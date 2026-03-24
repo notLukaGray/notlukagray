@@ -1,0 +1,110 @@
+{
+  "type": "sectionColumn",
+  "id": "rmt_c",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1.25rem" },
+  "columnStyles": {
+    "mobile": [{ "gap": "1rem" }],
+    "desktop": [{ "gap": "1rem" }, { "gap": "1rem" }]
+  },
+  "itemStyles": {
+    "desktop": {
+      "c-physical": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "0.4rem" },
+      "c-digital": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "0.4rem" },
+      "c-analysis-phys": { "borderRadius": "1rem", "fill": "#ffffff05", "padding": "1rem" },
+      "c-analysis-dig": { "borderRadius": "1rem", "fill": "#ffffff05", "padding": "1rem" }
+    },
+    "mobile": {
+      "c-physical": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "0.35rem" },
+      "c-digital": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "0.35rem" },
+      "c-analysis-phys": { "borderRadius": "0.9rem", "fill": "#ffffff05", "padding": "0.9rem" },
+      "c-analysis-dig": { "borderRadius": "0.9rem", "fill": "#ffffff05", "padding": "0.9rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": {
+      "c-label": 0,
+      "c-physical": 0,
+      "c-analysis-phys": 0,
+      "c-digital": 0,
+      "c-analysis-dig": 0
+    },
+    "desktop": {
+      "c-label": 0,
+      "c-physical": 0,
+      "c-analysis-phys": 0,
+      "c-digital": 1,
+      "c-analysis-dig": 1
+    }
+  },
+  "columnSpan": {
+    "mobile": { "c-label": "all" },
+    "desktop": { "c-label": "all" }
+  },
+  "elementOrder": ["c-label", "c-physical", "c-analysis-phys", "c-digital", "c-analysis-dig"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PHYSICAL VS. DIGITAL — SIGNAL COMPARISON",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "c-physical": {
+      "type": "elementImage",
+      "src": "research/research-material-texture/physical-materials.webp",
+      "alt": "Physical material samples — paper, metal, glass, leather",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["12rem", "18rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+      }
+    },
+    "c-analysis-phys": {
+      "type": "elementRichText",
+      "content": "**Physical surfaces** signal affordance through haptic, visual, and thermal properties simultaneously. A glass screen reads as brittle and reflective; a leather cover as warm and flexible. These cues are processed pre-attentively.\n\nPhysical material signals are almost impossible to fake — which is why counterfeit goods rely on weight, temperature, and flex rather than visual appearance alone.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "c-digital": {
+      "type": "elementImage",
+      "src": "research/research-material-texture/digital-materials.webp",
+      "alt": "Digital material references — frosted glass, paper card, embossed surface",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["12rem", "18rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.08 } }
+      }
+    },
+    "c-analysis-dig": {
+      "type": "elementRichText",
+      "content": "**Digital surfaces** can only simulate two of these channels — visual and (with haptic hardware) some tactile cues. The result is a partial signal that works because users have learned to interpret it.\n\nWhen a digital surface clearly references a physical material (frosted glass, paper), it borrows the pre-existing meaning. When it doesn't, users must learn the affordance language from scratch.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

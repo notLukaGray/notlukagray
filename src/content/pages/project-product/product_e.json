@@ -1,0 +1,66 @@
+{
+  "type": "sectionColumn",
+  "id": "product_e",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "12px" }],
+  "marginBottom": ["3rem", "5rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "2rem", "gap": "1rem" },
+      { "padding": "2rem", "gap": "1rem", "fill": "#d2ff7a06" }
+    ]
+  },
+  "elementOrder": ["e-impact-label", "e-impact", "e-metrics-label", "e-metrics"],
+  "columnAssignments": {
+    "mobile": { "e-impact-label": 0, "e-impact": 0, "e-metrics-label": 0, "e-metrics": 0 },
+    "desktop": { "e-impact-label": 0, "e-impact": 0, "e-metrics-label": 1, "e-metrics": 1 }
+  },
+  "definitions": {
+    "e-impact-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "IMPACT",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-impact": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "What changed after the redesign shipped. Real outcomes where you have them — user feedback, retention numbers, support ticket reduction. Where you don't have numbers, describe what the team observed and why it matters.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "e-metrics-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "METRICS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-metrics": {
+      "type": "elementRichText",
+      "content": "**+42%** Task completion rate\n\n**−31%** Support contacts related to this flow\n\n**4.7/5** Post-launch usability score\n\n**N weeks** to full rollout across platforms",
+      "level": 3,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

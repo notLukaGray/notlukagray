@@ -1,0 +1,56 @@
+{
+  "type": "contentBlock",
+  "id": "pipeline_hero",
+  "ariaLabel": "Pipeline intro",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000080",
+  "borderRadius": ["2rem 2rem 0 0", "4rem 4rem 0 0"],
+  "elementOrder": ["hero-heading", "hero-subtitle", "hero-body"],
+  "effects": [{ "type": "backdropBlur", "amount": "24px" }],
+  "definitions": {
+    "hero-heading": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Make it all data",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "2rem",
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": { "transition": { "delay": 0.1 } }
+      }
+    },
+    "hero-subtitle": {
+      "type": "elementHeading",
+      "level": 4,
+      "text": "Why I built a page builder as a pipeline",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginBottom": ["1.5rem", "2rem"],
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.2 } }
+      }
+    },
+    "hero-body": {
+      "type": "elementBody",
+      "level": 1,
+      "text": "I tried building a site in Node. Routes, components, copy—everything was code. Adding a page meant new files and new routes. I wanted something easier and reusable. So the idea became: treat the site as data. One pipeline. Load → Expand → Resolve → Render. This is how that pipeline works, and why it’s shaped this way.",
+      "variant": "medium-regular",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "66%"],
+      "wordWrap": true,
+      "marginBottom": ["2rem", "3rem"],
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.35 } }
+      }
+    }
+  }
+}

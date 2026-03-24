@@ -1,0 +1,85 @@
+{
+  "type": "sectionColumn",
+  "id": "rgs_c",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1.2] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1.25rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.25rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem", "gap": "1rem" },
+      { "padding": "1.5rem", "gap": "1rem" }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "c-diagram": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "0.4rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "c-label": 0, "c-argument": 0, "c-mb-lesson": 0, "c-diagram": 0 },
+    "desktop": { "c-label": 0, "c-argument": 0, "c-mb-lesson": 0, "c-diagram": 1 }
+  },
+  "elementOrder": ["c-label", "c-argument", "c-mb-lesson", "c-diagram"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "THE MÜLLER-BROCKMANN ARGUMENT",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "c-argument": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "The grid is not a cage. It is a field of potential. Its purpose is to locate tension, not to eliminate it.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "c-mb-lesson": {
+      "type": "elementRichText",
+      "content": "Müller-Brockmann's insight in *Grid Systems in Graphic Design* (1961) was that the grid's value lay not in uniform application but in the choices it made available. A 12-column grid offers more decisions than a 3-column grid — and the designer's job is to make those decisions with intention.\n\nThe lesson translates directly to responsive design: a 12-column Bootstrap grid used at its defaults is not a grid system — it is a template. A grid becomes a system only when the designer understands what they are accepting and why.\n\n**The practical consequence:** constraint that is chosen produces different work than constraint that is default-inherited.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.1 } }
+      }
+    },
+    "c-diagram": {
+      "type": "elementImage",
+      "src": "research/research-grid-systems/mb-grid-diagram.webp",
+      "alt": "Grid diagram after Müller-Brockmann — showing column structure with text placement examples",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["14rem", "100%"],
+      "constraints": [{ "minHeight": "0" }, { "minHeight": "20rem" }],
+      "borderRadius": ["0.75rem", "1rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.05 } }
+      }
+    }
+  }
+}

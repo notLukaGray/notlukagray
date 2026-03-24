@@ -1,0 +1,595 @@
+[
+  {
+    "type": "divider",
+    "label": "Divider",
+    "description": "Scrollable bar in document flow. Any CSS fill (color, gradient, transparent). Width and height as % or px. Covers BG as you scroll.",
+    "props": [
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "fill",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "layers",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "effects",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "borderRadius",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "border",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rotate",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "scale",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "scrollSpeed",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "initialX",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "initialY",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "onVisible",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "onInvisible",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "threshold",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "triggerOnce",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rootMargin",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "delay",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "sticky",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "stickyOffset",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "fixed",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "fixedPosition",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "fixedOffset",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "contentBlock",
+    "label": "Content block",
+    "description": "Same as divider (fill, layers, width, height, align, margins) but holds elements. Scrollable, in document flow.",
+    "props": [
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "fill",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "layers",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "effects",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "borderRadius",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "border",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rotate",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "scale",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "scrollSpeed",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "initialX",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "initialY",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "onVisible",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "onInvisible",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "threshold",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "triggerOnce",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rootMargin",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "delay",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "sticky",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "stickyOffset",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "fixed",
+        "type": "boolean",
+        "required": false
+      },
+      {
+        "name": "fixedPosition",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "fixedOffset",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "elements",
+        "type": "array",
+        "required": true
+      }
+    ]
+  },
+  {
+    "type": "scrollContainer",
+    "label": "Scroll container",
+    "description": "Scroll container description",
+    "props": [
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "fill",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "layers",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "effects",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "borderRadius",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "border",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rotate",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "scale",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "scrollSpeed",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "initialX",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "initialY",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "onVisible",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "onInvisible",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "threshold",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "triggerOnce",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rootMargin",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "delay",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "elements",
+        "type": "array",
+        "required": true
+      },
+      {
+        "name": "scrollDirection",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "sectionTrigger",
+    "label": "Section trigger",
+    "description": "Section trigger description",
+    "props": [
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "fill",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "layers",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "effects",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "borderRadius",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "border",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rotate",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "scale",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "scrollSpeed",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "initialX",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "initialY",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "onVisible",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "onInvisible",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "threshold",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "triggerOnce",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rootMargin",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "delay",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  }
+]

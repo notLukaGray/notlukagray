@@ -1,0 +1,90 @@
+{
+  "type": "sectionColumn",
+  "id": "rgen_e",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["3rem", "6rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.1, 1] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1rem" },
+  "columnStyles": {
+    "mobile": [{ "gap": "0.75rem" }],
+    "desktop": [{ "gap": "0.75rem" }, { "gap": "0.75rem" }]
+  },
+  "itemStyles": {
+    "desktop": {
+      "e-authorship": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
+      "e-stakes": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
+      "e-reading": { "borderRadius": "1.25rem", "fill": "#ffffff05", "padding": "1.1rem" }
+    },
+    "mobile": {
+      "e-authorship": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
+      "e-stakes": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
+      "e-reading": { "borderRadius": "1rem", "fill": "#ffffff05", "padding": "0.9rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "e-label": 0, "e-authorship": 0, "e-stakes": 0, "e-reading": 0 },
+    "desktop": { "e-label": 0, "e-authorship": 0, "e-stakes": 1, "e-reading": 1 }
+  },
+  "columnSpan": {
+    "mobile": { "e-label": "all" },
+    "desktop": { "e-label": "all" }
+  },
+  "elementOrder": ["e-label", "e-authorship", "e-stakes", "e-reading"],
+  "definitions": {
+    "e-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CONCLUSIONS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "e-authorship": {
+      "type": "elementRichText",
+      "content": "### On Authorship\n\nGenerative design does not eliminate authorship — it relocates it. The author of a generative system is the author of its constraints, its probability space, and its aesthetic range. The individual output is an instantiation of a set of intentional decisions.\n\nThis is not a diminished form of authorship. It is a different one: more architectural than compositional, more legislative than editorial. The designer writes the rules; the system performs within them.\n\nThe question of quality does not go away. It migrates from individual outputs to the quality of the system's range — and to how well the designer understands what they have authored.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.45, "delay": 0 } }
+      }
+    },
+    "e-stakes": {
+      "type": "elementRichText",
+      "content": "### What This Changes\n\n**For education** — Design programs must teach computational thinking alongside visual reasoning. Understanding how to author constraints is as important as understanding how to make compositions.\n\n**For critique** — Evaluation of generative work must account for the quality of the rule system, not only selected outputs. Curation becomes a form of authorship.\n\n**For IP** — Ownership of generative systems is genuinely contested. Legal frameworks have not caught up with practice.\n\n**For AI** — As large models become generative tools, the authorship question intensifies. The designer's role in prompt construction, curation, and post-processing is not trivially reducible.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.45, "delay": 0.08 } }
+      }
+    },
+    "e-reading": {
+      "type": "elementRichText",
+      "content": "### Further Reading\n\nMcCormack, J. et al. — *Ten Questions Concerning Generative Computer Art* (2014)\n\nBoden, M.A. — *The Creative Mind* (2004)\n\nRees, A. et al. — *Process: FIFTY Years of Graphic Design Thinking* (2013)\n\nManovich, L. — *The Language of New Media* (2001)\n\nGalanter, P. — *Generative Art Theory* (2012)\n\nMaeda, J. — *The Laws of Simplicity* (2006)",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.16 } }
+      }
+    }
+  }
+}

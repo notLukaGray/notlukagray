@@ -1,0 +1,57 @@
+{
+  "type": "contentBlock",
+  "id": "fm_real_intro",
+  "ariaLabel": "Limits intro",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#0a0a0a",
+  "borderRadius": ["1.5rem 1.5rem 0 0", "2rem 2rem 0 0"],
+  "marginTop": "2rem",
+  "marginBottom": "0",
+  "elementOrder": ["intro-heading", "intro-sub", "intro-body"],
+  "definitions": {
+    "intro-heading": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "The limit is content, not code.",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "2.5rem",
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": { "transition": { "duration": 0.6 } }
+      }
+    },
+    "intro-sub": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Every animation on this page — entrances, scroll, parallax, gestures, 3D load — is driven by JSON and our page-builder integration with Framer Motion.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.75rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.1, "duration": 0.45 } }
+      }
+    },
+    "intro-body": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "No custom animation code. Scroll to see scroll-driven opacity and parallax; hover and drag the cards; click Open to trigger the 3D load. All from content.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "68%"],
+      "wordWrap": true,
+      "marginBottom": "2.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.2, "duration": 0.45 } }
+      }
+    }
+  }
+}

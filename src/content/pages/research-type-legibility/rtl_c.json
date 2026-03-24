@@ -1,0 +1,91 @@
+{
+  "type": "sectionColumn",
+  "id": "rtl_c",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#0000000a",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.25rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem", "gap": "1rem" },
+      { "padding": "1.5rem", "gap": "1rem" }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "c-spec-a": { "borderRadius": "1rem", "fill": "#0000000a", "padding": "0.4rem" },
+      "c-spec-b": { "borderRadius": "1rem", "fill": "#0000000a", "padding": "0.4rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "c-label": 0, "c-finding": 0, "c-spec-a": 0, "c-spec-b": 0 },
+    "desktop": { "c-label": 0, "c-finding": 0, "c-spec-a": 0, "c-spec-b": 1 }
+  },
+  "columnSpan": {
+    "mobile": { "c-label": "all", "c-finding": "all" },
+    "desktop": { "c-label": "all", "c-finding": "all" }
+  },
+  "elementOrder": ["c-label", "c-finding", "c-spec-a", "c-spec-b"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "FINDINGS — SPECIMEN COMPARISON",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "c-finding": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "The interaction between line length and line-height proved to be the most predictive combination — more significant than either variable alone. Size gains plateau after 18px for desktop reading in standard ambient light.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "c-spec-a": {
+      "type": "elementImage",
+      "src": "research/research-type-legibility/specimen-optimal.webp",
+      "alt": "Optimal condition: 16px, weight 400, line-height 1.6, 65 char line",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["12rem", "20rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.08 } }
+      }
+    },
+    "c-spec-b": {
+      "type": "elementImage",
+      "src": "research/research-type-legibility/specimen-poor.webp",
+      "alt": "Poor condition: 13px, weight 300, line-height 1.2, 90 char line",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["12rem", "20rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.08 } }
+      }
+    }
+  }
+}

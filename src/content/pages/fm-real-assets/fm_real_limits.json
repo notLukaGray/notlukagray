@@ -1,0 +1,61 @@
+{
+  "type": "contentBlock",
+  "id": "fm_real_limits",
+  "ariaLabel": "What we push",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#0d0d0d",
+  "borderRadius": "0",
+  "marginTop": "0",
+  "marginBottom": "0",
+  "scrollOpacityRange": {
+    "input": [0, 0.4],
+    "output": [0.3, 1]
+  },
+  "elementOrder": ["limits-line-1", "limits-line-2", "limits-line-3"],
+  "definitions": {
+    "limits-line-1": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "One content pipeline. Entrances, scroll, gestures, layout, 3D.",
+      "align": "center",
+      "width": ["95%", "75%"],
+      "wordWrap": true,
+      "marginTop": "2.5rem",
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.05 } }
+      }
+    },
+    "limits-line-2": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Design and product control motion from JSON; engineering extends the schema, not the keyframes.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "65%"],
+      "wordWrap": true,
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.12, "duration": 0.45 } }
+      }
+    },
+    "limits-line-3": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Below: real project assets (El Leñero, 3D card) wired the same way.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "60%"],
+      "wordWrap": true,
+      "marginBottom": "2.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.18, "duration": 0.45 } }
+      }
+    }
+  }
+}

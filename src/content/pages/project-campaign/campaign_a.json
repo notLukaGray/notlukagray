@@ -1,0 +1,82 @@
+{
+  "type": "contentBlock",
+  "id": "campaign_a",
+  "width": ["100%", "88%"],
+  "height": ["85vh", "92vh"],
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "elementOrder": ["a-brand", "a-tagline", "a-campaign-name", "a-year"],
+  "definitions": {
+    "a-brand": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "MERIDIAN BANK \u00b7 CAMPAIGN",
+      "align": "center",
+      "width": "hug",
+      "marginTop": ["25vh", "30vh"],
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5
+          }
+        }
+      }
+    },
+    "a-tagline": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Your future, designed.",
+      "align": "center",
+      "width": ["92%", "70%"],
+      "wordWrap": true,
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.7,
+            "delay": 0.06
+          }
+        }
+      }
+    },
+    "a-campaign-name": {
+      "type": "elementHeading",
+      "level": 4,
+      "semanticLevel": 2,
+      "text": "Meridian \u00b7 Your Future, Designed",
+      "align": "center",
+      "width": ["85%", "55%"],
+      "wordWrap": true,
+      "marginBottom": "2rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.55,
+            "delay": 0.16
+          }
+        }
+      }
+    },
+    "a-year": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Art Direction \u00b7 Campaign Design \u00b7 OOH \u00b7 Digital \u00b7 2024",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug"
+    }
+  }
+}

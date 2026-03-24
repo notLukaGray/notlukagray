@@ -1,0 +1,323 @@
+{
+  "type": "sectionColumn",
+  "id": "rdp_b",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridAutoRows": ["auto", "minmax(5rem, auto)"],
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "0",
+        "gap": "0.75rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "0",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "0",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "0",
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "b-label": {
+        "padding": "0.25rem 0",
+        "marginBottom": "0.25rem"
+      },
+      "b-confirm": {
+        "borderRadius": "1rem",
+        "fill": "#ff000010",
+        "padding": "1rem"
+      },
+      "b-roach": {
+        "borderRadius": "1rem",
+        "fill": "#ff000010",
+        "padding": "1rem"
+      },
+      "b-trick": {
+        "borderRadius": "1rem",
+        "fill": "#ff000010",
+        "padding": "1rem"
+      },
+      "b-misdirect": {
+        "borderRadius": "1rem",
+        "fill": "#ff000014",
+        "padding": "1rem"
+      },
+      "b-hidden": {
+        "borderRadius": "1rem",
+        "fill": "#ff000014",
+        "padding": "1rem"
+      },
+      "b-scarcity": {
+        "borderRadius": "1rem",
+        "fill": "#ff000014",
+        "padding": "1rem"
+      },
+      "b-disgust": {
+        "borderRadius": "1rem",
+        "fill": "#ff000018",
+        "padding": "1rem"
+      },
+      "b-social": {
+        "borderRadius": "1rem",
+        "fill": "#ff000018",
+        "padding": "1rem"
+      },
+      "b-forced": {
+        "borderRadius": "1rem",
+        "fill": "#ff000018",
+        "padding": "1rem"
+      }
+    },
+    "mobile": {
+      "b-confirm": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000010",
+        "padding": "0.9rem"
+      },
+      "b-roach": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000010",
+        "padding": "0.9rem"
+      },
+      "b-trick": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000010",
+        "padding": "0.9rem"
+      },
+      "b-misdirect": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000014",
+        "padding": "0.9rem"
+      },
+      "b-hidden": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000014",
+        "padding": "0.9rem"
+      },
+      "b-scarcity": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000014",
+        "padding": "0.9rem"
+      },
+      "b-disgust": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000018",
+        "padding": "0.9rem"
+      },
+      "b-social": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000018",
+        "padding": "0.9rem"
+      },
+      "b-forced": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000018",
+        "padding": "0.9rem"
+      }
+    }
+  },
+  "itemLayout": {
+    "desktop": {
+      "b-label": {
+        "column": 0,
+        "row": 0,
+        "columnSpan": "all"
+      },
+      "b-confirm": {
+        "column": 0,
+        "row": 1
+      },
+      "b-roach": {
+        "column": 1,
+        "row": 1
+      },
+      "b-trick": {
+        "column": 2,
+        "row": 1
+      },
+      "b-misdirect": {
+        "column": 0,
+        "row": 2
+      },
+      "b-hidden": {
+        "column": 1,
+        "row": 2
+      },
+      "b-scarcity": {
+        "column": 2,
+        "row": 2
+      },
+      "b-disgust": {
+        "column": 0,
+        "row": 3
+      },
+      "b-social": {
+        "column": 1,
+        "row": 3
+      },
+      "b-forced": {
+        "column": 2,
+        "row": 3
+      }
+    }
+  },
+  "elementOrder": [
+    "b-label",
+    "b-confirm",
+    "b-roach",
+    "b-trick",
+    "b-misdirect",
+    "b-hidden",
+    "b-scarcity",
+    "b-disgust",
+    "b-social",
+    "b-forced"
+  ],
+  "definitions": {
+    "b-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "TAXONOMY",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-confirm": {
+      "type": "elementRichText",
+      "content": "### Confirmshaming\n\nLabelling the decline option with loaded language: \"No thanks, I don't want to save money.\"\n\n**Mechanism:** Shame as friction.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-roach": {
+      "type": "elementRichText",
+      "content": "### Roach Motel\n\nEasy to sign up; impossible to cancel. Cancellation buried behind calls, waiting periods, or multi-step forms.\n\n**Mechanism:** Asymmetric friction.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-trick": {
+      "type": "elementRichText",
+      "content": "### Trick Questions\n\nDouble-negative opt-outs, pre-checked boxes, ambiguous checkbox labels.\n\n**Mechanism:** Cognitive load exploited to produce false consent.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-misdirect": {
+      "type": "elementRichText",
+      "content": "### Misdirection\n\nVisual hierarchy steers attention toward a profitable option while obscuring the alternative.\n\n**Mechanism:** Preattentive salience exploited.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-hidden": {
+      "type": "elementRichText",
+      "content": "### Hidden Costs\n\nCharges added at final checkout step after the user has committed time and decision energy to the purchase.\n\n**Mechanism:** Sunk cost exploitation.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-scarcity": {
+      "type": "elementRichText",
+      "content": "### False Scarcity\n\n\"Only 2 left!\" or countdown timers that reset. Fabricated urgency or scarcity to pressure immediate decisions.\n\n**Mechanism:** Loss aversion activated artificially.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-disgust": {
+      "type": "elementRichText",
+      "content": "### Disguised Ads\n\nSponsored content designed to look like editorial; download buttons camouflaged as UI chrome.\n\n**Mechanism:** Trust transferred from trusted context to commercial.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-social": {
+      "type": "elementRichText",
+      "content": "### Social Proof Manipulation\n\nFabricated reviews, inflated user counts, or real-time activity notifications that exaggerate demand.\n\n**Mechanism:** Social proof heuristic exploited.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-forced": {
+      "type": "elementRichText",
+      "content": "### Forced Continuity\n\nFree trial ends, paid subscription begins automatically. Notification is buried or absent.\n\n**Mechanism:** Inertia and notification blindness exploited.",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "b-label": 0,
+      "b-confirm": 0,
+      "b-roach": 0,
+      "b-trick": 0,
+      "b-misdirect": 0,
+      "b-hidden": 0,
+      "b-scarcity": 0,
+      "b-disgust": 0,
+      "b-social": 0,
+      "b-forced": 0
+    },
+    "desktop": {
+      "b-label": 0,
+      "b-confirm": 1,
+      "b-roach": 2,
+      "b-trick": 0,
+      "b-misdirect": 1,
+      "b-hidden": 2,
+      "b-scarcity": 0,
+      "b-disgust": 1,
+      "b-social": 2,
+      "b-forced": 0
+    }
+  }
+}

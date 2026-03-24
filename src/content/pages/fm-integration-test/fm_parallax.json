@@ -1,0 +1,40 @@
+{
+  "type": "contentBlock",
+  "id": "fm_parallax",
+  "ariaLabel": "Parallax (scrollSpeed)",
+  "width": ["70%", "40%"],
+  "height": ["hug", "hug"],
+  "align": ["full", "left"],
+  "layers": [{ "fill": "#1a1a24" }],
+  "fill": "#252530",
+  "borderRadius": "1rem",
+  "marginTop": ["1.5rem", "1rem"],
+  "marginBottom": ["1.5rem", "1rem"],
+  "scrollSpeed": 0.6,
+  "reduceMotion": false,
+  "initialY": "140vh",
+  "zIndex": 20,
+  "elementOrder": ["parallax-heading", "parallax-body"],
+  "definitions": {
+    "parallax-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Parallax (scrollSpeed from JSON)",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "2rem",
+      "marginBottom": "0.5rem"
+    },
+    "parallax-body": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "This section has scrollSpeed: 0.6 and reduceMotion: false. The darker track shows where the card sits; the card (lighter) moves slower than the viewport as you scroll.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["92%", "85%"],
+      "wordWrap": true,
+      "marginBottom": "2rem"
+    }
+  }
+}

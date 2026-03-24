@@ -1,0 +1,26 @@
+{
+  "title": "Shifting Ground — Exhibition Design",
+  "slug": "project-exhibition",
+  "description": "Identity and spatial design for Shifting Ground, a group exhibition of twelve international sculptors at Kunsthalle Oslo.",
+  "ogImage": "https://media.notlukagray.com/website/work/project-exhibition/og.webp",
+  "assetBaseUrl": "/work",
+  "sectionOrder": [
+    "exhibition_a",
+    "exhibition_b",
+    "exhibition_c",
+    "exhibition_d",
+    "exhibition_e",
+    "nav",
+    "footer"
+  ],
+  "bgKey": "bg-exhibition",
+  "definitions": {
+    "bg-exhibition": {
+      "type": "backgroundVariable",
+      "layers": [
+        { "fill": "#f5f0e8" },
+        { "fill": "linear-gradient(180deg, #e8e0d0 0%, #f5f0e8 100%)" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "type": "sectionColumn",
+  "id": "immersive_e",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["3rem", "6rem"],
+  "columns": { "mobile": 1, "desktop": 3 },
+  "columnWidths": { "mobile": [1], "desktop": [1.2, 1, 1] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1rem" },
+  "columnStyles": {
+    "mobile": [{ "gap": "1rem" }],
+    "desktop": [
+      { "gap": "1rem" },
+      { "gap": "1rem", "fill": "#ffffff04", "borderRadius": "1.5rem", "padding": "1.25rem" },
+      { "gap": "1rem" }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "e-quote": { "padding": "1.25rem 1.5rem", "fill": "#ffffff07", "borderRadius": "1rem" },
+      "e-credits": { "padding": "1rem 1.1rem", "fill": "#ffffff05", "borderRadius": "1rem" }
+    },
+    "mobile": {
+      "e-quote": { "padding": "1rem", "fill": "#ffffff07", "borderRadius": "1rem" },
+      "e-credits": { "padding": "0.9rem", "fill": "#ffffff05", "borderRadius": "1rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "e-kicker": 0, "e-quote": 0, "e-reception": 0, "e-credits": 0 },
+    "desktop": { "e-kicker": 0, "e-quote": 0, "e-reception": 1, "e-credits": 2 }
+  },
+  "elementOrder": ["e-kicker", "e-quote", "e-reception", "e-credits"],
+  "definitions": {
+    "e-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "RECEPTION",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "e-quote": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "\"The sensation of standing inside a space that knows you are there — and responds — is not easily forgotten. Threshold makes that sensation the entire work.\"",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0 } }
+      }
+    },
+    "e-reception": {
+      "type": "elementRichText",
+      "content": "### Audience Response\n\n4,200 participants over 11 days. Average dwell time 18 minutes against a projected 6. Exit surveys reported:\n\n- **91%** felt a sense of altered presence\n- **78%** returned for a second session\n- **64%** described the exit as disorienting\n\nSelected for the Ars Electronica Prix digital art shortlist.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.1 } }
+      }
+    },
+    "e-credits": {
+      "type": "elementRichText",
+      "content": "### Credits\n\n**Concept & Direction** Luka Gray\n\n**Software Development** M. Voss, R. Ochsner\n\n**Sound Design** K. Nakamura\n\n**Hardware Engineering** C. Brauer\n\n**Production** The Foundry Berlin\n\n**Support** Kulturstiftung des Bundes",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.15 } }
+      }
+    }
+  }
+}

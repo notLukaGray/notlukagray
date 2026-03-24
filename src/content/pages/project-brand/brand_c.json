@@ -1,0 +1,28 @@
+{
+  "type": "contentBlock",
+  "id": "brand_c",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000060",
+  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "marginBottom": ["2rem", "3rem"],
+  "elementOrder": ["c-video"],
+  "definitions": {
+    "c-video": {
+      "type": "elementVideo",
+      "src": "work/project-brand/reel.webm",
+      "poster": "work/project-brand/reel-poster.webp",
+      "autoplay": false,
+      "muted": false,
+      "loop": false,
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9",
+      "objectFit": "cover",
+      "align": "center",
+      "module": "video-player",
+      "ariaLabel": "Brand motion reel"
+    }
+  }
+}

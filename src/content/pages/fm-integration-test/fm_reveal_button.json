@@ -1,0 +1,43 @@
+{
+  "type": "contentBlock",
+  "id": "fm_reveal_button",
+  "ariaLabel": "Button to toggle external reveal section",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#1e1e2e",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "elementOrder": ["reveal-button-heading", "reveal-toggle-button"],
+  "definitions": {
+    "reveal-button-heading": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Button trigger: toggles the external reveal section below via contentOverride (key \\\"openReveal\\\").",
+      "align": "center",
+      "textAlign": "center",
+      "width": "90%",
+      "wordWrap": true,
+      "marginTop": "1.25rem",
+      "marginBottom": "0.75rem"
+    },
+    "reveal-toggle-button": {
+      "type": "elementButton",
+      "label": "Toggle external reveal",
+      "copyType": "body",
+      "level": 2,
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "0.75rem",
+      "marginBottom": "1.75rem",
+      "action": "contentOverride",
+      "actionPayload": {
+        "key": "openReveal",
+        "value": true
+      }
+    }
+  }
+}

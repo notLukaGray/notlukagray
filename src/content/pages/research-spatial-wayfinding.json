@@ -1,0 +1,15 @@
+{
+  "type": "page",
+  "id": "research-spatial-wayfinding",
+  "title": "Spatial Design & Wayfinding Systems",
+  "description": "How environmental graphic design, typography, and spatial sequence guide orientation in complex built environments.",
+  "assetBaseUrl": "/research",
+  "backgrounds": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [{ "fill": "#0c0c0a" }]
+    }
+  },
+  "activeBackground": "bg-main",
+  "sectionOrder": ["nav", "rsw_a", "rsw_b", "rsw_c", "rsw_d", "rsw_e", "footer"]
+}

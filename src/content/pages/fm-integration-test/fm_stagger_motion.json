@@ -1,0 +1,120 @@
+{
+  "type": "contentBlock",
+  "id": "fm_stagger_motion",
+  "ariaLabel": "Sequenced motion from JSON",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#1f1f1f",
+  "borderRadius": "1rem",
+  "marginTop": ["1.5rem", "1rem"],
+  "marginBottom": ["1.5rem", "1rem"],
+  "elementOrder": ["seq-heading", "seq-1", "seq-2", "seq-3", "seq-4", "seq-5"],
+  "definitions": {
+    "seq-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Sequenced motion (transition.delay from JSON)",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "1rem"
+    },
+    "seq-1": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Item 1 — delay 0s",
+      "align": "center",
+      "width": "hug",
+      "textAlign": "center",
+      "marginBottom": "0.5rem",
+      "wrapperStyle": {
+        "maxWidth": "480px",
+        "margin": "0 auto"
+      },
+      "motion": {
+        "initial": { "opacity": 0, "x": -16 },
+        "animate": { "opacity": 1, "x": 0 },
+        "transition": { "duration": 0.4, "delay": 0, "ease": "easeOut" }
+      },
+      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+    },
+    "seq-2": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Item 2 — delay 0.1s",
+      "align": "center",
+      "width": "hug",
+      "textAlign": "center",
+      "marginBottom": "0.5rem",
+      "wrapperStyle": {
+        "maxWidth": "480px",
+        "margin": "0 auto"
+      },
+      "motion": {
+        "initial": { "opacity": 0, "x": -16 },
+        "animate": { "opacity": 1, "x": 0 },
+        "transition": { "duration": 0.4, "delay": 0.1, "ease": "easeOut" }
+      },
+      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+    },
+    "seq-3": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Item 3 — delay 0.2s",
+      "align": "center",
+      "width": "hug",
+      "textAlign": "center",
+      "marginBottom": "0.5rem",
+      "wrapperStyle": {
+        "maxWidth": "480px",
+        "margin": "0 auto"
+      },
+      "motion": {
+        "initial": { "opacity": 0, "x": -16 },
+        "animate": { "opacity": 1, "x": 0 },
+        "transition": { "duration": 0.4, "delay": 0.2, "ease": "easeOut" }
+      },
+      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+    },
+    "seq-4": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Item 4 — delay 0.3s",
+      "align": "center",
+      "width": "hug",
+      "textAlign": "center",
+      "marginBottom": "0.5rem",
+      "wrapperStyle": {
+        "maxWidth": "480px",
+        "margin": "0 auto"
+      },
+      "motion": {
+        "initial": { "opacity": 0, "x": -16 },
+        "animate": { "opacity": 1, "x": 0 },
+        "transition": { "duration": 0.4, "delay": 0.3, "ease": "easeOut" }
+      },
+      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+    },
+    "seq-5": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Item 5 — delay 0.4s",
+      "align": "center",
+      "width": "hug",
+      "textAlign": "center",
+      "marginBottom": "1.5rem",
+      "wrapperStyle": {
+        "maxWidth": "480px",
+        "margin": "0 auto"
+      },
+      "motion": {
+        "initial": { "opacity": 0, "x": -16 },
+        "animate": { "opacity": 1, "x": 0 },
+        "transition": { "duration": 0.4, "delay": 0.4, "ease": "easeOut" }
+      },
+      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+    }
+  }
+}

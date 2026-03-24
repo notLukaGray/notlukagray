@@ -1,0 +1,61 @@
+{
+  "type": "sectionColumn",
+  "id": "photo_d",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["2rem", "3rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.3, 1] },
+  "columnGaps": { "mobile": "1rem", "desktop": "2rem" },
+  "columnStyles": {
+    "mobile": [{ "gap": "1.25rem" }],
+    "desktop": [
+      { "gap": "1.25rem", "alignY": "center" },
+      { "gap": "1rem", "alignY": "center" }
+    ]
+  },
+  "elementOrder": ["d-primary", "d-statement", "d-detail"],
+  "columnAssignments": {
+    "mobile": { "d-primary": 0, "d-statement": 0, "d-detail": 0 },
+    "desktop": { "d-primary": 0, "d-statement": 1, "d-detail": 1 }
+  },
+  "definitions": {
+    "d-primary": {
+      "type": "elementImage",
+      "src": "work/project-photography/key-frame.webp",
+      "alt": "Key image from the series",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["24rem", "38rem"],
+      "borderRadius": ["1.25rem", "1.75rem"],
+      "align": "center"
+    },
+    "d-statement": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "A brief artist statement — what you were looking for when you made these photographs, and what the work is about beyond its surface subject. Not an explanation, but a context.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideLeft",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.55 } }
+      }
+    },
+    "d-detail": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Camera · Lens · Film stock / sensor\nPrinted at — × — cm · Edition of N",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "type": "contentBlock",
+  "id": "fm_motion_from_json",
+  "ariaLabel": "Motion from JSON playground",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#050509",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "elementOrder": [
+    "motion-heading",
+    "motion-sub",
+    "motion-opacity",
+    "motion-scale",
+    "motion-spring",
+    "motion-variants",
+    "motion-gestures"
+  ],
+  "definitions": {
+    "motion-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Motion from JSON (full FM control)",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "0.25rem"
+    },
+    "motion-sub": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Each block uses the optional \"motion\" prop: initial, animate, transition (or variants). All from JSON.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "90%",
+      "wordWrap": true,
+      "marginBottom": "1.25rem"
+    },
+    "motion-opacity": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "1. Opacity — initial 0 → animate 1, easeOut 0.8s",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "0.75rem",
+      "marginLeft": "auto",
+      "marginRight": "auto",
+      "motion": {
+        "initial": { "opacity": 0 },
+        "animate": { "opacity": 1 },
+        "transition": { "duration": 0.8, "ease": "easeOut" }
+      }
+    },
+    "motion-scale": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "2. Scale + rotate — starts small and tilted, animates to full",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "0.75rem",
+      "marginLeft": "auto",
+      "marginRight": "auto",
+      "motion": {
+        "initial": { "opacity": 0, "scale": 0.85, "rotate": -3 },
+        "animate": { "opacity": 1, "scale": 1, "rotate": 0 },
+        "transition": { "duration": 0.6, "ease": [0.22, 1, 0.36, 1] }
+      }
+    },
+    "motion-spring": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "3. Spring — type \"spring\" with stiffness/damping from JSON",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "0.75rem",
+      "marginLeft": "auto",
+      "marginRight": "auto",
+      "motion": {
+        "initial": { "opacity": 0, "y": 24 },
+        "animate": { "opacity": 1, "y": 0 },
+        "transition": { "type": "spring", "stiffness": 200, "damping": 22 }
+      }
+    },
+    "motion-variants": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "4. Variants — initialVariant/animateVariant with named keyframes + transition",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "0.75rem",
+      "marginLeft": "auto",
+      "marginRight": "auto",
+      "motion": {
+        "initialVariant": "hidden",
+        "animateVariant": "visible",
+        "variants": {
+          "hidden": { "opacity": 0, "x": -20 },
+          "visible": {
+            "opacity": 1,
+            "x": 0,
+            "transition": { "duration": 0.5, "ease": "easeOut" }
+          }
+        }
+      }
+    },
+    "motion-gestures": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "5. Gestures — hover/tap: whileHover scale 1.03, whileTap scale 0.98",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "marginLeft": "auto",
+      "marginRight": "auto",
+      "motion": {
+        "initial": { "opacity": 1 },
+        "animate": { "opacity": 1 },
+        "whileHover": { "scale": 1.03 },
+        "whileTap": { "scale": 0.98 }
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "description": "Case study builder: BG → SECTIONS → ELEMENTS. Asset URLs resolved via assetBaseUrl. Block definitions: bg-blocks.json, section-blocks.json, element-blocks.json. Effects: effects.json.",
+  "version": "2",
+  "effectsSchema": "effects.json"
+}

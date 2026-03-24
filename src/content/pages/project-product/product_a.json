@@ -1,0 +1,62 @@
+{
+  "type": "contentBlock",
+  "id": "product_a",
+  "width": ["100%", "88%"],
+  "height": ["80vh", "88vh"],
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "elementOrder": ["a-platform", "a-title", "a-logline", "a-stack"],
+  "definitions": {
+    "a-platform": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "iOS / ANDROID / WEB · PRODUCT DESIGN",
+      "align": "center",
+      "width": "hug",
+      "marginTop": ["26vh", "30vh"],
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Product Name",
+      "align": "center",
+      "width": ["92%", "68%"],
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.08 } }
+      }
+    },
+    "a-logline": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "One sentence that describes what the product does and who it's for. Specific enough to be useful, short enough to fit on a landing page hero.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["88%", "52%"],
+      "wordWrap": true,
+      "marginBottom": "2.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.18 } }
+      }
+    },
+    "a-stack": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Figma · Prototyping · Design System · Handoff",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug"
+    }
+  }
+}

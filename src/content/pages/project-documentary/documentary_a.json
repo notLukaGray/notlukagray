@@ -1,0 +1,80 @@
+{
+  "type": "divider",
+  "id": "documentary_a",
+  "width": "100%",
+  "height": ["80vh", "88vh"],
+  "fill": "#00000000",
+  "triggers": [
+    {
+      "event": "onViewportProgress",
+      "threshold": [0, 1],
+      "triggerOnce": false,
+      "action": {
+        "type": "updateTransitionProgress",
+        "transitionId": "bg-film",
+        "invert": true
+      }
+    }
+  ],
+  "elementOrder": ["a-category", "a-title", "a-tagline", "a-specs"],
+  "elementsAlignY": "center",
+  "definitions": {
+    "a-category": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "ESSAY FILM / DOCUMENTARY",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "2rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.1 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Still Water",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 1.0, "delay": 0.25 } }
+      }
+    },
+    "a-tagline": {
+      "type": "elementHeading",
+      "level": 4,
+      "text": "38 minutes with a river that no longer runs the way anyone remembers.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["100%", "60%"],
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.45 } }
+      }
+    },
+    "a-specs": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "DCP / 4K  ·  Stereo + 5.1  ·  2025  ·  World Premiere — IDFA 2025",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.6 } }
+      }
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "type": "sectionColumn",
+  "id": "exhibition_d",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["2rem", "3rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1.2] },
+  "columnGaps": { "mobile": "1rem", "desktop": "2rem" },
+  "columnStyles": {
+    "mobile": [{ "gap": "1rem" }],
+    "desktop": [{ "gap": "1rem", "alignY": "center" }, { "gap": "1rem" }]
+  },
+  "elementOrder": [
+    "d-plan-label",
+    "d-plan-note",
+    "d-footprint",
+    "d-rooms-label",
+    "d-rooms",
+    "d-floor-image"
+  ],
+  "columnAssignments": {
+    "mobile": {
+      "d-plan-label": 0,
+      "d-plan-note": 0,
+      "d-footprint": 0,
+      "d-rooms-label": 0,
+      "d-rooms": 0,
+      "d-floor-image": 0
+    },
+    "desktop": {
+      "d-plan-label": 0,
+      "d-plan-note": 0,
+      "d-footprint": 0,
+      "d-rooms-label": 0,
+      "d-rooms": 0,
+      "d-floor-image": 1
+    }
+  },
+  "definitions": {
+    "d-plan-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "SPATIAL LAYOUT",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "d-plan-note": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Describe how the space was organized — what the viewer encounters first, how the sequence unfolds, any deliberate transitions between rooms or registers.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "d-footprint": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Total footprint: 00 m² · N gallery spaces · Commissioned elements: N",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "d-rooms-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "SPACES",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "d-rooms": {
+      "type": "elementRichText",
+      "content": "**Room A** — Entry / orientation\n\n**Room B** — Primary installation\n\n**Room C** — Secondary works\n\n**Room D** — Publication and reading",
+      "level": 5,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "d-floor-image": {
+      "type": "elementImage",
+      "src": "work/project-exhibition/floor-plan.webp",
+      "alt": "Exhibition floor plan",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["20rem", "30rem"],
+      "borderRadius": "1rem",
+      "align": "center"
+    }
+  }
+}

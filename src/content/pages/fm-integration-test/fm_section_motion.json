@@ -1,0 +1,40 @@
+{
+  "type": "contentBlock",
+  "id": "fm_section_motion",
+  "ariaLabel": "Section root motion",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#2a2a2a",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "motion": {
+    "initial": { "opacity": 0, "y": 28, "scale": 0.98 },
+    "animate": { "opacity": 1, "y": 0, "scale": 1 },
+    "transition": { "duration": 0.55, "ease": [0.22, 1, 0.36, 1] }
+  },
+  "elementOrder": ["section-motion-heading", "section-motion-body"],
+  "definitions": {
+    "section-motion-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Section root motion",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "0.5rem"
+    },
+    "section-motion-body": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "The whole section has \"motion\" on the section root (opacity, y, scale). Scroll it into view to see the block animate in from JSON.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem"
+    }
+  }
+}

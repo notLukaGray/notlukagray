@@ -1,0 +1,43 @@
+{
+  "type": "contentBlock",
+  "id": "campaign_e",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["3rem", "5rem"],
+  "elementOrder": ["e-quote", "e-attribution"],
+  "definitions": {
+    "e-quote": {
+      "type": "elementBody",
+      "level": 1,
+      "text": "\"We had tried three agencies before this. The brief was identical each time. What came back from Luka was the first thing that actually looked like our customers \u2014 not our shareholders.\"",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "58%"],
+      "wordWrap": true,
+      "marginTop": "3rem",
+      "marginBottom": "1.25rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.4
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.8
+          }
+        }
+      }
+    },
+    "e-attribution": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "\u2014 Claire Andersen, Head of Brand, Meridian Bank",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "marginBottom": "3rem"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "type": "contentBlock",
+  "id": "product_b",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "18px"
+    },
+    {
+      "type": "dropShadow",
+      "y": "12px",
+      "blur": "48px",
+      "color": "rgba(0,0,0,0.4)"
+    }
+  ],
+  "marginBottom": ["2rem", "3rem"],
+  "elementOrder": ["b-video"],
+  "definitions": {
+    "b-video": {
+      "type": "elementVideo",
+      "src": "work/project-product/demo.webm",
+      "poster": "work/project-product/demo-poster.webp",
+      "autoplay": false,
+      "muted": false,
+      "loop": false,
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9",
+      "objectFit": "contain",
+      "align": "center",
+      "module": "video-player",
+      "ariaLabel": "Product walkthrough"
+    }
+  }
+}

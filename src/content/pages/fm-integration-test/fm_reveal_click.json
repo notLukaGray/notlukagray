@@ -1,0 +1,54 @@
+{
+  "type": "revealSection",
+  "id": "fm_reveal_click",
+  "ariaLabel": "Click to reveal accordion",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#252525",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "triggerMode": "click",
+  "revealOnClick": true,
+  "toggleOnClick": true,
+  "expandAxis": "vertical",
+  "expandDurationMs": 300,
+  "revealStaggerMs": 60,
+  "revealDurationMs": 220,
+  "revealPreset": "slideUp",
+  "collapsedElements": [
+    {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Click to expand (accordion)",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "1rem"
+    }
+  ],
+  "revealedElements": [
+    {
+      "type": "elementBody",
+      "level": 2,
+      "text": "First line: staggered reveal.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "0.5rem"
+    },
+    {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Second line: also staggered.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem"
+    }
+  ]
+}

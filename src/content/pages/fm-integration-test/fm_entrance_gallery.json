@@ -1,0 +1,144 @@
+{
+  "type": "contentBlock",
+  "id": "fm_entrance_gallery",
+  "ariaLabel": "Viewport entrance gallery",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#252525",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "elementOrder": [
+    "gallery-heading",
+    "gallery-sub",
+    "entrance-fade",
+    "entrance-slide-up",
+    "entrance-slide-down",
+    "entrance-slide-left",
+    "entrance-slide-right"
+  ],
+  "definitions": {
+    "gallery-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Viewport entrances",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "0.25rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.3
+          }
+        }
+      }
+    },
+    "gallery-sub": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Each line animates in as you scroll; style and timing (duration, delay, distance) come from JSON.",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.05
+          }
+        }
+      }
+    },
+    "entrance-fade": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Fade (entranceDuration 0.4, default)",
+      "align": "center",
+      "width": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.05
+          }
+        }
+      }
+    },
+    "entrance-slide-up": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Slide up (distance 32px, duration 0.5)",
+      "align": "center",
+      "width": "hug",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": {
+          "initial": { "opacity": 0, "y": 32 },
+          "animate": { "opacity": 1, "y": 0 },
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.1
+          }
+        }
+      }
+    },
+    "entrance-slide-down": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Slide down",
+      "align": "center",
+      "width": "hug",
+      "motionTiming": {
+        "entrancePreset": "slideDown",
+        "entranceMotion": {
+          "initial": { "opacity": 0, "y": -24 },
+          "animate": { "opacity": 1, "y": 0 },
+          "transition": {
+            "delay": 0.15
+          }
+        }
+      }
+    },
+    "entrance-slide-left": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Slide left",
+      "align": "center",
+      "width": "hug",
+      "motionTiming": {
+        "entrancePreset": "slideLeft",
+        "entranceMotion": {
+          "initial": { "opacity": 0, "x": 24 },
+          "animate": { "opacity": 1, "x": 0 },
+          "transition": {
+            "delay": 0.2
+          }
+        }
+      }
+    },
+    "entrance-slide-right": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Slide right",
+      "align": "center",
+      "width": "hug",
+      "motionTiming": {
+        "entrancePreset": "slideRight",
+        "entranceMotion": {
+          "initial": { "opacity": 0, "x": -24 },
+          "animate": { "opacity": 1, "x": 0 },
+          "transition": {
+            "delay": 0.25
+          }
+        }
+      }
+    }
+  }
+}

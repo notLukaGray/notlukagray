@@ -1,0 +1,158 @@
+{
+  "type": "sectionColumn",
+  "id": "documentary_e",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["3rem", "6rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1.2, 0.8]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "1rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "gap": "0.75rem"
+      }
+    ],
+    "desktop": [
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "e-festivals": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff06",
+        "padding": "1.25rem"
+      },
+      "e-press": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff06",
+        "padding": "1.25rem"
+      },
+      "e-credits": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff05",
+        "padding": "1.1rem"
+      }
+    },
+    "mobile": {
+      "e-festivals": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "1rem"
+      },
+      "e-press": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "1rem"
+      },
+      "e-credits": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff05",
+        "padding": "0.9rem"
+      }
+    }
+  },
+  "elementOrder": ["e-festivals", "e-press", "e-credits"],
+  "definitions": {
+    "e-festivals": {
+      "type": "elementRichText",
+      "content": "### Festival Selection\n\n**IDFA 2025** — World Premiere\n\n**Hot Docs 2026** — International Competition\n\n**Sheffield Doc/Fest 2026** — Official Selection\n\n**DocLisboa 2026** — Iberian Premiere\n\n**True/False 2026** — Special Presentation\n\nDistributed by — Taskovski Films",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "e-press": {
+      "type": "elementRichText",
+      "content": "### Press\n\n\"A film of sustained and quiet attention. Gray has made something that asks for the same patience from its audience that the landscape demands of those who live within it.\"\n— *DocAlliance Review*\n\n\"Unhurried, beautiful, and quietly devastating.\"\n— *Hot Docs Blog*\n\n\"One of the most formally assured debuts of the year.\"\n— *Filmmaker Magazine*",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.08
+          }
+        }
+      }
+    },
+    "e-credits": {
+      "type": "elementRichText",
+      "content": "### Credits\n\n**Director** Luka Gray\n\n**DoP** Ana Ferreira\n\n**Sound** Paulo Cunha\n\n**Editor** Luka Gray\n\n**Colorist** Dominique Remy\n\n**Producer** Slow River Films\n\n**Co-produced with** RTP / ARTE",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.16
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "e-festivals": 0,
+      "e-press": 0,
+      "e-credits": 0
+    },
+    "desktop": {
+      "e-festivals": 0,
+      "e-press": 1,
+      "e-credits": 2
+    }
+  }
+}

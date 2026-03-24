@@ -1,0 +1,303 @@
+import { describe, expect, it } from "vitest";
+import { convertNode } from "./node-to-element";
+
+function makeCtx(): {
+  assets: never[];
+  warnings: string[];
+  assetCounter: number;
+  usedIds: Set<string>;
+  usedAssetKeys: Set<string>;
+  cdnPrefix: string;
+} {
+  return {
+    assets: [],
+    warnings: [],
+    assetCounter: 0,
+    usedIds: new Set<string>(),
+    usedAssetKeys: new Set<string>(),
+    cdnPrefix: "",
+  };
+}
+
+describe("node-to-element annotations", () => {
+  it("warns on unsupported annotations without failing conversion", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Spacer [pb: type=spacer, madeup=1]",
+        width: 120,
+        height: 48,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "NONE",
+        children: [],
+        clipsContent: false,
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementSpacer");
+    expect(ctx.warnings.some((w) => w.includes("unsupported annotation key(s): madeup"))).toBe(
+      true
+    );
+  });
+
+  it("exports gradient strokes as borderGradient instead of layered background", async () => {
+    (globalThis as { figma?: { mixed: symbol } }).figma = { mixed: Symbol("mixed") };
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Card",
+        width: 150,
+        height: 44,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [
+          {
+            type: "SOLID",
+            color: { r: 0, g: 0, b: 0 },
+            opacity: 0.5,
+            visible: true,
+          },
+        ],
+        strokes: [
+          {
+            type: "GRADIENT_LINEAR",
+            visible: true,
+            gradientTransform: [
+              [1, 0, 0],
+              [0, 1, 0],
+            ],
+            gradientStops: [
+              { position: 0, color: { r: 0, g: 0, b: 0, a: 1 } },
+              { position: 1, color: { r: 1, g: 1, b: 1, a: 1 } },
+            ],
+          },
+        ],
+        strokeWeight: 1,
+        strokeAlign: "INSIDE",
+        effects: [],
+        layoutMode: "NONE",
+        children: [],
+        clipsContent: false,
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementGroup");
+    const group = result as {
+      borderGradient?: { stroke?: string; width?: string };
+      wrapperStyle?: Record<string, unknown>;
+    };
+    expect(group.borderGradient?.stroke).toContain("gradient");
+    expect(group.borderGradient?.width).toBe("1px");
+    expect(group.wrapperStyle?.backgroundColor).toBe("#00000080");
+    expect(group.wrapperStyle?.background).toBeUndefined();
+    expect(group.wrapperStyle?.border).toBeUndefined();
+  });
+
+  it("prefers getCSSAsync background fallback for complex gradients", async () => {
+    (globalThis as { figma?: { mixed: symbol } }).figma = { mixed: Symbol("mixed") };
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Gradient Card",
+        width: 200,
+        height: 100,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [
+          {
+            type: "SOLID",
+            color: { r: 1, g: 1, b: 1 },
+            opacity: 1,
+            visible: true,
+          },
+        ],
+        strokes: [],
+        effects: [],
+        layoutMode: "NONE",
+        children: [],
+        clipsContent: false,
+        getCSSAsync: async () => ({
+          background:
+            "linear-gradient(188deg, rgba(0, 0, 0, 0) 30.9%, rgba(0, 0, 0, 0.1) 50.88%, #000 110.83%)",
+        }),
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const group = result as { type: string; wrapperStyle?: Record<string, unknown> };
+    expect(group.type).toBe("elementGroup");
+    expect(group.wrapperStyle?.background).toBe(
+      "linear-gradient(188deg, rgba(0, 0, 0, 0) 30.9%, rgba(0, 0, 0, 0.1) 50.88%, #000 110.83%)"
+    );
+    expect(group.wrapperStyle?.backgroundColor).toBeUndefined();
+  });
+
+  it("uses background (not backgroundColor) for var() fills with gradient fallback", async () => {
+    (globalThis as { figma?: { mixed: symbol } }).figma = { mixed: Symbol("mixed") };
+    const ctx = makeCtx();
+    const bg =
+      "var(--GRADIENTS-FRAME-E, linear-gradient(188deg, rgba(0, 0, 0, 0) 30.9%, rgba(0, 0, 0, 0.1) 50.88%, #000 110.83%), radial-gradient(44.5% 44.5% at 0% 55.5%, rgba(130, 76, 30, 0.50) 0%, rgba(96, 57, 24, 0.00) 100%))";
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Gradient Var Card",
+        width: 200,
+        height: 100,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [
+          {
+            type: "SOLID",
+            color: { r: 1, g: 1, b: 1 },
+            opacity: 1,
+            visible: true,
+          },
+        ],
+        strokes: [],
+        effects: [],
+        layoutMode: "NONE",
+        children: [],
+        clipsContent: false,
+        getCSSAsync: async () => ({
+          background: bg,
+        }),
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const group = result as { type: string; wrapperStyle?: Record<string, unknown> };
+    expect(group.type).toBe("elementGroup");
+    expect(group.wrapperStyle?.background).toBe(bg);
+    expect(group.wrapperStyle?.backgroundColor).toBeUndefined();
+  });
+
+  it("exports native GLASS effects on nested frame groups", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Glass Card",
+        width: 279,
+        height: 155,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [
+          {
+            type: "GLASS",
+            visible: true,
+            radius: 24,
+            lightIntensity: 0.6,
+            lightAngle: 32,
+            refraction: 0.7,
+            depth: 1.4,
+            dispersion: 0.35,
+          },
+        ],
+        layoutMode: "NONE",
+        children: [],
+        clipsContent: false,
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementGroup");
+    const group = result as { effects?: Array<Record<string, unknown>> };
+    expect(Array.isArray(group.effects)).toBe(true);
+    expect(group.effects?.[0]?.type).toBe("glass");
+    expect(group.effects?.[0]?.frost).toBe("12px");
+    expect(group.effects?.[0]?.refraction).toBe(0.7);
+    expect(group.effects?.[0]?.dispersion).toBe(0.35);
+  });
+
+  it("infers glass from inspect backdrop-filter when native GLASS is unavailable", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Frosted Card",
+        width: 279,
+        height: 155,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "NONE",
+        children: [],
+        clipsContent: false,
+        getCSSAsync: async () => ({
+          "backdrop-filter": "blur(20px) saturate(160%)",
+        }),
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementGroup");
+    const group = result as {
+      effects?: Array<Record<string, unknown>>;
+      wrapperStyle?: Record<string, unknown>;
+    };
+    expect(group.wrapperStyle?.backdropFilter).toBe("blur(20px) saturate(160%)");
+    expect(group.wrapperStyle?.WebkitBackdropFilter).toBe("blur(20px) saturate(160%)");
+    expect(group.effects?.[0]?.type).toBe("glass");
+    expect(group.effects?.[0]?.frost).toBe("20px");
+  });
+
+  it("exports glass/backdrop effects on rectangle surfaces (elementSVG)", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "RECTANGLE",
+        name: "Glass Rect",
+        width: 279,
+        height: 155,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [
+          {
+            type: "SOLID",
+            color: { r: 0.85, g: 0.85, b: 0.85 },
+            opacity: 0.2,
+            visible: true,
+          },
+        ],
+        effects: [],
+        getCSSAsync: async () => ({
+          "backdrop-filter": "blur(18px) saturate(140%)",
+        }),
+        exportAsync: async () =>
+          '<svg width="279" height="155" viewBox="0 0 279 155" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="279" height="155" fill="#D9D9D9" fill-opacity="0.2"/></svg>',
+      } as unknown as RectangleNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementSVG");
+    const svg = result as {
+      backdropFilter?: string;
+      WebkitBackdropFilter?: string;
+      effects?: Array<Record<string, unknown>>;
+    };
+    expect(svg.backdropFilter).toBe("blur(18px) saturate(140%)");
+    expect(svg.WebkitBackdropFilter).toBe("blur(18px) saturate(140%)");
+    expect(svg.effects?.[0]?.type).toBe("glass");
+    expect(svg.effects?.[0]?.frost).toBe("18px");
+  });
+});

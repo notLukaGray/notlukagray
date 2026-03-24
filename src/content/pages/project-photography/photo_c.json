@@ -1,0 +1,73 @@
+{
+  "type": "scrollContainer",
+  "id": "photo_c",
+  "width": ["100%", "88%"],
+  "height": ["22rem", "32rem"],
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["2rem", "3rem"],
+  "scrollDirection": "horizontal",
+  "elementOrder": ["c-img-1", "c-img-2", "c-img-3", "c-img-4", "c-img-5", "c-img-6"],
+  "definitions": {
+    "c-img-1": {
+      "type": "elementImage",
+      "src": "work/project-photography/frame-01.webp",
+      "alt": "Frame 01",
+      "objectFit": "cover",
+      "width": ["18rem", "28rem"],
+      "height": "100%",
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    "c-img-2": {
+      "type": "elementImage",
+      "src": "work/project-photography/frame-02.webp",
+      "alt": "Frame 02",
+      "objectFit": "cover",
+      "width": ["12rem", "18rem"],
+      "height": "100%",
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    "c-img-3": {
+      "type": "elementImage",
+      "src": "work/project-photography/frame-03.webp",
+      "alt": "Frame 03",
+      "objectFit": "cover",
+      "width": ["20rem", "30rem"],
+      "height": "100%",
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    "c-img-4": {
+      "type": "elementImage",
+      "src": "work/project-photography/frame-04.webp",
+      "alt": "Frame 04",
+      "objectFit": "cover",
+      "width": ["14rem", "22rem"],
+      "height": "100%",
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    "c-img-5": {
+      "type": "elementImage",
+      "src": "work/project-photography/frame-05.webp",
+      "alt": "Frame 05",
+      "objectFit": "cover",
+      "width": ["18rem", "28rem"],
+      "height": "100%",
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    "c-img-6": {
+      "type": "elementImage",
+      "src": "work/project-photography/frame-06.webp",
+      "alt": "Frame 06",
+      "objectFit": "cover",
+      "width": ["10rem", "16rem"],
+      "height": "100%",
+      "borderRadius": "1.25rem",
+      "align": "center"
+    }
+  }
+}

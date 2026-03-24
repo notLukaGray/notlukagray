@@ -1,0 +1,90 @@
+{
+  "type": "sectionColumn",
+  "id": "immersive_b",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000060",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "20px" }],
+  "marginBottom": ["1.5rem", "3rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.4, 1] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1.25rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem", "gap": "1rem" },
+      { "padding": "1.5rem", "gap": "1rem" }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "b-image": { "borderRadius": "1.25rem", "fill": "#ffffff08", "padding": "0.4rem" }
+    },
+    "mobile": {
+      "b-image": { "borderRadius": "1rem", "fill": "#ffffff08", "padding": "0.35rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "b-kicker": 0, "b-title": 0, "b-body": 0, "b-image": 0 },
+    "desktop": { "b-kicker": 0, "b-title": 0, "b-body": 0, "b-image": 1 }
+  },
+  "elementOrder": ["b-kicker", "b-title", "b-body", "b-image"],
+  "definitions": {
+    "b-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CONCEPT",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-title": {
+      "type": "elementHeading",
+      "level": 3,
+      "text": "The experience begins before you enter the room.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "b-body": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "Participants walk through a calibrated space where physical walls dissolve into projected geometry. Depth sensors read their movement and alter the environment in real time — light, sound, and spatial topology shift as a function of where each body stands in the room. The installation holds up to eight people simultaneously, each experiencing a subtly different version of the same space.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.1 } }
+      }
+    },
+    "b-image": {
+      "type": "elementImage",
+      "src": "work/project-immersive/immersive-overview.webp",
+      "alt": "Installation view showing projected geometry and participants",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["16rem", "100%"],
+      "constraints": [{ "minHeight": "0" }, { "minHeight": "22rem" }],
+      "borderRadius": ["0.8rem", "1rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.05 } }
+      }
+    }
+  }
+}

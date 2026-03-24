@@ -1,0 +1,11 @@
+node_modules
+.next
+.dead
+out
+build
+dist
+*.min.js
+*.min.css
+package-lock.json
+.next-env.d.ts
+.claude

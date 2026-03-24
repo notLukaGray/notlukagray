@@ -1,0 +1,82 @@
+{
+  "type": "sectionColumn",
+  "id": "pipeline_section_e",
+  "width": ["100%", "92%"],
+  "contentWidth": ["100%", "min(92%, 72rem)"],
+  "height": "hug",
+  "marginTop": ["1.5rem", "3rem"],
+  "marginBottom": ["1.5rem", "3rem"],
+  "align": "center",
+  "fill": "#00000088",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "20px" }],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1.2] },
+  "columnGaps": { "mobile": "1rem", "desktop": "2rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "top" },
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "center" }
+    ]
+  },
+  "itemStyles": {
+    "mobile": {
+      "boundary-quote": { "padding": "1rem", "fill": "#ffffff0c", "borderRadius": "1rem" }
+    },
+    "desktop": {
+      "boundary-quote": {
+        "padding": "1.25rem 1.5rem",
+        "fill": "#ffffff0c",
+        "borderRadius": "1rem",
+        "alignY": "center"
+      }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "boundary-head": 0, "boundary-body": 0, "boundary-quote": 0 },
+    "desktop": { "boundary-head": 0, "boundary-body": 0, "boundary-quote": 1 }
+  },
+  "elementOrder": {
+    "mobile": ["boundary-head", "boundary-body", "boundary-quote"],
+    "desktop": ["boundary-head", "boundary-body", "boundary-quote"]
+  },
+  "definitions": {
+    "boundary-head": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Why the boundary matters",
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": { "entrancePreset": "fade" }
+    },
+    "boundary-body": {
+      "type": "elementRichText",
+      "content": "- **Tests** — Load and Expand are sync and pure; you can unit-test with in-memory JSON. Resolve can be tested with a mock base URL and optional mock fetch for 3D.\n- **Authoring** — Content stays in JSON and presets; no React. Adding a page is adding or editing a JSON file.\n- **Performance** — One `await` in the whole pipeline (`inlineModel3DAssets`). Everything else is sync; async is only “fetch and inline 3D assets.”",
+      "level": 2,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.08 } }
+      }
+    },
+    "boundary-quote": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Expand stays synchronous because it only resolves references (definition keys → block objects). URL resolution lives in Resolve, where assetBase and CDN/proxy are known.",
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.18 } }
+      }
+    }
+  }
+}

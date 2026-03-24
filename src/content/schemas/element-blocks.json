@@ -1,0 +1,698 @@
+[
+  {
+    "type": "elementHeading",
+    "label": "Heading",
+    "description": "Section heading (h1–h6) with layout: align, width, margins, textAlign",
+    "props": [
+      {
+        "name": "level",
+        "type": "unknown",
+        "required": true
+      },
+      {
+        "name": "text",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "wordWrap",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "textAlign",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "elementBody",
+    "label": "Body",
+    "description": "Body text with typography variant (e.g. large-regular, legal-book) and layout",
+    "props": [
+      {
+        "name": "text",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "variant",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "wordWrap",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "textAlign",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "elementLink",
+    "label": "Link",
+    "description": "Link with label and href; copyType heading (level 1–6) or body (variant); same layout as heading/body (align, width, margins, textAlign)",
+    "props": [
+      {
+        "name": "label",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "href",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "external",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "copyType",
+        "type": "unknown",
+        "required": true
+      },
+      {
+        "name": "level",
+        "type": "unknown",
+        "required": true
+      },
+      {
+        "name": "wordWrap",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "textAlign",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "elementLink",
+    "label": "Link",
+    "description": "Link with label and href; copyType heading (level 1–6) or body (variant); same layout as heading/body (align, width, margins, textAlign)",
+    "props": [
+      {
+        "name": "label",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "href",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "external",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "copyType",
+        "type": "unknown",
+        "required": true
+      },
+      {
+        "name": "variant",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "wordWrap",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "textAlign",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "elementImage",
+    "label": "Image",
+    "description": "Image (CDN-delivered), layout, objectFit (cover/contain/fillWidth/fillHeight), rotate, flip",
+    "props": [
+      {
+        "name": "src",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "alt",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "objectFit",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "objectPosition",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rotate",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "flipHorizontal",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "flipVertical",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "textAlign",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "elementVideo",
+    "label": "Video",
+    "description": "Inline video. With module: JSON-driven UI. Without module: native browser controls.",
+    "props": [
+      {
+        "name": "src",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "poster",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "autoplay",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "loop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "muted",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "objectFit",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "objectPosition",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rotate",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "flipHorizontal",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "flipVertical",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "showPlayButton",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "textAlign",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "elementVector",
+    "label": "Vector",
+    "description": "Structured shapes (rect, circle, path, etc.); colors/strokes and gradients editable on page",
+    "props": [
+      {
+        "name": "viewBox",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "preserveAspectRatio",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "shapes",
+        "type": "array",
+        "required": true
+      },
+      {
+        "name": "gradients",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "strokeGroup",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "rotate",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "flipHorizontal",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "flipVertical",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "textAlign",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "elementSVG",
+    "label": "SVG (inline)",
+    "description": "Inline SVG markup; treat as image (no editing, display only). Sanitized.",
+    "props": [
+      {
+        "name": "markup",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "rotate",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "flipHorizontal",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "flipVertical",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "id",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "width",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "height",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "align",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "textAlign",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginTop",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginBottom",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginLeft",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "marginRight",
+        "type": "unknown",
+        "required": false
+      },
+      {
+        "name": "zIndex",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  }
+]

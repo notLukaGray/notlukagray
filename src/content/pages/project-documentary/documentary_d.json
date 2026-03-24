@@ -1,0 +1,87 @@
+{
+  "type": "sectionColumn",
+  "id": "documentary_d",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000050",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "18px" }],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": { "mobile": 1, "desktop": 3 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1, 0.9] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "0.75rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.25rem", "gap": "0.75rem" },
+      { "padding": "1.25rem", "gap": "0.75rem", "fill": "#ffffff04", "borderRadius": "1.5rem" },
+      { "padding": "1.25rem", "gap": "0.75rem" }
+    ]
+  },
+  "elementOrder": {
+    "mobile": ["d-kicker", "d-notes", "d-structure", "d-craft"],
+    "desktop": ["d-kicker", "d-notes", "d-structure", "d-craft"]
+  },
+  "columnAssignments": {
+    "mobile": { "d-kicker": 0, "d-notes": 0, "d-structure": 0, "d-craft": 0 },
+    "desktop": { "d-kicker": 0, "d-notes": 0, "d-structure": 1, "d-craft": 2 }
+  },
+  "columnSpan": {
+    "mobile": { "d-kicker": "all" },
+    "desktop": { "d-kicker": "all" }
+  },
+  "definitions": {
+    "d-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PROCESS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "d-notes": {
+      "type": "elementRichText",
+      "content": "### Director's Notes\n\nI came to this project trying to make a film about water policy. What I found was something harder to name: a family of people whose sense of time is tied to a river's rhythm, and who are now watching that rhythm break apart in slow motion.\n\nI stopped trying to explain the problem. Instead I tried to stay close to what it feels like to live inside it.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "d-structure": {
+      "type": "elementRichText",
+      "content": "### Film Structure\n\n**I. First Light** — 0:00–9:40\nRiver at dawn, daily preparation\n\n**II. Low Season** — 9:40–19:10\nThe changed landscape, family tension\n\n**III. Waiting** — 19:10–28:30\nSilence, memory, the archive\n\n**IV. Downstream** — 28:30–38:00\nFuture conditional; what remains",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.08 } }
+      }
+    },
+    "d-craft": {
+      "type": "elementRichText",
+      "content": "### Craft\n\n**Camera** ARRI Alexa 35, anamorphic glass\n\n**Aspect ratio** 2.39:1\n\n**Format** 4K DCP, 4K DCI\n\n**Sound** Field recorded, no score\n\n**Grade** Dominique Remy\n\n**Runtime** 38 min\n\n**Language** Portuguese, with subtitles",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.16 } }
+      }
+    }
+  }
+}

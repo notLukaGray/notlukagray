@@ -1,0 +1,88 @@
+{
+  "type": "scrollContainer",
+  "id": "rgs_b",
+  "width": "100%",
+  "height": "hug",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "scrollDirection": "horizontal",
+  "scrollSnap": false,
+  "padding": ["0 1rem", "0 4%"],
+  "gap": ["0.75rem", "1rem"],
+  "label": {
+    "type": "elementHeading",
+    "level": 6,
+    "text": "GRID TYPOLOGY",
+    "align": "left",
+    "width": "hug",
+    "height": "hug",
+    "marginBottom": "0.75rem"
+  },
+  "elements": [
+    {
+      "id": "b-g1",
+      "type": "elementImage",
+      "src": "research/research-grid-systems/grid-manuscript.webp",
+      "alt": "Manuscript grid — single column with wide margins",
+      "objectFit": "contain",
+      "width": ["18rem", "24rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-g2",
+      "type": "elementImage",
+      "src": "research/research-grid-systems/grid-column.webp",
+      "alt": "Column grid — 3 to 6 equal columns",
+      "objectFit": "contain",
+      "width": ["18rem", "24rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-g3",
+      "type": "elementImage",
+      "src": "research/research-grid-systems/grid-modular.webp",
+      "alt": "Modular grid — rows and columns creating a matrix",
+      "objectFit": "contain",
+      "width": ["18rem", "24rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-g4",
+      "type": "elementImage",
+      "src": "research/research-grid-systems/grid-hierarchical.webp",
+      "alt": "Hierarchical grid — asymmetric zones for varied content types",
+      "objectFit": "contain",
+      "width": ["22rem", "28rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-g5",
+      "type": "elementImage",
+      "src": "research/research-grid-systems/grid-baseline.webp",
+      "alt": "Baseline grid overlay on typeset text",
+      "objectFit": "contain",
+      "width": ["16rem", "20rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-g6",
+      "type": "elementImage",
+      "src": "research/research-grid-systems/grid-responsive.webp",
+      "alt": "Responsive column grid — 4 columns at desktop collapsing to 1 at mobile",
+      "objectFit": "contain",
+      "width": ["24rem", "32rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    }
+  ]
+}

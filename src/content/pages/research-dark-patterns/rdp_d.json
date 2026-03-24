@@ -1,0 +1,57 @@
+{
+  "type": "contentBlock",
+  "id": "rdp_d",
+  "width": ["100%", "72%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "padding": ["1.5rem 1rem", "0"],
+  "elementOrder": ["d-label", "d-statement", "d-coda"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "ETHICS & RESPONSIBILITY",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+      }
+    },
+    "d-statement": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "\"I was just doing what I was told\" is not an ethical position available to designers. We choose which briefs to accept and which to decline. We choose how to interpret the latitude we are given.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.15 } }
+      }
+    },
+    "d-coda": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Dark patterns persist because they work — at least in the short term. They optimise for metrics that are measurable (conversion, clicks, sign-ups) and externalise costs that are harder to measure (trust, user wellbeing, reputation). The designer who implements them is participating in that transfer of costs onto users.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.35 } }
+      }
+    }
+  }
+}

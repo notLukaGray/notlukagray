@@ -1,0 +1,11 @@
+{
+  "type": "divider",
+  "width": "100%",
+  "height": ["65vh", "78vh"],
+  "align": "full",
+  "layers": [{ "fill": "#00000000" }],
+  "onViewportProgress": {
+    "type": "updateTransitionProgress",
+    "payload": { "id": "motion-bg-shift", "invert": true }
+  }
+}

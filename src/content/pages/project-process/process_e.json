@@ -1,0 +1,66 @@
+{
+  "type": "sectionColumn",
+  "id": "process_e",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "14px" }],
+  "marginBottom": ["3rem", "5rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.1, 1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "2rem", "gap": "1rem" },
+      { "padding": "2rem", "gap": "1rem" }
+    ]
+  },
+  "elementOrder": ["e-outcome-label", "e-outcome", "e-lessons-label", "e-lessons"],
+  "columnAssignments": {
+    "mobile": { "e-outcome-label": 0, "e-outcome": 0, "e-lessons-label": 0, "e-lessons": 0 },
+    "desktop": { "e-outcome-label": 0, "e-outcome": 0, "e-lessons-label": 1, "e-lessons": 1 }
+  },
+  "definitions": {
+    "e-outcome-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "OUTCOME",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-outcome": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "What shipped, what changed after it shipped, and what the client said about it. A paragraph of honest assessment — not marketing copy. What worked, what surprised you, what you'd approach differently.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "e-lessons-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "WHAT I LEARNED",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-lessons": {
+      "type": "elementRichText",
+      "content": "- Constraint is not the enemy of creativity — ambiguity is\n- Document decisions as they're made, not at the end\n- The second concept is usually the one you actually believe in\n- Timelines are a design problem too",
+      "level": 4,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

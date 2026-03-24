@@ -1,0 +1,31 @@
+{
+  "type": "contentBlock",
+  "id": "unlock_modal_intro",
+  "ariaLabel": "Unlock intro",
+  "width": "100%",
+  "height": "hug",
+  "align": "center",
+  "fill": "transparent",
+  "elementOrder": ["unlock_modal_heading", "unlock_modal_description"],
+  "definitions": {
+    "unlock_modal_heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "This page is password protected",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.5rem"
+    },
+    "unlock_modal_description": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "Enter the password you received to view the content.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem"
+    }
+  }
+}

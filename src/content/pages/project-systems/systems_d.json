@@ -1,0 +1,57 @@
+{
+  "type": "contentBlock",
+  "id": "systems_d",
+  "width": ["100%", "72%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "marginBottom": ["2rem", "5rem"],
+  "padding": ["1.5rem 1rem", "0"],
+  "elementOrder": ["d-label", "d-statement", "d-footnote"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "DESIGN PHILOSOPHY",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+      }
+    },
+    "d-statement": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "A design system is a series of decisions made once so they don't have to be made again. The goal is not consistency for its own sake — it's to protect thinking budget for the problems that actually matter.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.15 } }
+      }
+    },
+    "d-footnote": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Built for a team of four. Scaled to an org of forty. Documented so anyone could inherit it on day one.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.35 } }
+      }
+    }
+  }
+}

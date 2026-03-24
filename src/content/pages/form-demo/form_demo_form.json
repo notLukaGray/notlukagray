@@ -1,0 +1,166 @@
+{
+  "type": "formBlock",
+  "id": "form_demo_form",
+  "ariaLabel": "All field types",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#1a1a1a",
+  "borderRadius": ["0 0 1.5rem 1.5rem", "0 0 2rem 2rem"],
+  "marginBottom": "2rem",
+  "contentWidth": "full",
+  "fields": [
+    {
+      "type": "formField",
+      "fieldType": "text",
+      "name": "demo_text",
+      "label": "Text",
+      "placeholder": "Single-line text",
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "email",
+      "name": "demo_email",
+      "label": "Email",
+      "placeholder": "you@example.com",
+      "required": true,
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "password",
+      "name": "demo_password",
+      "label": "Password",
+      "placeholder": "••••••••",
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "tel",
+      "name": "demo_tel",
+      "label": "Tel",
+      "placeholder": "+1 234 567 8900",
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "url",
+      "name": "demo_url",
+      "label": "URL",
+      "placeholder": "https://example.com",
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "number",
+      "name": "demo_number",
+      "label": "Number",
+      "placeholder": "0",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "date",
+      "name": "demo_date",
+      "label": "Date",
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "paragraph",
+      "name": "demo_paragraph",
+      "label": "Paragraph",
+      "placeholder": "Multiline text…",
+      "rows": 4,
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "checkbox",
+      "name": "demo_checkbox",
+      "label": "Single checkbox (e.g. I agree)",
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "checkboxGroup",
+      "name": "demo_checkbox_group",
+      "label": "Checkbox group",
+      "options": [
+        { "value": "a", "label": "Option A" },
+        { "value": "b", "label": "Option B" },
+        { "value": "c", "label": "Option C" }
+      ],
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "radio",
+      "name": "demo_radio",
+      "label": "Radio",
+      "options": [
+        { "value": "x", "label": "Choice X" },
+        { "value": "y", "label": "Choice Y" },
+        { "value": "z", "label": "Choice Z" }
+      ],
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "select",
+      "name": "demo_select",
+      "label": "Select",
+      "placeholder": "Pick one",
+      "options": [
+        { "value": "one", "label": "One" },
+        { "value": "two", "label": "Two" },
+        { "value": "three", "label": "Three" }
+      ],
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "switch",
+      "name": "demo_switch",
+      "label": "Switch (toggle)",
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "range",
+      "name": "demo_range",
+      "label": "Range",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "file",
+      "name": "demo_file",
+      "label": "File upload",
+      "accept": "image/*",
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "hidden",
+      "name": "demo_hidden",
+      "value": "hidden-value"
+    },
+    {
+      "type": "formField",
+      "fieldType": "submit",
+      "label": "Submit",
+      "loadingText": "Sending…",
+      "level": 2,
+      "inputClassName": "font-semibold"
+    }
+  ],
+  "method": "post"
+}

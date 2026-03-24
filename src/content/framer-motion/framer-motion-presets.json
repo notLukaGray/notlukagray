@@ -1,0 +1,41 @@
+{
+  "entrancePresets": {
+    "fade": {
+      "initial": { "opacity": 0 },
+      "animate": { "opacity": 1 }
+    },
+    "slideUp": {
+      "initial": { "opacity": 0, "y": 24 },
+      "animate": { "opacity": 1, "y": 0 }
+    },
+    "slideDown": {
+      "initial": { "opacity": 0, "y": -24 },
+      "animate": { "opacity": 1, "y": 0 }
+    },
+    "slideLeft": {
+      "initial": { "opacity": 0, "x": 24 },
+      "animate": { "opacity": 1, "x": 0 }
+    },
+    "slideRight": {
+      "initial": { "opacity": 0, "x": -24 },
+      "animate": { "opacity": 1, "x": 0 }
+    }
+  },
+  "exitPresets": {
+    "fade": {
+      "exit": { "opacity": 0 }
+    },
+    "slideUp": {
+      "exit": { "opacity": 0, "y": -24 }
+    },
+    "slideDown": {
+      "exit": { "opacity": 0, "y": 24 }
+    },
+    "slideLeft": {
+      "exit": { "opacity": 0, "x": -24 }
+    },
+    "slideRight": {
+      "exit": { "opacity": 0, "x": 24 }
+    }
+  }
+}

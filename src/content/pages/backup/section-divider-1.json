@@ -1,0 +1,7 @@
+{
+  "type": "divider",
+  "width": ["100%", "90%"],
+  "height": ["70vh", "80vh"],
+  "align": "full",
+  "layers": [{ "fill": "#00000000" }]
+}

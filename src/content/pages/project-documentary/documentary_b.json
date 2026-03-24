@@ -1,0 +1,86 @@
+{
+  "type": "sectionColumn",
+  "id": "documentary_b",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#0b0d0f",
+  "marginBottom": ["1rem", "2rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.3, 1] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1.5rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.25rem 1rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "2rem 1.5rem", "gap": "1rem" },
+      { "padding": "2rem 1.5rem", "gap": "1rem" }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "b-player": { "borderRadius": "1.25rem", "fill": "#000000", "padding": "0.4rem" }
+    },
+    "mobile": {
+      "b-player": { "borderRadius": "1rem", "fill": "#000000", "padding": "0.35rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "b-kicker": 0, "b-synopsis": 0, "b-player": 0, "b-themes": 0 },
+    "desktop": { "b-kicker": 0, "b-synopsis": 0, "b-themes": 0, "b-player": 1 }
+  },
+  "elementOrder": ["b-kicker", "b-synopsis", "b-player", "b-themes"],
+  "definitions": {
+    "b-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "SYNOPSIS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-synopsis": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "Still Water follows three generations of a fishing family in the Alentejo as they navigate a river system reshaped by upstream damming, agricultural runoff, and drought. The film refuses linear argument, choosing instead to sit with the texture of daily life against a landscape in slow transformation. Shot over eighteen months across two seasons.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0 } }
+      }
+    },
+    "b-player": {
+      "type": "elementVideo",
+      "src": "work/project-documentary/doc-trailer.webm",
+      "poster": "work/project-documentary/doc-trailer-poster.webp",
+      "aspectRatio": "16/9",
+      "module": "video-player",
+      "width": "100%",
+      "height": "hug",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.1 } }
+      }
+    },
+    "b-themes": {
+      "type": "elementRichText",
+      "content": "**Water  ·  Memory  ·  Labour  ·  Time  ·  Loss**\n\nThe film does not argue for or against any particular solution. It insists only on the particularity of this river, these people, and the rhythms that are being slowly undone.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.15 } }
+      }
+    }
+  }
+}

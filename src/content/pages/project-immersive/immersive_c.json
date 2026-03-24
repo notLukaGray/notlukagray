@@ -1,0 +1,88 @@
+{
+  "type": "scrollContainer",
+  "id": "immersive_c",
+  "width": "100%",
+  "height": "hug",
+  "marginBottom": ["1.5rem", "3rem"],
+  "scrollDirection": "horizontal",
+  "scrollSnap": false,
+  "padding": ["0 1rem", "0 4%"],
+  "gap": ["0.75rem", "1rem"],
+  "label": {
+    "type": "elementHeading",
+    "level": 6,
+    "text": "DOCUMENTATION",
+    "align": "left",
+    "width": "hug",
+    "height": "hug",
+    "marginBottom": "0.75rem"
+  },
+  "elements": [
+    {
+      "id": "c-doc-1",
+      "type": "elementImage",
+      "src": "work/project-immersive/doc-entry.webp",
+      "alt": "Entry threshold — participants crossing into the space",
+      "objectFit": "cover",
+      "width": ["22rem", "28rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "c-doc-2",
+      "type": "elementImage",
+      "src": "work/project-immersive/doc-geometry.webp",
+      "alt": "Projected geometry responding to body position",
+      "objectFit": "cover",
+      "width": ["18rem", "22rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "c-doc-3",
+      "type": "elementImage",
+      "src": "work/project-immersive/doc-crowd.webp",
+      "alt": "Multiple participants altering shared environment",
+      "objectFit": "cover",
+      "width": ["26rem", "34rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "c-doc-4",
+      "type": "elementImage",
+      "src": "work/project-immersive/doc-detail.webp",
+      "alt": "Detail: sensor array and projection edge",
+      "objectFit": "cover",
+      "width": ["16rem", "20rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "c-doc-5",
+      "type": "elementImage",
+      "src": "work/project-immersive/doc-dark.webp",
+      "alt": "Low-light state during audio-reactive phase",
+      "objectFit": "cover",
+      "width": ["20rem", "26rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "c-doc-6",
+      "type": "elementImage",
+      "src": "work/project-immersive/doc-exit.webp",
+      "alt": "Exit state — space returns to neutral after participants leave",
+      "objectFit": "cover",
+      "width": ["18rem", "24rem"],
+      "height": ["14rem", "18rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    }
+  ]
+}

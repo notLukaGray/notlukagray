@@ -1,0 +1,44 @@
+{
+  "type": "page",
+  "id": "project-documentary",
+  "title": "Still Water — Documentary Film",
+  "description": "A 38-minute essay film about a coastal community's relationship with a river system changed beyond recognition.",
+  "assetBaseUrl": "/work",
+  "backgrounds": {
+    "bg-film": {
+      "type": "backgroundVideo",
+      "src": "work/project-documentary/doc-ambient-loop.webm",
+      "poster": "work/project-documentary/doc-ambient-poster.webp",
+      "objectFit": "cover",
+      "opacity": 0.55
+    },
+    "bg-reading": {
+      "type": "backgroundVariable",
+      "layers": [
+        { "fill": "#0b0d0f" },
+        {
+          "fill": "radial-gradient(ellipse 100% 50% at 50% 100%, #0f1820 0%, transparent 70%)",
+          "blendMode": "screen"
+        }
+      ]
+    }
+  },
+  "activeBackground": "bg-film",
+  "transitions": [
+    {
+      "id": "bg-film",
+      "from": "bg-film",
+      "to": "bg-reading",
+      "type": "SCROLL"
+    }
+  ],
+  "sectionOrder": [
+    "nav",
+    "documentary_a",
+    "documentary_b",
+    "documentary_c",
+    "documentary_d",
+    "documentary_e",
+    "footer"
+  ]
+}

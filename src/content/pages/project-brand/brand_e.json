@@ -1,0 +1,101 @@
+{
+  "type": "sectionColumn",
+  "id": "brand_e",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "14px"
+    }
+  ],
+  "marginBottom": ["3rem", "5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 2
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0",
+    "desktop": "0"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.5rem",
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "2rem",
+        "gap": "1rem"
+      },
+      {
+        "padding": "2rem",
+        "gap": "1rem"
+      }
+    ]
+  },
+  "elementOrder": ["e-label", "e-rationale", "e-deliverables-label", "e-deliverables"],
+  "columnAssignments": {
+    "mobile": {
+      "e-label": 0,
+      "e-rationale": 0,
+      "e-deliverables-label": 0,
+      "e-deliverables": 0
+    },
+    "desktop": {
+      "e-label": 0,
+      "e-rationale": 0,
+      "e-deliverables-label": 1,
+      "e-deliverables": 1
+    }
+  },
+  "definitions": {
+    "e-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "RATIONALE",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-rationale": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "NOMA is a word meaning \"north\" in Old Norse. The brief was to make a mark that felt like a geographic fact \u2014 something elemental, not decorative. That ruled out illustration, pattern, and anything that could be described as charming.\n\nWe arrived at a geometric wordmark built on a strict baseline grid, with spacing derived from the proportions of the bottle itself. The result is a brand that looks like it has always existed.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "e-deliverables-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "DELIVERABLES",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-deliverables": {
+      "type": "elementRichText",
+      "content": "- Brand strategy document\n- Logo suite (primary, secondary, icon)\n- Full colour system\n- Typography guidelines\n- Grid and spacing system\n- Motion principles\n- Brand guidelines PDF (120pp)\n- Asset library hand-off",
+      "level": 4,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

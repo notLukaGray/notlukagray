@@ -1,0 +1,39 @@
+import type { CSSProperties } from "react";
+import type { FormFieldBlock } from "@/page-builder/core/page-builder-schemas";
+import { resolveResponsiveValue } from "@/core/lib/responsive-value";
+
+/**
+ * Builds CSS style object from form field block Style modifiers.
+ * Used by FormFieldRenderer to apply width, padding, fill, stroke, margins, etc.
+ */
+export function formFieldStyleFromConfig(field: FormFieldBlock, isMobile: boolean): CSSProperties {
+  const width = resolveResponsiveValue(field.width, isMobile);
+  const marginTop = resolveResponsiveValue(field.marginTop, isMobile);
+  const marginBottom = resolveResponsiveValue(field.marginBottom, isMobile);
+  const marginLeft = resolveResponsiveValue(field.marginLeft, isMobile);
+  const marginRight = resolveResponsiveValue(field.marginRight, isMobile);
+  const padding = resolveResponsiveValue(field.padding, isMobile);
+  const fill = resolveResponsiveValue(field.fill, isMobile);
+  const stroke = resolveResponsiveValue(field.stroke, isMobile);
+  const borderRadius = resolveResponsiveValue(field.borderRadius, isMobile);
+  const borderWidth = resolveResponsiveValue(field.borderWidth, isMobile);
+  const textAlign = resolveResponsiveValue(field.textAlign, isMobile);
+
+  const style: CSSProperties = {};
+  if (width !== undefined) style.width = width;
+  if (marginTop !== undefined) style.marginTop = marginTop;
+  if (marginBottom !== undefined) style.marginBottom = marginBottom;
+  if (marginLeft !== undefined) style.marginLeft = marginLeft;
+  if (marginRight !== undefined) style.marginRight = marginRight;
+  if (padding !== undefined) style.padding = padding;
+  if (fill !== undefined) style.background = fill;
+  if (stroke !== undefined) style.borderColor = stroke;
+  if (borderRadius !== undefined) style.borderRadius = borderRadius;
+  if (borderWidth !== undefined) style.borderWidth = borderWidth;
+  if (textAlign !== undefined) style.textAlign = textAlign as CSSProperties["textAlign"];
+
+  if (field.wrapperStyle && typeof field.wrapperStyle === "object") {
+    Object.assign(style, field.wrapperStyle);
+  }
+  return style;
+}

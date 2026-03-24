@@ -1,0 +1,67 @@
+{
+  "type": "contentBlock",
+  "id": "editorial_a",
+  "width": ["100%", "88%"],
+  "height": ["80vh", "90vh"],
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "elementOrder": ["a-kicker", "a-title", "a-subtitle", "a-tags"],
+  "definitions": {
+    "a-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "EDITORIAL / PRINT / 2024",
+      "align": "center",
+      "width": "hug",
+      "marginTop": ["30vh", "35vh"],
+      "marginBottom": "1.25rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.6 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Project Title",
+      "align": "center",
+      "width": ["95%", "75%"],
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.65, "delay": 0.08 } }
+      }
+    },
+    "a-subtitle": {
+      "type": "elementHeading",
+      "level": 3,
+      "semanticLevel": 2,
+      "text": "A Subtitle or Descriptor",
+      "align": "center",
+      "width": ["85%", "55%"],
+      "wordWrap": true,
+      "marginBottom": "2.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.55, "delay": 0.18 } }
+      }
+    },
+    "a-tags": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Art Direction · Typography · Print · Client Name",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.28 } }
+      }
+    }
+  }
+}

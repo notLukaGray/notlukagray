@@ -1,0 +1,174 @@
+{
+  "type": "sectionColumn",
+  "id": "brand_b",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff07",
+  "borderRadius": ["1.5rem", "2.5rem"],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "20px"
+    }
+  ],
+  "marginBottom": ["2rem", "3rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1.2, 1, 0.9]
+  },
+  "columnGaps": {
+    "mobile": "0",
+    "desktop": "0"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.5rem",
+        "gap": "1.25rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "2rem",
+        "gap": "1rem"
+      },
+      {
+        "padding": "2rem 1.5rem",
+        "gap": "1rem",
+        "fill": "#ffffff04"
+      },
+      {
+        "padding": "2rem 1.5rem",
+        "gap": "1rem"
+      }
+    ]
+  },
+  "elementOrder": [
+    "b-mark",
+    "b-mark-caption",
+    "b-type-label",
+    "b-typeface",
+    "b-type-specimen",
+    "b-palette-label",
+    "b-palette-primary",
+    "b-palette-secondary",
+    "b-palette-note"
+  ],
+  "columnAssignments": {
+    "mobile": {
+      "b-mark": 0,
+      "b-mark-caption": 0,
+      "b-type-label": 0,
+      "b-typeface": 0,
+      "b-type-specimen": 0,
+      "b-palette-label": 0,
+      "b-palette-primary": 0,
+      "b-palette-secondary": 0,
+      "b-palette-note": 0
+    },
+    "desktop": {
+      "b-mark": 0,
+      "b-mark-caption": 0,
+      "b-type-label": 1,
+      "b-typeface": 1,
+      "b-type-specimen": 1,
+      "b-palette-label": 2,
+      "b-palette-primary": 2,
+      "b-palette-secondary": 2,
+      "b-palette-note": 2
+    }
+  },
+  "definitions": {
+    "b-mark": {
+      "type": "elementImage",
+      "src": "work/project-brand/mark.webp",
+      "alt": "Brand mark",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["16rem", "22rem"],
+      "align": "center"
+    },
+    "b-mark-caption": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Primary mark \u2014 reversed on field",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug"
+    },
+    "b-type-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "TYPOGRAPHY",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "b-typeface": {
+      "type": "elementHeading",
+      "level": 3,
+      "semanticLevel": 4,
+      "text": "GT Alpina",
+      "align": "left",
+      "width": "100%",
+      "wordWrap": true,
+      "marginBottom": "0.5rem"
+    },
+    "b-type-specimen": {
+      "type": "elementRichText",
+      "content": "**Regular** \u2014 Body, captions, metadata\n\n**Medium** \u2014 Subheadings, labels\n\n**Bold** \u2014 Display, emphasis\n\n*Italic* \u2014 Pull quotes, editorial notes\n\n`ABCDEFGHIJKLM`\n`NOPQRSTUVWXYZ`\n`0123456789`",
+      "level": 5,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-palette-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "COLOUR",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "b-palette-primary": {
+      "type": "elementRichText",
+      "content": "**Primary**\n\n`#000000` Black\n`#FFFFFF` White\n`#F5F0E8` Warm White",
+      "level": 5,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-palette-secondary": {
+      "type": "elementRichText",
+      "content": "**Accent**\n\n`#C8A96E` Gold\n`#2D2D2D` Charcoal\n`#8A8A8A` Mid Grey",
+      "level": 5,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-palette-note": {
+      "type": "elementBody",
+      "level": 6,
+      "text": "Gold is accent only \u2014 no backgrounds, no large fields.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

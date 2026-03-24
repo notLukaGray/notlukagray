@@ -1,0 +1,90 @@
+{
+  "type": "sectionColumn",
+  "id": "pipeline_section_c",
+  "width": ["100%", "92%"],
+  "contentWidth": ["100%", "min(92%, 80rem)"],
+  "height": "hug",
+  "marginTop": ["1.5rem", "3rem"],
+  "marginBottom": ["1.5rem", "3rem"],
+  "align": "center",
+  "fill": "#00000088",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "20px" }],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.1, 1] },
+  "columnGaps": { "mobile": "1rem", "desktop": "1.5rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "top" },
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "top" }
+    ]
+  },
+  "itemStyles": {
+    "mobile": {
+      "pipeline-code": { "padding": "1rem", "fill": "#0d1117", "borderRadius": "0.75rem" },
+      "pipeline-diagram": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "0.75rem" }
+    },
+    "desktop": {
+      "pipeline-code": {
+        "padding": "1.25rem 1.5rem",
+        "fill": "#0d1117",
+        "borderRadius": "0.75rem",
+        "alignY": "top"
+      },
+      "pipeline-diagram": {
+        "padding": "1.25rem 1.5rem",
+        "fill": "#ffffff08",
+        "borderRadius": "0.75rem",
+        "alignY": "top"
+      }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "pipeline-head": 0, "pipeline-code": 0, "pipeline-diagram": 0 },
+    "desktop": { "pipeline-head": 0, "pipeline-code": 0, "pipeline-diagram": 1 }
+  },
+  "columnSpan": { "mobile": { "pipeline-head": "all" }, "desktop": { "pipeline-head": "all" } },
+  "elementOrder": {
+    "mobile": ["pipeline-head", "pipeline-code", "pipeline-diagram"],
+    "desktop": ["pipeline-head", "pipeline-code", "pipeline-diagram"]
+  },
+  "definitions": {
+    "pipeline-head": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "The pipeline in code",
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": { "entrancePreset": "fade" }
+    },
+    "pipeline-code": {
+      "type": "elementRichText",
+      "content": "The orchestrator—`getPage(slug)` runs the full pipeline and returns a resolved page or null:\n\n```ts\nexport async function getPage(slug: string): Promise<ResolvedPage | null> {\n  if (!isSafePathSegment(slug)) return null;\n  const page = loadPageBuilder(slug);\n  if (page == null || !isPageBuilder(page)) return null;\n  const assetBase = getAssetBaseUrl(page as ResolvedPage);\n  const { bg: expandedBg, sections: sectionsWithResolvedTriggers } = expandPageBuilder(page, { assetBase });\n  const sectionsWithInline3DAssets = await inlineModel3DAssets(sectionsWithResolvedTriggers);\n  return { ...page, bg: expandedBg, sections: sectionsWithInline3DAssets, definitions: page.definitions };\n}\n```",
+      "level": 4,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideRight",
+        "entranceMotion": { "transition": { "delay": 0.1 } }
+      }
+    },
+    "pipeline-diagram": {
+      "type": "elementRichText",
+      "content": "**Flow (ASCII):**\n\n```\nslug → LOAD (read page JSON, merge definitions, resolve presets)\n     → PageBuilder\n     → EXPAND (pure, sync: sectionOrder → sections, namespace columns, trigger refs, trigger payload URLs when assetBase provided)\n     → bg + sections\n     → RESOLVE (inlineModel3DAssets — only async)\n     → ResolvedPage\n     → RENDER (getPage → resolveSectionBlockUrls → PageBuilderRenderer)\n```",
+      "level": 4,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideLeft",
+        "entranceMotion": { "transition": { "delay": 0.15 } }
+      }
+    }
+  }
+}

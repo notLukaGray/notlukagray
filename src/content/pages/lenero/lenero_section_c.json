@@ -1,0 +1,99 @@
+{
+  "type": "sectionColumn",
+  "id": "lenero_section_c",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#000000",
+  "borderRadius": ["1.5rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "scrollSpeed": 1.1,
+  "marginBottom": ["1.5rem", "2rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "0", "gap": "0" }],
+    "desktop": [{ "padding": "0", "gap": "0" }]
+  },
+  "columnAssignments": {
+    "mobile": { "c-img": 0, "c-label": 0, "c-body-1": 0, "c-body-2": 0 },
+    "desktop": { "c-img": 1, "c-label": 0, "c-body-1": 0, "c-body-2": 1 }
+  },
+  "itemStyles": {
+    "mobile": {
+      "c-img": { "padding": "0", "borderRadius": "1.5rem 1.5rem 0 0" },
+      "c-label": { "padding": "1.5rem 1.25rem 0.25rem" },
+      "c-body-1": { "padding": "0 1.25rem" },
+      "c-body-2": { "padding": "0.75rem 1.25rem 1.75rem" }
+    },
+    "desktop": {
+      "c-img": { "padding": "0", "borderRadius": "1.75rem 1.75rem 0 0" },
+      "c-label": { "padding": "2rem 2.75rem 0.5rem" },
+      "c-body-1": { "padding": "0 2.75rem" },
+      "c-body-2": { "padding": "1rem 2.75rem 2.75rem" }
+    }
+  },
+  "elementOrder": ["c-img", "c-label", "c-body-1", "c-body-2"],
+  "definitions": {
+    "c-img": {
+      "type": "elementImage",
+      "src": "work/lenero/lenero-forest-wide.webp",
+      "alt": "The Carson National Forest — dense treeline pressing close to the homes of Las Trampas, New Mexico",
+      "objectFit": "cover",
+      "objectPosition": "50% 40%",
+      "width": "100%",
+      "height": ["20rem", "56vh"],
+      "borderRadius": ["1.5rem 1.5rem 0 0", "1.75rem 1.75rem 0 0"],
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.8 } }
+      }
+    },
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "semanticLevel": 2,
+      "text": "THE STORY",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "c-body-1": {
+      "type": "elementRichText",
+      "content": "Las Trampas, New Mexico sits inside the Carson National Forest. Not near it. Inside it. The trees press close to the homes. In dry years — which is most years now — that closeness is not comfort. It is pressure.\n\nAlex Lopez has lived here his whole life. His family has lived here for two hundred years, in the same house. He did not choose this place. He was made by it.",
+      "level": 4,
+      "align": "left",
+      "textAlign": "left",
+      "width": ["100%", "70%"],
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.15 },
+        "entranceMotion": { "transition": { "duration": 0.6 } }
+      }
+    },
+    "c-body-2": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "A leñero cuts wood. He also manages the system most people never think about until it is gone. A dense, untreated forest is fuel. You thin it, you reduce the load. The wood goes free to the community for heat. Alex has treated over 20 acres himself. With his coalition, thousands.",
+      "align": "left",
+      "textAlign": "left",
+      "width": ["100%", "70%"],
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.15 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.1 } }
+      }
+    }
+  }
+}

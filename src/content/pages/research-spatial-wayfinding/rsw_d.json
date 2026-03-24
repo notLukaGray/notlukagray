@@ -1,0 +1,70 @@
+{
+  "type": "sectionColumn",
+  "id": "rsw_d",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1.2] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1.25rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.25rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem", "gap": "1rem" },
+      { "padding": "1.5rem", "gap": "1rem" }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "d-signage": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "0.4rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "d-label": 0, "d-principles": 0, "d-signage": 0 },
+    "desktop": { "d-label": 0, "d-principles": 0, "d-signage": 1 }
+  },
+  "elementOrder": ["d-label", "d-principles", "d-signage"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "DESIGN PRINCIPLES",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "d-principles": {
+      "type": "elementRichText",
+      "content": "### Seven Principles for Wayfinding Systems\n\n**1. Decision-point design** Place signage at every point where a choice must be made — and only there. Signing between decision points adds noise without information.\n\n**2. Redundancy by system** Use at least two independent cue types (colour + typography, number + pictogram) so that failure of one does not produce disorientation.\n\n**3. Progressive disclosure** Reveal only the information needed for the next decision. A hospital corridor does not need every floor's services listed.\n\n**4. Consistent grammar** Choose a sign typology and apply it without exceptions. Variation is read as meaning.\n\n**5. You-are-here orientation** Maps should be positioned so that north on the map aligns with north in the space, unless clearly annotated otherwise.\n\n**6. Accessibility as primary** Wayfinding must work for users with low vision, colour blindness, cognitive differences, and language differences. These are not edge cases.\n\n**7. System over detail** A good wayfinding system is mediocre in any individual instance — consistent across all instances. Individual brilliance does not compensate for system inconsistency.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "d-signage": {
+      "type": "elementImage",
+      "src": "research/research-spatial-wayfinding/signage-system.webp",
+      "alt": "Wayfinding sign system detail — typography, colour zone coding, and pictogram integration",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["16rem", "100%"],
+      "constraints": [{ "minHeight": "0" }, { "minHeight": "24rem" }],
+      "borderRadius": ["0.75rem", "1rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.08 } }
+      }
+    }
+  }
+}

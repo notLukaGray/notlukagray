@@ -1,0 +1,36 @@
+{
+  "type": "contentBlock",
+  "id": "renv_d",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "elementOrder": ["d-label", "d-photograph"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "THE MATERIAL REALITY",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "d-photograph": {
+      "type": "elementImage",
+      "src": "research/research-environmental/e-waste-facility.webp",
+      "alt": "Electronics recycling facility — circuit boards, screens, and cables processed for material recovery",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["16rem", "55vh"],
+      "borderRadius": ["1.25rem", "1.75rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0 } }
+      }
+    }
+  }
+}

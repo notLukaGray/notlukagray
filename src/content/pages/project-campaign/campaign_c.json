@@ -1,0 +1,67 @@
+{
+  "type": "scrollContainer",
+  "id": "campaign_c",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["2rem", "3rem"],
+  "scrollDirection": "horizontal",
+  "elements": [
+    {
+      "id": "c-ooh-1",
+      "type": "elementImage",
+      "src": "work/project-campaign/ooh-1.webp",
+      "alt": "OOH execution 1",
+      "objectFit": "cover",
+      "width": ["24rem", "34rem"],
+      "height": ["20rem", "28rem"],
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    {
+      "id": "c-ooh-2",
+      "type": "elementImage",
+      "src": "work/project-campaign/ooh-2.webp",
+      "alt": "OOH execution 2",
+      "objectFit": "cover",
+      "width": ["16rem", "24rem"],
+      "height": ["20rem", "28rem"],
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    {
+      "id": "c-ooh-3",
+      "type": "elementImage",
+      "src": "work/project-campaign/ooh-3.webp",
+      "alt": "OOH execution 3",
+      "objectFit": "cover",
+      "width": ["20rem", "28rem"],
+      "height": ["20rem", "28rem"],
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    {
+      "id": "c-ooh-4",
+      "type": "elementImage",
+      "src": "work/project-campaign/ooh-4.webp",
+      "alt": "Digital execution",
+      "objectFit": "cover",
+      "width": ["14rem", "20rem"],
+      "height": ["20rem", "28rem"],
+      "borderRadius": "1.25rem",
+      "align": "center"
+    },
+    {
+      "id": "c-ooh-5",
+      "type": "elementImage",
+      "src": "work/project-campaign/ooh-5.webp",
+      "alt": "Social execution",
+      "objectFit": "cover",
+      "width": ["20rem", "28rem"],
+      "height": ["20rem", "28rem"],
+      "borderRadius": "1.25rem",
+      "align": "center"
+    }
+  ]
+}

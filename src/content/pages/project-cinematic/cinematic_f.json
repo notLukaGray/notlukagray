@@ -1,0 +1,38 @@
+{
+  "type": "contentBlock",
+  "id": "cinematic_f",
+  "width": ["100%", "80%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["4rem", "6rem"],
+  "elementOrder": ["f-quote", "f-link"],
+  "definitions": {
+    "f-quote": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "\"The best way to describe the tone we were after: quiet urgency. Nothing performed. Everything earned.\"",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "55%"],
+      "wordWrap": true,
+      "marginTop": "3rem",
+      "marginBottom": "2rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.4 },
+        "entranceMotion": { "transition": { "duration": 0.7 } }
+      }
+    },
+    "f-link": {
+      "type": "elementLink",
+      "label": "View full project →",
+      "href": "https://example.com",
+      "external": true,
+      "copyType": "body",
+      "level": 4,
+      "align": "center",
+      "marginBottom": "3rem"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "type": "contentBlock",
+  "id": "fm_parallax_slow",
+  "ariaLabel": "Parallax slow",
+  "width": ["70%", "40%"],
+  "height": ["hug", "hug"],
+  "align": ["full", "left"],
+  "layers": [{ "fill": "#1a1a24" }],
+  "fill": "#252530",
+  "borderRadius": "1rem",
+  "marginTop": ["1.5rem", "1rem"],
+  "marginBottom": ["1.5rem", "1rem"],
+  "scrollSpeed": 0.8,
+  "reduceMotion": false,
+  "initialY": "150vh",
+  "zIndex": 20,
+  "elementOrder": ["slow-heading", "slow-body"],
+  "definitions": {
+    "slow-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "scrollSpeed: 0.5 (moves slower)",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "2.5rem",
+      "marginBottom": "0.5rem"
+    },
+    "slow-body": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "As you scroll the page, this block moves slower than the viewport. Parallax rate comes from JSON (scrollSpeed).",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["92%", "85%"],
+      "wordWrap": true,
+      "marginBottom": "2rem"
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "type": "sectionColumn",
+  "id": "pipeline_section_f",
+  "width": ["100%", "92%"],
+  "contentWidth": ["100%", "min(92%, 72rem)"],
+  "height": "hug",
+  "marginTop": ["1.5rem", "3rem"],
+  "marginBottom": ["1.5rem", "3rem"],
+  "align": "center",
+  "fill": "#00000088",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "20px" }],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.2, 1] },
+  "columnGaps": { "mobile": "1rem", "desktop": "2rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "top" },
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "top" }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "extend-tip": { "padding": "1rem 1.25rem", "fill": "#d2ff7a12", "borderRadius": "1rem" }
+    },
+    "mobile": { "extend-tip": { "padding": "1rem", "fill": "#d2ff7a12", "borderRadius": "1rem" } }
+  },
+  "columnAssignments": {
+    "mobile": { "extend-head": 0, "extend-body": 0, "extend-tip": 0 },
+    "desktop": { "extend-head": 0, "extend-body": 0, "extend-tip": 1 }
+  },
+  "elementOrder": {
+    "mobile": ["extend-head", "extend-body", "extend-tip"],
+    "desktop": ["extend-head", "extend-body", "extend-tip"]
+  },
+  "definitions": {
+    "extend-head": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "How to extend it",
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": { "entrancePreset": "fade" }
+    },
+    "extend-body": {
+      "type": "elementRichText",
+      "content": "- **New page (no new routes)** — Add a page JSON (e.g. `<slug>.json` in your pages directory) with `assetBaseUrl` set to the route you want (e.g. `/work` or `/research`). The same dynamic route serves any page whose JSON matches that `assetBaseUrl`.\n- **New pass** — If you need another transformation (e.g. A/B variants, feature flags), add it as a clear step. Prefer Resolve if it’s environment-dependent, or between Expand and Resolve if it’s still structure-only. Keep the single async boundary for 3D unless you have a good reason to add more.",
+      "level": 2,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.08 } }
+      }
+    },
+    "extend-tip": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "New passes: put them in Resolve if they need environment, or between Expand and Resolve if they’re still structure-only. Keep that one async boundary for 3D.",
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.2 } }
+      }
+    }
+  }
+}

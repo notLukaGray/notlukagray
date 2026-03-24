@@ -1,0 +1,70 @@
+{
+  "type": "contentBlock",
+  "id": "rcp_a",
+  "width": ["100%", "78%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "padding": ["2rem 1rem", "5rem 0 3rem"],
+  "elementOrder": ["a-tag", "a-title", "a-abstract", "a-meta"],
+  "definitions": {
+    "a-tag": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "RESEARCH  ·  COLOR THEORY  ·  PERCEPTION",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Color Perception & Contextual Relativity",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.1 } }
+      }
+    },
+    "a-abstract": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "The same hexadecimal value reads as different colors depending on what surrounds it. This paper investigates the mechanisms behind simultaneous contrast, luminance-relative perception, and cultural associations — and what they demand of designers working across contexts, substrates, and audiences.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.25 } }
+      }
+    },
+    "a-meta": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Luka Gray  ·  March 2025  ·  14 min read",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.4 } }
+      }
+    }
+  }
+}

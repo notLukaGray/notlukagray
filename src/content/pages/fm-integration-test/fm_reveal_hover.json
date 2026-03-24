@@ -1,0 +1,41 @@
+{
+  "type": "revealSection",
+  "id": "fm_reveal_hover",
+  "ariaLabel": "Hover reveal card",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#1a1a1a",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "triggerMode": "hover",
+  "revealOnHover": true,
+  "expandAxis": "vertical",
+  "expandDurationMs": 2000,
+  "collapseDurationMs": 220,
+  "collapsedElements": [
+    {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Hover to expand",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "1rem"
+    }
+  ],
+  "revealedElements": [
+    {
+      "type": "elementBody",
+      "level": 2,
+      "text": "This section expands on hover and collapses when the pointer leaves. The container height animates with Framer Motion layout. Trigger: hover.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem"
+    }
+  ]
+}

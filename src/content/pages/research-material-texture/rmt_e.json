@@ -1,0 +1,177 @@
+{
+  "type": "sectionColumn",
+  "id": "rmt_e",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["3rem", "6rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1.1, 1, 0.9]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "gap": "0.75rem"
+      }
+    ],
+    "desktop": [
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "e-argument": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "1.25rem"
+      },
+      "e-principles": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "1.25rem"
+      },
+      "e-reading": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff05",
+        "padding": "1.1rem"
+      }
+    },
+    "mobile": {
+      "e-argument": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "1rem"
+      },
+      "e-principles": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "1rem"
+      },
+      "e-reading": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff05",
+        "padding": "0.9rem"
+      }
+    }
+  },
+  "columnSpan": {
+    "mobile": {
+      "e-label": "all"
+    },
+    "desktop": {
+      "e-label": "all"
+    }
+  },
+  "elementOrder": ["e-label", "e-argument", "e-principles", "e-reading"],
+  "definitions": {
+    "e-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CONCLUSIONS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "e-argument": {
+      "type": "elementRichText",
+      "content": "### The Argument for Material Honesty\n\nThe skeuomorphic period in UI design is often retrospectively mocked — the felt textures, the leather stitching, the paper-look notepads. But its failure was not in using material language; it was in using it dishonestly. The textures were applied rather than structural, decorative rather than communicative.\n\nFlatness was the correction, not the conclusion. A pure flat surface carries no material information — which means no affordance information. The current moment in interface design is learning to use material cues that are earned: surfaces that communicate their properties because those properties are accurate.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.45,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "e-principles": {
+      "type": "elementRichText",
+      "content": "### Working Principles\n\n**Texture should communicate, not decorate.** If a surface treatment does not tell the user something true about what the element is or does, it is noise.\n\n**Affordance must be legible at first contact.** A new user should be able to read the interactivity of a surface before they touch it.\n\n**Hierarchy through texture is additive.** Subtle surface differentiation that reinforces — rather than replaces — colour and typographic hierarchy reduces cognitive load.\n\n**Test in context.** Material cues that read clearly in isolation may collapse against complex backgrounds. Always test in-situ.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.45,
+            "delay": 0.08
+          }
+        }
+      }
+    },
+    "e-reading": {
+      "type": "elementRichText",
+      "content": "### Further Reading\n\nGibson, J.J. — *The Ecological Approach to Visual Perception* (1979)\n\nNorman, D. — *The Design of Everyday Things* (revised ed. 2013)\n\nIsherwood, S.J. et al. — *Do Skeuomorphic Icons Lead to Perceived Affordances?* (2007)\n\nKay, A. — *User Interface: A Personal View* (1990)\n\nLimerick, D.C. et al. — *The Affordance of Touchscreens* (2011)\n\nMaterial Design — *Elevation and Surfaces* (Google, 2022)",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.16
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "e-label": 0,
+      "e-argument": 0,
+      "e-principles": 0,
+      "e-reading": 0
+    },
+    "desktop": {
+      "e-label": 0,
+      "e-argument": 0,
+      "e-principles": 1,
+      "e-reading": 2
+    }
+  }
+}

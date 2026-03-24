@@ -1,0 +1,42 @@
+{
+  "title": "El Leñero",
+  "slug": "lenero",
+  "description": "A short documentary about Alex Lopez, the Carson National Forest, and the work of keeping both alive.",
+  "ogImage": "FPO: Absolute URL to a 1200x630 share image for El Leñero.",
+  "assetBaseUrl": "/work",
+  "sectionOrder": [
+    "lenero_section_0",
+    "lenero_section_a",
+    "lenero_section_b",
+    "lenero_section_c",
+    "lenero_section_d",
+    "lenero_section_e",
+    "lenero_section_f",
+    "lenero_section_g",
+    "nav",
+    "footer"
+  ],
+  "passwordProtected": true,
+  "bgKey": "bg-video",
+  "definitions": {
+    "bg-video": {
+      "type": "backgroundVideo",
+      "video": "EL_LENERO_PREVIEW.webm",
+      "poster": "EL_LENERO_PREVIEW.webp",
+      "overlay": "#00000080"
+    },
+    "bg-black": {
+      "type": "backgroundVariable",
+      "layers": [{ "fill": "#000000" }]
+    }
+  },
+  "transitions": [
+    {
+      "type": "SCROLL",
+      "source": "trigger",
+      "id": "divider-visibility-fade",
+      "from": "bg-video",
+      "to": "bg-black"
+    }
+  ]
+}

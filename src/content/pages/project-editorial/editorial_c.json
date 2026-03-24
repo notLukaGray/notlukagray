@@ -1,0 +1,29 @@
+{
+  "type": "contentBlock",
+  "id": "editorial_c",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2rem"],
+  "elementOrder": ["c-pullquote"],
+  "definitions": {
+    "c-pullquote": {
+      "type": "elementHeading",
+      "level": 2,
+      "semanticLevel": 3,
+      "text": "\"A pull quote that crystallizes something essential about the work — a constraint that became an advantage, a decision that changed the direction, a line that survived every revision.\"",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["92%", "65%"],
+      "wordWrap": true,
+      "marginTop": "1rem",
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.4 },
+        "entranceMotion": { "transition": { "duration": 0.8 } }
+      }
+    }
+  }
+}

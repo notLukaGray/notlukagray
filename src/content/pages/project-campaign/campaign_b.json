@@ -1,0 +1,154 @@
+{
+  "type": "sectionColumn",
+  "id": "campaign_b",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff07",
+  "borderRadius": ["1.5rem", "2.5rem"],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "20px"
+    }
+  ],
+  "marginBottom": ["2rem", "3rem"],
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridAutoRows": ["auto", "minmax(5rem, auto)"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1.5, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0",
+    "desktop": "0.75rem"
+  },
+  "columnAssignments": {
+    "mobile": {
+      "b-hero": 0,
+      "b-strategy-label": 0,
+      "b-strategy": 0,
+      "b-channel-label": 0,
+      "b-channels": 0
+    },
+    "desktop": {
+      "b-hero": 0,
+      "b-strategy-label": 1,
+      "b-strategy": 1,
+      "b-channel-label": 2,
+      "b-channels": 2
+    }
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.5rem",
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "0.5rem"
+      },
+      {
+        "padding": "1rem 1.25rem",
+        "gap": "1rem"
+      },
+      {
+        "padding": "1rem 1.25rem",
+        "gap": "1rem"
+      }
+    ]
+  },
+  "itemLayout": {
+    "desktop": {
+      "b-hero": {
+        "column": 0,
+        "row": 0,
+        "rowSpan": 3
+      },
+      "b-strategy-label": {
+        "column": 1,
+        "row": 0
+      },
+      "b-strategy": {
+        "column": 1,
+        "row": 1,
+        "rowSpan": 2
+      },
+      "b-channel-label": {
+        "column": 2,
+        "row": 0
+      },
+      "b-channels": {
+        "column": 2,
+        "row": 1,
+        "rowSpan": 2
+      }
+    }
+  },
+  "elementOrder": ["b-hero", "b-strategy-label", "b-strategy", "b-channel-label", "b-channels"],
+  "definitions": {
+    "b-hero": {
+      "type": "elementImage",
+      "src": "work/project-campaign/hero-ad.webp",
+      "alt": "Hero campaign image",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["22rem", "100%"],
+      "constraints": [
+        {
+          "minHeight": "auto"
+        },
+        {
+          "minHeight": "30rem"
+        }
+      ],
+      "borderRadius": ["1rem", "2rem 0 0 2rem"],
+      "align": "center"
+    },
+    "b-strategy-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "STRATEGY",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-strategy": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "The insight was straightforward: people don't distrust banks because they don't understand finance. They distrust them because banks have historically communicated in ways that emphasise the bank's expertise over the customer's outcome. We reframed Meridian around the customer's ambitions, not the bank's products.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-channel-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CHANNELS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-channels": {
+      "type": "elementRichText",
+      "content": "- OOH \u2014 240-sheet and 48-sheet across 6 cities\n- Social \u2014 paid + organic across Instagram and LinkedIn\n- Digital display \u2014 premium placements, contextual targeting\n- Print \u2014 Sunday supplement and financial press\n- Branch \u2014 internal environmental rollout",
+      "level": 4,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

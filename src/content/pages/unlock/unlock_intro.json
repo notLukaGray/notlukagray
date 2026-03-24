@@ -1,0 +1,33 @@
+{
+  "type": "contentBlock",
+  "id": "unlock_intro",
+  "ariaLabel": "Unlock intro",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#111",
+  "borderRadius": ["1.5rem 1.5rem 0 0", "2rem 2rem 0 0"],
+  "elementOrder": ["unlock_heading", "unlock_description"],
+  "definitions": {
+    "unlock_heading": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "This page is password protected",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "2rem",
+      "marginBottom": "0.5rem"
+    },
+    "unlock_description": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Enter the password you received to view the content.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "70%"],
+      "wordWrap": true,
+      "marginBottom": "2rem"
+    }
+  }
+}

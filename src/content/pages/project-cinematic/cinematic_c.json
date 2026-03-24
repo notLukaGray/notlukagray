@@ -1,0 +1,33 @@
+{
+  "type": "contentBlock",
+  "id": "cinematic_c",
+  "width": ["100%", "80%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000070",
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "20px"
+    }
+  ],
+  "marginBottom": ["2rem", "3rem"],
+  "elementOrder": ["c-video"],
+  "definitions": {
+    "c-video": {
+      "type": "elementVideo",
+      "src": "work/project-cinematic/main.webm",
+      "poster": "work/project-cinematic/main-poster.webp",
+      "autoplay": false,
+      "muted": false,
+      "loop": false,
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "2.39/1",
+      "objectFit": "cover",
+      "align": "center",
+      "module": "video-player",
+      "ariaLabel": "Main film"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "divider",
+  "id": "lenero_divider",
+  "width": ["100%", "88%"],
+  "height": ["85vh", "92vh"],
+  "align": "full",
+  "onViewportProgress": {
+    "type": "updateTransitionProgress",
+    "payload": { "id": "divider-visibility-fade", "invert": true }
+  },
+  "layers": [{ "fill": "#00000000" }]
+}

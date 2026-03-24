@@ -1,0 +1,128 @@
+{
+  "type": "contentBlock",
+  "id": "fm_drag_demo",
+  "ariaLabel": "Draggable cards",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#050509",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "elementOrder": ["drag-label", "drag-area", "drag-hint"],
+  "definitions": {
+    "drag-label": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Draggable cards (dragConstraints: \"parent\")",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "1rem"
+    },
+    "drag-area": {
+      "type": "elementGroup",
+      "section": {
+        "elementOrder": ["card1", "card2", "card3"],
+        "definitions": {
+          "card1": {
+            "type": "elementBody",
+            "level": 2,
+            "text": "Drag 1",
+            "align": "center",
+            "width": "120px",
+            "wordWrap": true,
+            "marginTop": "0.5rem",
+            "marginBottom": "1.5rem",
+            "wrapperStyle": {
+              "padding": "12px 20px",
+              "background": "#2f2f3a",
+              "borderRadius": "12px",
+              "cursor": "grab",
+              "userSelect": "none"
+            },
+            "motion": {
+              "drag": true,
+              "dragConstraints": "parent",
+              "dragElastic": 0.15,
+              "whileHover": { "scale": 1.03 },
+              "whileDrag": { "scale": 1.05, "cursor": "grabbing" }
+            }
+          },
+          "card2": {
+            "type": "elementBody",
+            "level": 2,
+            "text": "Drag 2",
+            "align": "center",
+            "width": "120px",
+            "wordWrap": true,
+            "marginTop": "0",
+            "marginBottom": "1.5rem",
+            "wrapperStyle": {
+              "padding": "12px 20px",
+              "background": "#35353f",
+              "borderRadius": "12px",
+              "cursor": "grab",
+              "userSelect": "none"
+            },
+            "motion": {
+              "drag": "x",
+              "dragConstraints": "parent",
+              "dragElastic": 0.2,
+              "whileHover": { "scale": 1.02 },
+              "whileDrag": { "scale": 1.04 }
+            }
+          },
+          "card3": {
+            "type": "elementBody",
+            "level": 2,
+            "text": "Drag 3 (y only)",
+            "align": "center",
+            "width": "120px",
+            "wordWrap": true,
+            "marginBottom": "1.5rem",
+            "wrapperStyle": {
+              "padding": "12px 20px",
+              "background": "#2f2f3a",
+              "borderRadius": "12px",
+              "cursor": "grab",
+              "userSelect": "none"
+            },
+            "motion": {
+              "drag": "y",
+              "dragConstraints": "parent",
+              "dragElastic": 0.1,
+              "whileHover": { "scale": 1.03 },
+              "whileDrag": { "scale": 1.05 }
+            }
+          }
+        }
+      },
+      "display": "flex",
+      "flexDirection": "row",
+      "flexWrap": "wrap",
+      "alignItems": "flex-start",
+      "justifyContent": "center",
+      "gap": "16px",
+      "padding": "1.5rem",
+      "minHeight": "220px",
+      "width": "100%",
+      "wrapperStyle": {
+        "position": "relative",
+        "background": "#0c0c13",
+        "borderRadius": "12px"
+      }
+    },
+    "drag-hint": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Card 1: free drag. Card 2: x only. Card 3: y only. All use dragConstraints: \"parent\" and dragElastic from JSON.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "90%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem"
+    }
+  }
+}

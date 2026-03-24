@@ -1,0 +1,37 @@
+{
+  "type": "contentBlock",
+  "id": "exhibition_c",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000012",
+  "borderRadius": ["1rem", "1.5rem"],
+  "marginBottom": ["2rem", "3rem"],
+  "elementOrder": ["c-label", "c-statement"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CURATORIAL NOTE",
+      "align": "center",
+      "width": "hug",
+      "marginTop": "2rem",
+      "marginBottom": "1.25rem"
+    },
+    "c-statement": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "A paragraph-length statement about the exhibition — not a press release, but the actual idea behind it. What the work is asking, what it assumes about the audience, what conversation it wants to be part of. This should read like something a curator or artist would write, not something a PR team would approve.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "62%"],
+      "wordWrap": true,
+      "marginBottom": "2rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.4 },
+        "entranceMotion": { "transition": { "duration": 0.8 } }
+      }
+    }
+  }
+}

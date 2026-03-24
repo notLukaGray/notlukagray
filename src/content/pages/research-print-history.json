@@ -1,0 +1,15 @@
+{
+  "type": "page",
+  "id": "research-print-history",
+  "title": "Print History & Typographic Systems",
+  "description": "From movable type to modular grids — a selective history of how print constraints invented the conventions screen design inherited.",
+  "assetBaseUrl": "/research",
+  "backgrounds": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [{ "fill": "#f2ece4" }]
+    }
+  },
+  "activeBackground": "bg-main",
+  "sectionOrder": ["nav", "rph_a", "rph_b", "rph_c", "rph_d", "rph_e", "footer"]
+}

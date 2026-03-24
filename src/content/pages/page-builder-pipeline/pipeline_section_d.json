@@ -1,0 +1,110 @@
+{
+  "type": "sectionColumn",
+  "id": "pipeline_section_d",
+  "width": ["100%", "92%"],
+  "contentWidth": ["100%", "min(92%, 72rem)"],
+  "height": "hug",
+  "marginTop": ["1.5rem", "3rem"],
+  "marginBottom": ["1.5rem", "3rem"],
+  "align": "center",
+  "fill": "#00000088",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "20px" }],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1] },
+  "columnGaps": { "mobile": "1rem", "desktop": "1.5rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "top" },
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "top" }
+    ]
+  },
+  "itemStyles": {
+    "mobile": {
+      "stages-1": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "1rem" },
+      "stages-2": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "1rem" },
+      "stages-3": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "1rem" },
+      "stages-4": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "1rem" }
+    },
+    "desktop": {
+      "stages-1": { "padding": "1.25rem", "fill": "#ffffff08", "borderRadius": "1rem" },
+      "stages-2": { "padding": "1.25rem", "fill": "#ffffff08", "borderRadius": "1rem" },
+      "stages-3": { "padding": "1.25rem", "fill": "#ffffff08", "borderRadius": "1rem" },
+      "stages-4": { "padding": "1.25rem", "fill": "#ffffff08", "borderRadius": "1rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "stages-head": 0, "stages-1": 0, "stages-2": 0, "stages-3": 0, "stages-4": 0 },
+    "desktop": { "stages-head": 0, "stages-1": 0, "stages-2": 0, "stages-3": 1, "stages-4": 1 }
+  },
+  "columnSpan": { "mobile": { "stages-head": "all" }, "desktop": { "stages-head": "all" } },
+  "elementOrder": {
+    "mobile": ["stages-head", "stages-1", "stages-2", "stages-3", "stages-4"],
+    "desktop": ["stages-head", "stages-1", "stages-2", "stages-3", "stages-4"]
+  },
+  "definitions": {
+    "stages-head": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Stage by stage",
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": { "entrancePreset": "fade" }
+    },
+    "stages-1": {
+      "type": "elementRichText",
+      "content": "**Load** — Read page JSON, merge definitions (page + global modules + section files), resolve presets. `loadPageBuilder(slug)` returns a `PageBuilder`. Nothing async yet.",
+      "level": 3,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.05 } }
+      }
+    },
+    "stages-2": {
+      "type": "elementRichText",
+      "content": "**Expand** — Pure and sync. Walk `sectionOrder`, pull blocks from definitions, resolve elements, namespace columns, normalize trigger payload refs. When `assetBase` is passed, trigger payload URLs are resolved in the same pass. Output: `{ bg, sections }`.",
+      "level": 3,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.12 } }
+      }
+    },
+    "stages-3": {
+      "type": "elementRichText",
+      "content": "**Resolve** — Trigger payload URL resolution runs inside `expandPageBuilder(page, { assetBase })`. The only async step is `inlineModel3DAssets(sections)` (fetch and inline 3D). Environment lands here.",
+      "level": 3,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.19 } }
+      }
+    },
+    "stages-4": {
+      "type": "elementRichText",
+      "content": "**Render** — The route calls `getPage(slug)`, then `resolveSectionBlockUrls`, then `PageBuilderRenderer`. The client gets a resolved tree and just mounts it. No resolution on the client.",
+      "level": 3,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.26 } }
+      }
+    }
+  }
+}

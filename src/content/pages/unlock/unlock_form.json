@@ -1,0 +1,36 @@
+{
+  "type": "formBlock",
+  "id": "unlock_form",
+  "ariaLabel": "Unlock form",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#111",
+  "borderRadius": "0",
+  "marginBottom": "0",
+  "contentWidth": "full",
+  "action": "unlock",
+  "method": "post",
+  "actionPayload": {
+    "redirect": "/"
+  },
+  "fields": [
+    {
+      "type": "formField",
+      "fieldType": "password",
+      "name": "password",
+      "label": "Password",
+      "placeholder": "Password",
+      "required": true,
+      "level": 3
+    },
+    {
+      "type": "formField",
+      "fieldType": "submit",
+      "label": "Unlock",
+      "loadingText": "Checking…",
+      "level": 2,
+      "inputClassName": "font-semibold"
+    }
+  ]
+}

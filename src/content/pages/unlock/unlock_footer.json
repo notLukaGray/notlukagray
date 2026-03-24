@@ -1,0 +1,33 @@
+{
+  "type": "contentBlock",
+  "id": "unlock_footer",
+  "ariaLabel": "Unlock footer",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#111",
+  "borderRadius": ["0 0 1.5rem 1.5rem", "0 0 2rem 2rem"],
+  "elementOrder": ["unlock_help", "unlock_lock_link"],
+  "definitions": {
+    "unlock_help": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "Don't have the password? Contact me and I'll share access.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.75rem"
+    },
+    "unlock_lock_link": {
+      "type": "elementLink",
+      "copyType": "body",
+      "level": 3,
+      "label": "Lock again (clears access on this device)",
+      "href": "/api/unlock?lock=1",
+      "align": "center",
+      "width": "hug",
+      "marginBottom": "2rem"
+    }
+  }
+}

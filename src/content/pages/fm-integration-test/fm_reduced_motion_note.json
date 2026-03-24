@@ -1,0 +1,43 @@
+{
+  "type": "contentBlock",
+  "id": "fm_reduced_motion_note",
+  "ariaLabel": "Reduced motion QA note",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#1a1a2e",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "elementOrder": ["reduced-heading", "reduced-body"],
+  "definitions": {
+    "reduced-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Reduced motion check",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": { "transition": { "duration": 0.3 } }
+      }
+    },
+    "reduced-body": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Enable \"Reduce motion\" in your OS (e.g. System Settings → Accessibility → Display) and reload. Entrances should snap to final state, parallax and scroll progress bar should simplify or stay static. This section is for manual QA.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "90%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": { "transition": { "delay": 0.05 } }
+      }
+    }
+  }
+}

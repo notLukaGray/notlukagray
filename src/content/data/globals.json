@@ -1,0 +1,246 @@
+{
+  "siteUrl": "https://notlukagray.com",
+  "person": {
+    "name": "Luka Gray",
+    "jobTitle": "Designer",
+    "url": "https://notlukagray.com",
+    "sameAs": []
+  },
+  "assetBaseUrl": "",
+  "cdnBase": "https://media.notlukagray.com/website",
+  "cdn": {
+    "tokenExpiryDays": 7,
+    "clientCacheExpiryHours": 168,
+    "apiCacheMaxAge": 2592000,
+    "apiCacheStaleWhileRevalidate": 86400,
+    "allowedExtensions": [
+      ".webm",
+      ".mp4",
+      ".webp",
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".glb",
+      ".gltf",
+      ".exr",
+      ".hdr"
+    ],
+    "images": {
+      "defaultWidth": 1200,
+      "defaultPosterWidth": 1920,
+      "posterWidth": 1280,
+      "posterQuality": 60,
+      "mobileMaxWidth": 768,
+      "mobileMaxWidth2x": 1536,
+      "defaultQuality": 75,
+      "defaultFormat": "webp",
+      "defaultAspectRatio": null,
+      "posterAspectRatio": "16/9",
+      "class": null,
+      "posterClass": null
+    }
+  },
+  "auth": {
+    "accessCookie": {
+      "name": "site_access",
+      "maxAgeDays": 7
+    },
+    "rateLimit": {
+      "cookieName": "unlock_rate",
+      "maxAttempts": 5,
+      "lockoutMinutes": 10,
+      "cookieExpiryHours": 1
+    },
+    "formRateLimit": {
+      "maxPerHour": 5
+    }
+  },
+  "ui": {
+    "preloadMinDurationMs": 3000,
+    "resizeDebounceMs": 50,
+    "canvasLoadTimeoutMs": 5000,
+    "crossfadeDurationMs": 400,
+    "videoPauseButtonHideDelayMs": 2000,
+    "video": {
+      "doubleTapThresholdMs": 450,
+      "holdThresholdMs": 400,
+      "holdRepeatMs": 500,
+      "feedbackDurationMs": 500,
+      "slotExpandDurationMs": 400,
+      "slotElementRevealMs": 300,
+      "slotElementRevealStaggerMs": 50,
+      "slotTransitionMs": 500,
+      "slotTransitionEasing": "ease",
+      "seekBackSeconds": 10,
+      "seekForwardSeconds": 30,
+      "defaultAspectRatio": "16/9"
+    }
+  },
+  "cache": {
+    "videoUrlPrefix": "video_url_"
+  },
+  "nav": [
+    { "label": "Work", "href": "/work" },
+    { "label": "Teaching", "href": "/teaching" },
+    { "type": "logo" },
+    { "label": "Research", "href": "/research" },
+    { "label": "Profile", "href": "/profile" }
+  ],
+  "footer": [
+    { "label": "LinkedIn", "href": "https://linkedin.com", "external": true },
+    { "label": "Instagram", "href": "https://instagram.com", "external": true },
+    { "label": "Dribbble", "href": "https://dribbble.com", "external": true },
+    { "label": "ArtStation", "href": "https://artstation.com", "external": true },
+    { "type": "copyright", "text": "© 2026, Luka Gray" }
+  ],
+  "logo": {
+    "viewBox": "0 0 30 30",
+    "size": 30,
+    "fillPaths": [
+      "M19.0192 30L0.00116246 19.0172L20.366 13.0263L19.0192 30Z",
+      "M-4.87566e-05 19.0192L10.9817 0.000574477L20.3665 13.0266L-4.87566e-05 19.0192Z",
+      "M10.9807 0L29.9997 10.9812L20.366 13.0263L10.9807 0Z",
+      "M29.9995 10.9805L19.0191 30L20.3659 13.0263L29.9995 10.9805Z"
+    ],
+    "gradient": {
+      "angleDeg": 167,
+      "stops": [
+        { "offset": "0", "opacity": 0.1 },
+        { "offset": "100", "opacity": 0.6 }
+      ],
+      "hoverStops": [
+        { "offset": "0", "opacity": 0.25 },
+        { "offset": "100", "opacity": 0.7 }
+      ],
+      "activeStops": [
+        { "offset": "0", "opacity": 0.2 },
+        { "offset": "100", "opacity": 0.75 }
+      ],
+      "defaultColor": "#FFFFFF",
+      "hoverColor": "#F000B8",
+      "activeColor": "#FFFFFF"
+    },
+    "stroke": {
+      "width": 1,
+      "miterLimit": 10,
+      "lineJoin": "round",
+      "opacity": 0.5,
+      "blendMode": "overlay",
+      "colors": {
+        "default": "#FFF",
+        "hover": "#F000B8",
+        "active": "#FFFFFF"
+      }
+    }
+  },
+  "layoutFromJsonSlugs": ["/work/lenero"],
+  "home": {
+    "heroProjects": [
+      {
+        "id": "project-1",
+        "title": "El Lenero",
+        "description": "Brief description of the project and its core principles",
+        "slug": "lenero",
+        "brand": { "name": "Echo", "slug": "Echo" },
+        "video": {
+          "url": "https://notlukagray.b-cdn.net/video/ECHO_LENERO_SHORTFORM/ECHO_LENERO_SHORTFORM_0.webm",
+          "poster": "",
+          "duration": 10
+        },
+        "isHero": true,
+        "isRestricted": false,
+        "order": 1
+      },
+      {
+        "id": "project-2",
+        "title": "El Lenero",
+        "description": "Brief description of the project and its core principles",
+        "slug": "project-two",
+        "brand": { "name": "Echo", "slug": "brand-name-two" },
+        "video": {
+          "url": "/videos/hero-project-2.mp4",
+          "poster": "/images/hero-project-2-poster.jpg",
+          "duration": 10
+        },
+        "isHero": true,
+        "isRestricted": false,
+        "order": 2
+      },
+      {
+        "id": "project-3",
+        "title": "Project Title Three",
+        "description": "Brief description of the project and its core principles",
+        "slug": "project-three",
+        "brand": { "name": "Brand Name Three", "slug": "brand-name-three" },
+        "video": {
+          "url": "/videos/hero-project-3.mp4",
+          "poster": "/images/hero-project-3-poster.jpg",
+          "duration": 10
+        },
+        "isHero": true,
+        "isRestricted": false,
+        "order": 3
+      },
+      {
+        "id": "project-4",
+        "title": "Project Title Four",
+        "description": "Brief description of the project and its core principles",
+        "slug": "project-four",
+        "brand": { "name": "Brand Name Four", "slug": "brand-name-four" },
+        "video": {
+          "url": "/videos/hero-project-4.mp4",
+          "poster": "/images/hero-project-4-poster.jpg",
+          "duration": 10
+        },
+        "isHero": true,
+        "isRestricted": false,
+        "order": 4
+      },
+      {
+        "id": "project-5",
+        "title": "Project Title Five",
+        "description": "Brief description of the project and its core principles",
+        "slug": "project-five",
+        "brand": { "name": "Brand Name Five", "slug": "brand-name-five" },
+        "video": {
+          "url": "/videos/hero-project-5.mp4",
+          "poster": "/images/hero-project-5-poster.jpg",
+          "duration": 10
+        },
+        "isHero": true,
+        "isRestricted": false,
+        "order": 5
+      },
+      {
+        "id": "project-6",
+        "title": "Project Title Six",
+        "description": "Brief description of the project and its core principles",
+        "slug": "project-six",
+        "brand": { "name": "Brand Name Six", "slug": "brand-name-six" },
+        "video": {
+          "url": "/videos/hero-project-6.mp4",
+          "poster": "/images/hero-project-6-poster.jpg",
+          "duration": 10
+        },
+        "isHero": true,
+        "isRestricted": false,
+        "order": 6
+      },
+      {
+        "id": "project-7",
+        "title": "Project Title Seven",
+        "description": "Brief description of the project and its core principles",
+        "slug": "project-seven",
+        "brand": { "name": "Brand Name Seven", "slug": "brand-name-seven" },
+        "video": {
+          "url": "/videos/hero-project-7.mp4",
+          "poster": "/images/hero-project-7-poster.jpg",
+          "duration": 10
+        },
+        "isHero": true,
+        "isRestricted": false,
+        "order": 7
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "type": "contentBlock",
+  "id": "documentary_c",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "padding": ["0", "0"],
+  "elementOrder": ["c-still"],
+  "definitions": {
+    "c-still": {
+      "type": "elementImage",
+      "src": "work/project-documentary/doc-still-wide.webp",
+      "alt": "Key scene still — low water mark at dawn",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["16rem", "52vh"],
+      "borderRadius": ["1.25rem", "2rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.1
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.7,
+            "delay": 0
+          }
+        }
+      }
+    }
+  }
+}

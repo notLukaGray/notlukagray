@@ -1,0 +1,67 @@
+{
+  "type": "sectionColumn",
+
+  "fixed": true,
+  "fixedPosition": "top",
+  "fixedOffset": "0px",
+  "zIndex": 100,
+
+  "width": "100%",
+  "contentWidth": "min(90%,500px)",
+  "height": "hug",
+  "align": "center",
+
+  "fill": "#00000080",
+  "borderRadius": "0 0 30px 30px",
+  "effects": [{ "type": "backdropBlur", "amount": "64px" }],
+
+  "marginTop": ".5rem",
+  "marginRight": "1rem",
+  "marginBottom": ".5rem",
+  "marginLeft": "1rem",
+
+  "elementOrder": ["work", "teaching", "logo", "research", "profile"],
+  "columnAssignments": {
+    "work": 0,
+    "teaching": 1,
+    "logo": 2,
+    "research": 3,
+    "profile": 4
+  },
+  "columnGaps": "auto",
+  "columns": 5,
+
+  "definitions": {
+    "work": {
+      "preset": "nav-link-default",
+      "type": "elementLink",
+      "id": "work",
+      "label": "Work",
+      "href": "/work"
+    },
+    "teaching": {
+      "preset": "nav-link-default",
+      "type": "elementLink",
+      "id": "teaching",
+      "label": "Teaching",
+      "href": "/teaching"
+    },
+    "logo": {
+      "preset": "logo-default"
+    },
+    "research": {
+      "preset": "nav-link-default",
+      "type": "elementLink",
+      "id": "research",
+      "label": "Research",
+      "href": "/research"
+    },
+    "profile": {
+      "preset": "nav-link-default",
+      "type": "elementLink",
+      "id": "profile",
+      "label": "Profile",
+      "href": "/profile"
+    }
+  }
+}

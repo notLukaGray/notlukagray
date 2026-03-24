@@ -1,0 +1,43 @@
+{
+  "title": "Limits: Page builder × Framer Motion",
+  "slug": "fm-real-assets",
+  "description": "Investor demo: every animation, scroll effect, gesture, and 3D trigger is driven by JSON. No custom animation code.",
+  "assetBaseUrl": "/research",
+  "sectionOrder": [
+    "fm_real_intro",
+    "fm_real_limits",
+    "fm_real_lenero_hero",
+    "fm_real_lenero_gallery",
+    "fm_real_motion_grid",
+    "footer"
+  ],
+  "bgKey": "bg",
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [{ "fill": "#050505" }]
+    },
+    "footer": {
+      "type": "contentBlock",
+      "ariaLabel": "Footer",
+      "width": "100%",
+      "height": "hug",
+      "align": "full",
+      "fill": "transparent",
+      "elementOrder": ["footer-text"],
+      "definitions": {
+        "footer-text": {
+          "type": "elementBody",
+          "level": 2,
+          "text": "Limits demo — page builder × Framer Motion. Back to Research.",
+          "align": "center",
+          "textAlign": "center",
+          "width": "90%",
+          "wordWrap": true,
+          "marginTop": "2rem",
+          "marginBottom": "3rem"
+        }
+      }
+    }
+  }
+}

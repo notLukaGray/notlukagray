@@ -1,0 +1,70 @@
+{
+  "type": "contentBlock",
+  "id": "rtl_a",
+  "width": ["100%", "72%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "padding": ["2rem 1rem", "5rem 0 3rem"],
+  "elementOrder": ["a-tag", "a-title", "a-abstract", "a-meta"],
+  "definitions": {
+    "a-tag": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "RESEARCH  ·  TYPOGRAPHY  ·  LEGIBILITY",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Type, Legibility & Reading Conditions",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.1 } }
+      }
+    },
+    "a-abstract": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Legibility is not a fixed property of a typeface. It is produced in the relationship between a typeface, a body size, a line-height, a contrast ratio, an ambient light level, and a reader's familiarity with the form. This paper attempts to disentangle these variables and offer working guidelines for text design across digital environments.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.25 } }
+      }
+    },
+    "a-meta": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Luka Gray  ·  January 2025  ·  18 min read",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.4 } }
+      }
+    }
+  }
+}

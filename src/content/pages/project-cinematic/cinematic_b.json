@@ -1,0 +1,70 @@
+{
+  "type": "contentBlock",
+  "id": "cinematic_b",
+  "width": ["100%", "80%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000088",
+  "borderRadius": ["2rem 2rem 0 0", "3rem 3rem 0 0"],
+  "effects": [{ "type": "backdropBlur", "amount": "32px" }],
+  "elementOrder": ["c-label", "c-title", "c-logline", "c-meta"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "DOCUMENTARY / 2024",
+      "align": "center",
+      "width": "hug",
+      "marginTop": "2.5rem",
+      "marginBottom": "0.75rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "c-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Project Title",
+      "align": "center",
+      "width": ["90%", "70%"],
+      "wordWrap": true,
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.55, "delay": 0.1 } }
+      }
+    },
+    "c-logline": {
+      "type": "elementBody",
+      "level": 1,
+      "text": "A single-sentence log line that captures the core tension, subject, and stakes of this project. Keep it under thirty words — it should land like an opening frame.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["88%", "52%"],
+      "wordWrap": true,
+      "marginBottom": ["2rem", "2.5rem"],
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.2 } }
+      }
+    },
+    "c-meta": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Director — Client Name · Production Company · Runtime 00:00",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "marginBottom": "2.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.32 } }
+      }
+    }
+  }
+}

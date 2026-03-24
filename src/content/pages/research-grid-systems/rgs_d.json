@@ -1,0 +1,119 @@
+{
+  "type": "sectionColumn",
+  "id": "rgs_d",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 2
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "1.25rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.25rem",
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "1.5rem",
+        "gap": "1rem"
+      },
+      {
+        "padding": "1.5rem",
+        "gap": "1rem"
+      }
+    ]
+  },
+  "columnSpan": {
+    "mobile": {
+      "d-label": "all"
+    },
+    "desktop": {
+      "d-label": "all"
+    }
+  },
+  "elementOrder": ["d-label", "d-historical", "d-responsive"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PRINT GRID VS. RESPONSIVE GRID",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "d-historical": {
+      "type": "elementRichText",
+      "content": "### The Fixed Print Grid\n\nThe print grid is defined by a single fixed page size. Columns, gutters, and margins are specified in millimetres or points. The designer can depend on these measurements remaining constant.\n\nThis fixity allows the grid to function as a composition tool in the fullest sense — negative space can be precisely calibrated, proportional relationships held, optical corrections made.\n\n**What it assumed:** One output size. One viewing distance. One reading condition.\n\n**What it produced:** Systems with very high internal consistency — but no mechanism for adaptation to different formats.\n\nThe grid worked because the page did not change.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "d-responsive": {
+      "type": "elementRichText",
+      "content": "### The Responsive Grid\n\nThe responsive grid is defined by proportional relationships — columns as fractions of the container, gutters as relative units. The grid adapts, but so does the composition.\n\nThis introduces a new design problem: how to maintain compositional intent across viewport widths that vary by a factor of four. The Swiss Style had no answer to this because the question did not exist.\n\n**What it requires:** Grid decisions at multiple breakpoints. Proportional thinking rather than fixed measurement. Acceptance that the layout will look different at different sizes — and designing for that difference rather than against it.\n\n**What it produces:** Systems that are resilient across contexts — but that require more design decisions to specify, and more discipline to maintain consistency across them.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.08
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "d-label": 0,
+      "d-historical": 0,
+      "d-responsive": 0
+    },
+    "desktop": {
+      "d-label": 0,
+      "d-historical": 0,
+      "d-responsive": 1
+    }
+  }
+}

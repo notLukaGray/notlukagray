@@ -1,0 +1,60 @@
+{
+  "type": "contentBlock",
+  "id": "fm_intro",
+  "ariaLabel": "FM integration showcase intro",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#1a1a1a",
+  "borderRadius": ["1.5rem 1.5rem 0 0", "2rem 2rem 0 0"],
+  "elementOrder": ["intro-heading", "intro-sub", "intro-body"],
+  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "definitions": {
+    "intro-heading": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Framer Motion from JSON",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "2rem",
+      "marginBottom": "0.25rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "intro-sub": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Every animation on this page is driven by Framer Motion from content—no hardcoded keyframes.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.75rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": {
+          "transition": { "delay": 0.08, "duration": 0.4 }
+        }
+      }
+    },
+    "intro-body": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Below: viewport entrances, full motion config (initial/animate/transition/variants), section root motion, parallax (scrollSpeed), scroll/viewport triggers, and module slot visibility + stagger. Modal and button exit live on other pages.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "70%"],
+      "wordWrap": true,
+      "marginBottom": "2rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": {
+          "transition": { "delay": 0.15, "duration": 0.4 }
+        }
+      }
+    }
+  }
+}

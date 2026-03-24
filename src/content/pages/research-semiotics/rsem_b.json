@@ -1,0 +1,162 @@
+{
+  "type": "sectionColumn",
+  "id": "rsem_b",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "1rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.25rem",
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "1.5rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1.5rem",
+        "gap": "0.75rem",
+        "fill": "#ffffff04",
+        "borderRadius": "1.5rem"
+      },
+      {
+        "padding": "1.5rem",
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "columnSpan": {
+    "mobile": {
+      "b-kicker": "all",
+      "b-intro": "all"
+    },
+    "desktop": {
+      "b-kicker": "all",
+      "b-intro": "all"
+    }
+  },
+  "elementOrder": ["b-kicker", "b-intro", "b-iconic", "b-symbolic", "b-indexical"],
+  "definitions": {
+    "b-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PEIRCE'S TRIADIC MODEL",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-intro": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Peirce distinguished three types of sign based on the relationship between sign vehicle and its object. Each category presents different design opportunities and failure modes.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.5rem"
+    },
+    "b-iconic": {
+      "type": "elementRichText",
+      "content": "### Iconic Signs\n\nResemble their referent. The relationship is one of visual similarity.\n\n**Examples:** Photographic thumbnails, realistic product renders, the camera icon for photography apps\n\n**Design note:** Iconicity is not universal — a photorealistic trash can means \"delete\" only to those who grew up with it\n\n**Failure mode:** Culturally specific resemblance assumed to be universal",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "b-symbolic": {
+      "type": "elementRichText",
+      "content": "### Symbolic Signs\n\nArbitrary — the relationship between sign and referent is entirely conventional.\n\n**Examples:** National flags, traffic light colours, typographic characters, the word \"danger\"\n\n**Design note:** Symbols require learning. They are powerful precisely because they are arbitrary and therefore precise\n\n**Failure mode:** Convention assumed; symbol used in a context where the convention hasn't been established",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.08
+          }
+        }
+      }
+    },
+    "b-indexical": {
+      "type": "elementRichText",
+      "content": "### Indexical Signs\n\nPoint to their referent by physical or causal connection.\n\n**Examples:** A progress bar (indicates amount completed), a timestamp (caused by the action it describes), a loading spinner (caused by waiting)\n\n**Design note:** Indices are the most trustworthy signs — they are hard to fake and easy to interpret\n\n**Failure mode:** Fake indices (looping spinners, fabricated activity)",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.16
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "b-kicker": 0,
+      "b-intro": 0,
+      "b-iconic": 0,
+      "b-symbolic": 0,
+      "b-indexical": 0
+    },
+    "desktop": {
+      "b-kicker": 0,
+      "b-intro": 0,
+      "b-iconic": 0,
+      "b-symbolic": 1,
+      "b-indexical": 2
+    }
+  }
+}

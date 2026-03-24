@@ -1,0 +1,133 @@
+{
+  "type": "sectionColumn",
+  "id": "rtl_d",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#0000000a",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 2
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "1.25rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.25rem",
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "1.5rem",
+        "gap": "1rem"
+      },
+      {
+        "padding": "1.5rem",
+        "gap": "1rem"
+      }
+    ]
+  },
+  "columnSpan": {
+    "mobile": {
+      "d-label": "all",
+      "d-finding": "all"
+    },
+    "desktop": {
+      "d-label": "all",
+      "d-finding": "all"
+    }
+  },
+  "elementOrder": ["d-label", "d-finding", "d-desktop", "d-mobile"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PRACTICAL GUIDELINES",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "d-finding": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "Synthesised from the study results, the following guidelines represent minima — not targets. Exceeding them is nearly always better.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.5rem"
+    },
+    "d-desktop": {
+      "type": "elementRichText",
+      "content": "### Desktop / Wide Viewport\n\n**Body size** 15–18px\n\n**Weight** 400 for body; 300 only for display sizes above 28px\n\n**Line height** 1.5–1.65 for body; 1.2–1.35 for headings\n\n**Line length** 60–75 characters\n\n**Contrast** minimum 4.5:1 for body text; 3:1 for large text (18px bold+)\n\n**Paragraph spacing** 0.75–1× line height between paragraphs\n\n**Note:** Dark mode requires separate validation — the optimal values differ slightly from light mode defaults due to halation effects at high contrast ratios.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "d-mobile": {
+      "type": "elementRichText",
+      "content": "### Mobile / Narrow Viewport\n\n**Body size** 16–18px (never below 16px)\n\n**Weight** 400 for body; 300 weight shows measurable legibility loss below 30 lux\n\n**Line height** 1.6–1.7 for body text\n\n**Line length** 45–60 characters; use responsive text containers, not fixed widths\n\n**Contrast** 4.5:1 minimum; 7:1 preferred for outdoor-use contexts\n\n**Touch target** Minimum 44×44px for any interactive text\n\n**Note:** Users read more slowly on mobile — 25% slower on average in controlled conditions. Prioritise clarity over information density.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.08
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "d-label": 0,
+      "d-finding": 0,
+      "d-desktop": 0,
+      "d-mobile": 0
+    },
+    "desktop": {
+      "d-label": 0,
+      "d-finding": 0,
+      "d-desktop": 0,
+      "d-mobile": 1
+    }
+  }
+}

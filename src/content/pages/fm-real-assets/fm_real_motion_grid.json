@@ -1,0 +1,160 @@
+{
+  "type": "contentBlock",
+  "id": "fm_real_motion_grid",
+  "ariaLabel": "Motion grid (variants, layout, drag)",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#101010",
+  "borderRadius": "1.5rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "motion": {
+    "layout": true,
+    "initial": { "opacity": 0, "y": 32 },
+    "animate": { "opacity": 1, "y": 0 },
+    "transition": { "duration": 0.5, "ease": [0.22, 1, 0.36, 1] }
+  },
+  "elementOrder": ["grid-heading", "grid-cells"],
+  "definitions": {
+    "grid-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Integration surface: variants, whileInView, layoutId, drag physics",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "0.75rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": { "transition": { "duration": 0.35 } }
+      }
+    },
+    "grid-cells": {
+      "type": "elementGroup",
+      "section": {
+        "elementOrder": ["cell-variants", "cell-while-in-view", "cell-layout", "cell-drag"],
+        "definitions": {
+          "cell-variants": {
+            "type": "elementBody",
+            "level": 2,
+            "text": "Variants: initialVariant/animateVariant with nested transition.",
+            "align": "left",
+            "width": "100%",
+            "wordWrap": true,
+            "wrapperStyle": {
+              "padding": "1rem 1.25rem",
+              "background": "#181818",
+              "borderRadius": "0.75rem"
+            },
+            "motion": {
+              "initialVariant": "hidden",
+              "animateVariant": "visible",
+              "variants": {
+                "hidden": {
+                  "opacity": 0,
+                  "x": -24
+                },
+                "visible": {
+                  "opacity": 1,
+                  "x": 0,
+                  "transition": {
+                    "duration": 0.4,
+                    "ease": "easeOut"
+                  }
+                }
+              }
+            }
+          },
+          "cell-while-in-view": {
+            "type": "elementBody",
+            "level": 2,
+            "text": "whileInView: keyframes with viewport options (amount: 0.3).",
+            "align": "left",
+            "width": "100%",
+            "wordWrap": true,
+            "wrapperStyle": {
+              "padding": "1rem 1.25rem",
+              "background": "#181818",
+              "borderRadius": "0.75rem"
+            },
+            "motion": {
+              "initial": { "opacity": 0, "y": 20 },
+              "whileInView": { "opacity": 1, "y": 0 },
+              "transition": {
+                "type": "spring",
+                "stiffness": 220,
+                "damping": 24
+              },
+              "viewport": { "once": true, "amount": 0.3 }
+            }
+          },
+          "cell-layout": {
+            "type": "elementBody",
+            "level": 2,
+            "text": "layout + layoutId: ready for shared layout transitions between views.",
+            "align": "left",
+            "width": "100%",
+            "wordWrap": true,
+            "wrapperStyle": {
+              "padding": "1rem 1.25rem",
+              "background": "#181818",
+              "borderRadius": "0.75rem"
+            },
+            "motion": {
+              "layout": true,
+              "layoutId": "fm-motion-grid-cell",
+              "transition": {
+                "layout": {
+                  "type": "spring",
+                  "stiffness": 260,
+                  "damping": 30
+                }
+              }
+            }
+          },
+          "cell-drag": {
+            "type": "elementBody",
+            "level": 2,
+            "text": "Drag physics: constraints box, inertia dragTransition, and whileDrag scale.",
+            "align": "left",
+            "width": "100%",
+            "wordWrap": true,
+            "wrapperStyle": {
+              "padding": "1rem 1.25rem",
+              "background": "#181818",
+              "borderRadius": "0.75rem",
+              "cursor": "grab",
+              "userSelect": "none"
+            },
+            "motion": {
+              "drag": "x",
+              "dragConstraints": {
+                "left": -80,
+                "right": 80
+              },
+              "dragElastic": 0.25,
+              "dragMomentum": true,
+              "dragTransition": {
+                "type": "inertia",
+                "power": 0.9,
+                "timeConstant": 700,
+                "bounceStiffness": 500,
+                "bounceDamping": 20,
+                "min": -120,
+                "max": 120
+              },
+              "whileHover": { "scale": 1.03 },
+              "whileDrag": { "scale": 1.06 }
+            }
+          }
+        }
+      },
+      "display": "grid",
+      "gridTemplateColumns": ["1fr", "repeat(2, minmax(0, 1fr))"],
+      "gap": "1rem",
+      "padding": "1.5rem 1.5rem 2rem"
+    }
+  }
+}

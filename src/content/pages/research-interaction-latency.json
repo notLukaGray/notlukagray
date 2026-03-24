@@ -1,0 +1,21 @@
+{
+  "type": "page",
+  "id": "research-interaction-latency",
+  "title": "Latency, Responsiveness & Perceived Speed",
+  "description": "The psychology of waiting: how interaction latency is perceived, tolerated, and manipulated by design.",
+  "assetBaseUrl": "/research",
+  "backgrounds": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [
+        { "fill": "#060810" },
+        {
+          "fill": "radial-gradient(ellipse 70% 40% at 0% 50%, #0a1020 0%, transparent 70%)",
+          "blendMode": "screen"
+        }
+      ]
+    }
+  },
+  "activeBackground": "bg-main",
+  "sectionOrder": ["nav", "ril_a", "ril_b", "ril_c", "ril_d", "ril_e", "footer"]
+}

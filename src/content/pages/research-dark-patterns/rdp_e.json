@@ -1,0 +1,107 @@
+{
+  "type": "sectionColumn",
+  "id": "rdp_e",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["3rem", "6rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1rem" },
+  "columnStyles": {
+    "mobile": [{ "gap": "0.75rem" }],
+    "desktop": [{ "gap": "0.75rem" }, { "gap": "0.75rem" }]
+  },
+  "itemStyles": {
+    "desktop": {
+      "e-position": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
+      "e-resist": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
+      "e-reading": { "borderRadius": "1.25rem", "fill": "#ffffff05", "padding": "1.1rem" },
+      "e-close": { "borderRadius": "1.25rem", "fill": "#d2ff7a06", "padding": "1.25rem" }
+    },
+    "mobile": {
+      "e-position": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
+      "e-resist": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
+      "e-reading": { "borderRadius": "1rem", "fill": "#ffffff05", "padding": "0.9rem" },
+      "e-close": { "borderRadius": "1rem", "fill": "#d2ff7a06", "padding": "1rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "e-label": 0, "e-position": 0, "e-resist": 0, "e-reading": 0, "e-close": 0 },
+    "desktop": { "e-label": 0, "e-position": 0, "e-reading": 0, "e-resist": 1, "e-close": 1 }
+  },
+  "columnSpan": {
+    "mobile": { "e-label": "all" },
+    "desktop": { "e-label": "all" }
+  },
+  "elementOrder": ["e-label", "e-position", "e-resist", "e-reading", "e-close"],
+  "definitions": {
+    "e-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CONCLUSIONS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "e-position": {
+      "type": "elementRichText",
+      "content": "### The Designer's Position\n\nDark patterns persist not because designers are unaware of them but because the structural incentives of most product environments reward short-term conversion over long-term trust. Awareness is a necessary but insufficient condition for change.\n\nThe more durable solution is institutional: ethical review at the brief stage, access to longitudinal retention data rather than conversion-only metrics, and professional norms that make dark patterns socially costly to propose.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.45, "delay": 0 } }
+      }
+    },
+    "e-resist": {
+      "type": "elementRichText",
+      "content": "### Practical Resistance\n\n**Name what you see.** Using precise language (confirmshaming, roach motel) makes patterns legible and harder to rationalise internally.\n\n**Propose transparent alternatives.** A design that achieves the same business goal without manipulation is the most effective counter-argument.\n\n**Document your objections.** Written dissent creates organisational memory and protects practitioners who raise concerns.\n\n**Choose contexts carefully.** Some briefs should not be accepted. That is a professional judgement, not a personal one.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.45, "delay": 0.08 } }
+      }
+    },
+    "e-reading": {
+      "type": "elementRichText",
+      "content": "### Further Reading\n\nBrignull, H. — *Dark Patterns* (darkpatterns.org)\n\nGray, C.M. et al. — *The Dark (Patterns) Side of UX Design* (CHI 2018)\n\nMathur, A. et al. — *Dark Patterns at Scale* (CSCW 2019)\n\nNorman, D. — *The Design of Everyday Things* (1988)\n\nEthics in Design Working Group — *IDEO Design Ethics Checklist*",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.08 } }
+      }
+    },
+    "e-close": {
+      "type": "elementBody",
+      "level": 3,
+      "text": "Design is not neutral. Every choice about hierarchy, friction, and language is a claim about what the user deserves to understand. The question is not whether designers have power over users — they clearly do. The question is what they choose to do with it.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.15 } }
+      }
+    }
+  }
+}

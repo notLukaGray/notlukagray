@@ -1,0 +1,14 @@
+{
+  "title": "Form fields demo",
+  "slug": "form-demo",
+  "description": "All form field types alongside content block elements.",
+  "assetBaseUrl": "/research",
+  "sectionOrder": ["form_demo_intro", "form_demo_form"],
+  "bgKey": "bg",
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [{ "fill": "#0a0a0a" }]
+    }
+  }
+}

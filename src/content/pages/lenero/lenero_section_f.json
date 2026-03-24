@@ -1,0 +1,87 @@
+{
+  "type": "sectionColumn",
+  "id": "lenero_section_f",
+  "width": ["100%", "74%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff07",
+  "borderRadius": ["1.25rem", "1.75rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "14px" }],
+  "scrollSpeed": 0.93,
+  "marginBottom": ["1.5rem", "2rem"],
+  "columns": { "mobile": 1, "desktop": 1 },
+  "columnWidths": { "mobile": [1], "desktop": [1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem 1.25rem", "gap": "1rem" }],
+    "desktop": [{ "padding": "2.75rem 3.25rem", "gap": "1.25rem" }]
+  },
+  "columnAssignments": {
+    "mobile": { "f-label": 0, "f-body-1": 0, "f-label-2": 0, "f-body-2": 0 },
+    "desktop": { "f-label": 0, "f-body-1": 0, "f-label-2": 0, "f-body-2": 0 }
+  },
+  "elementOrder": ["f-label", "f-body-1", "f-label-2", "f-body-2"],
+  "definitions": {
+    "f-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "semanticLevel": 2,
+      "text": "THE WORK",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "f-body-1": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Las Trampas is remote. You bring everything with you. The mornings are cold and by midday the heat is serious. You hike between locations. The forest is not a backdrop — it is the whole environment, and it has its own logic.\n\nThe crew was small. Too small on paper. The kind of production where the person holding the camera is also thinking about the edit, the mix, the grade. That constraint either breaks a film or focuses it. Here it focused it.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.6 } }
+      }
+    },
+    "f-label-2": {
+      "type": "elementHeading",
+      "level": 6,
+      "semanticLevel": 3,
+      "text": "APPROACH",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "f-body-2": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "The brief was to tell a story. The harder question was what kind. Echo makes chainsaws. Alex uses one. But the film was never going to be about that — it was going to be about what a man does with his life when the place he loves is under threat.\n\nGetting that balance right, between a brand that needed visibility and a subject who deserved dignity, was the work inside the work. When to let a moment run. When to cut. When to hold on Alex's face and trust that the audience would stay with him.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.08 } }
+      }
+    }
+  }
+}

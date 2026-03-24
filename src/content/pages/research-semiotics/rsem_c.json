@@ -1,0 +1,76 @@
+{
+  "type": "sectionColumn",
+  "id": "rsem_c",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1.2] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1.25rem" },
+  "columnStyles": {
+    "mobile": [{ "gap": "1rem" }],
+    "desktop": [{ "gap": "1rem" }, { "gap": "1rem" }]
+  },
+  "itemStyles": {
+    "desktop": {
+      "c-grid": { "borderRadius": "1.25rem", "fill": "#ffffff06", "padding": "0.4rem" },
+      "c-caption": { "borderRadius": "1rem", "fill": "#ffffff06", "padding": "1.1rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "c-label": 0, "c-argument": 0, "c-grid": 0, "c-caption": 0 },
+    "desktop": { "c-label": 0, "c-argument": 0, "c-grid": 1, "c-caption": 1 }
+  },
+  "elementOrder": ["c-label", "c-argument", "c-grid", "c-caption"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CULTURAL CONTEXT STUDY",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "c-argument": {
+      "type": "elementRichText",
+      "content": "### The Same Sign, Different Meanings\n\nThe study examined eight icons used in global consumer software across twelve markets. The findings challenge the assumption that visual iconography is universally legible.\n\n**The folder icon** — universally understood in markets where physical filing cabinets were common in living memory. Significantly less intuitive to users under 25 in markets where digital-first storage was the norm.\n\n**The floppy disk for 'save'** — now a pure symbol (arbitrary) rather than an icon (resemblant). Users who have never seen a floppy disk still learn it — but they are learning a symbol, not recognising an object.\n\n**The hamburger menu** — successful because it became conventional through saturation, not because it is inherently descriptive. Users who encounter it first in a financial app report higher confusion than those who encounter it first in a social app.\n\nThe conclusion: iconography is not a shortcut to universal legibility. It is a different kind of learning — one that can be faster than text in familiar contexts and slower in unfamiliar ones.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "c-grid": {
+      "type": "elementImage",
+      "src": "research/research-semiotics/icon-cultural-grid.webp",
+      "alt": "8×12 grid showing icon recognition rates per market — darker cells indicate lower recognition",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["14rem", "22rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.08 } }
+      }
+    },
+    "c-caption": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Heat map of icon recognition rates across 12 markets. Darker cells indicate lower recognition. Note the age-correlated pattern on storage-related icons in digitally-saturated markets.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

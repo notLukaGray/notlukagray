@@ -1,0 +1,160 @@
+{
+  "type": "sectionColumn",
+  "id": "rsem_d",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.25rem",
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "d-app-1": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "1rem"
+      },
+      "d-app-2": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "1rem"
+      },
+      "d-app-3": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "1rem"
+      }
+    },
+    "mobile": {
+      "d-app-1": {
+        "borderRadius": "0.9rem",
+        "fill": "#ffffff06",
+        "padding": "0.9rem"
+      },
+      "d-app-2": {
+        "borderRadius": "0.9rem",
+        "fill": "#ffffff06",
+        "padding": "0.9rem"
+      },
+      "d-app-3": {
+        "borderRadius": "0.9rem",
+        "fill": "#ffffff06",
+        "padding": "0.9rem"
+      }
+    }
+  },
+  "columnSpan": {
+    "mobile": {
+      "d-label": "all",
+      "d-intro": "all"
+    },
+    "desktop": {
+      "d-label": "all",
+      "d-intro": "all"
+    }
+  },
+  "elementOrder": ["d-label", "d-intro", "d-app-1", "d-app-2", "d-app-3"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "APPLICATIONS FOR DESIGN PRACTICE",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "d-intro": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Semiotic awareness does not produce more beautiful design. It produces more precise design — work in which each element means something, and the system of meanings is internally consistent.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.25rem"
+    },
+    "d-app-1": {
+      "type": "elementRichText",
+      "content": "### Icon System Design\n\nBefore designing any icon, ask which of Peirce's three types it is attempting to be. If iconic (resemblant), test it with users who have no prior exposure to the convention. If symbolic (arbitrary), plan for the learning cost. If indexical (causal), ensure the causal relationship is clear.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "d-app-2": {
+      "type": "elementRichText",
+      "content": "### Brand Identity\n\nA brand is a semiotic system. Every element — colour, typeface, mark, tone of voice — is a sign that produces meaning through its relationship to other signs in the system and to the cultural context it operates within. Design choices that seem purely aesthetic are always also semiotic.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "d-app-3": {
+      "type": "elementRichText",
+      "content": "### Cross-Cultural Communication\n\nWhen designing for global markets, semiotic analysis surfaces the assumptions embedded in apparently neutral design choices. The white space that signals luxury in Western markets signals emptiness or incompleteness in markets where density signals richness.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "d-label": 0,
+      "d-intro": 0,
+      "d-app-1": 0,
+      "d-app-2": 0,
+      "d-app-3": 0
+    },
+    "desktop": {
+      "d-label": 0,
+      "d-intro": 0,
+      "d-app-1": 0,
+      "d-app-2": 1,
+      "d-app-3": 2
+    }
+  }
+}

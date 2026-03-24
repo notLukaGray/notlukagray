@@ -1,0 +1,40 @@
+{
+  "type": "contentBlock",
+  "id": "fm_parallax_fast",
+  "ariaLabel": "Parallax fast",
+  "width": ["70%", "40%"],
+  "height": ["hug", "hug"],
+  "align": ["full", "right"],
+  "layers": [{ "fill": "#1a1a24" }],
+  "fill": "#252530",
+  "borderRadius": "1rem",
+  "marginTop": ["1.5rem", "1rem"],
+  "marginBottom": ["1.5rem", "1rem"],
+  "scrollSpeed": 1.15,
+  "reduceMotion": false,
+  "initialY": "130vh",
+  "zIndex": 20,
+  "elementOrder": ["fast-heading", "fast-body"],
+  "definitions": {
+    "fast-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "scrollSpeed: 1.35 (moves faster)",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "2.5rem",
+      "marginBottom": "0.5rem"
+    },
+    "fast-body": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "This section scrolls faster than the viewport. Enable reduced motion in OS settings to see parallax disabled.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["92%", "85%"],
+      "wordWrap": true,
+      "marginBottom": "2rem"
+    }
+  }
+}

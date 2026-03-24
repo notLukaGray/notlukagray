@@ -1,0 +1,119 @@
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+const { seenSizes, seenFrameNames } = vi.hoisted(() => ({
+  seenSizes: [] as number[],
+  seenFrameNames: [] as string[],
+}));
+
+vi.mock("./converters", () => ({
+  convertFrameToSection: vi.fn(async (frame: { name?: string }, ctx: { usedIds: Set<string> }) => {
+    seenSizes.push(ctx.usedIds.size);
+    seenFrameNames.push(frame.name ?? "");
+    const id = ctx.usedIds.size === 0 ? "hero" : `hero-${ctx.usedIds.size}`;
+    ctx.usedIds.add(id);
+    return { type: "contentBlock", id, elements: [] };
+  }),
+}));
+
+vi.mock("./converters/responsive-merge", () => ({
+  mergeResponsiveSections: vi.fn((mobile: { id: string }, desktop: { id: string }) => ({
+    type: "contentBlock",
+    id: `${mobile.id}|${desktop.id}`,
+    elements: [],
+  })),
+}));
+
+import { convertNormalFrames, convertResponsivePairs } from "./main-frame-convert";
+
+(globalThis as unknown as { figma: { ui: { postMessage: (msg: unknown) => void } } }).figma = {
+  ui: { postMessage: vi.fn() },
+};
+
+function makeCtx() {
+  return {
+    assets: [],
+    warnings: [],
+    errors: [],
+    info: [],
+    assetCounter: 0,
+    usedIds: new Set<string>(),
+    usedAssetKeys: new Set<string>(),
+    cdnPrefix: "",
+    skipAssets: false,
+  };
+}
+
+describe("responsive pair conversion", () => {
+  beforeEach(() => {
+    seenSizes.length = 0;
+    seenFrameNames.length = 0;
+  });
+
+  it("gives desktop and mobile the same baseline usedIds", async () => {
+    const ctx = makeCtx();
+    const result = {
+      pages: {},
+      presets: {},
+      modals: {},
+      modules: {},
+      globals: {},
+      assets: [],
+      warnings: [],
+      elementCount: 0,
+    };
+    const desktop = { id: "desktop", name: "Section[Desktop]/Hero" } as FrameNode;
+    const mobile = { id: "mobile", name: "Section[Mobile]/Hero" } as FrameNode;
+    await convertResponsivePairs(
+      new Set(["hero"]),
+      new Map([["hero", desktop]]),
+      new Map([["hero", mobile]]),
+      {},
+      ctx,
+      result
+    );
+
+    expect(seenSizes).toEqual([0, 0]);
+    expect((result.presets as Record<string, { id: string }>).hero.id).toBe("hero|hero");
+    expect(ctx.usedIds.has("hero")).toBe(true);
+  });
+
+  it("merges existing and override annotations into one deterministic block", async () => {
+    const ctx = makeCtx();
+    const result = {
+      pages: {},
+      presets: {},
+      modals: {},
+      modules: {},
+      globals: {},
+      assets: [],
+      warnings: [],
+      elementCount: 0,
+    };
+
+    const frame = {
+      id: "frame-1",
+      name: "Page/Hero [pb: type=contentBlock, hidden=true]",
+    } as FrameNode;
+
+    await convertNormalFrames(
+      [frame],
+      {},
+      { "frame-1": { hidden: "false", fill: "#000000" } },
+      {},
+      ctx,
+      result
+    );
+
+    expect(seenFrameNames[0]).toContain(
+      "Page/Hero [pb: fill=#000000, hidden=false, type=contentBlock]"
+    );
+    expect((seenFrameNames[0].match(/\[pb:/g) ?? []).length).toBe(1);
+    expect(result.pages).toMatchObject({
+      hero: {
+        slug: "hero",
+        title: "Hero",
+        sectionOrder: ["hero"],
+      },
+    });
+  });
+});

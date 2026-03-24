@@ -1,0 +1,77 @@
+{
+  "type": "scrollContainer",
+  "id": "rgen_d",
+  "width": "100%",
+  "height": "hug",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "scrollDirection": "horizontal",
+  "scrollSnap": false,
+  "padding": ["0 1rem", "0 4%"],
+  "gap": ["0.75rem", "1rem"],
+  "label": {
+    "type": "elementHeading",
+    "level": 6,
+    "text": "FURTHER OUTPUT — SAME RULES, DIFFERENT SEEDS",
+    "align": "left",
+    "width": "hug",
+    "height": "hug",
+    "marginBottom": "0.75rem"
+  },
+  "elements": [
+    {
+      "id": "d-g1",
+      "type": "elementImage",
+      "src": "research/research-generative/gen-09.webp",
+      "alt": "Generative output 09",
+      "objectFit": "cover",
+      "width": ["20rem", "26rem"],
+      "height": ["16rem", "20rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "d-g2",
+      "type": "elementImage",
+      "src": "research/research-generative/gen-10.webp",
+      "alt": "Generative output 10",
+      "objectFit": "cover",
+      "width": ["16rem", "20rem"],
+      "height": ["16rem", "20rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "d-g3",
+      "type": "elementImage",
+      "src": "research/research-generative/gen-11.webp",
+      "alt": "Generative output 11",
+      "objectFit": "cover",
+      "width": ["24rem", "30rem"],
+      "height": ["16rem", "20rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "d-g4",
+      "type": "elementImage",
+      "src": "research/research-generative/gen-12.webp",
+      "alt": "Generative output 12",
+      "objectFit": "cover",
+      "width": ["18rem", "24rem"],
+      "height": ["16rem", "20rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "d-g5",
+      "type": "elementImage",
+      "src": "research/research-generative/gen-13.webp",
+      "alt": "Generative output 13",
+      "objectFit": "cover",
+      "width": ["14rem", "18rem"],
+      "height": ["16rem", "20rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    }
+  ]
+}

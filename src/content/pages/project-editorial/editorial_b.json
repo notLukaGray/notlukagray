@@ -1,0 +1,83 @@
+{
+  "type": "sectionColumn",
+  "id": "editorial_b",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.5rem", "2.5rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "marginBottom": ["2rem", "3rem"],
+  "columns": { "mobile": 1, "desktop": 3 },
+  "columnWidths": { "mobile": [1], "desktop": [1.8, 1, 0.8] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "2rem", "gap": "1.25rem" },
+      { "padding": "1.5rem 1rem", "gap": "1rem", "alignY": "center" },
+      {
+        "padding": "1.5rem 1.25rem",
+        "gap": "0.75rem",
+        "fill": "#ffffff05",
+        "borderRadius": "0 2.5rem 2.5rem 0"
+      }
+    ]
+  },
+  "columnSpan": {
+    "mobile": { "b-image": "all" },
+    "desktop": {}
+  },
+  "elementOrder": ["b-image", "b-overview", "b-scope-label", "b-scope"],
+  "columnAssignments": {
+    "mobile": { "b-image": 0, "b-overview": 0, "b-scope-label": 0, "b-scope": 0 },
+    "desktop": { "b-image": 0, "b-overview": 1, "b-scope-label": 2, "b-scope": 2 }
+  },
+  "definitions": {
+    "b-image": {
+      "type": "elementImage",
+      "src": "work/project-editorial/hero.webp",
+      "alt": "Primary project image",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["22rem", "100%"],
+      "constraints": [{ "minHeight": "auto" }, { "minHeight": "28rem" }],
+      "borderRadius": ["1rem", "1.5rem 0 0 1.5rem"],
+      "align": "center"
+    },
+    "b-overview": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "A two-to-three sentence overview of the project. What was the brief, who was it for, and what was the core design challenge? This should give a clear orientation without explaining every decision.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideLeft",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.55 } }
+      }
+    },
+    "b-scope-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "SCOPE",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "b-scope": {
+      "type": "elementRichText",
+      "content": "- Art Direction\n- Typography System\n- Print Production\n- Brand Alignment\n- Photo Direction",
+      "level": 4,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

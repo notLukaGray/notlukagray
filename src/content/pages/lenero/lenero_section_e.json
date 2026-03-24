@@ -1,0 +1,48 @@
+{
+  "type": "scrollContainer",
+  "id": "lenero_section_e",
+  "width": "100%",
+  "height": "hug",
+  "align": "full",
+  "fill": "#00000000",
+  "scrollSpeed": 0.88,
+  "marginBottom": ["2rem", "3rem"],
+  "scrollDirection": "horizontal",
+  "scrollProgressTrigger": { "id": "lenero-section-e-scroll", "input": [0, 1] },
+  "onViewportProgress": {
+    "type": "updateTransitionProgress",
+    "payload": { "id": "lenero-section-e-scroll" }
+  },
+  "elements": [
+    {
+      "id": "e-bts-wide",
+      "type": "elementImage",
+      "src": "work/lenero/lenero-bts-wide.webp",
+      "alt": "Production on location — crew small against the trees, remote and unglamorous",
+      "objectFit": "cover",
+      "width": ["28rem", "40rem"],
+      "height": ["20rem", "28rem"],
+      "borderRadius": "1.25rem"
+    },
+    {
+      "id": "e-burned",
+      "type": "elementImage",
+      "src": "work/lenero/lenero-burned-forest.webp",
+      "alt": "Acres of damage — blackened trunks in every direction",
+      "objectFit": "cover",
+      "width": ["22rem", "32rem"],
+      "height": ["20rem", "28rem"],
+      "borderRadius": "1.25rem"
+    },
+    {
+      "id": "e-detail",
+      "type": "elementImage",
+      "src": "work/lenero/lenero-bts-detail.webp",
+      "alt": "Camera rigged on location — close and specific",
+      "objectFit": "cover",
+      "width": ["16rem", "22rem"],
+      "height": ["20rem", "28rem"],
+      "borderRadius": "1.25rem"
+    }
+  ]
+}

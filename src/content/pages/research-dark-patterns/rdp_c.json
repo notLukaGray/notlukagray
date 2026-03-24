@@ -1,0 +1,211 @@
+{
+  "type": "sectionColumn",
+  "id": "rdp_c",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 2
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "1rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "c-before-1": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "0.4rem"
+      },
+      "c-after-1": {
+        "borderRadius": "1rem",
+        "fill": "#d2ff7a08",
+        "padding": "0.4rem"
+      },
+      "c-before-2": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "0.4rem"
+      },
+      "c-after-2": {
+        "borderRadius": "1rem",
+        "fill": "#d2ff7a08",
+        "padding": "0.4rem"
+      }
+    },
+    "mobile": {
+      "c-before-1": {
+        "borderRadius": "0.9rem",
+        "fill": "#ffffff07",
+        "padding": "0.35rem"
+      },
+      "c-after-1": {
+        "borderRadius": "0.9rem",
+        "fill": "#d2ff7a08",
+        "padding": "0.35rem"
+      },
+      "c-before-2": {
+        "borderRadius": "0.9rem",
+        "fill": "#ffffff07",
+        "padding": "0.35rem"
+      },
+      "c-after-2": {
+        "borderRadius": "0.9rem",
+        "fill": "#d2ff7a08",
+        "padding": "0.35rem"
+      }
+    }
+  },
+  "columnSpan": {
+    "mobile": {
+      "c-label": "all"
+    },
+    "desktop": {
+      "c-label": "all"
+    }
+  },
+  "elementOrder": ["c-label", "c-before-1", "c-after-1", "c-before-2", "c-after-2"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "BEFORE / AFTER — REDESIGNING DARK PATTERNS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "c-before-1": {
+      "type": "elementImage",
+      "src": "research/research-dark-patterns/confirm-shame-before.webp",
+      "alt": "Before: confirmshaming — decline label reads 'No thanks, I hate saving money'",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "c-after-1": {
+      "type": "elementImage",
+      "src": "research/research-dark-patterns/confirm-shame-after.webp",
+      "alt": "After: neutral decline label — 'No thanks'",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.06
+          }
+        }
+      }
+    },
+    "c-before-2": {
+      "type": "elementImage",
+      "src": "research/research-dark-patterns/hidden-cost-before.webp",
+      "alt": "Before: hidden cost added at checkout — service fee revealed on final step",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.08
+          }
+        }
+      }
+    },
+    "c-after-2": {
+      "type": "elementImage",
+      "src": "research/research-dark-patterns/hidden-cost-after.webp",
+      "alt": "After: total cost shown upfront on product page",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "borderRadius": "0.75rem",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.14
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "c-label": 0,
+      "c-before-1": 0,
+      "c-after-1": 0,
+      "c-before-2": 0,
+      "c-after-2": 0
+    },
+    "desktop": {
+      "c-label": 0,
+      "c-before-1": 0,
+      "c-after-1": 1,
+      "c-before-2": 0,
+      "c-after-2": 1
+    }
+  }
+}

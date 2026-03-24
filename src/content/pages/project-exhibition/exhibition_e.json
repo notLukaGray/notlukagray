@@ -1,0 +1,106 @@
+{
+  "type": "sectionColumn",
+  "id": "exhibition_e",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000012",
+  "borderRadius": ["1.25rem", "1.75rem"],
+  "marginBottom": ["3rem", "5rem"],
+  "columns": { "mobile": 1, "desktop": 3 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1, 1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem", "gap": "0.75rem" }],
+    "desktop": [
+      { "padding": "1.75rem", "gap": "0.5rem" },
+      { "padding": "1.75rem", "gap": "0.5rem", "fill": "#00000008" },
+      { "padding": "1.75rem", "gap": "0.5rem" }
+    ]
+  },
+  "elementOrder": [
+    "e-credit-label",
+    "e-artists",
+    "e-support-label",
+    "e-support",
+    "e-related-label",
+    "e-related"
+  ],
+  "columnAssignments": {
+    "mobile": {
+      "e-credit-label": 0,
+      "e-artists": 0,
+      "e-support-label": 0,
+      "e-support": 0,
+      "e-related-label": 0,
+      "e-related": 0
+    },
+    "desktop": {
+      "e-credit-label": 0,
+      "e-artists": 0,
+      "e-support-label": 1,
+      "e-support": 1,
+      "e-related-label": 2,
+      "e-related": 2
+    }
+  },
+  "definitions": {
+    "e-credit-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CONTRIBUTING ARTISTS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-artists": {
+      "type": "elementRichText",
+      "content": "Name Surname\n\nName Surname\n\nName Surname\n\nName Surname",
+      "level": 4,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "e-support-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "SUPPORTED BY",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-support": {
+      "type": "elementRichText",
+      "content": "Organisation Name\n\nFunding Body\n\nPartner Institution\n\n*Presented in partnership with Gallery Name*",
+      "level": 4,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "e-related-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PUBLICATION",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-related": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "An accompanying publication is available from the gallery. 120 pages, full colour. Essays by Name Surname and Name Surname.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

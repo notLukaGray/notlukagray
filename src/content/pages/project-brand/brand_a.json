@@ -1,0 +1,94 @@
+{
+  "type": "contentBlock",
+  "id": "brand_a",
+  "width": ["100%", "88%"],
+  "height": ["85vh", "92vh"],
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "elementOrder": ["a-client", "a-title", "a-descriptor", "a-year"],
+  "definitions": {
+    "a-client": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "NOMA DISTILLERY",
+      "align": "center",
+      "width": "hug",
+      "marginTop": ["28vh", "32vh"],
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5
+          }
+        }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "NOMA",
+      "align": "center",
+      "width": ["95%", "70%"],
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.7,
+            "delay": 0.06
+          }
+        }
+      }
+    },
+    "a-descriptor": {
+      "type": "elementHeading",
+      "level": 4,
+      "semanticLevel": 2,
+      "text": "Brand Identity \u00b7 Visual System \u00b7 Brand Guidelines",
+      "align": "center",
+      "width": ["88%", "60%"],
+      "wordWrap": true,
+      "marginBottom": "2rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.55,
+            "delay": 0.15
+          }
+        }
+      }
+    },
+    "a-year": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "2024",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.25
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "type": "sectionColumn",
+  "id": "immersive_d",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000055",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "16px"
+    }
+  ],
+  "marginBottom": ["1.5rem", "3rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 4
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1rem",
+        "gap": "0.75rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "1rem 1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1rem 1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1rem 1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1rem 1.25rem",
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "columnSpan": {
+    "mobile": {
+      "d-label": "all"
+    },
+    "desktop": {
+      "d-label": "all"
+    }
+  },
+  "elementOrder": ["d-label", "d-sensors", "d-software", "d-output", "d-interaction"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "TECHNICAL SYSTEM",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "d-sensors": {
+      "type": "elementRichText",
+      "content": "### Sensing\n\n**Depth** Azure Kinect DK × 6\n\n**Volume** Occupancy 8m × 12m\n\n**Latency** <30ms body-to-render\n\n**Calibration** Auto-corrects on participant entry",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "d-software": {
+      "type": "elementRichText",
+      "content": "### Software\n\n**Runtime** TouchDesigner\n\n**3D Engine** Notch\n\n**Audio** Max/MSP → binaural\n\n**Data pipeline** OSC over LAN, 60Hz tick",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.08
+          }
+        }
+      }
+    },
+    "d-output": {
+      "type": "elementRichText",
+      "content": "### Output\n\n**Projection** 4 × Christie Laser, 20K lm each\n\n**Resolution** 7680 × 2160 (wrapped)\n\n**Audio** 16-channel ambisonics\n\n**Haptic floor** 8-zone subwoofer array",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.16
+          }
+        }
+      }
+    },
+    "d-interaction": {
+      "type": "elementRichText",
+      "content": "### Interaction Model\n\n**Trigger zones** 14 spatial thresholds\n\n**Participants** 1–8 simultaneous\n\n**State machine** 6 environment modes\n\n**Session length** ~6 min average",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.24
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "d-label": 0,
+      "d-sensors": 0,
+      "d-software": 0,
+      "d-output": 0,
+      "d-interaction": 0
+    },
+    "desktop": {
+      "d-label": 0,
+      "d-sensors": 0,
+      "d-software": 1,
+      "d-output": 2,
+      "d-interaction": 3
+    }
+  }
+}

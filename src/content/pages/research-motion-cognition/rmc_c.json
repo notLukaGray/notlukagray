@@ -1,0 +1,213 @@
+{
+  "type": "sectionColumn",
+  "id": "rmc_c",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 4
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "gap": "0.75rem"
+      }
+    ],
+    "desktop": [
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "c-p1": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "1.1rem"
+      },
+      "c-p2": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "1.1rem"
+      },
+      "c-p3": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "1.1rem"
+      },
+      "c-p4": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "1.1rem"
+      }
+    },
+    "mobile": {
+      "c-p1": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "1rem"
+      },
+      "c-p2": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "1rem"
+      },
+      "c-p3": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "1rem"
+      },
+      "c-p4": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "1rem"
+      }
+    }
+  },
+  "columnSpan": {
+    "mobile": {
+      "c-label": "all"
+    },
+    "desktop": {
+      "c-label": "all"
+    }
+  },
+  "elementOrder": ["c-label", "c-p1", "c-p2", "c-p3", "c-p4"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "ANIMATION PATTERN CATEGORIES",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "c-p1": {
+      "type": "elementRichText",
+      "content": "### Continuity Motion\n\n**Effect:** Reduces load ↓\n\nAnimations that preserve object identity across states — an element moving from one position to another rather than disappearing and reappearing.\n\nThe brain does not have to decide whether the new object is related to the old one.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "c-p2": {
+      "type": "elementRichText",
+      "content": "### Causal Animation\n\n**Effect:** Reduces load ↓\n\nDirect visual feedback confirming that an action had an effect — a button press dimming, a form field flashing red on error, a card expanding on tap.\n\nEliminates the need for the user to infer whether anything happened.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.07
+          }
+        }
+      }
+    },
+    "c-p3": {
+      "type": "elementRichText",
+      "content": "### Entrance Animation\n\n**Effect:** Mixed / context-dependent\n\nElements appearing on page load. Useful when sequential presentation aids comprehension (progressive disclosure). Harmful when all elements animate simultaneously or delay access to content.\n\nRule: animate to reveal, not to display.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.14
+          }
+        }
+      }
+    },
+    "c-p4": {
+      "type": "elementRichText",
+      "content": "### Decorative Motion\n\n**Effect:** Adds load ↑\n\nMotion with no semantic relationship to content — background particle systems, hover effects that don't indicate interactivity, looping ambient animations.\n\nConsumed by pre-attentive vision automatically, regardless of whether the user wants to process them.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.21
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "c-label": 0,
+      "c-p1": 0,
+      "c-p2": 0,
+      "c-p3": 0,
+      "c-p4": 0
+    },
+    "desktop": {
+      "c-label": 0,
+      "c-p1": 0,
+      "c-p2": 1,
+      "c-p3": 2,
+      "c-p4": 3
+    }
+  }
+}

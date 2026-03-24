@@ -1,0 +1,36 @@
+{
+  "type": "contentBlock",
+  "id": "rmt_d",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "elementOrder": ["d-label", "d-image"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "THE TEXTURE SPECTRUM — FLAT TO MATERIAL",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "d-image": {
+      "type": "elementImage",
+      "src": "research/research-material-texture/texture-spectrum.webp",
+      "alt": "UI surface spectrum from completely flat to high-fidelity material — with affordance and trust ratings below each",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["14rem", "45vh"],
+      "borderRadius": ["1.25rem", "1.75rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0 } }
+      }
+    }
+  }
+}

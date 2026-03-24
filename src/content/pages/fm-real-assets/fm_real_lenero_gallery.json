@@ -1,0 +1,127 @@
+{
+  "type": "contentBlock",
+  "id": "fm_real_lenero_gallery",
+  "ariaLabel": "El Leñero stills with motion",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#050505",
+  "borderRadius": "1.5rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "elementOrder": ["gallery-heading", "gallery-row"],
+  "definitions": {
+    "gallery-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Stills in motion — variants, viewport, drag from JSON",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "0.75rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": { "transition": { "duration": 0.35 } }
+      }
+    },
+    "gallery-row": {
+      "type": "elementGroup",
+      "section": {
+        "elementOrder": ["frame-a", "frame-b", "frame-c"],
+        "definitions": {
+          "frame-a": {
+            "type": "elementImage",
+            "src": "work/lenero/lenero-image-a.webp",
+            "alt": "El Leñero still A",
+            "width": ["90%", "32%"],
+            "height": "hug",
+            "align": "center",
+            "objectFit": "cover",
+            "borderRadius": "1.25rem",
+            "motion": {
+              "initial": { "opacity": 0, "y": 32 },
+              "animate": { "opacity": 1, "y": 0 },
+              "whileHover": { "scale": 1.03 },
+              "whileTap": { "scale": 0.98 },
+              "transition": {
+                "type": "spring",
+                "stiffness": 220,
+                "damping": 26
+              },
+              "viewport": { "once": true, "amount": 0.3 }
+            }
+          },
+          "frame-b": {
+            "type": "elementImage",
+            "src": "work/lenero/lenero-image-a.webp",
+            "alt": "El Leñero still B",
+            "width": ["90%", "32%"],
+            "height": "hug",
+            "align": "center",
+            "objectFit": "cover",
+            "borderRadius": "1.25rem",
+            "motion": {
+              "initialVariant": "offscreen",
+              "animateVariant": "onscreen",
+              "variants": {
+                "offscreen": {
+                  "y": 40,
+                  "opacity": 0
+                },
+                "onscreen": {
+                  "y": 0,
+                  "opacity": 1,
+                  "transition": {
+                    "type": "spring",
+                    "stiffness": 260,
+                    "damping": 28
+                  }
+                }
+              },
+              "whileHover": "onscreen"
+            }
+          },
+          "frame-c": {
+            "type": "elementImage",
+            "src": "work/lenero/lenero-image-a.webp",
+            "alt": "El Leñero still C (draggable)",
+            "width": ["90%", "32%"],
+            "height": "hug",
+            "align": "center",
+            "objectFit": "cover",
+            "borderRadius": "1.25rem",
+            "motion": {
+              "drag": true,
+              "dragConstraints": {
+                "left": -40,
+                "right": 40,
+                "top": -20,
+                "bottom": 20
+              },
+              "dragElastic": 0.2,
+              "dragMomentum": true,
+              "dragTransition": {
+                "type": "inertia",
+                "power": 0.9,
+                "timeConstant": 650,
+                "bounceStiffness": 600,
+                "bounceDamping": 18,
+                "min": -80,
+                "max": 80
+              },
+              "whileHover": { "scale": 1.04 },
+              "whileDrag": { "scale": 1.05 }
+            }
+          }
+        }
+      },
+      "display": "flex",
+      "flexDirection": "column",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "gap": "1rem",
+      "padding": "1.5rem 1rem 2rem"
+    }
+  }
+}

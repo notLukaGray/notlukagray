@@ -1,0 +1,67 @@
+{
+  "type": "contentBlock",
+  "id": "systems_a",
+  "width": ["100%", "88%"],
+  "height": ["80vh", "88vh"],
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "elementOrder": ["a-context", "a-title", "a-version", "a-description"],
+  "definitions": {
+    "a-context": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "DESIGN SYSTEM / COMPONENT LIBRARY",
+      "align": "center",
+      "width": "hug",
+      "marginTop": ["24vh", "28vh"],
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "System Name",
+      "align": "center",
+      "width": ["92%", "68%"],
+      "wordWrap": true,
+      "marginBottom": "0.75rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.08 } }
+      }
+    },
+    "a-version": {
+      "type": "elementHeading",
+      "level": 4,
+      "semanticLevel": 2,
+      "text": "Version 2.0",
+      "align": "center",
+      "width": "hug",
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.18 } }
+      }
+    },
+    "a-description": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "A design system built for a product at scale — covering web, iOS, Android, and internal tooling. Designed to reduce decision overhead without removing the ability to make good decisions.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["88%", "54%"],
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.22 } }
+      }
+    }
+  }
+}

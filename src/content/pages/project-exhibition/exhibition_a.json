@@ -1,0 +1,52 @@
+{
+  "type": "contentBlock",
+  "id": "exhibition_a",
+  "width": ["100%", "88%"],
+  "height": ["85vh", "92vh"],
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "elementOrder": ["a-venue", "a-title", "a-dates"],
+  "definitions": {
+    "a-venue": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "VENUE NAME · CITY",
+      "align": "center",
+      "width": "hug",
+      "marginTop": ["28vh", "33vh"],
+      "marginBottom": "1.25rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.6 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Exhibition Title",
+      "align": "center",
+      "width": ["92%", "72%"],
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.08 } }
+      }
+    },
+    "a-dates": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Month Day – Month Day, Year",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.2 } }
+      }
+    }
+  }
+}

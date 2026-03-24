@@ -1,0 +1,41 @@
+{
+  "type": "revealSection",
+  "id": "fm_reveal_external",
+  "ariaLabel": "Externally triggered reveal",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#1e1e2e",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "triggerMode": "external",
+  "externalTriggerKey": "openReveal",
+  "externalTriggerMode": "toggle",
+  "expandAxis": "vertical",
+  "collapsedElements": [
+    {
+      "type": "elementBody",
+      "level": 2,
+      "text": "This section is controlled by the trigger and button below. Scroll to the trigger, or use the button, to toggle this block.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "90%",
+      "wordWrap": true,
+      "marginTop": "1rem",
+      "marginBottom": "1rem"
+    }
+  ],
+  "revealedElements": [
+    {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Revealed by external trigger (contentOverride with key \"openReveal\"). The sectionTrigger above fires onVisible with that action.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem"
+    }
+  ]
+}

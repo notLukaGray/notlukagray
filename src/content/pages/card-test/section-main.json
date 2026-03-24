@@ -1,0 +1,114 @@
+{
+  "type": "contentBlock",
+  "width": "100%",
+  "height": "100vh",
+  "align": "full",
+  "fill": "transparent",
+  "fixed": true,
+  "elementOrder": ["model3d", "loadModelButton"],
+  "definitions": {
+    "model3d": {
+      "type": "elementModel3D",
+      "id": "card-test-model",
+      "initiallyLoaded": false,
+      "width": "100%",
+      "height": "100%",
+      "align": "center",
+      "textures": {
+        "emissive": {
+          "type": "video",
+          "source": "dump_3d_test/test.webm",
+          "loop": true,
+          "useAsAlphaMap": false
+        },
+        "albedo": { "type": "image", "source": "dump_3d_test/albedo_card.webp" },
+        "maps": { "type": "image", "source": "dump_3d_test/maps_card.webp" },
+        "normal": { "type": "image", "source": "dump_3d_test/card_normal_map.webp" }
+      },
+      "materials": {
+        "base": {
+          "albedo": "albedo",
+          "normal": "normal",
+          "roughness": "maps",
+          "metallic": "maps",
+          "emissive": "emissive"
+        }
+      },
+      "models": {
+        "main": {
+          "geometry": "dump_3d_test/test2.glb",
+          "materialBindings": { "Material.001": "base" }
+        }
+      },
+      "scene": {
+        "environment": { "type": "hdri", "path": "dump_3d_test/hdri.exr", "intensity": 1 },
+        "lights": [
+          { "type": "ambient", "intensity": 0 },
+          {
+            "type": "spot",
+            "position": [1, 1, 1],
+            "target": [0, 0, 1],
+            "angle": 0.04,
+            "penumbra": 0.5,
+            "intensity": 1
+          },
+          {
+            "type": "spot",
+            "position": [2, -1, 1],
+            "target": [0, 0, 0],
+            "angle": 0.02,
+            "penumbra": 0.8,
+            "intensity": 1
+          }
+        ],
+        "camera": { "type": "orthographic", "size": 0.1 },
+        "cameraEffects": {
+          "bobbing": { "amount": 0.3, "speed": 0.8 },
+          "mouseFollow": { "sensitivity": -0.1, "smoothness": 0.1, "desktopOnly": true }
+        },
+        "contents": {
+          "models": [{ "model": "main", "animation": { "clip": "RotateCW", "loop": true } }]
+        }
+      },
+      "canvas": { "dpr": 2, "gl": { "antialias": true, "powerPreference": "high-performance" } },
+      "postProcessing": [
+        { "type": "brightnessContrast", "brightness": 0, "contrast": 0.5 },
+        { "type": "noise", "opacity": 0.1 }
+      ]
+    },
+    "loadModelButton": {
+      "type": "elementButton",
+      "label": "Open",
+      "action": "three.load",
+      "actionPayload": {
+        "id": "card-test-model",
+        "fadeInOnReady": { "durationMs": 1000 },
+        "buttonFadeOutOnModelReady": { "durationMs": 1000 },
+        "buttonUnmountOnModelReady": true
+      },
+      "width": "hug",
+      "fixed": true,
+      "align": "center",
+      "alignY": "center",
+      "zIndex": 50,
+      "wrapperFill": "rgba(0,0,0,0.65)",
+      "wrapperStroke": "rgba(255,255,255,0.25)",
+      "wrapperPadding": "1rem 3rem",
+      "wrapperBorderRadius": "999px",
+      "linkDefault": "#ffffff",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": {
+          "initial": { "opacity": 0, "y": 48 },
+          "animate": { "opacity": 1, "y": 0 },
+          "transition": {
+            "duration": 0.6,
+            "delay": 0,
+            "ease": [0.4, 2, 0.3, 1]
+          }
+        }
+      }
+    }
+  }
+}

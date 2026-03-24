@@ -1,0 +1,356 @@
+{
+  "type": "sectionColumn",
+  "id": "systems_b",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["2rem", "3rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 4
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "gap": "0.75rem",
+        "padding": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "mobile": {
+      "b-comp-1": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "0.35rem"
+      },
+      "b-comp-2": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "0.35rem"
+      },
+      "b-comp-3": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "0.35rem"
+      },
+      "b-comp-4": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "0.35rem"
+      },
+      "b-comp-5": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "0.35rem"
+      },
+      "b-comp-6": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "0.35rem"
+      },
+      "b-comp-7": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "0.35rem"
+      },
+      "b-comp-8": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "0.35rem"
+      }
+    },
+    "desktop": {
+      "b-comp-1": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "0.5rem"
+      },
+      "b-comp-2": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "0.5rem"
+      },
+      "b-comp-3": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "0.5rem"
+      },
+      "b-comp-4": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "0.5rem"
+      },
+      "b-comp-5": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "0.5rem"
+      },
+      "b-comp-6": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "0.5rem"
+      },
+      "b-comp-7": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "0.5rem"
+      },
+      "b-comp-8": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "0.5rem"
+      }
+    }
+  },
+  "columnSpan": {
+    "mobile": {
+      "b-label": "all"
+    },
+    "desktop": {
+      "b-label": "all"
+    }
+  },
+  "elementOrder": [
+    "b-label",
+    "b-comp-1",
+    "b-comp-2",
+    "b-comp-3",
+    "b-comp-4",
+    "b-comp-5",
+    "b-comp-6",
+    "b-comp-7",
+    "b-comp-8"
+  ],
+  "definitions": {
+    "b-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "COMPONENT GALLERY",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "b-comp-1": {
+      "type": "elementImage",
+      "src": "work/project-systems/comp-buttons.webp",
+      "alt": "Button components",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "b-comp-2": {
+      "type": "elementImage",
+      "src": "work/project-systems/comp-forms.webp",
+      "alt": "Form components",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.06
+          }
+        }
+      }
+    },
+    "b-comp-3": {
+      "type": "elementImage",
+      "src": "work/project-systems/comp-nav.webp",
+      "alt": "Navigation components",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.12
+          }
+        }
+      }
+    },
+    "b-comp-4": {
+      "type": "elementImage",
+      "src": "work/project-systems/comp-cards.webp",
+      "alt": "Card components",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.18
+          }
+        }
+      }
+    },
+    "b-comp-5": {
+      "type": "elementImage",
+      "src": "work/project-systems/comp-typography.webp",
+      "alt": "Typography scale",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.04
+          }
+        }
+      }
+    },
+    "b-comp-6": {
+      "type": "elementImage",
+      "src": "work/project-systems/comp-icons.webp",
+      "alt": "Icon set",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.1
+          }
+        }
+      }
+    },
+    "b-comp-7": {
+      "type": "elementImage",
+      "src": "work/project-systems/comp-data.webp",
+      "alt": "Data visualisation components",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.16
+          }
+        }
+      }
+    },
+    "b-comp-8": {
+      "type": "elementImage",
+      "src": "work/project-systems/comp-motion.webp",
+      "alt": "Motion guidelines",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["10rem", "14rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.22
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "b-label": 0,
+      "b-comp-1": 0,
+      "b-comp-2": 0,
+      "b-comp-3": 0,
+      "b-comp-4": 0,
+      "b-comp-5": 0,
+      "b-comp-6": 0,
+      "b-comp-7": 0,
+      "b-comp-8": 0
+    },
+    "desktop": {
+      "b-label": 0,
+      "b-comp-1": 0,
+      "b-comp-2": 1,
+      "b-comp-3": 2,
+      "b-comp-4": 3,
+      "b-comp-5": 0,
+      "b-comp-6": 1,
+      "b-comp-7": 2,
+      "b-comp-8": 3
+    }
+  }
+}

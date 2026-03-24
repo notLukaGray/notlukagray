@@ -1,0 +1,50 @@
+{
+  "type": "contentBlock",
+  "id": "motion_b",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000085",
+  "borderRadius": ["2rem 2rem 0 0", "3rem 3rem 0 0"],
+  "effects": [{ "type": "backdropBlur", "amount": "28px" }],
+  "elementOrder": ["b-type", "b-title", "b-specs"],
+  "definitions": {
+    "b-type": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "MOTION DESIGN / TITLE SEQUENCE / 2024",
+      "align": "center",
+      "width": "hug",
+      "marginTop": "2.5rem",
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "b-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Project Title",
+      "align": "center",
+      "width": ["90%", "68%"],
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.65, "delay": 0.08 } }
+      }
+    },
+    "b-specs": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "After Effects · Cinema 4D · Duration 01:30 · 4K · 24fps",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug",
+      "marginBottom": "2.5rem"
+    }
+  }
+}

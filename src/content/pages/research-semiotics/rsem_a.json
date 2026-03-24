@@ -1,0 +1,70 @@
+{
+  "type": "contentBlock",
+  "id": "rsem_a",
+  "width": ["100%", "78%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "padding": ["2rem 1rem", "5rem 0 3rem"],
+  "elementOrder": ["a-tag", "a-title", "a-abstract", "a-meta"],
+  "definitions": {
+    "a-tag": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "RESEARCH  ·  VISUAL COMMUNICATION  ·  SEMIOTICS",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Semiotics in Visual Communication",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.1 } }
+      }
+    },
+    "a-abstract": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Every mark a designer places carries meaning beyond its visual form. This paper draws on Peirce's triadic model and Barthes's analysis of visual rhetoric to explore how icons, symbols, and indices function in designed artifacts — and why the same image can signify safety in one context and danger in another.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.25 } }
+      }
+    },
+    "a-meta": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Luka Gray  ·  May 2024  ·  19 min read",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.4 } }
+      }
+    }
+  }
+}

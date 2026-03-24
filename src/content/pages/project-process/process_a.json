@@ -1,0 +1,62 @@
+{
+  "type": "contentBlock",
+  "id": "process_a",
+  "width": ["100%", "88%"],
+  "height": ["80vh", "88vh"],
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "elementOrder": ["a-phase", "a-title", "a-brief", "a-timeline"],
+  "definitions": {
+    "a-phase": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PHASE 01 → 04 / FULL PROCESS",
+      "align": "center",
+      "width": "hug",
+      "marginTop": ["26vh", "30vh"],
+      "marginBottom": "1rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Project Title",
+      "align": "center",
+      "width": ["95%", "72%"],
+      "wordWrap": true,
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.08 } }
+      }
+    },
+    "a-brief": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "What the project was trying to solve and why it was worth solving. A paragraph of genuine context — not a category description but a specific situation.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["88%", "52%"],
+      "wordWrap": true,
+      "marginBottom": "2rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.18 } }
+      }
+    },
+    "a-timeline": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Month Year → Month Year · Client Name · 4-person team",
+      "align": "center",
+      "textAlign": "center",
+      "width": "hug"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "type": "contentBlock",
+  "id": "fm_scroll_trigger",
+  "ariaLabel": "Scroll and viewport triggers",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#1a1a1a",
+  "borderRadius": "1rem",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "elementOrder": ["scroll-progress-bar", "trigger-heading", "trigger-body"],
+  "definitions": {
+    "scroll-progress-bar": {
+      "type": "elementScrollProgressBar"
+    },
+    "trigger-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Scroll & viewport triggers",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "marginBottom": "0.5rem"
+    },
+    "trigger-body": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Sections can fire onVisible, onInvisible, onProgress from JSON. Scroll progress (0–1) is driven by FM (useSectionScrollProgress). Use these for analytics, background transitions, or custom behavior.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "85%",
+      "wordWrap": true,
+      "marginBottom": "1.5rem"
+    }
+  }
+}

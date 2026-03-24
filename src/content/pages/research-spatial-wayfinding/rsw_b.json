@@ -1,0 +1,36 @@
+{
+  "type": "contentBlock",
+  "id": "rsw_b",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "elementOrder": ["b-label", "b-plan"],
+  "definitions": {
+    "b-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CASE STUDY — HOSPITAL CAMPUS WAYFINDING",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "b-plan": {
+      "type": "elementImage",
+      "src": "research/research-spatial-wayfinding/hospital-plan.webp",
+      "alt": "Annotated site plan showing signage placement, decision points, and zoning colour strategy",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["16rem", "50vh"],
+      "borderRadius": ["1.25rem", "1.75rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0 } }
+      }
+    }
+  }
+}

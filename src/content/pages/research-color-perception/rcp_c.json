@@ -1,0 +1,36 @@
+{
+  "type": "contentBlock",
+  "id": "rcp_c",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "elementOrder": ["c-label", "c-study"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "FINDINGS — SIMULTANEOUS CONTRAST",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "c-study": {
+      "type": "elementImage",
+      "src": "research/research-color-perception/color-study.webp",
+      "alt": "Nine-panel study showing identical hue values shifting apparent saturation and warmth across dark, light, and mid-tone grounds",
+      "objectFit": "contain",
+      "width": "100%",
+      "height": ["16rem", "55vh"],
+      "borderRadius": ["1.25rem", "1.75rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0 } }
+      }
+    }
+  }
+}

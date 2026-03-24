@@ -1,0 +1,188 @@
+{
+  "type": "sectionColumn",
+  "id": "lenero_section_g",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "1.75rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "14px" }],
+  "scrollSpeed": 0.95,
+  "marginBottom": ["5rem", "8rem"],
+  "gridMode": { "mobile": "columns", "desktop": "grid" },
+  "gridAutoRows": ["auto", "minmax(4rem, auto)"],
+  "columns": { "mobile": 1, "desktop": 3 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1, 1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem 1.25rem", "gap": "0.25rem" }],
+    "desktop": [
+      { "padding": "2rem 2.25rem", "gap": "0.5rem", "alignY": "top" },
+      { "padding": "2rem 2.25rem", "gap": "0.5rem", "alignY": "top" },
+      { "padding": "2rem 2.25rem", "gap": "0.5rem", "fill": "#d2ff7a0d", "alignY": "top" }
+    ]
+  },
+  "columnSpan": {
+    "desktop": { "g-kicker": "all", "g-ack": "all" }
+  },
+  "columnAssignments": {
+    "mobile": {
+      "g-kicker": 0,
+      "g-num-1": 0,
+      "g-label-1": 0,
+      "g-num-2": 0,
+      "g-label-2": 0,
+      "g-num-3": 0,
+      "g-label-3": 0,
+      "g-ack": 0
+    },
+    "desktop": {
+      "g-kicker": 0,
+      "g-num-1": 0,
+      "g-label-1": 0,
+      "g-num-2": 1,
+      "g-label-2": 1,
+      "g-num-3": 2,
+      "g-label-3": 2,
+      "g-ack": 0
+    }
+  },
+  "itemLayout": {
+    "desktop": {
+      "g-kicker": { "column": 0, "row": 0, "columnSpan": 3 },
+      "g-num-1": { "column": 0, "row": 1 },
+      "g-label-1": { "column": 0, "row": 2 },
+      "g-num-2": { "column": 1, "row": 1 },
+      "g-label-2": { "column": 1, "row": 2 },
+      "g-num-3": { "column": 2, "row": 1 },
+      "g-label-3": { "column": 2, "row": 2 },
+      "g-ack": { "column": 0, "row": 3, "columnSpan": 3 }
+    }
+  },
+  "elementOrder": [
+    "g-kicker",
+    "g-num-1",
+    "g-label-1",
+    "g-num-2",
+    "g-label-2",
+    "g-num-3",
+    "g-label-3",
+    "g-ack"
+  ],
+  "definitions": {
+    "g-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "semanticLevel": 2,
+      "text": "BY THE NUMBERS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "g-num-1": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "50 hrs",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "g-label-1": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Footage captured across 3 days on location",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.1 } }
+      }
+    },
+    "g-num-2": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "5 min",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.1 } }
+      }
+    },
+    "g-label-2": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Final runtime",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.18 } }
+      }
+    },
+    "g-num-3": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "11M",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.2 } }
+      }
+    },
+    "g-label-3": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Views on YouTube",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.28 } }
+      }
+    },
+    "g-ack": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Special thanks to Cramer-Kassalt, Jake Brusha, and Alex Lopez — whose story was always worth telling.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["100%", "60%"],
+      "wordWrap": true,
+      "marginTop": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    }
+  }
+}

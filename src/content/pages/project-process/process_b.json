@@ -1,0 +1,155 @@
+{
+  "type": "sectionColumn",
+  "id": "process_b",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff07",
+  "borderRadius": ["1.5rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "marginBottom": ["2rem", "3rem"],
+  "columns": { "mobile": 1, "desktop": 3 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1, 1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "2rem", "gap": "1rem" },
+      { "padding": "2rem", "gap": "1rem", "fill": "#ffffff04" },
+      { "padding": "2rem", "gap": "1rem" }
+    ]
+  },
+  "elementOrder": [
+    "b-p1-label",
+    "b-p1-name",
+    "b-p1-body",
+    "b-p2-label",
+    "b-p2-name",
+    "b-p2-body",
+    "b-p3-label",
+    "b-p3-name",
+    "b-p3-body"
+  ],
+  "columnAssignments": {
+    "mobile": {
+      "b-p1-label": 0,
+      "b-p1-name": 0,
+      "b-p1-body": 0,
+      "b-p2-label": 0,
+      "b-p2-name": 0,
+      "b-p2-body": 0,
+      "b-p3-label": 0,
+      "b-p3-name": 0,
+      "b-p3-body": 0
+    },
+    "desktop": {
+      "b-p1-label": 0,
+      "b-p1-name": 0,
+      "b-p1-body": 0,
+      "b-p2-label": 1,
+      "b-p2-name": 1,
+      "b-p2-body": 1,
+      "b-p3-label": 2,
+      "b-p3-name": 2,
+      "b-p3-body": 2
+    }
+  },
+  "definitions": {
+    "b-p1-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PHASE 01",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-p1-name": {
+      "type": "elementHeading",
+      "level": 3,
+      "semanticLevel": 2,
+      "text": "Research",
+      "align": "left",
+      "width": "100%",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.5 } }
+      }
+    },
+    "b-p1-body": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Competitive landscape, user interviews, content audits. The goal was to understand what the system was being asked to do before proposing what it should look like.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-p2-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PHASE 02",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-p2-name": {
+      "type": "elementHeading",
+      "level": 3,
+      "semanticLevel": 2,
+      "text": "Concept",
+      "align": "left",
+      "width": "100%",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.1 } }
+      }
+    },
+    "b-p2-body": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Three distinct directions, each tested against the same benchmark content. One clear winner by the second review — the other two became a record of what we decided not to do.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "b-p3-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PHASE 03",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-p3-name": {
+      "type": "elementHeading",
+      "level": 3,
+      "semanticLevel": 2,
+      "text": "Production",
+      "align": "left",
+      "width": "100%",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.2 } }
+      }
+    },
+    "b-p3-body": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Final files across all formats. Stress-tested at every scale from mobile notification to billboard. Documented every decision that wasn't immediately obvious.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

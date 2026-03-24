@@ -1,0 +1,88 @@
+{
+  "type": "scrollContainer",
+  "id": "rph_b",
+  "width": "100%",
+  "height": "hug",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "scrollDirection": "horizontal",
+  "scrollSnap": false,
+  "padding": ["0 1rem", "0 4%"],
+  "gap": ["0.75rem", "1rem"],
+  "label": {
+    "type": "elementHeading",
+    "level": 6,
+    "text": "PRIMARY SOURCES — PRINT HISTORY",
+    "align": "left",
+    "width": "hug",
+    "height": "hug",
+    "marginBottom": "0.75rem"
+  },
+  "elements": [
+    {
+      "id": "b-p1",
+      "type": "elementImage",
+      "src": "research/research-print-history/gutenberg-bible.webp",
+      "alt": "Gutenberg Bible, 1455 — set in Textura blackletter, two columns",
+      "objectFit": "cover",
+      "width": ["16rem", "20rem"],
+      "height": ["16rem", "22rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-p2",
+      "type": "elementImage",
+      "src": "research/research-print-history/garamond-specimen.webp",
+      "alt": "Garamond type specimen, c.1530",
+      "objectFit": "cover",
+      "width": ["20rem", "26rem"],
+      "height": ["16rem", "22rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-p3",
+      "type": "elementImage",
+      "src": "research/research-print-history/bauhaus-book.webp",
+      "alt": "Bauhaus Bücher, 1928 — Herbert Bayer's universal typeface proposal",
+      "objectFit": "cover",
+      "width": ["18rem", "24rem"],
+      "height": ["16rem", "22rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-p4",
+      "type": "elementImage",
+      "src": "research/research-print-history/swiss-poster.webp",
+      "alt": "Swiss International Style poster, c.1955 — Josef Müller-Brockmann",
+      "objectFit": "cover",
+      "width": ["14rem", "18rem"],
+      "height": ["16rem", "22rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-p5",
+      "type": "elementImage",
+      "src": "research/research-print-history/neue-grafik.webp",
+      "alt": "Neue Grafik magazine, 1958 — the canonical grid system journal",
+      "objectFit": "cover",
+      "width": ["22rem", "28rem"],
+      "height": ["16rem", "22rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    },
+    {
+      "id": "b-p6",
+      "type": "elementImage",
+      "src": "research/research-print-history/wim-crouwel.webp",
+      "alt": "Wim Crouwel, Gridnik typeface specimen, 1967",
+      "objectFit": "cover",
+      "width": ["16rem", "20rem"],
+      "height": ["16rem", "22rem"],
+      "borderRadius": ["1rem", "1.25rem"],
+      "flex": "none"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "type": "contentBlock",
+  "id": "fm_real_lenero_hero",
+  "ariaLabel": "El Leñero hero with motion",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#000000b0",
+  "borderRadius": ["2rem", "3rem"],
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "scrollOpacityRange": {
+    "input": [0, 0.35],
+    "output": [0, 1]
+  },
+  "elementOrder": ["hero-heading", "hero-subtitle", "intro-body", "hero-video"],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "24px"
+    }
+  ],
+  "definitions": {
+    "hero-heading": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "EL LEÑERO",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "2rem",
+      "marginBottom": "0.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.45
+          }
+        }
+      },
+      "motion": {
+        "whileHover": {
+          "scale": 1.03
+        },
+        "transition": {
+          "type": "spring",
+          "stiffness": 260,
+          "damping": 22
+        }
+      }
+    },
+    "hero-subtitle": {
+      "type": "elementHeading",
+      "level": 4,
+      "semanticLevel": 2,
+      "text": "{ THE WOODCUTTER }",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginBottom": ["2rem", "3rem"],
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.08
+          }
+        }
+      },
+      "motion": {
+        "whileInView": {
+          "opacity": 1,
+          "y": 0
+        },
+        "initial": {
+          "opacity": 0,
+          "y": 16
+        },
+        "transition": {
+          "type": "spring",
+          "stiffness": 220,
+          "damping": 26
+        },
+        "viewport": {
+          "once": true,
+          "amount": 0.4
+        }
+      }
+    },
+    "intro-body": {
+      "type": "elementBody",
+      "level": 1,
+      "text": "Follow Alex Lopez in Las Trampas, New Mexico. This hero: entrance presets + full motion from JSON (scroll opacity, hover, spring). Same content pattern we use in production.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["90%", "60%"],
+      "wordWrap": true,
+      "marginBottom": ["2rem", "3rem"],
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": {
+          "transition": {
+            "delay": 0.16,
+            "duration": 0.45
+          }
+        }
+      }
+    },
+    "hero-video": {
+      "type": "elementVideo",
+      "src": "work/lenero/echo_el_lenero_directors.webm",
+      "poster": "work/lenero/echo_el_lenero_directors_poster.webp",
+      "ariaLabel": "El Leñero video",
+      "autoplay": false,
+      "muted": false,
+      "loop": false,
+      "width": ["100%", "80%"],
+      "height": "hug",
+      "aspectRatio": "16/9",
+      "module": "video-player",
+      "objectFit": "cover",
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0
+        }
+      },
+      "motion": {
+        "initial": {
+          "opacity": 0
+        },
+        "animate": {
+          "opacity": 1
+        },
+        "whileHover": {
+          "scale": 1.05
+        },
+        "transition": {
+          "type": "spring",
+          "stiffness": 400,
+          "damping": 25
+        },
+        "whileTap": {
+          "scale": 1.05
+        }
+      }
+    }
+  }
+}

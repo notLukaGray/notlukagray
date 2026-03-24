@@ -1,0 +1,152 @@
+{
+  "slug": "layout",
+  "title": "Layout",
+  "sectionOrder": ["nav", "footer"],
+  "definitions": {
+    "nav": {
+      "type": "sectionColumn",
+      "elements": ["work", "teaching", "logo", "research", "profile"],
+      "columns": 5,
+      "columnAssignments": {
+        "work": 0,
+        "teaching": 1,
+        "logo": 2,
+        "research": 3,
+        "profile": 4
+      },
+      "fixed": true,
+      "fixedPosition": "top",
+      "fixedOffset": "0px",
+      "width": "100%",
+      "align": "center",
+      "effects": [{ "type": "backdropBlur", "amount": "64px" }],
+      "marginTop": "0",
+      "marginBottom": "0"
+    },
+    "work": {
+      "type": "elementLink",
+      "id": "work",
+      "label": "Work",
+      "href": "/work",
+      "copyType": "body",
+      "variant": "legal-light"
+    },
+    "teaching": {
+      "type": "elementLink",
+      "id": "teaching",
+      "label": "Teaching",
+      "href": "/teaching",
+      "copyType": "body",
+      "variant": "legal-light"
+    },
+    "logo": {
+      "type": "elementVector",
+      "id": "logo",
+      "viewBox": "0 0 30 30",
+      "width": "30px",
+      "height": "30px",
+      "shapes": [
+        {
+          "type": "path",
+          "d": "M19.0192 30L0.00116246 19.0172L20.366 13.0263L19.0192 30Z",
+          "fill": "currentColor"
+        },
+        {
+          "type": "path",
+          "d": "M-4.87566e-05 19.0192L10.9817 0.000574477L20.3665 13.0266L-4.87566e-05 19.0192Z",
+          "fill": "currentColor"
+        },
+        {
+          "type": "path",
+          "d": "M10.9807 0L29.9997 10.9812L20.366 13.0263L10.9807 0Z",
+          "fill": "currentColor"
+        },
+        {
+          "type": "path",
+          "d": "M29.9995 10.9805L19.0191 30L20.3659 13.0263L29.9995 10.9805Z",
+          "fill": "currentColor"
+        }
+      ]
+    },
+    "research": {
+      "type": "elementLink",
+      "id": "research",
+      "label": "Research",
+      "href": "/research",
+      "copyType": "body",
+      "variant": "legal-light"
+    },
+    "profile": {
+      "type": "elementLink",
+      "id": "profile",
+      "label": "Profile",
+      "href": "/profile",
+      "copyType": "body",
+      "variant": "legal-light"
+    },
+    "footer": {
+      "type": "sectionColumn",
+      "elements": ["linkedin", "instagram", "dribbble", "artstation", "copyright"],
+      "columns": 5,
+      "columnAssignments": {
+        "linkedin": 0,
+        "instagram": 1,
+        "dribbble": 2,
+        "artstation": 3,
+        "copyright": 4
+      },
+      "fixed": true,
+      "fixedPosition": "bottom",
+      "fixedOffset": "0px",
+      "width": "100%",
+      "align": "center",
+      "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+      "marginTop": "0",
+      "marginBottom": "0"
+    },
+    "linkedin": {
+      "type": "elementLink",
+      "id": "linkedin",
+      "label": "LinkedIn",
+      "href": "https://linkedin.com",
+      "external": true,
+      "copyType": "body",
+      "variant": "legal-light"
+    },
+    "instagram": {
+      "type": "elementLink",
+      "id": "instagram",
+      "label": "Instagram",
+      "href": "https://instagram.com",
+      "external": true,
+      "copyType": "body",
+      "variant": "legal-light"
+    },
+    "dribbble": {
+      "type": "elementLink",
+      "id": "dribbble",
+      "label": "Dribbble",
+      "href": "https://dribbble.com",
+      "external": true,
+      "copyType": "body",
+      "variant": "legal-light"
+    },
+    "artstation": {
+      "type": "elementLink",
+      "id": "artstation",
+      "label": "ArtStation",
+      "href": "https://artstation.com",
+      "external": true,
+      "copyType": "body",
+      "variant": "legal-light"
+    },
+    "copyright": {
+      "type": "elementLink",
+      "id": "copyright",
+      "label": "© 2026, Luka Gray",
+      "href": "/profile",
+      "copyType": "body",
+      "variant": "legal-light"
+    }
+  }
+}

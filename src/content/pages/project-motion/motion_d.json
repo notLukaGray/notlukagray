@@ -1,0 +1,119 @@
+{
+  "type": "sectionColumn",
+  "id": "motion_d",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["2rem", "3rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "gap": "0.75rem"
+      }
+    ],
+    "desktop": [
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "mobile": {
+      "d-v1": {
+        "borderRadius": "1rem"
+      },
+      "d-v2": {
+        "borderRadius": "1rem"
+      },
+      "d-v3": {
+        "borderRadius": "1rem"
+      }
+    },
+    "desktop": {
+      "d-v1": {
+        "borderRadius": "1.25rem"
+      },
+      "d-v2": {
+        "borderRadius": "1.25rem"
+      },
+      "d-v3": {
+        "borderRadius": "1.25rem"
+      }
+    }
+  },
+  "elementOrder": ["d-v1", "d-v2", "d-v3"],
+  "definitions": {
+    "d-v1": {
+      "type": "elementVideo",
+      "src": "work/project-motion/variant-1.webm",
+      "poster": "work/project-motion/variant-1-poster.webp",
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "width": "100%",
+      "height": ["14rem", "20rem"],
+      "objectFit": "cover",
+      "align": "center"
+    },
+    "d-v2": {
+      "type": "elementVideo",
+      "src": "work/project-motion/variant-2.webm",
+      "poster": "work/project-motion/variant-2-poster.webp",
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "width": "100%",
+      "height": ["14rem", "20rem"],
+      "objectFit": "cover",
+      "align": "center"
+    },
+    "d-v3": {
+      "type": "elementVideo",
+      "src": "work/project-motion/variant-3.webm",
+      "poster": "work/project-motion/variant-3-poster.webp",
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "width": "100%",
+      "height": ["14rem", "20rem"],
+      "objectFit": "cover",
+      "align": "center"
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "d-v1": 0,
+      "d-v2": 0,
+      "d-v3": 0
+    },
+    "desktop": {
+      "d-v1": 0,
+      "d-v2": 1,
+      "d-v3": 2
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "type": "contentBlock",
+  "id": "rmt_a",
+  "width": ["100%", "78%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "padding": ["2rem 1rem", "5rem 0 3rem"],
+  "elementOrder": ["a-tag", "a-title", "a-abstract", "a-meta"],
+  "definitions": {
+    "a-tag": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "RESEARCH  ·  UI DESIGN  ·  MATERIAL AESTHETICS",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Material & Texture in Digital UI",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.1 } }
+      }
+    },
+    "a-abstract": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Every interface surface communicates something about its nature — whether it is tappable, readable, dismissible, or permanent. This paper examines how material metaphors, depth cues, and surface treatments shape trust, affordance, and perceptual pleasure, with attention to the pendulum between skeumorphism and flat design and what both movements got wrong.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.25 } }
+      }
+    },
+    "a-meta": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Luka Gray  ·  August 2024  ·  15 min read",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.4 } }
+      }
+    }
+  }
+}

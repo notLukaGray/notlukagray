@@ -1,0 +1,49 @@
+{
+  "type": "contentBlock",
+  "id": "fm_video_slot",
+  "ariaLabel": "Video with module slots",
+  "width": ["100%", "92%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "transparent",
+  "marginTop": "1rem",
+  "marginBottom": "1rem",
+  "elementOrder": ["video-slot-heading", "video-slot-sub", "fm-video"],
+  "definitions": {
+    "video-slot-heading": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "Module slot visibility & stagger",
+      "align": "center",
+      "width": "hug",
+      "wordWrap": true,
+      "marginTop": "1rem",
+      "marginBottom": "0.25rem"
+    },
+    "video-slot-sub": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Interact with the video to wake the controls. The bar fades in (FM slot visibility from JSON) and slot elements reveal with stagger (elementRevealMs / elementRevealStaggerMs).",
+      "align": "center",
+      "textAlign": "center",
+      "width": "90%",
+      "wordWrap": true,
+      "marginBottom": "0.75rem"
+    },
+    "fm-video": {
+      "type": "elementVideo",
+      "src": "work/lenero/echo_el_lenero_directors.webm",
+      "poster": "work/lenero/echo_el_lenero_directors_poster.webp",
+      "ariaLabel": "FM test video",
+      "autoplay": false,
+      "muted": true,
+      "loop": true,
+      "width": ["100%", "80%"],
+      "height": "hug",
+      "aspectRatio": "16/9",
+      "module": "video-player",
+      "objectFit": "cover",
+      "align": "center"
+    }
+  }
+}

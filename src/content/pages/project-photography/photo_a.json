@@ -1,0 +1,11 @@
+{
+  "type": "divider",
+  "width": "100%",
+  "height": ["70vh", "80vh"],
+  "align": "full",
+  "layers": [{ "fill": "linear-gradient(180deg, #00000000 60%, #0a0a0a 100%)" }],
+  "onViewportProgress": {
+    "type": "updateTransitionProgress",
+    "payload": { "id": "photo-to-dark", "invert": true }
+  }
+}

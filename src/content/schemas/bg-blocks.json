@@ -1,0 +1,128 @@
+[
+  {
+    "type": "backgroundVideo",
+    "label": "Background video",
+    "description": "Full-viewport background webm (e.g. 1920×1080). Lowest z, autoplay, muted, loop.",
+    "props": [
+      {
+        "name": "video",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "poster",
+        "type": "string",
+        "required": false,
+        "description": "Optional fallback image when video fails or is unsupported. Omit to stream video immediately without a poster frame."
+      }
+    ]
+  },
+  {
+    "type": "backgroundImage",
+    "label": "Background image",
+    "description": "Full-viewport background image (local). Lowest z, canvas-drawn, cover fit.",
+    "props": [
+      {
+        "name": "image",
+        "type": "string",
+        "required": true
+      }
+    ]
+  },
+  {
+    "type": "backgroundVariable",
+    "label": "Background (variable / Figma-style)",
+    "description": "Stack N layers: colors, gradients (linear/radial), blend modes (multiply, screen, overlay, etc.). Full viewport each.",
+    "props": [
+      {
+        "name": "layers",
+        "type": "array",
+        "required": true
+      }
+    ]
+  },
+  {
+    "type": "backgroundPattern",
+    "label": "Background pattern",
+    "description": "Full-viewport tiled image from CDN. Canvas-drawn with createPattern; repeat, repeat-x, repeat-y, or no-repeat.",
+    "props": [
+      {
+        "name": "image",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "repeat",
+        "type": "unknown",
+        "required": false
+      }
+    ]
+  },
+  {
+    "type": "backgroundTransition",
+    "label": "Background transition",
+    "description": "Crossfade transition between two background elements. Triggered by trigger action, time delay, or scroll position.",
+    "props": [
+      {
+        "name": "from",
+        "type": "object",
+        "required": true,
+        "description": "Starting background element (any bgBlock type)"
+      },
+      {
+        "name": "to",
+        "type": "object",
+        "required": true,
+        "description": "Ending background element (any bgBlock type)"
+      },
+      {
+        "name": "duration",
+        "type": "number",
+        "required": false,
+        "description": "Transition duration in milliseconds. Only needed when mode is 'time' (required for time-based transitions)"
+      },
+      {
+        "name": "easing",
+        "type": "string",
+        "required": false,
+        "description": "CSS easing function (e.g., 'ease-in-out', 'cubic-bezier(0.4, 0, 0.2, 1)')"
+      },
+      {
+        "name": "mode",
+        "type": "string",
+        "required": false,
+        "description": "Transition mode: 'progress' = scroll-driven (instant opacity changes), 'time' = CSS transition with duration. Defaults to 'progress' if progressRange is set, otherwise 'time'"
+      },
+      {
+        "name": "trigger",
+        "type": "object",
+        "required": false,
+        "description": "Trigger action that initiates the transition (e.g., onVisible/onInvisible from a section)"
+      },
+      {
+        "name": "time",
+        "type": "number",
+        "required": false,
+        "description": "Time delay in milliseconds before transition starts"
+      },
+      {
+        "name": "position",
+        "type": "unknown",
+        "required": false,
+        "description": "Scroll position trigger - number (pixels) or string (percentage like '50%')"
+      },
+      {
+        "name": "progress",
+        "type": "number",
+        "required": false,
+        "description": "Progress value (0-1) for smooth transition. Can be from section onProgress trigger (section scroll progress) or page onPageProgress trigger (page scroll progress)."
+      },
+      {
+        "name": "progressRange",
+        "type": "object",
+        "required": false,
+        "description": "Progress range: map page/section progress to transition progress. e.g., { start: 0.2, end: 0.8 } means transition happens between 20% and 80% of scroll. If not specified, uses full 0-1 range."
+      }
+    ]
+  }
+]

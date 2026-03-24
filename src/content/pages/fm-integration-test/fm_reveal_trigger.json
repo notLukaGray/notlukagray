@@ -1,0 +1,24 @@
+{
+  "type": "sectionTrigger",
+  "id": "fm_reveal_trigger",
+  "ariaLabel": "External reveal section trigger",
+  "width": ["100%", "92%"],
+  "height": "1px",
+  "align": ["full", "center"],
+  "marginTop": "0.5rem",
+  "marginBottom": "0.5rem",
+  "onVisible": {
+    "type": "contentOverride",
+    "payload": {
+      "key": "openReveal",
+      "value": true
+    }
+  },
+  "onInvisible": {
+    "type": "contentOverride",
+    "payload": {
+      "key": "openReveal",
+      "value": false
+    }
+  }
+}

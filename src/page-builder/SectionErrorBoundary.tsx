@@ -1,0 +1,58 @@
+"use client";
+
+import { Component, type ErrorInfo, type ReactNode } from "react";
+
+type Props = {
+  children: ReactNode;
+  /** Section key for logging */
+  sectionKey?: string;
+  /** When true, render fallback instead of null (e.g. dev placeholder) */
+  fallback?: ReactNode;
+};
+
+type State = { hasError: boolean };
+
+/** Catches render errors in a single section so the rest of the page still renders. */
+export class SectionErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): State {
+    return { hasError: true };
+  }
+
+  componentDidCatch(_error: Error, _errorInfo: ErrorInfo): void {}
+
+  render(): ReactNode {
+    if (this.state.hasError) {
+      return this.props.fallback ?? null;
+    }
+    return this.props.children;
+  }
+}
+
+type ElementBoundaryProps = {
+  children: ReactNode;
+  elementKey?: string;
+};
+
+/** Catches render errors in a single element so the rest of the section (e.g. content block) still renders. */
+export class ElementErrorBoundary extends Component<ElementBoundaryProps, State> {
+  constructor(props: ElementBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(): State {
+    return { hasError: true };
+  }
+
+  componentDidCatch(_error: Error, _errorInfo: ErrorInfo): void {}
+
+  render(): ReactNode {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}

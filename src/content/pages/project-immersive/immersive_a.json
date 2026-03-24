@@ -1,0 +1,71 @@
+{
+  "type": "contentBlock",
+  "id": "immersive_a",
+  "width": "100%",
+  "height": ["88vh", "92vh"],
+  "align": "center",
+  "fill": "#00000000",
+  "padding": ["1.5rem", "4rem"],
+  "alignY": "center",
+  "elementOrder": ["a-medium", "a-title", "a-subtitle", "a-meta"],
+  "definitions": {
+    "a-medium": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "SPATIAL INSTALLATION / MIXED REALITY",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "2rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.1 } }
+      }
+    },
+    "a-title": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "Threshold",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.9, "delay": 0.25 } }
+      }
+    },
+    "a-subtitle": {
+      "type": "elementHeading",
+      "level": 4,
+      "text": "A room-scale installation in which participants traverse a boundary between the physical and the simulated — neither fully inside one world nor the other.",
+      "align": "center",
+      "textAlign": "center",
+      "width": ["100%", "70%"],
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.45 } }
+      }
+    },
+    "a-meta": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Shown at — The Foundry, Berlin  ·  2025  ·  11 days  ·  4,200 visitors",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.1 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.65 } }
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "page",
+  "id": "research-motion-cognition",
+  "title": "Motion Design & Cognitive Load",
+  "description": "When does animation reduce cognitive load — and when does it add to it? A survey of attention, continuity, and transition design.",
+  "assetBaseUrl": "/research",
+  "backgrounds": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [
+        { "fill": "#080810" },
+        {
+          "fill": "radial-gradient(ellipse 80% 50% at 50% 0%, #0d1030 0%, transparent 60%)",
+          "blendMode": "screen"
+        }
+      ]
+    }
+  },
+  "activeBackground": "bg-main",
+  "sectionOrder": ["nav", "rmc_a", "rmc_b", "rmc_c", "rmc_d", "rmc_e", "footer"]
+}

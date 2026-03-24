@@ -1,0 +1,34 @@
+{
+  "type": "contentBlock",
+  "id": "lenero_section_b",
+  "width": "100%",
+  "height": "hug",
+  "align": "full",
+  "fill": "#00000000",
+  "scrollSpeed": 0.9,
+  "zIndex": 1,
+  "reduceMotion": false,
+  "marginLeft": [".01rem", ".01rem"],
+  "marginRight": [".01rem", ".01rem"],
+  "marginTop": [".01rem", ".01rem"],
+  "marginBottom": [".01rem", ".01rem"],
+  "elementOrder": ["b-video"],
+  "definitions": {
+    "b-video": {
+      "type": "elementVideo",
+      "src": "work/lenero/echo_el_lenero_directors.webm",
+      "poster": "work/lenero/echo_el_lenero_directors_poster.webp",
+      "priority": true,
+      "autoplay": false,
+      "muted": false,
+      "loop": false,
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": ["4/3", "16/9"],
+      "objectFit": "cover",
+      "align": "center",
+      "module": "video-player",
+      "ariaLabel": "El Leñero — ECHO short documentary, 2024"
+    }
+  }
+}

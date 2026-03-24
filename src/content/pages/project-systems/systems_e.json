@@ -1,0 +1,108 @@
+{
+  "type": "sectionColumn",
+  "id": "systems_e",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["3rem", "6rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1.3] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1.25rem" },
+  "columnStyles": {
+    "mobile": [{ "gap": "1rem" }],
+    "desktop": [{ "gap": "1rem" }, { "gap": "1rem" }]
+  },
+  "itemStyles": {
+    "mobile": {
+      "e-case-1": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
+      "e-case-2": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
+      "e-case-3": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
+      "e-preview": { "borderRadius": "1rem", "fill": "#ffffff05", "padding": "0.35rem" }
+    },
+    "desktop": {
+      "e-case-1": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
+      "e-case-2": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
+      "e-case-3": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
+      "e-preview": { "borderRadius": "1.25rem", "fill": "#ffffff05", "padding": "0.5rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "e-label": 0, "e-case-1": 0, "e-case-2": 0, "e-case-3": 0, "e-preview": 0 },
+    "desktop": { "e-label": 0, "e-case-1": 0, "e-case-2": 0, "e-case-3": 0, "e-preview": 1 }
+  },
+  "columnSpan": {
+    "mobile": { "e-label": "all" },
+    "desktop": { "e-label": "all" }
+  },
+  "elementOrder": ["e-label", "e-preview", "e-case-1", "e-case-2", "e-case-3"],
+  "definitions": {
+    "e-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "APPLICATIONS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "e-preview": {
+      "type": "elementImage",
+      "src": "work/project-systems/systems-in-use.webp",
+      "alt": "Design system applied across marketing site, dashboard, and mobile",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["14rem", "100%"],
+      "constraints": [{ "minHeight": "0" }, { "minHeight": "28rem" }],
+      "borderRadius": ["0.8rem", "1rem"],
+      "align": "center",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "e-case-1": {
+      "type": "elementRichText",
+      "content": "### Marketing Site\n\nApplied type scale, spacing system, and color tokens across a 14-page marketing site. Zero custom overrides. Every surface assembled from existing library primitives.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.05 } }
+      }
+    },
+    "e-case-2": {
+      "type": "elementRichText",
+      "content": "### Internal Dashboard\n\nData-dense interface built on the same grid, color, and component primitives. Dark mode out of the box via semantic color tokens.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.12 } }
+      }
+    },
+    "e-case-3": {
+      "type": "elementRichText",
+      "content": "### Native Mobile\n\nTokens exported via Style Dictionary to iOS Swift and Android Kotlin. Spacing and color parity maintained without duplication across platforms.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.19 } }
+      }
+    }
+  }
+}

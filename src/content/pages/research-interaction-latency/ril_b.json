@@ -1,0 +1,187 @@
+{
+  "type": "sectionColumn",
+  "id": "ril_b",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 4
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "columnSpan": {
+    "mobile": {
+      "b-kicker": "all",
+      "b-intro": "all"
+    },
+    "desktop": {
+      "b-kicker": "all",
+      "b-intro": "all"
+    }
+  },
+  "elementOrder": ["b-kicker", "b-intro", "b-t1", "b-t2", "b-t3", "b-t4"],
+  "definitions": {
+    "b-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "LATENCY THRESHOLDS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-intro": {
+      "type": "elementBody",
+      "level": 4,
+      "text": "Following Miller's (1968) three response-time limits and updated with Doherty's 400ms threshold for flow, four latency bands define the design problem space.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.25rem"
+    },
+    "b-t1": {
+      "type": "elementRichText",
+      "content": "### 0 – 100ms\n\n**Instantaneous**\n\nUser perceives the response as a direct effect of their action. No feedback required. Any visible delay reads as system error.\n\nDesign: no spinner, no skeleton — just immediate visual change.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "b-t2": {
+      "type": "elementRichText",
+      "content": "### 100 – 400ms\n\n**Responsive**\n\nUser perceives the response as prompt. A subtle transition is appropriate to communicate state change. Doherty Threshold: below 400ms sustains flow.\n\nDesign: micro-animation; no progress indicator.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.07
+          }
+        }
+      }
+    },
+    "b-t3": {
+      "type": "elementRichText",
+      "content": "### 400ms – 1s\n\n**Noticeable**\n\nUser is aware of waiting. A spinner or skeleton prevents abandonment. Perceived duration is malleable — progress cues compress it.\n\nDesign: skeleton screens, optimistic UI, or animated placeholders.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.14
+          }
+        }
+      }
+    },
+    "b-t4": {
+      "type": "elementRichText",
+      "content": "### 1s+\n\n**Disruptive**\n\nUser's mental model of the task is interrupted. Context switching begins above 1s. Above 10s, they will likely abandon.\n\nDesign: background processing + notification on completion; break the wait.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.21
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "b-kicker": 0,
+      "b-intro": 0,
+      "b-t1": 0,
+      "b-t2": 0,
+      "b-t3": 0,
+      "b-t4": 0
+    },
+    "desktop": {
+      "b-kicker": 0,
+      "b-intro": 0,
+      "b-t1": 0,
+      "b-t2": 1,
+      "b-t3": 2,
+      "b-t4": 3
+    }
+  }
+}

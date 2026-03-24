@@ -1,0 +1,68 @@
+{
+  "type": "sectionColumn",
+  "id": "rgen_c",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1, 1] },
+  "columnGaps": { "mobile": "0.75rem", "desktop": "1.25rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.25rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem", "gap": "1rem" },
+      { "padding": "1.5rem", "gap": "1rem" }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "c-code": { "borderRadius": "1rem", "fill": "#000000", "padding": "1.1rem" }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "c-label": 0, "c-argument": 0, "c-code": 0 },
+    "desktop": { "c-label": 0, "c-argument": 0, "c-code": 1 }
+  },
+  "elementOrder": ["c-label", "c-argument", "c-code"],
+  "definitions": {
+    "c-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "AUTHORSHIP & EMERGENCE",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "c-argument": {
+      "type": "elementRichText",
+      "content": "### Where Is the Author?\n\nThe answer depends on what we mean by authorship. If authorship is the direct production of each mark, then generative work has no author after the system runs. If authorship is the design of the possibility space — the rules, the constraints, the seed of variation — then the author is entirely present, even in outputs they have never seen.\n\nThis distinction matters practically. A generative identity system that produces 10,000 unique poster variants does not require 10,000 design decisions. But it requires a set of decisions that are, arguably, more demanding than any single poster: decisions about the grammar of the system.\n\n**Vera Molnár** described her rule-based work as \"creating a mental model and then allowing it to run.\" The question for contemporary practice is whether that model-making constitutes design authorship — or whether it is something closer to choreography.\n\nThe outputs shown in this paper were produced from a single Processing sketch: 47 lines of code governing curve deviation, colour range, and iteration count. Each run produces a different result. None of them were individually intended. All of them were, in some sense, authored.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0 } }
+      }
+    },
+    "c-code": {
+      "type": "elementRichText",
+      "content": "```\nvoid setup() {\n  size(800, 800);\n  background(10);\n  noFill();\n  stroke(255, 80);\n  strokeWeight(0.6);\n}\n\nvoid draw() {\n  float cx = width/2;\n  float cy = height/2;\n  \n  for (int i = 0; i < 120; i++) {\n    float r = map(i, 0, 120, 20, 340);\n    float dev = noise(i * 0.04,\n      frameCount * 0.008) * 60;\n    float angle = TWO_PI * i / 120;\n    float x = cx + cos(angle) * (r + dev);\n    float y = cy + sin(angle) * (r + dev);\n    if (i == 0) {\n      beginShape();\n      curveVertex(x, y);\n    } else {\n      curveVertex(x, y);\n    }\n    if (i == 119) endShape(CLOSE);\n  }\n  \n  if (frameCount > 200) noLoop();\n}\n```",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": false,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.2 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.1 } }
+      }
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "type": "sectionColumn",
+  "id": "product_d",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "14px" }],
+  "marginBottom": ["2rem", "3rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.2, 1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "2rem", "gap": "1.25rem" },
+      { "padding": "2rem", "gap": "1.25rem" }
+    ]
+  },
+  "elementOrder": [
+    "d-before-label",
+    "d-before-img",
+    "d-before-cap",
+    "d-after-label",
+    "d-after-img",
+    "d-after-cap"
+  ],
+  "columnAssignments": {
+    "mobile": {
+      "d-before-label": 0,
+      "d-before-img": 0,
+      "d-before-cap": 0,
+      "d-after-label": 0,
+      "d-after-img": 0,
+      "d-after-cap": 0
+    },
+    "desktop": {
+      "d-before-label": 0,
+      "d-before-img": 0,
+      "d-before-cap": 0,
+      "d-after-label": 1,
+      "d-after-img": 1,
+      "d-after-cap": 1
+    }
+  },
+  "definitions": {
+    "d-before-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "BEFORE",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "d-before-img": {
+      "type": "elementImage",
+      "src": "work/project-product/before.webp",
+      "alt": "Before redesign",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["18rem", "26rem"],
+      "borderRadius": "1rem",
+      "align": "center"
+    },
+    "d-before-cap": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Original interface — describe the primary problem the user faced and what the design was forcing them to work around.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "d-after-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "AFTER",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "d-after-img": {
+      "type": "elementImage",
+      "src": "work/project-product/after.webp",
+      "alt": "After redesign",
+      "objectFit": "cover",
+      "width": "100%",
+      "height": ["18rem", "26rem"],
+      "borderRadius": "1rem",
+      "align": "center"
+    },
+    "d-after-cap": {
+      "type": "elementBody",
+      "level": 5,
+      "text": "Redesigned interface — describe the specific decisions made and how they resolve the issue described on the left.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

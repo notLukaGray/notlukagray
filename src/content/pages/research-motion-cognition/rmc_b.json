@@ -1,0 +1,171 @@
+{
+  "type": "sectionColumn",
+  "id": "rmc_b",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 2
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "1.25rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.25rem",
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "1.5rem",
+        "gap": "1rem"
+      },
+      {
+        "padding": "1.5rem",
+        "gap": "1rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "b-helps": {
+        "borderRadius": "1rem",
+        "fill": "#d2ff7a10",
+        "padding": "1.1rem"
+      },
+      "b-hurts": {
+        "borderRadius": "1rem",
+        "fill": "#ff000010",
+        "padding": "1.1rem"
+      }
+    },
+    "mobile": {
+      "b-helps": {
+        "borderRadius": "0.9rem",
+        "fill": "#d2ff7a10",
+        "padding": "1rem"
+      },
+      "b-hurts": {
+        "borderRadius": "0.9rem",
+        "fill": "#ff000010",
+        "padding": "1rem"
+      }
+    }
+  },
+  "columnSpan": {
+    "mobile": {
+      "b-kicker": "all",
+      "b-question": "all"
+    },
+    "desktop": {
+      "b-kicker": "all",
+      "b-question": "all"
+    }
+  },
+  "elementOrder": ["b-kicker", "b-question", "b-helps", "b-hurts"],
+  "definitions": {
+    "b-kicker": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "THE CENTRAL DISTINCTION",
+      "align": "left",
+      "width": "hug",
+      "height": "hug"
+    },
+    "b-question": {
+      "type": "elementHeading",
+      "level": 3,
+      "text": "Motion reduces cognitive load when it communicates causality. It adds to it when it decorates.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "marginBottom": "0.25rem",
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "b-helps": {
+      "type": "elementRichText",
+      "content": "### When Motion Helps\n\n- **Spatial continuity** — showing where an element came from or went to (e.g. a sheet sliding in from the side explains its place in a hierarchy)\n- **Causal feedback** — confirming that an action produced an effect\n- **State transition** — showing what changed between two states without requiring comparison\n- **Orientation** — anchoring the user within a navigable space (zoom, reveal, collapse)",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.08
+          }
+        }
+      }
+    },
+    "b-hurts": {
+      "type": "elementRichText",
+      "content": "### When Motion Hurts\n\n- **Decorative entrance animation** on every page load adds latency to the reading task without communicating meaning\n- **Parallax effects** that have no semantic relationship to content create visual noise\n- **Simultaneous animations** compete for attentional resources\n- **Long durations** on frequent UI events (button press → result) accumulate into noticeable friction\n- **Prefers-reduced-motion ignored** — vestibular disorders aside, motion that cannot be disabled disrespects the user",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.08
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "b-kicker": 0,
+      "b-question": 0,
+      "b-helps": 0,
+      "b-hurts": 0
+    },
+    "desktop": {
+      "b-kicker": 0,
+      "b-question": 0,
+      "b-helps": 0,
+      "b-hurts": 1
+    }
+  }
+}

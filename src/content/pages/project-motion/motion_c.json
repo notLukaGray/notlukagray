@@ -1,0 +1,91 @@
+{
+  "type": "sectionColumn",
+  "id": "motion_c",
+  "width": ["100%", "88%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff07",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "marginBottom": ["2rem", "3rem"],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.4, 1] },
+  "columnGaps": { "mobile": "0", "desktop": "0" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "0.5rem" },
+      { "padding": "2rem", "gap": "1.25rem", "alignY": "center" }
+    ]
+  },
+  "elementOrder": ["c-clip", "c-concept-label", "c-concept", "c-principles-label", "c-principles"],
+  "columnAssignments": {
+    "mobile": {
+      "c-clip": 0,
+      "c-concept-label": 0,
+      "c-concept": 0,
+      "c-principles-label": 0,
+      "c-principles": 0
+    },
+    "desktop": {
+      "c-clip": 0,
+      "c-concept-label": 1,
+      "c-concept": 1,
+      "c-principles-label": 1,
+      "c-principles": 1
+    }
+  },
+  "definitions": {
+    "c-clip": {
+      "type": "elementVideo",
+      "src": "work/project-motion/clip-a.webm",
+      "poster": "work/project-motion/clip-a-poster.webp",
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "width": "100%",
+      "height": ["20rem", "100%"],
+      "objectFit": "cover",
+      "borderRadius": ["1rem", "1.5rem 0 0 1.5rem"],
+      "align": "center"
+    },
+    "c-concept-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CONCEPT",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "c-concept": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "The motion language came from the subject itself — the way the brand moves through space, the physics of its material, the speed at which its ideas resolve. Every timing decision was grounded in that reading.",
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    },
+    "c-principles-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "PRINCIPLES",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.75rem"
+    },
+    "c-principles": {
+      "type": "elementRichText",
+      "content": "- Ease-out on arrival, ease-in on departure\n- No linear interpolation for character or brand elements\n- Hold 2-4 frames on key moments\n- Stagger reveals by 4–6 frames per element",
+      "level": 4,
+      "align": "left",
+      "textAlign": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true
+    }
+  }
+}

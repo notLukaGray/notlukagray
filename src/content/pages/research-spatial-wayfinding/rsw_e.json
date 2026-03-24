@@ -1,0 +1,177 @@
+{
+  "type": "sectionColumn",
+  "id": "rsw_e",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#00000000",
+  "marginBottom": ["3rem", "6rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 0.9]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "gap": "0.75rem"
+      }
+    ],
+    "desktop": [
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      },
+      {
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "e-scale": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "1.25rem"
+      },
+      "e-digital": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff07",
+        "padding": "1.25rem"
+      },
+      "e-reading": {
+        "borderRadius": "1.25rem",
+        "fill": "#ffffff05",
+        "padding": "1.1rem"
+      }
+    },
+    "mobile": {
+      "e-scale": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "1rem"
+      },
+      "e-digital": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff07",
+        "padding": "1rem"
+      },
+      "e-reading": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff05",
+        "padding": "0.9rem"
+      }
+    }
+  },
+  "columnSpan": {
+    "mobile": {
+      "e-label": "all"
+    },
+    "desktop": {
+      "e-label": "all"
+    }
+  },
+  "elementOrder": ["e-label", "e-scale", "e-digital", "e-reading"],
+  "definitions": {
+    "e-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CONCLUSIONS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "e-scale": {
+      "type": "elementRichText",
+      "content": "### Across Scales\n\nWayfinding problems have a common structure regardless of scale: a user must understand where they are, identify where they want to go, select a route, confirm movement in the right direction, and recognise arrival. Each step is a design problem.\n\nThe principles that make a hospital wayfinding system legible — consistent hierarchy, redundant cues, graceful failure when primary cues are missed — apply equally to website navigation, app information architecture, and physical-digital hybrid environments. The medium changes; the cognitive task is the same.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.45,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "e-digital": {
+      "type": "elementRichText",
+      "content": "### Digital Wayfinding\n\nDigital navigation inherits wayfinding's problems but removes two of its most powerful tools: proprioception (the sense of physical movement through space) and peripheral vision of the surrounding environment.\n\nThis is why digital wayfinding requires more explicit orientation cues than physical environments. Breadcrumbs, progress indicators, persistent navigation, and URL structure are not decoration — they are the equivalent of you-are-here maps for users who cannot look up from the screen and see where they are in the building.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.45,
+            "delay": 0.08
+          }
+        }
+      }
+    },
+    "e-reading": {
+      "type": "elementRichText",
+      "content": "### Further Reading\n\nLynch, K. — *The Image of the City* (1960)\n\nPassini, R. — *Wayfinding in Architecture* (1984)\n\nArthur, P. & Passini, R. — *Wayfinding: People, Signs, and Architecture* (1992)\n\nCard, S.K. et al. — *Information Visualization* (1999)\n\nRosenfeld, L. et al. — *Information Architecture for the Web and Beyond* (2015)\n\nGibson, D. — *The Wayfinding Handbook* (2009)",
+      "level": 5,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.16
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "e-label": 0,
+      "e-scale": 0,
+      "e-digital": 0,
+      "e-reading": 0
+    },
+    "desktop": {
+      "e-label": 0,
+      "e-scale": 0,
+      "e-digital": 1,
+      "e-reading": 2
+    }
+  }
+}

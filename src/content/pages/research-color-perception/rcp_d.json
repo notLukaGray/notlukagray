@@ -1,0 +1,182 @@
+{
+  "type": "sectionColumn",
+  "id": "rcp_d",
+  "width": ["100%", "90%"],
+  "height": "hug",
+  "align": ["full", "center"],
+  "fill": "#ffffff06",
+  "borderRadius": ["1.25rem", "2rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "columns": {
+    "mobile": 1,
+    "desktop": 3
+  },
+  "columnWidths": {
+    "mobile": [1],
+    "desktop": [1, 1, 1]
+  },
+  "columnGaps": {
+    "mobile": "0.75rem",
+    "desktop": "0.75rem"
+  },
+  "columnStyles": {
+    "mobile": [
+      {
+        "padding": "1.25rem",
+        "gap": "1rem"
+      }
+    ],
+    "desktop": [
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      },
+      {
+        "padding": "1.25rem",
+        "gap": "0.75rem"
+      }
+    ]
+  },
+  "itemStyles": {
+    "desktop": {
+      "d-simultaneous": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "1rem"
+      },
+      "d-luminance": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "1rem"
+      },
+      "d-cultural": {
+        "borderRadius": "1rem",
+        "fill": "#ffffff06",
+        "padding": "1rem"
+      }
+    },
+    "mobile": {
+      "d-simultaneous": {
+        "borderRadius": "0.9rem",
+        "fill": "#ffffff06",
+        "padding": "0.9rem"
+      },
+      "d-luminance": {
+        "borderRadius": "0.9rem",
+        "fill": "#ffffff06",
+        "padding": "0.9rem"
+      },
+      "d-cultural": {
+        "borderRadius": "0.9rem",
+        "fill": "#ffffff06",
+        "padding": "0.9rem"
+      }
+    }
+  },
+  "columnSpan": {
+    "mobile": {
+      "d-label": "all"
+    },
+    "desktop": {
+      "d-label": "all"
+    }
+  },
+  "elementOrder": ["d-label", "d-simultaneous", "d-luminance", "d-cultural"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "DISCUSSION — THREE MECHANISMS",
+      "align": "left",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "0.5rem"
+    },
+    "d-simultaneous": {
+      "type": "elementRichText",
+      "content": "### Simultaneous Contrast\n\nFirst described by Chevreul in 1839, simultaneous contrast is the perceptual effect in which the same hue appears lighter against a dark ground and darker against a light one.\n\n**Design consequence:** Brand colors specified as exact hex values will not produce consistent perceptual results across dark and light UI modes. Separate palette specifications — or relative lightness tokens — are necessary for perceptual consistency.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
+      }
+    },
+    "d-luminance": {
+      "type": "elementRichText",
+      "content": "### Luminance Relativity\n\nContrast ratio is a ratio, not an absolute value. A 4.5:1 contrast that meets WCAG AA on a white background may produce a very different perceptual experience on a mid-tone background.\n\n**Design consequence:** Accessibility calculations must account for the background's actual luminance, not just the nominal contrast ratio. Dynamic surfaces require dynamic contrast checking.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.08
+          }
+        }
+      }
+    },
+    "d-cultural": {
+      "type": "elementRichText",
+      "content": "### Cultural Framing\n\nRed means stop in traffic, danger in UI, luck in China, mourning in some parts of Africa. There is no universal color-emotion mapping.\n\n**Design consequence:** Color choices for global audiences should be validated with local research. Cultural color associations should be considered alongside universal perceptual ones — but should not be allowed to override accessibility requirements.",
+      "level": 4,
+      "align": "left",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.16
+          }
+        }
+      }
+    }
+  },
+  "gridMode": {
+    "mobile": "columns",
+    "desktop": "grid"
+  },
+  "gridDebug": false,
+  "columnAssignments": {
+    "mobile": {
+      "d-label": 0,
+      "d-simultaneous": 0,
+      "d-luminance": 0,
+      "d-cultural": 0
+    },
+    "desktop": {
+      "d-label": 0,
+      "d-simultaneous": 0,
+      "d-luminance": 1,
+      "d-cultural": 2
+    }
+  }
+}

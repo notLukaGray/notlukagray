@@ -1,0 +1,42 @@
+{
+  "type": "contentBlock",
+  "id": "ril_d",
+  "width": ["100%", "72%"],
+  "height": "hug",
+  "align": "center",
+  "fill": "#00000000",
+  "marginBottom": ["1.5rem", "2.5rem"],
+  "padding": ["1.5rem 1rem", "0"],
+  "elementOrder": ["d-label", "d-principle"],
+  "definitions": {
+    "d-label": {
+      "type": "elementHeading",
+      "level": 6,
+      "text": "CORE FINDING",
+      "align": "center",
+      "width": "hug",
+      "height": "hug",
+      "marginBottom": "1.5rem",
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+      }
+    },
+    "d-principle": {
+      "type": "elementHeading",
+      "level": 2,
+      "text": "You cannot eliminate latency. You can eliminate the experience of it. These are completely different problems with completely different solutions.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "height": "hug",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "fade",
+        "viewport": { "amount": 0.3 },
+        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.15 } }
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+
+/** Current page slug from pathname (e.g. /work/fm-integration-test → fm-integration-test). */
+function getSlugFromPathname(pathname: string): string | null {
+  const segment = pathname.split("/").filter(Boolean).pop();
+  return segment ?? null;
+}
+
+/** Only validate when we're on a page-builder detail route (e.g. /teaching/foo, /work/bar). Skip index/section routes like /teaching, /work, and internal dev tools like /__dev/*. */
+function isPageBuilderDetailPath(pathname: string): boolean {
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments[0] === "pb-dev") return false;
+  return segments.length >= 2;
+}
+
+export function DevPageValidationClient() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+    if (!pathname || !isPageBuilderDetailPath(pathname)) return;
+
+    const slug = getSlugFromPathname(pathname);
+    if (!slug) return;
+
+    const controller = new AbortController();
+    const url = `/api/dev/page-validation?slug=${encodeURIComponent(slug)}`;
+
+    async function run() {
+      try {
+        const res = await fetch(url, { signal: controller.signal });
+        if (!res.ok) return;
+        const data: {
+          results: { slug: string; valid: boolean; errors: string[] }[];
+          summary: { validCount: number; invalidCount: number };
+        } = await res.json();
+
+        if (!Array.isArray(data.results) || data.results.length === 0) return;
+
+        const [page] = data.results;
+        if (!page) return;
+        if (page.valid) return;
+
+        console.error("[page-builder validation] Page has errors:", page.slug);
+        for (const error of page.errors) {
+          console.error(error);
+        }
+      } catch (error) {
+        if ((error as { name?: string }).name === "AbortError") return;
+        console.error("[page-builder validation] Failed to fetch validation results", error);
+      }
+    }
+
+    void run();
+
+    return () => {
+      controller.abort();
+    };
+  }, [pathname]);
+
+  return null;
+}

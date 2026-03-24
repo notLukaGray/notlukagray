@@ -1,0 +1,80 @@
+{
+  "type": "sectionColumn",
+  "id": "pipeline_section_a",
+  "width": ["100%", "92%"],
+  "contentWidth": ["100%", "min(92%, 72rem)"],
+  "height": "hug",
+  "marginTop": ["1.5rem", "3rem"],
+  "marginBottom": ["1.5rem", "3rem"],
+  "align": "center",
+  "fill": "#00000088",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [{ "type": "backdropBlur", "amount": "20px" }],
+  "columns": { "mobile": 1, "desktop": 2 },
+  "columnWidths": { "mobile": [1], "desktop": [1.4, 1] },
+  "columnGaps": { "mobile": "1rem", "desktop": "2rem" },
+  "columnStyles": {
+    "mobile": [{ "padding": "1rem", "gap": "1rem" }],
+    "desktop": [
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "top" },
+      { "padding": "1.5rem 1.75rem", "gap": "1rem", "alignY": "center" }
+    ]
+  },
+  "itemStyles": {
+    "mobile": { "hook-quote": { "padding": "1rem", "fill": "#ffffff0c", "borderRadius": "1rem" } },
+    "desktop": {
+      "hook-quote": {
+        "padding": "1.25rem 1.5rem",
+        "fill": "#ffffff0c",
+        "borderRadius": "1rem",
+        "alignY": "center"
+      }
+    }
+  },
+  "columnAssignments": {
+    "mobile": { "hook-head": 0, "hook-body": 0, "hook-quote": 0 },
+    "desktop": { "hook-head": 0, "hook-body": 0, "hook-quote": 1 }
+  },
+  "elementOrder": {
+    "mobile": ["hook-head", "hook-body", "hook-quote"],
+    "desktop": ["hook-head", "hook-body", "hook-quote"]
+  },
+  "definitions": {
+    "hook-head": {
+      "type": "elementHeading",
+      "level": 1,
+      "text": "It’s not a component tree",
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": { "entrancePreset": "fade" }
+    },
+    "hook-body": {
+      "type": "elementRichText",
+      "content": "A page builder is often pictured as “JSON in, React out”—one big component tree. I wanted something with clearer seams. So here it’s a **pipeline**: **Load** → **Expand** → **Resolve** → **Render**. Each step does one job. Most of it is pure and synchronous, so it stays testable and predictable.\n\nThe main idea: **separate structure from environment**. Structure—sections, blocks, trigger refs—is built in sync steps from JSON and definitions. Environment stuff (asset base URLs, CDN, 3D inlining) happens in a single **Resolve** step and one async boundary. By the time the client gets the page, everything is already resolved; no key or URL resolution on the client.\n\nBelow is the pipeline in practice: the orchestrator, then each stage, with the real code written out (this site isn’t open source, so the snippets live on the page).",
+      "level": 2,
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.1 } }
+      }
+    },
+    "hook-quote": {
+      "type": "elementBody",
+      "level": 2,
+      "text": "Structure is built in sync steps from JSON. Environment-dependent work happens in one Resolve step and a single async boundary.",
+      "width": "100%",
+      "align": "left",
+      "textAlign": "left",
+      "wordWrap": true,
+      "motionTiming": {
+        "entrancePreset": "slideUp",
+        "entranceMotion": { "transition": { "delay": 0.2 } }
+      }
+    }
+  }
+}
