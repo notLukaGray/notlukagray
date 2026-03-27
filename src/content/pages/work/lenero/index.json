@@ -1,6 +1,7 @@
 {
   "title": "Echo — Short Documentary",
   "description": "A short documentary about presence, stillness, and the landscape of the inner Hardangervidda.",
+  "passwordProtected": true,
   "assetBaseUrl": "/work",
   "sectionOrder": [
     "lenero_section_0",

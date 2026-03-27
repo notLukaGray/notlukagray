@@ -4,7 +4,7 @@ import { accessCookieName } from "@/core/lib/auth-constants";
 import { verifyAccessTokenEdge } from "@/core/lib/access-cookie-edge";
 
 /**
- * Proxy for /work/[slug]:
+ * Proxy for /work/*:
  * When slug is protected and SITE_PASSWORD is set, redirect to /
  * with unlock_redirect if the access cookie is missing or invalid.
  *
@@ -14,7 +14,7 @@ import { verifyAccessTokenEdge } from "@/core/lib/access-cookie-edge";
  */
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  const workMatch = pathname.match(/^\/work\/([^/]+)\/?$/);
+  const workMatch = pathname.match(/^\/work\/(.+?)\/?$/);
   if (!workMatch) return NextResponse.next();
   const slug = workMatch[1]!;
 
