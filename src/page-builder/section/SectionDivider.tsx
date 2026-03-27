@@ -176,7 +176,7 @@ export function SectionDivider({
       >
         <SectionScrollTargetProvider sectionRef={sectionRef}>
           {layers?.length ? <LayerStack layers={layers} /> : null}
-          <SectionGlassEffect effects={effects} sectionRef={sectionRef} />
+          <SectionGlassEffect effects={effects} sectionRef={sectionRef} isSectionFixed={!!fixed} />
         </SectionScrollTargetProvider>
       </SectionMotionWrapper>
     </>

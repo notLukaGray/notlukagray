@@ -24,6 +24,7 @@ export function AppLayout({ children }: AppLayoutProps) {
   const isPbDevPage = pathname?.startsWith("/pb-dev") ?? false;
   const useLayoutFromJson = pathname && (layoutFromJsonSlugs.includes(pathname) || isResearchSlug);
   const hideSiteChrome = useLayoutFromJson || isPbDevPage;
+  const shouldReserveFooterSpace = !hideSiteChrome && !isWorkPage && !isResearchSlug;
 
   return (
     <>
@@ -31,7 +32,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       <div
         className="min-h-dvh w-full min-w-0 flex flex-col"
         style={{
-          paddingBottom: isWorkPage || isResearchSlug ? 0 : "var(--footer-height)",
+          paddingBottom: shouldReserveFooterSpace ? "var(--footer-height)" : 0,
         }}
       >
         {children}

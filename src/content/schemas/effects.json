@@ -19,49 +19,67 @@
     {
       "type": "glass",
       "label": "Glass",
-      "description": "Applies a glass surface treatment tuned for Figma GLASS effects.",
+      "description": "Applies the SVG displacement-map glass shader to the section/element surface.",
       "props": [
         {
-          "name": "frost",
+          "name": "bezelType",
           "type": "string",
           "required": false,
-          "description": "Backdrop blur amount, e.g. 12px, 16px, 24px. Default: 16px."
+          "description": "Surface profile: convex_circle | convex_squircle | concave | lip. Default: convex_squircle."
         },
         {
-          "name": "lightIntensity",
+          "name": "bezelWidth",
+          "type": "number|string",
+          "required": false,
+          "description": "Bezel width. Number > 1 = px, number 0..1 = ratio of half-min dimension, string accepts px/%."
+        },
+        {
+          "name": "glassThickness",
+          "type": "number|string",
+          "required": false,
+          "description": "Glass depth used in refraction ray travel. Number > 1 = px, number 0..1 = ratio of 1200 baseline, string accepts px/%."
+        },
+        {
+          "name": "refractiveIndex",
           "type": "number",
           "required": false,
-          "description": "Specular highlight intensity between 0 and 1. Default: 0.35."
+          "description": "Physical index of refraction. Range 1..3. Default: 1.5."
         },
         {
-          "name": "lightAngle",
+          "name": "blur",
+          "type": "number|string",
+          "required": false,
+          "description": "Gaussian blur before displacement. Number maps directly to stdDeviation; string accepts px."
+        },
+        {
+          "name": "scaleRatio",
           "type": "number",
           "required": false,
-          "description": "Light direction angle in degrees."
+          "description": "Multiplier applied to computed displacement scale. Range: 0.001..8. Default: 1."
         },
         {
-          "name": "refraction",
+          "name": "specularOpacity",
           "type": "number",
           "required": false,
-          "description": "Refraction strength between 0 and 1."
+          "description": "Opacity of specular highlight layer. Range: 0..1. Default: 0.9."
         },
         {
-          "name": "depth",
+          "name": "specularSaturation",
           "type": "number",
           "required": false,
-          "description": "Perceived glass depth (>= 1)."
+          "description": "Saturation boost for displaced layer. Range: 0..50. Default: 4."
         },
         {
-          "name": "dispersion",
+          "name": "magnifyingScale",
           "type": "number",
           "required": false,
-          "description": "Chromatic dispersion amount between 0 and 1."
+          "description": "Optional radial magnifying displacement pass. 0 disables; positive numbers increase lens effect."
         },
         {
-          "name": "mode",
-          "type": "string",
+          "name": "dropShadow",
+          "type": "boolean",
           "required": false,
-          "description": "Liquid glass mode: standard, polar, prominent, or shader."
+          "description": "When true, keeps the default glass shadow shell. Default: true."
         }
       ]
     },

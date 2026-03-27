@@ -174,6 +174,53 @@ export function parseEffectShorthand(value: string): Record<string, unknown> | n
           if (!isNaN(n)) entry.dispersion = n;
           continue;
         }
+        if (key === "displacement" || key === "displacementscale") {
+          const n = Number(raw);
+          if (!isNaN(n)) entry.displacementScale = n;
+          continue;
+        }
+        if (key === "bluramount") {
+          const n = Number(raw);
+          if (!isNaN(n)) entry.blurAmount = n;
+          continue;
+        }
+        if (key === "saturation") {
+          const n = Number(raw);
+          if (!isNaN(n)) entry.saturation = n;
+          continue;
+        }
+        if (key === "aberration" || key === "aberrationintensity") {
+          const n = Number(raw);
+          if (!isNaN(n)) entry.aberrationIntensity = n;
+          continue;
+        }
+        if (key === "elasticity") {
+          const n = Number(raw);
+          if (!isNaN(n)) entry.elasticity = n;
+          continue;
+        }
+        if (key === "reflection") {
+          const n = Number(raw);
+          if (!isNaN(n)) entry.reflection = n;
+          continue;
+        }
+        if (key === "overlight") {
+          const normalized = raw.toLowerCase();
+          if (normalized === "true" || normalized === "1") entry.overLight = true;
+          if (normalized === "false" || normalized === "0") entry.overLight = false;
+          continue;
+        }
+        if (key === "mousefollow" || key === "followmouse") {
+          const normalized = raw.toLowerCase();
+          if (normalized === "true" || normalized === "1") entry.mouseFollow = true;
+          if (normalized === "false" || normalized === "0") entry.mouseFollow = false;
+          continue;
+        }
+        if (key === "splay") {
+          const n = Number(raw);
+          if (!isNaN(n)) entry.splay = n;
+          continue;
+        }
         if (key === "mode") {
           const mode = raw.toLowerCase();
           if (

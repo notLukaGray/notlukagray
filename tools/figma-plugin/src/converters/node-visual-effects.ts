@@ -4,6 +4,7 @@ import {
   extractBoxShadow,
   extractFilter,
   extractGlassEffect,
+  withLiquidGlassDefaults,
 } from "./effects";
 import { getInspectableCssAsync } from "./node-css";
 
@@ -63,10 +64,9 @@ export async function extractNodeVisualEffects(
 
   let glassEffect = extractGlassEffect(effects, node);
   if (!glassEffect && backdropFilter) {
-    glassEffect = {
-      type: "glass",
+    glassEffect = withLiquidGlassDefaults({
       ...(extractBlurRadius(backdropFilter) ? { frost: extractBlurRadius(backdropFilter) } : {}),
-    };
+    });
   }
 
   return {

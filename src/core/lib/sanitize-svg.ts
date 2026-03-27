@@ -158,13 +158,22 @@ export function sanitizeSvgMarkup(markup: string): string {
   const trimmed = markup.trim();
   if (!trimmed) return "";
 
+  const maybeUnescaped = trimmed
+    .replace(/\\n/g, "\n")
+    .replace(/\\t/g, "\t")
+    .replace(/\\"/g, '"')
+    .replace(/\\'/g, "'");
+  const candidates = maybeUnescaped === trimmed ? [trimmed] : [trimmed, maybeUnescaped];
+
   try {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(trimmed, "image/svg+xml");
-    const root = doc.documentElement;
-    if (!root || root.tagName.toLowerCase() !== "svg") return "";
-
-    return serializeNode(root);
+    for (const candidate of candidates) {
+      const doc = parser.parseFromString(candidate, "image/svg+xml");
+      const root = doc.documentElement;
+      if (!root || root.tagName.toLowerCase() !== "svg") continue;
+      return serializeNode(root);
+    }
+    return "";
   } catch {
     return "";
   }

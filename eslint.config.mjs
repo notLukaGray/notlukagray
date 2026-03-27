@@ -26,14 +26,22 @@ const eslintConfig = defineConfig([
       "prefer-arrow-callback": "error",
     },
   },
-  
+
   {
     files: ["scripts*.ts"],
     rules: {
       "no-console": "off",
     },
   },
-  
+
+  {
+    files: ["src/page-builder/elements/ElementImage.tsx"],
+    rules: {
+      // Intrinsic/hug sizing branch intentionally uses a native <img>.
+      "@next/next/no-img-element": "off",
+    },
+  },
+
   {
     files: ["**/3d-scene/**"],
     rules: {
@@ -51,16 +59,15 @@ const eslintConfig = defineConfig([
       ],
     },
   },
-  
+
   globalIgnores([
-    
     ".next/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
-    
+
     ".claude/**",
-    
+
     ".dead/**",
 
     // Figma plugin compiled output — esbuild target ES2017 emits var declarations
@@ -69,6 +76,8 @@ const eslintConfig = defineConfig([
     "tools/figma-plugin/vendor/**",
     // Figma widget compiled output
     "tools/figma-widget/dist/**",
+    // Vendor copy of liquidGL runtime
+    "public/scripts/**",
   ]),
 ]);
 

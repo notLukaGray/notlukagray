@@ -110,15 +110,13 @@ function ActionsTab() {
 type Tab = "variables" | "actions";
 
 export function PageBuilderDevOverlay() {
-  if (process.env.NODE_ENV !== "development") return null;
+  const isDev = process.env.NODE_ENV === "development";
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [tab, setTab] = useState<Tab>("variables");
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
+    if (!isDev) return;
     function handleKey(e: KeyboardEvent) {
       if (e.shiftKey && (e.ctrlKey || e.metaKey) && e.key === "D") {
         e.preventDefault();
@@ -127,9 +125,9 @@ export function PageBuilderDevOverlay() {
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+  }, [isDev]);
 
-  if (!open) return null;
+  if (!isDev || !open) return null;
 
   return (
     <div

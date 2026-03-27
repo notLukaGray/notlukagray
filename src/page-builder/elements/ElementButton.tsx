@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
-import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
+import type { ElementBlock, SectionEffect } from "@/page-builder/core/page-builder-schemas";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
 import { useDefinitions } from "@/page-builder/elements/ElementModule/ModuleSlotContext";
 import { firePageBuilderAction } from "@/page-builder/triggers";
@@ -23,8 +23,21 @@ import {
   resolveElementButtonVectorBlock,
 } from "./ElementButton/element-button-link-and-vector";
 import { useModel3DReadyButtonExit } from "./ElementButton/use-model3d-ready-button-exit";
+import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 
 type Props = Extract<ElementBlock, { type: "elementButton" }>;
+
+function coerceSectionEffects(value: unknown): SectionEffect[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const entries = value.filter(
+    (entry): entry is SectionEffect =>
+      !!entry &&
+      typeof entry === "object" &&
+      "type" in entry &&
+      typeof (entry as { type?: unknown }).type === "string"
+  );
+  return entries.length > 0 ? entries : undefined;
+}
 
 /** Page-builder button: typography (like elementLink/body/heading), optional vector (via vectorRef), and either link (a-ref) or action (schema'd button function). */
 export function ElementButton({
@@ -62,6 +75,7 @@ export function ElementButton({
   ...rest
 }: Props) {
   const pathname = usePathname();
+  const shellRef = useRef<HTMLDivElement | null>(null);
   const definitions = useDefinitions();
   const typographyClass = getElementButtonTypographyClass({
     type: "elementButton",
@@ -109,6 +123,8 @@ export function ElementButton({
     vectorRef
   );
   const model3DExit = useModel3DReadyButtonExit(action, actionPayload);
+  const buttonEffects = useMemo(() => coerceSectionEffects(rest.effects), [rest.effects]);
+  const hasGlassEffect = (buttonEffects ?? []).some((effect) => effect.type === "glass");
 
   const exitMotion = useMemo(() => {
     const base = mergeMotionDefaults(rest.motion ?? {}) ?? {};
@@ -232,14 +248,24 @@ export function ElementButton({
     inner
   );
 
+  const shellStyle: CSSProperties = {
+    ...blockStyle,
+    ...(hasGlassEffect && blockStyle.position == null ? { position: "relative" } : {}),
+  };
+
+  const renderButtonShell = (child: ReactNode) => (
+    <div ref={shellRef} className="shrink-0" style={shellStyle}>
+      <SectionGlassEffect effects={buttonEffects} sectionRef={shellRef} variant="auto" />
+      {child}
+    </div>
+  );
+
   if (model3DExit.hasExit) {
     return (
       <AnimatePresence>
         {model3DExit.showButton && (
           <MotionFromJson key="button-exit" motion={exitMotion}>
-            <div className="shrink-0" style={blockStyle}>
-              {wrappedInner}
-            </div>
+            {renderButtonShell(wrappedInner)}
           </MotionFromJson>
         )}
       </AnimatePresence>
@@ -248,9 +274,5 @@ export function ElementButton({
 
   if (!model3DExit.isMounted) return null;
 
-  return (
-    <div className="shrink-0" style={blockStyle}>
-      {wrappedInner}
-    </div>
-  );
+  return renderButtonShell(wrappedInner);
 }

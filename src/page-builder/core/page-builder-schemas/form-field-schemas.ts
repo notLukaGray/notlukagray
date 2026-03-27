@@ -32,6 +32,8 @@ export const formFieldStyleSchema = z.object({
   labelClassName: z.string().optional(),
   /** Optional Tailwind/class override for input/control (e.g. "text-lg"). Default typography from level. */
   inputClassName: z.string().optional(),
+  /** Optional inline style object applied directly to the native input/control element. */
+  inputStyle: cssInlineStyleSchema.optional(),
   /** Optional class for error message text. */
   errorClassName: z.string().optional(),
 });

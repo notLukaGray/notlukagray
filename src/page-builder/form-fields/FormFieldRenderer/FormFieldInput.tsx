@@ -81,7 +81,10 @@ export function FormFieldInput({
         aria-describedby={hasError && id ? `${id}-error` : undefined}
         aria-required={field.required}
         className={inputClass}
-        style={{ borderColor: hasError ? formFieldStructuralClasses.inputBorderError : undefined }}
+        style={{
+          ...(field.inputStyle as React.CSSProperties | undefined),
+          borderColor: hasError ? formFieldStructuralClasses.inputBorderError : undefined,
+        }}
       />
       {hasError && error && (
         <p id={id ? `${id}-error` : undefined} className={errorClass} role="alert">

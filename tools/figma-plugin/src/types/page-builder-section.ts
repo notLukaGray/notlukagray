@@ -57,6 +57,7 @@ export interface SectionColumnBlock extends BaseSectionProps {
   columnAssignments?: Record<string, unknown>;
   columnWidths?: unknown;
   columnGaps?: unknown;
+  columnStyles?: unknown;
   contentWidth?: string | [string, string];
   contentHeight?: string | [string, string];
 }

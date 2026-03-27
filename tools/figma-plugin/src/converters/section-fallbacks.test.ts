@@ -137,7 +137,9 @@ describe("section fallback slotting", () => {
     const assignments = section.columnAssignments as Record<string, number>;
     const elementIds = (section.elements as Array<{ id?: string }>).map((el) => el.id);
     expect(elementIds).toEqual(expect.arrayContaining(["left-item", "right-item", "loose-item"]));
-    expect(assignments["loose-item"]).toBe(2);
+    expect(assignments["left-item"]).toBe(0);
+    expect(assignments["right-item"]).toBe(1);
+    expect(assignments["loose-item"]).toBe(1);
   });
 
   it("exports stacked section fills as layers so multi-gradient backgrounds are preserved", async () => {
@@ -207,5 +209,186 @@ describe("section fallback slotting", () => {
 
     expect((section as Record<string, unknown>).fill).toBe("#123456");
     expect((section as Record<string, unknown>).layers).toBeUndefined();
+  });
+
+  it("preserves negative horizontal auto-layout spacing as column overlap gap", async () => {
+    const ctx = makeCtx();
+    const section = await convertFrameToColumnSection(
+      {
+        type: "FRAME",
+        name: "Columns overlap",
+        width: 800,
+        height: 240,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "HORIZONTAL",
+        itemSpacing: -40,
+        primaryAxisAlignItems: "MIN",
+        counterAxisAlignItems: "MIN",
+        clipsContent: false,
+        children: [
+          {
+            type: "FRAME",
+            name: "Column 1",
+            width: 300,
+            height: 240,
+            x: 0,
+            y: 0,
+            visible: true,
+            children: [{ type: "RECTANGLE", name: "Left", width: 20, height: 20 }],
+          },
+          {
+            type: "FRAME",
+            name: "Column 2",
+            width: 300,
+            height: 240,
+            x: 260,
+            y: 0,
+            visible: true,
+            children: [{ type: "RECTANGLE", name: "Right", width: 20, height: 20 }],
+          },
+        ],
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect((section as Record<string, unknown>).columnGaps).toBe("-40px");
+  });
+
+  it("exports explicit column wrapper alignment into columnStyles", async () => {
+    const ctx = makeCtx();
+    const section = await convertFrameToColumnSection(
+      {
+        type: "FRAME",
+        name: "Columns aligned",
+        width: 800,
+        height: 240,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "HORIZONTAL",
+        itemSpacing: 24,
+        primaryAxisAlignItems: "MIN",
+        counterAxisAlignItems: "MIN",
+        clipsContent: false,
+        children: [
+          {
+            type: "FRAME",
+            name: "Column 1",
+            width: 300,
+            height: 240,
+            x: 0,
+            y: 0,
+            visible: true,
+            layoutMode: "VERTICAL",
+            itemSpacing: 12,
+            primaryAxisAlignItems: "CENTER",
+            counterAxisAlignItems: "MAX",
+            paddingTop: 8,
+            paddingRight: 12,
+            paddingBottom: 8,
+            paddingLeft: 12,
+            clipsContent: true,
+            fills: [],
+            effects: [],
+            children: [
+              { type: "RECTANGLE", name: "Left", width: 20, height: 20 },
+              { type: "RECTANGLE", name: "Left 2", width: 20, height: 20 },
+            ],
+          },
+          {
+            type: "FRAME",
+            name: "Column 2",
+            width: 300,
+            height: 240,
+            x: 324,
+            y: 0,
+            visible: true,
+            layoutMode: "VERTICAL",
+            itemSpacing: 0,
+            primaryAxisAlignItems: "MIN",
+            counterAxisAlignItems: "CENTER",
+            clipsContent: false,
+            fills: [],
+            effects: [],
+            children: [{ type: "RECTANGLE", name: "Right", width: 20, height: 20 }],
+          },
+        ],
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const styles = (section as Record<string, unknown>).columnStyles as Array<
+      Record<string, unknown>
+    >;
+    expect(Array.isArray(styles)).toBe(true);
+    expect(styles[0]?.justifyContent).toBe("center");
+    expect(styles[0]?.alignItems).toBe("flex-end");
+    expect(styles[0]?.gap).toBe("12px");
+    expect(styles[0]?.padding).toBe("8px 12px 8px 12px");
+    expect(styles[0]?.overflow).toBe("hidden");
+  });
+
+  it("maps section auto-layout padding to section margin fields for sectionColumn", async () => {
+    const ctx = makeCtx();
+    const section = await convertFrameToColumnSection(
+      {
+        type: "FRAME",
+        name: "Columns padded",
+        width: 396,
+        height: 341,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "HORIZONTAL",
+        itemSpacing: -200,
+        primaryAxisAlignItems: "MIN",
+        counterAxisAlignItems: "MIN",
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        clipsContent: false,
+        children: [
+          {
+            type: "TEXT",
+            name: "Text",
+            width: 100,
+            height: 20,
+            x: 0,
+            y: 0,
+            visible: true,
+          },
+          {
+            type: "RECTANGLE",
+            name: "Rectangle 2",
+            width: 300,
+            height: 150,
+            x: 100,
+            y: 0,
+            visible: true,
+          },
+        ],
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const sectionRecord = section as Record<string, unknown>;
+    expect(sectionRecord.marginTop).toBe("10px");
+    expect(sectionRecord.marginRight).toBe("10px");
+    expect(sectionRecord.marginBottom).toBe("10px");
+    expect(sectionRecord.marginLeft).toBe("10px");
+    expect(sectionRecord.padding).toBeUndefined();
+    expect(sectionRecord.paddingTop).toBeUndefined();
   });
 });

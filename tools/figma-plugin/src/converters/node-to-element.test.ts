@@ -300,4 +300,51 @@ describe("node-to-element annotations", () => {
     expect(svg.effects?.[0]?.type).toBe("glass");
     expect(svg.effects?.[0]?.frost).toBe("18px");
   });
+
+  it("falls back to exported SVG path data when glass clipPath is missing on STAR nodes", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "STAR",
+        name: "Star 1",
+        width: 106,
+        height: 101,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [
+          {
+            type: "SOLID",
+            color: { r: 0, g: 0, b: 0 },
+            opacity: 0.01,
+            visible: true,
+          },
+        ],
+        effects: [
+          {
+            type: "GLASS",
+            visible: true,
+            radius: 11,
+            lightIntensity: 0.8,
+            lightAngle: -45,
+            refraction: 1,
+            depth: 33,
+            dispersion: 0.5,
+          },
+        ],
+        // Deliberately omit vectorPaths to mimic exports where STAR path metadata
+        // is unavailable but SVG export still contains path geometry.
+        exportAsync: async () =>
+          '<svg width="106" height="101" viewBox="0 0 106 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M52.7837 0L65.2442 38.3496H105.567L72.9453 62.0509L85.4058 100.4L52.7837 76.6991L20.1616 100.4L32.6221 62.0509L5.34058e-05 38.3496H40.3232L52.7837 0Z" fill="black" fill-opacity="0.01"/></svg>',
+      } as unknown as StarNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementSVG");
+    const svg = result as { effects?: Array<Record<string, unknown>> };
+    const glass = svg.effects?.[0];
+    expect(glass?.type).toBe("glass");
+    expect(typeof glass?.clipPath).toBe("string");
+    expect((glass?.clipPath as string).length).toBeGreaterThan(0);
+  });
 });

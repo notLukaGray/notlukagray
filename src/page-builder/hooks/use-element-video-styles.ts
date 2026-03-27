@@ -21,10 +21,28 @@ export type UseElementVideoStylesParams = {
   width?: string | [string, string];
   height?: string | [string, string];
   align?: "left" | "center" | "right" | ["left" | "center" | "right", "left" | "center" | "right"];
+  alignY?: "top" | "center" | "bottom" | ["top" | "center" | "bottom", "top" | "center" | "bottom"];
+  borderRadius?: string | [string, string];
+  constraints?:
+    | { minWidth?: string; maxWidth?: string; minHeight?: string; maxHeight?: string }
+    | [
+        { minWidth?: string; maxWidth?: string; minHeight?: string; maxHeight?: string }?,
+        { minWidth?: string; maxWidth?: string; minHeight?: string; maxHeight?: string }?,
+      ];
   marginTop?: string | [string, string];
   marginBottom?: string | [string, string];
   marginLeft?: string | [string, string];
   marginRight?: string | [string, string];
+  zIndex?: number;
+  fixed?: boolean;
+  wrapperStyle?: CSSProperties;
+  opacity?: number;
+  blendMode?: string;
+  boxShadow?: string;
+  filter?: string;
+  backdropFilter?: string;
+  overflow?: "hidden" | "visible" | "auto" | "scroll";
+  hidden?: boolean;
   rotate?: number | string;
   flipHorizontal?: boolean;
   flipVertical?: boolean;
@@ -46,10 +64,23 @@ export function useElementVideoStyles({
   width,
   height,
   align,
+  alignY,
+  borderRadius,
+  constraints,
   marginTop,
   marginBottom,
   marginLeft,
   marginRight,
+  zIndex,
+  fixed,
+  wrapperStyle: layoutWrapperStyle,
+  opacity,
+  blendMode,
+  boxShadow,
+  filter,
+  backdropFilter,
+  overflow,
+  hidden,
   rotate,
   flipHorizontal,
   flipVertical,
@@ -75,12 +106,46 @@ export function useElementVideoStyles({
         width,
         height,
         align,
+        alignY,
+        borderRadius,
+        constraints,
         marginTop,
         marginBottom,
         marginLeft,
         marginRight,
+        zIndex,
+        fixed,
+        wrapperStyle: layoutWrapperStyle,
+        opacity,
+        blendMode,
+        boxShadow,
+        filter,
+        backdropFilter,
+        overflow,
+        hidden,
       } as Parameters<typeof getElementLayoutStyle>[0]),
-    [width, height, align, marginTop, marginBottom, marginLeft, marginRight]
+    [
+      width,
+      height,
+      align,
+      alignY,
+      borderRadius,
+      constraints,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      zIndex,
+      fixed,
+      layoutWrapperStyle,
+      opacity,
+      blendMode,
+      boxShadow,
+      filter,
+      backdropFilter,
+      overflow,
+      hidden,
+    ]
   );
 
   const transformBase = useMemo(

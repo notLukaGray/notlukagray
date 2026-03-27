@@ -10,11 +10,13 @@ import {
   Component,
   type ErrorInfo,
   type ReactNode,
+  type UIEvent,
 } from "react";
 import type { ElementBlock, SectionBlock, bgBlock } from "@/page-builder/core/page-builder-schemas";
 import { sectionBlockSchema } from "@/page-builder/core/page-builder-schemas";
 import { PageBuilderRenderer } from "@/page-builder/PageBuilderRenderer";
 import { ServerBreakpointProvider } from "@/core/providers/device-type-provider";
+import { ScrollContainerProvider } from "@/page-builder/section/position/use-scroll-container";
 import { z } from "zod";
 
 // ---------------------------------------------------------------------------
@@ -456,17 +458,20 @@ function expandSectionDefinitions(
     ...getDefinitionMap(resolvedSection.definitions),
   };
   const resolvedDefinitions = resolveDefinitionMapWithPresets(definitions, presetDefinitions ?? {});
+  const idCounts = new Map<string, number>();
 
   const elements = order
     .map((key) => {
       const definition = resolvedDefinitions[key];
       if (!definition || typeof definition.type !== "string") return null;
-      return definition.id ? { ...definition } : { ...definition, id: key };
+      const baseId =
+        typeof definition.id === "string" && definition.id.trim().length > 0 ? definition.id : key;
+      const nextCount = (idCounts.get(baseId) ?? 0) + 1;
+      idCounts.set(baseId, nextCount);
+      const uniqueId = nextCount === 1 ? baseId : `${baseId}__${nextCount}`;
+      return { ...definition, id: uniqueId };
     })
-    .filter(
-      (value): value is Record<string, unknown> =>
-        isRecord(value) && "type" in value && typeof value["type"] === "string"
-    );
+    .filter((value): value is Record<string, unknown> & { id: string } => value != null);
 
   if (elements.length === 0) return resolvedSection;
   return { ...resolvedSection, elements };
@@ -740,8 +745,15 @@ export default function PlaygroundPage() {
   const [errorPanelOpen, setErrorPanelOpen] = useState(true);
   const [runtimeError, setRuntimeError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const lineNumbersRef = useRef<HTMLPreElement>(null);
+  const previewViewportRef = useRef<HTMLDivElement | null>(null);
 
   const debouncedText = useDebounced(jsonText, 300);
+  const lineCount = useMemo(() => Math.max(1, jsonText.split("\n").length), [jsonText]);
+  const lineNumbers = useMemo(
+    () => Array.from({ length: lineCount }, (_, index) => String(index + 1)).join("\n"),
+    [lineCount]
+  );
 
   const parsed = useMemo((): ParsedState => {
     const trimmed = debouncedText.trim();
@@ -781,6 +793,10 @@ export default function PlaygroundPage() {
   const handleRuntimeError = useCallback((msg: string) => {
     setRuntimeError(msg);
   }, []);
+  const handleEditorScroll = useCallback((event: UIEvent<HTMLTextAreaElement>) => {
+    if (!lineNumbersRef.current) return;
+    lineNumbersRef.current.scrollTop = event.currentTarget.scrollTop;
+  }, []);
 
   // Error panel — collect all errors to display
   const allErrors = useMemo(() => {
@@ -799,7 +815,7 @@ export default function PlaygroundPage() {
   const hasErrors = allErrors.length > 0;
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-neutral-950 text-neutral-100">
+    <div className="flex h-dvh min-h-dvh flex-col overflow-hidden bg-neutral-950 text-neutral-100">
       {}
       <header className="flex shrink-0 items-center justify-between border-b border-neutral-800 bg-neutral-900 px-4 py-2">
         <div className="flex items-center gap-2">
@@ -901,17 +917,29 @@ export default function PlaygroundPage() {
               </button>
             </div>
           </div>
-          <textarea
-            ref={textareaRef}
-            value={jsonText}
-            onChange={(e) => {
-              setRuntimeError(null);
-              setJsonText(e.target.value);
-            }}
-            placeholder={PLACEHOLDER}
-            spellCheck={false}
-            className="min-h-0 flex-1 resize-none bg-neutral-950 p-4 font-mono text-xs leading-relaxed text-neutral-200 placeholder:text-neutral-700 focus:outline-none"
-          />
+          <div className="min-h-0 flex-1 bg-neutral-950 overflow-hidden">
+            <div className="flex h-full">
+              <pre
+                ref={lineNumbersRef}
+                aria-hidden
+                className="w-12 shrink-0 overflow-hidden border-r border-neutral-800 bg-neutral-900 px-2 py-4 text-right font-mono text-xs leading-relaxed text-neutral-600 select-none"
+              >
+                {lineNumbers}
+              </pre>
+              <textarea
+                ref={textareaRef}
+                value={jsonText}
+                onChange={(e) => {
+                  setRuntimeError(null);
+                  setJsonText(e.target.value);
+                }}
+                onScroll={handleEditorScroll}
+                placeholder={PLACEHOLDER}
+                spellCheck={false}
+                className="min-h-0 flex-1 resize-none bg-neutral-950 px-3 py-4 font-mono text-xs leading-relaxed text-neutral-200 placeholder:text-neutral-700 focus:outline-none"
+              />
+            </div>
+          </div>
         </div>
 
         {}
@@ -921,14 +949,25 @@ export default function PlaygroundPage() {
               preview{isMobile ? " — 390px" : " — full width"}
             </span>
           </div>
-          <div className="min-h-0 flex-1 overflow-auto">
+          <div className="min-h-0 flex-1">
             {}
             <div
-              className={isMobile ? "mx-auto overflow-hidden" : "h-full min-h-full"}
+              ref={previewViewportRef}
+              data-pb-preview-root=""
+              className={
+                isMobile ? "mx-auto h-full overflow-auto" : "h-full min-h-full overflow-auto"
+              }
               style={
                 isMobile
-                  ? { width: 390, backgroundColor: previewBackground.value }
-                  : { backgroundColor: previewBackground.value }
+                  ? {
+                      width: 390,
+                      backgroundColor: previewBackground.value,
+                      position: "relative",
+                    }
+                  : {
+                      backgroundColor: previewBackground.value,
+                      position: "relative",
+                    }
               }
             >
               {parsed.status === "empty" ? (
@@ -940,16 +979,18 @@ export default function PlaygroundPage() {
                   Fix the JSON to see a preview.
                 </div>
               ) : (
-                <ServerBreakpointProvider isMobile={isMobile}>
-                  <PreviewErrorBoundary key={previewResetKey} onError={handleRuntimeError}>
-                    <PageBuilderRenderer
-                      resolvedBg={null as bgBlock | null}
-                      resolvedSections={resolvedSections}
-                      bgDefinitions={{}}
-                      serverIsMobile={isMobile}
-                    />
-                  </PreviewErrorBoundary>
-                </ServerBreakpointProvider>
+                <ScrollContainerProvider containerRef={previewViewportRef}>
+                  <ServerBreakpointProvider isMobile={isMobile}>
+                    <PreviewErrorBoundary key={previewResetKey} onError={handleRuntimeError}>
+                      <PageBuilderRenderer
+                        resolvedBg={null as bgBlock | null}
+                        resolvedSections={resolvedSections}
+                        bgDefinitions={{}}
+                        serverIsMobile={isMobile}
+                      />
+                    </PreviewErrorBoundary>
+                  </ServerBreakpointProvider>
+                </ScrollContainerProvider>
               )}
             </div>
           </div>

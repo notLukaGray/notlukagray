@@ -126,6 +126,7 @@ export function ElementModuleGroup({
   const resolvedHeight = inDimensionGesture ? "100%" : height;
   const definitions = section?.definitions ?? {};
   const order = section?.elementOrder ?? Object.keys(definitions);
+  const idCounts = new Map<string, number>();
   const rawBlocks = order
     .map((key): ElementBlock | null => {
       const el = definitions[key];
@@ -136,7 +137,13 @@ export function ElementModuleGroup({
         (el as { type?: string }).type === "cssGradient"
       )
         return null;
-      return ("id" in el && (el as { id?: unknown }).id ? el : { ...el, id: key }) as ElementBlock;
+      const candidate = el as ElementBlock & { id?: unknown };
+      const baseId =
+        typeof candidate.id === "string" && candidate.id.trim().length > 0 ? candidate.id : key;
+      const nextCount = (idCounts.get(baseId) ?? 0) + 1;
+      idCounts.set(baseId, nextCount);
+      const uniqueId = nextCount === 1 ? baseId : `${baseId}__${nextCount}`;
+      return { ...candidate, id: uniqueId } as ElementBlock;
     })
     .filter((x): x is ElementBlock => x != null);
   const blocks = videoCtx
@@ -241,7 +248,7 @@ export function ElementModuleGroup({
       }
       tabIndex={hasInteractions ? 0 : undefined}
     >
-      <SectionGlassEffect effects={groupEffects} sectionRef={groupRef} />
+      <SectionGlassEffect effects={groupEffects} sectionRef={groupRef} variant="auto" />
       {hasBorderGradient ? (
         <div
           aria-hidden

@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { motion } from "@/page-builder/integrations/framer-motion";
 import { useShouldReduceMotion } from "./reduced-motion";
 import type { MotionTiming } from "@/page-builder/core/page-builder-schemas";
@@ -59,19 +59,20 @@ export function ElementEntranceWrapper({
   children,
 }: ElementEntranceWrapperProps) {
   const skip = useShouldReduceMotion(reduceMotion === false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
   // null = pre-hydration (SSR) | false = hydrated, below fold | true = hydrated, in viewport on mount
   const [viewOnMount, setViewOnMount] = useState<boolean | null>(null);
 
-  useLayoutEffect(() => {
-    const el = ref.current;
-    const inView =
-      !!el &&
-      el.getBoundingClientRect().top < window.innerHeight &&
-      el.getBoundingClientRect().bottom > 0;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setViewOnMount(inView);
-  }, []);
+  const setMountRef = useCallback(
+    (el: HTMLDivElement | null) => {
+      ref.current = el;
+      if (!el || viewOnMount !== null) return;
+      const rect = el.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      setViewOnMount(inView);
+    },
+    [viewOnMount]
+  );
 
   const resolved = motionTiming?.resolvedEntranceMotion;
   if (!resolved) return <>{children}</>;
@@ -117,14 +118,14 @@ export function ElementEntranceWrapper({
   // LCP is recorded immediately; no opacity:0 in the server-rendered output.
   if (viewOnMount === null) {
     return (
-      <div ref={ref} style={containerStyle} {...(aria as Record<string, string>)}>
+      <div ref={setMountRef} style={containerStyle} {...(aria as Record<string, string>)}>
         {inner}
       </div>
     );
   }
 
   const sharedProps = {
-    ref,
+    ref: setMountRef,
     style: containerStyle,
     ...(aria as Record<string, unknown>),
   } as Partial<MotionDivProps>;

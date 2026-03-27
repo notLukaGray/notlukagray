@@ -26,15 +26,12 @@ export function ScrollContainerProvider({
 /** Scroll container from context or `.work-scroll`. */
 export function useScrollContainer(): HTMLElement | null {
   const context = useContext(ScrollContainerContext);
+
   if (context?.containerRef.current) {
     return context.containerRef.current;
   }
-
-  if (typeof document !== "undefined") {
-    return document.querySelector(".work-scroll") as HTMLElement | null;
-  }
-
-  return null;
+  if (typeof document === "undefined") return null;
+  return document.querySelector(".work-scroll") as HTMLElement | null;
 }
 
 /** Scroll container ref from context (for Framer Motion useScroll container option). */

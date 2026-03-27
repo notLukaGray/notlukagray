@@ -42,6 +42,8 @@ type Props = {
   layout: LayoutProps;
   transform?: TransformProps;
   children: ReactNode;
+  /** Choose whether glass overlays the content or sits behind it. */
+  glassLayer?: "background" | "foreground";
   /** Inner div overflow; default "hidden". Use "visible" for range/slider so thumb isn't clipped. */
   overflow?: "hidden" | "visible";
   /** Optional extra props on the figure (e.g. aria-busy). */
@@ -70,6 +72,7 @@ export function ElementLayoutWrapper({
   layout,
   transform,
   children,
+  glassLayer = "background",
   overflow = "hidden",
   figureProps,
   interactions,
@@ -77,6 +80,12 @@ export function ElementLayoutWrapper({
   const surfaceRef = useRef<HTMLElement | null>(null);
   const surfaceEffects = useMemo(() => coerceSectionEffects(layout.effects), [layout.effects]);
   const hasGlassEffect = (surfaceEffects ?? []).some((effect) => effect.type === "glass");
+  // When a glass effect has a clip-path (non-rectangular shape), skip overflow:hidden —
+  // the SVG clipPath on the <figure> handles shape clipping instead.
+  const glassHasClipPath = (surfaceEffects ?? []).some(
+    (effect) => effect.type === "glass" && !!(effect as { clipPath?: string }).clipPath
+  );
+  const glassInForeground = hasGlassEffect && glassLayer === "foreground";
   const layoutStyle = getElementLayoutStyle(layout as Partial<ElementLayout>);
   const transformStyle = getElementTransformStyle(
     transform ? { ...layout, ...transform } : undefined
@@ -88,7 +97,10 @@ export function ElementLayoutWrapper({
     display: "flex" as const,
     alignItems: "center" as const,
     justifyContent: "center" as const,
-    ...(hasGlassEffect ? { position: "relative" as const, zIndex: 1 } : {}),
+    ...(layoutStyle.borderRadius != null ? { borderRadius: layoutStyle.borderRadius } : {}),
+    ...(hasGlassEffect
+      ? { position: "relative" as const, ...(glassInForeground ? {} : { zIndex: 1 }) }
+      : {}),
     ...transformStyle,
   };
 
@@ -128,6 +140,9 @@ export function ElementLayoutWrapper({
   const baseFigureStyle: CSSProperties = {
     ...layoutStyle,
     ...(hasGlassEffect && layoutStyle.position == null ? { position: "relative" as const } : {}),
+    ...(hasGlassEffect && layoutStyle.borderRadius != null && !glassHasClipPath
+      ? { overflow: "hidden" as const }
+      : {}),
   };
 
   const interactionProps = hasInteractions
@@ -149,8 +164,13 @@ export function ElementLayoutWrapper({
 
   return (
     <figure ref={surfaceRef} className="shrink-0 m-0" {...interactionProps} {...figureProps}>
-      <SectionGlassEffect effects={surfaceEffects} sectionRef={surfaceRef} />
+      {!glassInForeground && (
+        <SectionGlassEffect effects={surfaceEffects} sectionRef={surfaceRef} variant="auto" />
+      )}
       <div style={innerStyle}>{children}</div>
+      {glassInForeground && (
+        <SectionGlassEffect effects={surfaceEffects} sectionRef={surfaceRef} variant="auto" />
+      )}
     </figure>
   );
 }

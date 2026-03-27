@@ -4,15 +4,6 @@ import { DEFAULT_BACKDROP_BLUR_AMOUNT } from "./section-constants";
 
 export type EffectStyleResult = CSSProperties;
 
-function clamp(value: number, min: number, max: number): number {
-  return Math.max(min, Math.min(max, value));
-}
-
-function round(value: number, decimals = 3): number {
-  const factor = 10 ** decimals;
-  return Math.round(value * factor) / factor;
-}
-
 function handleBackdropBlur(
   effect: Extract<SectionEffect, { type: "backdropBlur" }>
 ): EffectStyleResult {
@@ -35,23 +26,8 @@ function handleDropShadow(
 }
 
 function handleGlass(effect: Extract<SectionEffect, { type: "glass" }>): EffectStyleResult {
-  const frost = effect.frost ?? "16px";
-  const lightIntensity = clamp(effect.lightIntensity ?? 0.35, 0, 1);
-  const refraction = clamp(effect.refraction ?? 0.45, 0, 1);
-  const dispersion = clamp(effect.dispersion ?? 0, 0, 1);
-  const depth = Math.max(effect.depth ?? 1, 1);
-
-  const saturate = round(1 + refraction * 0.55 + dispersion * 0.2, 2);
-  const contrast = round(1 + lightIntensity * 0.2, 2);
-  const shadowOpacity = round(clamp(0.12 + depth * 0.02 + refraction * 0.08, 0.08, 0.4), 3);
-  const shadowY = `${Math.round(8 + depth * 2)}px`;
-  const shadowBlur = `${Math.round(24 + depth * 8)}px`;
-
-  return {
-    backdropFilter: `blur(${frost}) saturate(${saturate}) contrast(${contrast})`,
-    WebkitBackdropFilter: `blur(${frost}) saturate(${saturate}) contrast(${contrast})`,
-    boxShadow: `0 ${shadowY} ${shadowBlur} rgba(15,23,42,${shadowOpacity})`,
-  };
+  void effect;
+  return {};
 }
 
 function handleInnerShadow(

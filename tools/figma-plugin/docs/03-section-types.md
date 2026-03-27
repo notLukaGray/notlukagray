@@ -103,9 +103,9 @@ When the frame has a Figma layout grid (no auto-layout), children are assigned t
   "columnWidths": ["1fr", "1fr", "1fr"],
   "columnGaps": "24px",
   "columnAssignments": {
-    "feature-card-a": 1,
-    "feature-card-b": 2,
-    "feature-card-c": 3
+    "feature-card-a": 0,
+    "feature-card-b": 1,
+    "feature-card-c": 2
   },
   "elementOrder": ["feature-card-a", "feature-card-b", "feature-card-c"],
   "elements": [
@@ -116,15 +116,15 @@ When the frame has a Figma layout grid (no auto-layout), children are assigned t
 }
 ```
 
-Elements are stored flat in the `elements` array. `columnAssignments` maps each element ID to its 1-based column index. `elementOrder` preserves left-to-right, top-to-bottom ordering.
+Elements are stored flat in the `elements` array. `columnAssignments` maps each element ID to its 0-based column index. `elementOrder` preserves left-to-right, top-to-bottom ordering.
 
 ### Example
 
 ```
 Feature Row         ← sectionColumn, columns=3, columnWidths=["1fr","1fr","1fr"], columnGaps="24px"
-  Card A            ← column 1 → elementGroup
-  Card B            ← column 2 → elementGroup
-  Card C            ← column 3 → elementGroup
+  Card A            ← column 0 → elementGroup
+  Card B            ← column 1 → elementGroup
+  Card C            ← column 2 → elementGroup
 ```
 
 ---

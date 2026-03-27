@@ -22,14 +22,18 @@ export function getElementOrder(section: SectionWithElements): string[] | null {
 }
 
 export function resolveElements(order: string[], defs: DefinitionsMap): ElementBlock[] {
+  const idCounts = new Map<string, number>();
   return order
     .map((k) => {
       const element = defs[k];
       if (element && typeof element === "object" && "type" in element) {
-        if (!("id" in element) || !element.id) {
-          return { ...element, id: k } as ElementBlock;
-        }
-        return { ...element } as ElementBlock;
+        const candidate = element as ElementBlock & { id?: unknown };
+        const baseId =
+          typeof candidate.id === "string" && candidate.id.trim().length > 0 ? candidate.id : k;
+        const nextCount = (idCounts.get(baseId) ?? 0) + 1;
+        idCounts.set(baseId, nextCount);
+        const uniqueId = nextCount === 1 ? baseId : `${baseId}__${nextCount}`;
+        return { ...candidate, id: uniqueId } as ElementBlock;
       }
       return null;
     })

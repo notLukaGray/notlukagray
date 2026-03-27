@@ -13,13 +13,28 @@ export type SectionBorder = {
 export type BackdropBlurEffect = { type: "backdropBlur"; amount?: string };
 export type GlassEffect = {
   type: "glass";
+  // Figma-semantic fields
   lightIntensity?: number;
   lightAngle?: number;
   refraction?: number;
   depth?: number;
   dispersion?: number;
   frost?: string;
+  splay?: number;
   mode?: "standard" | "polar" | "prominent" | "shader";
+  overLight?: boolean;
+  mouseFollow?: boolean;
+  // Physics overrides
+  bezelType?: "convex_circle" | "convex_squircle" | "concave" | "lip";
+  bezelWidth?: number | string;
+  glassThickness?: number | string;
+  refractiveIndex?: number;
+  blur?: number | string;
+  scaleRatio?: number;
+  specularOpacity?: number;
+  specularSaturation?: number;
+  magnifyingScale?: number;
+  dropShadow?: boolean;
 };
 export type DropShadowEffect = {
   type: "dropShadow";

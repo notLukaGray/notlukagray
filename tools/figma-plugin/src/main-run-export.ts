@@ -207,6 +207,24 @@ export function refreshPreview(
   figma.ui.postMessage({ type: "preview", items: state.previewItems });
 }
 
+function hasGlassEffectInResult(result: ExportResult): boolean {
+  const search = (value: unknown): boolean => {
+    if (Array.isArray(value)) return value.some(search);
+    if (value !== null && typeof value === "object") {
+      const rec = value as Record<string, unknown>;
+      if (rec.type === "glass") return true;
+      return Object.values(rec).some(search);
+    }
+    return false;
+  };
+  return (
+    search(result.pages) ||
+    search(result.presets) ||
+    search(result.modals) ||
+    search(result.modules)
+  );
+}
+
 export async function runExport(
   targetOverrides: Record<string, string>,
   annotationOverrides: Record<string, Record<string, string>>,
@@ -290,6 +308,15 @@ export async function runExport(
     const sev = getIssueSeverity(w);
     if (sev === "error") ctx.errors.push(w);
     else if (sev === "info") ctx.info.push(w);
+  }
+
+  // One-time info note when any glass effect is present — glass renders differently
+  // in Figma (shader-based) vs the web (SVG displacement filter). Push once per export.
+  if (hasGlassEffectInResult(result)) {
+    ctx.warnings.push(
+      "[info] Glass effect detected: glass may appear differently in Figma vs the web renderer. " +
+        "Physics-based refraction (bezel shape, displacement, specular) is approximated — verify visually in the browser."
+    );
   }
 
   result.elementCount = countElementsInResult(result);

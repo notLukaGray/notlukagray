@@ -12,13 +12,19 @@ export function resolveSlotElements(slot: ModuleSlotConfig): ElementBlock[] {
   const section = slot.section;
   if (!section?.definitions) return [];
   const order = section.elementOrder ?? Object.keys(section.definitions);
+  const idCounts = new Map<string, number>();
   return order
     .map((key) => {
       const el = section.definitions![key];
       if (!el || typeof el !== "object" || !("type" in el) || el.type === "cssGradient")
         return null;
-      const withId = !("id" in el) || !el.id ? { ...el, id: key } : el;
-      return withId as ElementBlock;
+      const candidate = el as ElementBlock & { id?: unknown };
+      const baseId =
+        typeof candidate.id === "string" && candidate.id.trim().length > 0 ? candidate.id : key;
+      const nextCount = (idCounts.get(baseId) ?? 0) + 1;
+      idCounts.set(baseId, nextCount);
+      const uniqueId = nextCount === 1 ? baseId : `${baseId}__${nextCount}`;
+      return { ...candidate, id: uniqueId } as ElementBlock;
     })
     .filter((x): x is ElementBlock => x != null);
 }

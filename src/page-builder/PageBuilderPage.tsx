@@ -28,7 +28,7 @@ export function PageBuilderPage({
 }: PageBuilderPageWrapperProps) {
   return (
     <main className={mainClassName} style={mainStyle}>
-      <article className={articleClassName} aria-label={page.title}>
+      <article className={articleClassName} aria-label={page.title} data-liquid-snapshot-root="">
         <h1 className="sr-only">{page.title}</h1>
         <PageBuilderRenderer
           resolvedBg={resolvedBg}

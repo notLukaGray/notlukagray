@@ -160,6 +160,15 @@ describe("sanitize-svg", () => {
       expect(sanitizeSvgMarkup("   ")).toBe("");
     });
 
+    it("supports JSON-escaped SVG strings", () => {
+      const escaped =
+        '<svg width=\\"300\\" height=\\"150\\" viewBox=\\"0 0 300 150\\" xmlns=\\"http://www.w3.org/2000/svg\\">\\n<rect width=\\"300\\" height=\\"150\\" rx=\\"50\\" fill=\\"#000\\" fill-opacity=\\"0.01\\"/>\\n</svg>';
+      const result = sanitizeSvgMarkup(escaped);
+      expect(result).toContain("<svg");
+      expect(result).toContain("<rect");
+      expect(result).toContain('fill-opacity="0.01"');
+    });
+
     it("strips dangerous href and xlink:href values", () => {
       const markupA = `<svg xmlns="http://www.w3.org/2000/svg"><a href="javascript:alert(1)"><text>link</text></a></svg>`;
       expect(sanitizeSvgMarkup(markupA)).not.toContain("javascript:");

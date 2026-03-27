@@ -213,7 +213,7 @@ export function SectionColumn({
       >
         <SectionScrollTargetProvider sectionRef={sectionRef}>
           {layers?.length ? <LayerStack layers={layers} /> : null}
-          <SectionGlassEffect effects={effects} sectionRef={sectionRef} />
+          <SectionGlassEffect effects={effects} sectionRef={sectionRef} isSectionFixed={!!fixed} />
           <SectionColumnContent
             elements={elements}
             columnLayout={columnLayout}

@@ -71,6 +71,15 @@ export function getPrimaryGap(
   return typeof resolvedColumnGaps === "string" ? resolvedColumnGaps : resolvedColumnGaps[0];
 }
 
+export function getOverlapGap(
+  resolvedColumnGaps: string | string[] | undefined
+): string | undefined {
+  const gap = getPrimaryGap(resolvedColumnGaps)?.trim();
+  if (!gap) return undefined;
+  // CSS `gap` does not support negatives; treat negative values as overlap offsets.
+  return /^-\d*\.?\d+(px|rem|em|vw|vh|%)$/i.test(gap) ? gap : undefined;
+}
+
 function getSegmentRowStyle(
   resolvedColumnCount: number,
   resolvedColumnGaps: string | string[] | undefined
@@ -80,7 +89,8 @@ function getSegmentRowStyle(
     resolvedColumnGaps === "auto" ||
     (Array.isArray(resolvedColumnGaps) && resolvedColumnGaps[0] === "auto");
   const gap = typeof resolvedColumnGaps === "string" ? resolvedColumnGaps : resolvedColumnGaps[0];
-  return isAuto ? { justifyContent: "space-between" } : { columnGap: gap };
+  const overlapGap = getOverlapGap(resolvedColumnGaps);
+  return isAuto ? { justifyContent: "space-between" } : { columnGap: overlapGap ? 0 : gap };
 }
 
 export function renderColumnStackSegment({
@@ -101,6 +111,7 @@ export function renderColumnStackSegment({
   itemStyles?: Record<string, ColumnStyleInput>;
 }) {
   const rowStyle = getSegmentRowStyle(resolvedColumnCount, resolvedColumnGaps);
+  const overlapGap = getOverlapGap(resolvedColumnGaps);
   return (
     <div key={segmentKey} className="relative z-10 flex min-w-0 w-full" style={rowStyle}>
       {segmentColumns.map((columnElements, columnIndex) => {
@@ -122,7 +133,11 @@ export function renderColumnStackSegment({
           <div
             key={`${segmentKey}:${columnIndex}`}
             className={`flex flex-col ${needsMinWidth ? "min-w-0" : ""}`}
-            style={{ ...style, ...flexStyle }}
+            style={{
+              ...style,
+              ...(overlapGap && columnIndex > 0 ? { marginLeft: overlapGap } : {}),
+              ...flexStyle,
+            }}
           >
             {columnElements.map((block, i) => (
               <ItemCell

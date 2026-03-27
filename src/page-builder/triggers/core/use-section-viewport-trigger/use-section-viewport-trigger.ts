@@ -3,6 +3,7 @@
 import { useEffect, useEffectEvent, useRef, type RefObject } from "react";
 import { firePageBuilderProgressTrigger, firePageBuilderTrigger } from "@/page-builder/triggers";
 import { useSectionScrollProgress } from "@/page-builder/section/position/use-section-scroll-progress";
+import { useScrollContainer } from "@/page-builder/section/position/use-scroll-container";
 import {
   getEntryProgress,
   getViewportObserverThresholds,
@@ -48,6 +49,7 @@ export function useSectionViewportTrigger(
   const fireViewportProgressAction = useEffectEvent((progress: number) => {
     if (onViewportProgress) firePageBuilderProgressTrigger(progress, onViewportProgress);
   });
+  const observerRoot = useScrollContainer();
 
   useSectionScrollProgress({
     sectionRef: ref,
@@ -119,6 +121,7 @@ export function useSectionViewportTrigger(
       },
       {
         threshold: getViewportObserverThresholds(hasViewportProgressTrigger, threshold),
+        root: observerRoot ?? null,
         rootMargin: rootMargin ?? undefined,
       }
     );
@@ -136,6 +139,7 @@ export function useSectionViewportTrigger(
     threshold,
     triggerOnce,
     rootMargin,
+    observerRoot,
     delay,
     hasVisibleTrigger,
     hasInvisibleTrigger,

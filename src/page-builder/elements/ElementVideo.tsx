@@ -1,7 +1,11 @@
 "use client";
 
 import { useRef, useMemo, useState, useCallback } from "react";
-import type { ElementBlock, ModuleBlock } from "@/page-builder/core/page-builder-schemas";
+import type {
+  ElementBlock,
+  ModuleBlock,
+  SectionEffect,
+} from "@/page-builder/core/page-builder-schemas";
 import { firePageBuilderAction } from "@/page-builder/triggers";
 import { resolveVideoLink } from "@/page-builder/core/element-video-utils";
 import { uiVideoPauseButtonHideDelayMs, uiVideoFeedbackDurationMs } from "@/core/lib/globals";
@@ -17,6 +21,7 @@ import { ElementVideoSlotsOverlay } from "./ElementVideo/ElementVideoSlotsOverla
 import { ElementVideoLinkWrap } from "./ElementVideo/ElementVideoLinkWrap";
 import { useVideoLazyLoad } from "./ElementVideo/use-video-lazy-load";
 import { resolveElementVideoSlots } from "./ElementVideo/element-video-slots";
+import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 
 type Props = Extract<ElementBlock, { type: "elementVideo" }> & {
   moduleConfig?: ModuleBlock;
@@ -30,6 +35,18 @@ function NoVideoSource() {
   );
 }
 
+function coerceSectionEffects(value: unknown): SectionEffect[] | undefined {
+  if (!Array.isArray(value)) return undefined;
+  const entries = value.filter(
+    (entry): entry is SectionEffect =>
+      !!entry &&
+      typeof entry === "object" &&
+      "type" in entry &&
+      typeof (entry as { type?: unknown }).type === "string"
+  );
+  return entries.length > 0 ? entries : undefined;
+}
+
 export function ElementVideo({
   src,
   poster,
@@ -40,10 +57,24 @@ export function ElementVideo({
   width,
   height,
   align,
+  alignY,
+  borderRadius,
+  constraints,
   marginTop,
   marginBottom,
   marginLeft,
   marginRight,
+  zIndex,
+  fixed,
+  effects,
+  wrapperStyle,
+  opacity,
+  blendMode,
+  boxShadow,
+  filter,
+  backdropFilter,
+  overflow,
+  hidden,
   objectFit = "cover",
   objectPosition,
   rotate,
@@ -59,6 +90,7 @@ export function ElementVideo({
   onVideoEnd,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const figureRef = useRef<HTMLElement | null>(null);
   const containerRef = useRef<HTMLSpanElement>(null);
   const [videoEl, setVideoEl] = useState<HTMLVideoElement | null>(null);
   const setVideoRef = useCallback((el: HTMLVideoElement | null) => {
@@ -120,10 +152,23 @@ export function ElementVideo({
     width,
     height,
     align,
+    alignY,
+    borderRadius,
+    constraints,
     marginTop,
     marginBottom,
     marginLeft,
     marginRight,
+    zIndex,
+    fixed,
+    wrapperStyle,
+    opacity,
+    blendMode,
+    boxShadow,
+    filter,
+    backdropFilter,
+    overflow,
+    hidden,
     rotate,
     flipHorizontal,
     flipVertical,
@@ -132,6 +177,8 @@ export function ElementVideo({
     aspectRatio,
     moduleConfig,
   });
+  const videoEffects = useMemo(() => coerceSectionEffects(effects), [effects]);
+  const hasGlassEffect = (videoEffects ?? []).some((effect) => effect.type === "glass");
 
   const videoContextValue = useVideoContextValue({
     moduleConfig,
@@ -235,7 +282,15 @@ export function ElementVideo({
   );
 
   return (
-    <figure className="shrink-0 m-0 block overflow-hidden" style={styles.figureStyle}>
+    <figure
+      ref={figureRef}
+      className="shrink-0 m-0 block overflow-hidden"
+      style={{
+        ...styles.figureStyle,
+        ...(hasGlassEffect && styles.figureStyle.position == null ? { position: "relative" } : {}),
+      }}
+    >
+      <SectionGlassEffect effects={videoEffects} sectionRef={figureRef} variant="auto" />
       <div style={styles.wrapperStyle}>
         <ElementVideoLinkWrap
           isLinkable={isLinkable}

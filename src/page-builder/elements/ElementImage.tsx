@@ -165,8 +165,6 @@ export function ElementImage({
       {showImage && src && (
         <span style={imageFrameStyle}>
           {useIntrinsicSizing ? (
-            // Next/Image requires `fill` or explicit dimensions; this branch preserves intrinsic/hug sizing.
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={src}
               alt={alt ?? ""}
@@ -223,7 +221,7 @@ export function ElementImage({
           }
         : {})}
     >
-      <SectionGlassEffect effects={imageEffects} sectionRef={figureRef} />
+      <SectionGlassEffect effects={imageEffects} sectionRef={figureRef} variant="auto" />
       {resolvedHref ? (
         isInternal ? (
           <Link href={resolvedHref} className="block w-full h-full">

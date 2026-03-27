@@ -9,6 +9,7 @@ import { ElementRichText } from "./ElementRichText";
 import { ElementVector } from "./ElementVector";
 import { ElementSVG } from "./ElementSVG";
 import { ElementRange } from "./ElementRange";
+import { ElementInput } from "./ElementInput";
 import { ElementVideoTime } from "./ElementVideoTime";
 import { ElementSpacer } from "./ElementSpacer";
 import { ElementButton } from "./ElementButton";
@@ -38,6 +39,7 @@ export {
   ElementVector,
   ElementSVG,
   ElementRange,
+  ElementInput,
   ElementVideoTime,
   ElementSpacer,
   ElementButton,
@@ -54,6 +56,7 @@ export const ELEMENT_COMPONENTS: Record<string, ComponentType<ElementBlock>> = {
   elementSVG: ElementSVG as ComponentType<ElementBlock>,
   elementRichText: ElementRichText as ComponentType<ElementBlock>,
   elementRange: ElementRange as ComponentType<ElementBlock>,
+  elementInput: ElementInput as ComponentType<ElementBlock>,
   elementVideoTime: ElementVideoTime as ComponentType<ElementBlock>,
   elementSpacer: ElementSpacer as ComponentType<ElementBlock>,
   elementScrollProgressBar: ElementScrollProgressBar as ComponentType<ElementBlock>,

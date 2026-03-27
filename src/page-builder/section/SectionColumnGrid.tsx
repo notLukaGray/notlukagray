@@ -9,6 +9,7 @@ import type {
   ItemLayoutEntryInput,
 } from "@/page-builder/core/section-column-layout";
 import {
+  getOverlapGap,
   getPrimaryGap,
   gridTemplateFromFlexStyles,
   ItemCell,
@@ -59,6 +60,7 @@ export function SectionColumnGrid({
     columnFlexStyles.slice(0, Math.max(1, resolvedColumnCount))
   );
   const primaryGap = getPrimaryGap(resolvedColumnGaps);
+  const overlapGap = getOverlapGap(resolvedColumnGaps);
   const outerWrapperStyle: React.CSSProperties = {
     ...contentWrapperStyle,
     flexDirection: "column",
@@ -72,7 +74,7 @@ export function SectionColumnGrid({
   // In columns mode, span items split the flow into multiple row segments.
   // Add vertical spacing between those segments so spanned bands/images don't collapse together.
   const columnModeWrapperStyle: React.CSSProperties =
-    layoutSegments && layoutSegments.length > 1 && primaryGap
+    layoutSegments && layoutSegments.length > 1 && primaryGap && !overlapGap
       ? { ...outerWrapperStyle, rowGap: primaryGap }
       : outerWrapperStyle;
 
@@ -83,7 +85,7 @@ export function SectionColumnGrid({
       ...outerWrapperStyle,
       display: "grid",
       gridTemplateColumns: templateColumns,
-      ...(gridGap ? { columnGap: gridGap, rowGap: gridGap } : {}),
+      ...(gridGap && !overlapGap ? { columnGap: gridGap, rowGap: gridGap } : {}),
       gridAutoRows: gridAutoRows ?? "minmax(min-content, max-content)",
       position: "relative",
     };
@@ -104,7 +106,7 @@ export function SectionColumnGrid({
             style={{
               display: "grid",
               gridTemplateColumns: templateColumns,
-              ...(gridGap ? { columnGap: gridGap, rowGap: gridGap } : {}),
+              ...(gridGap && !overlapGap ? { columnGap: gridGap, rowGap: gridGap } : {}),
               gridAutoRows: gridAutoRows ?? "minmax(min-content, max-content)",
             }}
           >
@@ -119,8 +121,10 @@ export function SectionColumnGrid({
     <div className="relative z-10 flex flex-col min-w-0" style={columnModeWrapperStyle}>
       {effectiveSegments.map((segment, segmentIndex) => {
         const segmentKey = `seg-${segmentIndex}`;
+        const segmentSpacingStyle =
+          segmentIndex > 0 && overlapGap ? ({ marginTop: overlapGap } as const) : undefined;
         if (segment.type === "columns") {
-          return renderColumnStackSegment({
+          const segmentContent = renderColumnStackSegment({
             segmentColumns: segment.elementsByColumn,
             segmentKey,
             columnFlexStyles,
@@ -129,6 +133,13 @@ export function SectionColumnGrid({
             columnStyles,
             itemStyles,
           });
+          return segmentSpacingStyle ? (
+            <div key={`${segmentKey}:spacing`} style={segmentSpacingStyle}>
+              {segmentContent}
+            </div>
+          ) : (
+            segmentContent
+          );
         }
 
         return (
@@ -140,7 +151,8 @@ export function SectionColumnGrid({
               width: "100%",
               alignItems: "stretch",
               gridTemplateColumns: templateColumns,
-              ...(primaryGap ? { columnGap: primaryGap } : {}),
+              ...(primaryGap && !overlapGap ? { columnGap: primaryGap } : {}),
+              ...(segmentSpacingStyle ?? {}),
             }}
           >
             <div

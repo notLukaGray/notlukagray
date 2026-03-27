@@ -48,6 +48,7 @@ export interface SectionColumnBlock {
   columnAssignments: Record<string, number>;
   columnWidths?: string[];
   columnGaps?: string;
+  columnStyles?: Array<Record<string, unknown>>;
   elementOrder?: string[];
   fill?: string;
   width?: string;
@@ -55,6 +56,97 @@ export interface SectionColumnBlock {
   overflow?: string;
   borderRadius?: string;
   [key: string]: unknown;
+}
+
+function isFrameLikeAutoLayout(node: SceneNode): node is FrameNode | ComponentNode | InstanceNode {
+  return node.type === "FRAME" || node.type === "COMPONENT" || node.type === "INSTANCE";
+}
+
+function toCssUnit(value: unknown): string | undefined {
+  if (typeof value === "string") return value;
+  if (typeof value === "number" && Number.isFinite(value)) return toPx(value);
+  return undefined;
+}
+
+function extractSectionPaddingMarginsFromAutoLayout(autoLayout: Record<string, unknown>): {
+  marginLeft?: string;
+  marginRight?: string;
+  marginTop?: string;
+  marginBottom?: string;
+} {
+  const placement: {
+    marginLeft?: string;
+    marginRight?: string;
+    marginTop?: string;
+    marginBottom?: string;
+  } = {};
+
+  const padding = toCssUnit(autoLayout.padding);
+  if (padding) {
+    placement.marginTop = padding;
+    placement.marginRight = padding;
+    placement.marginBottom = padding;
+    placement.marginLeft = padding;
+    return placement;
+  }
+
+  const paddingTop = toCssUnit(autoLayout.paddingTop);
+  const paddingRight = toCssUnit(autoLayout.paddingRight);
+  const paddingBottom = toCssUnit(autoLayout.paddingBottom);
+  const paddingLeft = toCssUnit(autoLayout.paddingLeft);
+
+  if (paddingTop) placement.marginTop = paddingTop;
+  if (paddingRight) placement.marginRight = paddingRight;
+  if (paddingBottom) placement.marginBottom = paddingBottom;
+  if (paddingLeft) placement.marginLeft = paddingLeft;
+
+  return placement;
+}
+
+async function extractColumnStyle(node: SceneNode): Promise<Record<string, unknown>> {
+  const style: Record<string, unknown> = {};
+
+  if (isFrameLikeAutoLayout(node)) {
+    const auto = extractAutoLayoutProps(node);
+    if (typeof auto.justifyContent === "string") style.justifyContent = auto.justifyContent;
+    if (typeof auto.alignItems === "string") style.alignItems = auto.alignItems;
+    if (typeof auto.gap === "string") style.gap = auto.gap;
+
+    const padding = toCssUnit(auto.padding);
+    if (padding) {
+      style.padding = padding;
+    } else {
+      const top = toCssUnit(auto.paddingTop);
+      const right = toCssUnit(auto.paddingRight);
+      const bottom = toCssUnit(auto.paddingBottom);
+      const left = toCssUnit(auto.paddingLeft);
+      if (top || right || bottom || left) {
+        style.padding = `${top ?? "0px"} ${right ?? top ?? "0px"} ${bottom ?? top ?? "0px"} ${left ?? right ?? top ?? "0px"}`;
+      }
+    }
+  }
+
+  if ("clipsContent" in node && (node as FrameNode).clipsContent) {
+    style.overflow = "hidden";
+  }
+
+  if ("fills" in node && "width" in node && "height" in node) {
+    const fillPayload = extractSectionFillPayload((node as FrameNode).fills as readonly Paint[], {
+      width: (node as FrameNode).width,
+      height: (node as FrameNode).height,
+    });
+    if (fillPayload?.fill) style.fill = fillPayload.fill;
+  }
+
+  if ("effects" in node) {
+    const glassEffect = extractGlassEffect((node as FrameNode).effects, node);
+    if (glassEffect) style.effects = [glassEffect];
+  }
+
+  const layout = extractLayoutProps(node as FrameNode);
+  if (layout.borderRadius) style.borderRadius = layout.borderRadius;
+
+  return style;
 }
 
 /**
@@ -84,7 +176,7 @@ async function convertGridFrameToColumnSection(
     ? [...visibleChildren].sort((a, b) => ("x" in a ? a.x : 0) - ("x" in b ? b.x : 0))
     : [];
   const implicitColumnIndex = new Map<SceneNode, number>();
-  implicitColumnOrder.forEach((child, index) => implicitColumnIndex.set(child, index + 1));
+  implicitColumnOrder.forEach((child, index) => implicitColumnIndex.set(child, index));
 
   for (const child of visibleChildren) {
     if (isColumnContainer(child)) {
@@ -105,7 +197,7 @@ async function convertGridFrameToColumnSection(
 
           elements.push(el);
           elementOrder.push(elId);
-          columnAssignments[elId] = colIdx + 1;
+          columnAssignments[elId] = colIdx;
         } catch (err) {
           ctx.warnings.push(
             `section-column (grid): error converting child "${subChild.name}" in column ${colIdx + 1}: ${String(err)}`
@@ -137,12 +229,12 @@ async function convertGridFrameToColumnSection(
     elementOrder.push(elId);
 
     if (inferImplicitColumns) {
-      columnAssignments[elId] = implicitColumnIndex.get(child) ?? 1;
+      columnAssignments[elId] = implicitColumnIndex.get(child) ?? 0;
     } else {
       const childX = "x" in child ? (child as { x: number }).x : 0;
       const childWidth = "width" in child ? (child as { width: number }).width : grid.columnWidthPx;
       const { column } = snapToColumn(childX, childWidth, grid);
-      columnAssignments[elId] = column;
+      columnAssignments[elId] = Math.max(0, column - 1);
     }
   }
 
@@ -250,7 +342,8 @@ export async function convertFrameToColumnSection(
 
   const assignLooseChildToColumn = (child: SceneNode): number => {
     if (columnCenters.length === 0) {
-      return inferImplicitColumns ? visibleChildren.indexOf(child) + 1 || 1 : 1;
+      const implicitIndex = visibleChildren.indexOf(child);
+      return inferImplicitColumns ? (implicitIndex >= 0 ? implicitIndex : 0) : 0;
     }
 
     const childX = "x" in child ? (child as { x: number }).x : 0;
@@ -266,7 +359,7 @@ export async function convertFrameToColumnSection(
         nearestIndex = index;
       }
     }
-    return nearestIndex + 1;
+    return nearestIndex;
   };
 
   for (const child of visibleChildren) {
@@ -280,7 +373,7 @@ export async function convertFrameToColumnSection(
           if (converted !== null) {
             const elId = converted.id as string | undefined;
             if (elId) {
-              columnAssignments[elId] = colIdx + 1;
+              columnAssignments[elId] = colIdx;
               elementOrder.push(elId);
             }
             elements.push(converted);
@@ -329,7 +422,18 @@ export async function convertFrameToColumnSection(
         : allColumnWidths.map((w) => toPx(w));
 
   const columnGaps: string | undefined =
-    frame.itemSpacing > 0 ? toPx(frame.itemSpacing) : undefined;
+    frame.itemSpacing !== 0
+      ? toPx(frame.itemSpacing)
+      : frame.primaryAxisAlignItems === "SPACE_BETWEEN" && columnCount > 1
+        ? "auto"
+        : undefined;
+
+  const columnStyles: Array<Record<string, unknown>> | undefined =
+    !inferImplicitColumns && columnChildren.length > 0
+      ? (await Promise.all(columnChildren.map((child) => extractColumnStyle(child)))).map(
+          (style) => style
+        )
+      : undefined;
 
   const layout = extractLayoutProps(frame);
   const autoLayout = extractAutoLayoutProps(frame);
@@ -351,6 +455,9 @@ export async function convertFrameToColumnSection(
 
   const { paddingTop, paddingRight, paddingBottom, paddingLeft, padding, ...autoLayoutNoPadding } =
     autoLayout as Record<string, unknown>;
+  const sectionPaddingPlacement = extractSectionPaddingMarginsFromAutoLayout(
+    autoLayout as Record<string, unknown>
+  );
   void paddingTop;
   void paddingRight;
   void paddingBottom;
@@ -365,10 +472,14 @@ export async function convertFrameToColumnSection(
     columnAssignments,
     ...(columnWidths.length > 0 ? { columnWidths } : {}),
     ...(columnGaps !== undefined ? { columnGaps } : {}),
+    ...(columnStyles && columnStyles.some((style) => Object.keys(style).length > 0)
+      ? { columnStyles }
+      : {}),
     ...(elementOrder.length > 0 ? { elementOrder } : {}),
     width: toPx(frame.width),
     height: toPx(frame.height),
     ...sectionPlacement,
+    ...sectionPaddingPlacement,
     ...(fillPayload?.fill ? { fill: fillPayload.fill } : {}),
     ...(fillPayload?.layers ? { layers: fillPayload.layers } : {}),
     ...borderProps,

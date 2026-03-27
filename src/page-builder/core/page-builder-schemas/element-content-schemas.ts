@@ -21,6 +21,7 @@ import {
   vectorShapeSchema,
 } from "./element-foundation-schemas";
 import { elementRangeSchema } from "./element-range-schemas";
+import { elementInputSchema } from "./element-input-schemas";
 
 const headingLevelSchema = z.union([
   z.literal(1),
@@ -263,6 +264,7 @@ export {
   elementImageSchema,
   elementLinkSchema,
   elementRangeSchema,
+  elementInputSchema,
   elementRichTextSchema,
   elementSVGSchema,
   elementSpacerSchema,

@@ -8,6 +8,7 @@ import type { ConversionContext } from "../types/figma-plugin";
 import { extractLayoutProps } from "./layout";
 import { extractNodeVisualEffects } from "./node-visual-effects";
 import { slugify, ensureUniqueId } from "../utils/slugify";
+import { inferGlassClipPathFromSvgMarkup } from "./glass-clip-path";
 
 /**
  * Converts a VECTOR or BOOLEAN_OPERATION node to an `elementSVG` block.
@@ -47,6 +48,13 @@ export async function convertVectorNode(
   if (!markup || typeof markup !== "string") {
     ctx.warnings.push(`[vector] Empty SVG result for "${node.name}"`);
     return null;
+  }
+
+  if (glassEffect && typeof glassEffect.clipPath !== "string") {
+    const clipPathFromMarkup = inferGlassClipPathFromSvgMarkup(markup);
+    if (clipPathFromMarkup) {
+      layout.effects = [{ ...glassEffect, ...clipPathFromMarkup }];
+    }
   }
 
   const result: ElementSVG = {

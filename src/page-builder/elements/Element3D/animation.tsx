@@ -28,6 +28,23 @@ function resolveLoopMode(
   return { loopMode: THREE.LoopRepeat, clampWhenFinished: false };
 }
 
+function configureActionPlayback(
+  action: THREE.AnimationAction,
+  loopMode: THREE.AnimationActionLoopStyles,
+  clampWhenFinished: boolean
+): void {
+  action.reset();
+  action.clampWhenFinished = clampWhenFinished;
+  action.setLoop(loopMode, Infinity);
+  action.play();
+}
+
+function scrubActionToProgress(action: THREE.AnimationAction, progress: number): void {
+  action.paused = true;
+  const duration = action.getClip().duration;
+  action.time = Math.max(0, Math.min(1, progress)) * duration;
+}
+
 export function useModelAnimation(
   animations: THREE.AnimationClip[],
   scene: THREE.Object3D,
@@ -68,12 +85,7 @@ export function useModelAnimation(
       }
 
       const { loopMode, clampWhenFinished } = resolveLoopMode(playMode, loop);
-      action.reset();
-      /* eslint-disable react-hooks/immutability -- Three.js AnimationAction */
-      action.clampWhenFinished = clampWhenFinished;
-      action.setLoop(loopMode, Infinity);
-      action.play();
-      /* eslint-enable react-hooks/immutability */
+      configureActionPlayback(action, loopMode, clampWhenFinished);
       currentActionRef.current = action;
       setCurrentAction(action);
       previousCycleTimeRef.current = 0;
@@ -87,10 +99,7 @@ export function useModelAnimation(
     const initialAction = getInitialAction();
     if (initialAction) {
       const { loopMode, clampWhenFinished } = resolveLoopMode(options.playMode, options.loop);
-      initialAction.reset();
-      initialAction.clampWhenFinished = clampWhenFinished;
-      initialAction.setLoop(loopMode, Infinity);
-      initialAction.play();
+      configureActionPlayback(initialAction, loopMode, clampWhenFinished);
       currentActionRef.current = initialAction;
       startTransition(() => {
         setCurrentAction(initialAction);
@@ -216,12 +225,7 @@ export function useModelAnimation(
       if (!target.isRunning()) {
         target.play();
       }
-      /* Three.js AnimationAction is driven by mutating paused/time — not React state. */
-      /* eslint-disable react-hooks/immutability -- imperative mixer API */
-      target.paused = true;
-      const duration = target.getClip().duration;
-      target.time = Math.max(0, Math.min(1, progress)) * duration;
-      /* eslint-enable react-hooks/immutability */
+      scrubActionToProgress(target, progress);
       mixer.update(0);
     },
     [actions, mixer]

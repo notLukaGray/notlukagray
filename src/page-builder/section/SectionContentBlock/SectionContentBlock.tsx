@@ -261,7 +261,7 @@ export function SectionContentBlock({
       ) : resolvedFill ? (
         <LayerStack fill={resolvedFill} />
       ) : null}
-      <SectionGlassEffect effects={effects} sectionRef={sectionRef} />
+      <SectionGlassEffect effects={effects} sectionRef={sectionRef} isSectionFixed={!!fixed} />
       <div
         className={`relative z-10 flex min-h-0 flex-col ${contentColumnAlignItems}`}
         style={contentWrapperStyle}
