@@ -1,0 +1,208 @@
+{
+  "slug": "research",
+  "title": "Research",
+  "description": "Research by Luka Gray",
+  "sectionOrder": ["hero"],
+  "bgKey": "bg",
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#080808"
+        }
+      ]
+    },
+    "hero": {
+      "type": "contentBlock",
+      "ariaLabel": "Research index",
+      "width": "100%",
+      "height": "hug",
+      "align": "center",
+      "fill": "transparent",
+      "paddingTop": "8rem",
+      "paddingBottom": "4rem",
+      "elementOrder": [
+        "heading",
+        "research-color-perception",
+        "research-dark-patterns",
+        "research-environmental",
+        "research-generative",
+        "research-grid-systems",
+        "research-interaction-latency",
+        "research-material-texture",
+        "research-motion-cognition",
+        "research-print-history",
+        "research-semiotics",
+        "research-spatial-wayfinding",
+        "research-type-legibility"
+      ],
+      "definitions": {
+        "heading": {
+          "type": "elementHeading",
+          "level": 1,
+          "text": "Research",
+          "align": "center",
+          "width": "hug",
+          "marginBottom": "3rem"
+        },
+        "research-color-perception": {
+          "type": "elementLink",
+          "href": "/research/research-color-perception",
+          "label": "Color Perception & Contextual Relativity",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-dark-patterns": {
+          "type": "elementLink",
+          "href": "/research/research-dark-patterns",
+          "label": "Dark Patterns, Coercion & Design Ethics",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-environmental": {
+          "type": "elementLink",
+          "href": "/research/research-environmental",
+          "label": "Environmental Design & Sustainability",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-generative": {
+          "type": "elementLink",
+          "href": "/research/research-generative",
+          "label": "Generative Design & Algorithmic Aesthetics",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-grid-systems": {
+          "type": "elementLink",
+          "href": "/research/research-grid-systems",
+          "label": "Grid Systems & Compositional Tension",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-interaction-latency": {
+          "type": "elementLink",
+          "href": "/research/research-interaction-latency",
+          "label": "Latency, Responsiveness & Perceived Speed",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-material-texture": {
+          "type": "elementLink",
+          "href": "/research/research-material-texture",
+          "label": "Material & Texture in Digital UI",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-motion-cognition": {
+          "type": "elementLink",
+          "href": "/research/research-motion-cognition",
+          "label": "Motion Design & Cognitive Load",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-print-history": {
+          "type": "elementLink",
+          "href": "/research/research-print-history",
+          "label": "Print History & Typographic Systems",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-semiotics": {
+          "type": "elementLink",
+          "href": "/research/research-semiotics",
+          "label": "Semiotics in Visual Communication",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-spatial-wayfinding": {
+          "type": "elementLink",
+          "href": "/research/research-spatial-wayfinding",
+          "label": "Spatial Design & Wayfinding Systems",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "research-type-legibility": {
+          "type": "elementLink",
+          "href": "/research/research-type-legibility",
+          "label": "Type, Legibility & Reading Conditions",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        }
+      }
+    }
+  }
+}

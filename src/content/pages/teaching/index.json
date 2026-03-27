@@ -1,0 +1,64 @@
+{
+  "slug": "teaching",
+  "title": "Teaching",
+  "description": "Teaching by Luka Gray",
+  "sectionOrder": ["hero"],
+  "bgKey": "bg",
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#080808"
+        }
+      ]
+    },
+    "hero": {
+      "type": "contentBlock",
+      "ariaLabel": "Teaching index",
+      "width": "100%",
+      "height": "hug",
+      "align": "center",
+      "fill": "transparent",
+      "paddingTop": "8rem",
+      "paddingBottom": "4rem",
+      "elementOrder": ["heading", "teaching-design-basics", "teaching-typography"],
+      "definitions": {
+        "heading": {
+          "type": "elementHeading",
+          "level": 1,
+          "text": "Teaching",
+          "align": "center",
+          "width": "hug",
+          "marginBottom": "3rem"
+        },
+        "teaching-design-basics": {
+          "type": "elementLink",
+          "href": "/teaching/teaching-design-basics",
+          "label": "Design Basics",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "teaching-typography": {
+          "type": "elementLink",
+          "href": "/teaching/teaching-typography",
+          "label": "Typography Fundamentals",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        }
+      }
+    }
+  }
+}

@@ -15,6 +15,8 @@ function resolveAssetRef(
 ): string {
   const proxy = proxyUrlByRef?.get(ref);
   const cdn = urlByRef.get(ref);
+  const lower = ref.toLowerCase();
+  const isVideoRef = lower.endsWith(".webm") || lower.endsWith(".mp4");
 
   if (isModel3D) {
     return proxy ?? (cdn !== undefined ? (cdn ?? ref) : ref);
@@ -25,6 +27,11 @@ function resolveAssetRef(
   }
 
   if (isImageRef(ref)) {
+    return cdn !== undefined && cdn != null ? cdn : (proxy ?? ref);
+  }
+
+  // For videos, prefer direct signed CDN URL over same-origin proxy redirect.
+  if (isVideoRef) {
     return cdn !== undefined && cdn != null ? cdn : (proxy ?? ref);
   }
 

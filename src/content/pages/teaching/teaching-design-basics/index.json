@@ -1,0 +1,49 @@
+{
+  "type": "page",
+  "id": "teaching-design-basics",
+  "title": "Design Basics",
+  "description": "Introduction to core design principles — placeholder content.",
+  "assetBaseUrl": "/teaching",
+  "sectionOrder": ["teaching_hero"],
+  "bgKey": "bg-main",
+  "definitions": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#0d0d0d"
+        }
+      ]
+    },
+    "teaching_hero": {
+      "type": "contentBlock",
+      "id": "teaching_hero",
+      "width": ["100%", "78%"],
+      "height": "hug",
+      "align": "center",
+      "fill": "#00000000",
+      "padding": ["2rem 1rem", "4rem 2rem"],
+      "elementOrder": ["heading", "body"],
+      "definitions": {
+        "heading": {
+          "type": "elementHeading",
+          "level": 1,
+          "text": "Design Basics",
+          "align": "center",
+          "width": "hug",
+          "wordWrap": true,
+          "marginBottom": "1rem"
+        },
+        "body": {
+          "type": "elementBody",
+          "level": 2,
+          "text": "Placeholder: course overview and key topics will go here.",
+          "align": "center",
+          "textAlign": "center",
+          "width": "100%",
+          "wordWrap": true
+        }
+      }
+    }
+  }
+}

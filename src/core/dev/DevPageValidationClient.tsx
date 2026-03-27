@@ -3,10 +3,11 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-/** Current page slug from pathname (e.g. /work/fm-integration-test → fm-integration-test). */
+/** Current page slug path from pathname (e.g. /work/lenero → work/lenero). */
 function getSlugFromPathname(pathname: string): string | null {
-  const segment = pathname.split("/").filter(Boolean).pop();
-  return segment ?? null;
+  const segments = pathname.split("/").filter(Boolean);
+  if (segments.length < 2) return null;
+  return segments.join("/");
 }
 
 /** Only validate when we're on a page-builder detail route (e.g. /teaching/foo, /work/bar). Skip index/section routes like /teaching, /work, and internal dev tools like /__dev/*. */

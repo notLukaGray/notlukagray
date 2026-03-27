@@ -19,6 +19,7 @@ export type {
   ResolvedPage,
   PageBuilder,
   PageBuilderDefinitionBlock,
+  PageScrollConfig,
   SectionBlockWithElementOrder,
 } from "@/page-builder/core/page-builder-schemas";
 export { ASSET_URL_KEYS } from "@/page-builder/core/page-builder-schemas";
@@ -41,10 +42,17 @@ export {
   readJsonFileSafe,
   coercePresetMap,
   loadPageBuilder,
+  loadPageBuilderByPath,
+  loadPageBuilderByPathAsync,
   getPageSlugs,
   getPageSlugsByBase,
   getPageSlugBases,
 } from "@/page-builder/core/page-builder-load";
+export {
+  discoverAllPages,
+  resolvePagePath,
+  type PageEntry,
+} from "@/page-builder/core/load/page-builder-discover-pages";
 export { loadModal, type ModalBuilder } from "@/page-builder/core/modal-load";
 export { expandPageBuilder } from "@/page-builder/core/page-builder-expand";
 export { getAllAssetUrlsFromPage } from "@/page-builder/core/page-builder-asset-urls";

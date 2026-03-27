@@ -1,0 +1,22 @@
+{
+  "title": "Vessel — Product Design Process",
+  "slug": "project-process",
+  "description": "Full design process for Vessel, a personal finance app — research through production across twelve weeks with a four-person team.",
+  "ogImage": "https://media.notlukagray.com/website/work/project-process/og.webp",
+  "assetBaseUrl": "/work",
+  "sectionOrder": ["process_a", "process_b", "process_c", "process_d", "process_e"],
+  "bgKey": "bg-neutral",
+  "definitions": {
+    "bg-neutral": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#0c0c0c"
+        },
+        {
+          "fill": "linear-gradient(180deg, #141414 0%, #0c0c0c 40%)"
+        }
+      ]
+    }
+  }
+}

@@ -2,10 +2,8 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Header, Footer } from "./header-footer";
 import { usePageBuilderActionRunner } from "@/page-builder/hooks/use-page-builder-action-runner";
 import { clearVariables } from "@/page-builder/core/page-builder-variable-store";
-import { layoutFromJsonSlugs } from "@/core/lib/globals";
 import { PageBuilderDevOverlay } from "@/page-builder/dev/PageBuilderDevOverlay";
 
 type AppLayoutProps = {
@@ -19,25 +17,10 @@ export function AppLayout({ children }: AppLayoutProps) {
   useEffect(() => {
     clearVariables();
   }, [pathname]);
-  const isWorkPage = pathname?.startsWith("/work") ?? false;
-  const isResearchSlug = pathname?.startsWith("/research/") ?? false;
-  const isPbDevPage = pathname?.startsWith("/pb-dev") ?? false;
-  const useLayoutFromJson = pathname && (layoutFromJsonSlugs.includes(pathname) || isResearchSlug);
-  const hideSiteChrome = useLayoutFromJson || isPbDevPage;
-  const shouldReserveFooterSpace = !hideSiteChrome && !isWorkPage && !isResearchSlug;
 
   return (
     <>
-      {!hideSiteChrome && <Header />}
-      <div
-        className="min-h-dvh w-full min-w-0 flex flex-col"
-        style={{
-          paddingBottom: shouldReserveFooterSpace ? "var(--footer-height)" : 0,
-        }}
-      >
-        {children}
-      </div>
-      {!hideSiteChrome && <Footer />}
+      <div className="min-h-dvh w-full min-w-0 flex flex-col">{children}</div>
       <PageBuilderDevOverlay />
     </>
   );

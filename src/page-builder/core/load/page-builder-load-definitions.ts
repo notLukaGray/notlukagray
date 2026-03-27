@@ -4,7 +4,7 @@ import path from "path";
 import { isSafePathSegment, resolvePathUnder } from "../page-builder-paths";
 import type { PageBuilderDefinitionBlock } from "../page-builder-schemas";
 import { resolvePresets } from "../page-builder-presets";
-import { PAGE_DATA_DIR, parseJsonSafe } from "./page-builder-load-io";
+import { parseJsonSafe, resolveSlugDir, PAGE_DATA_DIR } from "./page-builder-load-io";
 
 const MODULES_DIR = path.join(process.cwd(), "src/content/modules");
 
@@ -70,7 +70,9 @@ function loadSectionFile(
   definitions: Record<string, PageBuilderDefinitionBlock>
 ): void {
   if (!isSafePathSegment(slug) || !isSafePathSegment(sectionKey)) return;
-  const sectionPath = resolvePathUnder(PAGE_DATA_DIR, slug, `${sectionKey}.json`);
+  const slugDir = resolveSlugDir(slug);
+  if (!slugDir) return;
+  const sectionPath = resolvePathUnder(slugDir, `${sectionKey}.json`);
   if (!sectionPath || !fs.existsSync(sectionPath)) return;
   const raw = fs.readFileSync(sectionPath, "utf-8");
   const result = parseJsonSafe<Record<string, unknown>>(raw);
@@ -118,7 +120,7 @@ function loadDefinitionFragments(
   sectionOrder: string[]
 ): void {
   if (!isSafePathSegment(slug)) return;
-  const slugDirResolved = resolvePathUnder(PAGE_DATA_DIR, slug);
+  const slugDirResolved = resolveSlugDir(slug);
   if (
     !slugDirResolved ||
     !fs.existsSync(slugDirResolved) ||
@@ -131,7 +133,7 @@ function loadDefinitionFragments(
     const basename = path.basename(file, ".json");
     if (!isSafePathSegment(basename)) continue;
     if (sectionSet.has(basename) || basename === slug || basename.endsWith("-sections")) continue;
-    const filePath = resolvePathUnder(PAGE_DATA_DIR, slug, file);
+    const filePath = resolvePathUnder(slugDirResolved, file);
     if (!filePath || !fs.statSync(filePath).isFile()) continue;
     const raw = fs.readFileSync(filePath, "utf-8");
     const result = parseJsonSafe<Record<string, unknown>>(raw);
@@ -165,7 +167,7 @@ export function hydrateSectionFiles(
   sectionOrder: string[]
 ): Record<string, PageBuilderDefinitionBlock> {
   if (!isSafePathSegment(slug)) return definitions;
-  const slugDir = resolvePathUnder(PAGE_DATA_DIR, slug);
+  const slugDir = resolveSlugDir(slug);
   if (slugDir && fs.existsSync(slugDir) && fs.statSync(slugDir).isDirectory()) {
     for (const key of sectionOrder) {
       if (!isSafePathSegment(key)) continue;
@@ -183,7 +185,7 @@ export async function hydrateSectionFilesAsync(
   sectionOrder: string[]
 ): Promise<Record<string, PageBuilderDefinitionBlock>> {
   if (!isSafePathSegment(slug)) return definitions;
-  const slugDir = resolvePathUnder(PAGE_DATA_DIR, slug);
+  const slugDir = resolveSlugDir(slug);
   if (!slugDir) return definitions;
   let stat: Awaited<ReturnType<typeof fsPromises.stat>> | null = null;
   try {
@@ -199,7 +201,7 @@ export async function hydrateSectionFilesAsync(
   for (const key of sectionOrder) {
     if (!isSafePathSegment(key)) continue;
     if (definitions[key] == null) {
-      const sectionPath = resolvePathUnder(PAGE_DATA_DIR, slug, `${key}.json`);
+      const sectionPath = resolvePathUnder(slugDir, `${key}.json`);
       if (sectionPath) toRead.push({ path: sectionPath, kind: "section", key });
     }
   }
@@ -207,7 +209,7 @@ export async function hydrateSectionFilesAsync(
     const basename = path.basename(file, ".json");
     if (!isSafePathSegment(basename)) continue;
     if (sectionSet.has(basename) || basename === slug || basename.endsWith("-sections")) continue;
-    const filePath = resolvePathUnder(PAGE_DATA_DIR, slug, file);
+    const filePath = resolvePathUnder(slugDir, file);
     if (!filePath) continue;
     toRead.push({ path: filePath, kind: "fragment" });
   }
@@ -283,4 +285,174 @@ export function resolveDefinitionPresets(
     resolvedDefinitions[key] = resolvePresets(block, presets);
   }
   return resolvedDefinitions;
+}
+
+/**
+ * Sync section hydration for multi-segment pages (e.g. ['work', 'project-brand']).
+ * Each segment is validated individually by isSafePathSegment.
+ * The page directory is PAGE_DATA_DIR/<segments...>/  (sibling files next to index.json).
+ */
+export function hydrateSectionFilesBySegments(
+  definitions: Record<string, PageBuilderDefinitionBlock>,
+  slugSegments: string[],
+  sectionOrder: string[]
+): Record<string, PageBuilderDefinitionBlock> {
+  for (const seg of slugSegments) {
+    if (!isSafePathSegment(seg)) return definitions;
+  }
+  const slugDir = resolvePathUnder(PAGE_DATA_DIR, ...slugSegments);
+  if (!slugDir || !fs.existsSync(slugDir) || !fs.statSync(slugDir).isDirectory()) {
+    return definitions;
+  }
+  const sectionSet = new Set(sectionOrder);
+  for (const key of sectionOrder) {
+    if (!isSafePathSegment(key)) continue;
+    if (definitions[key] == null) {
+      const sectionPath = resolvePathUnder(PAGE_DATA_DIR, ...slugSegments, `${key}.json`);
+      if (!sectionPath || !fs.existsSync(sectionPath)) continue;
+      const raw = fs.readFileSync(sectionPath, "utf-8");
+      const result = parseJsonSafe<Record<string, unknown>>(raw);
+      if (!result.ok) continue;
+      const sectionData = result.data;
+      const { definitions: sectionDefs } = sectionData as Record<string, unknown> & {
+        definitions?: Record<string, unknown>;
+      };
+      if (sectionDefs != null && typeof sectionDefs === "object") {
+        for (const [k, v] of Object.entries(sectionDefs)) {
+          if (v != null && typeof v === "object") definitions[k] = v as PageBuilderDefinitionBlock;
+        }
+      }
+      definitions[key] = sectionData as PageBuilderDefinitionBlock;
+    }
+  }
+  // Load fragment files (non-section JSON siblings)
+  const files = fs.readdirSync(slugDir).filter((f) => f.endsWith(".json"));
+  for (const file of files) {
+    const basename = path.basename(file, ".json");
+    if (!isSafePathSegment(basename)) continue;
+    if (basename === "index" || sectionSet.has(basename) || basename.endsWith("-sections"))
+      continue;
+    const filePath = resolvePathUnder(PAGE_DATA_DIR, ...slugSegments, file);
+    if (!filePath || !fs.statSync(filePath).isFile()) continue;
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const result = parseJsonSafe<Record<string, unknown>>(raw);
+    if (!result.ok) continue;
+    const data = result.data;
+    if (data == null || typeof data !== "object" || Array.isArray(data)) continue;
+    for (const [key, value] of Object.entries(data)) {
+      if (value != null && typeof value === "object" && !Array.isArray(value) && "type" in value) {
+        definitions[key] = value as PageBuilderDefinitionBlock;
+      }
+    }
+  }
+  return definitions;
+}
+
+/**
+ * Async section hydration for multi-segment pages (e.g. ['work', 'project-brand']).
+ * Each segment is validated individually by isSafePathSegment.
+ */
+export async function hydrateSectionFilesBySegmentsAsync(
+  definitions: Record<string, PageBuilderDefinitionBlock>,
+  slugSegments: string[],
+  sectionOrder: string[]
+): Promise<Record<string, PageBuilderDefinitionBlock>> {
+  for (const seg of slugSegments) {
+    if (!isSafePathSegment(seg)) return definitions;
+  }
+  const slugDir = resolvePathUnder(PAGE_DATA_DIR, ...slugSegments);
+  if (!slugDir) return definitions;
+  let stat: Awaited<ReturnType<typeof fsPromises.stat>> | null = null;
+  try {
+    stat = await fsPromises.stat(slugDir);
+  } catch {
+    return definitions;
+  }
+  if (!stat.isDirectory()) return definitions;
+
+  const sectionSet = new Set(sectionOrder);
+  const files = (await fsPromises.readdir(slugDir)).filter((f) => f.endsWith(".json"));
+  const toRead: { path: string; kind: "section" | "fragment"; key?: string }[] = [];
+
+  for (const key of sectionOrder) {
+    if (!isSafePathSegment(key)) continue;
+    if (definitions[key] == null) {
+      const sectionPath = resolvePathUnder(PAGE_DATA_DIR, ...slugSegments, `${key}.json`);
+      if (sectionPath) toRead.push({ path: sectionPath, kind: "section", key });
+    }
+  }
+  for (const file of files) {
+    const basename = path.basename(file, ".json");
+    if (!isSafePathSegment(basename)) continue;
+    if (basename === "index" || sectionSet.has(basename) || basename.endsWith("-sections"))
+      continue;
+    const filePath = resolvePathUnder(PAGE_DATA_DIR, ...slugSegments, file);
+    if (!filePath) continue;
+    toRead.push({ path: filePath, kind: "fragment" });
+  }
+
+  const results = await Promise.all(
+    toRead.map(async (item) => {
+      try {
+        const raw = await fsPromises.readFile(item.path, "utf-8");
+        const result = parseJsonSafe<Record<string, unknown>>(raw);
+        if (!result.ok) return null;
+        return { ...item, data: result.data };
+      } catch {
+        return null;
+      }
+    })
+  );
+
+  // First pass: section blocks
+  for (const r of results) {
+    if (!r || !r.data || typeof r.data !== "object") continue;
+    if (r.kind === "section" && r.key) {
+      definitions[r.key] = r.data as PageBuilderDefinitionBlock;
+    }
+  }
+
+  // Second pass: nested defs and fragments
+  for (const r of results) {
+    if (!r || !r.data || typeof r.data !== "object") continue;
+    if (r.kind === "section" && r.key) {
+      const sectionData = r.data as Record<string, unknown> & {
+        definitions?: Record<string, unknown>;
+      };
+      const sectionDefs = sectionData.definitions;
+      if (sectionDefs != null && typeof sectionDefs === "object") {
+        for (const [k, v] of Object.entries(sectionDefs)) {
+          if (v != null && typeof v === "object" && !sectionSet.has(k)) {
+            definitions[k] = v as PageBuilderDefinitionBlock;
+          }
+        }
+      }
+    } else if (r.kind === "fragment") {
+      const data = r.data as Record<string, unknown>;
+      for (const [key, value] of Object.entries(data)) {
+        if (
+          value != null &&
+          typeof value === "object" &&
+          !Array.isArray(value) &&
+          "type" in value &&
+          !sectionSet.has(key)
+        ) {
+          definitions[key] = value as PageBuilderDefinitionBlock;
+        }
+      }
+    }
+  }
+
+  // Fallback: sync load any section still missing
+  for (const key of sectionOrder) {
+    if (!isSafePathSegment(key)) continue;
+    if (definitions[key] == null) {
+      const sectionPath = resolvePathUnder(PAGE_DATA_DIR, ...slugSegments, `${key}.json`);
+      if (!sectionPath || !fs.existsSync(sectionPath)) continue;
+      const raw = fs.readFileSync(sectionPath, "utf-8");
+      const result = parseJsonSafe<Record<string, unknown>>(raw);
+      if (result.ok) definitions[key] = result.data as PageBuilderDefinitionBlock;
+    }
+  }
+  return definitions;
 }

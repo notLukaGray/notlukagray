@@ -1,0 +1,51 @@
+{
+  "title": "Echo — Short Documentary",
+  "description": "A short documentary about presence, stillness, and the landscape of the inner Hardangervidda.",
+  "assetBaseUrl": "/work",
+  "sectionOrder": [
+    "lenero_section_0",
+    "lenero_section_a",
+    "lenero_section_b",
+    "lenero_section_c",
+    "lenero_section_d",
+    "lenero_section_e",
+    "lenero_section_f",
+    "lenero_section_g"
+  ],
+  "bgKey": "bg-video",
+  "scroll": {
+    "smooth": true,
+    "lockBody": true,
+    "overflowX": "hidden",
+    "overflowY": "auto"
+  },
+  "transitions": [
+    {
+      "type": "SCROLL",
+      "source": "trigger",
+      "id": "divider-visibility-fade",
+      "from": "bg-video",
+      "to": "bg-black"
+    }
+  ],
+  "definitions": {
+    "bg-video": {
+      "type": "backgroundVideo",
+      "video": "EL_LENERO_PREVIEW.webm",
+      "poster": "EL_LENERO_PREVIEW.webp",
+      "overlay": "#00000080"
+    },
+    "bg-black": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#060608"
+        },
+        {
+          "fill": "radial-gradient(ellipse 100% 60% at 50% 0%, #0d0d14 0%, transparent 70%)",
+          "blendMode": "screen"
+        }
+      ]
+    }
+  }
+}

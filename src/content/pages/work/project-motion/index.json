@@ -1,0 +1,37 @@
+{
+  "title": "Parallax — Title Sequence",
+  "slug": "project-motion",
+  "description": "Main title sequence for Parallax, a six-part science fiction series — motion design, typography, and 3D visual language for the opening two minutes.",
+  "ogImage": "https://media.notlukagray.com/website/work/project-motion/og.webp",
+  "assetBaseUrl": "/work",
+  "sectionOrder": ["motion_a", "motion_b", "motion_c", "motion_d", "motion_e"],
+  "bgKey": "bg-motion",
+  "definitions": {
+    "bg-motion": {
+      "type": "backgroundVideo",
+      "video": "work/project-motion/bg-loop.webm",
+      "poster": "work/project-motion/bg-loop-poster.webp"
+    },
+    "bg-motion-dark": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#050508"
+        },
+        {
+          "fill": "radial-gradient(ellipse 80% 60% at 30% 60%, #0d0a1f 0%, transparent 65%)",
+          "blendMode": "screen"
+        }
+      ]
+    }
+  },
+  "transitions": [
+    {
+      "type": "SCROLL",
+      "source": "trigger",
+      "id": "motion-bg-shift",
+      "from": "bg-motion",
+      "to": "bg-motion-dark"
+    }
+  ]
+}

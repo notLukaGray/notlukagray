@@ -1,0 +1,222 @@
+{
+  "slug": "work",
+  "title": "Work",
+  "description": "Work by Luka Gray",
+  "sectionOrder": ["hero"],
+  "bgKey": "bg",
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#080808"
+        }
+      ]
+    },
+    "hero": {
+      "type": "contentBlock",
+      "ariaLabel": "Work index",
+      "width": "100%",
+      "height": "hug",
+      "align": "center",
+      "fill": "transparent",
+      "paddingTop": "8rem",
+      "paddingBottom": "4rem",
+      "elementOrder": [
+        "heading",
+        "lenero",
+        "project-brand",
+        "project-campaign",
+        "project-cinematic",
+        "project-documentary",
+        "project-editorial",
+        "project-exhibition",
+        "project-immersive",
+        "project-motion",
+        "project-photography",
+        "project-process",
+        "project-product",
+        "project-systems"
+      ],
+      "definitions": {
+        "heading": {
+          "type": "elementHeading",
+          "level": 1,
+          "text": "Work",
+          "align": "center",
+          "width": "hug",
+          "marginBottom": "3rem"
+        },
+        "lenero": {
+          "type": "elementLink",
+          "href": "/work/lenero",
+          "label": "Echo — Short Documentary",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-brand": {
+          "type": "elementLink",
+          "href": "/work/project-brand",
+          "label": "NOMA — Brand Identity",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-campaign": {
+          "type": "elementLink",
+          "href": "/work/project-campaign",
+          "label": "Meridian — Your Future, Designed",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-cinematic": {
+          "type": "elementLink",
+          "href": "/work/project-cinematic",
+          "label": "Golden Hour — Short Film",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-documentary": {
+          "type": "elementLink",
+          "href": "/work/project-documentary",
+          "label": "Still Water — Documentary Film",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-editorial": {
+          "type": "elementLink",
+          "href": "/work/project-editorial",
+          "label": "Aperture Annual — Art Direction",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-exhibition": {
+          "type": "elementLink",
+          "href": "/work/project-exhibition",
+          "label": "Shifting Ground — Exhibition Design",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-immersive": {
+          "type": "elementLink",
+          "href": "/work/project-immersive",
+          "label": "Threshold — Immersive Installation",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-motion": {
+          "type": "elementLink",
+          "href": "/work/project-motion",
+          "label": "Parallax — Title Sequence",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-photography": {
+          "type": "elementLink",
+          "href": "/work/project-photography",
+          "label": "Last Light — Photography Series",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-process": {
+          "type": "elementLink",
+          "href": "/work/project-process",
+          "label": "Vessel — Product Design Process",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-product": {
+          "type": "elementLink",
+          "href": "/work/project-product",
+          "label": "Koto — Product Design",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "project-systems": {
+          "type": "elementLink",
+          "href": "/work/project-systems",
+          "label": "Atlas DS — Design System",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        }
+      }
+    }
+  }
+}

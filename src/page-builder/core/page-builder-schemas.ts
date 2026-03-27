@@ -38,6 +38,7 @@ import {
   backgroundTransitionEffectSchema,
   pageBuilderDefinitionBlockSchema,
   pageBuilderSchema,
+  pageScrollConfigSchema,
   resolvedPageSchema,
 } from "./page-builder-schemas/page-definition-and-resolution-schemas";
 import {
@@ -189,6 +190,7 @@ export type PageBuilderDefinitionBlock = z.infer<typeof pageBuilderDefinitionBlo
 export type PageBuilder = z.infer<typeof pageBuilderSchema>;
 export type ResolvedPage = z.infer<typeof resolvedPageSchema>;
 export type BackgroundTransitionEffect = z.infer<typeof backgroundTransitionEffectSchema>;
+export type PageScrollConfig = z.infer<typeof pageScrollConfigSchema>;
 
 export type BaseSectionProps = z.infer<typeof baseSectionPropsSchema>;
 

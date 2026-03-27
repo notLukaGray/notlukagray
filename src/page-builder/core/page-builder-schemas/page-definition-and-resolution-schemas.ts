@@ -108,6 +108,13 @@ export const backgroundTransitionEffectSchema = z.discriminatedUnion("type", [
   }),
 ]);
 
+export const pageScrollConfigSchema = z.object({
+  smooth: z.boolean().optional(),
+  lockBody: z.boolean().optional(),
+  overflowX: z.enum(["hidden", "auto", "visible"]).optional(),
+  overflowY: z.enum(["auto", "scroll", "hidden"]).optional(),
+});
+
 export const pageBuilderSchema = z
   .object({
     slug: z.string(),
@@ -126,6 +133,8 @@ export const pageBuilderSchema = z
     transitions: z
       .union([backgroundTransitionEffectSchema, z.array(backgroundTransitionEffectSchema)])
       .optional(),
+    disableOverlays: z.array(z.string()).optional(),
+    scroll: pageScrollConfigSchema.optional(),
   })
   .passthrough();
 
@@ -139,5 +148,6 @@ export const resolvedPageSchema = z
     sections: z.array(sectionBlockSchema).optional(),
     passwordProtected: z.boolean().optional(),
     assetBaseUrl: z.string().optional(),
+    scroll: pageScrollConfigSchema.optional(),
   })
   .passthrough();

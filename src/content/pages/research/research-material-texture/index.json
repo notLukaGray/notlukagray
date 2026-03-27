@@ -1,0 +1,19 @@
+{
+  "type": "page",
+  "id": "research-material-texture",
+  "title": "Material & Texture in Digital UI",
+  "description": "How depth cues, surface treatments, and skeumorphic reference shape trust, affordance, and pleasure in digital interfaces.",
+  "assetBaseUrl": "/research",
+  "backgrounds": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#0e0d0c"
+        }
+      ]
+    }
+  },
+  "activeBackground": "bg-main",
+  "sectionOrder": ["rmt_a", "rmt_b", "rmt_c", "rmt_d", "rmt_e"]
+}

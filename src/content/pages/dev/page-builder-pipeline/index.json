@@ -1,0 +1,27 @@
+{
+  "title": "The page builder pipeline: make it all data",
+  "slug": "page-builder-pipeline",
+  "description": "Why I built a page builder as a pipeline—Load, Expand, Resolve, Render—and how it stays simple, testable, and data-driven.",
+  "assetBaseUrl": "/research",
+  "sectionOrder": [
+    "pipeline_hero",
+    "pipeline_spacer",
+    "pipeline_section_a",
+    "pipeline_section_b",
+    "pipeline_section_c",
+    "pipeline_section_d",
+    "pipeline_section_e",
+    "pipeline_section_f"
+  ],
+  "bgKey": "bg",
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#000000"
+        }
+      ]
+    }
+  }
+}

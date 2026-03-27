@@ -5,7 +5,7 @@ import type {
   ResolvedPage,
 } from "@/page-builder/core/page-builder-schemas";
 import type { bgBlock, SectionBlock } from "@/page-builder/core/page-builder-schemas";
-import type { PageBuilder } from "@/page-builder/core/page-builder-schemas";
+import type { PageBuilder, PageScrollConfig } from "@/page-builder/core/page-builder-schemas";
 import { expandPageBuilder } from "@/page-builder/core/page-builder-expand";
 import {
   getAssetBaseUrl,
@@ -16,7 +16,10 @@ import {
   isPageBuilder,
   loadPageBuilder,
   loadPageBuilderAsync,
+  loadPageBuilderByPath,
+  loadPageBuilderByPathAsync,
 } from "@/page-builder/core/page-builder-load";
+import { resolvePagePath } from "@/page-builder/core/load/page-builder-discover-pages";
 import { loadModal } from "@/page-builder/core/modal-load";
 import type { ModalProps } from "./modal-types";
 import {
@@ -28,6 +31,7 @@ import { resolvePageBuilderBreakpoint } from "./page-builder-resolve-breakpoint-
 import { resolveEntranceMotionsIntoSections } from "./page-builder-resolve-entrance-motions";
 import type { BackgroundTransitionEffect } from "./page-builder-types";
 import type { TriggerAction } from "./page-builder-schemas";
+import { loadOverlaySections } from "./overlay/page-builder-overlay-loader";
 
 /** Minimal page shape sent to client; avoids serializing definitions, bg, sections. */
 export type PageBuilderPageClientPage = {
@@ -35,6 +39,7 @@ export type PageBuilderPageClientPage = {
   title: string;
   onPageProgress?: TriggerAction;
   transitions?: BackgroundTransitionEffect | BackgroundTransitionEffect[];
+  scroll?: PageScrollConfig;
 };
 
 function stripPageForClient(
@@ -49,6 +54,7 @@ function stripPageForClient(
     page.transitions = full.transitions as
       | BackgroundTransitionEffect
       | BackgroundTransitionEffect[];
+  if (full.scroll != null) page.scroll = full.scroll as PageScrollConfig;
   return page;
 }
 
@@ -64,6 +70,7 @@ export type PageBuilderPageProps = {
   resolvedSections: SectionBlock[];
   bgDefinitions: Record<string, bgBlock>;
   serverIsMobile?: boolean;
+  overlaySections?: SectionBlock[];
 };
 
 export type GetModalPropsOptions = {
@@ -72,12 +79,38 @@ export type GetModalPropsOptions = {
   isMobile?: boolean;
 };
 
+/**
+ * Validate and split a slug string into segments.
+ * Single-segment slugs (e.g. "project-brand") return ["project-brand"].
+ * Multi-segment slugs (e.g. "work/project-brand") are split on "/" and each
+ * segment is validated by isSafePathSegment.
+ * Returns null if any segment is invalid.
+ */
+function parseSlugSegments(slug: string): string[] | null {
+  if (typeof slug !== "string" || slug.length === 0) return null;
+  const segments = slug.split("/");
+  for (const seg of segments) {
+    if (!isSafePathSegment(seg)) return null;
+  }
+  return segments;
+}
+
 /** Request-scoped cache: dedupes load+expand when both generateMetadata and getPageBuilderPropsAsync run for the same slug. */
 function getPageUncached(
   slug: string
 ): (ResolvedPage & { definitions?: Record<string, PageBuilderDefinitionBlock> }) | null {
-  if (!isSafePathSegment(slug)) return null;
-  const page = loadPageBuilder(slug);
+  const segments = parseSlugSegments(slug);
+  if (!segments) return null;
+
+  let page: PageBuilder | null;
+  if (segments.length === 1) {
+    // Non-null: length === 1 guarantees index 0 exists.
+    page = loadPageBuilder(segments[0] as string);
+  } else {
+    const absolutePath = resolvePagePath(segments);
+    if (!absolutePath) return null;
+    page = loadPageBuilderByPath(absolutePath, segments);
+  }
   if (page == null || !isPageBuilder(page)) return null;
 
   const assetBase = getAssetBaseUrl(page as ResolvedPage);
@@ -99,8 +132,18 @@ export const getPage = cache(getPageUncached);
 async function getPageAsyncUncached(
   slug: string
 ): Promise<(ResolvedPage & { definitions?: Record<string, PageBuilderDefinitionBlock> }) | null> {
-  if (!isSafePathSegment(slug)) return null;
-  const page = await loadPageBuilderAsync(slug);
+  const segments = parseSlugSegments(slug);
+  if (!segments) return null;
+
+  let page: PageBuilder | null;
+  if (segments.length === 1) {
+    // Non-null: length === 1 guarantees index 0 exists.
+    page = await loadPageBuilderAsync(segments[0] as string);
+  } else {
+    const absolutePath = resolvePagePath(segments);
+    if (!absolutePath) return null;
+    page = await loadPageBuilderByPathAsync(absolutePath, segments);
+  }
   if (page == null || !isPageBuilder(page)) return null;
 
   const assetBase = getAssetBaseUrl(page as ResolvedPage);
@@ -179,12 +222,16 @@ export function getPageBuilderProps(
     resolvedSections = options.transformSections(resolvedSections);
   }
   const bgDefinitions = buildResolvedBgDefinitions(page.definitions, assetBase);
+  const overlaySections = loadOverlaySections(
+    (page as { disableOverlays?: string[] }).disableOverlays
+  );
 
   return {
     page: stripPageForClient(page),
     resolvedBg,
     resolvedSections,
     bgDefinitions,
+    ...(overlaySections.length > 0 && { overlaySections }),
   };
 }
 
@@ -248,12 +295,16 @@ export async function getPageBuilderPropsAsync(
   );
 
   const injectedSections = resolveEntranceMotionsIntoSections(injectedSectionsRaw);
+  const overlaySections = loadOverlaySections(
+    (page as { disableOverlays?: string[] }).disableOverlays
+  );
 
   return {
     page: stripPageForClient(page),
     resolvedBg: injectedBg,
     resolvedSections: injectedSections,
     bgDefinitions,
+    ...(overlaySections.length > 0 && { overlaySections }),
     ...(options?.isMobile !== undefined && { serverIsMobile: options.isMobile }),
   };
 }

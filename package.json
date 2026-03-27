@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run generate-json-schemas && next dev",
-    "build": "npm run generate-page-manifest && npm run generate-protected-slugs && next build",
-    "generate-page-manifest": "tsx scripts/generate-page-manifest.ts",
+    "build": "npm run generate-protected-slugs && next build",
     "generate-protected-slugs": "tsx scripts/generate-protected-slugs.ts",
     "start": "next start",
     "check": "npm run type-check && npm run lint && npm run format:check && npm run validate-pages",

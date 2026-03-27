@@ -4,8 +4,13 @@ import { z } from "zod";
 import { pageBuilderSchema } from "@/page-builder/core/page-builder-schemas";
 import {
   loadPageBuilder,
+  loadPageBuilderByPath,
   PAGE_DATA_DIR as CORE_PAGE_DATA_DIR,
 } from "@/page-builder/core/page-builder-load";
+import {
+  resolvePagePath,
+  discoverAllPages,
+} from "@/page-builder/core/load/page-builder-discover-pages";
 
 export interface ValidationResult {
   slug: string;
@@ -25,18 +30,7 @@ type FlattenedIssue = {
 const PAGE_DATA_DIR = CORE_PAGE_DATA_DIR ?? path.join(process.cwd(), "src/content/pages");
 
 function getAllPageSlugs(): string[] {
-  if (!fs.existsSync(PAGE_DATA_DIR)) return [];
-  return fs
-    .readdirSync(PAGE_DATA_DIR)
-    .filter((f) => {
-      if (!f.endsWith(".json")) return false;
-      if (f.endsWith("-sections.json")) return false;
-      if (f === "schema.example.json") return false;
-      if (f.includes(" copy")) return false;
-      const filePath = path.join(PAGE_DATA_DIR, f);
-      return fs.statSync(filePath).isFile();
-    })
-    .map((f) => f.replace(/\.json$/, ""));
+  return discoverAllPages().map(({ slugSegments }) => slugSegments.join("/"));
 }
 
 export interface RunValidationOptions {
@@ -50,7 +44,15 @@ export function runPageBuilderValidation(options: RunValidationOptions = {}): Va
 }
 
 function validatePage(slug: string): ValidationResult {
-  const page = loadPageBuilder(slug);
+  const segments = slug.split("/").filter(Boolean);
+  const page =
+    segments.length > 1
+      ? (() => {
+          const pagePath = resolvePagePath(segments);
+          if (!pagePath) return null;
+          return loadPageBuilderByPath(pagePath, segments);
+        })()
+      : loadPageBuilder(slug);
   if (!page) {
     return { slug, valid: false, errors: ["Page file not found or could not be loaded"] };
   }
@@ -178,9 +180,11 @@ function getSourceHint(slug: string, errorPath: string): string | null {
   const topDefinitionKey = parts[1];
   if (!topDefinitionKey) return null;
 
-  const pageDefinitionFile = path.join(PAGE_DATA_DIR, slug, `${topDefinitionKey}.json`);
+  const slugSegments = slug.split("/").filter(Boolean);
+  const pageDir = path.join(PAGE_DATA_DIR, ...slugSegments);
+  const pageDefinitionFile = path.join(pageDir, `${topDefinitionKey}.json`);
   const moduleFile = path.join(process.cwd(), "src/content/modules", `${topDefinitionKey}.json`);
-  const pageFile = path.join(PAGE_DATA_DIR, `${slug}.json`);
+  const pageFile = path.join(pageDir, "index.json");
 
   const nestedDefinitionsIndex = parts.findIndex(
     (part, index) => index >= 2 && part === "definitions"

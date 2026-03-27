@@ -1,0 +1,23 @@
+{
+  "type": "page",
+  "id": "research-environmental",
+  "title": "Environmental Design & Sustainability",
+  "description": "The material footprint of design practice — from screen energy to print waste — and what a more careful discipline might look like.",
+  "assetBaseUrl": "/research",
+  "backgrounds": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#080d08"
+        },
+        {
+          "fill": "radial-gradient(ellipse 60% 40% at 20% 80%, #0a1a0a 0%, transparent 60%)",
+          "blendMode": "screen"
+        }
+      ]
+    }
+  },
+  "activeBackground": "bg-main",
+  "sectionOrder": ["renv_a", "renv_b", "renv_c", "renv_d", "renv_e"]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "page",
+  "id": "research-type-legibility",
+  "title": "Type, Legibility & Reading Conditions",
+  "description": "An investigation into how typeface weight, size, line-height, and ambient light interact to shape reading speed and comprehension.",
+  "assetBaseUrl": "/research",
+  "backgrounds": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#f8f5f0"
+        }
+      ]
+    }
+  },
+  "activeBackground": "bg-main",
+  "sectionOrder": ["rtl_a", "rtl_b", "rtl_c", "rtl_d", "rtl_e"]
+}

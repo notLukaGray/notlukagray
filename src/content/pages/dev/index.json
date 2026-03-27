@@ -1,0 +1,110 @@
+{
+  "slug": "dev",
+  "title": "Dev",
+  "description": "Development pages for page-builder and integration testing",
+  "sectionOrder": ["hero"],
+  "bgKey": "bg",
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#080808"
+        }
+      ]
+    },
+    "hero": {
+      "type": "contentBlock",
+      "ariaLabel": "Dev index",
+      "width": "100%",
+      "height": "hug",
+      "align": "center",
+      "fill": "transparent",
+      "paddingTop": "8rem",
+      "paddingBottom": "4rem",
+      "elementOrder": [
+        "heading",
+        "card-test",
+        "fm-integration-test",
+        "fm-real-assets",
+        "form-demo",
+        "page-builder-pipeline"
+      ],
+      "definitions": {
+        "heading": {
+          "type": "elementHeading",
+          "level": 1,
+          "text": "Dev",
+          "align": "center",
+          "width": "hug",
+          "marginBottom": "3rem"
+        },
+        "card-test": {
+          "type": "elementLink",
+          "href": "/dev/card-test",
+          "label": "Card Test",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "fm-integration-test": {
+          "type": "elementLink",
+          "href": "/dev/fm-integration-test",
+          "label": "FM Integration Test",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "fm-real-assets": {
+          "type": "elementLink",
+          "href": "/dev/fm-real-assets",
+          "label": "FM Real Assets",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "form-demo": {
+          "type": "elementLink",
+          "href": "/dev/form-demo",
+          "label": "Form Demo",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "page-builder-pipeline": {
+          "type": "elementLink",
+          "href": "/dev/page-builder-pipeline",
+          "label": "Page Builder Pipeline",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        }
+      }
+    }
+  }
+}

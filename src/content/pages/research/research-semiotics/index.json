@@ -1,0 +1,19 @@
+{
+  "type": "page",
+  "id": "research-semiotics",
+  "title": "Semiotics in Visual Communication",
+  "description": "Sign, signifier, and signified — how meaning is constructed and misread in designed artifacts across cultures.",
+  "assetBaseUrl": "/research",
+  "backgrounds": {
+    "bg-main": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#0c0b10"
+        }
+      ]
+    }
+  },
+  "activeBackground": "bg-main",
+  "sectionOrder": ["rsem_a", "rsem_b", "rsem_c", "rsem_d", "rsem_e"]
+}

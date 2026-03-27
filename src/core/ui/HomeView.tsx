@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { ScrambledText } from "@/core/ui/scrambled-text";
 import { useProjectNavigation } from "@/core/hooks/use-project-navigation";
 import { useAfterLcp } from "@/core/hooks/use-after-lcp";
@@ -11,6 +12,7 @@ import {
   getHeroCarouselOpacity,
   getProjectUrl,
   getCarouselPlaceholderBg,
+  resolveHomeMediaUrl,
 } from "@/core/lib/home/home-utils";
 import type { HeroProject } from "@/core/lib/globals";
 
@@ -23,6 +25,8 @@ export function HomeView({ heroProjects }: HomeViewProps) {
   const [previousPositions, setPreviousPositions] = useState<Map<string, number>>(new Map());
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number } | null>(null);
   const [hoveredProjectId, setHoveredProjectId] = useState<string | null>(null);
+  const [videoFailedByProject, setVideoFailedByProject] = useState<Record<string, boolean>>({});
+  const [posterFailedByProject, setPosterFailedByProject] = useState<Record<string, boolean>>({});
   const activeProject = heroProjects[activeProjectIndex];
   const isAfterLcp = useAfterLcp();
 
@@ -37,29 +41,68 @@ export function HomeView({ heroProjects }: HomeViewProps) {
     },
   });
 
+  const videoUrl = useMemo(
+    () => resolveHomeMediaUrl(activeProject?.video?.url),
+    [activeProject?.video?.url]
+  );
+  const posterUrl = useMemo(
+    () => resolveHomeMediaUrl(activeProject?.video?.poster),
+    [activeProject?.video?.poster]
+  );
+  const activeVideoFailed = activeProject ? videoFailedByProject[activeProject.id] === true : false;
+  const activePosterFailed = activeProject
+    ? posterFailedByProject[activeProject.id] === true
+    : false;
+  const shouldAttemptVideo = isAfterLcp && Boolean(videoUrl) && !activeVideoFailed;
+  const shouldShowPoster = Boolean(posterUrl) && !activePosterFailed && !shouldAttemptVideo;
+  const placeholderBg = getCarouselPlaceholderBg(activeProjectIndex);
+
   if (!activeProject) {
     return null;
   }
-
-  const placeholderBg = getCarouselPlaceholderBg(activeProjectIndex);
 
   return (
     <div className="relative h-screen overflow-hidden">
       <div className="fixed inset-0 w-full h-full">
         <div className="fixed inset-0 w-full h-full bg-black">
-          {isAfterLcp && activeProject?.video?.url ? (
+          {shouldAttemptVideo ? (
             <video
-              key={activeProject.id}
+              key={`${activeProject.id}:${videoUrl}`}
+              src={videoUrl}
               autoPlay
               loop
               muted
               playsInline
               preload="metadata"
+              poster={posterUrl}
               className="w-full h-full object-cover transition-opacity duration-1000"
+              onError={() =>
+                setVideoFailedByProject((prev) => ({
+                  ...prev,
+                  [activeProject.id]: true,
+                }))
+              }
             >
-              <source src={activeProject.video.url} type="video/webm" />
               Your browser does not support the video tag.
             </video>
+          ) : shouldShowPoster ? (
+            <div className="relative w-full h-full">
+              <Image
+                src={posterUrl as string}
+                alt=""
+                fill
+                unoptimized
+                sizes="100vw"
+                className="object-cover transition-opacity duration-1000"
+                aria-hidden
+                onError={() =>
+                  setPosterFailedByProject((prev) => ({
+                    ...prev,
+                    [activeProject.id]: true,
+                  }))
+                }
+              />
+            </div>
           ) : (
             <div
               className="w-full h-full transition-colors duration-1000"
