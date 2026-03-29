@@ -7,6 +7,7 @@ import JSZip from "jszip";
 import type { ExportResult } from "./types/figma-plugin";
 import { splitPageForContentDir } from "./split-page-for-content-dir";
 import { generateExportNotes } from "./ui-export-notes";
+import { buildExportErrorsPayload } from "./ui-export-errors";
 import { SAFE_SEGMENT } from "./content-split-guards";
 
 function appendSplitPageToZip(zip: JSZip, slug: string, page: unknown): void {
@@ -66,6 +67,7 @@ export async function buildExportZip(
   }
 
   zip.file("export-notes.txt", generateExportNotes(result, errors, warningCount, infoCount));
+  zip.file("export-errors.json", buildExportErrorsPayload(result, errors, warningCount, infoCount));
   if (result.trace) {
     zip.file("export-trace.json", JSON.stringify(result.trace, null, 2));
   }

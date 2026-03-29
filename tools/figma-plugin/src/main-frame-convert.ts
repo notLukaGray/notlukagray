@@ -9,12 +9,7 @@ import { mergeResponsiveSections } from "./converters/responsive-merge";
 import { detectExportTarget, parseTargetOverride } from "./main-frame-detect";
 import { applyFrameToResult } from "./main-export-helpers";
 import { parseAnnotations, stripAnnotations } from "./converters/annotations-parse";
-import {
-  accumulateParityFromSectionTree,
-  EXPORT_DROP_REASON,
-  getOrCreateExportParity,
-  recordUpstreamDrop,
-} from "./export-parity";
+import { EXPORT_DROP_REASON, getOrCreateExportParity, recordUpstreamDrop } from "./export-parity";
 
 export async function convertNormalFrames(
   normalFrames: FrameNode[],
@@ -48,7 +43,6 @@ export async function convertNormalFrames(
       try {
         surfaceDescription(frame, ctx);
         const section = await convertFrameToSection(frame, ctx);
-        accumulateParityFromSectionTree(section, getOrCreateExportParity(ctx).output);
         (frame as unknown as { name: string }).name = originalName;
         applyFrameToResult(frame, target, section, result, ctx);
       } catch (err) {
@@ -61,7 +55,6 @@ export async function convertNormalFrames(
     surfaceDescription(frame, ctx);
     try {
       const section = await convertFrameToSection(frame, ctx);
-      accumulateParityFromSectionTree(section, getOrCreateExportParity(ctx).output);
       applyFrameToResult(frame, target, section, result, ctx);
     } catch (err) {
       ctx.warnings.push(`[error] "${frame.name}": Failed to convert — ${String(err)}`);
@@ -126,7 +119,6 @@ export async function convertResponsivePairs(
       label: desktopTarget.label,
     };
 
-    accumulateParityFromSectionTree(merged, getOrCreateExportParity(ctx).output);
     applyFrameToResult(desktopFrame, mergedTarget, merged, result, ctx);
   }
 }

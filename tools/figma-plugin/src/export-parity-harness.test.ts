@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  accumulateParityFromExportResult,
   accumulateParityFromSectionTree,
   buildParityTraceSnapshot,
   createExportParityState,
@@ -73,5 +74,59 @@ describe("export parity harness", () => {
     const snap = buildParityTraceSnapshot(parity);
     expect(snap.dropped).toBe(2);
     expect(snap.converted).toBe(0);
+  });
+
+  it("counts module/global buckets in final ExportResult parity walk", () => {
+    const parity = createExportParityState();
+    const result = {
+      pages: {},
+      presets: {},
+      modals: {},
+      modules: {
+        m1: {
+          type: "module",
+          slots: {
+            main: {
+              section: {
+                definitions: {
+                  a: { type: "elementText", id: "a" },
+                  b: {
+                    type: "elementGroup",
+                    id: "b",
+                    section: {
+                      definitions: {
+                        c: {
+                          type: "elementText",
+                          id: "c",
+                          meta: { figma: { fallbackReason: "module-fallback" } },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      globals: {
+        elements: {
+          g1: {
+            type: "elementImage",
+            id: "g1",
+            meta: { figma: { fallbackReason: "global-fallback" } },
+          },
+        },
+      },
+    };
+
+    accumulateParityFromExportResult(result, parity.output);
+    const snap = buildParityTraceSnapshot(parity);
+    expect(snap.converted).toBe(2);
+    expect(snap.fallback).toBe(2);
+    expect(snap.fallbackReasons).toMatchObject({
+      "module-fallback": 1,
+      "global-fallback": 1,
+    });
   });
 });

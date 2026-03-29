@@ -1,6 +1,7 @@
 import { cache } from "react";
 import { isSafePathSegment } from "@/page-builder/core/page-builder-paths";
 import type {
+  FigmaExportDiagnosticsPageField,
   PageBuilderDefinitionBlock,
   ResolvedPage,
 } from "@/page-builder/core/page-builder-schemas";
@@ -40,6 +41,7 @@ export type PageBuilderPageClientPage = {
   onPageProgress?: TriggerAction;
   transitions?: BackgroundTransitionEffect | BackgroundTransitionEffect[];
   scroll?: PageScrollConfig;
+  figmaExportDiagnostics?: FigmaExportDiagnosticsPageField;
 };
 
 function stripPageForClient(
@@ -55,6 +57,10 @@ function stripPageForClient(
       | BackgroundTransitionEffect
       | BackgroundTransitionEffect[];
   if (full.scroll != null) page.scroll = full.scroll as PageScrollConfig;
+  const figmaExportDiagnostics = (
+    full as unknown as { figmaExportDiagnostics?: FigmaExportDiagnosticsPageField }
+  ).figmaExportDiagnostics;
+  if (figmaExportDiagnostics != null) page.figmaExportDiagnostics = figmaExportDiagnostics;
   return page;
 }
 

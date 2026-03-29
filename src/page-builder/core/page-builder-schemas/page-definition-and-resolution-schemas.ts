@@ -125,6 +125,7 @@ export const figmaExportDiagnosticsPageFieldSchema = z.object({
   dropReasons: z.record(z.string(), z.number()).optional(),
   highRiskWarnings: z.array(z.object({ category: z.string(), count: z.number() })).optional(),
 });
+export type FigmaExportDiagnosticsPageField = z.infer<typeof figmaExportDiagnosticsPageFieldSchema>;
 
 export const pageBuilderSchema = z
   .object({

@@ -4,6 +4,7 @@
 
 import type { ExportResult, UIToMainMessage } from "./types/figma-plugin";
 import { buildFigmaExportDiagnostics } from "./export-parity";
+import { buildExportErrorsPayload } from "./ui-export-errors";
 import type { FramePreviewItem } from "./ui-state";
 import { collectOverrides } from "./ui-state";
 import { buildExportZip } from "./ui-zip";
@@ -19,6 +20,7 @@ export interface UIElements {
   actionRowEl: HTMLDivElement;
   copyJsonBtn: HTMLButtonElement;
   copyMergedPageBtn: HTMLButtonElement;
+  copyErrorsBtn: HTMLButtonElement;
   downloadBtn: HTMLButtonElement;
   statusEl: HTMLDivElement;
   summaryEl: HTMLDivElement;
@@ -33,12 +35,16 @@ export interface UIElements {
 
 export let pendingResult: ExportResult | null = null;
 export let pendingBlob: Blob | null = null;
+export let pendingErrorsPayload: string | null = null;
 
 export function setPendingResult(r: ExportResult | null): void {
   pendingResult = r;
 }
 export function setPendingBlob(b: Blob | null): void {
   pendingBlob = b;
+}
+export function setPendingErrorsPayload(payload: string | null): void {
+  pendingErrorsPayload = payload;
 }
 
 // ---------------------------------------------------------------------------
@@ -82,6 +88,9 @@ export function flashCopied(copyJsonBtn: HTMLButtonElement): void {
 
 export function flashMergedCopied(btn: HTMLButtonElement): void {
   flashButtonLabel(btn, "Copied!", "Copy page JSON");
+}
+export function flashErrorsCopied(btn: HTMLButtonElement): void {
+  flashButtonLabel(btn, "Copied!", "Copy errors");
 }
 
 function flashButtonLabel(btn: HTMLButtonElement, doneLabel: string, restoreLabel: string): void {
@@ -132,6 +141,7 @@ export async function handleResult(
   infoCount: number,
   mode: "copy" | "copy-merged" | "zip" = "zip"
 ): Promise<void> {
+  setPendingErrorsPayload(buildExportErrorsPayload(result, errors, warningCount, infoCount));
   setWarnings(els.warningsEl, result.warnings);
 
   if (errors.length > 0) {
@@ -171,6 +181,7 @@ export async function handleResult(
     }
     setSummary(els.summaryEl, result);
     els.actionRowEl.style.display = "flex";
+    els.copyErrorsBtn.disabled = false;
     return;
   }
 
@@ -192,6 +203,7 @@ export async function handleResult(
     }
     setSummary(els.summaryEl, result);
     els.actionRowEl.style.display = "flex";
+    els.copyErrorsBtn.disabled = false;
     return;
   }
 
@@ -209,6 +221,7 @@ export async function handleResult(
     setStatus(els.statusEl, statusMsg, errors.length > 0 ? "error" : "success");
     setSummary(els.summaryEl, result);
     els.actionRowEl.style.display = "flex";
+    els.copyErrorsBtn.disabled = false;
   } catch (err) {
     setStatus(els.statusEl, `ZIP packaging failed: ${String(err)}`, "error");
   }
@@ -226,8 +239,10 @@ export function wireExportButton(
     els.exportBtn.disabled = true;
     els.copyJsonBtn.disabled = true;
     els.copyMergedPageBtn.disabled = true;
+    els.copyErrorsBtn.disabled = true;
     setPendingResult(null);
     setPendingBlob(null);
+    setPendingErrorsPayload(null);
     els.actionRowEl.style.display = "none";
     els.summaryEl.style.display = "none";
     els.previewEl.style.display = "none";
@@ -265,6 +280,7 @@ export function wireCopyJsonButton(
     }
     els.copyJsonBtn.disabled = true;
     els.copyMergedPageBtn.disabled = true;
+    els.copyErrorsBtn.disabled = true;
     els.copyJsonBtn.textContent = "Exporting…";
     const { targetOverrides, annotationOverrides, cdnPrefixOverrides } =
       collectOverrides(getCurrentFrames());
@@ -292,6 +308,7 @@ export function wireCopyMergedPageButton(
     }
     els.copyJsonBtn.disabled = true;
     els.copyMergedPageBtn.disabled = true;
+    els.copyErrorsBtn.disabled = true;
     els.copyMergedPageBtn.textContent = "Exporting…";
     const { targetOverrides, annotationOverrides, cdnPrefixOverrides } =
       collectOverrides(getCurrentFrames());
@@ -315,6 +332,7 @@ export function wireDownloadButton(
       els.exportBtn.disabled = true;
       els.copyJsonBtn.disabled = true;
       els.copyMergedPageBtn.disabled = true;
+      els.copyErrorsBtn.disabled = true;
       els.actionRowEl.style.display = "none";
       els.summaryEl.style.display = "none";
       els.previewEl.style.display = "none";
@@ -338,5 +356,32 @@ export function wireDownloadButton(
     anchor.download = "page-builder-export.zip";
     anchor.click();
     URL.revokeObjectURL(url);
+  });
+}
+
+export function wireCopyErrorsButton(
+  els: UIElements,
+  getCurrentFrames: () => FramePreviewItem[]
+): void {
+  els.copyErrorsBtn.addEventListener("click", () => {
+    if (pendingErrorsPayload) {
+      void copyToClipboard(pendingErrorsPayload).then(() => flashErrorsCopied(els.copyErrorsBtn));
+      return;
+    }
+
+    els.copyJsonBtn.disabled = true;
+    els.copyMergedPageBtn.disabled = true;
+    els.copyErrorsBtn.disabled = true;
+    els.copyErrorsBtn.textContent = "Exporting…";
+    const { targetOverrides, annotationOverrides, cdnPrefixOverrides } =
+      collectOverrides(getCurrentFrames());
+    sendToMain({
+      type: "export",
+      mode: "zip",
+      targetOverrides,
+      annotationOverrides,
+      cdnPrefixOverrides,
+      autoPresets: els.autoPresetToggle.checked,
+    });
   });
 }

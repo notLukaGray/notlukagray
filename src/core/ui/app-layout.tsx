@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { usePageBuilderActionRunner } from "@/page-builder/hooks/use-page-builder-action-runner";
 import { clearVariables } from "@/page-builder/core/page-builder-variable-store";
 import { PageBuilderDevOverlay } from "@/page-builder/dev/PageBuilderDevOverlay";
+import { useFigmaExportDiagnosticsStore } from "@/page-builder/dev/figma-export-diagnostics-store";
 
 type AppLayoutProps = {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ export function AppLayout({ children }: AppLayoutProps) {
 
   useEffect(() => {
     clearVariables();
+    useFigmaExportDiagnosticsStore.getState().clear();
   }, [pathname]);
 
   return (

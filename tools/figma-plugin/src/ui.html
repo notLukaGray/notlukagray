@@ -102,6 +102,23 @@
     #copy-merged-page-btn.copied {
       background: #27ae60;
     }
+    #copy-errors-btn {
+      flex: 0 0 auto;
+      background: #6f5a1f;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    #copy-errors-btn:hover { background: #5e4c1a; }
+    #copy-errors-btn:disabled { background: #aaa; cursor: not-allowed; }
+    #copy-errors-btn.copied {
+      background: #27ae60;
+    }
     #download-btn {
       flex: 0 0 auto;
       background: transparent;
@@ -442,6 +459,7 @@
     <div id="action-row">
       <button id="copy-json-btn" type="button">Copy JSON</button>
       <button id="copy-merged-page-btn" type="button">Copy page JSON</button>
+      <button id="copy-errors-btn" type="button">Copy errors</button>
       <button id="download-btn" type="button">Export ZIP</button>
     </div>
     <div id="summary"></div>

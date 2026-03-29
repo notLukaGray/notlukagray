@@ -18,6 +18,7 @@ import {
   setStatus,
   wireExportButton,
   wireCopyJsonButton,
+  wireCopyErrorsButton,
   wireCopyMergedPageButton,
   wireDownloadButton,
   type UIElements,
@@ -31,6 +32,7 @@ const exportBtn = document.getElementById("export-btn") as HTMLButtonElement;
 const actionRowEl = document.getElementById("action-row") as HTMLDivElement;
 const copyJsonBtn = document.getElementById("copy-json-btn") as HTMLButtonElement;
 const copyMergedPageBtn = document.getElementById("copy-merged-page-btn") as HTMLButtonElement;
+const copyErrorsBtn = document.getElementById("copy-errors-btn") as HTMLButtonElement;
 const downloadBtn = document.getElementById("download-btn") as HTMLButtonElement;
 const statusEl = document.getElementById("status") as HTMLDivElement;
 const summaryEl = document.getElementById("summary") as HTMLDivElement;
@@ -43,6 +45,7 @@ const els: UIElements = {
   actionRowEl,
   copyJsonBtn,
   copyMergedPageBtn,
+  copyErrorsBtn,
   downloadBtn,
   statusEl,
   summaryEl,
@@ -79,6 +82,7 @@ autoPresetToggle.addEventListener("change", () => {
 wireExportButton(els, getCurrentFrames);
 wireCopyJsonButton(els, getCurrentFrames);
 wireCopyMergedPageButton(els, getCurrentFrames);
+wireCopyErrorsButton(els, getCurrentFrames);
 wireDownloadButton(els, getCurrentFrames);
 
 // Ensure the main plugin process is closed when the UI is dismissed.
@@ -125,6 +129,8 @@ window.onmessage = async (event: MessageEvent) => {
       copyJsonBtn.textContent = "Copy JSON";
       copyMergedPageBtn.disabled = false;
       copyMergedPageBtn.textContent = "Copy page JSON";
+      copyErrorsBtn.disabled = false;
+      copyErrorsBtn.textContent = "Copy errors";
       sendToMain({
         type: "refresh-preview",
         targetOverrides: collectOverrides(getCurrentFrames()).targetOverrides,

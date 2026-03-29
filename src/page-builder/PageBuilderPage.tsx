@@ -2,6 +2,7 @@ import type { TriggerAction, SectionBlock } from "@/page-builder/core/page-build
 import type { BackgroundTransitionEffect } from "@/page-builder/core/page-builder-types";
 import type { PageBuilderPageProps } from "@/page-builder/core/page-builder";
 import { PageBuilderRenderer } from "@/page-builder/hooks";
+import { FigmaExportDiagnosticsBridge } from "@/page-builder/dev/FigmaExportDiagnosticsBridge";
 import { PageScrollProvider } from "@/page-builder/section/position/page-scroll-provider";
 
 export type PageBuilderPageWrapperProps = PageBuilderPageProps & {
@@ -99,11 +100,17 @@ export function PageBuilderPage({
     );
 
   if (sortedOverlays.length === 0) {
-    return pageContent;
+    return (
+      <>
+        <FigmaExportDiagnosticsBridge diagnostics={page.figmaExportDiagnostics} />
+        {pageContent}
+      </>
+    );
   }
 
   return (
     <>
+      <FigmaExportDiagnosticsBridge diagnostics={page.figmaExportDiagnostics} />
       {sortedOverlays.map((section, i) => {
         const s = section as SectionBlock & {
           fixedPosition?: string;

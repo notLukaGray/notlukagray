@@ -25,6 +25,7 @@ import {
   buildParityTraceSnapshot,
   createExportParityState,
   EXPORT_DROP_REASON,
+  recomputeOutputParityFromExportResult,
   recordUpstreamDropOnParity,
 } from "./export-parity";
 
@@ -337,6 +338,7 @@ export async function runExport(
   );
 
   result.elementCount = countElementsInResult(result);
+  recomputeOutputParityFromExportResult(exportParity, result);
   ctx.warnings.push(...collectContentSplitWarnings(result));
 
   // One-time info note when any glass effect is present — glass renders differently

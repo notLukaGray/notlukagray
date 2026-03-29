@@ -102,6 +102,12 @@ export function recordUpstreamDropOnParity(
   bumpReason(parity.upstream.dropReasons, code, 1);
 }
 
+function resetOutputTally(tally: ExportParityTally): void {
+  tally.converted = 0;
+  tally.fallback = 0;
+  tally.fallbackReasons = {};
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
@@ -170,6 +176,84 @@ export function accumulateParityFromSectionTree(root: unknown, tally: ExportPari
       }
     }
   }
+}
+
+function accumulateParityFromPageLike(root: unknown, tally: ExportParityTally): void {
+  if (!isRecord(root)) return;
+
+  const sectionOrder = root["sectionOrder"];
+  const definitions = root["definitions"];
+  if (Array.isArray(sectionOrder) && isRecord(definitions)) {
+    for (const key of sectionOrder) {
+      if (typeof key !== "string" || key.length === 0) continue;
+      accumulateParityFromSectionTree(definitions[key], tally);
+    }
+    return;
+  }
+
+  const sections = root["sections"];
+  if (!Array.isArray(sections)) return;
+  for (const section of sections) {
+    accumulateParityFromSectionTree(section, tally);
+  }
+}
+
+/**
+ * Recomputes output parity from final export JSON buckets.
+ *
+ * Notes:
+ * - Includes pages, presets, modals, modules, and globals.
+ * - Intentionally does not traverse page.inline `preset` bags to avoid double counting
+ *   against top-level `presets`.
+ */
+export function accumulateParityFromExportResult(result: unknown, tally: ExportParityTally): void {
+  if (!isRecord(result)) return;
+
+  const pages = result["pages"];
+  if (isRecord(pages)) {
+    for (const page of Object.values(pages)) {
+      accumulateParityFromPageLike(page, tally);
+    }
+  }
+
+  const presets = result["presets"];
+  if (isRecord(presets)) {
+    for (const preset of Object.values(presets)) {
+      accumulateParityFromSectionTree(preset, tally);
+    }
+  }
+
+  const modals = result["modals"];
+  if (isRecord(modals)) {
+    for (const modal of Object.values(modals)) {
+      accumulateParityFromPageLike(modal, tally);
+    }
+  }
+
+  const modules = result["modules"];
+  if (isRecord(modules)) {
+    for (const moduleValue of Object.values(modules)) {
+      accumulateParityFromSectionTree(moduleValue, tally);
+    }
+  }
+
+  const globals = result["globals"];
+  if (!isRecord(globals)) return;
+  for (const bucketKey of ["buttons", "backgrounds", "elements"] as const) {
+    const bucket = globals[bucketKey];
+    if (!isRecord(bucket)) continue;
+    for (const value of Object.values(bucket)) {
+      accumulateParityFromSectionTree(value, tally);
+    }
+  }
+}
+
+export function recomputeOutputParityFromExportResult(
+  parity: ExportParityState,
+  result: unknown
+): void {
+  resetOutputTally(parity.output);
+  accumulateParityFromExportResult(result, parity.output);
 }
 
 export interface ParityTraceSnapshot {
