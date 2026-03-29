@@ -154,12 +154,25 @@ export function parseSectionTriggerProps(annotations: Record<string, string>): S
   // scrollOpacityRange
   const scrollOpacityRaw = annotations["scrollopacity"];
   if (scrollOpacityRaw !== undefined) {
-    const parts = scrollOpacityRaw.split(":");
-    if (parts.length === 4) {
-      const [is, ie, os, oe] = parts.map((p) => parseFloat(p.trim()));
-      if (![is, ie, os, oe].some(isNaN)) {
-        props.scrollOpacityRange = { input: [is, ie], output: [os, oe] };
-      }
+    const colon = scrollOpacityRaw.split(":");
+    const comma = scrollOpacityRaw.split(",").map((p) => p.trim());
+    let is: number | undefined;
+    let ie: number | undefined;
+    let os: number | undefined;
+    let oe: number | undefined;
+    if (colon.length === 4) {
+      [is, ie, os, oe] = colon.map((p) => parseFloat(p.trim())) as [number, number, number, number];
+    } else if (comma.length === 4) {
+      [is, ie, os, oe] = comma.map((p) => parseFloat(p)) as [number, number, number, number];
+    }
+    if (
+      is !== undefined &&
+      ie !== undefined &&
+      os !== undefined &&
+      oe !== undefined &&
+      ![is, ie, os, oe].some((n) => Number.isNaN(n))
+    ) {
+      props.scrollOpacityRange = { input: [is, ie], output: [os, oe] };
     }
   }
 

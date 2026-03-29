@@ -29,17 +29,11 @@ npm run fix
 
 ## Important scripts
 
-### `generate-page-manifest`
+### Page manifest (archived)
 
-File: `scripts/generate-page-manifest.ts`
+There is **no** `scripts/generate-page-manifest.ts` in this repo. Slugs are resolved by scanning `src/content/pages/` at runtime.
 
-Generates `src/content/page-manifest.json`.
-
-Purpose:
-
-- make slug and base-path lookup cheap
-- avoid scanning all page files in some runtime paths
-- support route generation and indexing
+An archived generator script and sample output live under `src/content/_dead/manifest/` and are not part of `npm run build`.
 
 ### `generate-protected-slugs`
 
@@ -206,13 +200,13 @@ Public assets are minimal compared to CDN-served media.
 
 ## Operational notes
 
-### Page manifest
+### Page discovery
 
-There is a filesystem fallback, but the manifest path exists to support scale and should not be removed without a clear replacement.
+The app discovers pages from the filesystem under `src/content/pages/`. A separate checked-in `page-manifest.json` is not used in the current pipeline (see `.gitignore` if a local file appears from older workflows).
 
 ### Generated files
 
-`page-manifest.json` and `protected-slugs.generated.ts` affect runtime behavior and should be treated as build inputs.
+`protected-slugs.generated.ts` affects runtime behavior (proxy) and should be treated as a build input. JSON schemas under `src/content/schemas/` are authoring contracts; regenerate them when schema code changes.
 
 ### Validation in workflows
 
@@ -237,5 +231,5 @@ Before merging anything meaningful:
 1. run `npm run check`
 2. run `npm run test`
 3. if content changed, run `npm run validate-pages`
-4. if page metadata or password flags changed, ensure manifest and protected slug generation still make sense
+4. if page metadata or password flags changed, ensure protected slug generation still matches expectations
 5. if schema contracts changed, regenerate JSON schemas

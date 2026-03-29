@@ -20,6 +20,14 @@ export function generateExportNotes(
   lines.push(`Modules exported: ${Object.keys(result.modules).length}`);
   lines.push(`Elements exported: ${result.elementCount}`);
   lines.push(`Assets exported: ${result.assets.length}`);
+  lines.push("");
+  lines.push("Each page is also under content/pages/{slug}/ as index.json + {sectionKey}.json");
+  lines.push(
+    "(mirrors src/content/pages split layout). See docs/12-page-builder-expand-parity.md."
+  );
+  lines.push(
+    "globals.json is NOT auto-loaded by the site — merge into modules/definitions (docs/14-globals-and-modules.md)."
+  );
   lines.push(`Errors: ${errors.length}`);
   lines.push(`Comments: ${warningCount + infoCount}`);
   lines.push(`Warnings: ${warningCount}`);
@@ -91,7 +99,9 @@ export function generateExportNotes(
   lines.push("  • Corner smoothing (squircle) — standard border-radius used");
   lines.push("  • LINEAR_BURN / LINEAR_DODGE blend modes — fell back to 'normal'");
   lines.push("  • Diamond / angular gradients — no CSS equivalent");
-  lines.push("  • Figma variables / bound values — raw value used if available");
+  lines.push(
+    "  • Figma variables / bound values — numeric layout bindings emit var(--token, fallback) where supported"
+  );
   lines.push("  • Component variants — skipped");
   lines.push("");
   lines.push("ANNOTATION SYSTEM");

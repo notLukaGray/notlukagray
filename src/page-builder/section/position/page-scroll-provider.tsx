@@ -10,9 +10,8 @@ import { ScrollContainerProvider, useScrollContainerRef } from "./use-scroll-con
  * Reuses an existing scroll container from context when present (route layout),
  * otherwise creates one and provides ScrollContainerProvider.
  *
- * Reuses existing hooks: useSmoothScroll (from core/hooks) and the scroll-lock
- * logic from use-scroll-lock.ts, both called unconditionally with an internal
- * enabled guard so the Rules of Hooks are satisfied.
+ * Reuses useSmoothScroll (from core/hooks). Scroll-lock runs in an effect below
+ * with an `lockBody` guard so hooks stay unconditional.
  */
 export function PageScrollProvider({
   scroll,
@@ -31,8 +30,7 @@ export function PageScrollProvider({
   const scrollRef = useRef<HTMLDivElement>(null);
   const activeScrollRef = inheritedScrollRef ?? scrollRef;
 
-  // Scroll-lock: inlined from use-scroll-lock.ts with an enabled guard so the
-  // hook is always called at the same depth regardless of the flag value.
+  // Scroll-lock: html/body overflow hidden when lockBody; restore on cleanup.
   useEffect(() => {
     if (!lockBody) return;
     const html = document.documentElement;

@@ -2,23 +2,16 @@
  * Export target detection from Figma frame names.
  * Uses the "Prefix/Name" naming convention to determine what kind of page-builder
  * artifact each frame maps to (page, preset, modal, module, global, etc.).
+ * Parsing is shared with `@notlukagray/figma-bridge` (widget + tests).
  */
 
 import type { ExportTarget, ExportTargetType } from "./types/figma-plugin";
+import {
+  getLayerPrefixDiagnostics,
+  parseExportTargetFromLayerName,
+} from "../../figma-bridge/src/export-target-parse";
 import { slugify } from "./utils/slugify";
 import { stripAnnotations } from "./converters/annotations-parse";
-
-const KNOWN_PREFIXES = new Set([
-  "page",
-  "section",
-  "section[desktop]",
-  "section[mobile]",
-  "modal",
-  "module",
-  "button",
-  "background",
-  "global",
-]);
 
 function splitPrefixName(name: string): { prefix: string; rest: string; hasSlash: boolean } {
   const slashIdx = name.indexOf("/");
@@ -33,6 +26,20 @@ function splitPrefixName(name: string): { prefix: string; rest: string; hasSlash
   };
 }
 
+function parsedToExportTarget(
+  parsed: ReturnType<typeof parseExportTargetFromLayerName>
+): ExportTarget {
+  const base: ExportTarget = {
+    type: parsed.kind,
+    key: parsed.key,
+    label: parsed.label,
+  };
+  if (parsed.responsiveRole) {
+    (base as ExportTarget).responsiveRole = parsed.responsiveRole;
+  }
+  return base;
+}
+
 /**
  * Determines the export target for a Figma node based on its name prefix.
  * Uses the "/" naming convention: "Section/Hero Dark" → preset with key "hero-dark".
@@ -41,36 +48,7 @@ function splitPrefixName(name: string): { prefix: string; rest: string; hasSlash
 export function detectExportTarget(
   node: FrameNode | ComponentNode | ComponentSetNode
 ): ExportTarget {
-  const name = stripAnnotations(node.name || "untitled");
-  const { prefix, rest } = splitPrefixName(name);
-
-  const key = slugify(rest || name);
-  const label = rest || name;
-
-  switch (prefix) {
-    case "page":
-      return { type: "page", key, label };
-    case "section":
-      return { type: "preset", key, label };
-    // Responsive artboard prefixes — treated as presets; the pairing logic in
-    // runExport will later merge desktop+mobile pairs before writing output.
-    case "section[desktop]":
-      return { type: "preset", key, label, responsiveRole: "desktop" } as ExportTarget;
-    case "section[mobile]":
-      return { type: "preset", key, label, responsiveRole: "mobile" } as ExportTarget;
-    case "modal":
-      return { type: "modal", key, label };
-    case "module":
-      return { type: "module", key, label };
-    case "button":
-      return { type: "global-button", key, label };
-    case "background":
-      return { type: "global-background", key, label };
-    case "global":
-      return { type: "global-element", key, label };
-    default:
-      return { type: "page", key: slugify(name), label: name };
-  }
+  return parsedToExportTarget(parseExportTargetFromLayerName(node.name || "untitled"));
 }
 
 /**
@@ -78,23 +56,7 @@ export function detectExportTarget(
  * These are warnings only; export target resolution still falls back to "page".
  */
 export function getPrefixDiagnostics(node: FrameNode | ComponentNode | ComponentSetNode): string[] {
-  const name = stripAnnotations(node.name || "untitled");
-  const { prefix, rest, hasSlash } = splitPrefixName(name);
-  const diagnostics: string[] = [];
-
-  if (!hasSlash) return diagnostics;
-
-  if (!rest) {
-    diagnostics.push(`[prefix] Frame "${name}" has no name after "/".`);
-  }
-
-  if (!KNOWN_PREFIXES.has(prefix)) {
-    diagnostics.push(
-      `[prefix] Frame "${name}" uses unknown prefix "${prefix || "(empty)"}" and will default to page.`
-    );
-  }
-
-  return diagnostics;
+  return getLayerPrefixDiagnostics(node.name || "").map((m) => `[prefix] ${m}`);
 }
 
 /**

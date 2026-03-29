@@ -5,7 +5,12 @@
 
 import type { ConversionContext, ExportResult } from "./types/figma-plugin";
 import { detectExportTarget, getPrefixDiagnostics, parseTargetOverride } from "./main-frame-detect";
-import { detectResponsivePairs, type PreviewItem } from "./main-responsive-pairs";
+import {
+  detectResponsivePairs,
+  explainResponsiveOverrideOrphans,
+  type PreviewItem,
+} from "./main-responsive-pairs";
+import { collectContentSplitWarnings } from "./content-split-guards";
 import { convertNormalFrames, convertResponsivePairs } from "./main-frame-convert";
 import { stripAnnotations } from "./converters/annotations-parse";
 import { topLevelFrames, isFrameNode } from "@figma-plugin/helpers";
@@ -16,6 +21,12 @@ import {
   getIssueSeverity,
   quickScanFrame,
 } from "./main-export-helpers";
+import {
+  buildParityTraceSnapshot,
+  createExportParityState,
+  EXPORT_DROP_REASON,
+  recordUpstreamDropOnParity,
+} from "./export-parity";
 
 interface SelectionState {
   frames: FrameNode[];
@@ -125,6 +136,14 @@ function buildSelectionState(
 
   const { normalFrames, desktopFramesByKey, mobileFramesByKey, pairedKeys, tempCtxWarnings } =
     detectResponsivePairs(frames, targetOverrides);
+  tempCtxWarnings.push(
+    ...explainResponsiveOverrideOrphans(
+      desktopFramesByKey,
+      mobileFramesByKey,
+      normalFrames,
+      targetOverrides
+    )
+  );
   if (selectionResult.source === "top-level-fallback") {
     tempCtxWarnings.push(
       `[info] [frame-selection] No explicit frame selection — exporting all visible top-level frames on the current page.`
@@ -229,7 +248,7 @@ export async function runExport(
   targetOverrides: Record<string, string>,
   annotationOverrides: Record<string, Record<string, string>>,
   cdnPrefixOverrides: Record<string, string>,
-  mode: "copy" | "zip" = "zip",
+  mode: "copy" | "copy-merged" | "zip" = "zip",
   autoPresets = false
 ): Promise<void> {
   const state = buildSelectionState(targetOverrides, { autoPresets });
@@ -248,11 +267,24 @@ export async function runExport(
     message: `Converting ${state.frames.length} frame(s)…`,
   });
 
+  const exportParity = createExportParityState();
+  for (const key of state.desktopFramesByKey.keys()) {
+    if (!state.pairedKeys.has(key)) {
+      recordUpstreamDropOnParity(exportParity, EXPORT_DROP_REASON.RESPONSIVE_ORPHAN_FRAME);
+    }
+  }
+  for (const key of state.mobileFramesByKey.keys()) {
+    if (!state.pairedKeys.has(key)) {
+      recordUpstreamDropOnParity(exportParity, EXPORT_DROP_REASON.RESPONSIVE_ORPHAN_FRAME);
+    }
+  }
+
   const ctx: ConversionContext & { errors: string[]; info: string[] } = {
     assets: [],
     warnings: [...state.tempCtxWarnings],
     errors: [],
     info: [],
+    exportParity,
     autoPresets,
     usedPresetKeys: new Set(
       state.previewItems
@@ -264,7 +296,7 @@ export async function runExport(
     usedIds: new Set(),
     usedAssetKeys: new Set(),
     cdnPrefix: "",
-    skipAssets: mode === "copy",
+    skipAssets: mode === "copy" || mode === "copy-merged",
   };
 
   for (const frame of state.frames) {
@@ -304,11 +336,8 @@ export async function runExport(
     result
   );
 
-  for (const w of ctx.warnings) {
-    const sev = getIssueSeverity(w);
-    if (sev === "error") ctx.errors.push(w);
-    else if (sev === "info") ctx.info.push(w);
-  }
+  result.elementCount = countElementsInResult(result);
+  ctx.warnings.push(...collectContentSplitWarnings(result));
 
   // One-time info note when any glass effect is present — glass renders differently
   // in Figma (shader-based) vs the web (SVG displacement filter). Push once per export.
@@ -319,10 +348,16 @@ export async function runExport(
     );
   }
 
-  result.elementCount = countElementsInResult(result);
+  for (const w of ctx.warnings) {
+    const sev = getIssueSeverity(w);
+    if (sev === "error") ctx.errors.push(w);
+    else if (sev === "info") ctx.info.push(w);
+  }
+
   result.trace = buildExportTrace(
     state.previewItems.map((item) => ({ id: item.id, name: item.name, issues: item.issues })),
-    ctx.warnings
+    ctx.warnings,
+    ctx.exportParity !== undefined ? buildParityTraceSnapshot(ctx.exportParity) : undefined
   );
 
   const warningCount = ctx.warnings.filter(

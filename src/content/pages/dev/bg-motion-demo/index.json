@@ -1,0 +1,188 @@
+{
+  "slug": "dev/bg-motion-demo",
+  "title": "BG Motion Demo",
+  "description": "Background motion demo — loop drives position, scroll drives hue via CSS custom properties",
+  "sectionOrder": ["scroll-stage"],
+  "bgKey": "bg",
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "#000000"
+        },
+
+        {
+          "fill": "radial-gradient(ellipse 160% 110% at 35% 55%, hsl(var(--h1, 268), 65%, 13%) 0%, transparent 72%)",
+          "backgroundSize": "320% 320%",
+          "motion": [
+            {
+              "type": "loop",
+              "animate": { "backgroundPosition": ["15% 25%", "85% 75%", "15% 25%"] },
+              "transition": { "duration": 20, "ease": "easeInOut", "repeatType": "mirror" }
+            },
+            {
+              "type": "scroll",
+              "properties": { "--h1": [268, 352] }
+            }
+          ]
+        },
+
+        {
+          "fill": "radial-gradient(ellipse 130% 90% at 65% 35%, hsl(var(--h2, 218), 85%, 28%) 0%, transparent 68%)",
+          "blendMode": "screen",
+          "backgroundSize": "360% 360%",
+          "motion": [
+            {
+              "type": "loop",
+              "animate": { "backgroundPosition": ["70% 15%", "15% 85%", "70% 15%"] },
+              "transition": { "duration": 28, "ease": "linear", "repeatType": "loop" }
+            },
+            {
+              "type": "scroll",
+              "properties": { "--h2": [218, 28] }
+            }
+          ]
+        },
+
+        {
+          "fill": "radial-gradient(ellipse 110% 80% at 50% 85%, hsl(var(--h3, 176), 72%, 22%) 0%, transparent 62%)",
+          "blendMode": "screen",
+          "opacity": 0.75,
+          "backgroundSize": "280% 280%",
+          "motion": [
+            {
+              "type": "loop",
+              "animate": { "backgroundPosition": ["50% 90%", "50% 10%", "50% 90%"] },
+              "transition": { "duration": 14, "ease": "easeInOut", "repeatType": "mirror" }
+            },
+            {
+              "type": "scroll",
+              "properties": { "--h3": [176, 328] }
+            },
+            {
+              "type": "parallax",
+              "speed": 0.22,
+              "axis": "y"
+            }
+          ]
+        },
+
+        {
+          "fill": "radial-gradient(circle at 55% 45%, hsl(var(--h4, 248), 90%, 32%) 0%, transparent 52%)",
+          "blendMode": "screen",
+          "opacity": 0.55,
+          "backgroundSize": "240% 240%",
+          "motion": [
+            {
+              "type": "loop",
+              "animate": { "backgroundPosition": ["0% 50%", "100% 50%", "0% 50%"] },
+              "transition": { "duration": 9, "ease": "linear", "repeatType": "loop" }
+            },
+            {
+              "type": "scroll",
+              "properties": { "--h4": [248, 12] }
+            }
+          ]
+        },
+
+        {
+          "fill": "radial-gradient(ellipse 90% 60% at 20% 70%, hsl(var(--h5, 290), 55%, 18%) 0%, transparent 58%)",
+          "blendMode": "screen",
+          "opacity": 0.45,
+          "backgroundSize": "300% 300%",
+          "motion": [
+            {
+              "type": "loop",
+              "animate": { "backgroundPosition": ["80% 60%", "20% 40%", "80% 60%"] },
+              "transition": { "duration": 17, "ease": "easeInOut", "repeatType": "mirror" }
+            },
+            {
+              "type": "scroll",
+              "properties": { "--h5": [290, 42] }
+            }
+          ]
+        }
+      ]
+    },
+
+    "scroll-stage": {
+      "type": "contentBlock",
+      "ariaLabel": "Background motion demo scroll stage",
+      "width": "100%",
+      "height": "500vh",
+      "align": "full",
+      "fill": "transparent",
+      "paddingTop": "5vh",
+      "paddingLeft": "3rem",
+      "elementOrder": [
+        "back-link",
+        "label-top",
+        "label-quarter",
+        "label-mid",
+        "label-three-quarter",
+        "label-bottom"
+      ],
+      "definitions": {
+        "back-link": {
+          "type": "elementLink",
+          "href": "/dev",
+          "label": "← dev",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "left",
+          "linkDefault": "rgba(255,255,255,0.3)",
+          "linkHover": "rgba(255,255,255,0.8)",
+          "linkActive": "#ffffff",
+          "linkTransition": ".2s",
+          "marginBottom": "1.5rem"
+        },
+        "label-top": {
+          "type": "elementBody",
+          "level": 2,
+          "text": "0%  —  deep violet / blue",
+          "align": "left",
+          "width": "hug",
+          "opacity": 0.35
+        },
+        "label-quarter": {
+          "type": "elementBody",
+          "level": 2,
+          "text": "25%  —  shifting to cyan / teal",
+          "align": "left",
+          "width": "hug",
+          "opacity": 0.35,
+          "marginTop": "118vh"
+        },
+        "label-mid": {
+          "type": "elementBody",
+          "level": 2,
+          "text": "50%  —  teal to warm amber",
+          "align": "left",
+          "width": "hug",
+          "opacity": 0.35,
+          "marginTop": "118vh"
+        },
+        "label-three-quarter": {
+          "type": "elementBody",
+          "level": 2,
+          "text": "75%  —  amber / orange",
+          "align": "left",
+          "width": "hug",
+          "opacity": 0.35,
+          "marginTop": "118vh"
+        },
+        "label-bottom": {
+          "type": "elementBody",
+          "level": 2,
+          "text": "100%  —  crimson / rose",
+          "align": "left",
+          "width": "hug",
+          "opacity": 0.35,
+          "marginTop": "108vh"
+        }
+      }
+    }
+  }
+}

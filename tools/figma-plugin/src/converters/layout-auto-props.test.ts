@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import { extractAbsolutePositionStyle, extractConstraintPosition } from "./layout-auto-props";
+import {
+  extractAbsolutePositionStyle,
+  extractAutoLayoutProps,
+  extractConstraintPosition,
+  extractSectionPlacementFromParent,
+} from "./layout-auto-props";
 import { getBoundingRect } from "@figma-plugin/helpers";
 
 vi.mock("@figma-plugin/helpers", () => ({
@@ -62,5 +67,108 @@ describe("layout-auto-props absolute positioning", () => {
       width: "140px",
       height: "70px",
     });
+  });
+});
+
+describe("extractAutoLayoutProps primary axis", () => {
+  it("maps SPACE_EVENLY / SPACE_AROUND at runtime to justify-content", () => {
+    const base = {
+      layoutMode: "HORIZONTAL" as const,
+      primaryAxisAlignItems: "SPACE_EVENLY" as const,
+      counterAxisAlignItems: "MIN" as const,
+      itemSpacing: 0,
+      paddingTop: 0,
+      paddingRight: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      children: [{}, {}],
+    };
+    const even = extractAutoLayoutProps(base as unknown as FrameNode);
+    expect(even.justifyContent).toBe("space-evenly");
+    const around = extractAutoLayoutProps({
+      ...base,
+      primaryAxisAlignItems: "SPACE_AROUND",
+    } as unknown as FrameNode);
+    expect(around.justifyContent).toBe("space-around");
+  });
+
+  it("preserves negative packed spacing as gap", () => {
+    const props = extractAutoLayoutProps({
+      layoutMode: "HORIZONTAL",
+      primaryAxisAlignItems: "MIN",
+      counterAxisAlignItems: "MIN",
+      itemSpacing: -24,
+      paddingTop: 0,
+      paddingRight: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      children: [{}, {}],
+    } as unknown as FrameNode);
+    expect(props.gap).toBe("-24px");
+  });
+
+  it("emits var-bound zero padding side instead of dropping it", () => {
+    (
+      globalThis as unknown as {
+        figma: {
+          variables: { getVariableById: (id: string) => { name: string; resolvedType: string } };
+        };
+      }
+    ).figma = {
+      variables: {
+        getVariableById: () => ({ name: "spacing/zero-top", resolvedType: "FLOAT" }),
+      },
+    };
+    const props = extractAutoLayoutProps({
+      layoutMode: "VERTICAL",
+      primaryAxisAlignItems: "MIN",
+      counterAxisAlignItems: "MIN",
+      itemSpacing: 0,
+      paddingTop: 0,
+      paddingRight: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      boundVariables: {
+        paddingTop: { type: "VARIABLE_ALIAS", id: "v-pad-top" },
+      },
+      children: [{}, {}],
+    } as unknown as FrameNode);
+    expect(props.paddingTop).toBe("var(--spacing-zero-top, 0px)");
+  });
+});
+
+describe("extractSectionPlacementFromParent baseline", () => {
+  it("does not force section align=left when parent counter-axis is BASELINE", () => {
+    const child = {
+      parent: {
+        type: "FRAME",
+        layoutMode: "HORIZONTAL",
+        counterAxisAlignItems: "BASELINE",
+        paddingTop: 0,
+        paddingBottom: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+      },
+      layoutAlign: "INHERIT",
+    };
+    const p = extractSectionPlacementFromParent(child as unknown as FrameNode);
+    expect(p.align).toBeUndefined();
+  });
+
+  it("does not map horizontal-parent cross-axis MAX to section align", () => {
+    const child = {
+      parent: {
+        type: "FRAME",
+        layoutMode: "HORIZONTAL",
+        counterAxisAlignItems: "MAX",
+        paddingTop: 0,
+        paddingBottom: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+      },
+      layoutAlign: "INHERIT",
+    };
+    const p = extractSectionPlacementFromParent(child as unknown as FrameNode);
+    expect(p.align).toBeUndefined();
   });
 });

@@ -13,11 +13,13 @@ import {
   type UIEvent,
 } from "react";
 import type { ElementBlock, SectionBlock, bgBlock } from "@/page-builder/core/page-builder-schemas";
-import { sectionBlockSchema } from "@/page-builder/core/page-builder-schemas";
+import { sectionBlockSchema, type PageBuilder } from "@/page-builder/core/page-builder-schemas";
+import { expandPageBuilder } from "@/page-builder/core/page-builder-expand";
 import { PageBuilderRenderer } from "@/page-builder/PageBuilderRenderer";
 import { ServerBreakpointProvider } from "@/core/providers/device-type-provider";
 import { ScrollContainerProvider } from "@/page-builder/section/position/use-scroll-container";
 import { z } from "zod";
+import { useFigmaExportDiagnosticsStore } from "@/page-builder/dev/figma-export-diagnostics-store";
 
 // ---------------------------------------------------------------------------
 // Client-side breakpoint resolver
@@ -654,6 +656,14 @@ function validateSections(sections: SectionBlock[]): ValidationResult {
   };
 }
 
+function isPageBuilderDocument(raw: unknown): raw is PageBuilder {
+  if (raw == null || typeof raw !== "object" || Array.isArray(raw)) return false;
+  const o = raw as Record<string, unknown>;
+  return (
+    Array.isArray(o.sectionOrder) && o.definitions != null && typeof o.definitions === "object"
+  );
+}
+
 // ---------------------------------------------------------------------------
 // ErrorBoundary for the preview panel
 // ---------------------------------------------------------------------------
@@ -755,6 +765,25 @@ export default function PlaygroundPage() {
     [lineCount]
   );
 
+  useEffect(() => {
+    if (debouncedText.trim() === "") {
+      useFigmaExportDiagnosticsStore.getState().ingestPlaygroundPageRoot(null);
+      return;
+    }
+    let raw: unknown;
+    try {
+      raw = JSON.parse(debouncedText.trim());
+    } catch {
+      useFigmaExportDiagnosticsStore.getState().ingestPlaygroundPageRoot(null);
+      return;
+    }
+    if (isPageBuilderDocument(raw)) {
+      useFigmaExportDiagnosticsStore.getState().ingestPlaygroundPageRoot(raw);
+    } else {
+      useFigmaExportDiagnosticsStore.getState().ingestPlaygroundPageRoot(null);
+    }
+  }, [debouncedText]);
+
   const parsed = useMemo((): ParsedState => {
     const trimmed = debouncedText.trim();
     if (!trimmed) return { status: "empty" };
@@ -767,6 +796,23 @@ export default function PlaygroundPage() {
         status: "json-error",
         message: e instanceof Error ? e.message : String(e),
       };
+    }
+
+    if (isPageBuilderDocument(raw)) {
+      try {
+        const { sections: expanded } = expandPageBuilder(raw);
+        const validation = validateSections(expanded);
+        return {
+          status: "ok",
+          sections: expanded,
+          validationIssues: validation.valid ? [] : validation.issues,
+        };
+      } catch (e) {
+        return {
+          status: "normalise-error",
+          message: e instanceof Error ? e.message : String(e),
+        };
+      }
     }
 
     const normalised = normaliseInput(raw);
@@ -877,6 +923,13 @@ export default function PlaygroundPage() {
                 </button>
               )}
             </div>
+            <p className="mt-1 text-[10px] leading-snug text-neutral-600">
+              Documents with <code className="text-neutral-500">sectionOrder</code> +{" "}
+              <code className="text-neutral-500">definitions</code> run through{" "}
+              <code className="text-neutral-500">expandPageBuilder</code> (namespaced ids). No{" "}
+              <code className="text-neutral-500">globals.json</code> merge or split section
+              files—paste merged JSON or validate on-disk pages separately.
+            </p>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <div className="flex items-center rounded border border-neutral-700 text-xs">
                 <button

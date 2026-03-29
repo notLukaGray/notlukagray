@@ -10,6 +10,7 @@ import {
   triggerActionSchema,
 } from "./schema-primitives";
 import { sectionEffectSchema } from "./section-effect-schemas";
+import { pageBuilderMetaSchema } from "./figma-exporter-meta-schema";
 
 export const borderGradientSchema = z.object({
   stroke: z.string().min(1),
@@ -82,6 +83,8 @@ export const elementInteractionsSchema = z
 export const elementLayoutSchema = z
   .object({
     id: z.string().optional(),
+    /** Namespaced metadata (`meta.figma`, etc.); passthrough preserves extension keys. */
+    meta: pageBuilderMetaSchema.optional(),
     width: responsiveStringSchema.optional(),
     height: responsiveStringSchema.optional(),
     borderRadius: responsiveStringSchema.optional(),

@@ -87,6 +87,7 @@ describe("export helper diagnostics", () => {
     );
 
     expect(trace.counts.severity).toEqual({ error: 1, warn: 2, info: 1 });
+    expect(trace.counts.parity).toBeUndefined();
     expect(trace.counts.category).toMatchObject({
       "preflight:annotations": 1,
       "preflight:slots": 1,

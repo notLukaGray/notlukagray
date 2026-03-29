@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useVariableStore } from "@/page-builder/core/page-builder-variable-store";
 import { useActionLogStore } from "@/page-builder/core/page-builder-variable-store";
+import { useFigmaExportDiagnosticsStore } from "@/page-builder/dev/figma-export-diagnostics-store";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -57,6 +58,86 @@ function VariablesTab() {
   );
 }
 
+function FigmaTab() {
+  const embedded = useFigmaExportDiagnosticsStore((s) => s.embedded);
+  const scanned = useFigmaExportDiagnosticsStore((s) => s.scannedFallback);
+
+  if (!embedded && (!scanned || scanned.fallbackElements === 0)) {
+    return (
+      <p className="text-gray-500 text-xs px-3 py-4 font-mono leading-relaxed">
+        No Figma export diagnostics yet. Use the Figma plugin &quot;Copy page JSON&quot; (includes{" "}
+        <span className="text-gray-400">figmaExportDiagnostics</span>) and paste into pb-dev
+        playground — or open a page JSON that already embeds the field.
+      </p>
+    );
+  }
+
+  return (
+    <div className="overflow-y-auto max-h-72 px-3 py-2 text-xs font-mono space-y-3">
+      {embedded ? (
+        <div className="space-y-1 border-b border-gray-800 pb-2">
+          <div className="text-gray-500 uppercase tracking-wide text-[10px]">
+            Exporter trace (embedded)
+          </div>
+          <div className="text-gray-200">
+            <span className="text-green-400">{embedded.converted}</span> converted ·{" "}
+            <span className="text-amber-400">{embedded.fallback}</span> fallback ·{" "}
+            <span className="text-red-400">{embedded.dropped}</span> dropped
+          </div>
+          {embedded.topFallbackReasons.length > 0 && (
+            <div>
+              <div className="text-gray-500 mt-1">Top fallback reasons</div>
+              <ul className="text-gray-400 mt-0.5 space-y-0.5">
+                {embedded.topFallbackReasons.map((r) => (
+                  <li key={r.code}>
+                    <span className="text-amber-300/90">{r.code}</span> × {r.count}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {embedded.highRiskWarnings && embedded.highRiskWarnings.length > 0 && (
+            <div>
+              <div className="text-gray-500 mt-1">High-risk warnings (category)</div>
+              <ul className="text-gray-400 mt-0.5 space-y-0.5">
+                {embedded.highRiskWarnings.map((w) => (
+                  <li key={w.category}>
+                    <span className="text-orange-300/90">{w.category}</span> × {w.count}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      ) : null}
+      {scanned && scanned.fallbackElements > 0 ? (
+        <div className="space-y-1">
+          <div className="text-gray-500 uppercase tracking-wide text-[10px]">
+            Scanned from JSON (fallback only)
+          </div>
+          <div className="text-gray-300">
+            <span className="text-amber-400">{scanned.fallbackElements}</span> elements with{" "}
+            <span className="text-gray-500">meta.figma.fallbackReason</span>
+          </div>
+          <ul className="text-gray-400 space-y-0.5">
+            {scanned.topFallbackReasons.map((r) => (
+              <li key={r.code}>
+                <span className="text-amber-300/90">{r.code}</span> × {r.count}
+              </li>
+            ))}
+          </ul>
+          {!embedded ? (
+            <p className="text-gray-600 text-[10px] mt-1 leading-snug">
+              Dropped / converted counts need embedded{" "}
+              <span className="text-gray-500">figmaExportDiagnostics</span> from the plugin.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function ActionsTab() {
   const entries = useActionLogStore((s) => s.entries);
   const clear = useActionLogStore((s) => s.clear);
@@ -107,7 +188,7 @@ function ActionsTab() {
 // Main overlay
 // ---------------------------------------------------------------------------
 
-type Tab = "variables" | "actions";
+type Tab = "variables" | "actions" | "figma";
 
 export function PageBuilderDevOverlay() {
   const isDev = process.env.NODE_ENV === "development";
@@ -138,7 +219,7 @@ export function PageBuilderDevOverlay() {
       <div className="flex items-center justify-between px-3 py-2 bg-gray-800 border-b border-gray-700">
         <span className="text-xs font-semibold text-gray-300 tracking-wide uppercase">PB Dev</span>
         <div className="flex items-center gap-1">
-          {(["variables", "actions"] as Tab[]).map((t) => (
+          {(["variables", "actions", "figma"] as Tab[]).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -146,7 +227,7 @@ export function PageBuilderDevOverlay() {
                 tab === t ? "bg-gray-600 text-gray-100" : "text-gray-400 hover:text-gray-200"
               }`}
             >
-              {t.charAt(0).toUpperCase() + t.slice(1)}
+              {t === "figma" ? "Figma" : t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
           ))}
           <button
@@ -160,7 +241,7 @@ export function PageBuilderDevOverlay() {
       </div>
 
       {/* Tab content */}
-      {tab === "variables" ? <VariablesTab /> : <ActionsTab />}
+      {tab === "variables" ? <VariablesTab /> : tab === "actions" ? <ActionsTab /> : <FigmaTab />}
 
       {/* Footer hint */}
       <div className="px-3 py-1 bg-gray-800 border-t border-gray-700">

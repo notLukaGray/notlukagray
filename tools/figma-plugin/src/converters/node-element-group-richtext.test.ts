@@ -33,6 +33,7 @@ describe("convertRichTextNode", () => {
         type: "TEXT",
         name: "Mixed Label",
         characters: "Hello World",
+        textAlignHorizontal: "RIGHT",
         width: 200,
         height: 32,
         x: 0,
@@ -47,6 +48,7 @@ describe("convertRichTextNode", () => {
     const rich = result as Record<string, unknown>;
     expect(String(rich.content)).toContain("~~***World***~~");
     expect(String(rich.markup)).toContain("font-style:italic");
+    expect(rich.textAlign).toBe("right");
     expect(ctx.warnings.some((w) => w.includes("run-level formatting approximations"))).toBe(true);
   });
 });

@@ -64,6 +64,14 @@ function paintToCssFill(
   return undefined;
 }
 
+function readPaintOpacity(paint: Paint): number | undefined {
+  const opaque = paint as Paint & { opacity?: number };
+  if (typeof opaque.opacity !== "number" || !Number.isFinite(opaque.opacity)) return undefined;
+  const o = Math.min(1, Math.max(0, opaque.opacity));
+  if (Math.abs(o - 1) < 1e-6) return undefined;
+  return o;
+}
+
 function figmaBlendModeToCss(mode?: BlendMode): string | undefined {
   if (!mode || mode === "NORMAL" || mode === "PASS_THROUGH") return undefined;
   const map: Partial<Record<BlendMode, string>> = {
@@ -106,14 +114,19 @@ export function extractSectionFillPayload(
     const cssFill = paintToCssFill(paint, size);
     if (!cssFill) continue;
     const blendMode = figmaBlendModeToCss((paint as Paint & { blendMode?: BlendMode }).blendMode);
+    const opacity = readPaintOpacity(paint);
     layers.push({
       fill: cssFill,
       ...(blendMode ? { blendMode } : {}),
+      ...(opacity !== undefined ? { opacity } : {}),
     });
   }
 
   if (layers.length === 0) return undefined;
-  const hasLayerFeatures = layers.length > 1 || layers.some((layer) => !!layer.blendMode);
+  const hasLayerFeatures =
+    layers.length > 1 ||
+    layers.some((layer) => !!layer.blendMode) ||
+    layers.some((layer) => layer.opacity !== undefined);
   if (!hasLayerFeatures) {
     return { fill: layers[0].fill };
   }

@@ -11,6 +11,7 @@ import { extractBoxShadow, extractFilter, extractBackdropFilter } from "./effect
 import { toPx } from "../utils/css";
 import { annotationNumber } from "./annotations-parse";
 import { warnRepeatedStructuralSignatures } from "./structure-hints";
+import { ensureElementId } from "./node-element-helpers";
 
 function extractGradientStroke(
   node: ComponentNode | InstanceNode
@@ -69,9 +70,10 @@ export async function convertVariantChildren(
   for (const child of children) {
     try {
       const converted = await convertNodeFn(child, ctx);
-      if (converted && converted.id) {
-        definitions[converted.id as string] = converted;
-        elementOrder.push(converted.id as string);
+      if (converted) {
+        const childId = ensureElementId(converted, child.name || child.type, ctx, ctx.warnings);
+        definitions[childId] = converted;
+        elementOrder.push(childId);
         convertedChildren.push(converted);
       }
     } catch (err) {

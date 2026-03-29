@@ -1,4 +1,6 @@
 import type { PageBuilderPage } from "./page-builder";
+import type { ParsedExportTargetKind } from "../../../figma-bridge/src/export-target-parse";
+import type { ExportParityState, ParityTraceSnapshot } from "../export-parity-types";
 
 export interface AssetEntry {
   /** Relative path inside the ZIP, e.g. "assets/image-hero.png" */
@@ -33,15 +35,7 @@ export interface ExportResult {
   elementCount: number;
 }
 
-export type ExportTargetType =
-  | "page"
-  | "preset"
-  | "modal"
-  | "module"
-  | "global-button"
-  | "global-background"
-  | "global-element"
-  | "skip";
+export type ExportTargetType = ParsedExportTargetKind | "skip";
 
 export interface ExportTarget {
   type: ExportTargetType;
@@ -59,6 +53,11 @@ export interface ExportTarget {
 export interface ConversionContext {
   assets: AssetEntry[];
   warnings: string[];
+  /**
+   * Cumulative parity metrics for this export session (optional until first use).
+   * Populated by converters and merged into `ExportResult.trace.counts.parity`.
+   */
+  exportParity?: ExportParityState;
   /** When true, auto-promote repeated sibling structures into presets. */
   autoPresets?: boolean;
   /** Tracks generated preset keys to avoid collisions. */
@@ -98,6 +97,11 @@ export interface ExportTrace {
   counts: {
     severity: Record<FrameIssue["severity"], number>;
     category: Record<string, number>;
+    /**
+     * Element parity: `converted`/`fallback` from recursive output scan; `dropped` =
+     * converter losses + upstream routing (skip/orphan frames). Reason maps use stable codes.
+     */
+    parity?: ParityTraceSnapshot;
   };
   frames: Array<{
     id: string;
@@ -115,7 +119,7 @@ export type MainToUIMessage =
       warningCount: number;
       infoCount: number;
       errors: string[];
-      mode: "copy" | "zip";
+      mode: "copy" | "copy-merged" | "zip";
     }
   | { type: "error"; message: string }
   | { type: "progress"; message: string }
@@ -135,8 +139,8 @@ export type MainToUIMessage =
 export type UIToMainMessage =
   | {
       type: "export";
-      /** "copy" — JSON only, skip ZIP asset bundling. "zip" — full export with assets (default). */
-      mode?: "copy" | "zip";
+      /** "copy" — full ExportResult JSON. "copy-merged" — one page doc (or `pages` wrapper) for pb-dev. "zip" — assets (default). */
+      mode?: "copy" | "copy-merged" | "zip";
       targetOverrides?: Record<string, string>;
       annotationOverrides?: Record<string, Record<string, string>>;
       cdnPrefixOverrides?: Record<string, string>;

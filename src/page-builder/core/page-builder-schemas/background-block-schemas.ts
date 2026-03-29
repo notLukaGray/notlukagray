@@ -1,10 +1,30 @@
 import { z } from "zod";
 import { triggerActionSchema } from "./schema-primitives";
+import { bgLayerMotionSchema } from "@/page-builder/background/motion/bg-layer-motion-schema";
+
+export { bgLayerMotionSchema };
+export type { BgLayerMotion } from "@/page-builder/background/motion/bg-layer-motion-types";
 
 export const bgVarLayerSchema = z.object({
   fill: z.string(),
   blendMode: z.string().optional(),
   opacity: z.number().optional(),
+  /**
+   * Passed directly as the CSS `background-size` property.
+   * Required for moving gradient effects — e.g. "400% 400%" gives the gradient
+   * room to pan without repeating.
+   */
+  backgroundSize: z.string().optional(),
+  /**
+   * Initial `background-position` value. Overridden at runtime by `parallax` motion.
+   */
+  backgroundPosition: z.string().optional(),
+  /**
+   * Ordered array of motion configs that animate this layer.
+   * Multiple types compose additively — e.g. loop + scroll + trigger can all
+   * run simultaneously on the same layer. See bgLayerMotionSchema for full docs.
+   */
+  motion: z.array(bgLayerMotionSchema).optional(),
 });
 
 export const bgPatternRepeatSchema = z.enum(["repeat", "repeat-x", "repeat-y", "no-repeat"]);

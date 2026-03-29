@@ -1,24 +1,9 @@
 /**
  * Converts Figma layer names to valid page-builder element IDs.
+ * `slugify` is canonical in figma-bridge — re-exported here to avoid duplication.
  */
 
-/**
- * Converts a Figma layer name to a valid element ID string.
- * Result is lowercase, hyphen-separated, no spaces or special chars,
- * truncated to 64 characters.
- */
-export function slugify(name: string): string {
-  return (
-    name
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, "") // strip special chars except hyphens and spaces
-      .replace(/[\s]+/g, "-") // spaces → hyphens
-      .replace(/-{2,}/g, "-") // collapse multiple hyphens
-      .replace(/^-+|-+$/g, "") // strip leading/trailing hyphens
-      .slice(0, 64) || "element"
-  ); // fallback if name reduces to empty
-}
+export { slugify } from "../../../figma-bridge/src/slugify";
 
 /**
  * Returns `id` if not in `usedIds`, otherwise appends `-2`, `-3`, etc.

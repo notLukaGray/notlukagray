@@ -3,7 +3,6 @@
  */
 
 import { extractColumnGrid } from "./layout-grid";
-import { parseAnnotations } from "./annotations-parse";
 import { getVisibleChildren, isContainerNode } from "./structure-hints";
 
 /**
@@ -49,5 +48,3 @@ export function isColumnLayout(frame: FrameNode, annotations: Record<string, str
   if (frame.width > 0 && totalVisibleWidth / frame.width > 0.6) return true;
   return structuralChildren.length >= 2 && totalStructuralWidth > 0;
 }
-
-export { parseAnnotations };

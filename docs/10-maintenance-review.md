@@ -134,9 +134,10 @@ If the long-term goal is a more universally data-authored system, the current sp
 
 These files matter:
 
-- `src/content/page-manifest.json`
 - `src/core/lib/protected-slugs.generated.ts`
 - `src/content/schemas/*.json`
+
+(Page discovery scans `src/content/pages/`; a legacy `page-manifest.json` path is not part of the current build.)
 
 If contributors stop thinking about them, bugs become harder to diagnose.
 

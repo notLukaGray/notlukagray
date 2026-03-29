@@ -9,7 +9,7 @@ import type { ConversionContext } from "../types/figma-plugin";
 import { slugify, ensureUniqueId } from "../utils/slugify";
 import { extractImageFill } from "./fills-image";
 import { convertImageNode } from "./image";
-import { isLikelyButton, convertButtonNode } from "./button";
+import { isLikelyButton, convertButtonNode, inferButtonInferenceMeta } from "./button";
 import { extractComponentProps } from "./component-props";
 import { buildVariantElement, VARIANT_STATE_MAP } from "./component-variants";
 import { convertVariantChildren, extractVariantNodeProps } from "./variant-child-helpers";
@@ -18,8 +18,15 @@ import {
   inferNodeId,
   applyElementAnnotationProps,
   applyAbsPos,
+  mergeElementMetaFigma,
   type GroupNodeParentCtx,
 } from "./node-element-helpers";
+import { reconcileElementOrderWithDefinitions } from "./element-order-reconcile";
+import { toPx } from "../utils/css";
+import { stripAnnotations } from "./annotations-parse";
+import { isLikelyScrollProgressBarNode, isLikelyRiveComponentName } from "./element-media-detect";
+import { convertElementInputFromInstance } from "./element-input-convert";
+import { inferElementInputInferenceMeta, isInputLikeInstance } from "./section-routing-detect";
 
 type ConvertNodeFn = (
   node: SceneNode,
@@ -79,12 +86,30 @@ export async function convertInstanceNode(
     if (result) {
       applyAbsPos(result, node, parentCtx);
       applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+      return result;
     }
-    return result;
+    const fallbackId = ensureUniqueId(slugify(inferNodeId(node)), ctx.usedIds);
+    const fallback: ElementBlock = {
+      type: "elementGroup",
+      id: fallbackId,
+      section: { elementOrder: [], definitions: {} },
+      ...(typeof node.width === "number" ? { width: toPx(node.width) } : {}),
+      ...(typeof node.height === "number" ? { height: toPx(node.height) } : {}),
+    } as ElementBlock;
+    mergeElementMetaFigma(fallback, {
+      sourceType: node.type,
+      sourceName: node.name,
+      fallbackReason: "instance-image-export-failed",
+    });
+    applyAbsPos(fallback, node, parentCtx);
+    applyElementAnnotationProps(fallback, node, annotations, ctx.warnings);
+    return fallback;
   }
 
   if (isLikelyButton(node, annotations)) {
     const btn = await convertButtonNode(node, ctx, annotations);
+    const btnInfer = inferButtonInferenceMeta(node, annotations);
+    if (btnInfer) mergeElementMetaFigma(btn, { inference: btnInfer });
     const compProps = extractComponentProps(node);
     const btnR = btn as unknown as Record<string, unknown>;
     if (compProps.label && !btn.label) btnR.label = compProps.label;
@@ -97,6 +122,44 @@ export async function convertInstanceNode(
     return btn;
   }
 
+  if (isLikelyScrollProgressBarNode(node)) {
+    const id = ensureUniqueId(slugify(inferNodeId(node)), ctx.usedIds);
+    const height = node.height >= 2 && node.height <= 72 ? toPx(node.height) : undefined;
+    const result: ElementBlock = {
+      type: "elementScrollProgressBar",
+      id,
+      ...(height ? { height } : {}),
+    };
+    applyAbsPos(result, node, parentCtx);
+    applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+    return result;
+  }
+
+  const mainForMedia = mainComponent?.name ?? "";
+  if (mainForMedia && isLikelyRiveComponentName(mainForMedia)) {
+    const id = ensureUniqueId(slugify(inferNodeId(node)), ctx.usedIds);
+    const src = `cdn/${slugify(stripAnnotations(node.name || "rive"))}.riv`;
+    ctx.warnings.push(
+      `[rive] Instance "${node.name}" — placeholder src "${src}"; replace with your deployed .riv URL.`
+    );
+    const result: ElementBlock = {
+      type: "elementRive",
+      id,
+      src,
+    };
+    applyAbsPos(result, node, parentCtx);
+    applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+    return result;
+  }
+
+  if (await isInputLikeInstance(node)) {
+    const inputEl = await convertElementInputFromInstance(node, ctx);
+    mergeElementMetaFigma(inputEl, { inference: inferElementInputInferenceMeta() });
+    applyAbsPos(inputEl, node, parentCtx);
+    applyElementAnnotationProps(inputEl, node, annotations, ctx.warnings);
+    return inputEl;
+  }
+
   const instanceGroupResult = await convertGroupNode(node, ctx, convertNodeFn, parentCtx);
   if (instanceGroupResult) {
     applyElementAnnotationProps(instanceGroupResult, node, annotations, ctx.warnings);
@@ -107,11 +170,19 @@ export async function convertInstanceNode(
   ctx.warnings.push(
     `[warn] "${node.name}" (INSTANCE) — could not fully convert, emitting as fallback group`
   );
-  return {
+  const fallback: ElementBlock = {
     type: "elementGroup",
     id: fallbackId,
     section: { elementOrder: [], definitions: {} },
   } as ElementBlock;
+  mergeElementMetaFigma(fallback, {
+    sourceType: node.type,
+    sourceName: node.name,
+    fallbackReason: "instance-conversion-fallback",
+  });
+  applyAbsPos(fallback, node, parentCtx);
+  applyElementAnnotationProps(fallback, node, annotations, ctx.warnings);
+  return fallback;
 }
 
 async function applyInstanceOverridesToVariantElement(
@@ -216,7 +287,7 @@ function mergeSectionWithOverrides(
 
   return {
     ...baseSection,
-    elementOrder: mergedOrder,
+    elementOrder: reconcileElementOrderWithDefinitions(mergedOrder, mergedDefinitions),
     definitions: mergedDefinitions,
   };
 }

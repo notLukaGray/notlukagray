@@ -6,7 +6,7 @@
 export type { BorderProps } from "./layout-border";
 export { extractBorderProps } from "./layout-border";
 
-export { extractLayoutProps, extractChildLayoutAlign } from "./layout-frame-props";
+export { extractLayoutProps, extractChildAutoLayoutOverrides } from "./layout-frame-props";
 
 export {
   extractAutoLayoutProps,

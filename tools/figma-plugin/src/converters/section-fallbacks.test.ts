@@ -14,6 +14,7 @@ vi.mock("./node-to-element", () => ({
 import { convertFrameToRevealSection } from "./section-reveal";
 import { convertFrameToColumnSection } from "./section-column-convert";
 import { convertFrameToSection } from "./node-to-section";
+import { convertNode } from "./node-to-element";
 
 (globalThis as unknown as { figma: { mixed: symbol } }).figma = { mixed: Symbol("mixed") };
 
@@ -178,12 +179,13 @@ describe("section fallback slotting", () => {
       ctx
     );
 
-    const layers = (section as Record<string, unknown>).layers as Array<Record<string, unknown>>;
+    const rec = section as unknown as Record<string, unknown>;
+    const layers = rec.layers as Array<Record<string, unknown>>;
     expect(Array.isArray(layers)).toBe(true);
     expect(layers).toHaveLength(2);
     expect(layers[0].fill).toContain("linear-gradient");
     expect(layers[1].blendMode).toBe("multiply");
-    expect((section as Record<string, unknown>).fill).toBeUndefined();
+    expect(rec.fill).toBeUndefined();
   });
 
   it("drops inferred layers when [pb: fill=...] override is provided", async () => {
@@ -207,8 +209,9 @@ describe("section fallback slotting", () => {
       ctx
     );
 
-    expect((section as Record<string, unknown>).fill).toBe("#123456");
-    expect((section as Record<string, unknown>).layers).toBeUndefined();
+    const rec2 = section as unknown as Record<string, unknown>;
+    expect(rec2.fill).toBe("#123456");
+    expect(rec2.layers).toBeUndefined();
   });
 
   it("preserves negative horizontal auto-layout spacing as column overlap gap", async () => {
@@ -390,5 +393,158 @@ describe("section fallback slotting", () => {
     expect(sectionRecord.marginLeft).toBe("10px");
     expect(sectionRecord.padding).toBeUndefined();
     expect(sectionRecord.paddingTop).toBeUndefined();
+  });
+
+  it("keeps zero edge values when synthesizing sectionColumn child padding shorthand", async () => {
+    const ctx = makeCtx();
+    const section = await convertFrameToColumnSection(
+      {
+        type: "FRAME",
+        name: "Columns zero edge",
+        width: 800,
+        height: 240,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "HORIZONTAL",
+        itemSpacing: 24,
+        primaryAxisAlignItems: "MIN",
+        counterAxisAlignItems: "MIN",
+        clipsContent: false,
+        children: [
+          {
+            type: "FRAME",
+            name: "Column 1",
+            width: 300,
+            height: 240,
+            x: 0,
+            y: 0,
+            visible: true,
+            layoutMode: "VERTICAL",
+            itemSpacing: 0,
+            primaryAxisAlignItems: "MIN",
+            counterAxisAlignItems: "MIN",
+            paddingTop: 8,
+            paddingRight: 12,
+            paddingBottom: 8,
+            paddingLeft: 0,
+            clipsContent: false,
+            fills: [],
+            effects: [],
+            children: [{ type: "RECTANGLE", name: "Left", width: 20, height: 20 }],
+          },
+        ],
+      } as unknown as FrameNode,
+      ctx
+    );
+    const styles = (section as Record<string, unknown>).columnStyles as Array<
+      Record<string, unknown>
+    >;
+    expect(styles[0]?.padding).toBe("8px 12px 8px 0px");
+  });
+
+  it("passes column-wrapper parent context to nested child conversion", async () => {
+    vi.mocked(convertNode).mockClear();
+    const ctx = makeCtx();
+    await convertFrameToColumnSection(
+      {
+        type: "FRAME",
+        name: "Columns context",
+        width: 800,
+        height: 240,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "HORIZONTAL",
+        itemSpacing: 24,
+        primaryAxisAlignItems: "MIN",
+        counterAxisAlignItems: "MIN",
+        clipsContent: false,
+        children: [
+          {
+            type: "FRAME",
+            name: "Column 1",
+            width: 300,
+            height: 240,
+            x: 0,
+            y: 0,
+            visible: true,
+            layoutMode: "VERTICAL",
+            itemSpacing: 8,
+            primaryAxisAlignItems: "MIN",
+            counterAxisAlignItems: "MIN",
+            clipsContent: false,
+            fills: [],
+            effects: [],
+            children: [{ type: "RECTANGLE", name: "Nested", width: 20, height: 20 }],
+          },
+        ],
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const nestedCall = vi
+      .mocked(convertNode)
+      .mock.calls.find((call) => (call[0] as { name?: string }).name === "Nested");
+    expect(nestedCall?.[2]).toEqual({
+      layoutMode: "VERTICAL",
+      parentWidth: 300,
+      parentHeight: 240,
+    });
+  });
+
+  it("wraps auto-layout contentBlock even without padding to preserve layout semantics", async () => {
+    const ctx = makeCtx();
+    const section = await convertFrameToSection(
+      {
+        type: "FRAME",
+        name: "Auto layout no padding [pb: type=contentBlock]",
+        width: 480,
+        height: 260,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "VERTICAL",
+        itemSpacing: 16,
+        primaryAxisAlignItems: "SPACE_BETWEEN",
+        counterAxisAlignItems: "CENTER",
+        paddingTop: 0,
+        paddingRight: 0,
+        paddingBottom: 0,
+        paddingLeft: 0,
+        clipsContent: false,
+        children: [
+          { type: "RECTANGLE", name: "Item A", width: 40, height: 20, x: 0, y: 0, visible: true },
+          {
+            type: "RECTANGLE",
+            name: "Item B",
+            width: 40,
+            height: 20,
+            x: 0,
+            y: 36,
+            visible: true,
+          },
+        ],
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const sectionRecord = section as Record<string, unknown>;
+    const wrappers = sectionRecord.elements as Array<Record<string, unknown>>;
+    expect(Array.isArray(wrappers)).toBe(true);
+    expect(wrappers).toHaveLength(1);
+    expect(wrappers[0]?.type).toBe("elementGroup");
+    expect(wrappers[0]?.display).toBe("flex");
+    expect(wrappers[0]?.justifyContent).toBe("space-between");
+    expect(wrappers[0]?.gap).toBe("16px");
   });
 });

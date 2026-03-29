@@ -2,7 +2,8 @@
  * Core annotation parsing — layer-name [pb: key=value] extraction and helpers.
  */
 
-const ANNOTATION_REGEX_GLOBAL = /\[pb:\s*([^\]]+)\]/gi;
+import { stripAnnotations } from "../../../figma-bridge/src/annotations-strip";
+export { stripAnnotations };
 
 const ELEMENT_SUPPORTED_ANNOTATION_KEYS = new Set([
   "type",
@@ -110,13 +111,9 @@ const SECTION_SUPPORTED_ANNOTATION_FAMILIES = [
  * parseAnnotations('Hero [pb: type=button, href=/about]')
  * // → { type: "button", href: "/about" }
  */
-export function parseAnnotations(name: string): Record<string, string> {
-  const matches = [...name.matchAll(/\[pb:\s*([^\]]+)\]/gi)];
-  const match = matches.length > 0 ? matches[matches.length - 1] : null;
-  if (!match) return {};
-
+function parseAnnotationPairBlock(block: string): Record<string, string> {
   const result: Record<string, string> = {};
-  const pairs = match[1].split(",");
+  const pairs = block.split(",");
 
   for (const pair of pairs) {
     const eqIndex = pair.indexOf("=");
@@ -130,6 +127,20 @@ export function parseAnnotations(name: string): Record<string, string> {
     if (key) result[key] = value;
   }
 
+  return result;
+}
+
+/**
+ * Parses every `[pb: …]` block in order; later blocks override keys from earlier ones.
+ */
+export function parseAnnotations(name: string): Record<string, string> {
+  const matches = [...name.matchAll(/\[pb:\s*([^\]]+)\]/gi)];
+  if (matches.length === 0) return {};
+
+  const result: Record<string, string> = {};
+  for (const match of matches) {
+    Object.assign(result, parseAnnotationPairBlock(match[1]));
+  }
   return result;
 }
 
@@ -165,64 +176,29 @@ export function findUnsupportedAnnotationKeys(
   );
 }
 
-function collectAnnotationCandidateStrings(value: unknown, out: string[], depth = 0): void {
-  if (depth > 2 || value == null) return;
-  if (typeof value === "string") {
-    if (value.includes("[pb:")) out.push(value);
-    return;
-  }
-  if (Array.isArray(value)) {
-    for (const item of value) collectAnnotationCandidateStrings(item, out, depth + 1);
-    return;
-  }
-  if (typeof value === "object") {
-    for (const nested of Object.values(value as Record<string, unknown>)) {
-      collectAnnotationCandidateStrings(nested, out, depth + 1);
-    }
-  }
-}
-
 type NodeAnnotationLike = {
   label?: string;
   labelMarkdown?: string;
 };
 
 /**
- * Best-effort annotation extraction from a live Figma node.
- * Prefers `[pb: ...]` embedded in `name`, but also scans annotation-like fields because
- * some Figma surfaces expose annotations separately from the layer name.
+ * Annotation extraction from a live Figma node.
+ * Parses `[pb: ...]` from `node.name` and from the explicit `node.annotations` array.
  */
 export function parseNodeAnnotations(
   node: { name?: string } & Record<string, unknown>
 ): Record<string, string> {
-  const fromName = parseAnnotations(node.name ?? "");
-  if (Object.keys(fromName).length > 0) return fromName;
+  const merged: Record<string, string> = {};
+  Object.assign(merged, parseAnnotations(node.name ?? ""));
 
   const nodeAnnotations = (node as { annotations?: readonly NodeAnnotationLike[] }).annotations;
   if (Array.isArray(nodeAnnotations)) {
     for (const ann of nodeAnnotations) {
-      const parsed = parseAnnotations(ann.label ?? ann.labelMarkdown ?? "");
-      if (Object.keys(parsed).length > 0) return parsed;
+      Object.assign(merged, parseAnnotations(ann.label ?? ann.labelMarkdown ?? ""));
     }
   }
 
-  const candidates: string[] = [];
-  for (const [key, value] of Object.entries(node)) {
-    if (
-      key.toLowerCase().includes("annotation") ||
-      key.toLowerCase().includes("description") ||
-      (typeof value === "string" && value.includes("[pb:"))
-    ) {
-      collectAnnotationCandidateStrings(value, candidates);
-    }
-  }
-
-  for (const candidate of candidates) {
-    const parsed = parseAnnotations(candidate);
-    if (Object.keys(parsed).length > 0) return parsed;
-  }
-
-  return {};
+  return merged;
 }
 
 export {
@@ -230,16 +206,6 @@ export {
   SECTION_SUPPORTED_ANNOTATION_KEYS,
   SECTION_SUPPORTED_ANNOTATION_FAMILIES,
 };
-
-/**
- * Returns the layer name with the [pb:...] annotation removed.
- */
-export function stripAnnotations(name: string): string {
-  return name
-    .replace(ANNOTATION_REGEX_GLOBAL, "")
-    .replace(/\s{2,}/g, " ")
-    .trim();
-}
 
 /**
  * Returns true if the annotation map contains the given key with value "true"

@@ -20,6 +20,74 @@ function makeCtx(): {
 }
 
 describe("node-to-element annotations", () => {
+  it("maps child layoutAlign to horizontal align for vertical auto-layout parents", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Item [pb: type=spacer]",
+        width: 120,
+        height: 24,
+        x: 0,
+        y: 0,
+        visible: true,
+        layoutAlign: "CENTER",
+        parent: { type: "FRAME", layoutMode: "VERTICAL" },
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const element = result as Record<string, unknown>;
+    expect(element.align).toBe("center");
+    expect(element.alignY).toBeUndefined();
+    expect(element.alignSelf).toBeUndefined();
+  });
+
+  it("maps child layoutAlign to vertical alignY for horizontal auto-layout parents", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Item [pb: type=spacer]",
+        width: 120,
+        height: 24,
+        x: 0,
+        y: 0,
+        visible: true,
+        layoutAlign: "MAX",
+        parent: { type: "FRAME", layoutMode: "HORIZONTAL" },
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const element = result as Record<string, unknown>;
+    expect(element.alignY).toBe("bottom");
+    expect(element.align).toBeUndefined();
+    expect(element.alignSelf).toBeUndefined();
+  });
+
+  it("preserves stretch alignment safely via wrapperStyle", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Item [pb: type=spacer]",
+        width: 120,
+        height: 24,
+        x: 0,
+        y: 0,
+        visible: true,
+        layoutAlign: "STRETCH",
+        parent: { type: "FRAME", layoutMode: "VERTICAL" },
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    const element = result as { alignSelf?: string; wrapperStyle?: Record<string, unknown> };
+    expect(element.alignSelf).toBeUndefined();
+    expect(element.wrapperStyle?.alignSelf).toBe("stretch");
+  });
+
   it("warns on unsupported annotations without failing conversion", async () => {
     const ctx = makeCtx();
     const result = await convertNode(
@@ -45,6 +113,60 @@ describe("node-to-element annotations", () => {
     expect(ctx.warnings.some((w) => w.includes("unsupported annotation key(s): madeup"))).toBe(
       true
     );
+  });
+
+  it("infers frame buttons from naming convention without annotation", async () => {
+    (globalThis as { figma?: { mixed: symbol } }).figma = { mixed: Symbol("mixed") };
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "btn-primary",
+        width: 160,
+        height: 44,
+        x: 0,
+        y: 0,
+        visible: true,
+        children: [
+          {
+            type: "TEXT",
+            name: "Label",
+            characters: "Get Started",
+            visible: true,
+          },
+        ],
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementButton");
+    expect((result as { label?: string }).label).toBe("Get Started");
+    const meta = (result as { meta?: { figma?: { inference?: { kind: string } } } }).meta;
+    expect(meta?.figma?.inference?.kind).toBe("elementButton");
+  });
+
+  it("emits fallback group for unsupported node types instead of skipping", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "STICKY",
+        name: "Sticky Note",
+        width: 220,
+        height: 120,
+        x: 10,
+        y: 20,
+        visible: true,
+      } as unknown as SceneNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementGroup");
+    const fallback = result as {
+      meta?: { figma?: { fallbackReason?: string } };
+      width?: string;
+    };
+    expect(fallback.meta?.figma?.fallbackReason).toBe("unsupported-node-type");
+    expect(fallback.width).toBe("220px");
   });
 
   it("exports gradient strokes as borderGradient instead of layered background", async () => {

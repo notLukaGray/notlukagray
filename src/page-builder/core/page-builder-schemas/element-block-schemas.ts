@@ -23,13 +23,15 @@ import { sectionEffectSchema } from "./section-effect-schemas";
 const elementGroupSchema = z
   .object({
     type: z.literal("elementGroup"),
-    section: z.object({
-      elementOrder: z.array(z.string()).optional(),
-      // definitions holds child ElementBlocks. z.unknown() is required here because
-      // elementGroupSchema is part of elementBlockSchema — z.lazy(() => elementBlockSchema)
-      // would cause a circular initializer TS error (TS7022). The tree-walk casts to ElementBlock.
-      definitions: z.record(z.string(), z.unknown()),
-    }),
+    section: z
+      .object({
+        elementOrder: z.array(z.string()).optional(),
+        // definitions holds child ElementBlocks. z.unknown() is required here because
+        // elementGroupSchema is part of elementBlockSchema — z.lazy(() => elementBlockSchema)
+        // would cause a circular initializer TS error (TS7022). The tree-walk casts to ElementBlock.
+        definitions: z.record(z.string(), z.unknown()),
+      })
+      .passthrough(),
     display: z.string().optional(),
     flexDirection: z.string().optional(),
     alignItems: z.string().optional(),
@@ -114,3 +116,6 @@ export const sectionDefinitionBlockSchema = z.union([
   elementBlockSchema,
   cssGradientDefinitionSchema,
 ]);
+
+export { figmaExporterMetaSchema, pageBuilderMetaSchema } from "./figma-exporter-meta-schema";
+export type { FigmaExporterMeta, PageBuilderMeta } from "./figma-exporter-meta-schema";

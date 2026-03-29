@@ -115,6 +115,17 @@ export const pageScrollConfigSchema = z.object({
   overflowY: z.enum(["auto", "scroll", "hidden"]).optional(),
 });
 
+/** Optional parity / diagnostics blob appended by the Figma plugin “Copy page JSON” flow. */
+export const figmaExportDiagnosticsPageFieldSchema = z.object({
+  version: z.literal(1),
+  converted: z.number(),
+  fallback: z.number(),
+  dropped: z.number(),
+  topFallbackReasons: z.array(z.object({ code: z.string(), count: z.number() })),
+  dropReasons: z.record(z.string(), z.number()).optional(),
+  highRiskWarnings: z.array(z.object({ category: z.string(), count: z.number() })).optional(),
+});
+
 export const pageBuilderSchema = z
   .object({
     slug: z.string(),
@@ -135,6 +146,7 @@ export const pageBuilderSchema = z
       .optional(),
     disableOverlays: z.array(z.string()).optional(),
     scroll: pageScrollConfigSchema.optional(),
+    figmaExportDiagnostics: figmaExportDiagnosticsPageFieldSchema.optional(),
   })
   .passthrough();
 

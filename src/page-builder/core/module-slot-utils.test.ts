@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import {
   resolveSlotElements,
+  reconcileElementOrderWithDefinitions,
   getRegionFromClientX,
   getFeedbackJustifyContent,
   getFeedbackPadding,
@@ -20,6 +21,19 @@ function elVideo(overrides: Record<string, unknown> = {}) {
 }
 
 describe("module-slot-utils", () => {
+  describe("reconcileElementOrderWithDefinitions", () => {
+    it("ignores stale order keys and appends unreferenced definitions", () => {
+      const definitions = {
+        a: elImage({ id: "a" }),
+        b: elVideo(),
+      };
+      expect(reconcileElementOrderWithDefinitions(["missing", "b", "a"], definitions)).toEqual([
+        "b",
+        "a",
+      ]);
+    });
+  });
+
   describe("resolveSlotElements", () => {
     it("returns empty array when slot has no section or definitions", () => {
       expect(resolveSlotElements({})).toEqual([]);

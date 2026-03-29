@@ -28,6 +28,7 @@ import {
   sectionBorderSchema,
   sectionEffectSchema,
 } from "./section-style-and-column-schemas";
+import { pageBuilderMetaSchema } from "./figma-exporter-meta-schema";
 
 const scrollOpacityRangeSchema = z
   .object({
@@ -44,6 +45,8 @@ const responsiveSectionContentSizeSchema = z.union([
 
 export const baseSectionPropsSchema = z.object({
   id: z.string().optional(),
+  /** Namespaced metadata (`meta.figma`, etc.); passthrough preserves extension keys. */
+  meta: pageBuilderMetaSchema.optional(),
 
   ariaLabel: responsiveStringSchema.optional(),
   fill: responsiveStringSchema.optional(),

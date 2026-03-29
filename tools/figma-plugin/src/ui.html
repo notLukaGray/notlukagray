@@ -86,6 +86,22 @@
     #copy-json-btn.copied {
       background: #27ae60;
     }
+    #copy-merged-page-btn {
+      flex: 1;
+      background: #0d8050;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    #copy-merged-page-btn:hover { background: #0a6b42; }
+    #copy-merged-page-btn:disabled { background: #aaa; cursor: not-allowed; }
+    #copy-merged-page-btn.copied {
+      background: #27ae60;
+    }
     #download-btn {
       flex: 0 0 auto;
       background: transparent;
@@ -424,8 +440,9 @@
     <div id="preview-panel"></div>
 
     <div id="action-row">
-      <button id="copy-json-btn">Copy JSON</button>
-      <button id="download-btn">Export ZIP</button>
+      <button id="copy-json-btn" type="button">Copy JSON</button>
+      <button id="copy-merged-page-btn" type="button">Copy page JSON</button>
+      <button id="download-btn" type="button">Export ZIP</button>
     </div>
     <div id="summary"></div>
     <div id="warnings"></div>

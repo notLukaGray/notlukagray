@@ -3,6 +3,7 @@
  */
 
 import { extractComponentProps } from "./component-props";
+import { nameSuggestsVideo } from "./element-media-detect";
 
 /**
  * Returns true if the fills array contains a Figma-native VIDEO fill paint.
@@ -12,12 +13,42 @@ export function hasVideoFill(fills: readonly Paint[]): boolean {
 }
 
 /**
+ * When `isVideoNode` matched without explicit video type annotation, describes inference for `meta.figma.inference`.
+ */
+export function inferVideoInferenceMeta(
+  node: SceneNode,
+  annotations: Record<string, string>
+): { kind: "elementVideo"; confidence: "high" | "medium" | "low"; detail?: string } | null {
+  if (annotations.type === "elementVideo" || annotations.type === "video") return null;
+
+  if ("fills" in node) {
+    const fills = (node as SceneNode & { fills?: readonly Paint[] }).fills;
+    if (fills && hasVideoFill(fills)) {
+      return { kind: "elementVideo", confidence: "high", detail: "video-fill" };
+    }
+  }
+
+  if (node.type === "INSTANCE") {
+    const props = extractComponentProps(node as InstanceNode);
+    if (props.src && /\.(mp4|webm|mov|ogg)(\?|$)/i.test(props.src)) {
+      return { kind: "elementVideo", confidence: "high", detail: "instance-src" };
+    }
+  }
+
+  if (nameSuggestsVideo(node.name || "")) {
+    return { kind: "elementVideo", confidence: "medium", detail: "layer-name" };
+  }
+
+  return { kind: "elementVideo", confidence: "low", detail: "heuristic-fallback" };
+}
+
+/**
  * Returns true if a node should be treated as an `elementVideo`.
  *
  * Detection rules (any of):
  * 1. `[pb: type=elementVideo]` or `[pb: type=video]` annotation
  * 2. Has a Figma-native VIDEO fill
- * 3. Node name starts with "video" or "vid-" (case-insensitive)
+ * 3. Node name matches video-oriented naming heuristics
  * 4. INSTANCE whose component property `src` points to a video URL
  */
 export function isVideoNode(node: SceneNode, annotations: Record<string, string>): boolean {
@@ -28,8 +59,7 @@ export function isVideoNode(node: SceneNode, annotations: Record<string, string>
     if (fills && hasVideoFill(fills)) return true;
   }
 
-  const name = (node.name || "").toLowerCase();
-  if (name.startsWith("video") || name.startsWith("vid-")) return true;
+  if (nameSuggestsVideo(node.name || "")) return true;
 
   if (node.type === "INSTANCE") {
     const props = extractComponentProps(node as InstanceNode);

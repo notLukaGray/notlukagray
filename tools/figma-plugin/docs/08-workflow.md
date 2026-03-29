@@ -88,6 +88,11 @@ page-builder-export.zip
   pages/
     home.json
     about.json
+  content/pages/
+    home/
+      index.json
+      hero.json
+      …
   presets/
     hero-dark.json
   modals/
@@ -101,6 +106,8 @@ page-builder-export.zip
     hero-reel/poster.png
   export-notes.txt
 ```
+
+`content/pages/{slug}/` mirrors how **`src/content/pages/`** can split sections: `index.json` keeps `sectionOrder` plus definitions that are not section roots; each top-level section from `sectionOrder` is also written as `{sectionKey}.json`. Copy that tree into the repo when you prefer split files. Flat `pages/{slug}.json` remains the single-file export.
 
 Multiple frames with the same `Page/` prefix are merged into a single `pages/{slug}.json`. Each frame becomes one section key in `sectionOrder`, and the concrete section block is stored in `definitions[sectionId]` (with a compatibility `sections` mirror also included).
 

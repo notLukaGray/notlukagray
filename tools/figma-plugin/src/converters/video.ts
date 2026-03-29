@@ -5,5 +5,5 @@
  *   video-convert.ts — convertVideoNode
  */
 
-export { hasVideoFill, isVideoNode } from "./video-detect";
+export { hasVideoFill, isVideoNode, inferVideoInferenceMeta } from "./video-detect";
 export { convertVideoNode } from "./video-convert";

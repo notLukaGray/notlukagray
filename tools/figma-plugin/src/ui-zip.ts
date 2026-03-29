@@ -5,7 +5,20 @@
 
 import JSZip from "jszip";
 import type { ExportResult } from "./types/figma-plugin";
+import { splitPageForContentDir } from "./split-page-for-content-dir";
 import { generateExportNotes } from "./ui-export-notes";
+import { SAFE_SEGMENT } from "./content-split-guards";
+
+function appendSplitPageToZip(zip: JSZip, slug: string, page: unknown): void {
+  if (!SAFE_SEGMENT.test(slug)) return;
+  if (page == null || typeof page !== "object" || Array.isArray(page)) return;
+  const { index, sectionFiles } = splitPageForContentDir(page as Record<string, unknown>, slug);
+  zip.file(`content/pages/${slug}/index.json`, JSON.stringify(index, null, 2));
+  for (const [sectionKey, body] of Object.entries(sectionFiles)) {
+    if (!SAFE_SEGMENT.test(sectionKey)) continue;
+    zip.file(`content/pages/${slug}/${sectionKey}.json`, JSON.stringify(body, null, 2));
+  }
+}
 
 /**
  * Builds a ZIP blob from a completed ExportResult.
@@ -21,6 +34,7 @@ export async function buildExportZip(
 
   for (const [key, page] of Object.entries(result.pages)) {
     zip.file(`pages/${key}.json`, JSON.stringify(page, null, 2));
+    appendSplitPageToZip(zip, key, page);
   }
   for (const [key, preset] of Object.entries(result.presets)) {
     zip.file(`presets/${key}.json`, JSON.stringify(preset, null, 2));

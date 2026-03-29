@@ -1,75 +1,23 @@
 "use client";
 
 import { useMemo, useRef, type CSSProperties } from "react";
-import type {
-  CssInlineStyle,
-  ElementBlock,
-  SectionEffect,
-} from "@/page-builder/core/page-builder-schemas";
-import { ElementRenderer } from "./Shared/ElementRenderer";
-import { generateElementKey } from "@/page-builder/core/element-keys";
+import { useDeviceType } from "@/core/providers/device-type-provider";
+import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
 import { getElementLayoutStyle } from "@/page-builder/core/element-layout-utils";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";
 import { useSlotDefaultWrapperStyle } from "@/page-builder/elements/ElementModule/ModuleSlotContext";
-import { LayoutMotionDiv } from "@/page-builder/integrations/framer-motion";
 import { useDimensionGestureContext } from "./Shared/DimensionGestureContext";
 import { firePageBuilderAction } from "@/page-builder/triggers";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
+import { ElementModuleChildren } from "./ElementModule/ElementModuleChildren";
+import {
+  buildBorderGradientOverlayStyle,
+  coerceSectionEffects,
+  type BorderGradient,
+} from "./ElementModule/element-module-style-utils";
+import { reconcileElementOrderWithDefinitions } from "@/page-builder/core/module-slot-utils";
 
 type Props = Extract<ElementBlock, { type: "elementGroup" }>;
-type BorderGradient = { stroke: string; width: string | number };
-
-function lightenHexColor(hex: string, amount: number): string {
-  const match = /^#?([0-9a-fA-F]{6})$/.exec(hex);
-  if (!match) return hex;
-  const matchedHex = match[1];
-  if (!matchedHex) return hex;
-  const int = parseInt(matchedHex, 16);
-  const r = Math.min(255, ((int >> 16) & 0xff) + amount);
-  const g = Math.min(255, ((int >> 8) & 0xff) + amount);
-  const b = Math.min(255, (int & 0xff) + amount);
-  const toHex = (v: number) => v.toString(16).padStart(2, "0");
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
-
-function getContainerWrapperStyle(base: CSSProperties): CSSProperties {
-  const bg = base.background;
-  if (!bg || typeof bg !== "string") return base;
-  return {
-    ...base,
-    background: lightenHexColor(bg, 10),
-  };
-}
-
-function buildBorderGradientOverlayStyle(
-  borderGradient: BorderGradient,
-  borderRadius: CSSProperties["borderRadius"]
-): CSSProperties {
-  return {
-    position: "absolute",
-    inset: 0,
-    padding: borderGradient.width,
-    borderRadius: borderRadius ?? "inherit",
-    background: borderGradient.stroke,
-    boxSizing: "border-box",
-    pointerEvents: "none",
-    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-    WebkitMaskComposite: "xor",
-    maskComposite: "exclude",
-  };
-}
-
-function coerceSectionEffects(value: unknown): SectionEffect[] | undefined {
-  if (!Array.isArray(value)) return undefined;
-  const entries = value.filter(
-    (entry): entry is SectionEffect =>
-      !!entry &&
-      typeof entry === "object" &&
-      "type" in entry &&
-      typeof (entry as { type?: unknown }).type === "string"
-  );
-  return entries.length > 0 ? entries : undefined;
-}
 
 export function ElementModuleGroup({
   section,
@@ -84,7 +32,14 @@ export function ElementModuleGroup({
   alignItems = "center",
   justifyContent,
   gap,
+  rowGap,
+  columnGap,
   padding,
+  paddingTop,
+  paddingRight,
+  paddingBottom,
+  paddingLeft,
+  flexWrap,
   flex,
   overflow,
   marginTop,
@@ -114,6 +69,7 @@ export function ElementModuleGroup({
     cursor?: string;
   };
 }) {
+  const { isMobile } = useDeviceType();
   const videoCtx = useVideoControlContext();
   const slotDefaultWrapper = useSlotDefaultWrapperStyle();
   const groupRef = useRef<HTMLDivElement>(null);
@@ -124,12 +80,12 @@ export function ElementModuleGroup({
   const inDimensionGesture = useDimensionGestureContext();
   const resolvedWidth = inDimensionGesture ? "100%" : width;
   const resolvedHeight = inDimensionGesture ? "100%" : height;
-  const definitions = section?.definitions ?? {};
-  const order = section?.elementOrder ?? Object.keys(definitions);
+  const definitions = (section?.definitions ?? {}) as Record<string, unknown>;
+  const order = reconcileElementOrderWithDefinitions(section?.elementOrder, definitions);
   const idCounts = new Map<string, number>();
   const rawBlocks = order
     .map((key): ElementBlock | null => {
-      const el = definitions[key];
+      const el = definitions[key] as unknown;
       if (
         !el ||
         typeof el !== "object" ||
@@ -188,8 +144,15 @@ export function ElementModuleGroup({
     ...(justifyContent
       ? { justifyContent: justifyContent as CSSProperties["justifyContent"] }
       : {}),
-    ...(gap ? { gap } : {}),
-    ...(padding ? { padding } : {}),
+    ...(gap != null ? { gap } : {}),
+    ...(rowGap != null ? { rowGap } : {}),
+    ...(columnGap != null ? { columnGap } : {}),
+    ...(padding != null ? { padding } : {}),
+    ...(paddingTop != null ? { paddingTop } : {}),
+    ...(paddingRight != null ? { paddingRight } : {}),
+    ...(paddingBottom != null ? { paddingBottom } : {}),
+    ...(paddingLeft != null ? { paddingLeft } : {}),
+    ...(flexWrap ? { flexWrap: flexWrap as CSSProperties["flexWrap"] } : {}),
     ...(flex ? { flex } : {}),
     overflow: (overflow ?? (layoutChildren ? "visible" : "hidden")) as CSSProperties["overflow"],
     ...(groupWrapperStyle as CSSProperties),
@@ -258,71 +221,14 @@ export function ElementModuleGroup({
           )}
         />
       ) : null}
-      {blocks.map((block, i) => {
-        const action = (block as ElementBlock & { action?: string }).action;
-        const actionPayload = (block as ElementBlock & { actionPayload?: number }).actionPayload;
-        const handler = videoCtx?.getActionHandler(action, actionPayload);
-        const elWrapperStyle = (
-          block as ElementBlock & {
-            wrapperStyle?: CssInlineStyle;
-          }
-        ).wrapperStyle;
-        const hasMotion = !!(block as ElementBlock & { motion?: unknown }).motion;
-        const baseWrapperStyle = (
-          handler
-            ? { ...slotDefaultWrapper, ...(elWrapperStyle ?? {}) }
-            : hasMotion
-              ? {}
-              : (elWrapperStyle ?? {})
-        ) as CSSProperties;
-        const wrapperStyle = getContainerWrapperStyle(baseWrapperStyle);
-        // Inside a dimension gesture, cell wrappers (which carry the visual —
-        // background, borderRadius, etc.) must fill their parent so the visual
-        // expands with the animated container rather than hugging content.
-        const cellStyle: CSSProperties = inDimensionGesture
-          ? { width: "100%", height: "100%", ...wrapperStyle }
-          : wrapperStyle;
-        const content = <ElementRenderer key={generateElementKey(block, i)} block={block} />;
-        if (handler) {
-          return (
-            <button
-              key={generateElementKey(block, i)}
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handler();
-              }}
-              className="flex items-center justify-center shrink-0 text-white rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-              style={{ cursor: "pointer", ...cellStyle }}
-              aria-label={action ?? "Control"}
-            >
-              {content}
-            </button>
-          );
-        }
-        // layoutChildren: true means siblings participate in Framer Motion FLIP reflow
-        // when any sibling changes dimensions via gesture animation.
-        if (layoutChildren) {
-          return (
-            <LayoutMotionDiv
-              key={generateElementKey(block, i)}
-              className="shrink-0"
-              style={cellStyle}
-            >
-              {content}
-            </LayoutMotionDiv>
-          );
-        }
-        return (
-          <div
-            key={generateElementKey(block, i)}
-            className="shrink-0 flex items-center justify-center"
-            style={cellStyle}
-          >
-            {content}
-          </div>
-        );
-      })}
+      <ElementModuleChildren
+        blocks={blocks}
+        inDimensionGesture={inDimensionGesture}
+        isMobile={isMobile}
+        layoutChildren={layoutChildren}
+        slotDefaultWrapper={slotDefaultWrapper}
+        getActionHandler={videoCtx?.getActionHandler}
+      />
     </div>
   );
 }

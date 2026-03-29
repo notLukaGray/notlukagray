@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["src/core/lib/next-image-loader.ts"],
+  "ignore": ["src/content/**", "tools/**"],
+  "ignoreDependencies": ["patch-package"],
+  "include": [
+    "files",
+    "dependencies",
+    "unlisted",
+    "unresolved",
+    "duplicates",
+    "binaries",
+    "catalog"
+  ]
+}

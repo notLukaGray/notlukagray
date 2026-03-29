@@ -2,11 +2,14 @@ import { z } from "zod";
 import { MOTION_DEFAULTS } from "@/page-builder/core/page-builder-motion-defaults";
 import { motionPropsSchema } from "./motion-props-schema";
 import { cssInlineStyleSchema } from "./schema-primitives";
+import { pageBuilderMetaSchema } from "./figma-exporter-meta-schema";
 
-const moduleSlotSectionSchema = z.object({
-  elementOrder: z.array(z.string()).optional(),
-  definitions: z.record(z.string(), z.unknown()).optional(),
-});
+const moduleSlotSectionSchema = z
+  .object({
+    elementOrder: z.array(z.string()).optional(),
+    definitions: z.record(z.string(), z.unknown()).optional(),
+  })
+  .passthrough();
 
 export const moduleSlotSchema = z
   .object({
@@ -76,6 +79,7 @@ export const moduleSlotSchema = z
 export const moduleBlockSchema = z
   .object({
     type: z.literal("module"),
+    meta: pageBuilderMetaSchema.optional(),
     contextType: z.enum(["video", "image", "model3d"]).optional(),
     contentSlot: z.string(),
     slots: z.record(z.string(), moduleSlotSchema),

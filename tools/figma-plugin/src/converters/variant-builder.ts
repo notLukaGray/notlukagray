@@ -26,6 +26,7 @@ import {
   buildOuterGestureMotion,
   type ChildDiffEntry,
 } from "./variant-gesture-motion";
+import { ensureElementId } from "./node-element-helpers";
 
 function isHardSwap(componentSet: ComponentSetNode): boolean {
   const annotations = parseAnnotations(componentSet.name);
@@ -332,9 +333,10 @@ async function buildFallbackGroup(
     for (const child of childChildren) {
       try {
         const converted = await convertNodeFn(child, ctx);
-        if (converted && converted.id) {
-          definitions[converted.id as string] = converted;
-          elementOrder.push(converted.id as string);
+        if (converted) {
+          const childId = ensureElementId(converted, child.name || child.type, ctx, ctx.warnings);
+          definitions[childId] = converted;
+          elementOrder.push(childId);
         }
       } catch (err) {
         ctx.warnings.push(

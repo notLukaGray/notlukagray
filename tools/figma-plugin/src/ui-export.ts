@@ -3,6 +3,7 @@
  */
 
 import type { ExportResult, UIToMainMessage } from "./types/figma-plugin";
+import { buildFigmaExportDiagnostics } from "./export-parity";
 import type { FramePreviewItem } from "./ui-state";
 import { collectOverrides } from "./ui-state";
 import { buildExportZip } from "./ui-zip";
@@ -17,6 +18,7 @@ export interface UIElements {
   exportBtn: HTMLButtonElement;
   actionRowEl: HTMLDivElement;
   copyJsonBtn: HTMLButtonElement;
+  copyMergedPageBtn: HTMLButtonElement;
   downloadBtn: HTMLButtonElement;
   statusEl: HTMLDivElement;
   summaryEl: HTMLDivElement;
@@ -75,12 +77,47 @@ export async function copyToClipboard(text: string): Promise<void> {
 }
 
 export function flashCopied(copyJsonBtn: HTMLButtonElement): void {
-  copyJsonBtn.classList.add("copied");
-  copyJsonBtn.textContent = "Copied!";
+  flashButtonLabel(copyJsonBtn, "Copied!", "Copy JSON");
+}
+
+export function flashMergedCopied(btn: HTMLButtonElement): void {
+  flashButtonLabel(btn, "Copied!", "Copy page JSON");
+}
+
+function flashButtonLabel(btn: HTMLButtonElement, doneLabel: string, restoreLabel: string): void {
+  btn.classList.add("copied");
+  btn.textContent = doneLabel;
   setTimeout(() => {
-    copyJsonBtn.classList.remove("copied");
-    copyJsonBtn.textContent = "Copy JSON";
+    btn.classList.remove("copied");
+    btn.textContent = restoreLabel;
   }, 1500);
+}
+
+/** One merged page object for pb-dev / disk; multiple pages → `{ pages }` root for playground. */
+export function mergedPageClipboardPayload(result: ExportResult): string {
+  const keys = Object.keys(result.pages);
+  if (keys.length === 0) return "{}";
+  if (keys.length === 1) {
+    const first = keys[0];
+    const pageRaw = result.pages[first];
+    const pageRec =
+      pageRaw !== null && typeof pageRaw === "object" && !Array.isArray(pageRaw)
+        ? { ...(pageRaw as Record<string, unknown>) }
+        : {};
+    const parity = result.trace?.counts?.parity;
+    const category = result.trace?.counts?.category ?? {};
+    if (parity !== undefined) {
+      pageRec["figmaExportDiagnostics"] = buildFigmaExportDiagnostics(parity, category);
+    }
+    return JSON.stringify(pageRec, null, 2);
+  }
+  const parity = result.trace?.counts?.parity;
+  const category = result.trace?.counts?.category ?? {};
+  const envelope: Record<string, unknown> = { pages: result.pages, presets: result.presets };
+  if (parity !== undefined) {
+    envelope["figmaExportDiagnostics"] = buildFigmaExportDiagnostics(parity, category);
+  }
+  return JSON.stringify(envelope, null, 2);
 }
 
 // ---------------------------------------------------------------------------
@@ -93,7 +130,7 @@ export async function handleResult(
   errors: string[],
   warningCount: number,
   infoCount: number,
-  mode: "copy" | "zip" = "zip"
+  mode: "copy" | "copy-merged" | "zip" = "zip"
 ): Promise<void> {
   setWarnings(els.warningsEl, result.warnings);
 
@@ -137,6 +174,27 @@ export async function handleResult(
     return;
   }
 
+  if (mode === "copy-merged") {
+    setPendingResult(result);
+    const pageCount = Object.keys(result.pages).length;
+    const statusMsg =
+      errors.length > 0
+        ? `Done with errors — merged page JSON copied`
+        : pageCount === 1
+          ? `Done! Copied single page document for pb-dev / content.`
+          : `Done! Copied ${pageCount} pages as { pages, presets } wrapper (pb-dev compatible).`;
+    try {
+      await copyToClipboard(mergedPageClipboardPayload(result));
+      setStatus(els.statusEl, statusMsg, errors.length > 0 ? "error" : "success");
+      flashMergedCopied(els.copyMergedPageBtn);
+    } catch (err) {
+      setStatus(els.statusEl, `Copy failed: ${String(err)}`, "error");
+    }
+    setSummary(els.summaryEl, result);
+    els.actionRowEl.style.display = "flex";
+    return;
+  }
+
   // ZIP mode
   setPendingResult(result);
   setStatus(els.statusEl, "Packaging ZIP…");
@@ -166,6 +224,8 @@ export function wireExportButton(
 ): void {
   els.exportBtn.addEventListener("click", () => {
     els.exportBtn.disabled = true;
+    els.copyJsonBtn.disabled = true;
+    els.copyMergedPageBtn.disabled = true;
     setPendingResult(null);
     setPendingBlob(null);
     els.actionRowEl.style.display = "none";
@@ -204,12 +264,40 @@ export function wireCopyJsonButton(
       return;
     }
     els.copyJsonBtn.disabled = true;
+    els.copyMergedPageBtn.disabled = true;
     els.copyJsonBtn.textContent = "Exporting…";
     const { targetOverrides, annotationOverrides, cdnPrefixOverrides } =
       collectOverrides(getCurrentFrames());
     sendToMain({
       type: "export",
       mode: "copy",
+      targetOverrides,
+      annotationOverrides,
+      cdnPrefixOverrides,
+      autoPresets: els.autoPresetToggle.checked,
+    });
+  });
+}
+
+export function wireCopyMergedPageButton(
+  els: UIElements,
+  getCurrentFrames: () => FramePreviewItem[]
+): void {
+  els.copyMergedPageBtn.addEventListener("click", () => {
+    if (pendingResult) {
+      void copyToClipboard(mergedPageClipboardPayload(pendingResult)).then(() =>
+        flashMergedCopied(els.copyMergedPageBtn)
+      );
+      return;
+    }
+    els.copyJsonBtn.disabled = true;
+    els.copyMergedPageBtn.disabled = true;
+    els.copyMergedPageBtn.textContent = "Exporting…";
+    const { targetOverrides, annotationOverrides, cdnPrefixOverrides } =
+      collectOverrides(getCurrentFrames());
+    sendToMain({
+      type: "export",
+      mode: "copy-merged",
       targetOverrides,
       annotationOverrides,
       cdnPrefixOverrides,
@@ -225,6 +313,8 @@ export function wireDownloadButton(
   els.downloadBtn.addEventListener("click", () => {
     if (!pendingBlob) {
       els.exportBtn.disabled = true;
+      els.copyJsonBtn.disabled = true;
+      els.copyMergedPageBtn.disabled = true;
       els.actionRowEl.style.display = "none";
       els.summaryEl.style.display = "none";
       els.previewEl.style.display = "none";

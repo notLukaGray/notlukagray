@@ -7,15 +7,30 @@ import type React from "react";
 import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
 import type { ModuleSlotConfig } from "@/page-builder/elements/ElementModule/types";
 
+/**
+ * Honor `elementOrder` for keys present in `definitions`, ignore stale keys, append keys that
+ * were never listed (deterministic nested group / module resolution).
+ */
+export function reconcileElementOrderWithDefinitions(
+  elementOrder: string[] | undefined,
+  definitions: Record<string, unknown>
+): string[] {
+  const definitionKeys = Object.keys(definitions);
+  const orderedFromJson = (elementOrder ?? definitionKeys).filter((key) => key in definitions);
+  const orderedSet = new Set(orderedFromJson);
+  return [...orderedFromJson, ...definitionKeys.filter((key) => !orderedSet.has(key))];
+}
+
 /** Resolves slot section definitions into ElementBlocks. Shared across video, image, model3d modules. */
 export function resolveSlotElements(slot: ModuleSlotConfig): ElementBlock[] {
   const section = slot.section;
   if (!section?.definitions) return [];
-  const order = section.elementOrder ?? Object.keys(section.definitions);
+  const definitions = section.definitions as Record<string, unknown>;
+  const order = reconcileElementOrderWithDefinitions(section.elementOrder, definitions);
   const idCounts = new Map<string, number>();
   return order
     .map((key) => {
-      const el = section.definitions![key];
+      const el = section.definitions![key] as unknown;
       if (!el || typeof el !== "object" || !("type" in el) || el.type === "cssGradient")
         return null;
       const candidate = el as ElementBlock & { id?: unknown };

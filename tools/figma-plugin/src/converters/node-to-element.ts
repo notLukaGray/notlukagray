@@ -17,28 +17,82 @@ import {
   ELEMENT_SUPPORTED_ANNOTATION_KEYS,
 } from "./annotations-parse";
 import { buildMotionTiming } from "./motion";
-import { isLikelyButton, convertButtonNode } from "./button";
-import { isVideoNode, convertVideoNode } from "./video";
+import { isLikelyButton, convertButtonNode, inferButtonInferenceMeta } from "./button";
+import { isVideoNode, convertVideoNode, inferVideoInferenceMeta } from "./video";
+import { inferImageInferenceMeta } from "./element-media-detect";
 import { buildVariantElement } from "./component-variants";
 import { convertGroupNode, convertRichTextNode } from "./node-element-group";
 import {
   inferNodeId,
   applyElementAnnotationProps,
   applyAbsPos,
+  mergeElementMetaFigma,
   type GroupNodeParentCtx,
 } from "./node-element-helpers";
 import { convertInstanceNode } from "./node-instance-convert";
 import { convertSectionNode } from "./node-section-convert";
+import { EXPORT_DROP_REASON, getOrCreateExportParity, recordConverterDrop } from "../export-parity";
 
 export type { GroupNodeParentCtx };
 
 void buildMotionTiming; // referenced transitively via applyElementAnnotationProps
+
+function finalizeConvertNodeResult(
+  ctx: ConversionContext,
+  node: SceneNode,
+  result: ElementBlock | null
+): ElementBlock | null {
+  if (result === null) {
+    getOrCreateExportParity(ctx);
+    recordConverterDrop(ctx, EXPORT_DROP_REASON.CONVERT_NODE_NULL, {
+      nodeName: node.name,
+      nodeType: node.type,
+    });
+  }
+  return result;
+}
+
+function buildFallbackGroupForNode(
+  node: SceneNode,
+  ctx: ConversionContext,
+  annotations: Record<string, string>,
+  reason: string,
+  parentCtx?: GroupNodeParentCtx
+): ElementBlock {
+  const fallbackId = ensureUniqueId(slugify(inferNodeId(node)), ctx.usedIds);
+  const fallback: ElementBlock = {
+    type: "elementGroup",
+    id: fallbackId,
+    section: { elementOrder: [], definitions: {} },
+    ...("width" in node && typeof node.width === "number" ? { width: toPx(node.width) } : {}),
+    ...("height" in node && typeof node.height === "number" ? { height: toPx(node.height) } : {}),
+  } as ElementBlock;
+  mergeElementMetaFigma(fallback, {
+    sourceType: node.type,
+    sourceName: node.name,
+    fallbackReason: reason,
+  });
+  applyAbsPos(fallback, node, parentCtx);
+  applyElementAnnotationProps(fallback, node, annotations, ctx.warnings);
+  ctx.warnings.push(
+    `[node-router] "${node.name}" (${node.type}) — emitted fallback elementGroup (${reason})`
+  );
+  return fallback;
+}
 
 /**
  * Converts a SceneNode to a page-builder ElementBlock.
  * Returns null for nodes that cannot be represented in the page-builder schema.
  */
 export async function convertNode(
+  node: SceneNode,
+  ctx: ConversionContext,
+  parentCtx?: GroupNodeParentCtx
+): Promise<ElementBlock | null> {
+  return finalizeConvertNodeResult(ctx, node, await convertNodeImpl(node, ctx, parentCtx));
+}
+
+async function convertNodeImpl(
   node: SceneNode,
   ctx: ConversionContext,
   parentCtx?: GroupNodeParentCtx
@@ -80,26 +134,43 @@ export async function convertNode(
     if (result) {
       applyAbsPos(result, node, parentCtx);
       applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+      return result;
     }
-    return result;
+    return buildFallbackGroupForNode(
+      node,
+      ctx,
+      annotations,
+      "annotated-svg-conversion-failed",
+      parentCtx
+    );
   }
   if (annotations.type === "image") {
     const result = await convertImageNode(node as RectangleNode, ctx);
     if (result) {
       applyAbsPos(result, node, parentCtx);
       applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+      return result;
     }
-    return result;
+    return buildFallbackGroupForNode(
+      node,
+      ctx,
+      annotations,
+      "annotated-image-conversion-failed",
+      parentCtx
+    );
   }
 
   // Video detection
   if (isVideoNode(node, annotations)) {
     const result = await convertVideoNode(node, ctx, annotations);
     if (result) {
+      const infer = inferVideoInferenceMeta(node, annotations);
+      if (infer) mergeElementMetaFigma(result, { inference: infer });
       applyAbsPos(result, node, parentCtx);
       applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+      return result;
     }
-    return result;
+    return buildFallbackGroupForNode(node, ctx, annotations, "video-conversion-failed", parentCtx);
   }
 
   switch (node.type) {
@@ -133,8 +204,9 @@ export async function convertNode(
       if (result) {
         applyAbsPos(result, node, parentCtx);
         applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+        return result;
       }
-      return result;
+      return buildFallbackGroupForNode(node, ctx, annotations, "vector-export-failed", parentCtx);
     }
 
     case "RECTANGLE": {
@@ -143,17 +215,33 @@ export async function convertNode(
       if (imageFill) {
         const result = await convertImageNode(node, ctx);
         if (result) {
+          const im = inferImageInferenceMeta(node, annotations);
+          if (im) mergeElementMetaFigma(result, { inference: im });
           applyAbsPos(result, node, parentCtx);
           applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+          return result;
         }
-        return result;
+        return buildFallbackGroupForNode(
+          node,
+          ctx,
+          annotations,
+          "rectangle-image-export-failed",
+          parentCtx
+        );
       }
       const result = await convertVectorNode(node, ctx);
       if (result) {
         applyAbsPos(result, node, parentCtx);
         applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+        return result;
       }
-      return result;
+      return buildFallbackGroupForNode(
+        node,
+        ctx,
+        annotations,
+        "rectangle-vector-export-failed",
+        parentCtx
+      );
     }
 
     case "ELLIPSE": {
@@ -161,8 +249,15 @@ export async function convertNode(
       if (result) {
         applyAbsPos(result, node, parentCtx);
         applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+        return result;
       }
-      return result;
+      return buildFallbackGroupForNode(
+        node,
+        ctx,
+        annotations,
+        "ellipse-vector-export-failed",
+        parentCtx
+      );
     }
 
     case "FRAME":
@@ -173,14 +268,28 @@ export async function convertNode(
       if (imageFill) {
         const result = await convertImageNode(node, ctx);
         if (result) {
+          const im = inferImageInferenceMeta(node, annotations);
+          if (im) mergeElementMetaFigma(result, { inference: im });
           applyAbsPos(result, node, parentCtx);
           applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+          return result;
         }
-        return result;
+        return buildFallbackGroupForNode(
+          node,
+          ctx,
+          annotations,
+          "group-image-export-failed",
+          parentCtx
+        );
       }
 
-      if (node.type === "COMPONENT" && isLikelyButton(node, annotations)) {
+      if (
+        (node.type === "FRAME" || node.type === "COMPONENT") &&
+        isLikelyButton(node, annotations)
+      ) {
         const result = await convertButtonNode(node, ctx, annotations);
+        const bm = inferButtonInferenceMeta(node, annotations);
+        if (bm) mergeElementMetaFigma(result, { inference: bm });
         applyAbsPos(result, node, parentCtx);
         applyElementAnnotationProps(result, node, annotations, ctx.warnings);
         return result;
@@ -202,11 +311,19 @@ export async function convertNode(
         ctx.warnings.push(
           `[warn] "${node.name}" (${node.type}) — could not fully convert, emitting as fallback group`
         );
-        return {
+        const fallbackGroup: ElementBlock = {
           type: "elementGroup",
           id: fallbackId,
           section: { elementOrder: [], definitions: {} },
         } as ElementBlock;
+        mergeElementMetaFigma(fallbackGroup, {
+          sourceType: node.type,
+          sourceName: node.name,
+          fallbackReason: "group-conversion-fallback",
+        });
+        applyAbsPos(fallbackGroup, node, parentCtx);
+        applyElementAnnotationProps(fallbackGroup, node, annotations, ctx.warnings);
+        return fallbackGroup;
       }
     }
 
@@ -220,9 +337,6 @@ export async function convertNode(
       return convertSectionNode(node as SectionNode, ctx, annotations, parentCtx, convertNode);
 
     default:
-      ctx.warnings.push(
-        `[node-router] Unsupported node type "${node.type}" ("${node.name}") — skipped`
-      );
-      return null;
+      return buildFallbackGroupForNode(node, ctx, annotations, "unsupported-node-type", parentCtx);
   }
 }

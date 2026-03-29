@@ -37,6 +37,12 @@ export function extractAutoLayoutProps(
     case "SPACE_BETWEEN":
       props.justifyContent = "space-between";
       break;
+    default: {
+      const raw = node.primaryAxisAlignItems as string;
+      if (raw === "SPACE_EVENLY") props.justifyContent = "space-evenly";
+      else if (raw === "SPACE_AROUND") props.justifyContent = "space-around";
+      break;
+    }
   }
 
   // Counter axis alignment
@@ -60,7 +66,7 @@ export function extractAutoLayoutProps(
   // the gap value is invisible and clutters the output JSON.
   const visibleChildCount =
     "children" in node ? (node as unknown as { children: SceneNode[] }).children.length : 0;
-  if (node.itemSpacing > 0 && visibleChildCount >= 2) {
+  if (node.itemSpacing !== 0 && visibleChildCount >= 2) {
     const resolvedGap = resolveNumericVar(boundVars, "itemSpacing", node.itemSpacing, "px", node);
     props.gap = typeof resolvedGap === "number" ? toPx(resolvedGap) : resolvedGap;
   }
@@ -81,23 +87,25 @@ export function extractAutoLayoutProps(
 
   // Padding — resolve variable bindings per side
   const { paddingTop, paddingRight, paddingBottom, paddingLeft } = node;
-  if (paddingTop > 0 || paddingRight > 0 || paddingBottom > 0 || paddingLeft > 0) {
+  const includeTop = shouldEmitPaddingSide(boundVars, "paddingTop", paddingTop);
+  const includeRight = shouldEmitPaddingSide(boundVars, "paddingRight", paddingRight);
+  const includeBottom = shouldEmitPaddingSide(boundVars, "paddingBottom", paddingBottom);
+  const includeLeft = shouldEmitPaddingSide(boundVars, "paddingLeft", paddingLeft);
+  const shouldEmitPadding = includeTop || includeRight || includeBottom || includeLeft;
+  if (shouldEmitPadding) {
     const rTop = resolveNumericVar(boundVars, "paddingTop", paddingTop, "px", node);
     const rRight = resolveNumericVar(boundVars, "paddingRight", paddingRight, "px", node);
     const rBottom = resolveNumericVar(boundVars, "paddingBottom", paddingBottom, "px", node);
     const rLeft = resolveNumericVar(boundVars, "paddingLeft", paddingLeft, "px", node);
 
-    if (rTop === rRight && rRight === rBottom && rBottom === rLeft && typeof rTop === "number") {
-      props.padding = toPx(rTop);
+    const allSidesIncluded = includeTop && includeRight && includeBottom && includeLeft;
+    if (allSidesIncluded && rTop === rRight && rRight === rBottom && rBottom === rLeft) {
+      props.padding = formatResolvedCssUnit(rTop);
     } else {
-      props.paddingTop =
-        paddingTop > 0 ? (typeof rTop === "number" ? toPx(rTop) : rTop) : undefined;
-      props.paddingRight =
-        paddingRight > 0 ? (typeof rRight === "number" ? toPx(rRight) : rRight) : undefined;
-      props.paddingBottom =
-        paddingBottom > 0 ? (typeof rBottom === "number" ? toPx(rBottom) : rBottom) : undefined;
-      props.paddingLeft =
-        paddingLeft > 0 ? (typeof rLeft === "number" ? toPx(rLeft) : rLeft) : undefined;
+      props.paddingTop = includeTop ? formatResolvedCssUnit(rTop) : undefined;
+      props.paddingRight = includeRight ? formatResolvedCssUnit(rRight) : undefined;
+      props.paddingBottom = includeBottom ? formatResolvedCssUnit(rBottom) : undefined;
+      props.paddingLeft = includeLeft ? formatResolvedCssUnit(rLeft) : undefined;
     }
   }
 
@@ -262,12 +270,11 @@ function mapChildLayoutAlignToSectionAlign(value: string | undefined): SectionAl
 }
 
 function mapCounterAxisAlignToSectionAlign(value: string | undefined): SectionAlign | undefined {
-  if (!value) return undefined;
+  if (!value || value === "BASELINE") return undefined;
   const map: Record<string, SectionAlign> = {
     MIN: "left",
     CENTER: "center",
     MAX: "right",
-    BASELINE: "left",
   };
   return map[value];
 }
@@ -293,9 +300,11 @@ export function extractSectionPlacementFromParent(
   const placement: SectionParentPlacement = {};
 
   const childLayoutAlign = (node as unknown as { layoutAlign?: string }).layoutAlign;
-  placement.align =
-    mapChildLayoutAlignToSectionAlign(childLayoutAlign) ??
-    mapCounterAxisAlignToSectionAlign(parentLayoutNode.counterAxisAlignItems);
+  if (parentLayoutNode.layoutMode === "VERTICAL") {
+    placement.align =
+      mapChildLayoutAlignToSectionAlign(childLayoutAlign) ??
+      mapCounterAxisAlignToSectionAlign(parentLayoutNode.counterAxisAlignItems);
+  }
 
   if (parentLayoutNode.layoutMode === "VERTICAL") {
     if (parentLayoutNode.paddingLeft > 0) placement.marginLeft = toPx(parentLayoutNode.paddingLeft);
@@ -308,4 +317,22 @@ export function extractSectionPlacementFromParent(
   }
 
   return placement;
+}
+
+function formatResolvedCssUnit(value: number | string): string {
+  return typeof value === "number" ? toPx(value) : value;
+}
+
+function shouldEmitPaddingSide(
+  boundVars: BoundVarsMap | undefined,
+  key: "paddingTop" | "paddingRight" | "paddingBottom" | "paddingLeft",
+  fallback: number
+): boolean {
+  if (fallback !== 0) return true;
+  const raw = boundVars?.[key];
+  if (!raw) return false;
+  if (Array.isArray(raw)) {
+    return raw.some((entry) => entry?.type === "VARIABLE_ALIAS");
+  }
+  return raw.type === "VARIABLE_ALIAS";
 }

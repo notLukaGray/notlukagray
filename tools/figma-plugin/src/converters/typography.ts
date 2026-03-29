@@ -186,11 +186,6 @@ export function extractTypographyOverrides(node: TextNode): Partial<TypographyOv
   return overrides;
 }
 
-/**
- * Converts a Figma LetterSpacing value to a CSS string.
- * PERCENT unit → em (Figma's percent is relative to font size, same as em * 100).
- * PIXELS unit → px string.
- */
 export function figmaLetterSpacingToCSS(ls: LetterSpacing): string {
   if (ls.unit === "PERCENT") {
     // Figma: 10% = 0.1em
@@ -199,17 +194,13 @@ export function figmaLetterSpacingToCSS(ls: LetterSpacing): string {
   return toPx(ls.value);
 }
 
-// ---------------------------------------------------------------------------
-// Internal helpers
-// ---------------------------------------------------------------------------
-
 function figmaLineHeightToCSS(lh: LineHeight): string {
   if (lh.unit === "PIXELS") return toPx(lh.value);
   if (lh.unit === "PERCENT") return `${(lh.value / 100).toFixed(4).replace(/\.?0+$/, "")}`;
   return "normal";
 }
 
-function figmaTextAlignToCSS(align: "LEFT" | "CENTER" | "RIGHT" | "JUSTIFIED"): string {
+export function figmaTextAlignToCSS(align: "LEFT" | "CENTER" | "RIGHT" | "JUSTIFIED"): string {
   switch (align) {
     case "LEFT":
       return "left";

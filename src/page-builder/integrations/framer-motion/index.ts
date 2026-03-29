@@ -30,4 +30,5 @@ export {
   type UseDragHandleControlsResult,
 } from "./drag-handle-controls";
 export { useSectionScrollOpacityStyle, type ScrollOpacityRange } from "./scroll-style";
-export type { Easing, DragControls, HTMLMotionProps } from "./types";
+export { useBgLayerMotion, type BgLayerMotionStyle } from "./use-bg-layer-motion";
+export type { Easing, DragControls, HTMLMotionProps, MotionValue } from "./types";

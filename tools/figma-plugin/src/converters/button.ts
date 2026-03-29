@@ -42,6 +42,16 @@ export function isLikelyButton(node: SceneNode, annotations: Record<string, stri
   return false;
 }
 
+/** `meta.figma.inference` when the button mapping came from naming/heuristics, not `[pb: type=button]`. */
+export function inferButtonInferenceMeta(
+  node: SceneNode,
+  annotations: Record<string, string>
+): { kind: "elementButton"; confidence: "medium"; detail?: string } | null {
+  if (annotations.type === "button") return null;
+  if (!isLikelyButton(node, annotations)) return null;
+  return { kind: "elementButton", confidence: "medium", detail: "naming-convention" };
+}
+
 // ---------------------------------------------------------------------------
 // Label / href extraction helpers
 // ---------------------------------------------------------------------------

@@ -21,12 +21,8 @@ import {
 } from "./effects";
 import { slugify, ensureUniqueId } from "../utils/slugify";
 import { toPx } from "../utils/css";
-import {
-  parseAnnotations,
-  stripAnnotations,
-  annotationFlag,
-  annotationNumber,
-} from "./annotations";
+import { stripAnnotations, annotationFlag, annotationNumber } from "./annotations";
+import { parseNodeAnnotations } from "./annotations-parse";
 import { parseSectionTriggerProps } from "./section-triggers";
 import {
   getVisibleChildren,
@@ -34,6 +30,9 @@ import {
   warnRepeatedStructuralSignatures,
 } from "./structure-hints";
 import { getInspectableBackgroundAsync } from "./node-css";
+import { applySectionFillAnnotationOverride } from "./section-annotation-fill-override";
+import { mergeElementMetaFigma, type GroupNodeParentCtx } from "./node-element-helpers";
+import { EXPORT_DROP_REASON, recordConverterDrop } from "../export-parity";
 
 // ---------------------------------------------------------------------------
 // Detection
@@ -85,6 +84,73 @@ function matchesNames(name: string, patterns: string[]): boolean {
   return patterns.some((p) => lower === p || lower.startsWith(p + " ") || lower.endsWith(" " + p));
 }
 
+function hasVisibleFigmaEffects(node: SceneNode): boolean {
+  if (!("effects" in node) || !Array.isArray(node.effects)) return false;
+  return node.effects.some((e: Effect) => e.visible !== false);
+}
+
+function hasVisibleStrokes(node: SceneNode): boolean {
+  if (!("strokes" in node)) return false;
+  const strokes = node.strokes as readonly Paint[] | typeof figma.mixed;
+  if (!Array.isArray(strokes)) return false;
+  return strokes.some((s) => s.visible !== false);
+}
+
+function hasNonTrivialAutoLayout(node: SceneNode): boolean {
+  if (!("layoutMode" in node)) return false;
+  if (node.layoutMode === "NONE") return false;
+  const f = node as FrameNode | ComponentNode | InstanceNode;
+  const pad =
+    (f.paddingLeft ?? 0) + (f.paddingRight ?? 0) + (f.paddingTop ?? 0) + (f.paddingBottom ?? 0);
+  const spacing = f.itemSpacing ?? 0;
+  const counter =
+    "counterAxisSpacing" in f && typeof f.counterAxisSpacing === "number"
+      ? f.counterAxisSpacing
+      : 0;
+  return pad > 0 || spacing > 0 || counter > 0;
+}
+
+function hasVisibleContainerFills(node: SceneNode): boolean {
+  if (!("fills" in node)) return false;
+  const fills = node.fills as readonly Paint[];
+  if (!Array.isArray(fills)) return false;
+  return fills.some((f) => {
+    if (f.visible === false) return false;
+    if (f.type === "SOLID") {
+      const op = "opacity" in f ? (f.opacity ?? 1) : 1;
+      return op > 0.001;
+    }
+    return true;
+  });
+}
+
+function nodeClipsContent(node: SceneNode): boolean {
+  return "clipsContent" in node && node.clipsContent === true;
+}
+
+function hasMeaningfulRotation(node: SceneNode): boolean {
+  return "rotation" in node && typeof node.rotation === "number" && Math.abs(node.rotation) > 0.01;
+}
+
+function hasMeaningfulOpacity(node: SceneNode): boolean {
+  return "opacity" in node && typeof node.opacity === "number" && node.opacity < 0.999;
+}
+
+/**
+ * Flatten named reveal-slot containers into their children only when the wrapper is a
+ * pass-through (no clip, effects, strokes, auto-layout spacing, fills, rotation, or opacity).
+ */
+export function isRevealSlotChildFlattenSafe(container: SceneNode): boolean {
+  if (nodeClipsContent(container)) return false;
+  if (hasVisibleFigmaEffects(container)) return false;
+  if (hasVisibleStrokes(container)) return false;
+  if (hasNonTrivialAutoLayout(container)) return false;
+  if (hasVisibleContainerFills(container)) return false;
+  if (hasMeaningfulRotation(container)) return false;
+  if (hasMeaningfulOpacity(container)) return false;
+  return true;
+}
+
 // ---------------------------------------------------------------------------
 // Conversion
 // ---------------------------------------------------------------------------
@@ -110,7 +176,9 @@ export async function convertFrameToRevealSection(
   frame: FrameNode,
   ctx: ConversionContext
 ): Promise<Record<string, unknown>> {
-  const annotations = parseAnnotations(frame.name || "");
+  const annotations = parseNodeAnnotations(
+    frame as unknown as { name?: string } & Record<string, unknown>
+  );
   const rawName = stripAnnotations(frame.name || "section");
   const sectionId = ensureUniqueId(slugify(rawName), ctx.usedIds);
 
@@ -149,6 +217,11 @@ export async function convertFrameToRevealSection(
   let fallbackSlotCount = 0;
 
   const children = "children" in frame ? (frame.children as readonly SceneNode[]) : [];
+  const frameParentCtx: GroupNodeParentCtx = {
+    layoutMode: frame.layoutMode ?? "NONE",
+    parentWidth: typeof frame.width === "number" ? frame.width : undefined,
+    parentHeight: typeof frame.height === "number" ? frame.height : undefined,
+  };
   const visibleChildren = getVisibleChildren(children);
   const layoutFallback =
     frame.layoutMode === "VERTICAL" && frame.clipsContent && visibleChildren.length >= 2;
@@ -169,15 +242,53 @@ export async function convertFrameToRevealSection(
 
     if (isContainer && (isCollapsed || isRevealed)) {
       const containerFrame = child as FrameNode | ComponentNode | InstanceNode;
+      const containerParentCtx: GroupNodeParentCtx = {
+        layoutMode:
+          "layoutMode" in containerFrame
+            ? (containerFrame.layoutMode as GroupNodeParentCtx["layoutMode"])
+            : "NONE",
+        parentWidth: typeof containerFrame.width === "number" ? containerFrame.width : undefined,
+        parentHeight: typeof containerFrame.height === "number" ? containerFrame.height : undefined,
+      };
+      if (!isRevealSlotChildFlattenSafe(containerFrame)) {
+        try {
+          const converted = await convertNode(containerFrame, ctx, frameParentCtx);
+          if (converted !== null) {
+            mergeElementMetaFigma(converted, {
+              inference: {
+                kind: "revealSlotWrapper",
+                confidence: "high",
+                detail: "preserved-slot-container",
+              },
+            });
+            if (isCollapsed) collapsedElements.push(converted);
+            else revealedElements.push(converted);
+          }
+        } catch (err) {
+          recordConverterDrop(ctx, EXPORT_DROP_REASON.REVEAL_SLOT_ERROR, {
+            nodeName: childName,
+            nodeType: containerFrame.type,
+          });
+          ctx.warnings.push(
+            `section-reveal: error converting slot container "${childName}": ${String(err)}`
+          );
+        }
+        continue;
+      }
+
       const subChildren = "children" in containerFrame ? containerFrame.children : [];
       for (const sub of subChildren as SceneNode[]) {
         try {
-          const converted = await convertNode(sub, ctx);
+          const converted = await convertNode(sub, ctx, containerParentCtx);
           if (converted !== null) {
             if (isCollapsed) collapsedElements.push(converted);
             else revealedElements.push(converted);
           }
         } catch (err) {
+          recordConverterDrop(ctx, EXPORT_DROP_REASON.REVEAL_SLOT_ERROR, {
+            nodeName: sub.name,
+            nodeType: sub.type,
+          });
           ctx.warnings.push(
             `section-reveal: error converting "${sub.name}" in "${childName}": ${String(err)}`
           );
@@ -185,7 +296,7 @@ export async function convertFrameToRevealSection(
       }
     } else {
       try {
-        const converted = await convertNode(child, ctx);
+        const converted = await convertNode(child, ctx, frameParentCtx);
         if (converted !== null) {
           if (isCollapsed) collapsedElements.push(converted);
           else if (isRevealed) revealedElements.push(converted);
@@ -204,6 +315,10 @@ export async function convertFrameToRevealSection(
           }
         }
       } catch (err) {
+        recordConverterDrop(ctx, EXPORT_DROP_REASON.REVEAL_SLOT_ERROR, {
+          nodeName: childName,
+          nodeType: child.type,
+        });
         ctx.warnings.push(`section-reveal: error converting "${childName}": ${String(err)}`);
       }
     }
@@ -260,8 +375,7 @@ export async function convertFrameToRevealSection(
 
   // Apply annotation overrides
   if (annotations["fill"]) {
-    section["fill"] = annotations["fill"];
-    delete section["layers"];
+    applySectionFillAnnotationOverride(section, annotations["fill"]);
   }
   if (annotations["overflow"]) section["overflow"] = annotations["overflow"];
   if (annotations["hidden"] === "true") section["hidden"] = true;

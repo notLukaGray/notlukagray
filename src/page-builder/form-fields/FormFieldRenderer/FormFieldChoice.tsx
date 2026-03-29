@@ -10,7 +10,7 @@ import {
   getFormFieldInputClass,
   getFormFieldErrorClass,
   REQUIRED_INDICATOR,
-  STRUCTURAL_SELECT,
+  STRUCTURAL_INPUT_BASE,
 } from "./form-field-typography";
 
 const CHOICE_FIELD_TYPES = ["checkbox", "checkboxGroup", "radio", "select", "switch"] as const;
@@ -110,7 +110,11 @@ export function FormFieldChoice({
           disabled={disabled}
           aria-invalid={hasError}
           aria-describedby={hasError && id ? `${id}-error` : undefined}
-          className={getFormFieldInputClass(resolvedLevel, field.inputClassName, STRUCTURAL_SELECT)}
+          className={getFormFieldInputClass(
+            resolvedLevel,
+            field.inputClassName,
+            STRUCTURAL_INPUT_BASE
+          )}
         >
           {field.placeholder && <option value="">{field.placeholder}</option>}
           {options.map((opt) => (

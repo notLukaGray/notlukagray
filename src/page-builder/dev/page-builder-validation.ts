@@ -11,6 +11,11 @@ import {
   resolvePagePath,
   discoverAllPages,
 } from "@/page-builder/core/load/page-builder-discover-pages";
+import { computeFallbackStatsFromPageDefinitions } from "@/page-builder/dev/compute-figma-fallback-walk";
+import {
+  parseFigmaExportDiagnostics,
+  type FigmaExportDiagnosticsV1,
+} from "@/page-builder/dev/figma-export-diagnostics-store";
 
 export interface ValidationResult {
   slug: string;
@@ -211,4 +216,31 @@ export function summarizeValidation(results: ValidationResult[]): {
   const validCount = results.filter((r) => r.valid).length;
   const invalidCount = results.filter((r) => !r.valid).length;
   return { validCount, invalidCount };
+}
+
+// ---------------------------------------------------------------------------
+// Figma export diagnostics (dev tooling)
+// ---------------------------------------------------------------------------
+
+export type { FigmaExportDiagnosticsV1 };
+
+export interface PageFigmaDiagnosticsSummary {
+  /** Present when the page JSON includes `figmaExportDiagnostics` from the Figma plugin. */
+  embedded: FigmaExportDiagnosticsV1 | null;
+  /** Fallback elements found by scanning `definitions` (subset of exporter `fallback` when trace embedded). */
+  scannedFallbackElements: number;
+  scannedTopFallbackReasons: Array<{ code: string; count: number }>;
+}
+
+/** Non-throwing summary for PB dev overlay and validation scripts. */
+export function summarizePageFigmaDiagnostics(page: unknown): PageFigmaDiagnosticsSummary | null {
+  if (!page || typeof page !== "object" || Array.isArray(page)) return null;
+  const rec = page as Record<string, unknown>;
+  const embedded = parseFigmaExportDiagnostics(rec["figmaExportDiagnostics"]);
+  const scan = computeFallbackStatsFromPageDefinitions(rec);
+  return {
+    embedded,
+    scannedFallbackElements: scan.fallbackElements,
+    scannedTopFallbackReasons: scan.topFallbackReasons,
+  };
 }

@@ -17,6 +17,7 @@ export type ElementType =
   | "elementVideoTime"
   | "elementSpacer"
   | "elementScrollProgressBar"
+  | "elementInput"
   | "elementButton"
   | "elementModel3D"
   | "elementRive"
@@ -137,6 +138,14 @@ export interface ElementSpacer extends LayoutProps {
   type: "elementSpacer";
 }
 
+export interface ElementInput extends LayoutProps {
+  type: "elementInput";
+  placeholder?: string;
+  ariaLabel?: string;
+  showIcon?: boolean;
+  color?: string;
+}
+
 // Simplified generic element block
 export type ElementBlock =
   | ElementHeading
@@ -148,4 +157,5 @@ export type ElementBlock =
   | ElementSVG
   | ElementRichText
   | ElementSpacer
+  | ElementInput
   | { type: ElementType; id?: string; [key: string]: unknown };

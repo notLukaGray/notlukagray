@@ -11,6 +11,7 @@ import type {
   ExportTarget,
   FrameIssue,
 } from "./types/figma-plugin";
+import type { ParityTraceSnapshot } from "./export-parity-types";
 import {
   ELEMENT_SUPPORTED_ANNOTATION_KEYS,
   SECTION_SUPPORTED_ANNOTATION_FAMILIES,
@@ -231,7 +232,8 @@ export function quickScanFrame(
 
 export function buildExportTrace(
   frames: Array<{ id: string; name: string; issues: FrameIssue[] }>,
-  warnings: string[]
+  warnings: string[],
+  parity?: ParityTraceSnapshot
 ): ExportTrace {
   const severity: ExportTrace["counts"]["severity"] = { error: 0, warn: 0, info: 0 };
   const category: Record<string, number> = {};
@@ -257,7 +259,14 @@ export function buildExportTrace(
     bump((match?.[1] ?? "general").toLowerCase());
   }
 
-  return { counts: { severity, category }, frames: traceFrames };
+  return {
+    counts: {
+      severity,
+      category,
+      ...(parity !== undefined ? { parity } : {}),
+    },
+    frames: traceFrames,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -365,11 +374,21 @@ export function applyFrameToResult(
     }
 
     case "global-background": {
-      // Extract fill string and any image source from the section
       const fill = "fill" in s && typeof s.fill === "string" ? s.fill : undefined;
       const src = "bgImage" in s && typeof s.bgImage === "string" ? s.bgImage : undefined;
       result.globals.backgrounds ??= {};
-      result.globals.backgrounds[target.key] = { fill, src };
+      let bgBlock: Record<string, unknown>;
+      if (src) {
+        bgBlock = { type: "backgroundImage", image: src };
+      } else if (fill) {
+        bgBlock = { type: "backgroundVariable", layers: [{ fill }] };
+      } else {
+        ctx.warnings.push(
+          `[global-background] "${frame.name}" had no raster bgImage or fill — exported placeholder backgroundVariable; set fill or image in Figma or JSON.`
+        );
+        bgBlock = { type: "backgroundVariable", layers: [{ fill: "transparent" }] };
+      }
+      result.globals.backgrounds[target.key] = bgBlock;
       break;
     }
 

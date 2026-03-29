@@ -23,10 +23,12 @@ import { getInspectableBackgroundAsync, getInspectableCssAsync } from "./node-cs
 import { extractNodeVisualEffects } from "./node-visual-effects";
 import {
   inferNodeId,
+  ensureElementId,
   applyElementAnnotationProps,
   type GroupNodeParentCtx,
 } from "./node-element-helpers";
 import { warnRepeatedStructuralSignatures } from "./structure-hints";
+import { figmaTextAlignToCSS } from "./typography";
 
 function extractGradientStrokeForGroup(
   node: FrameNode | GroupNode | ComponentNode | InstanceNode
@@ -202,9 +204,10 @@ export async function convertGroupNode(
 
   for (const child of children) {
     const converted = await convertNodeFn(child, ctx, childParentCtx);
-    if (converted && converted.id) {
-      definitions[converted.id as string] = converted;
-      elementOrder.push(converted.id as string);
+    if (converted) {
+      const childId = ensureElementId(converted, child.name || child.type, ctx, ctx.warnings);
+      definitions[childId] = converted;
+      elementOrder.push(childId);
       convertedChildren.push(converted);
     }
   }
@@ -299,6 +302,9 @@ export async function convertRichTextNode(
   );
   const id = ensureUniqueId(slugify(inferNodeId(node)), ctx.usedIds);
   const layout = extractLayoutProps(node);
+  if (node.textAlignHorizontal) {
+    layout.textAlign = figmaTextAlignToCSS(node.textAlignHorizontal);
+  }
 
   let content = node.characters;
   let markup: string | undefined;

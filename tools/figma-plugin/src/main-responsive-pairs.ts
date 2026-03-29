@@ -69,6 +69,51 @@ export function detectResponsivePairs(
   return { normalFrames, desktopFramesByKey, mobileFramesByKey, pairedKeys, tempCtxWarnings };
 }
 
+/**
+ * When one half of a desktop/mobile pair is user-overridden out of responsive pairing,
+ * the orphan frame often looks like an "unpaired" Section[Desktop]/[Mobile] — add clearer context.
+ */
+export function explainResponsiveOverrideOrphans(
+  desktopFramesByKey: Map<string, FrameNode>,
+  mobileFramesByKey: Map<string, FrameNode>,
+  normalFrames: FrameNode[],
+  targetOverrides: Record<string, string>
+): string[] {
+  const extra: string[] = [];
+
+  for (const key of mobileFramesByKey.keys()) {
+    if (desktopFramesByKey.has(key)) continue;
+    const mobileFrame = mobileFramesByKey.get(key)!;
+    const desktopTwin = normalFrames.find((f) => {
+      const t = detectExportTarget(f);
+      const role = (t as ExportTarget & { responsiveRole?: string }).responsiveRole;
+      return role === "desktop" && t.key === key;
+    });
+    if (desktopTwin && targetOverrides[desktopTwin.id]) {
+      extra.push(
+        `[responsive] "${mobileFrame.name}" has no export pair: "${desktopTwin.name}" uses a UI target override (slug "${key}"). Set the same override on both desktop and mobile, or remove overrides so Section[Desktop]/ and Section[Mobile]/ auto-pair.`
+      );
+    }
+  }
+
+  for (const key of desktopFramesByKey.keys()) {
+    if (mobileFramesByKey.has(key)) continue;
+    const desktopFrame = desktopFramesByKey.get(key)!;
+    const mobileTwin = normalFrames.find((f) => {
+      const t = detectExportTarget(f);
+      const role = (t as ExportTarget & { responsiveRole?: string }).responsiveRole;
+      return role === "mobile" && t.key === key;
+    });
+    if (mobileTwin && targetOverrides[mobileTwin.id]) {
+      extra.push(
+        `[responsive] "${desktopFrame.name}" has no export pair: "${mobileTwin.name}" uses a UI target override (slug "${key}"). Set the same override on both desktop and mobile, or remove overrides so Section[Desktop]/ and Section[Mobile]/ auto-pair.`
+      );
+    }
+  }
+
+  return extra;
+}
+
 export interface PreviewItem {
   id: string;
   name: string;

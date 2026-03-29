@@ -4,7 +4,8 @@ import { useMemo, useEffect, useState, useRef } from "react";
 import { createElement } from "react";
 import type { bgBlock } from "@/page-builder/core/page-builder-schemas";
 import { BG_COMPONENTS, isKnownBgType } from "./index";
-import { useScrollContainer } from "@/page-builder/section/position/use-scroll-container";
+import { useScrollContainerRef } from "@/page-builder/section/position/use-scroll-container";
+import { useScroll, useMotionValueEvent } from "@/page-builder/integrations/framer-motion";
 
 type BgBlockTransition = Extract<bgBlock, { type: "backgroundTransition" }>;
 
@@ -114,9 +115,18 @@ export function BackgroundTransition(props: BgBlockTransition) {
     position,
     time,
   } = props;
-  const container = useScrollContainer();
+
+  // ── Scroll container ─────────────────────────────────────────────────────────
+  // Use the ref object (not .current) so FM can handle deferred DOM mounting.
+  // Reading containerRef.current at render time returns null before the container
+  // mounts, which breaks manual event-listener subscriptions. FM's useScroll
+  // internally watches for the ref to populate, so it works correctly even on
+  // the initial render.
+  const containerRef = useScrollContainerRef();
+
   const [positionTriggered, setPositionTriggered] = useState(false);
   const [transitionStarted, setTransitionStarted] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const hasTriggeredRef = useRef(false);
 
   const transitionMode = useMemo(
@@ -124,6 +134,21 @@ export function BackgroundTransition(props: BgBlockTransition) {
     [mode, progressRange]
   );
 
+  // ── Scroll progress tracking (progress mode only) ────────────────────────────
+  // Use FM's useScroll so the container ref is handled correctly even when the
+  // DOM element isn't mounted on the first render tick. FM watches containerRef
+  // internally rather than reading .current eagerly.
+  const { scrollYProgress } = useScroll({
+    container: containerRef ?? undefined,
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (transitionMode === "progress" && progress == null) {
+      setScrollProgress(latest);
+    }
+  });
+
+  // ── Time-based "background-switch-occurred" event listener ───────────────────
   useEffect(() => {
     if (transitionMode !== "time" || transitionStarted || time || position) return;
     const handler = () => {
@@ -135,14 +160,19 @@ export function BackgroundTransition(props: BgBlockTransition) {
     return () => window.removeEventListener("background-switch-occurred", handler as EventListener);
   }, [transitionMode, transitionStarted, time, position]);
 
+  // ── Scroll position trigger ───────────────────────────────────────────────────
+  // Fires once when scrollTop passes a pixel or percentage threshold.
   useEffect(() => {
-    if (!container || !position || hasTriggeredRef.current) return;
+    if (!position || hasTriggeredRef.current) return;
+    const el = containerRef?.current;
+    if (!el) return;
+
     const parsePosition = (pos: number | string): number | null => {
       if (typeof pos === "number") return pos;
       if (typeof pos === "string" && pos.endsWith("%")) {
         const percent = parseFloat(pos);
         if (isNaN(percent)) return null;
-        const maxScroll = container.scrollHeight - container.clientHeight;
+        const maxScroll = el.scrollHeight - el.clientHeight;
         return (maxScroll * percent) / 100;
       }
       return null;
@@ -151,16 +181,17 @@ export function BackgroundTransition(props: BgBlockTransition) {
     if (targetPosition === null) return;
     const checkPosition = () => {
       if (hasTriggeredRef.current) return;
-      if (container.scrollTop >= targetPosition) {
+      if (el.scrollTop >= targetPosition) {
         hasTriggeredRef.current = true;
         setPositionTriggered(true);
       }
     };
     checkPosition();
-    container.addEventListener("scroll", checkPosition, { passive: true });
-    return () => container.removeEventListener("scroll", checkPosition);
-  }, [container, position]);
+    el.addEventListener("scroll", checkPosition, { passive: true });
+    return () => el.removeEventListener("scroll", checkPosition);
+  }, [containerRef, position]);
 
+  // ── Timer trigger ─────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!time || hasTriggeredRef.current) return;
     const id = setTimeout(() => {
@@ -173,10 +204,11 @@ export function BackgroundTransition(props: BgBlockTransition) {
 
   const effectiveProgress = useMemo(() => {
     if (progress != null) return progress;
+    if (transitionMode === "progress") return scrollProgress;
     if (positionTriggered) return 1;
     if (transitionMode === "time" && transitionStarted) return 1;
     return 0;
-  }, [progress, positionTriggered, transitionMode, transitionStarted]);
+  }, [progress, scrollProgress, positionTriggered, transitionMode, transitionStarted]);
 
   const mappedProgress = useMemo(
     () => mapProgressThroughRange(effectiveProgress, progressRange),

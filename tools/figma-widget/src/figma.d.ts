@@ -29,6 +29,11 @@ interface WidgetNode {
   readonly __widgetNode: unique symbol;
 }
 
+interface TextStyle {
+  id: string;
+  name: string;
+}
+
 type WidgetProps = Record<string, unknown>;
 type WidgetComponent = (props: WidgetProps) => WidgetNode;
 
@@ -37,6 +42,7 @@ declare namespace figma {
   function on(event: "selectionchange" | "run" | "close" | "drop", callback: () => void): void;
   function off(event: string, callback: () => void): void;
   function closePlugin(message?: string): void;
+  function getLocalTextStyles(): ReadonlyArray<TextStyle>;
 
   namespace widget {
     function register(component: () => WidgetNode): void;

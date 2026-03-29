@@ -3,13 +3,15 @@
  * ID inference, annotation prop application, absolute positioning.
  */
 
-import type { ElementInteractions } from "../types/page-builder";
+import type { ElementBlock, ElementInteractions } from "../types/page-builder";
+import type { ConversionContext } from "../types/figma-plugin";
+import { ensureUniqueId, slugify } from "../utils/slugify";
 import {
   extractAbsolutePositionStyle,
   extractConstraintPosition,
   isAbsolutePositioned,
 } from "./layout-auto-props";
-import { extractChildLayoutAlign } from "./layout-frame-props";
+import { extractChildAutoLayoutOverrides } from "./layout-frame-props";
 import { extractPrototypeInteractions } from "./prototype-interactions";
 import { parseElementInteractionAnnotations } from "./annotations-interactions";
 import { parseAnnotationValue, annotationFlag } from "./annotations-parse";
@@ -64,6 +66,53 @@ export interface GroupNodeParentCtx {
 }
 
 // ---------------------------------------------------------------------------
+// meta.figma (exporter contract)
+// ---------------------------------------------------------------------------
+
+/** Inferred mapping from Figma structure when annotations are absent or partial. */
+export type FigmaInferenceMeta = {
+  kind: string;
+  confidence?: "high" | "medium" | "low";
+  detail?: string;
+};
+
+export type FigmaExporterMetaPatch = {
+  sourceType?: string;
+  sourceName?: string;
+  fallbackReason?: string;
+  originalLayers?: Array<{ fill?: string; blendMode?: string; opacity?: number }>;
+  inference?: FigmaInferenceMeta;
+};
+
+function isPlainRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+/** Merges fields into `element.meta.figma` without dropping other meta namespaces. */
+export function mergeElementMetaFigma(elementInput: unknown, patch: FigmaExporterMetaPatch): void {
+  const element = elementInput as Record<string, unknown>;
+  const metaIn = element["meta"];
+  const meta: Record<string, unknown> = isPlainRecord(metaIn) ? { ...metaIn } : {};
+  const figmaIn = meta["figma"];
+  const figma: Record<string, unknown> = isPlainRecord(figmaIn) ? { ...figmaIn } : {};
+
+  if (patch.sourceType !== undefined) figma["sourceType"] = patch.sourceType;
+  if (patch.sourceName !== undefined) figma["sourceName"] = patch.sourceName;
+  if (patch.fallbackReason !== undefined) figma["fallbackReason"] = patch.fallbackReason;
+  if (patch.originalLayers !== undefined) figma["originalLayers"] = patch.originalLayers;
+
+  if (patch.inference !== undefined) {
+    const existing = figma["inference"];
+    figma["inference"] = isPlainRecord(existing)
+      ? { ...existing, ...patch.inference }
+      : { ...patch.inference };
+  }
+
+  meta["figma"] = figma;
+  element["meta"] = meta;
+}
+
+// ---------------------------------------------------------------------------
 // mergeInteractions
 // ---------------------------------------------------------------------------
 
@@ -106,6 +155,36 @@ export function applyAbsPos(
       ...absStyle,
     };
   }
+}
+
+// ---------------------------------------------------------------------------
+// ensureElementId
+// ---------------------------------------------------------------------------
+
+/**
+ * Ensures the element has a non-empty `id`. If missing, assigns a generated fallback id
+ * and records a warning so the exported JSON keeps structure instead of dropping nodes.
+ */
+export function ensureElementId(
+  element: ElementBlock,
+  fallbackSeed: string,
+  ctx: ConversionContext,
+  warnings?: string[]
+): string {
+  const record = element as Record<string, unknown>;
+  const existing = typeof record.id === "string" ? record.id.trim() : "";
+  if (existing.length > 0) return existing;
+
+  const seed =
+    fallbackSeed.trim().length > 0
+      ? fallbackSeed
+      : typeof record.type === "string"
+        ? String(record.type)
+        : "element";
+  const generated = ensureUniqueId(slugify(seed), ctx.usedIds);
+  record.id = generated;
+  warnings?.push(`[ids] assigned fallback id "${generated}" to converted "${seed}" node`);
+  return generated;
 }
 
 // ---------------------------------------------------------------------------
@@ -193,9 +272,20 @@ export function applyElementAnnotationProps(
     if (!isNaN(z)) element.zIndex = z;
   }
 
-  // 11. Per-child align-self
-  const alignSelf = extractChildLayoutAlign(node);
-  if (alignSelf) element.alignSelf = alignSelf;
+  // 11. Per-child auto-layout cross-axis overrides
+  const childLayout = extractChildAutoLayoutOverrides(node);
+  if (childLayout?.align && element.align == null) {
+    element.align = childLayout.align;
+  }
+  if (childLayout?.alignY && element.alignY == null) {
+    element.alignY = childLayout.alignY;
+  }
+  if (childLayout?.wrapperStyle) {
+    element.wrapperStyle = {
+      ...(childLayout.wrapperStyle as Record<string, string | number>),
+      ...((element.wrapperStyle as Record<string, string | number> | undefined) ?? {}),
+    };
+  }
 
   // 12. Motion shorthand
   const motionTiming = buildMotionTiming(annotations);

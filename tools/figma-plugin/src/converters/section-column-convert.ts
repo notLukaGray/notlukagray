@@ -21,10 +21,13 @@ import {
 } from "./effects";
 import { slugify, ensureUniqueId } from "../utils/slugify";
 import { toPx } from "../utils/css";
-import { parseAnnotations, stripAnnotations } from "./annotations-parse";
+import { parseNodeAnnotations, stripAnnotations } from "./annotations-parse";
 import { parseSectionTriggerProps } from "./section-triggers";
 import { getVisibleChildren, warnRepeatedStructuralSignatures } from "./structure-hints";
 import { getInspectableBackgroundAsync } from "./node-css";
+import { ensureElementId, type GroupNodeParentCtx } from "./node-element-helpers";
+import { applySectionFillAnnotationOverride } from "./section-annotation-fill-override";
+import { EXPORT_DROP_REASON, recordConverterDrop } from "../export-parity";
 
 function isColumnContainer(
   node: SceneNode
@@ -66,6 +69,20 @@ function toCssUnit(value: unknown): string | undefined {
   if (typeof value === "string") return value;
   if (typeof value === "number" && Number.isFinite(value)) return toPx(value);
   return undefined;
+}
+
+function buildNodeParentCtx(node: SceneNode): GroupNodeParentCtx {
+  const layoutMode =
+    node.type === "FRAME" || node.type === "COMPONENT" || node.type === "INSTANCE"
+      ? node.layoutMode
+      : "NONE";
+  const hasWidth = "width" in node && typeof node.width === "number";
+  const hasHeight = "height" in node && typeof node.height === "number";
+  return {
+    layoutMode,
+    parentWidth: hasWidth ? node.width : undefined,
+    parentHeight: hasHeight ? node.height : undefined,
+  };
 }
 
 function extractSectionPaddingMarginsFromAutoLayout(autoLayout: Record<string, unknown>): {
@@ -121,7 +138,7 @@ async function extractColumnStyle(node: SceneNode): Promise<Record<string, unkno
       const bottom = toCssUnit(auto.paddingBottom);
       const left = toCssUnit(auto.paddingLeft);
       if (top || right || bottom || left) {
-        style.padding = `${top ?? "0px"} ${right ?? top ?? "0px"} ${bottom ?? top ?? "0px"} ${left ?? right ?? top ?? "0px"}`;
+        style.padding = `${top ?? "0px"} ${right ?? "0px"} ${bottom ?? "0px"} ${left ?? "0px"}`;
       }
     }
   }
@@ -159,7 +176,9 @@ async function convertGridFrameToColumnSection(
 ): Promise<SectionColumnBlock> {
   const rawName = stripAnnotations(frame.name || "");
   const id = ensureUniqueId(slugify(rawName || "section"), ctx.usedIds);
-  const annotations = parseAnnotations(frame.name || "");
+  const annotations = parseNodeAnnotations(
+    frame as unknown as { name?: string } & Record<string, unknown>
+  );
 
   const elements: ElementBlock[] = [];
   const columnAssignments: Record<string, number> = {};
@@ -170,6 +189,7 @@ async function convertGridFrameToColumnSection(
 
   const visibleChildren = getVisibleChildren(children);
   const columnChildren = visibleChildren.filter(isColumnContainer);
+  const columnChildSet = new Set<SceneNode>(columnChildren);
   const inferImplicitColumns =
     columnChildren.length === 0 && visibleChildren.length >= 2 && frame.layoutMode === "HORIZONTAL";
   const implicitColumnOrder = inferImplicitColumns
@@ -177,28 +197,28 @@ async function convertGridFrameToColumnSection(
     : [];
   const implicitColumnIndex = new Map<SceneNode, number>();
   implicitColumnOrder.forEach((child, index) => implicitColumnIndex.set(child, index));
+  const frameParentCtx = buildNodeParentCtx(frame);
 
-  for (const child of visibleChildren) {
-    if (isColumnContainer(child)) {
+  for (const child of children) {
+    if (isColumnContainer(child) && columnChildSet.has(child)) {
       const colIdx = columnChildren.indexOf(child);
       const colChildren = "children" in child ? (child.children as readonly SceneNode[]) : [];
+      const columnParentCtx = buildNodeParentCtx(child);
 
       for (const subChild of colChildren) {
         try {
-          const el = await convertNode(subChild, ctx, {
-            layoutMode: "NONE",
-            parentWidth: frame.width,
-            parentHeight: frame.height,
-          });
+          const el = await convertNode(subChild, ctx, columnParentCtx);
           if (!el) continue;
 
-          const elId = String((el as Record<string, unknown>)["id"] ?? "");
-          if (!elId) continue;
-
+          const elId = ensureElementId(el, subChild.name || subChild.type, ctx, ctx.warnings);
           elements.push(el);
           elementOrder.push(elId);
           columnAssignments[elId] = colIdx;
         } catch (err) {
+          recordConverterDrop(ctx, EXPORT_DROP_REASON.COLUMN_CHILD_ERROR, {
+            nodeName: subChild.name,
+            nodeType: subChild.type,
+          });
           ctx.warnings.push(
             `section-column (grid): error converting child "${subChild.name}" in column ${colIdx + 1}: ${String(err)}`
           );
@@ -209,12 +229,12 @@ async function convertGridFrameToColumnSection(
 
     let el: ElementBlock | null = null;
     try {
-      el = await convertNode(child, ctx, {
-        layoutMode: "NONE",
-        parentWidth: frame.width,
-        parentHeight: frame.height,
-      });
+      el = await convertNode(child, ctx, frameParentCtx);
     } catch (err) {
+      recordConverterDrop(ctx, EXPORT_DROP_REASON.COLUMN_CHILD_ERROR, {
+        nodeName: child.name,
+        nodeType: child.type,
+      });
       ctx.warnings.push(
         `section-column (grid): error converting child "${child.name}": ${String(err)}`
       );
@@ -222,14 +242,15 @@ async function convertGridFrameToColumnSection(
     }
     if (!el) continue;
 
-    const elId = String((el as Record<string, unknown>)["id"] ?? "");
-    if (!elId) continue;
-
+    const elId = ensureElementId(el, child.name || child.type, ctx, ctx.warnings);
     elements.push(el);
     elementOrder.push(elId);
 
     if (inferImplicitColumns) {
-      columnAssignments[elId] = implicitColumnIndex.get(child) ?? 0;
+      const implicitIndex = implicitColumnIndex.get(child);
+      if (typeof implicitIndex === "number") {
+        columnAssignments[elId] = implicitIndex;
+      }
     } else {
       const childX = "x" in child ? (child as { x: number }).x : 0;
       const childWidth = "width" in child ? (child as { width: number }).width : grid.columnWidthPx;
@@ -295,6 +316,10 @@ async function convertGridFrameToColumnSection(
   if (mergedEffects.length > 0) triggerProps.effects = mergedEffects;
   Object.assign(section, triggerProps);
 
+  if (annotations["fill"]) {
+    applySectionFillAnnotationOverride(section as Record<string, unknown>, annotations["fill"]);
+  }
+
   warnRepeatedStructuralSignatures(frame.name || rawName, elements, ctx.warnings, "children", {
     suppress: ctx.autoPresets,
   });
@@ -317,7 +342,9 @@ export async function convertFrameToColumnSection(
     }
   }
 
-  const annotations = parseAnnotations(frame.name || "");
+  const annotations = parseNodeAnnotations(
+    frame as unknown as { name?: string } & Record<string, unknown>
+  );
   const rawName = stripAnnotations(frame.name || "section");
   const sectionId = ensureUniqueId(slugify(rawName), ctx.usedIds);
 
@@ -328,7 +355,9 @@ export async function convertFrameToColumnSection(
   const visibleChildren = (frame.children as readonly SceneNode[]).filter(
     (child) => (child as { visible?: boolean }).visible !== false
   );
+  const allChildren = frame.children as readonly SceneNode[];
   const columnChildren = visibleChildren.filter(isColumnContainer);
+  const columnChildSet = new Set<SceneNode>(columnChildren);
   const looseChildren = visibleChildren.filter((child) => !isColumnContainer(child));
   const inferImplicitColumns =
     columnChildren.length === 0 && visibleChildren.length >= 2 && frame.layoutMode === "HORIZONTAL";
@@ -339,6 +368,7 @@ export async function convertFrameToColumnSection(
     const width = "width" in colFrame ? colFrame.width : 0;
     return x + width / 2;
   });
+  const frameParentCtx = buildNodeParentCtx(frame);
 
   const assignLooseChildToColumn = (child: SceneNode): number => {
     if (columnCenters.length === 0) {
@@ -362,23 +392,31 @@ export async function convertFrameToColumnSection(
     return nearestIndex;
   };
 
-  for (const child of visibleChildren) {
-    if (isColumnContainer(child)) {
+  for (const child of allChildren) {
+    if (isColumnContainer(child) && columnChildSet.has(child)) {
       const colIdx = columnIndexByNode.get(child) ?? 0;
       const colChildren = "children" in child ? (child.children as readonly SceneNode[]) : [];
+      const columnParentCtx = buildNodeParentCtx(child);
 
       for (const subChild of colChildren) {
         try {
-          const converted = await convertNode(subChild, ctx);
+          const converted = await convertNode(subChild, ctx, columnParentCtx);
           if (converted !== null) {
-            const elId = converted.id as string | undefined;
-            if (elId) {
-              columnAssignments[elId] = colIdx;
-              elementOrder.push(elId);
-            }
+            const elId = ensureElementId(
+              converted,
+              subChild.name || subChild.type,
+              ctx,
+              ctx.warnings
+            );
+            columnAssignments[elId] = colIdx;
+            elementOrder.push(elId);
             elements.push(converted);
           }
         } catch (err) {
+          recordConverterDrop(ctx, EXPORT_DROP_REASON.COLUMN_CHILD_ERROR, {
+            nodeName: subChild.name,
+            nodeType: subChild.type,
+          });
           ctx.warnings.push(
             `section-column: error converting child "${subChild.name}" in column ${colIdx + 1}: ${String(err)}`
           );
@@ -388,16 +426,18 @@ export async function convertFrameToColumnSection(
     }
 
     try {
-      const converted = await convertNode(child, ctx);
+      const converted = await convertNode(child, ctx, frameParentCtx);
       if (converted !== null) {
-        const elId = converted.id as string | undefined;
-        if (elId) {
-          columnAssignments[elId] = assignLooseChildToColumn(child);
-          elementOrder.push(elId);
-        }
+        const elId = ensureElementId(converted, child.name || child.type, ctx, ctx.warnings);
+        columnAssignments[elId] = assignLooseChildToColumn(child);
+        elementOrder.push(elId);
         elements.push(converted);
       }
     } catch (err) {
+      recordConverterDrop(ctx, EXPORT_DROP_REASON.COLUMN_CHILD_ERROR, {
+        nodeName: child.name,
+        nodeType: child.type,
+      });
       ctx.warnings.push(
         `section-column: error converting loose child "${child.name}": ${String(err)}`
       );
@@ -496,8 +536,7 @@ export async function convertFrameToColumnSection(
   const section = sectionRecord as unknown as SectionColumnBlock;
 
   if (annotations["fill"]) {
-    section.fill = annotations["fill"];
-    delete (section as Record<string, unknown>).layers;
+    applySectionFillAnnotationOverride(sectionRecord, annotations["fill"]);
   }
   if (annotations["overflow"]) section.overflow = annotations["overflow"];
   if (annotations["hidden"] === "true") section.hidden = true;

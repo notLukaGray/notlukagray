@@ -110,24 +110,40 @@ export function extractLayoutProps(node: SceneNode): LayoutProps {
   return props;
 }
 
-/**
- * Extracts the CSS `align-self` value for a child node within an auto-layout parent.
- * Figma's `layoutAlign` property sets per-child cross-axis alignment.
- *
- * Returns undefined if the value is "INHERIT" or not set (uses parent's alignItems).
- */
-export function extractChildLayoutAlign(node: SceneNode): string | undefined {
-  const layoutAlign = (node as unknown as { layoutAlign?: string }).layoutAlign;
-  if (!layoutAlign || layoutAlign === "INHERIT") return undefined;
+type ParentLayoutMode = "NONE" | "HORIZONTAL" | "VERTICAL";
+type ChildAutoLayoutOverrides = Pick<LayoutProps, "align" | "alignY" | "wrapperStyle">;
 
-  const map: Record<string, string> = {
-    MIN: "flex-start",
-    MAX: "flex-end",
-    CENTER: "center",
-    STRETCH: "stretch",
-    BASELINE: "baseline",
-  };
-  return map[layoutAlign];
+/**
+ * Extracts child-level auto-layout overrides in page-builder schema fields.
+ * Figma `layoutAlign` is a cross-axis child override, so the mapping depends
+ * on the parent auto-layout direction.
+ */
+export function extractChildAutoLayoutOverrides(
+  node: SceneNode
+): ChildAutoLayoutOverrides | undefined {
+  const layoutAlign = (node as { layoutAlign?: string }).layoutAlign;
+  if (!layoutAlign || layoutAlign === "INHERIT" || layoutAlign === "BASELINE") return undefined;
+
+  const parentLayoutMode = readParentLayoutMode(node);
+  if (parentLayoutMode === "NONE") return undefined;
+
+  if (layoutAlign === "STRETCH") {
+    // Preserve Figma stretch behavior without relying on unsupported
+    // top-level alignSelf in the element schema.
+    return { wrapperStyle: { alignSelf: "stretch" } };
+  }
+
+  if (parentLayoutMode === "VERTICAL") {
+    if (layoutAlign === "MIN") return { align: "left" };
+    if (layoutAlign === "CENTER") return { align: "center" };
+    if (layoutAlign === "MAX") return { align: "right" };
+    return undefined;
+  }
+
+  if (layoutAlign === "MIN") return { alignY: "top" };
+  if (layoutAlign === "CENTER") return { alignY: "center" };
+  if (layoutAlign === "MAX") return { alignY: "bottom" };
+  return undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -153,4 +169,15 @@ function figmaBlendModeToCSS(mode: BlendMode): string {
     LUMINOSITY: "luminosity",
   };
   return map[mode] ?? "normal";
+}
+
+function readParentLayoutMode(node: SceneNode): ParentLayoutMode {
+  const parent = node.parent;
+  if (
+    !parent ||
+    (parent.type !== "FRAME" && parent.type !== "COMPONENT" && parent.type !== "INSTANCE")
+  ) {
+    return "NONE";
+  }
+  return parent.layoutMode;
 }

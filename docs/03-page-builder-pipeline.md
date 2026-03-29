@@ -1,5 +1,9 @@
 # Page-builder pipeline
 
+## Figma export diagnostics (dev)
+
+Optional root field `figmaExportDiagnostics` may be present on page JSON when pasted from the Figma plugin “Copy page JSON” flow. It carries exporter parity counts (`converted`, `fallback`, `dropped`) and does not affect runtime rendering. See [16-figma-page-builder-export-contract.md](./16-figma-page-builder-export-contract.md).
+
 ## Pipeline stages
 
 Pages are processed in distinct stages.
@@ -151,19 +155,21 @@ Validation is non-blocking by default.
 In development, if `STRICT_VALIDATION=true`, page validation failures can throw.
 Otherwise, the loader tolerates invalid content enough to keep moving, while still allowing stricter enforcement when needed.
 
-## Manifest and slug generation
+## Slug generation and page discovery
 
-The pipeline is supported by generated artifacts:
+Runtime **page discovery** walks `src/content/pages/` on the filesystem (see `page-builder-discover-pages.ts`); there is no `page-manifest.json` step in the current build.
 
-- `src/content/page-manifest.json`
+Generated artifacts that **are** part of the pipeline:
+
 - `src/core/lib/protected-slugs.generated.ts`
 
-These are produced by:
+Produced by:
 
-- `scripts/generate-page-manifest.ts`
 - `scripts/generate-protected-slugs.ts`
 
-They exist to keep runtime route work lighter and to avoid scanning page files for certain concerns on every request.
+That file keeps password-protection lookup fast for the proxy without reading every page file per request.
+
+An older experimental page-manifest generator still lives under `src/content/_dead/manifest/`; it is not run by `npm run build` and does not write to `src/content/page-manifest.json`.
 
 ## Breakpoint resolution
 
