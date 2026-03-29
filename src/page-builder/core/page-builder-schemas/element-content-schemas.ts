@@ -220,6 +220,7 @@ const elementRichTextSchema = z
   .object({
     type: z.literal("elementRichText"),
     content: z.string(),
+    markup: z.string().optional(),
     level: responsiveElementBodyVariantSchema.optional(),
     wordWrap: z.boolean().optional(),
   })

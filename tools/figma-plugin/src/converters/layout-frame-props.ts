@@ -22,6 +22,8 @@ export function extractLayoutProps(node: SceneNode): LayoutProps {
   const sizingH = (node as unknown as { layoutSizingHorizontal?: string }).layoutSizingHorizontal;
   const sizingV = (node as unknown as { layoutSizingVertical?: string }).layoutSizingVertical;
 
+  const parentLayoutMode = readParentLayoutMode(node);
+
   // Dimensions — map Figma sizing modes to CSS equivalents.
   // FIXED → explicit px (or variable).
   // HUG   → no width emitted (natural content size; group nodes handle this via extractAutoLayoutProps).
@@ -30,7 +32,15 @@ export function extractLayoutProps(node: SceneNode): LayoutProps {
   //          signal and the text will not wrap at the correct container width.
   if ("width" in node) {
     if (sizingH === "FILL") {
-      props.width = "100%";
+      if (parentLayoutMode === "HORIZONTAL") {
+        props.wrapperStyle = {
+          ...(props.wrapperStyle ?? {}),
+          flex: "1 1 0%",
+          minWidth: 0,
+        };
+      } else {
+        props.width = "100%";
+      }
     } else if (sizingH !== "HUG") {
       const rw = resolveNumericVar(boundVars, "width", node.width, "px", node);
       props.width = typeof rw === "number" ? toPx(rw) : rw;
@@ -38,7 +48,15 @@ export function extractLayoutProps(node: SceneNode): LayoutProps {
   }
   if ("height" in node) {
     if (sizingV === "FILL") {
-      props.height = "100%";
+      if (parentLayoutMode === "VERTICAL") {
+        props.wrapperStyle = {
+          ...(props.wrapperStyle ?? {}),
+          flex: "1 1 0%",
+          minHeight: 0,
+        };
+      } else {
+        props.height = "100%";
+      }
     } else if (sizingV !== "HUG") {
       const rh = resolveNumericVar(boundVars, "height", node.height, "px", node);
       props.height = typeof rh === "number" ? toPx(rh) : rh;

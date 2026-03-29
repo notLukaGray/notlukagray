@@ -30,7 +30,18 @@ const INPUT_NAME_RE =
   /(input|field|textfield|text-field|textarea|search|email|password|tel|phone|otp|pin|combobox|combo-?box)\b/i;
 
 export async function isInputLikeInstance(node: InstanceNode): Promise<boolean> {
-  const main = await node.getMainComponentAsync();
+  let main: ComponentNode | null = null;
+  try {
+    const getMainComponent = (
+      node as InstanceNode & { getMainComponentAsync?: () => Promise<ComponentNode | null> }
+    ).getMainComponentAsync;
+    if (typeof getMainComponent === "function") {
+      main = (await getMainComponent.call(node)) ?? null;
+    }
+  } catch {
+    // Library/main-component metadata can be unavailable in some contexts.
+    // Fall back to node name only instead of failing conversion.
+  }
   const name = (main?.name ?? node.name ?? "").toLowerCase();
   return INPUT_NAME_RE.test(name);
 }

@@ -135,6 +135,29 @@ describe("extractAutoLayoutProps primary axis", () => {
     } as unknown as FrameNode);
     expect(props.paddingTop).toBe("var(--spacing-zero-top, 0px)");
   });
+
+  it("maps horizontal fill sizing to flex growth instead of hard 100% width", () => {
+    const props = extractAutoLayoutProps({
+      layoutMode: "VERTICAL",
+      layoutSizingHorizontal: "FILL",
+      layoutSizingVertical: "HUG",
+      primaryAxisAlignItems: "MIN",
+      counterAxisAlignItems: "MIN",
+      itemSpacing: 0,
+      paddingTop: 0,
+      paddingRight: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      children: [{}, {}],
+      parent: {
+        type: "FRAME",
+        layoutMode: "HORIZONTAL",
+      },
+    } as unknown as FrameNode);
+
+    expect(props.width).toBeUndefined();
+    expect(props.wrapperStyle).toMatchObject({ flex: "1 1 0%", minWidth: 0 });
+  });
 });
 
 describe("extractSectionPlacementFromParent baseline", () => {

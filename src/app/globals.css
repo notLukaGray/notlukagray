@@ -466,3 +466,16 @@
   min-width: 100% !important;
   min-height: 100% !important;
 }
+
+/* Rich-text run semantics should remain CSS-driven so font-family swaps are safe. */
+.pb-rich-text strong {
+  font-weight: var(--pb-rich-text-strong-weight, 700);
+}
+
+.pb-rich-text em {
+  font-style: italic;
+}
+
+.pb-rich-text s {
+  text-decoration: line-through;
+}

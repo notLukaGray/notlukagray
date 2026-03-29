@@ -9,7 +9,14 @@ import type { ConversionContext } from "../types/figma-plugin";
 import { stripAnnotations, parseTriggerShorthand } from "./annotations";
 import { extractLayoutProps } from "./layout";
 import { slugify, ensureUniqueId } from "../utils/slugify";
-import { hasChildren, isTextNode } from "@figma-plugin/helpers";
+
+function isTextNodeSafe(node: SceneNode): node is TextNode {
+  return node.type === "TEXT";
+}
+
+function hasChildrenSafe(node: SceneNode): node is SceneNode & { children: readonly SceneNode[] } {
+  return "children" in node && Array.isArray((node as { children?: unknown }).children);
+}
 
 // ---------------------------------------------------------------------------
 // Detection
@@ -61,11 +68,11 @@ export function inferButtonInferenceMeta(
  * Returns its `characters`, or `undefined` if none found.
  */
 function findFirstTextCharacters(node: SceneNode): string | undefined {
-  if (isTextNode(node)) {
+  if (isTextNodeSafe(node)) {
     return node.characters;
   }
 
-  if (hasChildren(node)) {
+  if (hasChildrenSafe(node)) {
     for (const child of node.children as SceneNode[]) {
       const found = findFirstTextCharacters(child);
       if (found !== undefined) return found;
@@ -102,14 +109,14 @@ function extractButtonHref(
 
   // Walk children looking for a TEXT node with a URL hyperlink
   function walkForHyperlink(n: SceneNode): string | undefined {
-    if (isTextNode(n)) {
+    if (isTextNodeSafe(n)) {
       const hl = n.hyperlink;
       if (hl && typeof hl === "object" && "type" in hl) {
         const h = hl as { type: string; value: string };
         if (h.type === "URL") return h.value;
       }
     }
-    if (hasChildren(n)) {
+    if (hasChildrenSafe(n)) {
       for (const child of n.children as SceneNode[]) {
         const found = walkForHyperlink(child);
         if (found !== undefined) return found;

@@ -16,7 +16,14 @@ import { extractPrototypeInteractions } from "./prototype-interactions";
 import { parseElementInteractionAnnotations } from "./annotations-interactions";
 import { parseAnnotationValue, annotationFlag } from "./annotations-parse";
 import { buildMotionTiming } from "./motion";
-import { hasChildren, isTextNode } from "@figma-plugin/helpers";
+
+function isTextNodeSafe(node: SceneNode): node is TextNode {
+  return node.type === "TEXT";
+}
+
+function hasChildrenSafe(node: SceneNode): node is SceneNode & { children: readonly SceneNode[] } {
+  return "children" in node && Array.isArray((node as { children?: unknown }).children);
+}
 
 // ---------------------------------------------------------------------------
 // inferNodeId
@@ -39,10 +46,10 @@ export function inferNodeId(node: SceneNode, fallbackIndex?: number): string {
     return cleanName;
   }
 
-  if (hasChildren(node)) {
+  if (hasChildrenSafe(node)) {
     const children = node.children as SceneNode[];
     for (const child of children) {
-      if (isTextNode(child)) {
+      if (isTextNodeSafe(child)) {
         const text = (child as unknown as { characters: string }).characters?.trim();
         if (text && text.length > 0 && text.length <= 60) {
           return text.slice(0, 40);
@@ -248,11 +255,13 @@ export function applyElementAnnotationProps(
   }
   if (annotations.overflow) element.overflow = annotations.overflow;
 
-  // 7. rotate
-  const nodeWithRotation = node as SceneNode & { rotation?: number };
-  if (typeof nodeWithRotation.rotation === "number") {
-    const deg = -nodeWithRotation.rotation;
-    if (Math.abs(deg) > 0.01) element.rotate = Math.round(deg * 100) / 100;
+  // 7. rotate (only fill when converter did not already set it via extractLayoutProps)
+  if (element.rotate == null && element.type !== "elementSVG") {
+    const nodeWithRotation = node as SceneNode & { rotation?: number };
+    if (typeof nodeWithRotation.rotation === "number") {
+      const deg = nodeWithRotation.rotation;
+      if (Math.abs(deg) > 0.01) element.rotate = Math.round(deg * 100) / 100;
+    }
   }
 
   // 8. flipHorizontal / flipVertical

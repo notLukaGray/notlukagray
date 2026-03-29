@@ -25,6 +25,8 @@ export async function convertVectorNode(
 ): Promise<ElementSVG | null> {
   const id = ensureUniqueId(slugify(node.name || "vector"), ctx.usedIds);
   const layout = extractLayoutProps(node);
+  // SVG export includes node transforms in markup, so avoid double-applying rotation.
+  delete layout.rotate;
   const { boxShadow, filter, backdropFilter, glassEffect } = await extractNodeVisualEffects(node);
   if (boxShadow) layout.boxShadow = boxShadow;
   if (filter) layout.filter = filter;

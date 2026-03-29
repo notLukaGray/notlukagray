@@ -8,7 +8,10 @@ import { nameSuggestsVideo } from "./element-media-detect";
 /**
  * Returns true if the fills array contains a Figma-native VIDEO fill paint.
  */
-export function hasVideoFill(fills: readonly Paint[]): boolean {
+export function hasVideoFill(
+  fills: readonly Paint[] | typeof figma.mixed | null | undefined
+): boolean {
+  if (!Array.isArray(fills)) return false;
   return fills.some((f) => f.visible !== false && (f as Paint & { type: string }).type === "VIDEO");
 }
 
@@ -22,7 +25,7 @@ export function inferVideoInferenceMeta(
   if (annotations.type === "elementVideo" || annotations.type === "video") return null;
 
   if ("fills" in node) {
-    const fills = (node as SceneNode & { fills?: readonly Paint[] }).fills;
+    const fills = (node as SceneNode & { fills?: readonly Paint[] | typeof figma.mixed }).fills;
     if (fills && hasVideoFill(fills)) {
       return { kind: "elementVideo", confidence: "high", detail: "video-fill" };
     }
@@ -55,7 +58,7 @@ export function isVideoNode(node: SceneNode, annotations: Record<string, string>
   if (annotations.type === "elementVideo" || annotations.type === "video") return true;
 
   if ("fills" in node) {
-    const fills = (node as SceneNode & { fills?: readonly Paint[] }).fills;
+    const fills = (node as SceneNode & { fills?: readonly Paint[] | typeof figma.mixed }).fills;
     if (fills && hasVideoFill(fills)) return true;
   }
 

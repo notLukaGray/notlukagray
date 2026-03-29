@@ -26,12 +26,16 @@ export async function gatherDirectChildElements(
         elements.push(converted);
       }
     } catch (err) {
+      const detail =
+        err instanceof Error && typeof err.stack === "string"
+          ? err.stack.split("\n").slice(0, 4).join(" | ")
+          : String(err);
       recordConverterDrop(ctx, EXPORT_DROP_REASON.GATHER_CHILD_ERROR, {
         nodeName: child.name,
         nodeType: child.type,
       });
       ctx.warnings.push(
-        `gatherDirectChildElements: error converting child "${child.name}" in "${frame.name}": ${String(err)}`
+        `gatherDirectChildElements: error converting child "${child.name}" in "${frame.name}": ${detail}`
       );
     }
   }

@@ -37,6 +37,24 @@ export type { GroupNodeParentCtx };
 
 void buildMotionTiming; // referenced transitively via applyElementAnnotationProps
 
+function isVectorLikeType(type: SceneNode["type"]): boolean {
+  return (
+    type === "VECTOR" ||
+    type === "BOOLEAN_OPERATION" ||
+    type === "STAR" ||
+    type === "POLYGON" ||
+    type === "LINE" ||
+    type === "ELLIPSE"
+  );
+}
+
+function isCompositeVectorFrame(node: SceneNode): boolean {
+  if (node.type !== "FRAME" && node.type !== "GROUP") return false;
+  if (!("children" in node) || node.children.length === 0) return false;
+  if (node.type === "FRAME" && node.layoutMode !== "NONE") return false;
+  return node.children.every((child) => isVectorLikeType(child.type));
+}
+
 function finalizeConvertNodeResult(
   ctx: ConversionContext,
   node: SceneNode,
@@ -178,7 +196,10 @@ async function convertNodeImpl(
       if (
         node.textStyleId === figma.mixed ||
         node.fontName === figma.mixed ||
-        node.fontSize === figma.mixed
+        node.fontSize === figma.mixed ||
+        node.fills === figma.mixed ||
+        node.textCase === figma.mixed ||
+        node.textDecoration === figma.mixed
       ) {
         const result = await convertRichTextNode(node, ctx);
         if (result) {
@@ -281,6 +302,15 @@ async function convertNodeImpl(
           "group-image-export-failed",
           parentCtx
         );
+      }
+
+      if (isCompositeVectorFrame(node)) {
+        const result = await convertVectorNode(node, ctx);
+        if (result) {
+          applyAbsPos(result, node, parentCtx);
+          applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+          return result;
+        }
       }
 
       if (

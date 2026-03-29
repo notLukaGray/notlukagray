@@ -150,10 +150,32 @@ export function extractAutoLayoutProps(
     props.maxHeight = toPx(frameNode.maxHeight);
 
   // Sizing modes override fixed width/height when HUG or FILL
+  const parentLayoutMode = readParentLayoutMode(node);
+
   if (frameNode.layoutSizingHorizontal === "HUG") props.width = "fit-content";
-  if (frameNode.layoutSizingHorizontal === "FILL") props.width = "100%";
+  if (frameNode.layoutSizingHorizontal === "FILL") {
+    if (parentLayoutMode === "HORIZONTAL") {
+      props.wrapperStyle = {
+        ...(props.wrapperStyle ?? {}),
+        flex: "1 1 0%",
+        minWidth: 0,
+      };
+    } else {
+      props.width = "100%";
+    }
+  }
   if (frameNode.layoutSizingVertical === "HUG") props.height = "fit-content";
-  if (frameNode.layoutSizingVertical === "FILL") props.height = "100%";
+  if (frameNode.layoutSizingVertical === "FILL") {
+    if (parentLayoutMode === "VERTICAL") {
+      props.wrapperStyle = {
+        ...(props.wrapperStyle ?? {}),
+        flex: "1 1 0%",
+        minHeight: 0,
+      };
+    } else {
+      props.height = "100%";
+    }
+  }
 
   return props;
 }
@@ -247,6 +269,17 @@ function getNodeVisualSize(node: SceneNode & { width: number; height: number }):
     // fall back to raw width/height below
   }
   return { width: node.width, height: node.height };
+}
+
+function readParentLayoutMode(node: SceneNode): "NONE" | "HORIZONTAL" | "VERTICAL" | undefined {
+  const parent = node.parent;
+  if (
+    !parent ||
+    (parent.type !== "FRAME" && parent.type !== "COMPONENT" && parent.type !== "INSTANCE")
+  ) {
+    return undefined;
+  }
+  return parent.layoutMode;
 }
 
 type SectionAlign = "left" | "center" | "right" | "full";

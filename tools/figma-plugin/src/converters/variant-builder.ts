@@ -245,6 +245,11 @@ export async function buildVariantElement(
   }
 
   const hasGestureMotion = Object.keys(gestureMotion).length > 0;
+  const defaultWrapperStyle = ((defaultInner as Record<string, unknown>).wrapperStyle ??
+    {}) as Record<string, unknown>;
+  const defaultHasRoundedMask =
+    (defaultInner as Record<string, unknown>).borderRadius !== undefined ||
+    defaultWrapperStyle.borderRadius !== undefined;
 
   // Apply child-level gesture diffs
   applyChildGestureDiffs(childDiffs, defaultChildren, setAnnotations);
@@ -257,7 +262,7 @@ export async function buildVariantElement(
   // Bug 1 fix: overflow: "visible" belongs on the animated inner element so that
   // Framer Motion can render gesture transforms outside its own box, but NOT on
   // the outer group where it would defeat border-radius clipping (e.g. pill buttons).
-  if (hasGestureMotion) {
+  if (hasGestureMotion && !defaultHasRoundedMask) {
     (defaultInner as Record<string, unknown>).overflow = "visible";
   }
 
@@ -295,6 +300,11 @@ export async function buildVariantElement(
 
   const hasDimensionGestureOuter =
     hasGestureMotion && Object.values(gestureMotion).some((t) => "width" in t || "height" in t);
+  const outerOverflowForDimensionGesture = hasDimensionGestureOuter
+    ? defaultHasRoundedMask
+      ? "hidden"
+      : "visible"
+    : undefined;
 
   const outerGroup: ElementBlock = {
     type: "elementGroup",
@@ -302,7 +312,7 @@ export async function buildVariantElement(
     ...extraProps,
     ...(Object.keys(combinedInteractions).length > 0 ? { interactions: combinedInteractions } : {}),
     ...(motionTiming ? { motionTiming } : {}),
-    ...(hasDimensionGestureOuter ? { overflow: "visible" } : {}),
+    ...(outerOverflowForDimensionGesture ? { overflow: outerOverflowForDimensionGesture } : {}),
     ...(hasDimensionGestureOuter ? { layoutChildren: true } : {}),
     ...(hasDimensionGestureOuter
       ? { motion: { layout: true } as Record<string, unknown> }

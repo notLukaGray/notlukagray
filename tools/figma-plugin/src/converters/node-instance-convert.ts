@@ -34,6 +34,23 @@ type ConvertNodeFn = (
   parentCtx?: GroupNodeParentCtx
 ) => Promise<ElementBlock | null>;
 
+function normalizeVariantPropertyValue(value: unknown): string | undefined {
+  if (typeof value === "string") return value.toLowerCase();
+  if (typeof value === "boolean") return value ? "true" : "false";
+  if (typeof value === "number" && Number.isFinite(value)) return String(value).toLowerCase();
+  return undefined;
+}
+
+function normalizeVariantProperties(variantProps: Record<string, unknown>): Record<string, string> {
+  const normalized: Record<string, string> = {};
+  for (const [key, value] of Object.entries(variantProps)) {
+    const normalizedValue = normalizeVariantPropertyValue(value);
+    if (normalizedValue === undefined) continue;
+    normalized[key] = normalizedValue;
+  }
+  return normalized;
+}
+
 export async function convertInstanceNode(
   node: InstanceNode,
   ctx: ConversionContext,
@@ -41,22 +58,35 @@ export async function convertInstanceNode(
   parentCtx: GroupNodeParentCtx | undefined,
   convertNodeFn: ConvertNodeFn
 ): Promise<ElementBlock | null> {
-  const mainComponent = await node.getMainComponentAsync();
+  let mainComponent: ComponentNode | null = null;
+  try {
+    const getMainComponent = (
+      node as InstanceNode & { getMainComponentAsync?: () => Promise<ComponentNode | null> }
+    ).getMainComponentAsync;
+    if (typeof getMainComponent === "function") {
+      mainComponent = (await getMainComponent.call(node)) ?? null;
+    }
+  } catch (err) {
+    ctx.warnings.push(
+      `[component-variants] Instance "${node.name}" main component lookup failed (${String(err)}) — falling back to rendered child conversion`
+    );
+  }
   const componentSet = mainComponent?.parent;
 
   if (componentSet && componentSet.type === "COMPONENT_SET") {
-    const variantProps = node.variantProperties ?? {};
+    const variantPropsRaw = (node.variantProperties ?? {}) as Record<string, unknown>;
+    const variantProps = normalizeVariantProperties(variantPropsRaw);
 
     let stateKey = Object.keys(variantProps).find((k) =>
       ["state", "mode", "status", "variant"].includes(k.toLowerCase())
     );
     if (!stateKey) {
       stateKey = Object.keys(variantProps).find(
-        (k) => VARIANT_STATE_MAP[variantProps[k].toLowerCase()] !== undefined
+        (k) => VARIANT_STATE_MAP[variantProps[k] ?? ""] !== undefined
       );
     }
 
-    const stateValue = stateKey ? variantProps[stateKey].toLowerCase() : null;
+    const stateValue = stateKey ? (variantProps[stateKey] ?? null) : null;
     const stateInfo = stateValue ? VARIANT_STATE_MAP[stateValue] : null;
     const isBaseOrUnknown = !stateInfo || stateInfo.isBase;
 
@@ -73,8 +103,9 @@ export async function convertInstanceNode(
       applyElementAnnotationProps(variantResult, node, annotations, ctx.warnings);
       return variantResult;
     } else {
+      const rawStateValue = stateKey ? variantPropsRaw[stateKey] : undefined;
       ctx.warnings.push(
-        `[component-variants] Instance "${node.name}" is a non-default variant (${stateKey}=${variantProps[stateKey!]}) placed directly — place the Default variant instead`
+        `[component-variants] Instance "${node.name}" is a non-default variant (${stateKey}=${String(rawStateValue)}) placed directly — place the Default variant instead`
       );
     }
   }

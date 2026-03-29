@@ -32,6 +32,33 @@ function extractBlurRadius(filterValue: string | undefined): string | undefined 
   return `${numeric}px`;
 }
 
+function hasNameGlassHint(node: SceneNode): boolean {
+  const name = (node.name ?? "").trim().toLowerCase();
+  if (!name) return false;
+  return /\b(glass|frost|frosted|liquid)\b/.test(name);
+}
+
+function hasCssGlassHint(css: Record<string, string> | undefined): boolean {
+  if (!css) return false;
+  for (const [key, value] of Object.entries(css)) {
+    const k = key.toLowerCase();
+    const v = String(value ?? "").toLowerCase();
+    if (k.includes("glass") || k.includes("liquid")) return true;
+    if (v.includes("glass") || v.includes("liquid")) return true;
+  }
+  return false;
+}
+
+function shouldSynthesizeGlassFromBackdrop(
+  node: SceneNode,
+  css: Record<string, string> | undefined,
+  backdropFilter: string | undefined
+): boolean {
+  if (!backdropFilter) return false;
+  if (!/blur\(/i.test(backdropFilter)) return false;
+  return hasNameGlassHint(node) || hasCssGlassHint(css);
+}
+
 export type ExtractedNodeVisualEffects = {
   boxShadow?: string;
   filter?: string;
@@ -63,7 +90,7 @@ export async function extractNodeVisualEffects(
     readCssValue(inspectCss, ["backdrop-filter", "backdropFilter", "-webkit-backdrop-filter"]);
 
   let glassEffect = extractGlassEffect(effects, node);
-  if (!glassEffect && backdropFilter) {
+  if (!glassEffect && shouldSynthesizeGlassFromBackdrop(node, inspectCss, backdropFilter)) {
     glassEffect = withLiquidGlassDefaults({
       ...(extractBlurRadius(backdropFilter) ? { frost: extractBlurRadius(backdropFilter) } : {}),
     });

@@ -311,7 +311,7 @@ export async function convertRichTextNode(
   try {
     const runs = parseTextStyle(node) as Array<Record<string, unknown>>;
     if (Array.isArray(runs) && runs.length > 0) {
-      content = runs.map(runToMarkdown).join("");
+      content = runsToMarkdown(runs);
       markup = runs.map(runToHtml).join("");
     }
   } catch {
@@ -336,7 +336,9 @@ export async function convertRichTextNode(
 }
 
 function escapeMarkdownText(value: string): string {
-  return value.replace(/\\/g, "\\\\").replace(/([`*_{}\[\]()#+\-.!|>~])/g, "\\$1");
+  // Keep markdown human-readable for the page-builder markdown renderer.
+  // Escape only tokens that commonly break inline emphasis parsing.
+  return value.replace(/\\/g, "\\\\").replace(/([`*_[\]])/g, "\\$1");
 }
 
 function htmlEscape(value: string): string {
@@ -355,37 +357,101 @@ function normalizeTextCase(value: string, textCase: unknown): string {
   return value;
 }
 
-function runToMarkdown(run: Record<string, unknown>): string {
-  let text = String(run.characters ?? "");
-  text = normalizeTextCase(text, run.textCase);
-  let rendered = escapeMarkdownText(text);
-  const styleName = String((run.fontName as { style?: string } | undefined)?.style ?? "");
-  const isBold = /(semi|demi|extra)?bold|black|heavy|medium/i.test(styleName);
-  const isItalic = /(italic|oblique)/i.test(styleName);
-  const isStrikethrough = run.textDecoration === "STRIKETHROUGH";
+type MarkdownRunStyle = {
+  bold: boolean;
+  italic: boolean;
+  strikethrough: boolean;
+};
 
-  if (isBold) rendered = `**${rendered}**`;
-  if (isItalic) rendered = `*${rendered}*`;
-  if (isStrikethrough) rendered = `~~${rendered}~~`;
+function isRunBold(run: Record<string, unknown>): boolean {
+  const numericWeight =
+    typeof run.fontWeight === "number" && Number.isFinite(run.fontWeight)
+      ? run.fontWeight
+      : undefined;
+  if (numericWeight !== undefined) return numericWeight >= 600;
+  const styleName = String((run.fontName as { style?: string } | undefined)?.style ?? "");
+  return /(semi|demi|extra)?bold|black|heavy/i.test(styleName);
+}
+
+function readMarkdownStyle(run: Record<string, unknown>): MarkdownRunStyle {
+  const styleName = String((run.fontName as { style?: string } | undefined)?.style ?? "");
+  return {
+    bold: isRunBold(run),
+    italic: /(italic|oblique)/i.test(styleName),
+    strikethrough: run.textDecoration === "STRIKETHROUGH",
+  };
+}
+
+function renderMarkdownWithStyle(value: string, style: MarkdownRunStyle): string {
+  // Wrap each non-empty line separately so markdown markers never straddle newlines.
+  const wrapByLine = (value: string, marker: string): string =>
+    value
+      .split("\n")
+      .map((line) => (line.length > 0 ? `${marker}${line}${marker}` : line))
+      .join("\n");
+
+  let rendered = value;
+  if (style.bold) rendered = wrapByLine(rendered, "**");
+  if (style.italic) rendered = wrapByLine(rendered, "*");
+  if (style.strikethrough) rendered = wrapByLine(rendered, "~~");
 
   return rendered;
+}
+
+function sameMarkdownStyle(a: MarkdownRunStyle, b: MarkdownRunStyle): boolean {
+  return a.bold === b.bold && a.italic === b.italic && a.strikethrough === b.strikethrough;
+}
+
+function runsToMarkdown(runs: Array<Record<string, unknown>>): string {
+  let merged = "";
+  let buffer = "";
+  let currentStyle: MarkdownRunStyle | null = null;
+
+  const flush = (): void => {
+    if (!currentStyle || buffer.length === 0) return;
+    merged += renderMarkdownWithStyle(buffer, currentStyle);
+    buffer = "";
+  };
+
+  for (const run of runs) {
+    let text = String(run.characters ?? "");
+    text = normalizeTextCase(text, run.textCase);
+    const escaped = escapeMarkdownText(text);
+    const nextStyle = readMarkdownStyle(run);
+
+    if (currentStyle && !sameMarkdownStyle(currentStyle, nextStyle)) {
+      flush();
+    }
+    currentStyle = nextStyle;
+    buffer += escaped;
+  }
+
+  flush();
+  return merged;
 }
 
 function runToHtml(run: Record<string, unknown>): string {
   let text = String(run.characters ?? "");
   text = normalizeTextCase(text, run.textCase);
-  const escaped = htmlEscape(text).replace(/\n/g, "<br/>");
+  let escaped = htmlEscape(text).replace(/\n/g, "<br/>");
 
   const styleParts: string[] = [];
   if (typeof run.fontSize === "number") styleParts.push(`font-size:${run.fontSize}px`);
-  const fontName = run.fontName as { family?: string; style?: string } | undefined;
-  if (fontName?.family) styleParts.push(`font-family:${fontName.family}`);
-  const styleName = String(fontName?.style ?? "");
-  if (/(semi|demi|extra)?bold|black|heavy|medium/i.test(styleName)) {
-    styleParts.push("font-weight:700");
-  }
-  if (/(italic|oblique)/i.test(styleName)) styleParts.push("font-style:italic");
-  if (run.textDecoration === "STRIKETHROUGH") styleParts.push("text-decoration:line-through");
+  const lineHeightPx =
+    typeof run.lineHeightPx === "number" &&
+    Number.isFinite(run.lineHeightPx) &&
+    run.lineHeightPx > 0
+      ? run.lineHeightPx
+      : undefined;
+  if (lineHeightPx !== undefined) styleParts.push(`line-height:${lineHeightPx}px`);
+  const styleName = String((run.fontName as { style?: string } | undefined)?.style ?? "");
+  const isBold = isRunBold(run);
+  const isItalic = /(italic|oblique)/i.test(styleName);
+  const isStrikethrough = run.textDecoration === "STRIKETHROUGH";
+  if (isBold) escaped = `<strong>${escaped}</strong>`;
+  if (isItalic) escaped = `<em>${escaped}</em>`;
+  if (isStrikethrough) escaped = `<s>${escaped}</s>`;
+
   const fills = run.fills as Paint[] | undefined;
   const solidFill = Array.isArray(fills)
     ? fills.find((fill) => fill.type === "SOLID" && fill.visible !== false)

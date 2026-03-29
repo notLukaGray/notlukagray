@@ -306,6 +306,126 @@ describe("node-to-element annotations", () => {
     expect(group.wrapperStyle?.backgroundColor).toBeUndefined();
   });
 
+  it("exports vector-only frames as a single elementSVG to preserve exact alignment", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Top Label Composite",
+        width: 370,
+        height: 66,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "NONE",
+        children: [
+          { type: "VECTOR", name: "Vector" },
+          { type: "VECTOR", name: "Headline" },
+        ],
+        clipsContent: false,
+        exportAsync: async () =>
+          '<svg width="370" height="66" viewBox="0 0 370 66" xmlns="http://www.w3.org/2000/svg"><rect width="370" height="66" rx="8"/></svg>',
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementSVG");
+    const svg = result as { markup?: string };
+    expect(typeof svg.markup).toBe("string");
+    expect(svg.markup).toContain("<svg");
+    expect(svg.markup).toContain('width="370"');
+  });
+
+  it("does not emit extra rotate on elementSVG (rotation baked into exported SVG)", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "VECTOR",
+        name: "Play Icon",
+        width: 75,
+        height: 75,
+        x: 0,
+        y: 0,
+        rotation: -90,
+        visible: true,
+        exportAsync: async () =>
+          '<svg width="75" height="75" viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg"><path d="M0 0L75 37.5L0 75Z"/></svg>',
+      } as unknown as VectorNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementSVG");
+    const svg = result as { rotate?: number; markup?: string };
+    expect(svg.rotate).toBeUndefined();
+    expect(svg.markup).toContain("<svg");
+  });
+
+  it("routes mixed-fill text to elementRichText to preserve run-level styling", async () => {
+    (globalThis as { figma?: { mixed: symbol } }).figma = { mixed: Symbol("mixed") };
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "TEXT",
+        name: "H2 - What folks are saying",
+        characters: "What Folks Are Saying",
+        width: 320,
+        height: 55,
+        x: 0,
+        y: 0,
+        visible: true,
+        fontName: { family: "CircularXX", style: "Bold" },
+        fontSize: 50,
+        textStyleId: "style-id",
+        fills: (globalThis as { figma: { mixed: symbol } }).figma.mixed,
+        textAlignHorizontal: "CENTER",
+      } as unknown as TextNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementRichText");
+  });
+
+  it("preserves original oversized crop layer dimensions for clipped auto-layout wrappers", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "RECTANGLE",
+        name: "_F8A1374 cropped 1",
+        width: 840,
+        height: 560,
+        x: 0,
+        y: -250,
+        visible: true,
+        parent: { type: "FRAME", width: 610, height: 310 },
+        fills: [
+          {
+            type: "IMAGE",
+            visible: true,
+            imageHash: "hash-1",
+            scaleMode: "CROP",
+            imageTransform: [
+              [1, 0, 0.01],
+              [0, 1, 0.14],
+            ],
+          },
+        ],
+      } as unknown as RectangleNode,
+      {
+        ...ctx,
+        skipAssets: true,
+      }
+    );
+
+    expect(result?.type).toBe("elementImage");
+    const image = result as { width?: string; height?: string; objectFit?: string };
+    expect(image.width).toBe("840px");
+    expect(image.height).toBe("560px");
+    expect(image.objectFit).toBe("cover");
+  });
+
   it("exports native GLASS effects on nested frame groups", async () => {
     const ctx = makeCtx();
     const result = await convertNode(
@@ -347,12 +467,46 @@ describe("node-to-element annotations", () => {
     expect(group.effects?.[0]?.dispersion).toBe(0.35);
   });
 
-  it("infers glass from inspect backdrop-filter when native GLASS is unavailable", async () => {
+  it("keeps backdrop-filter styling without synthesizing glass effects", async () => {
     const ctx = makeCtx();
     const result = await convertNode(
       {
         type: "FRAME",
-        name: "Frosted Card",
+        name: "Backdrop Card",
+        width: 279,
+        height: 155,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        layoutMode: "NONE",
+        children: [],
+        clipsContent: false,
+        getCSSAsync: async () => ({
+          "backdrop-filter": "blur(20px) saturate(160%)",
+        }),
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect(result?.type).toBe("elementGroup");
+    const group = result as {
+      effects?: Array<Record<string, unknown>>;
+      wrapperStyle?: Record<string, unknown>;
+    };
+    expect(group.wrapperStyle?.backdropFilter).toBe("blur(20px) saturate(160%)");
+    expect(group.wrapperStyle?.WebkitBackdropFilter).toBe("blur(20px) saturate(160%)");
+    expect(group.effects).toBeUndefined();
+  });
+
+  it("synthesizes glass when backdrop-filter has an explicit glass hint", async () => {
+    const ctx = makeCtx();
+    const result = await convertNode(
+      {
+        type: "FRAME",
+        name: "Frosted Glass Card",
         width: 279,
         height: 155,
         x: 0,
@@ -382,12 +536,12 @@ describe("node-to-element annotations", () => {
     expect(group.effects?.[0]?.frost).toBe("20px");
   });
 
-  it("exports glass/backdrop effects on rectangle surfaces (elementSVG)", async () => {
+  it("exports backdrop effects on rectangle surfaces (elementSVG) without synthetic glass", async () => {
     const ctx = makeCtx();
     const result = await convertNode(
       {
         type: "RECTANGLE",
-        name: "Glass Rect",
+        name: "Rectangle Surface",
         width: 279,
         height: 155,
         x: 0,
@@ -419,8 +573,7 @@ describe("node-to-element annotations", () => {
     };
     expect(svg.backdropFilter).toBe("blur(18px) saturate(140%)");
     expect(svg.WebkitBackdropFilter).toBe("blur(18px) saturate(140%)");
-    expect(svg.effects?.[0]?.type).toBe("glass");
-    expect(svg.effects?.[0]?.frost).toBe("18px");
+    expect(svg.effects).toBeUndefined();
   });
 
   it("falls back to exported SVG path data when glass clipPath is missing on STAR nodes", async () => {

@@ -109,6 +109,16 @@ export interface VariantGroup {
   matchedFamily?: boolean;
 }
 
+type VariantPropertyValue = string | number | boolean;
+type VariantPropertyMap = Record<string, VariantPropertyValue>;
+
+function normalizeVariantPropertyValue(value: unknown): string | undefined {
+  if (typeof value === "string") return value.toLowerCase();
+  if (typeof value === "boolean") return value ? "true" : "false";
+  if (typeof value === "number" && Number.isFinite(value)) return String(value).toLowerCase();
+  return undefined;
+}
+
 /** Parses "State=Default, Size=Large" into { State: "Default", Size: "Large" }. */
 export function parseVariantName(name: string): Record<string, string> {
   const result: Record<string, string> = {};
@@ -130,30 +140,36 @@ export function getStateVariableKey(elementId: string): string {
 
 function getVariantProperties(
   node: Pick<ComponentNode, "name" | "variantProperties">
-): Record<string, string> {
+): VariantPropertyMap {
   const props = node.variantProperties;
-  if (props && Object.keys(props).length > 0) return props;
+  if (props && Object.keys(props).length > 0) {
+    return props as unknown as VariantPropertyMap;
+  }
   return parseVariantName(node.name);
 }
 
-function getVariantPropertyValue(props: Record<string, string>, key: string): string | undefined {
-  if (props[key] !== undefined) return props[key];
+function getVariantPropertyValue(props: VariantPropertyMap, key: string): string | undefined {
+  if (props[key] !== undefined) return normalizeVariantPropertyValue(props[key]);
   const normalizedKey = key.toLowerCase();
   for (const [propKey, propValue] of Object.entries(props)) {
-    if (propKey.toLowerCase() === normalizedKey) return propValue;
+    if (propKey.toLowerCase() === normalizedKey) {
+      return normalizeVariantPropertyValue(propValue);
+    }
   }
   return undefined;
 }
 
 function normalizeVariantProperties(
-  props: Record<string, string>,
+  props: VariantPropertyMap,
   omitKey?: string
 ): Record<string, string> {
   const normalized: Record<string, string> = {};
   const omitKeyLower = omitKey?.toLowerCase();
   for (const [key, value] of Object.entries(props)) {
     if (omitKeyLower && key.toLowerCase() === omitKeyLower) continue;
-    normalized[key.toLowerCase()] = value.toLowerCase();
+    const normalizedValue = normalizeVariantPropertyValue(value);
+    if (normalizedValue === undefined) continue;
+    normalized[key.toLowerCase()] = normalizedValue;
   }
   return normalized;
 }
@@ -171,7 +187,7 @@ function signatureFromProperties(props: Record<string, string>): string {
  */
 export function extractVariantGroup(
   componentSet: ComponentSetNode,
-  selector?: Record<string, string> | null
+  selector?: Record<string, unknown> | null
 ): VariantGroup | null {
   const children = componentSet.children as readonly ComponentNode[];
   if (children.length === 0) return null;
@@ -290,7 +306,7 @@ export function extractVariantGroup(
   const otherProperties = new Map<string, string>();
   const defaultPairs = getVariantProperties(resolvedDefaultVariant);
   for (const [k, v] of Object.entries(defaultPairs)) {
-    if (k !== statePropertyKey) otherProperties.set(k, v);
+    if (k !== statePropertyKey) otherProperties.set(k, String(v));
   }
 
   return {
