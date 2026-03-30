@@ -4,8 +4,10 @@ export {
   computePositioningStyle,
   computeSizingStyle,
   getElementLayoutStyle,
+  pageBuilderJustifyContentForGap,
   normalizeLayoutInput,
   pageBuilderFlexGapToCss,
+  pageBuilderOverlapGapToCss,
   type ResolvedElementLayout,
 } from "./element-layout-utils/layout-style";
 

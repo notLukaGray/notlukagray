@@ -6,6 +6,8 @@ import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
 import {
   getElementLayoutStyle,
   pageBuilderFlexGapToCss,
+  pageBuilderJustifyContentForGap,
+  pageBuilderOverlapGapToCss,
 } from "@/page-builder/core/element-layout-utils";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";
 import { useSlotDefaultWrapperStyle } from "@/page-builder/elements/ElementModule/ModuleSlotContext";
@@ -137,6 +139,11 @@ export function ElementModuleGroup({
       typeof (borderGradient as BorderGradient).width === "number");
 
   const resolvedFlexGap = pageBuilderFlexGapToCss(gap);
+  const overlapGap = pageBuilderOverlapGapToCss(gap);
+  const resolvedJustifyContent = pageBuilderJustifyContentForGap(
+    justifyContent as CSSProperties["justifyContent"] | undefined,
+    gap
+  );
 
   const groupStyleBase: CSSProperties = {
     ...layoutStyle,
@@ -148,9 +155,7 @@ export function ElementModuleGroup({
     alignItems: inDimensionGesture
       ? "stretch"
       : ((alignItems as CSSProperties["alignItems"]) ?? "center"),
-    ...(justifyContent
-      ? { justifyContent: justifyContent as CSSProperties["justifyContent"] }
-      : {}),
+    ...(resolvedJustifyContent ? { justifyContent: resolvedJustifyContent } : {}),
     ...(resolvedFlexGap != null ? { gap: resolvedFlexGap } : {}),
     ...(rowGap != null ? { rowGap } : {}),
     ...(columnGap != null ? { columnGap } : {}),
@@ -230,6 +235,9 @@ export function ElementModuleGroup({
       ) : null}
       <ElementModuleChildren
         blocks={blocks}
+        overlapGap={overlapGap}
+        flexDirection={(flexDirection as CSSProperties["flexDirection"]) ?? "row"}
+        parentAlignItems={(alignItems as CSSProperties["alignItems"]) ?? "center"}
         inDimensionGesture={inDimensionGesture}
         isMobile={isMobile}
         layoutChildren={layoutChildren}

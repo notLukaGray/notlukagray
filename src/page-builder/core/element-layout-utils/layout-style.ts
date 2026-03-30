@@ -15,7 +15,23 @@ function resolveSize(value: string | undefined): string | undefined {
  */
 export function pageBuilderFlexGapToCss(gap: string | undefined | null): string | undefined {
   if (gap == null || gap === "auto") return undefined;
+  if (/^-\d*\.?\d+(px|rem|em|vw|vh|%)$/i.test(gap.trim())) return undefined;
   return gap;
+}
+
+export function pageBuilderOverlapGapToCss(gap: string | undefined | null): string | undefined {
+  if (gap == null) return undefined;
+  const trimmed = gap.trim();
+  return /^-\d*\.?\d+(px|rem|em|vw|vh|%)$/i.test(trimmed) ? trimmed : undefined;
+}
+
+export function pageBuilderJustifyContentForGap(
+  justifyContent: CSSProperties["justifyContent"] | undefined,
+  gap: string | undefined | null
+): CSSProperties["justifyContent"] | undefined {
+  const overlapGap = pageBuilderOverlapGapToCss(gap);
+  if (overlapGap && justifyContent === "space-between") return "center";
+  return justifyContent;
 }
 
 const ALIGN_TO_ALIGN_SELF: Record<"left" | "center" | "right", string> = {

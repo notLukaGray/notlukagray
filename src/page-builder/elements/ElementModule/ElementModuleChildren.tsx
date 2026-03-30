@@ -13,6 +13,9 @@ import {
 
 type ElementModuleChildrenProps = {
   blocks: ElementBlock[];
+  overlapGap?: string;
+  flexDirection?: CSSProperties["flexDirection"];
+  parentAlignItems?: CSSProperties["alignItems"];
   inDimensionGesture: boolean;
   isMobile: boolean;
   layoutChildren?: boolean;
@@ -20,8 +23,20 @@ type ElementModuleChildrenProps = {
   getActionHandler?: (action: string | undefined, payload?: number) => (() => void) | undefined;
 };
 
+function mapCrossAxisPlacement(
+  alignItems: CSSProperties["alignItems"]
+): CSSProperties["justifyContent"] | CSSProperties["alignItems"] | undefined {
+  if (alignItems === "center") return "center";
+  if (alignItems === "flex-end" || alignItems === "end") return "flex-end";
+  if (alignItems === "flex-start" || alignItems === "start") return "flex-start";
+  return undefined;
+}
+
 export function ElementModuleChildren({
   blocks,
+  overlapGap,
+  flexDirection = "row",
+  parentAlignItems = "center",
   inDimensionGesture,
   isMobile,
   layoutChildren,
@@ -43,11 +58,45 @@ export function ElementModuleChildren({
           : (elWrapperStyle ?? {})
     ) as CSSProperties;
     const wrapperStyle = getContainerWrapperStyle(baseWrapperStyle);
+    const blockWidth = (block as ElementBlock & { width?: unknown }).width;
+    const blockMaxWidth = (block as ElementBlock & { maxWidth?: unknown }).maxWidth;
+    const blockHeight = (block as ElementBlock & { height?: unknown }).height;
+    const blockMaxHeight = (block as ElementBlock & { maxHeight?: unknown }).maxHeight;
+    const isConstrainedFullWidthChild =
+      blockWidth === "100%" && typeof blockMaxWidth === "string" && blockMaxWidth.trim().length > 0;
+    const isConstrainedFullHeightChild =
+      blockHeight === "100%" &&
+      typeof blockMaxHeight === "string" &&
+      blockMaxHeight.trim().length > 0;
+    const isColumnLikeParent = flexDirection === "column" || flexDirection === "column-reverse";
+    const isRowLikeParent = flexDirection === "row" || flexDirection === "row-reverse";
+    const crossAxisPlacement = mapCrossAxisPlacement(parentAlignItems);
+    const shouldApplyConstrainedStretchPlacement =
+      wrapperStyle.alignSelf === "stretch" &&
+      crossAxisPlacement != null &&
+      ((isColumnLikeParent && isConstrainedFullWidthChild) ||
+        (isRowLikeParent && isConstrainedFullHeightChild));
     const cellStyleBase: CSSProperties = inDimensionGesture
       ? { width: "100%", height: "100%", ...wrapperStyle }
       : wrapperStyle;
     const cellLayoutStyle = getChildWrapperLayoutStyle(block, isMobile);
-    const cellStyle: CSSProperties = { ...cellLayoutStyle, ...cellStyleBase };
+    const overlapOffsetStyle: CSSProperties =
+      overlapGap && index > 0
+        ? flexDirection === "column" || flexDirection === "column-reverse"
+          ? { marginTop: overlapGap }
+          : { marginLeft: overlapGap }
+        : {};
+    const constrainedStretchPlacementStyle: CSSProperties = shouldApplyConstrainedStretchPlacement
+      ? isColumnLikeParent
+        ? { display: "flex", justifyContent: crossAxisPlacement as CSSProperties["justifyContent"] }
+        : { display: "flex", alignItems: crossAxisPlacement as CSSProperties["alignItems"] }
+      : {};
+    const cellStyle: CSSProperties = {
+      ...cellLayoutStyle,
+      ...cellStyleBase,
+      ...overlapOffsetStyle,
+      ...constrainedStretchPlacementStyle,
+    };
     const content = <ElementRenderer key={key} block={block} />;
 
     if (handler) {
@@ -76,7 +125,9 @@ export function ElementModuleChildren({
       );
     }
 
+    const needsWrapperForOverlap = !!(overlapGap && index > 0);
     if (
+      !needsWrapperForOverlap &&
       !shouldRenderChildWrapper({
         hasHandler: false,
         layoutChildren: false,

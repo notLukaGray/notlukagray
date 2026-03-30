@@ -4,6 +4,9 @@ import {
   normalizeLayoutInput,
   computePositioningStyle,
   computeSizingStyle,
+  pageBuilderFlexGapToCss,
+  pageBuilderJustifyContentForGap,
+  pageBuilderOverlapGapToCss,
   type ResolvedElementLayout,
 } from "./element-layout-utils";
 
@@ -218,6 +221,25 @@ describe("element-layout-utils", () => {
       expect(v.height).toBe("auto");
       expect(v.top).toBe("5px");
       expect(v.bottom).toBe("8px");
+    });
+  });
+
+  describe("gap helpers", () => {
+    it("omits CSS gap for auto and negative values", () => {
+      expect(pageBuilderFlexGapToCss("auto")).toBeUndefined();
+      expect(pageBuilderFlexGapToCss("-100px")).toBeUndefined();
+      expect(pageBuilderFlexGapToCss("12px")).toBe("12px");
+    });
+
+    it("extracts negative overlap offsets for supported units", () => {
+      expect(pageBuilderOverlapGapToCss("-110.93px")).toBe("-110.93px");
+      expect(pageBuilderOverlapGapToCss("20px")).toBeUndefined();
+    });
+
+    it("normalizes space-between to center for overlap rows", () => {
+      expect(pageBuilderJustifyContentForGap("space-between", "-130px")).toBe("center");
+      expect(pageBuilderJustifyContentForGap("center", "-130px")).toBe("center");
+      expect(pageBuilderJustifyContentForGap("space-between", "20px")).toBe("space-between");
     });
   });
 });

@@ -88,8 +88,7 @@ export function resolveNumericVar(
       if (variable && (variable.resolvedType === "FLOAT" || variable.resolvedType === "STRING")) {
         const cssVar = toCssVarName(variable.name);
         const modeAwareFallback = getModeAwareFallback(variable, node, fallback);
-        const fallbackStr =
-          unit === "px" ? `${Math.round(modeAwareFallback)}px` : `${modeAwareFallback}${unit}`;
+        const fallbackStr = `${modeAwareFallback}${unit}`;
         return `var(${cssVar}, ${fallbackStr})`;
       }
     } catch {
