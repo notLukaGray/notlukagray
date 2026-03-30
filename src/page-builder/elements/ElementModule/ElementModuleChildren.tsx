@@ -91,11 +91,27 @@ export function ElementModuleChildren({
         ? { display: "flex", justifyContent: crossAxisPlacement as CSSProperties["justifyContent"] }
         : { display: "flex", alignItems: crossAxisPlacement as CSSProperties["alignItems"] }
       : {};
+    const wrapperFlex = wrapperStyle.flex;
+    const hasFlexGrowWrapper = typeof wrapperFlex === "string" && /^\s*\d/.test(wrapperFlex);
+    const isClippedGroupWithoutExplicitHeight =
+      block.type === "elementGroup" &&
+      (block as ElementBlock & { overflow?: unknown }).overflow === "hidden" &&
+      (blockHeight == null || blockHeight === "fit-content");
+    const clippedFlexContainStyle: CSSProperties =
+      hasFlexGrowWrapper && isClippedGroupWithoutExplicitHeight
+        ? {
+            display: constrainedStretchPlacementStyle.display ?? "flex",
+            alignItems:
+              (constrainedStretchPlacementStyle.alignItems as CSSProperties["alignItems"]) ??
+              "stretch",
+          }
+        : {};
     const cellStyle: CSSProperties = {
       ...cellLayoutStyle,
       ...cellStyleBase,
       ...overlapOffsetStyle,
       ...constrainedStretchPlacementStyle,
+      ...clippedFlexContainStyle,
     };
     const content = <ElementRenderer key={key} block={block} />;
 
