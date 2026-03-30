@@ -3,7 +3,10 @@
 import { useMemo, useRef, type CSSProperties } from "react";
 import { useDeviceType } from "@/core/providers/device-type-provider";
 import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
-import { getElementLayoutStyle } from "@/page-builder/core/element-layout-utils";
+import {
+  getElementLayoutStyle,
+  pageBuilderFlexGapToCss,
+} from "@/page-builder/core/element-layout-utils";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";
 import { useSlotDefaultWrapperStyle } from "@/page-builder/elements/ElementModule/ModuleSlotContext";
 import { useDimensionGestureContext } from "./Shared/DimensionGestureContext";
@@ -47,6 +50,7 @@ export function ElementModuleGroup({
   marginLeft,
   marginRight,
   align,
+  figmaConstraints,
   wrapperStyle: groupWrapperStyle,
   borderGradient,
   effects,
@@ -122,6 +126,7 @@ export function ElementModuleGroup({
     marginBottom,
     marginLeft,
     marginRight,
+    figmaConstraints,
   });
 
   const hasBorderGradient =
@@ -130,6 +135,8 @@ export function ElementModuleGroup({
     typeof (borderGradient as BorderGradient).stroke === "string" &&
     (typeof (borderGradient as BorderGradient).width === "string" ||
       typeof (borderGradient as BorderGradient).width === "number");
+
+  const resolvedFlexGap = pageBuilderFlexGapToCss(gap);
 
   const groupStyleBase: CSSProperties = {
     ...layoutStyle,
@@ -144,7 +151,7 @@ export function ElementModuleGroup({
     ...(justifyContent
       ? { justifyContent: justifyContent as CSSProperties["justifyContent"] }
       : {}),
-    ...(gap != null ? { gap } : {}),
+    ...(resolvedFlexGap != null ? { gap: resolvedFlexGap } : {}),
     ...(rowGap != null ? { rowGap } : {}),
     ...(columnGap != null ? { columnGap } : {}),
     ...(padding != null ? { padding } : {}),

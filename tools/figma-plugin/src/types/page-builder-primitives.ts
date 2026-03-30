@@ -10,6 +10,20 @@ export interface BorderGradient {
   width: string | number;
 }
 
+/** Raw Figma constraints; the page-builder renderer turns this into CSS. */
+export interface FigmaConstraintsLayout {
+  horizontal?: "LEFT" | "RIGHT" | "LEFT_RIGHT" | "CENTER" | "SCALE";
+  vertical?: "TOP" | "BOTTOM" | "TOP_BOTTOM" | "CENTER" | "SCALE";
+  x?: number;
+  y?: number;
+  right?: number;
+  bottom?: number;
+  width?: number;
+  height?: number;
+  parentWidth?: number;
+  parentHeight?: number;
+}
+
 export interface LayoutProps {
   id?: string;
   width?: ResponsiveString;
@@ -42,6 +56,7 @@ export interface LayoutProps {
   interactions?: ElementInteractions;
   visibleWhen?: ElementVisibleWhen;
   borderGradient?: BorderGradient;
+  figmaConstraints?: FigmaConstraintsLayout;
   wrapperStyle?: Record<string, string | number>;
   aria?: Record<string, string | boolean>;
 }

@@ -106,4 +106,8 @@ export interface ContentBlockProps {
   maxWidth?: string;
   minHeight?: string;
   maxHeight?: string;
+  /** Inline styles merged onto the exported group/section container. */
+  wrapperStyle?: Record<string, string | number>;
+  /** Flexbox `align-content` when `flexWrap` is wrap. */
+  alignContent?: string;
 }

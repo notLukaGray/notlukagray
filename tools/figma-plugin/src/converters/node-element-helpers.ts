@@ -67,9 +67,18 @@ export function inferNodeId(node: SceneNode, fallbackIndex?: number): string {
 // ---------------------------------------------------------------------------
 
 export interface GroupNodeParentCtx {
-  layoutMode: "NONE" | "HORIZONTAL" | "VERTICAL";
+  layoutMode: "NONE" | "HORIZONTAL" | "VERTICAL" | "GRID";
   parentWidth?: number;
   parentHeight?: number;
+  /** True when the parent frame clips content (exported as overflow hidden). */
+  parentClipsContent?: boolean;
+  /**
+   * GROUP nodes report children's x/y in the parent frame's coordinate space, not
+   * relative to the group itself. Set these to the GROUP's own x/y so applyAbsPos
+   * can subtract them to recover group-local coordinates.
+   */
+  originX?: number;
+  originY?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -136,31 +145,40 @@ export function mergeInteractions(
 // ---------------------------------------------------------------------------
 
 export function applyAbsPos(
-  resultInput: unknown,
+  result: ElementBlock,
   node: SceneNode,
   parentCtx?: GroupNodeParentCtx
 ): void {
-  const result = resultInput as Record<string, unknown>;
   if (parentCtx?.layoutMode === "NONE" && "x" in node && "y" in node) {
-    const absStyle = extractAbsolutePositionStyle(
-      node as SceneNode & { x: number; y: number; width: number; height: number }
-    );
-    result.wrapperStyle = {
-      ...absStyle,
-      ...((result.wrapperStyle as Record<string, unknown>) ?? {}),
+    const raw = node as SceneNode & { x: number; y: number; width: number; height: number };
+    // GROUP children report x/y in the parent frame's coordinate space; subtract the
+    // group's own origin to recover coordinates relative to the group.
+    const corrected = {
+      ...raw,
+      x: raw.x - (parentCtx.originX ?? 0),
+      y: raw.y - (parentCtx.originY ?? 0),
     };
-  }
-
-  if (isAbsolutePositioned(node) && "x" in node && "y" in node) {
-    const absStyle = extractConstraintPosition(
-      node as SceneNode & { x: number; y: number; width: number; height: number },
+    const { figmaConstraints } = extractAbsolutePositionStyle(
+      corrected,
       parentCtx?.parentWidth,
       parentCtx?.parentHeight
     );
-    result.wrapperStyle = {
-      ...((result.wrapperStyle as Record<string, unknown>) ?? {}),
-      ...absStyle,
+    result.figmaConstraints = figmaConstraints;
+  }
+
+  if (isAbsolutePositioned(node) && "x" in node && "y" in node) {
+    const raw = node as SceneNode & { x: number; y: number; width: number; height: number };
+    const corrected = {
+      ...raw,
+      x: raw.x - (parentCtx?.originX ?? 0),
+      y: raw.y - (parentCtx?.originY ?? 0),
     };
+    const { figmaConstraints } = extractConstraintPosition(
+      corrected,
+      parentCtx?.parentWidth,
+      parentCtx?.parentHeight
+    );
+    result.figmaConstraints = figmaConstraints;
   }
 }
 

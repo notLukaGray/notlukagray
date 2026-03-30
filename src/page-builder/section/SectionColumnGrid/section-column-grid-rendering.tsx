@@ -1,6 +1,7 @@
 "use client";
 
 import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
+import { pageBuilderFlexGapToCss } from "@/page-builder/core/element-layout-utils";
 import { borderToCss } from "@/page-builder/core/section-utils";
 import { generateElementKey } from "@/page-builder/core/element-keys";
 import type { ColumnFlexStyle, ColumnStyleInput } from "@/page-builder/core/section-column-layout";
@@ -33,7 +34,7 @@ export function getBoxStyle(style: ColumnStyleInput | undefined): React.CSSPrope
     border: borderToCss(style.border),
     backgroundColor: style.fill,
     padding: style.padding,
-    gap: style.gap,
+    gap: pageBuilderFlexGapToCss(style.gap),
     justifyContent,
     alignItems,
     minHeight: style.minHeight,
@@ -115,15 +116,13 @@ export function renderColumnStackSegment({
   return (
     <div key={segmentKey} className="relative z-10 flex min-w-0 w-full" style={rowStyle}>
       {segmentColumns.map((columnElements, columnIndex) => {
-        const colStyle =
-          resolvedColumnCount === 1 && resolvedColumnGaps
-            ? {
-                gap:
-                  typeof resolvedColumnGaps === "string"
-                    ? resolvedColumnGaps
-                    : resolvedColumnGaps[0],
-              }
-            : {};
+        const colStyle = (() => {
+          if (resolvedColumnCount !== 1 || !resolvedColumnGaps) return {};
+          const raw =
+            typeof resolvedColumnGaps === "string" ? resolvedColumnGaps : resolvedColumnGaps[0];
+          const g = pageBuilderFlexGapToCss(raw);
+          return g != null ? { gap: g } : {};
+        })();
         const columnStyle = columnStyles?.[columnIndex];
         const style = { ...colStyle, ...(getBoxStyle(columnStyle) ?? {}) };
         const flexStyle = columnFlexStyles[columnIndex] ?? { flex: "0 0 auto" };

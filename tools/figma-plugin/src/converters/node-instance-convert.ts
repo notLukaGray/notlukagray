@@ -113,7 +113,7 @@ export async function convertInstanceNode(
   const fills = "fills" in node ? (node.fills as Paint[]) : [];
   const imageFill = extractImageFill(fills);
   if (imageFill) {
-    const result = await convertImageNode(node, ctx);
+    const result = await convertImageNode(node, ctx, parentCtx);
     if (result) {
       applyAbsPos(result, node, parentCtx);
       applyElementAnnotationProps(result, node, annotations, ctx.warnings);

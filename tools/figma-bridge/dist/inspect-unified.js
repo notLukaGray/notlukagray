@@ -1,4 +1,4 @@
-import { getAnnotationTemplateTotal, getTopAnnotationTemplates } from "./annotation-templates";
+import { getAnnotationTemplateTotal, getTopAnnotationTemplates, } from "./annotation-templates";
 import { inferContextualInsights } from "./context-inference";
 import { getLayerPrefixDiagnostics, parseExportTargetFromLayerName } from "./export-target-parse";
 import { slugify } from "./slugify";
@@ -61,7 +61,11 @@ function textAnnotationSuggestions() {
 }
 function frameSectionSuggestions() {
     return [
-        { kind: "apply-annotation", label: "Mark as default section", annotation: { type: "contentBlock" } },
+        {
+            kind: "apply-annotation",
+            label: "Mark as default section",
+            annotation: { type: "contentBlock" },
+        },
         { kind: "apply-annotation", label: "Mark as columns", annotation: { type: "sectionColumn" } },
     ];
 }

@@ -2,7 +2,7 @@
  * Converts frame/group nodes to elementGroup blocks and handles rich-text conversion.
  */
 
-import type { ElementBlock } from "../types/page-builder";
+import type { ElementBlock, ElementImage } from "../types/page-builder";
 import type { ConversionContext } from "../types/figma-plugin";
 import {
   extractLayoutProps,
@@ -12,7 +12,8 @@ import {
   extractConstraintPosition,
   isAbsolutePositioned,
 } from "./layout";
-import { extractMultipleFills } from "./fills-image";
+import { extractMultipleFills, extractImageFill, figmaScaleModeToObjectFit } from "./fills-image";
+import { buildAssetKey } from "../utils/asset-key";
 import { extractGradientFill } from "./fills";
 import { slugify, ensureUniqueId } from "../utils/slugify";
 import { toPx } from "../utils/css";
@@ -133,25 +134,25 @@ export async function convertGroupNode(
       ? extractAutoLayoutProps(node as FrameNode | ComponentNode | InstanceNode)
       : {};
 
-  const nodeLayoutMode = ("layoutMode" in node ? node.layoutMode : "NONE") as
-    | "NONE"
-    | "HORIZONTAL"
-    | "VERTICAL";
+  const nodeLayoutMode: GroupNodeParentCtx["layoutMode"] =
+    "layoutMode" in node ? node.layoutMode : "NONE";
 
   if (parentCtx?.layoutMode === "NONE" && "x" in node && "y" in node) {
-    const absStyle = extractAbsolutePositionStyle(
-      node as SceneNode & { x: number; y: number; width: number; height: number }
-    );
-    layout.wrapperStyle = { ...absStyle, ...(layout.wrapperStyle ?? {}) };
-  }
-
-  if (isAbsolutePositioned(node) && "x" in node && "y" in node) {
-    const absStyle = extractConstraintPosition(
+    const { figmaConstraints } = extractAbsolutePositionStyle(
       node as SceneNode & { x: number; y: number; width: number; height: number },
       parentCtx?.parentWidth,
       parentCtx?.parentHeight
     );
-    layout.wrapperStyle = { ...(layout.wrapperStyle ?? {}), ...absStyle };
+    layout.figmaConstraints = figmaConstraints;
+  }
+
+  if (isAbsolutePositioned(node) && "x" in node && "y" in node) {
+    const { figmaConstraints } = extractConstraintPosition(
+      node as SceneNode & { x: number; y: number; width: number; height: number },
+      parentCtx?.parentWidth,
+      parentCtx?.parentHeight
+    );
+    layout.figmaConstraints = figmaConstraints;
   }
 
   if (nodeLayoutMode === "NONE") {
@@ -161,8 +162,7 @@ export async function convertGroupNode(
   }
 
   if (nodeLayoutMode !== "NONE") {
-    const nodeChildren =
-      "children" in node ? (node as unknown as { children: SceneNode[] }).children : [];
+    const nodeChildren = "children" in node ? [...node.children] : [];
     const hasAbsChild = nodeChildren.some(isAbsolutePositioned);
     if (hasAbsChild) {
       const ws: Record<string, string | number> = { ...(layout.wrapperStyle ?? {}) };
@@ -195,6 +195,18 @@ export async function convertGroupNode(
     layoutMode: nodeLayoutMode,
     parentWidth: "width" in node ? (node as { width: number }).width : undefined,
     parentHeight: "height" in node ? (node as { height: number }).height : undefined,
+    parentClipsContent:
+      (node.type === "FRAME" || node.type === "COMPONENT" || node.type === "INSTANCE") &&
+      "clipsContent" in node &&
+      (node as FrameNode).clipsContent === true,
+    // For GROUP nodes, children report x/y in the parent frame's coordinate space, not
+    // relative to the group. Pass the group's own x/y so applyAbsPos can correct them.
+    ...(node.type === "GROUP" && "x" in node && "y" in node
+      ? {
+          originX: (node as { x: number }).x,
+          originY: (node as { y: number }).y,
+        }
+      : {}),
   };
 
   const children = "children" in node ? node.children : [];
@@ -209,6 +221,53 @@ export async function convertGroupNode(
       definitions[childId] = converted;
       elementOrder.push(childId);
       convertedChildren.push(converted);
+    }
+  }
+
+  // Image fill background: when this group/frame has an image fill AND children (content on top),
+  // export the image as a background elementImage injected as the first child.
+  const groupImageFill = extractImageFill(fills);
+  if (groupImageFill) {
+    let bgSrc: string | undefined;
+    if (ctx.skipAssets) {
+      const ak = buildAssetKey(`${node.name || id}/bg`, ctx);
+      bgSrc = ak.cdnKey;
+    } else {
+      const img = figma.getImageByHash(groupImageFill.hash);
+      if (img) {
+        try {
+          const bytes = await img.getBytesAsync();
+          const ak = buildAssetKey(`${node.name || id}/bg`, ctx);
+          ctx.assets.push({ filename: ak.filename, data: new Uint8Array(bytes) });
+          bgSrc = ak.cdnKey;
+        } catch (err) {
+          ctx.warnings.push(`[fills] "${node.name}" image fill export failed: ${String(err)}`);
+        }
+      }
+    }
+
+    if (bgSrc) {
+      const bgId = ensureUniqueId(`${id}-bg`, ctx.usedIds);
+      const objFit = figmaScaleModeToObjectFit(groupImageFill.scaleMode);
+      const bgElement: ElementImage = {
+        type: "elementImage",
+        id: bgId,
+        src: bgSrc,
+        alt: "",
+        objectFit: objFit as ElementImage["objectFit"],
+        wrapperStyle: {
+          position: "absolute",
+          top: "0px",
+          left: "0px",
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
+        },
+      };
+      definitions[bgId] = bgElement as unknown as ElementBlock;
+      elementOrder.unshift(bgId);
+      // Ensure parent is positioned so the absolute bg child works
+      layout.wrapperStyle = { position: "relative", ...(layout.wrapperStyle ?? {}) };
     }
   }
 

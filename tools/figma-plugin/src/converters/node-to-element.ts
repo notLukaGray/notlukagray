@@ -163,7 +163,7 @@ async function convertNodeImpl(
     );
   }
   if (annotations.type === "image") {
-    const result = await convertImageNode(node as RectangleNode, ctx);
+    const result = await convertImageNode(node as RectangleNode, ctx, parentCtx);
     if (result) {
       applyAbsPos(result, node, parentCtx);
       applyElementAnnotationProps(result, node, annotations, ctx.warnings);
@@ -234,7 +234,7 @@ async function convertNodeImpl(
       const fills = node.fills as Paint[];
       const imageFill = extractImageFill(fills);
       if (imageFill) {
-        const result = await convertImageNode(node, ctx);
+        const result = await convertImageNode(node, ctx, parentCtx);
         if (result) {
           const im = inferImageInferenceMeta(node, annotations);
           if (im) mergeElementMetaFigma(result, { inference: im });
@@ -287,21 +287,33 @@ async function convertNodeImpl(
       const fills = "fills" in node ? (node.fills as Paint[]) : [];
       const imageFill = extractImageFill(fills);
       if (imageFill) {
-        const result = await convertImageNode(node, ctx);
-        if (result) {
-          const im = inferImageInferenceMeta(node, annotations);
-          if (im) mergeElementMetaFigma(result, { inference: im });
-          applyAbsPos(result, node, parentCtx);
-          applyElementAnnotationProps(result, node, annotations, ctx.warnings);
-          return result;
-        }
-        return buildFallbackGroupForNode(
-          node,
-          ctx,
-          annotations,
-          "group-image-export-failed",
-          parentCtx
+        // Only flatten to elementImage when the node has no visible children.
+        // Frames/groups with an image fill AND children should be elementGroups with
+        // the image exported as a background child — content renders on top.
+        const nodeChildren =
+          "children" in node ? (node as { children: readonly SceneNode[] }).children : [];
+        const hasVisibleChildren = nodeChildren.some(
+          (c) => !("visible" in c) || (c as { visible?: boolean }).visible !== false
         );
+        if (!hasVisibleChildren) {
+          const result = await convertImageNode(node, ctx, parentCtx);
+          if (result) {
+            const im = inferImageInferenceMeta(node, annotations);
+            if (im) mergeElementMetaFigma(result, { inference: im });
+            applyAbsPos(result, node, parentCtx);
+            applyElementAnnotationProps(result, node, annotations, ctx.warnings);
+            return result;
+          }
+          return buildFallbackGroupForNode(
+            node,
+            ctx,
+            annotations,
+            "group-image-export-failed",
+            parentCtx
+          );
+        }
+        // Has visible children — fall through to convertGroupNode.
+        // The image fill will be injected as a positioned background elementImage child.
       }
 
       if (isCompositeVectorFrame(node)) {

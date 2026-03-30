@@ -3,8 +3,9 @@
  * Exports the node as PNG and stores it in ConversionContext.assets.
  */
 
-import type { ElementImage } from "../types/page-builder";
+import type { ElementImage, LayoutProps } from "../types/page-builder";
 import type { ConversionContext } from "../types/figma-plugin";
+import type { GroupNodeParentCtx } from "./node-element-helpers";
 import { extractLayoutProps } from "./layout";
 import { extractNodeVisualEffects } from "./node-visual-effects";
 import { figmaScaleModeToObjectFit, extractImageFill } from "./fills";
@@ -105,6 +106,52 @@ function computeAspectRatio(width: number, height: number): string | undefined {
   return undefined;
 }
 
+function firstResponsiveLength(value: LayoutProps["width"]): string | undefined {
+  if (value == null) return undefined;
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function parseCssPx(value: string | undefined): number | undefined {
+  if (value == null) return undefined;
+  const m = value.trim().match(/^(-?\d+(?:\.\d+)?)px$/i);
+  if (!m) return undefined;
+  const n = parseFloat(m[1]);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+/**
+ * Flex + overflow:hidden parents clip children to the content box; fixed px sizes
+ * larger than the parent should fill the cell so the image can shrink like in Figma.
+ */
+function maybeExpandImageForClippedFlexParent(
+  layout: Pick<LayoutProps, "width" | "height">,
+  parentCtx?: GroupNodeParentCtx
+): void {
+  if (!parentCtx) return;
+  if (parentCtx.layoutMode !== "HORIZONTAL" && parentCtx.layoutMode !== "VERTICAL") return;
+  if (!parentCtx.parentClipsContent) return;
+  const pw = parentCtx.parentWidth;
+  const ph = parentCtx.parentHeight;
+  if (
+    pw == null ||
+    ph == null ||
+    !Number.isFinite(pw) ||
+    !Number.isFinite(ph) ||
+    pw <= 0 ||
+    ph <= 0
+  ) {
+    return;
+  }
+
+  const w = parseCssPx(firstResponsiveLength(layout.width));
+  const h = parseCssPx(firstResponsiveLength(layout.height));
+  if (w == null || h == null) return;
+  if (w <= pw && h <= ph) return;
+
+  layout.width = "100%";
+  layout.height = "100%";
+}
+
 // ---------------------------------------------------------------------------
 // Converter
 // ---------------------------------------------------------------------------
@@ -125,7 +172,8 @@ function computeAspectRatio(width: number, height: number): string | undefined {
  */
 export async function convertImageNode(
   node: SceneNode,
-  ctx: ConversionContext
+  ctx: ConversionContext,
+  parentCtx?: GroupNodeParentCtx
 ): Promise<ElementImage | null> {
   const id = ensureUniqueId(slugify(node.name || "image"), ctx.usedIds);
   const layout = extractLayoutProps(node);
@@ -256,6 +304,8 @@ export async function convertImageNode(
     ...(aspectRatio ? { aspectRatio } : {}),
     ...layout,
   };
+
+  maybeExpandImageForClippedFlexParent(result, parentCtx);
 
   // Annotation-based objectPosition override: [pb: objectPosition=top] or
   // [pb: objectPosition=center center]. Annotation wins over transform-derived value.

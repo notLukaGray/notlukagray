@@ -22,11 +22,13 @@ describe("layout-auto-props absolute positioning", () => {
     } as unknown as SceneNode & { x: number; y: number; width: number; height: number });
 
     expect(vi.mocked(getBoundingRect)).toHaveBeenCalled();
-    expect(style).toMatchObject({
-      left: "10px",
-      top: "20px",
-      width: "140px",
-      height: "70px",
+    expect(style.figmaConstraints).toMatchObject({
+      horizontal: "LEFT",
+      vertical: "TOP",
+      x: 10,
+      y: 20,
+      width: 140,
+      height: 70,
     });
   });
 
@@ -39,11 +41,13 @@ describe("layout-auto-props absolute positioning", () => {
       rotation: 0,
     } as unknown as SceneNode & { x: number; y: number; width: number; height: number });
 
-    expect(style).toMatchObject({
-      left: "5px",
-      top: "6px",
-      width: "100px",
-      height: "50px",
+    expect(style.figmaConstraints).toMatchObject({
+      horizontal: "LEFT",
+      vertical: "TOP",
+      x: 5,
+      y: 6,
+      width: 100,
+      height: 50,
     });
   });
 
@@ -61,11 +65,15 @@ describe("layout-auto-props absolute positioning", () => {
       300
     );
 
-    expect(style).toMatchObject({
-      right: "240px",
-      bottom: "200px",
-      width: "140px",
-      height: "70px",
+    expect(style.figmaConstraints).toMatchObject({
+      horizontal: "RIGHT",
+      vertical: "BOTTOM",
+      right: 240,
+      bottom: 200,
+      width: 140,
+      height: 70,
+      parentWidth: 400,
+      parentHeight: 300,
     });
   });
 });
@@ -134,6 +142,23 @@ describe("extractAutoLayoutProps primary axis", () => {
       children: [{}, {}],
     } as unknown as FrameNode);
     expect(props.paddingTop).toBe("var(--spacing-zero-top, 0px)");
+  });
+
+  it("uses gap auto when child geometry implies non-zero spacing but itemSpacing is 0", () => {
+    const child0 = { x: 0, y: 0, width: 100, height: 50, layoutPositioning: "AUTO" };
+    const child1 = { x: 70, y: 0, width: 100, height: 50, layoutPositioning: "AUTO" };
+    const props = extractAutoLayoutProps({
+      layoutMode: "HORIZONTAL",
+      primaryAxisAlignItems: "MIN",
+      counterAxisAlignItems: "MIN",
+      itemSpacing: 0,
+      paddingTop: 0,
+      paddingRight: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      children: [child0, child1],
+    } as unknown as FrameNode);
+    expect(props.gap).toBe("auto");
   });
 
   it("maps horizontal fill sizing to flex growth instead of hard 100% width", () => {

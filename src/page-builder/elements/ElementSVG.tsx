@@ -369,6 +369,7 @@ export const ElementSVG = forwardRef<HTMLAnchorElement | HTMLDivElement, Props>(
       flipVertical = false,
       link,
       interactions,
+      figmaConstraints,
     },
     ref
   ) => {
@@ -426,6 +427,7 @@ export const ElementSVG = forwardRef<HTMLAnchorElement | HTMLDivElement, Props>(
       zIndex,
       fixed,
       constraints,
+      figmaConstraints,
       effects: resolvedEffects,
       wrapperStyle,
       opacity,

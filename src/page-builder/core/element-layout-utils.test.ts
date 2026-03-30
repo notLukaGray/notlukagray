@@ -161,5 +161,63 @@ describe("element-layout-utils", () => {
         marginBottom: "auto",
       });
     });
+
+    it("applies figmaConstraints after wrapperStyle (absolute positioning)", () => {
+      const style = getElementLayoutStyle({
+        width: "200px",
+        figmaConstraints: {
+          horizontal: "LEFT",
+          vertical: "TOP",
+          x: 8,
+          y: 12,
+          width: 96,
+          height: 48,
+        },
+        wrapperStyle: { left: "1px", top: "2px" },
+      });
+      expect(style).toMatchObject({
+        position: "absolute",
+        left: "8px",
+        top: "12px",
+        width: "96px",
+        height: "48px",
+      });
+    });
+
+    it("uses width/height auto for LEFT_RIGHT / TOP_BOTTOM stretch modes", () => {
+      const h = getElementLayoutStyle({
+        width: "500px",
+        figmaConstraints: {
+          horizontal: "LEFT_RIGHT",
+          vertical: "TOP",
+          x: 0,
+          y: 0,
+          right: 10,
+          width: 400,
+          height: 40,
+          parentWidth: 800,
+        },
+      });
+      expect(h.width).toBe("auto");
+      expect(h.left).toBe("0px");
+      expect(h.right).toBe("10px");
+
+      const v = getElementLayoutStyle({
+        height: "300px",
+        figmaConstraints: {
+          horizontal: "LEFT",
+          vertical: "TOP_BOTTOM",
+          x: 0,
+          y: 5,
+          bottom: 8,
+          width: 40,
+          height: 200,
+          parentHeight: 400,
+        },
+      });
+      expect(v.height).toBe("auto");
+      expect(v.top).toBe("5px");
+      expect(v.bottom).toBe("8px");
+    });
   });
 });

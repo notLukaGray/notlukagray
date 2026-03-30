@@ -14,6 +14,7 @@ export {
   isAbsolutePositioned,
   extractConstraintPosition,
   extractSectionPlacementFromParent,
+  type FigmaConstraintsPayload,
 } from "./layout-auto-props";
 
 export type { ColumnGridInfo } from "./layout-grid";

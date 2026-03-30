@@ -55,6 +55,7 @@ export function computeElementImagePresentation(
     flipVertical = false,
     link,
     aspectRatio,
+    figmaConstraints,
   } = props;
 
   const fillHeight = height === "100%";
@@ -69,6 +70,7 @@ export function computeElementImagePresentation(
     marginBottom,
     marginLeft,
     marginRight,
+    figmaConstraints,
     effects,
     wrapperStyle,
     opacity,

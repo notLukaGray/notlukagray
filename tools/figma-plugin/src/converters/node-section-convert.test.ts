@@ -57,17 +57,23 @@ describe("convertSectionNode", () => {
       .mockResolvedValue({ type: "elementSpacer", id: "child-a", height: "10px" });
     const node = makeSectionNode([{ type: "RECTANGLE", name: "Child A" } as unknown as SceneNode]);
 
-    const result = (await convertSectionNode(
+    const result = await convertSectionNode(
       node,
       ctx,
       {},
       { layoutMode: "NONE", parentWidth: 1000, parentHeight: 1000 },
       convertNodeFn
-    )) as Record<string, unknown>;
-    const wrapperStyle = result.wrapperStyle as Record<string, unknown>;
+    );
 
-    expect(wrapperStyle.position).toBe("absolute");
-    expect(wrapperStyle.left).toBe("12px");
-    expect(wrapperStyle.top).toBe("24px");
+    expect(result.figmaConstraints).toMatchObject({
+      horizontal: "LEFT",
+      vertical: "TOP",
+      x: 12,
+      y: 24,
+      width: 420,
+      height: 240,
+      parentWidth: 1000,
+      parentHeight: 1000,
+    });
   });
 });

@@ -43,7 +43,12 @@ export function extractLayoutProps(node: SceneNode): LayoutProps {
       }
     } else if (sizingH !== "HUG") {
       const rw = resolveNumericVar(boundVars, "width", node.width, "px", node);
-      props.width = typeof rw === "number" ? toPx(rw) : rw;
+      // Guard against NaN (e.g. empty GROUP nodes) — "NaNpx" breaks layout.
+      if (typeof rw === "number") {
+        if (Number.isFinite(rw)) props.width = toPx(rw);
+      } else {
+        props.width = rw;
+      }
     }
   }
   if ("height" in node) {
@@ -59,7 +64,12 @@ export function extractLayoutProps(node: SceneNode): LayoutProps {
       }
     } else if (sizingV !== "HUG") {
       const rh = resolveNumericVar(boundVars, "height", node.height, "px", node);
-      props.height = typeof rh === "number" ? toPx(rh) : rh;
+      // Guard against NaN (e.g. empty GROUP nodes) — "NaNpx" breaks layout.
+      if (typeof rh === "number") {
+        if (Number.isFinite(rh)) props.height = toPx(rh);
+      } else {
+        props.height = rh;
+      }
     }
   }
 
@@ -128,7 +138,7 @@ export function extractLayoutProps(node: SceneNode): LayoutProps {
   return props;
 }
 
-type ParentLayoutMode = "NONE" | "HORIZONTAL" | "VERTICAL";
+type ParentLayoutMode = "NONE" | "HORIZONTAL" | "VERTICAL" | "GRID";
 type ChildAutoLayoutOverrides = Pick<LayoutProps, "align" | "alignY" | "wrapperStyle">;
 
 /**
@@ -143,7 +153,7 @@ export function extractChildAutoLayoutOverrides(
   if (!layoutAlign || layoutAlign === "INHERIT" || layoutAlign === "BASELINE") return undefined;
 
   const parentLayoutMode = readParentLayoutMode(node);
-  if (parentLayoutMode === "NONE") return undefined;
+  if (parentLayoutMode !== "VERTICAL" && parentLayoutMode !== "HORIZONTAL") return undefined;
 
   if (layoutAlign === "STRETCH") {
     // Preserve Figma stretch behavior without relying on unsupported

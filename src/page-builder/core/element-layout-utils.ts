@@ -5,8 +5,14 @@ export {
   computeSizingStyle,
   getElementLayoutStyle,
   normalizeLayoutInput,
+  pageBuilderFlexGapToCss,
   type ResolvedElementLayout,
 } from "./element-layout-utils/layout-style";
+
+export {
+  resolveConstraintStyle,
+  type FigmaConstraintsInput,
+} from "./element-layout-utils/figma-constraints-style";
 
 export {
   getElementTransformStyle,

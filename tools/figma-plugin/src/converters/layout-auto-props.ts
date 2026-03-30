@@ -18,7 +18,7 @@ export function extractAutoLayoutProps(
 
   if (node.layoutMode === "NONE") return props;
 
-  const boundVars = (node as unknown as { boundVariables?: BoundVarsMap }).boundVariables;
+  const boundVars = (node as SceneNode & { boundVariables?: BoundVarsMap }).boundVariables;
 
   props.display = "flex";
   props.flexDirection = node.layoutMode === "HORIZONTAL" ? "row" : "column";
@@ -61,14 +61,24 @@ export function extractAutoLayoutProps(
       break;
   }
 
-  // Spacing — resolve variable bindings
-  // Only emit gap when there are at least 2 children; with 0 or 1 children
-  // the gap value is invisible and clutters the output JSON.
-  const visibleChildCount =
-    "children" in node ? (node as unknown as { children: SceneNode[] }).children.length : 0;
-  if (node.itemSpacing !== 0 && visibleChildCount >= 2) {
-    const resolvedGap = resolveNumericVar(boundVars, "itemSpacing", node.itemSpacing, "px", node);
-    props.gap = typeof resolvedGap === "number" ? toPx(resolvedGap) : resolvedGap;
+  // Spacing — API only exposes itemSpacing as a number; "packed" / dynamic spacing often
+  // still reads as 0. When geometry shows non-zero effective spacing, emit gap: "auto"
+  // so the renderer omits fixed CSS gap and relies on flex + child layout (explicit
+  // negative/positive itemSpacing still exports as px, e.g. -200px).
+  const visibleChildCount = node.children.length;
+  if (visibleChildCount >= 2) {
+    if (node.itemSpacing !== 0) {
+      const resolvedGap = resolveNumericVar(boundVars, "itemSpacing", node.itemSpacing, "px", node);
+      props.gap = typeof resolvedGap === "number" ? toPx(resolvedGap) : resolvedGap;
+    } else if (shouldEmitItemSpacingVariable(boundVars, node.itemSpacing)) {
+      const resolvedGap = resolveNumericVar(boundVars, "itemSpacing", node.itemSpacing, "px", node);
+      props.gap = typeof resolvedGap === "number" ? toPx(resolvedGap) : resolvedGap;
+    } else {
+      const inferred = inferPrimaryAxisGapFromFlowChildren(node);
+      if (inferred !== undefined && Number.isFinite(inferred) && Math.abs(inferred) > 1e-3) {
+        props.gap = "auto";
+      }
+    }
   }
 
   // counterAxisSpacing (multi-wrap gap on the cross axis)
@@ -113,7 +123,7 @@ export function extractAutoLayoutProps(
   if ("layoutWrap" in node && node.layoutWrap === "WRAP") {
     props.flexWrap = "wrap";
 
-    const counterAxisAlignContent = (node as unknown as { counterAxisAlignContent?: string })
+    const counterAxisAlignContent = (node as FrameNode & { counterAxisAlignContent?: string })
       .counterAxisAlignContent;
     if (counterAxisAlignContent) {
       const alignContentMap: Record<string, string> = {
@@ -126,7 +136,7 @@ export function extractAutoLayoutProps(
         BASELINE: "baseline",
       };
       const mapped = alignContentMap[counterAxisAlignContent];
-      if (mapped && mapped !== "normal") (props as Record<string, unknown>).alignContent = mapped;
+      if (mapped && mapped !== "normal") props.alignContent = mapped;
     }
   }
 
@@ -180,21 +190,52 @@ export function extractAutoLayoutProps(
   return props;
 }
 
+export type FigmaConstraintsPayload = {
+  horizontal?: "LEFT" | "RIGHT" | "LEFT_RIGHT" | "CENTER" | "SCALE";
+  vertical?: "TOP" | "BOTTOM" | "TOP_BOTTOM" | "CENTER" | "SCALE";
+  x?: number;
+  y?: number;
+  right?: number;
+  bottom?: number;
+  width?: number;
+  height?: number;
+  parentWidth?: number;
+  parentHeight?: number;
+};
+
 /**
- * Extracts CSS absolute-position styles for a node whose parent uses free
- * (non-auto-layout) positioning. Returns a wrapperStyle-compatible object.
+ * Raw absolute geometry for a node whose parent uses free (non-auto-layout)
+ * positioning. The page-builder renderer maps this to CSS via `figmaConstraints`.
  */
 export function extractAbsolutePositionStyle(
-  node: SceneNode & { x: number; y: number; width: number; height: number }
-): Record<string, string | number> {
+  node: SceneNode & { x: number; y: number; width: number; height: number },
+  parentWidth?: number,
+  parentHeight?: number
+): { figmaConstraints: FigmaConstraintsPayload } {
   const visualSize = getNodeVisualSize(node);
-  return {
-    position: "absolute",
-    left: toPx(Math.round(node.x)),
-    top: toPx(Math.round(node.y)),
-    width: toPx(Math.round(visualSize.width)),
-    height: toPx(Math.round(visualSize.height)),
+  const right =
+    parentWidth !== undefined && Number.isFinite(parentWidth)
+      ? parentWidth - node.x - visualSize.width
+      : undefined;
+  const bottom =
+    parentHeight !== undefined && Number.isFinite(parentHeight)
+      ? parentHeight - node.y - visualSize.height
+      : undefined;
+
+  const figmaConstraints: FigmaConstraintsPayload = {
+    horizontal: "LEFT",
+    vertical: "TOP",
+    x: node.x,
+    y: node.y,
+    ...(right !== undefined && Number.isFinite(right) ? { right } : {}),
+    ...(bottom !== undefined && Number.isFinite(bottom) ? { bottom } : {}),
+    ...(Number.isFinite(visualSize.width) ? { width: visualSize.width } : {}),
+    ...(Number.isFinite(visualSize.height) ? { height: visualSize.height } : {}),
+    ...(parentWidth !== undefined && Number.isFinite(parentWidth) ? { parentWidth } : {}),
+    ...(parentHeight !== undefined && Number.isFinite(parentHeight) ? { parentHeight } : {}),
   };
+
+  return { figmaConstraints };
 }
 
 /**
@@ -209,47 +250,53 @@ export function isAbsolutePositioned(node: SceneNode): boolean {
 }
 
 /**
- * Extracts CSS positioning for a node that is absolutely positioned inside an
- * auto-layout parent. Uses constraints to decide left/right/top/bottom.
+ * Raw constraint + geometry for a node that is absolutely positioned inside an
+ * auto-layout parent. The page-builder maps `figmaConstraints` to CSS.
  */
 export function extractConstraintPosition(
   node: SceneNode & { x: number; y: number; width: number; height: number },
   parentWidth?: number,
   parentHeight?: number
-): Record<string, string | number> {
-  const style: Record<string, string | number> = { position: "absolute" };
+): { figmaConstraints: FigmaConstraintsPayload } {
   const visualSize = getNodeVisualSize(node);
 
   const constraints = (
     node as unknown as { constraints?: { horizontal: string; vertical: string } }
   ).constraints;
-  const hc = constraints?.horizontal ?? "LEFT";
-  const vc = constraints?.vertical ?? "TOP";
+  const rawH = constraints?.horizontal ?? "LEFT";
+  const rawV = constraints?.vertical ?? "TOP";
+  const hc: NonNullable<FigmaConstraintsPayload["horizontal"]> =
+    rawH === "RIGHT" || rawH === "LEFT_RIGHT" || rawH === "CENTER" || rawH === "SCALE"
+      ? rawH
+      : "LEFT";
+  const vc: NonNullable<FigmaConstraintsPayload["vertical"]> =
+    rawV === "BOTTOM" || rawV === "TOP_BOTTOM" || rawV === "CENTER" || rawV === "SCALE"
+      ? rawV
+      : "TOP";
 
-  // Horizontal
-  if (hc === "RIGHT" && parentWidth !== undefined) {
-    style.right = toPx(Math.round(parentWidth - node.x - visualSize.width));
-  } else if (hc === "LEFT_RIGHT" && parentWidth !== undefined) {
-    style.left = toPx(Math.round(node.x));
-    style.right = toPx(Math.round(parentWidth - node.x - visualSize.width));
-  } else {
-    style.left = toPx(Math.round(node.x));
-  }
+  const right =
+    parentWidth !== undefined && Number.isFinite(parentWidth)
+      ? parentWidth - node.x - visualSize.width
+      : undefined;
+  const bottom =
+    parentHeight !== undefined && Number.isFinite(parentHeight)
+      ? parentHeight - node.y - visualSize.height
+      : undefined;
 
-  // Vertical
-  if (vc === "BOTTOM" && parentHeight !== undefined) {
-    style.bottom = toPx(Math.round(parentHeight - node.y - visualSize.height));
-  } else if (vc === "TOP_BOTTOM" && parentHeight !== undefined) {
-    style.top = toPx(Math.round(node.y));
-    style.bottom = toPx(Math.round(parentHeight - node.y - visualSize.height));
-  } else {
-    style.top = toPx(Math.round(node.y));
-  }
+  const figmaConstraints: FigmaConstraintsPayload = {
+    horizontal: hc,
+    vertical: vc,
+    x: node.x,
+    y: node.y,
+    ...(right !== undefined && Number.isFinite(right) ? { right } : {}),
+    ...(bottom !== undefined && Number.isFinite(bottom) ? { bottom } : {}),
+    ...(Number.isFinite(visualSize.width) ? { width: visualSize.width } : {}),
+    ...(Number.isFinite(visualSize.height) ? { height: visualSize.height } : {}),
+    ...(parentWidth !== undefined && Number.isFinite(parentWidth) ? { parentWidth } : {}),
+    ...(parentHeight !== undefined && Number.isFinite(parentHeight) ? { parentHeight } : {}),
+  };
 
-  style.width = toPx(Math.round(visualSize.width));
-  style.height = toPx(Math.round(visualSize.height));
-
-  return style;
+  return { figmaConstraints };
 }
 
 function getNodeVisualSize(node: SceneNode & { width: number; height: number }): {
@@ -271,7 +318,9 @@ function getNodeVisualSize(node: SceneNode & { width: number; height: number }):
   return { width: node.width, height: node.height };
 }
 
-function readParentLayoutMode(node: SceneNode): "NONE" | "HORIZONTAL" | "VERTICAL" | undefined {
+function readParentLayoutMode(
+  node: SceneNode
+): "NONE" | "HORIZONTAL" | "VERTICAL" | "GRID" | undefined {
   const parent = node.parent;
   if (
     !parent ||
@@ -332,7 +381,7 @@ export function extractSectionPlacementFromParent(
 
   const placement: SectionParentPlacement = {};
 
-  const childLayoutAlign = (node as unknown as { layoutAlign?: string }).layoutAlign;
+  const childLayoutAlign = (node as SceneNode & { layoutAlign?: string }).layoutAlign;
   if (parentLayoutNode.layoutMode === "VERTICAL") {
     placement.align =
       mapChildLayoutAlignToSectionAlign(childLayoutAlign) ??
@@ -368,4 +417,36 @@ function shouldEmitPaddingSide(
     return raw.some((entry) => entry?.type === "VARIABLE_ALIAS");
   }
   return raw.type === "VARIABLE_ALIAS";
+}
+
+function shouldEmitItemSpacingVariable(
+  boundVars: BoundVarsMap | undefined,
+  itemSpacing: number
+): boolean {
+  if (itemSpacing !== 0) return false;
+  const raw = boundVars?.itemSpacing;
+  if (!raw) return false;
+  if (Array.isArray(raw)) {
+    return raw.some((entry) => entry?.type === "VARIABLE_ALIAS");
+  }
+  return raw.type === "VARIABLE_ALIAS";
+}
+
+type LayoutPositioningNode = SceneNode & { layoutPositioning?: "AUTO" | "ABSOLUTE" };
+
+function inferPrimaryAxisGapFromFlowChildren(
+  node: FrameNode | ComponentNode | InstanceNode
+): number | undefined {
+  if (node.layoutMode !== "HORIZONTAL" && node.layoutMode !== "VERTICAL") return undefined;
+  const flow = node.children.filter((c) => {
+    const lp = (c as LayoutPositioningNode).layoutPositioning;
+    return lp !== "ABSOLUTE";
+  });
+  if (flow.length < 2) return undefined;
+  const a = flow[0]!;
+  const b = flow[1]!;
+  if (node.layoutMode === "HORIZONTAL") {
+    return b.x - (a.x + a.width);
+  }
+  return b.y - (a.y + a.height);
 }

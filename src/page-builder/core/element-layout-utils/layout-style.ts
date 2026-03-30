@@ -1,10 +1,21 @@
 import type { CSSProperties } from "react";
 import type { ElementLayout } from "../page-builder-schemas";
 import { resolveResponsiveValue } from "../../../core/lib/responsive-value";
+import { resolveConstraintStyle } from "./figma-constraints-style";
 
 function resolveSize(value: string | undefined): string | undefined {
   if (value == null) return undefined;
   return value === "hug" ? "fit-content" : value;
+}
+
+/**
+ * Maps page-builder `gap` to a CSS `gap` value. `"auto"` is used when export infers
+ * Figma packed/dynamic primary-axis spacing (itemSpacing 0 but non-zero child geometry);
+ * flexbox has no gap:auto, so we omit the property and rely on alignment + children.
+ */
+export function pageBuilderFlexGapToCss(gap: string | undefined | null): string | undefined {
+  if (gap == null || gap === "auto") return undefined;
+  return gap;
 }
 
 const ALIGN_TO_ALIGN_SELF: Record<"left" | "center" | "right", string> = {
@@ -168,8 +179,12 @@ export function getElementLayoutStyle(
   const resolved = normalizeLayoutInput(layout, isMobile);
   if (!resolved) return {};
   const handler = LAYOUT_STYLE_HANDLERS.default ?? (() => ({}));
+  const figmaConstraintStyle = resolveConstraintStyle(
+    (layout as Partial<ElementLayout> | undefined)?.figmaConstraints ?? undefined
+  );
   return {
     ...handler(resolved),
     ...computeVisualStyle(layout),
+    ...figmaConstraintStyle,
   };
 }

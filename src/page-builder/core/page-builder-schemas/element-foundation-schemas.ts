@@ -41,6 +41,22 @@ const constraintsObjectSchema = z.object({
 
 export const elementLayoutConstraintsSchema = constraintsObjectSchema.optional();
 
+/** Raw Figma constraints + geometry for absolute layout; CSS is derived in the renderer. */
+export const figmaConstraintsSchema = z
+  .object({
+    horizontal: z.enum(["LEFT", "RIGHT", "LEFT_RIGHT", "CENTER", "SCALE"]).optional(),
+    vertical: z.enum(["TOP", "BOTTOM", "TOP_BOTTOM", "CENTER", "SCALE"]).optional(),
+    x: z.number().optional(),
+    y: z.number().optional(),
+    right: z.number().optional(),
+    bottom: z.number().optional(),
+    width: z.number().optional(),
+    height: z.number().optional(),
+    parentWidth: z.number().optional(),
+    parentHeight: z.number().optional(),
+  })
+  .optional();
+
 const responsiveConstraintsSchema = z
   .union([
     constraintsObjectSchema.optional(),
@@ -114,6 +130,7 @@ export const elementLayoutSchema = z
       .optional(),
     /** Gradient border ring rendered as a separate layer from `background` and solid `border`. */
     borderGradient: borderGradientSchema.optional(),
+    figmaConstraints: figmaConstraintsSchema,
     wrapperStyle: cssInlineStyleSchema.optional(),
     /** Optional aria-* attributes spread onto the element wrapper (e.g. aria-label, aria-describedby). */
     aria: z.record(z.string(), z.union([z.string(), z.boolean()])).optional(),
