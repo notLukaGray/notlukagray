@@ -7,6 +7,9 @@ const { seenSizes, seenFrameNames } = vi.hoisted(() => ({
 
 vi.mock("./converters", () => ({
   convertFrameToSection: vi.fn(async (frame: { name?: string }, ctx: { usedIds: Set<string> }) => {
+    if ((frame.name ?? "").includes("FAIL")) {
+      throw new Error("boom");
+    }
     seenSizes.push(ctx.usedIds.size);
     seenFrameNames.push(frame.name ?? "");
     const id = ctx.usedIds.size === 0 ? "hero" : `hero-${ctx.usedIds.size}`;
@@ -115,5 +118,53 @@ describe("responsive pair conversion", () => {
         sectionOrder: ["hero"],
       },
     });
+  });
+
+  it("records skip override without converting the frame", async () => {
+    const ctx = makeCtx();
+    const result = {
+      pages: {},
+      presets: {},
+      modals: {},
+      modules: {},
+      globals: {},
+      assets: [],
+      warnings: [],
+      elementCount: 0,
+    };
+    const frame = { id: "frame-skip", name: "Page/Skip Me" } as FrameNode;
+
+    await convertNormalFrames([frame], { "frame-skip": "skip" }, {}, {}, ctx, result);
+
+    expect(seenFrameNames).not.toContain("Page/Skip Me");
+    expect(ctx.warnings.some((w) => w.includes("skipped by user"))).toBe(true);
+  });
+
+  it("warns and skips merge when desktop half fails", async () => {
+    const ctx = makeCtx();
+    const result = {
+      pages: {},
+      presets: {},
+      modals: {},
+      modules: {},
+      globals: {},
+      assets: [],
+      warnings: [],
+      elementCount: 0,
+    };
+    const desktop = { id: "desktop", name: "Section[Desktop]/FAIL Hero" } as FrameNode;
+    const mobile = { id: "mobile", name: "Section[Mobile]/Hero" } as FrameNode;
+
+    await convertResponsivePairs(
+      new Set(["hero"]),
+      new Map([["hero", desktop]]),
+      new Map([["hero", mobile]]),
+      {},
+      ctx,
+      result
+    );
+
+    expect(result.presets).toEqual({});
+    expect(ctx.warnings.some((w) => w.includes("Failed to convert desktop"))).toBe(true);
   });
 });

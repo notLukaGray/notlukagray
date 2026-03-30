@@ -173,9 +173,9 @@ function getPageSlugBasesUncached(): { slug: string; basePath: string }[] {
   const result: { slug: string; basePath: string }[] = [];
   const pages = discoverAllPages();
   for (const page of pages) {
-    const slugSegment = page.slugSegments[page.slugSegments.length - 1];
-    if (typeof slugSegment !== "string" || !isSafePathSegment(slugSegment)) continue;
-    const slug = slugSegment;
+    if (page.slugSegments.length === 0) continue;
+    if (!page.slugSegments.every((segment) => isSafePathSegment(segment))) continue;
+    const slug = page.slugSegments.join("/");
     const raw = fs.readFileSync(page.contentPath, "utf-8");
     const parsed = parseJsonSafe<Record<string, unknown>>(raw);
     if (!parsed.ok || parsed.data == null || typeof parsed.data !== "object") continue;
@@ -184,7 +184,7 @@ function getPageSlugBasesUncached(): { slug: string; basePath: string }[] {
       // Pages without an explicit assetBaseUrl (e.g. unlock) are not part of /work or /research indexes.
       continue;
     }
-    validateSlugSegments([slug]);
+    validateSlugSegments(page.slugSegments);
     result.push({ slug, basePath: assetBaseUrl });
   }
   result.sort((a, b) => a.slug.localeCompare(b.slug));

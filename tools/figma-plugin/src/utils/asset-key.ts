@@ -13,13 +13,33 @@ import type { ConversionContext } from "../types/figma-plugin";
  * - Collapses consecutive hyphens/slashes
  */
 function sanitizeAssetName(name: string): string {
-  return name
+  const sanitized = name
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9/\-_.]/g, "")
     .replace(/-{2,}/g, "-")
     .replace(/\/{2,}/g, "/")
     .replace(/^[/\-]+|[/\-]+$/g, "");
+  return normalizeSafePathSegments(sanitized);
+}
+
+function normalizeSafePathSegments(input: string): string {
+  const out: string[] = [];
+  for (const rawSegment of input.split("/")) {
+    const segment = rawSegment.trim();
+    if (!segment || segment === ".") continue;
+    if (segment === "..") {
+      if (out.length > 0) out.pop();
+      continue;
+    }
+    out.push(segment);
+  }
+  return out.join("/");
+}
+
+function ensureSafeZipFilename(cdnKey: string): string {
+  const normalized = normalizeSafePathSegments(cdnKey.replace(/\\/g, "/"));
+  return `assets/${normalized || "image.png"}`;
 }
 
 /**
@@ -52,7 +72,8 @@ export function buildAssetKey(
   const base = sanitized || "image";
   const hasExt = fileExtension(base) !== "";
   const baseWithExt = hasExt ? base : `${base}${ext}`;
-  const prefixed = ctx.cdnPrefix ? `${ctx.cdnPrefix}${baseWithExt}` : baseWithExt;
+  const prefixedRaw = ctx.cdnPrefix ? `${ctx.cdnPrefix}${baseWithExt}` : baseWithExt;
+  const prefixed = normalizeSafePathSegments(prefixedRaw) || "image.png";
 
   // Collision detection — split off extension to append counter before it
   const dotIdx = prefixed.lastIndexOf(".");
@@ -69,5 +90,5 @@ export function buildAssetKey(
   }
 
   ctx.usedAssetKeys.add(candidate);
-  return { cdnKey: candidate, filename: `assets/${candidate}` };
+  return { cdnKey: candidate, filename: ensureSafeZipFilename(candidate) };
 }

@@ -1,0 +1,77 @@
+import { describe, expect, it, vi } from "vitest";
+import { NextRequest } from "next/server";
+import { accessCookieName } from "@/core/lib/auth-constants";
+
+vi.mock("@/core/lib/protected-slugs.generated", () => ({
+  PROTECTED_PAGE_PATHS: new Set<string>(["work/lenero", "research/secret-case"]),
+}));
+
+const verifyAccessTokenEdge = vi.fn<() => Promise<boolean>>();
+vi.mock("@/core/lib/access-cookie-edge", () => ({
+  verifyAccessTokenEdge,
+}));
+
+describe("proxy", () => {
+  it("passes through when SITE_PASSWORD is not configured", async () => {
+    delete process.env.SITE_PASSWORD;
+    verifyAccessTokenEdge.mockClear();
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/research/secret-case");
+    const res = await proxy(req);
+    expect(res.status).toBe(200);
+    expect(verifyAccessTokenEdge).not.toHaveBeenCalled();
+  });
+
+  it("redirects for protected non-work path when cookie invalid", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockResolvedValue(false);
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/research/secret-case");
+    const res = await proxy(req);
+    expect(res.status).toBe(307);
+    expect(res.headers.get("location")).toContain("unlock_redirect=%2Fresearch%2Fsecret-case");
+  });
+
+  it("passes through protected path when cookie is valid", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockClear();
+    verifyAccessTokenEdge.mockResolvedValue(true);
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/research/secret-case");
+    req.cookies.set(accessCookieName, "valid-token");
+    const res = await proxy(req);
+    expect(res.status).toBe(200);
+    expect(verifyAccessTokenEdge).toHaveBeenCalledTimes(1);
+    expect(verifyAccessTokenEdge).toHaveBeenCalledWith("valid-token");
+  });
+
+  it("passes through unprotected path without token verification", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockClear();
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/work/public-page");
+    const res = await proxy(req);
+    expect(res.status).toBe(200);
+    expect(verifyAccessTokenEdge).not.toHaveBeenCalled();
+  });
+
+  it("passes through root path without token verification", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockClear();
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/");
+    const res = await proxy(req);
+    expect(res.status).toBe(200);
+    expect(verifyAccessTokenEdge).not.toHaveBeenCalled();
+  });
+
+  it("normalizes trailing slashes for protected paths", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockResolvedValue(false);
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/research/secret-case/");
+    const res = await proxy(req);
+    expect(res.status).toBe(307);
+    expect(res.headers.get("location")).toContain("unlock_redirect=%2Fresearch%2Fsecret-case");
+  });
+});

@@ -32,6 +32,9 @@ describe("section-utils", () => {
     it("parses decimal rem", () => {
       expect(parseNumericWithUnit("1.5rem")).toEqual({ num: 1.5, unit: "rem" });
     });
+    it("parses em", () => {
+      expect(parseNumericWithUnit("2em")).toEqual({ num: 2, unit: "em" });
+    });
     it("returns null for invalid string", () => {
       expect(parseNumericWithUnit("abc")).toBe(null);
       expect(parseNumericWithUnit("16")).toBe(null);
@@ -54,11 +57,18 @@ describe("section-utils", () => {
       const ctx = { ...baseCtx, isVertical: false };
       expect(convertToPixels({ num: 50, unit: "vw" }, ctx)).toBe(960);
     });
+    it("returns null when axis and viewport unit do not match orientation", () => {
+      expect(convertToPixels({ num: 50, unit: "vh" }, { ...baseCtx, isVertical: false })).toBe(
+        null
+      );
+      expect(convertToPixels({ num: 50, unit: "vw" }, { ...baseCtx, isVertical: true })).toBe(null);
+    });
     it("returns null for %", () => {
       expect(convertToPixels({ num: 50, unit: "%" }, baseCtx)).toBe(null);
     });
     it("returns null when ctx is null for rem/vh/vw", () => {
       expect(convertToPixels({ num: 1, unit: "rem" }, null)).toBe(null);
+      expect(convertToPixels({ num: 1, unit: "em" }, null)).toBe(null);
       expect(convertToPixels({ num: 50, unit: "vh" }, null)).toBe(null);
       expect(convertToPixels({ num: 50, unit: "vw" }, null)).toBe(null);
     });
@@ -107,6 +117,14 @@ describe("section-utils", () => {
       });
       (global as unknown as { getComputedStyle: unknown }).getComputedStyle = getComputedStyle;
       expect(parseCssValueToPixels("1.5rem", true)).toBe(24);
+    });
+    it("em uses root font size context like rem", () => {
+      const getComputedStyle = vi.fn(() => ({ fontSize: "10px" }));
+      vi.stubGlobal("document", {
+        documentElement: {},
+      });
+      (global as unknown as { getComputedStyle: unknown }).getComputedStyle = getComputedStyle;
+      expect(parseCssValueToPixels("1.5em", true)).toBe(15);
     });
     it('"  20px " trims and works', () => {
       expect(parseCssValueToPixels("  20px ", true)).toBe(20);

@@ -25,6 +25,7 @@ export function detectResponsivePairs(
   const desktopFramesByKey = new Map<string, FrameNode>();
   const mobileFramesByKey = new Map<string, FrameNode>();
   const normalFrames: FrameNode[] = [];
+  const tempCtxWarnings: string[] = [];
 
   for (const frame of frames) {
     const override = targetOverrides[frame.id];
@@ -32,11 +33,23 @@ export function detectResponsivePairs(
     if (!override) {
       const t = detectExportTarget(frame);
       if ((t as ExportTarget & { responsiveRole?: string }).responsiveRole === "desktop") {
-        desktopFramesByKey.set(t.key, frame);
+        addResponsiveFrameWithCollisionHandling(
+          desktopFramesByKey,
+          t.key,
+          frame,
+          "desktop",
+          tempCtxWarnings
+        );
         continue;
       }
       if ((t as ExportTarget & { responsiveRole?: string }).responsiveRole === "mobile") {
-        mobileFramesByKey.set(t.key, frame);
+        addResponsiveFrameWithCollisionHandling(
+          mobileFramesByKey,
+          t.key,
+          frame,
+          "mobile",
+          tempCtxWarnings
+        );
         continue;
       }
     }
@@ -45,7 +58,6 @@ export function detectResponsivePairs(
 
   // Validate pairs — warn and skip unpaired frames
   const pairedKeys = new Set<string>();
-  const tempCtxWarnings: string[] = [];
 
   for (const key of desktopFramesByKey.keys()) {
     if (mobileFramesByKey.has(key)) {
@@ -67,6 +79,23 @@ export function detectResponsivePairs(
   }
 
   return { normalFrames, desktopFramesByKey, mobileFramesByKey, pairedKeys, tempCtxWarnings };
+}
+
+function addResponsiveFrameWithCollisionHandling(
+  framesByKey: Map<string, FrameNode>,
+  key: string,
+  frame: FrameNode,
+  role: "desktop" | "mobile",
+  warnings: string[]
+): void {
+  const existing = framesByKey.get(key);
+  if (!existing) {
+    framesByKey.set(key, frame);
+    return;
+  }
+  warnings.push(
+    `[responsive] Duplicate Section[${role === "desktop" ? "Desktop" : "Mobile"}]/${key} frame key: keeping "${existing.name}" and ignoring "${frame.name}".`
+  );
 }
 
 /**

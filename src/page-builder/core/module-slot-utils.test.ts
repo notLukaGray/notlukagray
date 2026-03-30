@@ -64,7 +64,11 @@ describe("module-slot-utils", () => {
         },
       };
       const result = resolveSlotElements(slot);
-      expect(result.length).toBeGreaterThanOrEqual(1);
+      expect(result).toHaveLength(2);
+      expect(result).toMatchObject([
+        { id: "a", type: "elementImage" },
+        { id: "b", type: "elementVideo" },
+      ]);
     });
     it("adds id when definition has no id", () => {
       const slot: ModuleSlotConfig = {
@@ -126,6 +130,22 @@ describe("module-slot-utils", () => {
       });
       expect(getRegionFromClientX(150, el)).toBe("center");
     });
+    it("treats exact third boundaries as center", () => {
+      const el = document.createElement("div");
+      vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
+        left: 0,
+        width: 300,
+        top: 0,
+        height: 100,
+        right: 300,
+        bottom: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      });
+      expect(getRegionFromClientX(100, el)).toBe("center");
+      expect(getRegionFromClientX(200, el)).toBe("center");
+    });
     it("returns right when x in last third", () => {
       const el = document.createElement("div");
       vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
@@ -176,6 +196,9 @@ describe("module-slot-utils", () => {
     });
     it("returns undefined for undefined payload", () => {
       expect(inferSeekFeedbackType(undefined)).toBeUndefined();
+    });
+    it("maps zero payload to seekForward", () => {
+      expect(inferSeekFeedbackType(0)).toBe("seekForward");
     });
   });
 });

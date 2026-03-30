@@ -16,4 +16,12 @@ describe("element-order-reconcile", () => {
       })
     ).toEqual(["b", "orphan"]);
   });
+
+  it("keeps duplicate ordered entries as-is for deterministic passthrough", () => {
+    expect(
+      reconcileElementOrderWithDefinitions(["a", "a"], {
+        a: { id: "a" },
+      })
+    ).toEqual(["a", "a"]);
+  });
 });

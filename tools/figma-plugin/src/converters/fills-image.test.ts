@@ -34,4 +34,36 @@ describe("extractSectionFillPayload opacity", () => {
     expect(result?.fill).toBeDefined();
     expect(result?.layers).toBeUndefined();
   });
+
+  it("promotes to layered payload when blend mode is present", () => {
+    const result = extractSectionFillPayload(
+      [
+        {
+          type: "SOLID",
+          visible: true,
+          color: { r: 0, g: 0, b: 0 },
+          blendMode: "MULTIPLY",
+        } as Paint,
+      ],
+      undefined
+    );
+    expect(result?.layers?.[0]).toMatchObject({ blendMode: "multiply" });
+    expect(result?.fill).toBeUndefined();
+  });
+
+  it("clamps invalid opacity values into supported range", () => {
+    const result = extractSectionFillPayload(
+      [
+        {
+          type: "SOLID",
+          visible: true,
+          color: { r: 1, g: 1, b: 1 },
+          opacity: 3,
+        } as Paint,
+      ],
+      undefined
+    );
+    expect(result?.fill).toBeDefined();
+    expect(result?.layers).toBeUndefined();
+  });
 });

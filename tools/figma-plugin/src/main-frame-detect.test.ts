@@ -23,4 +23,20 @@ describe("parseTargetOverride", () => {
       label: "Landing Hero",
     });
   });
+
+  it("strips annotations and resolves override type case-insensitively", () => {
+    const frame = { name: "Section/Hero Banner [pb: hidden=true]" } as FrameNode;
+    const target = parseTargetOverride("BUTTON", frame);
+    expect(target).toMatchObject({
+      type: "global-button",
+      key: "hero-banner",
+      label: "Hero Banner",
+    });
+  });
+
+  it("falls back to page when override value is unknown", () => {
+    const frame = { name: "Modal/Quick View" } as FrameNode;
+    const target = parseTargetOverride("mystery", frame);
+    expect(target.type).toBe("page");
+  });
 });

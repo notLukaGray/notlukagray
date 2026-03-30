@@ -90,4 +90,31 @@ describe("text converter SEO semantics", () => {
     expect("semanticLevel" in result).toBe(false);
     expect(ctx.warnings.some((w) => w.includes("unsupported seo value"))).toBe(true);
   });
+
+  it("uses resolved figma text style as semantic fallback when no annotations exist", async () => {
+    const ctx = {
+      assets: [],
+      warnings: [],
+      assetCounter: 0,
+      usedIds: new Set<string>(),
+      usedAssetKeys: new Set<string>(),
+      cdnPrefix: "",
+    };
+    (
+      globalThis as unknown as {
+        figma: {
+          mixed: symbol;
+          getStyleByIdAsync: (id: string) => Promise<{ name: string } | null>;
+        };
+      }
+    ).figma.getStyleByIdAsync = vi.fn().mockResolvedValue({ name: "Body2" });
+
+    const result = await convertTextNode(
+      makeTextNode({ name: "Paragraph", textStyleId: "style-1" }),
+      ctx
+    );
+    expect(result.type).toBe("elementBody");
+    expect(result.level).toBe(2);
+    expect(ctx.warnings).toEqual([]);
+  });
 });

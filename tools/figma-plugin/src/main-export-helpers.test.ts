@@ -313,6 +313,54 @@ describe("export helper diagnostics", () => {
     expect(page).not.toHaveProperty("sections");
   });
 
+  it("dedupes duplicate explicit section ids without overwriting existing definitions", () => {
+    const result = {
+      pages: {},
+      presets: {},
+      modals: {},
+      modules: {},
+      globals: {},
+      assets: [],
+      warnings: [],
+      elementCount: 0,
+    };
+    const ctx = {
+      assets: [],
+      warnings: [] as string[],
+      assetCounter: 0,
+      usedIds: new Set<string>(),
+      usedAssetKeys: new Set<string>(),
+      cdnPrefix: "",
+    };
+    const frame = { name: "Page/Home" } as unknown as FrameNode;
+    const target = { type: "page", key: "home", label: "Home" } as const;
+
+    applyFrameToResult(
+      frame,
+      target,
+      { type: "contentBlock", id: "hero", elements: [] },
+      result,
+      ctx
+    );
+    applyFrameToResult(
+      frame,
+      target,
+      { type: "contentBlock", id: "hero", elements: [] },
+      result,
+      ctx
+    );
+
+    const home = (result.pages as Record<string, unknown>).home as Record<string, unknown>;
+    expect(home.sectionOrder).toEqual(["hero", "hero-2"]);
+    expect(Object.keys(home.definitions as Record<string, unknown>)).toEqual(["hero", "hero-2"]);
+    expect(ctx.warnings).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('produced duplicate section id "hero"'),
+        expect.stringContaining('Using "hero-2" instead.'),
+      ])
+    );
+  });
+
   it("fixture: preserves instance override content and motion-rich button structure without false preset promotion", () => {
     const result = {
       pages: {},

@@ -1,5 +1,5 @@
 // Reserved slug segments that cannot be used as page names
-const RESERVED_SEGMENTS: string[] = [];
+const RESERVED_SEGMENTS: string[] = ["mobile", "desktop"];
 
 export function validateSlugSegments(segments: string[]): void {
   for (const segment of segments) {

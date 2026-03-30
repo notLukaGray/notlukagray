@@ -7,6 +7,18 @@ describe("page-builder-get-props", () => {
       expect(getModalProps("nonexistent_modal_xyz")).toBeNull();
     });
 
+    it("does not call transformSections when modal does not exist", () => {
+      let called = false;
+      const result = getModalProps("nonexistent_modal_xyz", {
+        transformSections: (sections) => {
+          called = true;
+          return sections;
+        },
+      });
+      expect(result).toBeNull();
+      expect(called).toBe(false);
+    });
+
     it("returns modal props with resolvedSections from asset pipeline for unlock modal", () => {
       const props = getModalProps("unlock");
       expect(props).not.toBeNull();
@@ -25,6 +37,17 @@ describe("page-builder-get-props", () => {
         transformSections: (sections) => sections.slice(0, 1),
       });
       expect(props?.resolvedSections).toHaveLength(1);
+    });
+
+    it("supports isMobile option and remains deterministic in shape", () => {
+      const mobile = getModalProps("unlock", { isMobile: true });
+      const desktop = getModalProps("unlock", { isMobile: false });
+      expect(mobile?.id).toBe("unlock");
+      expect(desktop?.id).toBe("unlock");
+      expect(Array.isArray(mobile?.resolvedSections)).toBe(true);
+      expect(Array.isArray(desktop?.resolvedSections)).toBe(true);
+      expect(mobile?.resolvedSections.length).toBeGreaterThan(0);
+      expect(desktop?.resolvedSections.length).toBeGreaterThan(0);
     });
   });
 });

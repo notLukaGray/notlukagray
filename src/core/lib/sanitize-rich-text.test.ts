@@ -6,7 +6,7 @@ describe("sanitizeRichTextMarkup", () => {
     const raw =
       '<span onclick="alert(1)" style="font-size:18px;color:#fff">Hello</span><script>alert(1)</script>';
     const safe = sanitizeRichTextMarkup(raw);
-    expect(safe).toContain("<span");
+    expect(safe).toBe('<span style="font-size:18px;color:#fff">Hello</span>');
     expect(safe).not.toContain("onclick=");
     expect(safe).not.toContain("<script");
   });
@@ -17,6 +17,9 @@ describe("sanitizeRichTextMarkup", () => {
     const safe = sanitizeRichTextMarkup(raw);
     expect(safe).not.toContain('href="javascript:alert(1)"');
     expect(safe).toContain('href="https://example.com"');
+    expect(safe).toBe(
+      '<a target="_blank">Bad</a><a href="https://example.com" target="_blank" rel="noopener">Good</a>'
+    );
   });
 
   it("keeps only allowed style declarations", () => {
@@ -34,5 +37,12 @@ describe("sanitizeRichTextMarkup", () => {
     expect(safe).toContain("<strong>");
     expect(safe).toContain("<em>");
     expect(safe).toContain("Text");
+  });
+
+  it("removes disallowed tags but keeps allowed inner text", () => {
+    const raw =
+      '<div><p>Alpha</p><iframe src="https://example.com"></iframe><custom>Beta</custom></div>';
+    const safe = sanitizeRichTextMarkup(raw);
+    expect(safe).toBe("<p>Alpha</p>Beta");
   });
 });

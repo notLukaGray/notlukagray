@@ -41,4 +41,45 @@ describe("fills-gradient radial export", () => {
 
     expect(css).toContain("at 30% 20%");
   });
+
+  it("supports angular gradients as conic-gradient", () => {
+    const css = extractGradientFill(
+      [
+        {
+          type: "GRADIENT_ANGULAR",
+          visible: true,
+          gradientTransform: [
+            [1, 0, 0],
+            [0, 1, 0],
+          ] as Transform,
+          gradientStops: [
+            { position: 0, color: { r: 1, g: 0, b: 0, a: 1 } },
+            { position: 1, color: { r: 0, g: 0, b: 1, a: 1 } },
+          ],
+        } as GradientPaint,
+      ],
+      { width: 200, height: 100 }
+    );
+    expect(css).toContain("conic-gradient(");
+  });
+
+  it("skips invisible gradients and uses first visible one", () => {
+    const css = extractGradientFill(
+      [
+        {
+          ...makeRadialPaint([
+            [1, 0, 0],
+            [0, 1, 0],
+          ] as Transform),
+          visible: false,
+        } as GradientPaint,
+        makeRadialPaint([
+          [1, 0, 0],
+          [0, 1, 0],
+        ] as Transform),
+      ],
+      { width: 100, height: 100 }
+    );
+    expect(css).toContain("radial-gradient(");
+  });
 });

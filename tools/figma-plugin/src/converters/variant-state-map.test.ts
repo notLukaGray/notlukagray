@@ -45,4 +45,42 @@ describe("variant-state-map selector normalization", () => {
     expect(group?.defaultVariant.name).toBe("State=Default, Icon=True");
     expect(group?.states.has("hover")).toBe(true);
   });
+
+  it("returns null when no state-like property exists", () => {
+    const componentSet = {
+      type: "COMPONENT_SET",
+      name: "Icon Set",
+      children: [
+        {
+          type: "COMPONENT",
+          name: "Size=Sm, Tone=Light",
+          variantProperties: { Size: "Sm", Tone: "Light" },
+        },
+      ],
+    } as unknown as ComponentSetNode;
+    expect(extractVariantGroup(componentSet)).toBeNull();
+  });
+
+  it("marks unmatched selector families as not matched", () => {
+    const componentSet = {
+      type: "COMPONENT_SET",
+      name: "Button",
+      children: [
+        {
+          type: "COMPONENT",
+          name: "State=Default, Tone=Light",
+          variantProperties: { State: "Default", Tone: "Light" },
+        },
+        {
+          type: "COMPONENT",
+          name: "State=Hover, Tone=Light",
+          variantProperties: { State: "Hover", Tone: "Light" },
+        },
+      ],
+    } as unknown as ComponentSetNode;
+    const group = extractVariantGroup(componentSet, { Tone: "Dark" });
+    expect(group).not.toBeNull();
+    expect(group?.matchedFamily).toBe(false);
+    expect(group?.states.has("hover")).toBe(true);
+  });
 });

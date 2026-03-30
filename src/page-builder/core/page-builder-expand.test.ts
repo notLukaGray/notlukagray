@@ -3,6 +3,42 @@ import { expandPageBuilder } from "./page-builder-expand";
 import type { PageBuilder, SectionBlock } from "./page-builder-schemas";
 
 describe("expandPageBuilder", () => {
+  it("uses default bg key when bgKey is omitted", () => {
+    const page: PageBuilder = {
+      slug: "test",
+      title: "Test",
+      sectionOrder: [],
+      definitions: {
+        bg: {
+          type: "backgroundImage",
+          image: "work/default.jpg",
+        } as unknown as PageBuilder["definitions"][string],
+      },
+    } as PageBuilder;
+    const { bg } = expandPageBuilder(page);
+    expect(bg).not.toBeNull();
+    expect((bg as { type?: string }).type).toBe("backgroundImage");
+  });
+
+  it("ignores entries in sectionOrder that are not valid section blocks", () => {
+    const page: PageBuilder = {
+      slug: "test",
+      title: "Test",
+      sectionOrder: ["badType", "missing", "valid"],
+      definitions: {
+        badType: { type: "notASection" } as unknown as PageBuilder["definitions"][string],
+        valid: {
+          type: "contentBlock",
+          elements: [],
+        } as unknown as PageBuilder["definitions"][string],
+      },
+      bgKey: "_none",
+    };
+    const { sections } = expandPageBuilder(page);
+    expect(sections).toHaveLength(1);
+    expect(sections[0]?.type).toBe("contentBlock");
+  });
+
   it("resolves trigger payload URLs when assetBase is provided", () => {
     const page: PageBuilder = {
       slug: "test",
@@ -83,5 +119,23 @@ describe("expandPageBuilder", () => {
     const section = sections[0] as SectionBlock;
     const payload = section.onVisible!.payload as { type?: string; image?: string };
     expect(payload.image).toContain("/api/video/");
+  });
+
+  it("does not throw when sectionOrder contains empty keys", () => {
+    const page: PageBuilder = {
+      slug: "test",
+      title: "Test",
+      sectionOrder: ["", "hero"],
+      definitions: {
+        hero: {
+          type: "contentBlock",
+          elements: [],
+        } as unknown as PageBuilder["definitions"][string],
+      },
+      bgKey: "_none",
+    };
+    const { sections } = expandPageBuilder(page);
+    expect(sections).toHaveLength(1);
+    expect(sections[0]?.type).toBe("contentBlock");
   });
 });

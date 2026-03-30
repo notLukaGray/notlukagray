@@ -24,7 +24,7 @@ export type PageEntry = {
   contentPath: string;
 };
 
-const RESERVED_SEGMENTS = new Set<string>();
+const RESERVED_SEGMENTS = new Set<string>(["mobile", "desktop"]);
 
 /** Throw a clear error if any segment is a reserved variant name. */
 function assertNoReservedSegments(segments: string[]): void {

@@ -20,4 +20,19 @@ describe("extractComponentProps", () => {
     expect(extracted["Button Text"]).toBe("Buy now");
     expect(extracted["Button Text#0:1"]).toBe("Buy now");
   });
+
+  it("inverts visible boolean into hidden", () => {
+    const instance = {
+      componentProperties: {
+        "Visible#0:1": { type: "BOOLEAN", value: false },
+      },
+    } as unknown as InstanceNode;
+    const extracted = extractComponentProps(instance);
+    expect(extracted.hidden).toBe(true);
+  });
+
+  it("returns empty object when component properties are missing", () => {
+    const extracted = extractComponentProps({ type: "INSTANCE" } as InstanceNode);
+    expect(extracted).toEqual({});
+  });
 });

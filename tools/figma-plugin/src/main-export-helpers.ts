@@ -548,6 +548,8 @@ function ensureSectionIdForRecord(
   }
 
   if (definitions[sectionId] !== undefined) {
+    // Seed usedIds with the conflicting id so ensureUniqueId cannot return it again.
+    ctx.usedIds.add(sectionId);
     const dedupedSectionId = ensureUniqueId(sectionId, ctx.usedIds);
     if (dedupedSectionId !== sectionId) {
       ctx.warnings.push(
@@ -558,6 +560,7 @@ function ensureSectionIdForRecord(
     }
   }
 
+  ctx.usedIds.add(sectionId);
   return sectionId;
 }
 

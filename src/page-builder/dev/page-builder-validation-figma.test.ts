@@ -40,4 +40,37 @@ describe("summarizePageFigmaDiagnostics", () => {
   it("returns null for non-object input", () => {
     expect(summarizePageFigmaDiagnostics(null)).toBeNull();
   });
+
+  it("returns scan-only summary when embedded diagnostics are missing", () => {
+    const summary = summarizePageFigmaDiagnostics({
+      slug: "x",
+      title: "t",
+      sectionOrder: ["a"],
+      definitions: {
+        a: {
+          type: "contentBlock",
+          id: "a",
+          elementOrder: ["e1", "e2"],
+          definitions: {
+            e1: {
+              type: "elementGroup",
+              id: "e1",
+              meta: { figma: { fallbackReason: "group-conversion-fallback" } },
+            },
+            e2: {
+              type: "elementHeading",
+              id: "e2",
+              text: "Title",
+              level: 2,
+            },
+          },
+        },
+      },
+    });
+    expect(summary).toEqual({
+      embedded: null,
+      scannedFallbackElements: 1,
+      scannedTopFallbackReasons: [{ code: "group-conversion-fallback", count: 1 }],
+    });
+  });
 });

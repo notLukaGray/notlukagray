@@ -1,3 +1,5 @@
+import fs from "fs";
+import os from "os";
 import path from "path";
 import { describe, it, expect } from "vitest";
 import {
@@ -5,6 +7,8 @@ import {
   coercePresetMap,
   loadPageBuilder,
   getPageSlugBases,
+  getPageSlugsByBase,
+  getPageSlugs,
 } from "@/page-builder/core/page-builder-load";
 import { isSafePathSegment } from "@/page-builder/core/page-builder-paths";
 
@@ -26,7 +30,11 @@ describe("page-builder-load", () => {
     it("returns only safe path segments for slug (no traversal)", () => {
       const result = getPageSlugBases();
       for (const item of result) {
-        expect(isSafePathSegment(item.slug)).toBe(true);
+        const slugSegments = item.slug.split("/").filter(Boolean);
+        expect(slugSegments.length).toBeGreaterThan(0);
+        for (const segment of slugSegments) {
+          expect(isSafePathSegment(segment)).toBe(true);
+        }
       }
     });
     it("returns same length and shape when called twice in same request", () => {
@@ -45,6 +53,16 @@ describe("page-builder-load", () => {
       const result = readJsonFileSafe(path.join(process.cwd(), "nonexistent-preset-file.json"));
       expect(result).toBe(null);
     });
+
+    it("returns null for invalid JSON content", () => {
+      const tempPath = path.join(os.tmpdir(), `page-builder-invalid-${Date.now()}.json`);
+      fs.writeFileSync(tempPath, "{ invalid json", "utf-8");
+      try {
+        expect(readJsonFileSafe(tempPath)).toBeNull();
+      } finally {
+        fs.unlinkSync(tempPath);
+      }
+    });
   });
 
   describe("loadPageBuilder path validation", () => {
@@ -58,6 +76,10 @@ describe("page-builder-load", () => {
     });
     it("returns null for empty slug", () => {
       expect(loadPageBuilder("")).toBe(null);
+    });
+    it("returns null for invalid slug characters", () => {
+      expect(loadPageBuilder(".hidden")).toBe(null);
+      expect(loadPageBuilder("with space")).toBe(null);
     });
   });
 
@@ -88,6 +110,27 @@ describe("page-builder-load", () => {
       const second = { key: { type: "b", value: 2 } };
       const merged = { ...coercePresetMap(first), ...coercePresetMap(second) };
       expect(merged.key).toEqual(second.key);
+    });
+
+    it("keeps array values because they are objects at runtime", () => {
+      const data = { arr: [1, 2, 3] as unknown as { type: string } };
+      const out = coercePresetMap(data);
+      expect(out).toHaveProperty("arr");
+      expect(Array.isArray(out.arr)).toBe(true);
+    });
+  });
+
+  describe("slug-base helpers", () => {
+    it("getPageSlugsByBase only returns slugs for the requested base", () => {
+      const base = "/work";
+      const expected = getPageSlugBases()
+        .filter((p) => p.basePath === base)
+        .map((p) => p.slug);
+      expect(getPageSlugsByBase(base)).toEqual(expected);
+    });
+
+    it("getPageSlugs defaults to /work base", () => {
+      expect(getPageSlugs()).toEqual(getPageSlugsByBase("/work"));
     });
   });
 });

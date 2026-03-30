@@ -27,6 +27,18 @@ describe("pageBuilderMetaSchema", () => {
       originalLayers: [{ fill: "#000", blendMode: "multiply", opacity: 0.5 }],
     });
     expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.originalLayers).toEqual([
+        { fill: "#000", blendMode: "multiply", opacity: 0.5 },
+      ]);
+    }
+  });
+
+  it("rejects invalid originalLayers entries", () => {
+    const parsed = figmaExporterMetaSchema.safeParse({
+      originalLayers: [{ fill: 42 }],
+    });
+    expect(parsed.success).toBe(false);
   });
 });
 
@@ -45,5 +57,12 @@ describe("elementBlockSchema with meta.figma", () => {
       },
     });
     expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data.meta?.figma).toMatchObject({
+        sourceName: "Title",
+        fallbackReason: "test-reason",
+        exporterNote: "parity",
+      });
+    }
   });
 });

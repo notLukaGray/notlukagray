@@ -1,17 +1,39 @@
+import fs from "fs";
+import os from "os";
 import path from "path";
 import { describe, it, expect } from "vitest";
 import {
   readJsonFileSafe,
+  readJsonFileSafeAsync,
   coercePresetMap,
   parseJsonSafe,
   PAGE_DATA_DIR,
   PAGE_IGNORE,
+  resolveSlugDir,
 } from "@/page-builder/core/load/page-builder-load-io";
 
 describe("page-builder-load-io", () => {
   describe("readJsonFileSafe", () => {
     it("returns null for non-existent file", () => {
       expect(readJsonFileSafe(path.join(process.cwd(), "nonexistent-file-xyz.json"))).toBe(null);
+    });
+
+    it("returns null for invalid json", () => {
+      const tempPath = path.join(os.tmpdir(), `load-io-invalid-${Date.now()}.json`);
+      fs.writeFileSync(tempPath, "{bad json", "utf-8");
+      try {
+        expect(readJsonFileSafe(tempPath)).toBeNull();
+      } finally {
+        fs.unlinkSync(tempPath);
+      }
+    });
+  });
+
+  describe("readJsonFileSafeAsync", () => {
+    it("returns null for missing file", async () => {
+      await expect(
+        readJsonFileSafeAsync(path.join(process.cwd(), "nonexistent-file-async-xyz.json"))
+      ).resolves.toBeNull();
     });
   });
 
@@ -25,6 +47,10 @@ describe("page-builder-load-io", () => {
       expect(r.ok).toBe(false);
       expect("error" in r && r.error).toBeDefined();
     });
+    it("parses array JSON payloads", () => {
+      const r = parseJsonSafe<number[]>("[1,2,3]");
+      expect(r).toEqual({ ok: true, data: [1, 2, 3] });
+    });
   });
 
   describe("coercePresetMap", () => {
@@ -35,6 +61,10 @@ describe("page-builder-load-io", () => {
     it("includes object values keyed by string", () => {
       const data = { k: { type: "elementVector", shapes: [] } };
       expect(coercePresetMap(data)).toEqual(data);
+    });
+    it("skips primitive values and keeps object-like values", () => {
+      const out = coercePresetMap({ keep: { type: "x" }, skip: 1, skip2: "s" });
+      expect(out).toEqual({ keep: { type: "x" } });
     });
   });
 
@@ -47,6 +77,18 @@ describe("page-builder-load-io", () => {
     it("PAGE_IGNORE is a Set", () => {
       expect(PAGE_IGNORE).toBeInstanceOf(Set);
       expect(PAGE_IGNORE.has("schema.example.json")).toBe(true);
+    });
+  });
+
+  describe("resolveSlugDir", () => {
+    it("returns null for unsafe slug", () => {
+      expect(resolveSlugDir("../bad")).toBeNull();
+      expect(resolveSlugDir("with space")).toBeNull();
+    });
+
+    it("returns path under PAGE_DATA_DIR for safe slug", () => {
+      const resolved = resolveSlugDir("unlock");
+      expect(resolved).toBe(path.resolve(PAGE_DATA_DIR, "unlock"));
     });
   });
 });

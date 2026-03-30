@@ -18,4 +18,29 @@ describe("splitPageForContentDir", () => {
     expect(sectionFiles.hero).toMatchObject({ type: "contentBlock" });
     expect(index.slug).toBe("fixture-layout");
   });
+
+  it("falls back slug and leaves definitions untouched when sectionOrder is missing", () => {
+    const page = {
+      title: "No order",
+      definitions: { hero: { type: "contentBlock" } },
+    } as Record<string, unknown>;
+    const { index, sectionFiles } = splitPageForContentDir(page, "fallback-slug");
+
+    expect(index.slug).toBe("fallback-slug");
+    expect(index.definitions).toMatchObject({ hero: { type: "contentBlock" } });
+    expect(sectionFiles).toEqual({});
+  });
+
+  it("normalizes non-object definitions input to empty object", () => {
+    const page = {
+      slug: "typed",
+      sectionOrder: ["hero"],
+      definitions: "bad-shape",
+    } as unknown as Record<string, unknown>;
+    const { index, sectionFiles } = splitPageForContentDir(page, "fallback");
+
+    expect(index.definitions).toEqual({});
+    expect(sectionFiles).toEqual({});
+    expect(index.slug).toBe("typed");
+  });
 });

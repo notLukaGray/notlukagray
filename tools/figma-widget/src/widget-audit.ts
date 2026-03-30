@@ -33,8 +33,11 @@ export function scanPageFrames(): FrameAuditRow[] {
 
   for (const row of rows) {
     if (row.exportKind !== "preset") continue;
-    if (row.responsiveRole === "desktop") desktopByKey.set(row.exportKey, row);
-    else if (row.responsiveRole === "mobile") mobileByKey.set(row.exportKey, row);
+    if (row.responsiveRole === "desktop") {
+      addResponsiveRowWithCollisionHandling(desktopByKey, row, "desktop");
+    } else if (row.responsiveRole === "mobile") {
+      addResponsiveRowWithCollisionHandling(mobileByKey, row, "mobile");
+    }
   }
 
   for (const row of rows) {
@@ -50,4 +53,21 @@ export function scanPageFrames(): FrameAuditRow[] {
   }
 
   return rows;
+}
+
+function addResponsiveRowWithCollisionHandling(
+  rowsByKey: Map<string, FrameAuditRow>,
+  row: FrameAuditRow,
+  role: "desktop" | "mobile"
+): void {
+  const existing = rowsByKey.get(row.exportKey);
+  if (!existing) {
+    rowsByKey.set(row.exportKey, row);
+    return;
+  }
+
+  row.prefixWarnings = [
+    ...row.prefixWarnings,
+    `[responsive] Duplicate Section[${role === "desktop" ? "Desktop" : "Mobile"}]/${row.exportKey} frame key; pairing keeps "${existing.frameName}" and ignores this duplicate.`,
+  ];
 }

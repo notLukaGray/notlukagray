@@ -76,4 +76,28 @@ describe("convertSectionNode", () => {
       parentHeight: 1000,
     });
   });
+
+  it("falls back to empty group when section has no children", async () => {
+    const ctx = makeCtx();
+    const convertNodeFn = vi.fn();
+    const node = makeSectionNode([]);
+
+    const result = await convertSectionNode(node, ctx, {}, undefined, convertNodeFn);
+
+    expect(result.type).toBe("elementGroup");
+    expect(result.section).toMatchObject({ elementOrder: [], definitions: {} });
+    expect(ctx.warnings.some((w) => w.includes("fallback group"))).toBe(true);
+    expect(convertNodeFn).not.toHaveBeenCalled();
+  });
+
+  it("injects relative wrapper positioning when absent", async () => {
+    const ctx = makeCtx();
+    const convertNodeFn = vi
+      .fn()
+      .mockResolvedValue({ type: "elementSpacer", id: "child-a", height: "10px" });
+    const node = makeSectionNode([{ type: "RECTANGLE", name: "Child A" } as unknown as SceneNode]);
+
+    const result = await convertSectionNode(node, ctx, {}, undefined, convertNodeFn);
+    expect(result.wrapperStyle).toMatchObject({ position: "relative" });
+  });
 });

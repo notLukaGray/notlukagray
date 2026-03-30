@@ -15,6 +15,9 @@ describe("section-keys", () => {
     it("accepts custom maxLen", () => {
       expect(normalizeKeyPart("hello", 3)).toBe("hel");
     });
+    it("applies maxLen before normalization", () => {
+      expect(normalizeKeyPart("ab cd-ef", 5)).toBe("ab_cd");
+    });
   });
 
   describe("generateSectionKey", () => {
@@ -89,7 +92,7 @@ describe("section-keys", () => {
         elements: [{ type: "elementImage", src: "/assets/hero.webp" }],
       } as unknown as Parameters<typeof generateSectionKey>[0];
       const key = generateSectionKey(section, 0);
-      expect(key).toMatch(/^sectionColumn_/);
+      expect(key).toBe("sectionColumn__assets_hero_webp");
     });
 
     it("no randomness or Date usage", () => {
@@ -102,6 +105,34 @@ describe("section-keys", () => {
       const k1 = generateSectionKey(section, 0);
       const k2 = generateSectionKey(section, 0);
       expect(k1).toBe(k2);
+    });
+
+    it("uses initialX and initialY hints before index fallback", () => {
+      const withX = {
+        type: "sectionParallax",
+        initialX: "12.5vw",
+      } as unknown as Parameters<typeof generateSectionKey>[0];
+      const withY = {
+        type: "sectionParallax",
+        initialY: "30vh",
+      } as unknown as Parameters<typeof generateSectionKey>[0];
+      expect(generateSectionKey(withX, 8)).toBe("sectionParallax_x_12_5vw");
+      expect(generateSectionKey(withY, 8)).toBe("sectionParallax_y_30vh");
+    });
+
+    it("uses fixed and sticky hints when present", () => {
+      const fixed = {
+        type: "sectionColumn",
+        fixed: true,
+        fixedPosition: "top",
+      } as unknown as Parameters<typeof generateSectionKey>[0];
+      const sticky = {
+        type: "sectionColumn",
+        sticky: true,
+        stickyOffset: "20px",
+      } as unknown as Parameters<typeof generateSectionKey>[0];
+      expect(generateSectionKey(fixed, 1)).toBe("sectionColumn_fixed_top");
+      expect(generateSectionKey(sticky, 1)).toBe("sectionColumn_offset_20px");
     });
   });
 });

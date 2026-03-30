@@ -118,4 +118,109 @@ describe("section-reveal end-to-end (real convertNode path)", () => {
     expect(section.marginLeft).toBe("20px");
     expect(section.align).toBe("center");
   });
+
+  it("warns when named slots also contain unslotted fallback children", async () => {
+    const ctx = makeCtx();
+    const section = await convertFrameToRevealSection(
+      {
+        type: "FRAME",
+        name: "Reveal Named Mix [pb: type=revealSection]",
+        layoutMode: "VERTICAL",
+        clipsContent: true,
+        width: 320,
+        height: 240,
+        x: 0,
+        y: 0,
+        visible: true,
+        fills: [],
+        strokes: [],
+        effects: [],
+        children: [
+          {
+            type: "FRAME",
+            name: "Header",
+            width: 320,
+            height: 40,
+            x: 0,
+            y: 0,
+            visible: true,
+            fills: [],
+            strokes: [],
+            effects: [],
+            layoutMode: "NONE",
+            clipsContent: false,
+            children: [
+              {
+                type: "RECTANGLE",
+                name: "Top Child",
+                width: 20,
+                height: 20,
+                x: 0,
+                y: 0,
+                visible: true,
+                fills: [],
+              },
+            ],
+          },
+          {
+            type: "FRAME",
+            name: "Revealed",
+            width: 320,
+            height: 120,
+            x: 0,
+            y: 40,
+            visible: true,
+            fills: [],
+            strokes: [],
+            effects: [],
+            layoutMode: "NONE",
+            clipsContent: false,
+            children: [
+              {
+                type: "RECTANGLE",
+                name: "Bottom Child",
+                width: 20,
+                height: 20,
+                x: 0,
+                y: 0,
+                visible: true,
+                fills: [],
+              },
+            ],
+          },
+          {
+            type: "FRAME",
+            name: "Unslotted",
+            width: 320,
+            height: 60,
+            x: 0,
+            y: 160,
+            visible: true,
+            fills: [],
+            strokes: [],
+            effects: [],
+            layoutMode: "NONE",
+            clipsContent: false,
+            children: [
+              {
+                type: "RECTANGLE",
+                name: "Fallback Child",
+                width: 20,
+                height: 20,
+                x: 0,
+                y: 0,
+                visible: true,
+                fills: [],
+              },
+            ],
+          },
+        ],
+      } as unknown as FrameNode,
+      ctx
+    );
+
+    expect(Array.isArray(section.revealedElements)).toBe(true);
+    expect((section.revealedElements as unknown[]).length).toBeGreaterThan(0);
+    expect(ctx.warnings.some((w) => w.includes("fallback slotting"))).toBe(true);
+  });
 });

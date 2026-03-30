@@ -14,6 +14,11 @@ describe("element-module-style-utils", () => {
       alignSelf: "flex-end",
     });
   });
+  it("returns empty style when align is not left/center/right", () => {
+    expect(getChildWrapperLayoutStyle({ align: ["stretch", "stretch"] as never }, true)).toEqual(
+      {}
+    );
+  });
 
   it("does not render a static wrapper when there is no style override", () => {
     expect(
@@ -53,5 +58,12 @@ describe("element-module-style-utils", () => {
     expect(getContainerWrapperStyle({ background: "#112233" })).toMatchObject({
       background: "#1b2c3d",
     });
+  });
+
+  it("keeps non-hex and non-string backgrounds unchanged", () => {
+    expect(getContainerWrapperStyle({ background: "linear-gradient(red, blue)" })).toEqual({
+      background: "linear-gradient(red, blue)",
+    });
+    expect(getContainerWrapperStyle({ background: 123 as never })).toEqual({ background: 123 });
   });
 });
