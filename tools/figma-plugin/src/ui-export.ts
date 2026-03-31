@@ -2,7 +2,12 @@
  * Export result handling, clipboard copy, and button event wiring.
  */
 
-import type { ExportResult, UIToMainMessage } from "./types/figma-plugin";
+import type {
+  ExportArtifact,
+  ExportResult,
+  SectionExportArtifact,
+  UIToMainMessage,
+} from "./types/figma-plugin";
 import { buildFigmaExportDiagnostics } from "./export-parity";
 import { buildExportErrorsPayload } from "./ui-export-errors";
 import type { FramePreviewItem } from "./ui-state";
@@ -139,7 +144,9 @@ export async function handleResult(
   errors: string[],
   warningCount: number,
   infoCount: number,
-  mode: "copy" | "copy-merged" | "zip" = "zip"
+  mode: "copy" | "copy-merged" | "zip" = "zip",
+  artifact: ExportArtifact = "full",
+  sectionArtifact?: SectionExportArtifact
 ): Promise<void> {
   setPendingErrorsPayload(buildExportErrorsPayload(result, errors, warningCount, infoCount));
   setWarnings(els.warningsEl, result.warnings);
@@ -160,9 +167,30 @@ export async function handleResult(
     Object.keys(result.globals.backgrounds ?? {}).length > 0 ||
     Object.keys(result.globals.elements ?? {}).length > 0;
 
-  if (!hasAnyContent) {
+  if (!hasAnyContent && artifact !== "section") {
     setStatus(els.statusEl, "Export produced no content.", "error");
     return;
+  }
+
+  if (artifact === "section") {
+    if (!sectionArtifact) {
+      setStatus(els.statusEl, "Section export failed: missing section artifact payload.", "error");
+      return;
+    }
+    try {
+      await copyToClipboard(JSON.stringify(sectionArtifact, null, 2));
+      setStatus(
+        els.statusEl,
+        `Done! Copied section artifact (${sectionArtifact.sectionId})`,
+        errors.length > 0 ? "error" : "success"
+      );
+      flashCopied(els.copyJsonBtn);
+      els.copyErrorsBtn.disabled = false;
+      return;
+    } catch (err) {
+      setStatus(els.statusEl, `Copy failed: ${String(err)}`, "error");
+      return;
+    }
   }
 
   if (mode === "copy") {
@@ -225,6 +253,37 @@ export async function handleResult(
   } catch (err) {
     setStatus(els.statusEl, `ZIP packaging failed: ${String(err)}`, "error");
   }
+}
+
+export function sendSectionExport(
+  frame: FramePreviewItem,
+  currentFrames: FramePreviewItem[],
+  autoPresets: boolean
+): void {
+  const { targetOverrides, annotationOverrides, cdnPrefixOverrides } =
+    collectOverrides(currentFrames);
+  // Section artifacts should work for non-prefixed frames.
+  // Keep page/preset/modal targets as-is; coerce everything else to page.
+  if (
+    !frame.responsivePairKey &&
+    frame.target.type !== "page" &&
+    frame.target.type !== "preset" &&
+    frame.target.type !== "modal"
+  ) {
+    targetOverrides[frame.id] = "page";
+  }
+  sendToMain({
+    type: "export",
+    mode: "copy",
+    artifact: "section",
+    scope: "single-frame",
+    frameId: frame.id,
+    responsivePairKey: frame.responsivePairKey,
+    targetOverrides,
+    annotationOverrides,
+    cdnPrefixOverrides,
+    autoPresets,
+  });
 }
 
 // ---------------------------------------------------------------------------

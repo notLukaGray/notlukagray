@@ -158,6 +158,7 @@ This is convention — the plugin works regardless of which Figma page frames li
    - Responsive pairs show as `label [desktop+mobile]` with a teal badge.
    - Set per-frame CDN prefix if needed.
    - Override target type with the dropdown if auto-detection is wrong.
+   - Use **Copy section** on a frame row to export one section artifact JSON (section block + `index.json` patch metadata). This works even when the frame is not named `Section/*`.
    - Mark frames as `skip` if you want to exclude them.
 5. Click **Export Selection**.
 6. Wait for conversion — progress messages appear.
@@ -173,6 +174,17 @@ This is convention — the plugin works regardless of which Figma page frames li
 11. Review `export-notes.txt` and apply manual fixes.
 
 Frames are exported in top-to-bottom, left-to-right order (2 px threshold for near-identical rows). The order in `page.json` matches the visual stacking on canvas.
+
+### Single section artifact
+
+The row-level **Copy section** action emits:
+
+- `section`: the converted section block
+- `sectionId`: resolved section key
+- `indexPatch`: minimal patch metadata (`slug`, `sectionOrder`, `definitions`) for `content/pages/{slug}/index.json`
+- `paths`: suggested split-content paths for `index.json` and `{sectionId}.json`
+
+Use this when you want to update one section without copying a full page payload.
 
 ---
 

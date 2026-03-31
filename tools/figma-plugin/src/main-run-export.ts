@@ -3,7 +3,12 @@
  * context setup, conversion, and result dispatch to the UI thread.
  */
 
-import type { ConversionContext, ExportResult } from "./types/figma-plugin";
+import type {
+  ConversionContext,
+  ExportArtifact,
+  ExportResult,
+  ExportScope,
+} from "./types/figma-plugin";
 import { detectExportTarget, getPrefixDiagnostics, parseTargetOverride } from "./main-frame-detect";
 import {
   detectResponsivePairs,
@@ -28,6 +33,7 @@ import {
   recomputeOutputParityFromExportResult,
   recordUpstreamDropOnParity,
 } from "./export-parity";
+import { buildSectionExportArtifact } from "./main-section-export-artifact";
 
 interface SelectionState {
   frames: FrameNode[];
@@ -43,6 +49,13 @@ interface SelectionState {
 interface FrameSelectionResult {
   frames: FrameNode[];
   source: "selection" | "top-level-fallback";
+}
+
+interface SelectionOptions {
+  autoPresets?: boolean;
+  scope?: ExportScope;
+  frameId?: string;
+  responsivePairKey?: string;
 }
 
 const WRAPPER_FRAME_MARKERS = new Set([
@@ -125,15 +138,41 @@ function getSelectedFrames(): FrameSelectionResult {
   return { frames, source: "top-level-fallback" };
 }
 
+function getResponsivePairKey(frame: FrameNode): string | null {
+  const target = detectExportTarget(frame);
+  if (target.responsiveRole === "desktop" || target.responsiveRole === "mobile") {
+    return target.key;
+  }
+  return null;
+}
+
+function applyScopeToFrames(frames: FrameNode[], options?: SelectionOptions): FrameNode[] {
+  if ((options?.scope ?? "all-selected") !== "single-frame") return frames;
+
+  if (options?.responsivePairKey) {
+    const responsiveFrames = frames.filter(
+      (frame) => getResponsivePairKey(frame) === options.responsivePairKey
+    );
+    return resolveWrapperFrames(responsiveFrames);
+  }
+
+  if (options?.frameId) {
+    return frames.filter((frame) => frame.id === options.frameId);
+  }
+
+  return [];
+}
+
 function buildSelectionState(
   targetOverrides: Record<string, string>,
-  options?: { autoPresets?: boolean }
+  options?: SelectionOptions
 ): SelectionState | null {
   const selectionResult = getSelectedFrames();
   if (selectionResult.frames.length === 0) {
     return null;
   }
-  const frames = selectionResult.frames;
+  const frames = applyScopeToFrames(selectionResult.frames, options);
+  if (frames.length === 0) return null;
 
   const { normalFrames, desktopFramesByKey, mobileFramesByKey, pairedKeys, tempCtxWarnings } =
     detectResponsivePairs(frames, targetOverrides);
@@ -145,7 +184,10 @@ function buildSelectionState(
       targetOverrides
     )
   );
-  if (selectionResult.source === "top-level-fallback") {
+  if (
+    selectionResult.source === "top-level-fallback" &&
+    (options?.scope ?? "all-selected") === "all-selected"
+  ) {
     tempCtxWarnings.push(
       `[info] [frame-selection] No explicit frame selection — exporting all visible top-level frames on the current page.`
     );
@@ -250,11 +292,29 @@ export async function runExport(
   annotationOverrides: Record<string, Record<string, string>>,
   cdnPrefixOverrides: Record<string, string>,
   mode: "copy" | "copy-merged" | "zip" = "zip",
-  autoPresets = false
+  autoPresets = false,
+  scope: ExportScope = "all-selected",
+  frameId?: string,
+  artifact: ExportArtifact = "full",
+  responsivePairKey?: string
 ): Promise<void> {
-  const state = buildSelectionState(targetOverrides, { autoPresets });
+  const state = buildSelectionState(targetOverrides, {
+    autoPresets,
+    scope,
+    frameId,
+    responsivePairKey,
+  });
   if (!state) {
     postNoSelectionError();
+    return;
+  }
+
+  if (artifact === "section" && state.previewItems.length !== 1) {
+    figma.ui.postMessage({
+      type: "error",
+      message:
+        'Section artifact export requires exactly one preview row. Use "Copy section" on a frame row.',
+    });
     return;
   }
 
@@ -362,6 +422,17 @@ export async function runExport(
     ctx.exportParity !== undefined ? buildParityTraceSnapshot(ctx.exportParity) : undefined
   );
 
+  const sectionArtifact =
+    artifact === "section" ? buildSectionExportArtifact(result, state.previewItems[0]) : undefined;
+  if (artifact === "section" && !sectionArtifact) {
+    figma.ui.postMessage({
+      type: "error",
+      message:
+        "Could not build section artifact from export output. Ensure a single frame row is selected.",
+    });
+    return;
+  }
+
   const warningCount = ctx.warnings.filter(
     (w) => !w.startsWith("[error]") && !w.startsWith("[info]") && !w.startsWith("[docs]")
   ).length;
@@ -374,5 +445,7 @@ export async function runExport(
     infoCount: ctx.info.length,
     errors: ctx.errors,
     mode,
+    artifact,
+    ...(sectionArtifact ? { sectionArtifact } : {}),
   });
 }

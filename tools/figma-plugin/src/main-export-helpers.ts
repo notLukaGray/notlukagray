@@ -21,6 +21,7 @@ import {
 } from "./converters/annotations-parse";
 import { ensureUniqueId, slugify } from "./utils/slugify";
 import { autoPromotePresetsInSection } from "./converters/auto-presets";
+import { promotePageBackgroundFromSection } from "./main-page-background";
 
 // ---------------------------------------------------------------------------
 // Element counting
@@ -303,8 +304,17 @@ export function applyFrameToResult(
       autoPromotePresetsInSection(normalizedSection, result, ctx);
       attachNewAutoPresetsToPage(page, result, presetKeysBefore);
 
-      page.sectionOrder.push(sectionId);
-      page.definitions[sectionId] = normalizedSection;
+      const promotion = promotePageBackgroundFromSection({
+        page,
+        section: normalizedSection,
+        sectionId,
+        frameName: frame.name,
+        ctx,
+      });
+      if (!promotion.dropSection) {
+        page.sectionOrder.push(sectionId);
+        page.definitions[sectionId] = normalizedSection;
+      }
       result.pages[target.key] = page;
       break;
     }
@@ -418,6 +428,7 @@ type ExportedPageRecord = {
   title: string;
   sectionOrder: string[];
   definitions: Record<string, unknown>;
+  bgKey?: string;
   preset?: Record<string, unknown>;
 };
 
@@ -463,6 +474,7 @@ function normalisePageRecord(existing: unknown, target: ExportTarget): ExportedP
     title: typeof rec.title === "string" && rec.title.trim() ? rec.title : target.label,
     sectionOrder,
     definitions,
+    ...(typeof rec.bgKey === "string" && rec.bgKey.trim() ? { bgKey: rec.bgKey } : {}),
     ...(inlinePreset ? { preset: inlinePreset } : {}),
   };
 }

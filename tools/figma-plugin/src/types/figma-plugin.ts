@@ -36,6 +36,9 @@ export interface ExportResult {
 }
 
 export type ExportTargetType = ParsedExportTargetKind | "skip";
+export type ExportMode = "copy" | "copy-merged" | "zip";
+export type ExportScope = "all-selected" | "single-frame";
+export type ExportArtifact = "full" | "section";
 
 export interface ExportTarget {
   type: ExportTargetType;
@@ -48,6 +51,33 @@ export interface ExportTarget {
    * Absent for all single-artboard frames.
    */
   responsiveRole?: "desktop" | "mobile";
+}
+
+export interface SectionExportArtifact {
+  version: 1;
+  frame: { id: string; name: string };
+  target: { type: ExportTargetType; key: string; label: string };
+  sectionId: string;
+  section: Record<string, unknown>;
+  indexPatch: {
+    slug: string;
+    title: string;
+    sectionOrder: string[];
+    definitions: Record<string, unknown>;
+  };
+  paths: {
+    index: string;
+    section: string;
+  };
+  /**
+   * Non-breaking hint for optionally promoting section background fields
+   * (fill/layers/bgImage) into page-level background definitions.
+   */
+  backgroundCandidate?: {
+    reason: "section-bgimage" | "section-layers" | "section-fill";
+    bgKey: string;
+    definition: Record<string, unknown>;
+  };
 }
 
 export interface ConversionContext {
@@ -119,7 +149,9 @@ export type MainToUIMessage =
       warningCount: number;
       infoCount: number;
       errors: string[];
-      mode: "copy" | "copy-merged" | "zip";
+      mode: ExportMode;
+      artifact?: ExportArtifact;
+      sectionArtifact?: SectionExportArtifact;
     }
   | { type: "error"; message: string }
   | { type: "progress"; message: string }
@@ -140,7 +172,15 @@ export type UIToMainMessage =
   | {
       type: "export";
       /** "copy" — full ExportResult JSON. "copy-merged" — one page doc (or `pages` wrapper) for pb-dev. "zip" — assets (default). */
-      mode?: "copy" | "copy-merged" | "zip";
+      mode?: ExportMode;
+      /** "full" keeps current behavior. "section" emits a single section artifact JSON payload. */
+      artifact?: ExportArtifact;
+      /** "all-selected" (default) exports the current selection/top-level fallback; "single-frame" exports one preview row. */
+      scope?: ExportScope;
+      /** Required with scope="single-frame" unless responsivePairKey is provided. */
+      frameId?: string;
+      /** Optional responsive pair key from preview row; when set with scope="single-frame", exports that merged pair. */
+      responsivePairKey?: string;
       targetOverrides?: Record<string, string>;
       annotationOverrides?: Record<string, Record<string, string>>;
       cdnPrefixOverrides?: Record<string, string>;

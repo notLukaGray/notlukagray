@@ -14,6 +14,7 @@ import {
 import { renderPreview } from "./ui-render";
 import {
   handleResult,
+  sendSectionExport,
   sendToMain,
   setStatus,
   wireExportButton,
@@ -114,7 +115,14 @@ window.onmessage = async (event: MessageEvent) => {
         ...item,
         responsivePairKey: (item as typeof item & { responsivePairKey?: string }).responsivePairKey,
       }));
-      renderPreview(previewEl, currentFrames, currentFrames);
+      renderPreview(previewEl, currentFrames, currentFrames, (frame) => {
+        exportBtn.disabled = true;
+        copyJsonBtn.disabled = true;
+        copyMergedPageBtn.disabled = true;
+        copyErrorsBtn.disabled = true;
+        setStatus(statusEl, `Exporting section for "${frame.name}"…`);
+        sendSectionExport(frame, getCurrentFrames(), autoPresetToggle.checked);
+      });
       break;
 
     case "error":
@@ -123,7 +131,16 @@ window.onmessage = async (event: MessageEvent) => {
       break;
 
     case "result":
-      await handleResult(els, msg.payload, msg.errors, msg.warningCount, msg.infoCount, msg.mode);
+      await handleResult(
+        els,
+        msg.payload,
+        msg.errors,
+        msg.warningCount,
+        msg.infoCount,
+        msg.mode,
+        msg.artifact,
+        msg.sectionArtifact
+      );
       exportBtn.disabled = false;
       copyJsonBtn.disabled = false;
       copyJsonBtn.textContent = "Copy JSON";

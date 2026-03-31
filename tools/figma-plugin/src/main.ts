@@ -16,7 +16,11 @@ figma.ui.onmessage = async (msg: UIToMainMessage) => {
       msg.annotationOverrides ?? {},
       msg.cdnPrefixOverrides ?? {},
       msg.mode ?? "zip",
-      msg.autoPresets ?? false
+      msg.autoPresets ?? false,
+      msg.scope ?? "all-selected",
+      msg.frameId,
+      msg.artifact ?? "full",
+      msg.responsivePairKey
     );
     return;
   }

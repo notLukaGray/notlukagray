@@ -10,6 +10,12 @@ import { detectExportTarget, parseTargetOverride } from "./main-frame-detect";
 import { applyFrameToResult } from "./main-export-helpers";
 import { parseAnnotations, stripAnnotations } from "./converters/annotations-parse";
 import { EXPORT_DROP_REASON, getOrCreateExportParity, recordUpstreamDrop } from "./export-parity";
+import {
+  applyPageBackgroundDefinition,
+  extractPageBackgroundDefinition,
+  findExplicitPageSections,
+  inferPageSectionsFromDirectChildren,
+} from "./main-page-sections";
 
 export async function convertNormalFrames(
   normalFrames: FrameNode[],
@@ -34,31 +40,35 @@ export async function convertNormalFrames(
     }
 
     const frameAnnotationOverrides = annotationOverrides[frame.id];
-    if (frameAnnotationOverrides) {
-      const originalName = frame.name;
-      (frame as unknown as { name: string }).name = buildMergedAnnotationName(
-        originalName,
-        frameAnnotationOverrides
-      );
-      try {
-        surfaceDescription(frame, ctx);
-        const section = await convertFrameToSection(frame, ctx);
-        (frame as unknown as { name: string }).name = originalName;
-        applyFrameToResult(frame, target, section, result, ctx);
-      } catch (err) {
-        (frame as unknown as { name: string }).name = originalName;
-        ctx.warnings.push(`[error] "${frame.name}": Failed to convert — ${String(err)}`);
+    const hasFrameAnnotationOverrides = hasMeaningfulAnnotationOverrides(frameAnnotationOverrides);
+    if (target.type === "page") {
+      const explicitSections = findExplicitPageSections(frame);
+      if (explicitSections.length > 0) {
+        if (hasFrameAnnotationOverrides) {
+          ctx.warnings.push(
+            `[info] "${frame.name}" has frame-level annotation overrides, but explicit Section/* child splitting takes precedence.`
+          );
+        }
+        await applyDetectedPageSections(frame, explicitSections, target, "explicit", ctx, result);
+        continue;
       }
-      continue;
+
+      if (!hasFrameAnnotationOverrides) {
+        const inferredSections = inferPageSectionsFromDirectChildren(frame);
+        if (inferredSections.length > 0) {
+          await applyDetectedPageSections(frame, inferredSections, target, "inferred", ctx, result);
+          continue;
+        }
+      }
     }
 
-    surfaceDescription(frame, ctx);
-    try {
-      const section = await convertFrameToSection(frame, ctx);
-      applyFrameToResult(frame, target, section, result, ctx);
-    } catch (err) {
-      ctx.warnings.push(`[error] "${frame.name}": Failed to convert — ${String(err)}`);
-    }
+    await convertSingleFrameToTarget(
+      frame,
+      target,
+      hasFrameAnnotationOverrides ? frameAnnotationOverrides : undefined,
+      ctx,
+      result
+    );
   }
 }
 
@@ -123,9 +133,71 @@ export async function convertResponsivePairs(
   }
 }
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
+async function applyDetectedPageSections(
+  frame: FrameNode,
+  sectionFrames: FrameNode[],
+  target: Extract<ExportTarget, { type: "page" }>,
+  mode: "explicit" | "inferred",
+  ctx: ConversionContext,
+  result: ExportResult
+): Promise<void> {
+  const bgDefinition = await extractPageBackgroundDefinition(frame, ctx);
+  const modeLabel =
+    mode === "explicit" ? `used explicit Section/* frames to split into` : "inferred";
+  if (bgDefinition) {
+    result.pages[target.key] = applyPageBackgroundDefinition({
+      pageRecord: result.pages[target.key],
+      pageKey: target.key,
+      pageTitle: target.label,
+      definition: bgDefinition,
+    });
+    ctx.warnings.push(
+      `[info] "${frame.name}" promoted parent frame fill to page background and ${modeLabel} ${sectionFrames.length} section frame(s).`
+    );
+  } else {
+    ctx.warnings.push(
+      `[info] "${frame.name}" ${modeLabel} ${sectionFrames.length} section frame(s).`
+    );
+  }
+
+  for (const childFrame of sectionFrames) {
+    await convertSingleFrameToTarget(childFrame, target, undefined, ctx, result);
+  }
+}
+
+async function convertSingleFrameToTarget(
+  frame: FrameNode,
+  target: ExportTarget,
+  frameAnnotationOverrides: Record<string, string> | undefined,
+  ctx: ConversionContext,
+  result: ExportResult
+): Promise<void> {
+  if (frameAnnotationOverrides) {
+    const originalName = frame.name;
+    (frame as unknown as { name: string }).name = buildMergedAnnotationName(
+      originalName,
+      frameAnnotationOverrides
+    );
+    try {
+      surfaceDescription(frame, ctx);
+      const section = await convertFrameToSection(frame, ctx);
+      (frame as unknown as { name: string }).name = originalName;
+      applyFrameToResult(frame, target, section, result, ctx);
+    } catch (err) {
+      (frame as unknown as { name: string }).name = originalName;
+      ctx.warnings.push(`[error] "${frame.name}": Failed to convert — ${String(err)}`);
+    }
+    return;
+  }
+
+  surfaceDescription(frame, ctx);
+  try {
+    const section = await convertFrameToSection(frame, ctx);
+    applyFrameToResult(frame, target, section, result, ctx);
+  } catch (err) {
+    ctx.warnings.push(`[error] "${frame.name}": Failed to convert — ${String(err)}`);
+  }
+}
 
 function clonePairConversionContext(
   ctx: ConversionContext,
@@ -138,9 +210,7 @@ function clonePairConversionContext(
 }
 
 function reserveUsedIds(target: Set<string>, source: Set<string>): void {
-  for (const id of source) {
-    target.add(id);
-  }
+  for (const id of source) target.add(id);
 }
 
 export function surfaceDescription(frame: FrameNode, ctx: ConversionContext): void {
@@ -160,11 +230,17 @@ function buildMergedAnnotationName(
     ...existingAnnotations,
     ...annotationOverrides,
   };
-
   const pairs = Object.entries(mergedAnnotations).filter(([key]) => key.trim().length > 0);
   if (pairs.length === 0) return baseName;
 
   pairs.sort(([a], [b]) => a.localeCompare(b));
   const annotationString = pairs.map(([key, value]) => `${key}=${value}`).join(", ");
   return `${baseName} [pb: ${annotationString}]`;
+}
+
+function hasMeaningfulAnnotationOverrides(
+  annotationOverrides: Record<string, string> | undefined
+): boolean {
+  if (!annotationOverrides) return false;
+  return Object.keys(annotationOverrides).length > 0;
 }

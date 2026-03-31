@@ -22,7 +22,8 @@ import {
 
 export function renderFrameRow(
   frame: FramePreviewItem,
-  currentFrames: FramePreviewItem[]
+  currentFrames: FramePreviewItem[],
+  onCopySection?: (frame: FramePreviewItem) => void
 ): HTMLLIElement {
   const li = document.createElement("li");
   li.className = "preview-item";
@@ -42,20 +43,17 @@ export function renderFrameRow(
     updatePreExportSummary(currentFrames);
   };
 
-  // Type badge
   const badge = document.createElement("span");
   badge.className = `badge ${TARGET_BADGE_COLORS[target.type]}`;
   badge.textContent = TARGET_LABELS[target.type];
   topRow.appendChild(badge);
 
-  // Frame name
   const nameSpan = document.createElement("span");
   nameSpan.className = "preview-name";
   nameSpan.textContent = frame.name.length > 36 ? frame.name.slice(0, 36) + "…" : frame.name;
   nameSpan.title = frame.name;
   topRow.appendChild(nameSpan);
 
-  // Responsive badge
   if (frame.responsivePairKey) {
     const respBadge = document.createElement("span");
     respBadge.className = "badge badge-teal responsive-badge";
@@ -64,7 +62,6 @@ export function renderFrameRow(
     topRow.appendChild(respBadge);
   }
 
-  // Issue count badge
   const errorCount = frame.issues.filter((i) => i.severity === "error").length;
   const warnCount = frame.issues.filter((i) => i.severity === "warn").length;
   if (errorCount > 0 || warnCount > 0) {
@@ -91,7 +88,6 @@ export function renderFrameRow(
     topRow.appendChild(presetHint);
   }
 
-  // Override select
   const sel = document.createElement("select");
   sel.className = "target-override-select";
   sel.setAttribute("aria-label", `Export target for ${frame.name}`);
@@ -117,7 +113,6 @@ export function renderFrameRow(
     sel.appendChild(optEl);
   }
 
-  // Output path line — must exist before select change handler
   const keySpan = document.createElement("span");
   keySpan.className = "preview-key";
   keySpan.textContent = `→ ${getOutputPath(target)}`;
@@ -129,7 +124,20 @@ export function renderFrameRow(
 
   topRow.appendChild(sel);
 
-  // CDN prefix row
+  const supportsSectionCopy = target.type !== "skip";
+  if (supportsSectionCopy && onCopySection) {
+    const copySectionBtn = document.createElement("button");
+    copySectionBtn.type = "button";
+    copySectionBtn.className = "copy-section-btn";
+    copySectionBtn.textContent = "Copy section";
+    copySectionBtn.title =
+      "Export this frame as a section artifact (section JSON + index patch metadata)";
+    copySectionBtn.addEventListener("click", () => {
+      onCopySection(frame);
+    });
+    topRow.appendChild(copySectionBtn);
+  }
+
   const cdnRow = document.createElement("div");
   cdnRow.className = "cdn-prefix-row";
   const cdnLabel = document.createElement("label");
@@ -151,20 +159,14 @@ export function renderFrameRow(
   li.appendChild(keySpan);
   li.appendChild(cdnRow);
 
-  // Issues list
   if (frame.issues.length > 0) {
     li.appendChild(buildIssuesList(frame));
   }
 
-  // Advanced options
   li.appendChild(buildAdvancedOptions(frame));
 
   return li;
 }
-
-// ---------------------------------------------------------------------------
-// Issues list
-// ---------------------------------------------------------------------------
 
 function buildIssuesList(frame: FramePreviewItem): HTMLDetailsElement {
   const issueDetails = document.createElement("details");
@@ -187,10 +189,6 @@ function buildIssuesList(frame: FramePreviewItem): HTMLDetailsElement {
   return issueDetails;
 }
 
-// ---------------------------------------------------------------------------
-// Advanced options
-// ---------------------------------------------------------------------------
-
 function buildAdvancedOptions(frame: FramePreviewItem): HTMLDetailsElement {
   const advDetails = document.createElement("details");
   advDetails.className = "frame-adv-options";
@@ -208,7 +206,6 @@ function buildAdvancedOptions(frame: FramePreviewItem): HTMLDetailsElement {
   advBody.appendChild(buildCheckboxOption(frame.id, "sticky", savedAnn, " Sticky header"));
   advBody.appendChild(buildCheckboxOption(frame.id, "hidden", savedAnn, " Hidden initially"));
 
-  // Overflow select
   const overflowLabel = document.createElement("label");
   overflowLabel.className = "adv-option adv-option--select";
   overflowLabel.append("Overflow: ");

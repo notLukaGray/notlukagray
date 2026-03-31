@@ -127,6 +127,17 @@ They solve real problems:
 
 If a page becomes large and still lives entirely in one top-level JSON file, that is usually a smell.
 
+### Consistency check
+
+The repo now enforces split-file consistency for multi-section pages:
+
+- if `sectionOrder.length > 1`, each section key should have a sibling `{sectionKey}.json`
+- run `npm run validate-pages` (also included in `npm run check`)
+
+If a page needs a temporary exception, add a targeted waiver in:
+
+- `src/content/config/section-file-waivers.json`
+
 ## Asset partitions via `assetBaseUrl`
 
 `assetBaseUrl` is more than a path prefix.

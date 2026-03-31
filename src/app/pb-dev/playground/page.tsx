@@ -664,6 +664,47 @@ function isPageBuilderDocument(raw: unknown): raw is PageBuilder {
   );
 }
 
+const BG_TYPES = new Set([
+  "backgroundVideo",
+  "backgroundImage",
+  "backgroundVariable",
+  "backgroundPattern",
+  "backgroundTransition",
+]);
+
+function isBgBlockLike(value: unknown): value is bgBlock {
+  return (
+    value != null &&
+    typeof value === "object" &&
+    "type" in value &&
+    BG_TYPES.has((value as { type: string }).type)
+  );
+}
+
+function extractBgDefinitionsFromPage(page: PageBuilder): Record<string, bgBlock> {
+  const out: Record<string, bgBlock> = {};
+  for (const [key, block] of Object.entries(page.definitions ?? {})) {
+    if (isBgBlockLike(block)) out[key] = block;
+  }
+  return out;
+}
+
+function getSinglePageBuilderDocumentFromWrapper(raw: unknown): PageBuilder | null {
+  if (!isRecord(raw)) return null;
+
+  if (isRecord(raw.payload)) {
+    const nested = getSinglePageBuilderDocumentFromWrapper(raw.payload);
+    if (nested) return nested;
+  }
+
+  if (!isRecord(raw.pages)) return null;
+  const pageCandidates = Object.values(raw.pages).filter((page): page is PageBuilder =>
+    isPageBuilderDocument(page)
+  );
+  if (pageCandidates.length !== 1) return null;
+  return pageCandidates[0] ?? null;
+}
+
 // ---------------------------------------------------------------------------
 // ErrorBoundary for the preview panel
 // ---------------------------------------------------------------------------
@@ -739,12 +780,15 @@ type ParsedState =
       status: "ok";
       sections: SectionBlock[];
       validationIssues: { path: string; message: string }[];
+      resolvedBg: bgBlock | null;
+      bgDefinitions: Record<string, bgBlock>;
     };
 
 const PREVIEW_BACKGROUNDS = [
-  { label: "white", value: "#ffffff" },
-  { label: "gray", value: "#d4d4d8" },
-  { label: "black", value: "#000000" },
+  { label: "native", mode: "native" as const },
+  { label: "white", mode: "color" as const, value: "#ffffff" },
+  { label: "gray", mode: "color" as const, value: "#d4d4d8" },
+  { label: "black", mode: "color" as const, value: "#000000" },
 ] as const;
 
 export default function PlaygroundPage() {
@@ -800,12 +844,34 @@ export default function PlaygroundPage() {
 
     if (isPageBuilderDocument(raw)) {
       try {
-        const { sections: expanded } = expandPageBuilder(raw);
+        const { bg, sections: expanded } = expandPageBuilder(raw);
         const validation = validateSections(expanded);
         return {
           status: "ok",
           sections: expanded,
           validationIssues: validation.valid ? [] : validation.issues,
+          resolvedBg: bg,
+          bgDefinitions: extractBgDefinitionsFromPage(raw),
+        };
+      } catch (e) {
+        return {
+          status: "normalise-error",
+          message: e instanceof Error ? e.message : String(e),
+        };
+      }
+    }
+
+    const wrappedPage = getSinglePageBuilderDocumentFromWrapper(raw);
+    if (wrappedPage) {
+      try {
+        const { bg, sections: expanded } = expandPageBuilder(wrappedPage);
+        const validation = validateSections(expanded);
+        return {
+          status: "ok",
+          sections: expanded,
+          validationIssues: validation.valid ? [] : validation.issues,
+          resolvedBg: bg,
+          bgDefinitions: extractBgDefinitionsFromPage(wrappedPage),
         };
       } catch (e) {
         return {
@@ -825,6 +891,8 @@ export default function PlaygroundPage() {
       status: "ok",
       sections: normalised.sections,
       validationIssues: validation.valid ? [] : validation.issues,
+      resolvedBg: null,
+      bgDefinitions: {},
     };
   }, [debouncedText]);
 
@@ -834,6 +902,8 @@ export default function PlaygroundPage() {
   }, [parsed, isMobile]);
 
   const previewBackground = PREVIEW_BACKGROUNDS[previewBgIndex] ?? PREVIEW_BACKGROUNDS[0];
+  const previewBackgroundColor =
+    previewBackground.mode === "color" ? previewBackground.value : undefined;
   const previewResetKey = `${isMobile ? "mobile" : "desktop"}:${debouncedText}`;
 
   const handleRuntimeError = useCallback((msg: string) => {
@@ -1014,11 +1084,15 @@ export default function PlaygroundPage() {
                 isMobile
                   ? {
                       width: 390,
-                      backgroundColor: previewBackground.value,
+                      ...(previewBackgroundColor
+                        ? { backgroundColor: previewBackgroundColor }
+                        : {}),
                       position: "relative",
                     }
                   : {
-                      backgroundColor: previewBackground.value,
+                      ...(previewBackgroundColor
+                        ? { backgroundColor: previewBackgroundColor }
+                        : {}),
                       position: "relative",
                     }
               }
@@ -1036,9 +1110,11 @@ export default function PlaygroundPage() {
                   <ServerBreakpointProvider isMobile={isMobile}>
                     <PreviewErrorBoundary key={previewResetKey} onError={handleRuntimeError}>
                       <PageBuilderRenderer
-                        resolvedBg={null as bgBlock | null}
+                        resolvedBg={previewBackground.mode === "native" ? parsed.resolvedBg : null}
                         resolvedSections={resolvedSections}
-                        bgDefinitions={{}}
+                        bgDefinitions={
+                          previewBackground.mode === "native" ? parsed.bgDefinitions : {}
+                        }
                         serverIsMobile={isMobile}
                       />
                     </PreviewErrorBoundary>

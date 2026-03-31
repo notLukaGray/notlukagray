@@ -46,6 +46,26 @@ function makeCtx() {
   };
 }
 
+function makeFrameNode(
+  id: string,
+  name: string,
+  children: SceneNode[] = [],
+  overrides: Partial<FrameNode> = {}
+): FrameNode {
+  return {
+    id,
+    type: "FRAME",
+    name,
+    x: 0,
+    y: 0,
+    width: 100,
+    height: 100,
+    visible: true,
+    children,
+    ...overrides,
+  } as FrameNode;
+}
+
 describe("responsive pair conversion", () => {
   beforeEach(() => {
     seenSizes.length = 0;
@@ -166,5 +186,58 @@ describe("responsive pair conversion", () => {
 
     expect(result.presets).toEqual({});
     expect(ctx.warnings.some((w) => w.includes("Failed to convert desktop"))).toBe(true);
+  });
+
+  it("treats empty annotation overrides as absent for page section splitting", async () => {
+    const ctx = makeCtx();
+    const result = {
+      pages: {},
+      presets: {},
+      modals: {},
+      modules: {},
+      globals: {},
+      assets: [],
+      warnings: [],
+      elementCount: 0,
+    };
+    const sectionA = makeFrameNode("child-1", "Section/Hero");
+    const sectionB = makeFrameNode("child-2", "Section/Footer", [], { y: 600 });
+    const page = makeFrameNode("page-1", "Page/Landing", [
+      sectionA as unknown as SceneNode,
+      sectionB as unknown as SceneNode,
+    ]);
+
+    await convertNormalFrames([page], {}, { "page-1": {} }, {}, ctx, result);
+
+    expect(seenFrameNames).toContain("Section/Hero");
+    expect(seenFrameNames).toContain("Section/Footer");
+    expect(seenFrameNames).not.toContain("Page/Landing");
+    expect(result.pages).toMatchObject({
+      landing: {
+        sectionOrder: ["hero", "hero-1"],
+      },
+    });
+  });
+
+  it("keeps explicit Section/* splitting even with non-empty page overrides", async () => {
+    const ctx = makeCtx();
+    const result = {
+      pages: {},
+      presets: {},
+      modals: {},
+      modules: {},
+      globals: {},
+      assets: [],
+      warnings: [],
+      elementCount: 0,
+    };
+    const sectionA = makeFrameNode("child-1", "Section/Hero");
+    const page = makeFrameNode("page-1", "Page/Landing", [sectionA as unknown as SceneNode]);
+
+    await convertNormalFrames([page], {}, { "page-1": { fill: "#000000" } }, {}, ctx, result);
+
+    expect(seenFrameNames).toContain("Section/Hero");
+    expect(seenFrameNames).not.toContain("Page/Landing [pb: fill=#000000]");
+    expect(result.pages).toMatchObject({ landing: { sectionOrder: ["hero"] } });
   });
 });

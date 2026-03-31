@@ -22,7 +22,8 @@ export {
 export function renderPreview(
   previewEl: HTMLDivElement,
   items: FramePreviewItem[],
-  currentFrames: FramePreviewItem[]
+  currentFrames: FramePreviewItem[],
+  onCopySection?: (frame: FramePreviewItem) => void
 ): void {
   previewEl.innerHTML = "";
   previewEl.style.display = "block";
@@ -47,7 +48,7 @@ export function renderPreview(
   list.className = "preview-list";
 
   for (const item of items) {
-    list.appendChild(renderFrameRow(item, currentFrames));
+    list.appendChild(renderFrameRow(item, currentFrames, onCopySection));
   }
 
   previewEl.appendChild(list);
