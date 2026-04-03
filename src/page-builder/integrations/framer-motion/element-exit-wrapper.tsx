@@ -24,6 +24,10 @@ export type ElementExitWrapperProps = {
   exitEasing?: string | [number, number, number, number];
   /** Stable unique key for AnimatePresence child. Required when multiple exit wrappers are siblings to avoid shared key bugs. */
   exitKey?: string;
+  /** Optional className applied to the motion wrapper rendered by this component. */
+  className?: string;
+  /** Optional style applied to the motion wrapper rendered by this component. */
+  style?: React.CSSProperties;
   children: React.ReactNode;
 };
 
@@ -39,10 +43,24 @@ export function ElementExitWrapper({
   exitDuration = MOTION_DEFAULTS.transition.exitDuration ?? MOTION_DEFAULTS.transition.duration,
   exitEasing = MOTION_DEFAULTS.transition.ease,
   exitKey = "element-exit",
+  className,
+  style,
   children,
 }: ElementExitWrapperProps) {
   const effectiveExitPreset = motionTiming?.exitPreset ?? exitPreset;
   const effectiveExitMotion = motionTiming?.exitMotion ?? motionFromJson;
+  const exitTransitionOverrides = useMemo(() => {
+    if (!effectiveExitMotion || typeof effectiveExitMotion !== "object") return undefined;
+    const transition = (effectiveExitMotion as MotionPropsFromJson).transition;
+    if (!transition || typeof transition !== "object") return undefined;
+    return transition as Record<string, unknown>;
+  }, [effectiveExitMotion]);
+  const resolvedExitDuration =
+    (exitTransitionOverrides?.duration as number | undefined) ?? exitDuration;
+  const resolvedExitDelay = (exitTransitionOverrides?.delay as number | undefined) ?? 0;
+  const resolvedExitEasing =
+    (exitTransitionOverrides?.ease as string | [number, number, number, number] | undefined) ??
+    exitEasing;
 
   const motionConfig = useMemo<MotionPropsFromJson>(() => {
     const hasMotionExit =
@@ -57,8 +75,9 @@ export function ElementExitWrapper({
     }
     if (effectiveExitPreset && typeof effectiveExitPreset === "string") {
       const { exit, transition } = getExitMotionFromPreset(effectiveExitPreset, {
-        duration: exitDuration,
-        ease: exitEasing,
+        duration: resolvedExitDuration,
+        delay: resolvedExitDelay,
+        ease: resolvedExitEasing,
       });
       return (
         mergeMotionDefaults({
@@ -75,7 +94,12 @@ export function ElementExitWrapper({
       );
     }
     const mc = MOTION_DEFAULTS.motionComponent;
-    const exitTransition = { type: "tween" as const, duration: exitDuration, ease: exitEasing };
+    const exitTransition = {
+      type: "tween" as const,
+      duration: resolvedExitDuration,
+      delay: resolvedExitDelay,
+      ease: resolvedExitEasing,
+    };
     return (
       mergeMotionDefaults({
         initial: mc.animate as Record<string, string | number | number[]>,
@@ -84,12 +108,18 @@ export function ElementExitWrapper({
         transition: exitTransition,
       } as MotionPropsFromJson) ?? ({} as MotionPropsFromJson)
     );
-  }, [effectiveExitMotion, effectiveExitPreset, exitDuration, exitEasing]);
+  }, [
+    effectiveExitMotion,
+    effectiveExitPreset,
+    resolvedExitDuration,
+    resolvedExitDelay,
+    resolvedExitEasing,
+  ]);
 
   return (
     <AnimatePresence>
       {show && (
-        <MotionFromJson key={exitKey} motion={motionConfig}>
+        <MotionFromJson key={exitKey} motion={motionConfig} className={className} style={style}>
           {children}
         </MotionFromJson>
       )}

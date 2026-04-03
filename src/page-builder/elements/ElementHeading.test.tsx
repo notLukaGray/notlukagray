@@ -9,6 +9,6 @@ describe("ElementHeading semantic contract", () => {
     );
 
     expect(markup).toContain("<h1");
-    expect(markup).toContain("typography-heading-tertiary-light");
+    expect(markup).toContain("typography-heading-md");
   });
 });

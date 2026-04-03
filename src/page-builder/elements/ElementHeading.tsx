@@ -1,8 +1,13 @@
 import { createElement, type CSSProperties } from "react";
+import { applyPbDefaultTextAlign } from "@/app/theme/pb-content-guidelines";
 import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
-import { getElementLayoutStyle } from "@/page-builder/core/element-layout-utils";
+import {
+  getElementLayoutStyle,
+  getLayoutRotateFlipStyle,
+} from "@/page-builder/core/element-layout-utils";
 import { getHeadingTypographyClass } from "@/page-builder/core/element-body-typography";
 import { useVariable } from "@/page-builder/core/page-builder-variable-store";
+import { resolveFontFamily } from "@/page-builder/core/element-font-slot";
 
 type Props = Extract<ElementBlock, { type: "elementHeading" }>;
 
@@ -24,6 +29,9 @@ export function ElementHeading({
   variableKey,
   letterSpacing,
   lineSpacing,
+  fontFamily,
+  fontSize,
+  fontWeight,
   align,
   textAlign,
   width,
@@ -33,6 +41,9 @@ export function ElementHeading({
   marginLeft,
   marginRight,
   wordWrap = true,
+  rotate,
+  flipHorizontal,
+  flipVertical,
   ...rest
 }: Props & { variableKey?: string }) {
   // Always call hook unconditionally; use its value only when variableKey is set
@@ -53,16 +64,20 @@ export function ElementHeading({
       marginRight,
       ...rest,
     }),
+    ...getLayoutRotateFlipStyle({ rotate, flipHorizontal, flipVertical }),
   };
-  const multilineAlign = textAlign ?? align;
-  if (multilineAlign)
-    blockStyle.textAlign = multilineAlign as "left" | "right" | "center" | "justify";
+  applyPbDefaultTextAlign(blockStyle, align, textAlign);
   blockStyle.whiteSpace = wordWrap ? "normal" : "nowrap";
   if (!wordWrap) blockStyle.overflow = "hidden";
   blockStyle.textOverflow = wordWrap ? undefined : "ellipsis";
   const textStyle: CSSProperties = {
     letterSpacing,
     lineHeight: lineSpacing,
+    ...(resolveFontFamily(fontFamily) !== undefined
+      ? { fontFamily: resolveFontFamily(fontFamily) }
+      : {}),
+    ...(fontSize !== undefined ? { fontSize } : {}),
+    ...(fontWeight !== undefined ? { fontWeight: fontWeight as CSSProperties["fontWeight"] } : {}),
   };
 
   return (

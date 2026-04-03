@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { applyPbDefaultTextAlign } from "@/app/theme/pb-content-guidelines";
 import type { ElementBlock, ElementBodyVariant } from "@/page-builder/core/page-builder-schemas";
 import { getElementLayoutStyle } from "@/page-builder/core/element-layout-utils";
 import {
@@ -58,9 +59,7 @@ export function buildElementButtonBlockStyle(
       ...rest,
     }),
   };
-  const multilineAlign = textAlign ?? align;
-  if (multilineAlign)
-    blockStyle.textAlign = multilineAlign as "left" | "right" | "center" | "justify";
+  applyPbDefaultTextAlign(blockStyle, align, textAlign);
   blockStyle.whiteSpace = wordWrap ? "normal" : "nowrap";
   if (!wordWrap) {
     blockStyle.overflow = "hidden";

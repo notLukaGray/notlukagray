@@ -65,6 +65,8 @@ export interface ImageCrop {
   x?: number;
   y?: number;
   scale?: number;
+  focalX?: number;
+  focalY?: number;
 }
 
 export interface ImageFilters {

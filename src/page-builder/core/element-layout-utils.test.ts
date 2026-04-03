@@ -1,16 +1,38 @@
 import { describe, it, expect } from "vitest";
 import {
   getElementLayoutStyle,
+  getLayoutRotateFlipStyle,
   normalizeLayoutInput,
   computePositioningStyle,
   computeSizingStyle,
   pageBuilderFlexGapToCss,
+  resolveFrameGapCss,
+  resolveFrameRowGapCss,
+  resolveFrameColumnGapCss,
+  coalesceEmptyString,
+  normalizeFlexAlignItemsValue,
+  normalizeFlexJustifyContentValue,
   pageBuilderJustifyContentForGap,
   pageBuilderOverlapGapToCss,
   type ResolvedElementLayout,
 } from "./element-layout-utils";
 
 describe("element-layout-utils", () => {
+  describe("getLayoutRotateFlipStyle", () => {
+    it("combines rotate and flip scales", () => {
+      expect(
+        getLayoutRotateFlipStyle({ rotate: 12, flipHorizontal: true, flipVertical: true }).transform
+      ).toContain("rotate(12deg)");
+      expect(getLayoutRotateFlipStyle({ flipHorizontal: true }).transform).toContain("scaleX(-1)");
+      expect(getLayoutRotateFlipStyle({ flipVertical: true }).transform).toContain("scaleY(-1)");
+    });
+
+    it("returns empty when no transform fields", () => {
+      expect(getLayoutRotateFlipStyle({})).toEqual({});
+      expect(getLayoutRotateFlipStyle(undefined)).toEqual({});
+    });
+  });
+
   describe("normalizeLayoutInput", () => {
     it("returns undefined for undefined layout", () => {
       expect(normalizeLayoutInput(undefined)).toBeUndefined();
@@ -240,6 +262,39 @@ describe("element-layout-utils", () => {
       expect(pageBuilderJustifyContentForGap("space-between", "-130px")).toBe("center");
       expect(pageBuilderJustifyContentForGap("center", "-130px")).toBe("center");
       expect(pageBuilderJustifyContentForGap("space-between", "20px")).toBe("space-between");
+    });
+
+    it("resolveFrameGapCss falls back when gap is omitted", () => {
+      expect(resolveFrameGapCss(undefined)).toBe(
+        "calc((1rem) * var(--pb-density-space-multiplier, 1))"
+      );
+      expect(resolveFrameGapCss("")).toBe("calc((1rem) * var(--pb-density-space-multiplier, 1))");
+      expect(resolveFrameGapCss("12px")).toBe("12px");
+      expect(resolveFrameGapCss("auto")).toBeUndefined();
+      expect(resolveFrameGapCss("-5px")).toBeUndefined();
+    });
+
+    it("resolveFrameRowGapCss and resolveFrameColumnGapCss fall back when unset in config", () => {
+      expect(resolveFrameRowGapCss(undefined)).toBeUndefined();
+      expect(resolveFrameRowGapCss("")).toBeUndefined();
+      expect(resolveFrameColumnGapCss(undefined)).toBeUndefined();
+      expect(resolveFrameColumnGapCss("8px")).toBe("8px");
+    });
+
+    it("coalesceEmptyString treats whitespace like unset", () => {
+      expect(coalesceEmptyString(undefined)).toBeUndefined();
+      expect(coalesceEmptyString("")).toBeUndefined();
+      expect(coalesceEmptyString("  ")).toBeUndefined();
+      expect(coalesceEmptyString("center")).toBe("center");
+      expect(coalesceEmptyString(12)).toBe("12");
+    });
+
+    it("normalizes left/start/right/end to flex keywords", () => {
+      expect(normalizeFlexAlignItemsValue("left")).toBe("flex-start");
+      expect(normalizeFlexAlignItemsValue("end")).toBe("flex-end");
+      expect(normalizeFlexJustifyContentValue("start")).toBe("flex-start");
+      expect(normalizeFlexJustifyContentValue("right")).toBe("flex-end");
+      expect(normalizeFlexJustifyContentValue("space-between")).toBe("space-between");
     });
   });
 });

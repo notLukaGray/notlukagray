@@ -8,21 +8,21 @@ import type { ElementBodyVariant } from "./page-builder-schemas";
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export const BODY_TYPOGRAPHY_CLASS_BY_LEVEL: Record<ElementBodyVariant, string> = {
-  1: "typography-body-large-regular",
-  2: "typography-body-large-thin",
-  3: "typography-body-medium-regular",
-  4: "typography-body-medium-thin",
-  5: "typography-body-legal-book",
-  6: "typography-body-legal-light",
+  1: "typography-body-2xl",
+  2: "typography-body-xl",
+  3: "typography-body-lg",
+  4: "typography-body-md",
+  5: "typography-body-sm",
+  6: "typography-body-xs",
 };
 
 export const HEADING_TYPOGRAPHY_CLASS_BY_LEVEL: Record<HeadingLevel, string> = {
-  1: "typography-heading-primary-bold",
-  2: "typography-heading-secondary-bold",
-  3: "typography-heading-tertiary-bold",
-  4: "typography-heading-tertiary-light",
-  5: "typography-heading-card-bold",
-  6: "typography-heading-card-bold",
+  1: "typography-heading-2xl",
+  2: "typography-heading-xl",
+  3: "typography-heading-lg",
+  4: "typography-heading-md",
+  5: "typography-heading-sm",
+  6: "typography-heading-xs",
 };
 
 export const DEFAULT_BODY_LEVEL: ElementBodyVariant = 3;

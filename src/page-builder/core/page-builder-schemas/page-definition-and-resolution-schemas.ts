@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PAGE_DENSITY_LEVELS } from "@/page-builder/core/page-density";
 import { bgBlockSchema } from "./background-block-schemas";
 import { elementBlockSchema, sectionDefinitionBlockSchema } from "./element-block-schemas";
 import { moduleBlockSchema } from "./module-block-schemas";
@@ -115,6 +116,8 @@ export const pageScrollConfigSchema = z.object({
   overflowY: z.enum(["auto", "scroll", "hidden"]).optional(),
 });
 
+export const pageDensitySchema = z.enum(PAGE_DENSITY_LEVELS);
+
 /** Optional parity / diagnostics blob appended by the Figma plugin “Copy page JSON” flow. */
 export const figmaExportDiagnosticsPageFieldSchema = z.object({
   version: z.literal(1),
@@ -148,6 +151,7 @@ export const pageBuilderSchema = z
     disableOverlays: z.array(z.string()).optional(),
     scroll: pageScrollConfigSchema.optional(),
     figmaExportDiagnostics: figmaExportDiagnosticsPageFieldSchema.optional(),
+    density: pageDensitySchema.optional(),
   })
   .passthrough();
 
@@ -162,5 +166,6 @@ export const resolvedPageSchema = z
     passwordProtected: z.boolean().optional(),
     assetBaseUrl: z.string().optional(),
     scroll: pageScrollConfigSchema.optional(),
+    density: pageDensitySchema.optional(),
   })
   .passthrough();

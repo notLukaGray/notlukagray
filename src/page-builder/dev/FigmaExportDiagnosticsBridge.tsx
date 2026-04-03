@@ -9,7 +9,7 @@ type FigmaExportDiagnosticsBridgeProps = {
 };
 
 /**
- * Wires runtime pages into the same diagnostics store used by pb-dev playground paste.
+ * Wires runtime pages into the same diagnostics store used by `/playground` JSON paste.
  * This keeps the PB dev overlay's Figma tab populated on normal routes too.
  */
 export function FigmaExportDiagnosticsBridge({ diagnostics }: FigmaExportDiagnosticsBridgeProps) {

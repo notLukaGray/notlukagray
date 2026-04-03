@@ -5,20 +5,40 @@
       "animate": { "opacity": 1 }
     },
     "slideUp": {
-      "initial": { "opacity": 0, "y": 24 },
-      "animate": { "opacity": 1, "y": 0 }
+      "initial": { "y": 24 },
+      "animate": { "y": 0 }
     },
     "slideDown": {
-      "initial": { "opacity": 0, "y": -24 },
-      "animate": { "opacity": 1, "y": 0 }
+      "initial": { "y": -24 },
+      "animate": { "y": 0 }
     },
     "slideLeft": {
-      "initial": { "opacity": 0, "x": 24 },
-      "animate": { "opacity": 1, "x": 0 }
+      "initial": { "x": 24 },
+      "animate": { "x": 0 }
     },
     "slideRight": {
-      "initial": { "opacity": 0, "x": -24 },
-      "animate": { "opacity": 1, "x": 0 }
+      "initial": { "x": -24 },
+      "animate": { "x": 0 }
+    },
+    "zoomIn": {
+      "initial": { "scale": 0.92 },
+      "animate": { "scale": 1 }
+    },
+    "zoomOut": {
+      "initial": { "scale": 1.08 },
+      "animate": { "scale": 1 }
+    },
+    "popIn": {
+      "initial": { "opacity": 0, "scale": 0.86, "y": 10 },
+      "animate": { "opacity": 1, "scale": 1, "y": 0 }
+    },
+    "blurIn": {
+      "initial": { "opacity": 0, "filter": "blur(8px)" },
+      "animate": { "opacity": 1, "filter": "blur(0px)" }
+    },
+    "tiltIn": {
+      "initial": { "rotate": -4 },
+      "animate": { "rotate": 0 }
     }
   },
   "exitPresets": {
@@ -26,16 +46,31 @@
       "exit": { "opacity": 0 }
     },
     "slideUp": {
-      "exit": { "opacity": 0, "y": -24 }
+      "exit": { "y": -24 }
     },
     "slideDown": {
-      "exit": { "opacity": 0, "y": 24 }
+      "exit": { "y": 24 }
     },
     "slideLeft": {
-      "exit": { "opacity": 0, "x": -24 }
+      "exit": { "x": -24 }
     },
     "slideRight": {
-      "exit": { "opacity": 0, "x": 24 }
+      "exit": { "x": 24 }
+    },
+    "zoomIn": {
+      "exit": { "scale": 1.08 }
+    },
+    "zoomOut": {
+      "exit": { "scale": 0.92 }
+    },
+    "popIn": {
+      "exit": { "opacity": 0, "scale": 0.92, "y": 8 }
+    },
+    "blurIn": {
+      "exit": { "opacity": 0, "filter": "blur(8px)" }
+    },
+    "tiltIn": {
+      "exit": { "rotate": 4 }
     }
   }
 }

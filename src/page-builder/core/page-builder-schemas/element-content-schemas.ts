@@ -15,7 +15,8 @@ import {
   elementLayoutSchema,
   elementSimpleLinkSchema,
   responsiveElementBodyVariantSchema,
-  responsiveObjectFitSchema,
+  responsiveImageObjectFitSchema,
+  responsiveVideoObjectFitSchema,
   vectorColorsSchema,
   vectorGradientSchema,
   vectorShapeSchema,
@@ -35,6 +36,8 @@ const headingLevelSchema = z.union([
 const elementHeadingSchema = z
   .object({
     type: z.literal("elementHeading"),
+    /** Preset key for `pbBuilderDefaultsV1.elements.heading` variant templates. */
+    variant: z.enum(["display", "section", "label"]).optional(),
     level: headingLevelSchema,
     /** Optional semantic heading level (h1–h6) for document outline. When set, used for the element tag; `level` still drives typography style. Use to fix heading order (e.g. level 4 style with semanticLevel 2 for correct outline). */
     semanticLevel: headingLevelSchema.optional(),
@@ -44,6 +47,11 @@ const elementHeadingSchema = z
     lineSpacing: z.union([z.string(), z.number()]).optional(),
     /** When set, renders the variable value from the store instead of static `text`. */
     variableKey: z.string().optional(),
+    /**
+     * Font family override. Use a named slot to follow the active typeface:
+     * `"primary"` | `"secondary"` | `"mono"`.
+     * Any other string is passed through as a raw CSS font-family value.
+     */
     fontFamily: z.string().optional(),
     fontSize: z.union([z.string(), z.number()]).optional(),
     fontWeight: z.union([z.string(), z.number()]).optional(),
@@ -59,6 +67,8 @@ const elementHeadingSchema = z
 const elementBodySchema = z
   .object({
     type: z.literal("elementBody"),
+    /** Preset key for `pbBuilderDefaultsV1.elements.body` variant templates. */
+    variant: z.enum(["lead", "standard", "fine"]).optional(),
     text: z.string(),
     level: responsiveElementBodyVariantSchema.optional(),
     wordWrap: z.boolean().optional(),
@@ -66,6 +76,11 @@ const elementBodySchema = z
     lineSpacing: z.union([z.string(), z.number()]).optional(),
     /** When set, renders the variable value from the store instead of static `text`. */
     variableKey: z.string().optional(),
+    /**
+     * Font family override. Use a named slot to follow the active typeface:
+     * `"primary"` | `"secondary"` | `"mono"`.
+     * Any other string is passed through as a raw CSS font-family value.
+     */
     fontFamily: z.string().optional(),
     fontSize: z.union([z.string(), z.number()]).optional(),
     fontWeight: z.union([z.string(), z.number()]).optional(),
@@ -84,6 +99,8 @@ const elementBodySchema = z
 const elementLinkSchema = z
   .object({
     type: z.literal("elementLink"),
+    /** Preset key for `pbBuilderDefaultsV1.elements.link` variant templates. */
+    variant: z.enum(["inline", "emphasis", "nav"]).optional(),
     label: z.string(),
     href: z.string(),
     external: z.boolean().optional(),
@@ -96,6 +113,11 @@ const elementLinkSchema = z
     linkDisabled: z.string().optional(),
     linkTransition: z.union([z.string(), z.number()]).optional(),
     disabled: z.boolean().optional(),
+    /**
+     * Font family override. Use a named slot to follow the active typeface:
+     * `"primary"` | `"secondary"` | `"mono"`.
+     * Any other string is passed through as a raw CSS font-family value.
+     */
     fontFamily: z.string().optional(),
     fontSize: z.union([z.string(), z.number()]).optional(),
     fontWeight: z.union([z.string(), z.number()]).optional(),
@@ -117,9 +139,11 @@ const elementLinkSchema = z
 const elementImageSchema = z
   .object({
     type: z.literal("elementImage"),
+    /** Optional image variant key. Runtime defaults can map this to fit/aspect/animation behavior. */
+    variant: z.enum(["hero", "inline", "fullCover", "feature", "crop"]).optional(),
     src: z.string(),
     alt: z.string(),
-    objectFit: responsiveObjectFitSchema,
+    objectFit: responsiveImageObjectFitSchema,
     objectPosition: z.string().optional(),
     rotate: z.union([z.number(), z.string()]).optional(),
     flipHorizontal: z.boolean().optional(),
@@ -132,6 +156,9 @@ const elementImageSchema = z
         x: z.number().optional(),
         y: z.number().optional(),
         scale: z.number().optional(),
+        /** Normalized 0–1 in the media frame; metadata only (does not move the image). */
+        focalX: z.number().min(0).max(1).optional(),
+        focalY: z.number().min(0).max(1).optional(),
       })
       .optional(),
     imageFilters: z
@@ -160,7 +187,7 @@ const elementVideoSchema = z
     autoplay: z.boolean().optional(),
     loop: z.boolean().optional(),
     muted: z.boolean().optional(),
-    objectFit: responsiveObjectFitSchema,
+    objectFit: responsiveVideoObjectFitSchema,
     objectPosition: z.string().optional(),
     rotate: z.union([z.number(), z.string()]).optional(),
     flipHorizontal: z.boolean().optional(),

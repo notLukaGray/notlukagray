@@ -1,33 +1,18 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
+import { primaryFontLocal, secondaryFontLocal, monoFontLocal } from "@/app/fonts/create-fonts";
+import { primaryFontConfig, secondaryFontConfig, monoFontConfig } from "@/app/fonts/config";
+import { getActiveWebfontUrls } from "@/app/fonts/webfont";
+import { generateFontCssVars } from "@/app/fonts/css-vars";
+import { typeScaleConfig } from "@/app/fonts/type-scale";
 import { siteUrl, cdnBase } from "@/core/lib/globals";
 import { ThemeProvider } from "@/core/providers/theme-provider";
 import { AppLayout } from "@/core/ui/app-layout";
 import { DeviceTypeProvider } from "@/core/providers/device-type-provider";
 import { DevPageValidationClient } from "@/core/dev/DevPageValidationClient";
 import { DevContentReloadClient } from "@/core/dev/DevContentReloadClient";
-
-const exo2 = localFont({
-  src: [
-    {
-      path: "../../public/font/exo-2-latin-wght-normal.woff2",
-      style: "normal",
-      weight: "100 900",
-    },
-    {
-      path: "../../public/font/exo-2-latin-wght-italic.woff2",
-      style: "italic",
-      weight: "100 900",
-    },
-  ],
-  variable: "--font-exo2",
-  // optional = never block first paint on font load (better LCP; fallback used if font not ready)
-  display: "optional",
-  preload: true,
-  // Match fallback font metrics to Exo 2 to reduce reflow and element render delay when font loads
-  adjustFontFallback: "Arial",
-});
+import { pbBrandCssInline } from "@/app/theme/config";
+import { pbContentGuidelinesCssInline } from "@/app/theme/pb-content-guidelines-config";
 
 const title = "Portfolio";
 const description = "Modern portfolio website";
@@ -62,14 +47,48 @@ export const viewport = {
   ],
 };
 
+// Build once at module level — these are pure functions of static config.
+const webfontUrls = getActiveWebfontUrls(primaryFontConfig, secondaryFontConfig, monoFontConfig);
+const fontCssVars = generateFontCssVars(
+  primaryFontConfig,
+  secondaryFontConfig,
+  monoFontConfig,
+  typeScaleConfig
+);
+
+// Only apply a slot's next/font variable className when that slot uses local files.
+// Webfont slots get their --font-* var set via the generated <style> block above.
+const htmlFontClasses = [
+  primaryFontConfig.source === "local" ? primaryFontLocal.variable : null,
+  secondaryFontConfig.source === "local" ? secondaryFontLocal.variable : null,
+  monoFontConfig.source === "local" ? monoFontLocal.variable : null,
+]
+  .filter(Boolean)
+  .join(" ");
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={exo2.variable}>
-      <body className={`${exo2.className} antialiased`}>
+    <html lang="en" suppressHydrationWarning className={htmlFontClasses}>
+      <head>
+        {/* Weight vars + webfont family overrides. Injected before any stylesheet
+            so CSS custom properties are available when globals.css is parsed. */}
+        <style dangerouslySetInnerHTML={{ __html: fontCssVars }} />
+        {/* Webfont stylesheets — only present when at least one slot uses "webfont". */}
+        {webfontUrls.map((url) => (
+          <link key={url} rel="stylesheet" href={url} />
+        ))}
+      </head>
+      <body className="font-sans antialiased">
+        {/* PB brand `--pb-*` tokens: `theme/config.ts`. Layout & copy vars: `theme/pb-content-guidelines-config.ts`. */}
+        <style dangerouslySetInnerHTML={{ __html: pbBrandCssInline() }} suppressHydrationWarning />
+        <style
+          dangerouslySetInnerHTML={{ __html: pbContentGuidelinesCssInline() }}
+          suppressHydrationWarning
+        />
         <DeviceTypeProvider>
           <ThemeProvider
             attribute="class"

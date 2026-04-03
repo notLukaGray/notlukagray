@@ -155,11 +155,29 @@ export function ElementButton({
   const hasAction = !!action && !href;
   const contentWrapStyle: CSSProperties =
     hasLabel && hasVector
-      ? { display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }
+      ? {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "var(--pb-button-label-gap)",
+        }
       : {};
 
+  const nakedSurfacePadding: CSSProperties = hasWrapper
+    ? {}
+    : {
+        paddingTop: "var(--pb-button-naked-pad-y)",
+        paddingBottom: "var(--pb-button-naked-pad-y)",
+        paddingLeft: "var(--pb-button-naked-pad-x)",
+        paddingRight: "var(--pb-button-naked-pad-x)",
+        borderRadius: "var(--pb-button-naked-radius)",
+      };
+
   const content = (
-    <span style={contentWrapStyle} className="inline-flex items-center justify-center gap-2">
+    <span
+      style={contentWrapStyle}
+      className="inline-flex items-center justify-center gap-(--pb-button-label-gap)"
+    >
       {hasLabel && (
         <span
           className={`m-0 block ${typographyClass}`}
@@ -174,14 +192,14 @@ export function ElementButton({
 
   const inner = hasLink ? (
     isInternal ? (
-      <Link href={href!} className={linkClassName} style={linkStyle}>
+      <Link href={href!} className={linkClassName} style={{ ...linkStyle, ...nakedSurfacePadding }}>
         {content}
       </Link>
     ) : (
       <a
         href={href!}
         className={linkClassName}
-        style={linkStyle}
+        style={{ ...linkStyle, ...nakedSurfacePadding }}
         {...(external && { target: "_blank", rel: "noopener noreferrer" })}
       >
         {content}
@@ -221,10 +239,10 @@ export function ElementButton({
         appearance: "none",
         background: "transparent",
         border: "none",
-        padding: 0,
         color: "inherit",
         font: "inherit",
         textAlign: "inherit",
+        ...(hasWrapper ? { padding: 0 } : nakedSurfacePadding),
         ...(disabled ? { opacity: 0.6 } : {}),
       }}
     >

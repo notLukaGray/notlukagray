@@ -1,7 +1,36 @@
 import type { CSSProperties } from "react";
+import { pbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
+import { scaleSpaceForDensity } from "@/page-builder/core/page-density";
 import type { ElementLayout } from "../page-builder-schemas";
 import { resolveResponsiveValue } from "../../../core/lib/responsive-value";
 import { resolveConstraintStyle } from "./figma-constraints-style";
+
+/** JSON often sends `""` for “unset”; treat like undefined so guideline defaults apply. */
+export function coalesceEmptyString(value: unknown): string | undefined {
+  if (value == null) return undefined;
+  if (typeof value === "number" && !Number.isNaN(value)) return String(value);
+  if (typeof value !== "string") return undefined;
+  const t = value.trim();
+  return t === "" ? undefined : t;
+}
+
+/** Maps exporter / author quirks to valid flex `align-items` keywords. */
+export function normalizeFlexAlignItemsValue(
+  value: string
+): NonNullable<CSSProperties["alignItems"]> {
+  const s = value.trim();
+  if (s === "left" || s === "start") return "flex-start";
+  if (s === "right" || s === "end") return "flex-end";
+  return s as NonNullable<CSSProperties["alignItems"]>;
+}
+
+/** Maps exporter / author quirks to valid `justify-content` keywords. */
+export function normalizeFlexJustifyContentValue(value: string): string {
+  const s = value.trim();
+  if (s === "left" || s === "start") return "flex-start";
+  if (s === "right" || s === "end") return "flex-end";
+  return s;
+}
 
 function resolveSize(value: string | undefined): string | undefined {
   if (value == null) return undefined;
@@ -17,6 +46,33 @@ export function pageBuilderFlexGapToCss(gap: string | undefined | null): string 
   if (gap == null || gap === "auto") return undefined;
   if (/^-\d*\.?\d+(px|rem|em|vw|vh|%)$/i.test(gap.trim())) return undefined;
   return gap;
+}
+
+/** Resolved `gap` for element groups, including `pbContentGuidelines.frameGapWhenUnset` when JSON omits `gap`. */
+export function resolveFrameGapCss(gap: string | undefined | null): string | undefined {
+  if (gap == null || gap === "") {
+    const fallback = pbContentGuidelines.frameGapWhenUnset;
+    return fallback != null ? scaleSpaceForDensity(fallback) : undefined;
+  }
+  return pageBuilderFlexGapToCss(gap);
+}
+
+/** Row gap when JSON omits `rowGap` — uses `frameRowGapWhenUnset` when set. */
+export function resolveFrameRowGapCss(rowGap: string | undefined | null): string | undefined {
+  if (rowGap == null || rowGap === "") {
+    const fallback = pbContentGuidelines.frameRowGapWhenUnset;
+    return fallback != null ? scaleSpaceForDensity(fallback) : undefined;
+  }
+  return pageBuilderFlexGapToCss(rowGap);
+}
+
+/** Column gap when JSON omits `columnGap` — uses `frameColumnGapWhenUnset` when set. */
+export function resolveFrameColumnGapCss(columnGap: string | undefined | null): string | undefined {
+  if (columnGap == null || columnGap === "") {
+    const fallback = pbContentGuidelines.frameColumnGapWhenUnset;
+    return fallback != null ? scaleSpaceForDensity(fallback) : undefined;
+  }
+  return pageBuilderFlexGapToCss(columnGap);
 }
 
 export function pageBuilderOverlapGapToCss(gap: string | undefined | null): string | undefined {

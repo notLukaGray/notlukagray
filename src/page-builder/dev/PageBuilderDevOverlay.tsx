@@ -66,8 +66,9 @@ function FigmaTab() {
     return (
       <p className="text-gray-500 text-xs px-3 py-4 font-mono leading-relaxed">
         No Figma export diagnostics yet. Use the Figma plugin &quot;Copy page JSON&quot; (includes{" "}
-        <span className="text-gray-400">figmaExportDiagnostics</span>) and paste into pb-dev
-        playground — or open a page JSON that already embeds the field.
+        <span className="text-gray-400">figmaExportDiagnostics</span>) and paste into the{" "}
+        <span className="text-gray-400">/playground</span> page — or open a page JSON that already
+        embeds the field.
       </p>
     );
   }

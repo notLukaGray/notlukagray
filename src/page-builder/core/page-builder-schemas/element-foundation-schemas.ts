@@ -219,14 +219,32 @@ export const elementLayoutSchema = z
     });
   });
 
-export const elementImageObjectFitSchema = z.enum(["cover", "contain", "fillWidth", "fillHeight"]);
+export const elementVideoObjectFitSchema = z.enum(["cover", "contain", "fillWidth", "fillHeight"]);
 
-export const responsiveObjectFitSchema = z
+export const elementImageObjectFitSchema = z.enum([
+  "cover",
+  "contain",
+  "fillWidth",
+  "fillHeight",
+  "crop",
+]);
+
+export const responsiveImageObjectFitSchema = z
   .union([
     elementImageObjectFitSchema,
     z.tuple([elementImageObjectFitSchema, elementImageObjectFitSchema]),
   ])
   .optional();
+
+export const responsiveVideoObjectFitSchema = z
+  .union([
+    elementVideoObjectFitSchema,
+    z.tuple([elementVideoObjectFitSchema, elementVideoObjectFitSchema]),
+  ])
+  .optional();
+
+/** @deprecated Prefer `responsiveImageObjectFitSchema` (name is clearer for image-only crop). */
+export const responsiveObjectFitSchema = responsiveImageObjectFitSchema;
 
 const elementBodyVariantNumericSchema = z.union([
   z.literal(1),

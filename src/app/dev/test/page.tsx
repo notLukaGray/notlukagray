@@ -1,0 +1,16 @@
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { DevTestClient } from "./DevTestClient";
+
+export const metadata: Metadata = {
+  title: "Defaults Test Page (dev)",
+  robots: { index: false, follow: false },
+};
+
+export const dynamic = "force-dynamic";
+
+export default function DevTestPage() {
+  if (process.env.NODE_ENV !== "development") notFound();
+
+  return <DevTestClient />;
+}

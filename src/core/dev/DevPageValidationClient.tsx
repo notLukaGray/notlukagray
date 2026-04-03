@@ -10,10 +10,10 @@ function getSlugFromPathname(pathname: string): string | null {
   return segments.join("/");
 }
 
-/** Only validate when we're on a page-builder detail route (e.g. /teaching/foo, /work/bar). Skip index/section routes like /teaching, /work, and internal dev tools like /__dev/*. */
+/** Only validate when we're on a page-builder detail route (e.g. /teaching/foo, /work/bar). Skip index/section routes like /teaching, /work, and internal dev tools like /dev/*, /playground. */
 function isPageBuilderDetailPath(pathname: string): boolean {
   const segments = pathname.split("/").filter(Boolean);
-  if (segments[0] === "pb-dev") return false;
+  if (segments[0] === "dev" || segments[0] === "playground") return false;
   return segments.length >= 2;
 }
 

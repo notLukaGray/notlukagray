@@ -4,6 +4,16 @@
  */
 
 import type React from "react";
+import { pbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
+import {
+  coalesceEmptyString,
+  normalizeFlexAlignItemsValue,
+  normalizeFlexJustifyContentValue,
+  resolveFrameColumnGapCss,
+  resolveFrameGapCss,
+  resolveFrameRowGapCss,
+} from "@/page-builder/core/element-layout-utils";
+import { scaleSpaceShorthandForDensity } from "@/page-builder/core/page-density";
 import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
 import type { ModuleSlotConfig } from "@/page-builder/elements/ElementModule/types";
 
@@ -119,14 +129,38 @@ export function getModuleSlotBaseStyle({
       ? `left ${expandDurationMs}ms ${easing}, right ${expandDurationMs}ms ${easing}, transform ${expandDurationMs}ms ${easing}, width ${expandDurationMs}ms ${easing}`
       : "",
   ].filter(Boolean);
+  const resolvedGap = resolveFrameGapCss(slot.gap);
+  const resolvedRowGap = resolveFrameRowGapCss(
+    slot.rowGap === undefined || slot.rowGap === null ? slot.rowGap : String(slot.rowGap)
+  );
+  const resolvedColGap = resolveFrameColumnGapCss(
+    slot.columnGap === undefined || slot.columnGap === null
+      ? slot.columnGap
+      : String(slot.columnGap)
+  );
+  const slotPadding =
+    slot.padding ?? scaleSpaceShorthandForDensity(pbContentGuidelines.framePaddingDefault);
+  const resolvedFlexWrap =
+    (coalesceEmptyString(slot.flexWrap) as React.CSSProperties["flexWrap"] | undefined) ??
+    pbContentGuidelines.frameFlexWrapDefault;
+
   return {
     ...positionStyles,
     display: (slot.display as React.CSSProperties["display"]) ?? "flex",
-    flexDirection: (slot.flexDirection as React.CSSProperties["flexDirection"]) ?? "row",
-    alignItems: (slot.alignItems as React.CSSProperties["alignItems"]) ?? "center",
-    justifyContent: (slot.justifyContent as React.CSSProperties["justifyContent"]) ?? "center",
-    gap: slot.gap,
-    padding: slot.padding,
+    flexDirection:
+      (coalesceEmptyString(slot.flexDirection) as React.CSSProperties["flexDirection"]) ??
+      pbContentGuidelines.frameFlexDirectionDefault,
+    alignItems: normalizeFlexAlignItemsValue(
+      coalesceEmptyString(slot.alignItems) ?? pbContentGuidelines.frameAlignItemsDefault
+    ),
+    justifyContent: normalizeFlexJustifyContentValue(
+      coalesceEmptyString(slot.justifyContent) ?? pbContentGuidelines.frameJustifyContentDefault
+    ) as React.CSSProperties["justifyContent"],
+    ...(resolvedGap != null ? { gap: resolvedGap } : {}),
+    ...(resolvedRowGap != null ? { rowGap: resolvedRowGap } : {}),
+    ...(resolvedColGap != null ? { columnGap: resolvedColGap } : {}),
+    flexWrap: resolvedFlexWrap,
+    ...(slotPadding != null && slotPadding !== "" ? { padding: slotPadding } : {}),
     transition: transitionParts.join(", "),
     ...(slot.style as React.CSSProperties),
   };

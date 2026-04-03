@@ -1,6 +1,7 @@
 import type { TriggerAction, SectionBlock } from "@/page-builder/core/page-builder-schemas";
 import type { BackgroundTransitionEffect } from "@/page-builder/core/page-builder-types";
 import type { PageBuilderPageProps } from "@/page-builder/core/page-builder";
+import { buildPageDensityCssVars } from "@/page-builder/core/page-density";
 import { PageBuilderRenderer } from "@/page-builder/hooks";
 import { FigmaExportDiagnosticsBridge } from "@/page-builder/dev/FigmaExportDiagnosticsBridge";
 import { PageScrollProvider } from "@/page-builder/section/position/page-scroll-provider";
@@ -61,6 +62,13 @@ export function PageBuilderPage({
   },
   articleClassName = "w-full",
 }: PageBuilderPageWrapperProps) {
+  const density = page.density ?? "balanced";
+  const densityVars = buildPageDensityCssVars(density) as React.CSSProperties;
+  const mergedMainStyle: React.CSSProperties = {
+    ...mainStyle,
+    ...densityVars,
+  };
+
   // Sort overlays: top-positioned (header) first, bottom-positioned (footer) last.
   const sortedOverlays = overlaySections
     ? [...overlaySections].sort((a, b) => {
@@ -72,7 +80,7 @@ export function PageBuilderPage({
     : [];
 
   const inner = (
-    <main className={mainClassName} style={mainStyle}>
+    <main className={mainClassName} style={mergedMainStyle} data-pb-density={density}>
       <article className={articleClassName} aria-label={page.title} data-liquid-snapshot-root="">
         <h1 className="sr-only">{page.title}</h1>
         <PageBuilderRenderer
@@ -120,6 +128,7 @@ export function PageBuilderPage({
         const fixedPosition = s.fixedPosition ?? "top";
         const resolvedZIndex = s.zIndex ?? (fixedPosition === "top" ? 100 : 50);
         const wrapperStyle: React.CSSProperties = {
+          ...densityVars,
           position: "fixed",
           left: 0,
           right: 0,

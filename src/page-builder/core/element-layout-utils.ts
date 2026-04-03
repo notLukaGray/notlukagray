@@ -7,6 +7,12 @@ export {
   pageBuilderJustifyContentForGap,
   normalizeLayoutInput,
   pageBuilderFlexGapToCss,
+  coalesceEmptyString,
+  normalizeFlexAlignItemsValue,
+  normalizeFlexJustifyContentValue,
+  resolveFrameGapCss,
+  resolveFrameRowGapCss,
+  resolveFrameColumnGapCss,
   pageBuilderOverlapGapToCss,
   type ResolvedElementLayout,
 } from "./element-layout-utils/layout-style";
@@ -18,5 +24,6 @@ export {
 
 export {
   getElementTransformStyle,
+  getLayoutRotateFlipStyle,
   type ElementLayoutTransformOptions,
 } from "./element-layout-utils/transform-style";

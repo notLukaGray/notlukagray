@@ -6,7 +6,11 @@ import type {
   ResolvedPage,
 } from "@/page-builder/core/page-builder-schemas";
 import type { bgBlock, SectionBlock } from "@/page-builder/core/page-builder-schemas";
-import type { PageBuilder, PageScrollConfig } from "@/page-builder/core/page-builder-schemas";
+import type {
+  PageBuilder,
+  PageDensity,
+  PageScrollConfig,
+} from "@/page-builder/core/page-builder-schemas";
 import { expandPageBuilder } from "@/page-builder/core/page-builder-expand";
 import {
   getAssetBaseUrl,
@@ -30,6 +34,7 @@ import {
 } from "./page-builder-resolve-assets-server";
 import { resolvePageBuilderBreakpoint } from "./page-builder-resolve-breakpoint-server";
 import { resolveEntranceMotionsIntoSections } from "./page-builder-resolve-entrance-motions";
+import { applyBuilderElementDefaultsToSections } from "./page-builder-apply-element-defaults";
 import type { BackgroundTransitionEffect } from "./page-builder-types";
 import type { TriggerAction } from "./page-builder-schemas";
 import { loadOverlaySections } from "./overlay/page-builder-overlay-loader";
@@ -41,6 +46,7 @@ export type PageBuilderPageClientPage = {
   onPageProgress?: TriggerAction;
   transitions?: BackgroundTransitionEffect | BackgroundTransitionEffect[];
   scroll?: PageScrollConfig;
+  density?: PageDensity;
   figmaExportDiagnostics?: FigmaExportDiagnosticsPageField;
 };
 
@@ -57,6 +63,7 @@ function stripPageForClient(
       | BackgroundTransitionEffect
       | BackgroundTransitionEffect[];
   if (full.scroll != null) page.scroll = full.scroll as PageScrollConfig;
+  if (full.density != null) page.density = full.density as PageDensity;
   const figmaExportDiagnostics = (
     full as unknown as { figmaExportDiagnostics?: FigmaExportDiagnosticsPageField }
   ).figmaExportDiagnostics;
@@ -198,6 +205,8 @@ export function getModalProps(id: string, options?: GetModalPropsOptions): Modal
   if (options?.transformSections) {
     resolvedSections = options.transformSections(resolvedSections);
   }
+  resolvedSections = applyBuilderElementDefaultsToSections(resolvedSections);
+  resolvedSections = resolveEntranceMotionsIntoSections(resolvedSections);
 
   return {
     id: modal.id,
@@ -221,12 +230,14 @@ export function getPageBuilderProps(
   }
 
   const resolvedBg = page.bg ? resolveBgBlockUrls(page.bg, assetBase) : null;
-  let resolvedSections = resolveEntranceMotionsIntoSections(
-    (page.sections ?? []).map((block) => resolveSectionBlockUrls(block, assetBase))
+  let resolvedSections = (page.sections ?? []).map((block) =>
+    resolveSectionBlockUrls(block, assetBase)
   );
   if (options?.transformSections) {
     resolvedSections = options.transformSections(resolvedSections);
   }
+  resolvedSections = applyBuilderElementDefaultsToSections(resolvedSections);
+  resolvedSections = resolveEntranceMotionsIntoSections(resolvedSections);
   const bgDefinitions = buildResolvedBgDefinitions(page.definitions, assetBase);
   const overlaySections = loadOverlaySections(
     (page as { disableOverlays?: string[] }).disableOverlays
@@ -260,6 +271,7 @@ export async function getPageBuilderPropsAsync(
   if (options?.transformSections) {
     resolvedSections = options.transformSections(resolvedSections);
   }
+  resolvedSections = applyBuilderElementDefaultsToSections(resolvedSections);
 
   const bgDefinitionsRaw = buildRawBgDefinitions(page.definitions);
 

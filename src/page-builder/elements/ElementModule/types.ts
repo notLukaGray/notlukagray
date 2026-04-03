@@ -26,6 +26,9 @@ export type ModuleSlotConfig = {
   alignItems?: string;
   justifyContent?: string;
   gap?: string;
+  flexWrap?: "nowrap" | "wrap" | "wrap-reverse";
+  rowGap?: string | number;
+  columnGap?: string | number;
   padding?: string;
   /** When set, the whole slot is clickable (empty area / fallback). */
   action?: string;

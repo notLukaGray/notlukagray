@@ -5,8 +5,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-exo2);
-  --font-mono: var(--font-exo2);
+  --font-sans: var(--font-primary);
+  --font-serif: var(--font-secondary);
+  /* Next.js injects the monospace stack on `--font-mono-face` via `monoFont.variable` */
+  --font-mono: var(--font-mono-face);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -46,86 +48,148 @@
 }
 
 :root {
-  --font-exo2-latin: var(--font-exo2);
-  --frame-padding-y: 10px;
-  --frame-inner-gap: 20px;
-  --nav-gap-min: 20px;
-  --nav-gap-max: 40px;
-  --nav-gap: clamp(var(--nav-gap-min), 2.5vw, var(--nav-gap-max));
-  --footer-height: 5rem;
-  --frame-link: #a8a8a8;
-  --frame-link-hover: #f000b8;
-  --frame-link-active: #ffffff;
+  /* Semantic roles (remap actual faces without touching typography classes). */
+  --font-heading: var(--font-primary);
+  --font-body: var(--font-primary);
+  --font-accent: var(--font-secondary);
 
+  --footer-height: 5rem;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /*
+   * Page-builder layout + rich-text rhythm: `theme/pb-content-guidelines-config.ts` (+ `/dev/style`)
+   * and are injected in root layout (`--pb-copy-text-align`, `--pb-frame-*`, `--pb-rich-text-*`,
+   * `--pb-button-*`).
+   * Font scale remains in `fonts/type-scale.ts`.
+   */
+
+  /*
+   * Page builder color foundations (`--pb-*`). Theme aliases below reference these only.
+   * Compared to type: several surface/text roles, UI fills, links, status + on-colors,
+   * charts, and sidebar — enough for rich layouts without an enormous raw ramp.
+   */
+  --pb-surface-root: oklch(1 0 0);
+  --pb-surface-raised: oklch(1 0 0);
+  --pb-surface-overlay: oklch(1 0 0);
+  --pb-surface-sunken: oklch(0.97 0 0);
+  --pb-surface-muted: oklch(0.97 0 0);
+
+  --pb-text-primary: oklch(0.145 0 0);
+  --pb-text-secondary: oklch(0.205 0 0);
+  --pb-text-muted: oklch(0.556 0 0);
+  --pb-text-inverse: oklch(0.985 0 0);
+
+  --pb-border: oklch(0.922 0 0);
+  --pb-border-strong: oklch(0.85 0 0);
+  --pb-input: oklch(0.922 0 0);
+  --pb-ring: oklch(0.708 0 0);
+
+  /* Brand seeds + derived tokens: `src/app/theme/config.ts` (injected in root layout). */
+
+  --pb-danger: oklch(0.577 0.245 27.325);
+  --pb-on-danger: oklch(0.985 0 0);
+  --pb-success: oklch(0.52 0.14 155);
+  --pb-on-success: oklch(0.98 0.02 155);
+  --pb-warning: oklch(0.78 0.16 85);
+  --pb-on-warning: oklch(0.28 0.06 85);
+  --pb-info: oklch(0.52 0.14 250);
+  --pb-on-info: oklch(0.98 0.02 250);
+
+  --pb-chart-1: oklch(0.646 0.222 41.116);
+  --pb-chart-2: oklch(0.6 0.118 184.704);
+  --pb-chart-3: oklch(0.398 0.07 227.392);
+  --pb-chart-4: oklch(0.828 0.189 84.429);
+  --pb-chart-5: oklch(0.769 0.188 70.08);
+
+  --pb-sidebar-surface: oklch(0.985 0 0);
+  --pb-sidebar-foreground: oklch(0.145 0 0);
+  --pb-sidebar-primary: oklch(0.205 0 0);
+  --pb-on-sidebar-primary: oklch(0.985 0 0);
+  --pb-sidebar-accent: oklch(0.97 0 0);
+  --pb-on-sidebar-accent: oklch(0.205 0 0);
+  --pb-sidebar-border: oklch(0.922 0 0);
+  --pb-sidebar-ring: oklch(0.708 0 0);
+
+  /* Consumed by Tailwind `@theme inline` and existing utilities. */
+  --background: var(--pb-surface-root);
+  --foreground: var(--pb-text-primary);
+  --card: var(--pb-surface-raised);
+  --card-foreground: var(--pb-text-primary);
+  --popover: var(--pb-surface-overlay);
+  --popover-foreground: var(--pb-text-primary);
+  --primary: var(--pb-primary);
+  --primary-foreground: var(--pb-on-primary);
+  --secondary: var(--pb-secondary);
+  --secondary-foreground: var(--pb-on-secondary);
+  --muted: var(--pb-surface-muted);
+  --muted-foreground: var(--pb-text-muted);
+  --accent: var(--pb-accent);
+  --accent-foreground: var(--pb-on-accent);
+  --destructive: var(--pb-danger);
+  --border: var(--pb-border);
+  --input: var(--pb-input);
+  --ring: var(--pb-ring);
+  --chart-1: var(--pb-chart-1);
+  --chart-2: var(--pb-chart-2);
+  --chart-3: var(--pb-chart-3);
+  --chart-4: var(--pb-chart-4);
+  --chart-5: var(--pb-chart-5);
+  --sidebar: var(--pb-sidebar-surface);
+  --sidebar-foreground: var(--pb-sidebar-foreground);
+  --sidebar-primary: var(--pb-sidebar-primary);
+  --sidebar-primary-foreground: var(--pb-on-sidebar-primary);
+  --sidebar-accent: var(--pb-sidebar-accent);
+  --sidebar-accent-foreground: var(--pb-on-sidebar-accent);
+  --sidebar-border: var(--pb-sidebar-border);
+  --sidebar-ring: var(--pb-sidebar-ring);
+
+  --frame-link: var(--pb-link);
+  --frame-link-hover: var(--pb-link-hover);
+  --frame-link-active: var(--pb-link-active);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-  --frame-link: #a8a8a8;
-  --frame-link-hover: #f000b8;
-  --frame-link-active: #ffffff;
+  --pb-surface-root: oklch(0.145 0 0);
+  --pb-surface-raised: oklch(0.205 0 0);
+  --pb-surface-overlay: oklch(0.205 0 0);
+  --pb-surface-sunken: oklch(0.205 0 0);
+  --pb-surface-muted: oklch(0.269 0 0);
+
+  --pb-text-primary: oklch(0.985 0 0);
+  --pb-text-secondary: oklch(0.985 0 0);
+  --pb-text-muted: oklch(0.708 0 0);
+  --pb-text-inverse: oklch(0.205 0 0);
+
+  --pb-border: oklch(1 0 0 / 10%);
+  --pb-border-strong: oklch(1 0 0 / 18%);
+  --pb-input: oklch(1 0 0 / 15%);
+  --pb-ring: oklch(0.556 0 0);
+
+  /* Brand seeds + derived tokens: `src/app/theme/config.ts` (injected in root layout). */
+
+  --pb-danger: oklch(0.704 0.191 22.216);
+  --pb-on-danger: oklch(0.985 0 0);
+  --pb-success: oklch(0.62 0.17 155);
+  --pb-on-success: oklch(0.15 0.04 155);
+  --pb-warning: oklch(0.75 0.14 85);
+  --pb-on-warning: oklch(0.2 0.05 85);
+  --pb-info: oklch(0.62 0.17 250);
+  --pb-on-info: oklch(0.12 0.04 250);
+
+  --pb-chart-1: oklch(0.488 0.243 264.376);
+  --pb-chart-2: oklch(0.696 0.17 162.48);
+  --pb-chart-3: oklch(0.769 0.188 70.08);
+  --pb-chart-4: oklch(0.627 0.265 303.9);
+  --pb-chart-5: oklch(0.645 0.246 16.439);
+
+  --pb-sidebar-surface: oklch(0.205 0 0);
+  --pb-sidebar-foreground: oklch(0.985 0 0);
+  --pb-sidebar-primary: oklch(0.488 0.243 264.376);
+  --pb-on-sidebar-primary: oklch(0.985 0 0);
+  --pb-sidebar-accent: oklch(0.269 0 0);
+  --pb-on-sidebar-accent: oklch(0.985 0 0);
+  --pb-sidebar-border: oklch(1 0 0 / 10%);
+  --pb-sidebar-ring: oklch(0.556 0 0);
 }
 
 @layer base {
@@ -160,218 +224,126 @@
   }
 
   .typography-font-bold {
-    font-family: var(--font-sans);
-    font-weight: 900;
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--font-weight-bold, 700);
   }
   .typography-font-regular {
-    font-family: var(--font-sans);
-    font-weight: 900;
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--font-weight-regular, 600);
   }
   .typography-font-book {
-    font-family: var(--font-sans);
-    font-weight: 700;
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--font-weight-book, 500);
   }
   .typography-font-light {
-    font-family: var(--font-sans);
-    font-weight: 500;
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--font-weight-light, 400);
   }
   .typography-font-thin {
-    font-family: var(--font-sans);
-    font-weight: 300;
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--font-weight-thin, 300);
+  }
+  .typography-font-black {
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--font-weight-black, 900);
   }
 
   .typography-normal {
-    font-family: var(--font-sans);
+    font-family: var(--font-body, var(--font-sans));
     font-style: normal;
   }
   .typography-italic {
-    font-family: var(--font-exo2-latin), var(--font-sans);
+    font-family: var(--font-body, var(--font-sans));
     font-style: italic;
   }
 
-  .typography-heading-primary-bold {
-    font-family: var(--font-sans);
-    font-weight: 900;
-    font-size: 44px;
-    line-height: 48px;
-    letter-spacing: 0;
+  /* Sizes, line-heights, and semantic weights (--type-*-fw) come from type-scale.ts via layout.tsx.
+     Edit typeScaleConfig or use /dev/fonts. Each class uses the primary font’s weight map. */
+
+  .typography-heading-xs {
+    font-family: var(--font-heading, var(--font-sans));
+    font-weight: var(--type-heading-xs-fw, var(--font-weight-light, 400));
+    font-size: var(--type-heading-xs-size, 16px);
+    line-height: var(--type-heading-xs-lh, 20px);
+    letter-spacing: var(--type-heading-xs-ls, 0);
   }
-  .typography-heading-secondary-bold {
-    font-family: var(--font-sans);
-    font-weight: 900;
-    font-size: 30px;
-    line-height: 33px;
-    letter-spacing: 0;
+  .typography-heading-sm {
+    font-family: var(--font-heading, var(--font-sans));
+    font-weight: var(--type-heading-sm-fw, var(--font-weight-bold, 700));
+    font-size: var(--type-heading-sm-size, 20px);
+    line-height: var(--type-heading-sm-lh, 22px);
+    letter-spacing: var(--type-heading-sm-ls, 0);
   }
-  .typography-heading-tertiary-bold {
-    font-family: var(--font-sans);
-    font-weight: 900;
-    font-size: 26px;
-    line-height: 29px;
-    letter-spacing: 0;
+  .typography-heading-md {
+    font-family: var(--font-heading, var(--font-sans));
+    font-weight: var(--type-heading-md-fw, var(--font-weight-light, 400));
+    font-size: var(--type-heading-md-size, 22px);
+    line-height: var(--type-heading-md-lh, 26px);
+    letter-spacing: var(--type-heading-md-ls, 0);
   }
-  .typography-heading-tertiary-light {
-    font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: 26px;
-    line-height: 29px;
-    letter-spacing: 0;
+  .typography-heading-lg {
+    font-family: var(--font-heading, var(--font-sans));
+    font-weight: var(--type-heading-lg-fw, var(--font-weight-bold, 700));
+    font-size: var(--type-heading-lg-size, 26px);
+    line-height: var(--type-heading-lg-lh, 29px);
+    letter-spacing: var(--type-heading-lg-ls, 0);
   }
-  .typography-heading-card-bold {
-    font-family: var(--font-sans);
-    font-weight: 900;
-    font-size: 20px;
-    line-height: 22px;
-    letter-spacing: 0;
+  .typography-heading-xl {
+    font-family: var(--font-heading, var(--font-sans));
+    font-weight: var(--type-heading-xl-fw, var(--font-weight-bold, 700));
+    font-size: var(--type-heading-xl-size, 30px);
+    line-height: var(--type-heading-xl-lh, 33px);
+    letter-spacing: var(--type-heading-xl-ls, 0);
+  }
+  .typography-heading-2xl {
+    font-family: var(--font-heading, var(--font-sans));
+    font-weight: var(--type-heading-2xl-fw, var(--font-weight-bold, 700));
+    font-size: var(--type-heading-2xl-size, 44px);
+    line-height: var(--type-heading-2xl-lh, 48px);
+    letter-spacing: var(--type-heading-2xl-ls, 0);
   }
 
-  @media (min-width: 768px) {
-    .typography-heading-primary-bold {
-      font-size: 76px;
-      line-height: 84px;
-    }
-    .typography-heading-secondary-bold {
-      font-size: 50px;
-      line-height: 55px;
-    }
-    .typography-heading-tertiary-bold {
-      font-size: 40px;
-      line-height: 44px;
-    }
-    .typography-heading-tertiary-light {
-      font-size: 40px;
-      line-height: 44px;
-    }
-    .typography-heading-card-bold {
-      font-size: 30px;
-      line-height: 33px;
-    }
+  .typography-body-xs {
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--type-body-xs-fw, var(--font-weight-light, 400));
+    font-size: var(--type-body-xs-size, 8px);
+    line-height: var(--type-body-xs-lh, 12px);
+    letter-spacing: var(--type-body-xs-ls, 0);
   }
-
-  .typography-body-large-regular {
-    font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: 26px;
-    line-height: 39px;
-    letter-spacing: 0;
+  .typography-body-sm {
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--type-body-sm-fw, var(--font-weight-book, 500));
+    font-size: var(--type-body-sm-size, 8px);
+    line-height: var(--type-body-sm-lh, 12px);
+    letter-spacing: var(--type-body-sm-ls, 0);
   }
-  .typography-body-large-thin {
-    font-family: var(--font-sans);
-    font-weight: 300;
-    font-size: 26px;
-    line-height: 39px;
-    letter-spacing: 0;
+  .typography-body-md {
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--type-body-md-fw, var(--font-weight-thin, 300));
+    font-size: var(--type-body-md-size, 12px);
+    line-height: var(--type-body-md-lh, 18px);
+    letter-spacing: var(--type-body-md-ls, 0);
   }
-  .typography-body-medium-regular {
-    font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: 22px;
-    line-height: 33px;
-    letter-spacing: 0;
+  .typography-body-lg {
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--type-body-lg-fw, var(--font-weight-book, 500));
+    font-size: var(--type-body-lg-size, 12px);
+    line-height: var(--type-body-lg-lh, 18px);
+    letter-spacing: var(--type-body-lg-ls, 0);
   }
-  .typography-body-medium-thin {
-    font-family: var(--font-sans);
-    font-weight: 300;
-    font-size: 22px;
-    line-height: 33px;
-    letter-spacing: 0;
+  .typography-body-xl {
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--type-body-xl-fw, var(--font-weight-thin, 300));
+    font-size: var(--type-body-xl-size, 18px);
+    line-height: var(--type-body-xl-lh, 28px);
+    letter-spacing: var(--type-body-xl-ls, 0);
   }
-  .typography-body-legal-book {
-    font-family: var(--font-sans);
-    font-weight: 900;
-    font-size: 12px;
-    line-height: 18px;
-    letter-spacing: 0;
-  }
-  .typography-body-legal-light {
-    font-family: var(--font-sans);
-    font-weight: 500;
-    font-size: 12px;
-    line-height: 18px;
-    letter-spacing: 0;
-  }
-
-  @media (max-width: 767px) {
-    .typography-body-large-regular {
-      font-size: 18px;
-      line-height: 28px;
-    }
-    .typography-body-large-thin {
-      font-size: 18px;
-      line-height: 28px;
-    }
-    .typography-body-medium-regular {
-      font-size: 12px;
-      line-height: 18px;
-    }
-    .typography-body-medium-thin {
-      font-size: 12px;
-      line-height: 18px;
-    }
-    .typography-body-legal-book {
-      font-size: 8px;
-      line-height: 12px;
-    }
-    .typography-body-legal-light {
-      font-size: 8px;
-      line-height: 12px;
-    }
-  }
-
-  .typography-body-large-force-mobile-base {
-    font-size: 18px;
-    line-height: 28px;
-  }
-  .typography-body-medium-force-mobile-base {
-    font-size: 12px;
-    line-height: 18px;
-  }
-  .typography-body-legal-force-mobile-base {
-    font-size: 8px;
-    line-height: 12px;
-  }
-
-  .frame-bar-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-self: stretch;
-    width: 100%;
-    gap: var(--frame-inner-gap);
-    background: transparent;
-  }
-  .frame-bar-nav {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding-top: var(--frame-padding-y);
-    padding-bottom: var(--frame-padding-y);
-    gap: var(--nav-gap);
-    background: transparent;
-  }
-  .header-frame-bg {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.5) 50%);
-  }
-  .footer-frame-bg {
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.65) 50%);
-  }
-
-  .frame-link {
-    font-weight: 500;
-    color: var(--frame-link);
-    transition: color 0.15s;
-  }
-  .frame-link:hover {
-    color: var(--frame-link-hover);
-  }
-  .frame-link:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.5);
-    outline-offset: 2px;
-    border-radius: 0.25rem;
-  }
-  .frame-link--active {
-    color: var(--frame-link-active);
+  .typography-body-2xl {
+    font-family: var(--font-body, var(--font-sans));
+    font-weight: var(--type-body-2xl-fw, var(--font-weight-book, 500));
+    font-size: var(--type-body-2xl-size, 18px);
+    line-height: var(--type-body-2xl-lh, 28px);
+    letter-spacing: var(--type-body-2xl-ls, 0);
   }
 
   .element-link {
@@ -394,17 +366,6 @@
     color: var(--element-link-disabled, var(--frame-link-disabled));
     pointer-events: none;
     cursor: default;
-  }
-}
-
-@keyframes glowPulse {
-  from {
-    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.4))
-      drop-shadow(0 0 80px rgba(138, 43, 226, 0.3));
-  }
-  to {
-    filter: drop-shadow(0 0 60px rgba(255, 255, 255, 0.6))
-      drop-shadow(0 0 120px rgba(0, 191, 255, 0.4));
   }
 }
 

@@ -8,6 +8,35 @@ import {
 import { resolveElementImageLink } from "./element-image-link";
 
 type ElementImageProps = Extract<ElementBlock, { type: "elementImage" }>;
+
+function applyImageCropToImageStyles(
+  target: CSSProperties,
+  imageCrop: NonNullable<ElementImageProps["imageCrop"]> | undefined,
+  objectFit: ElementImageProps["objectFit"] | undefined
+): void {
+  const fit = objectFit ?? "cover";
+  if (fit === "crop") {
+    const c = imageCrop ?? { x: 0, y: 0, scale: 1 };
+    const x = Number(c.x ?? 0);
+    const y = Number(c.y ?? 0);
+    const scaleRaw = Number(c.scale ?? 1);
+    const scale = Number.isFinite(scaleRaw) ? Math.min(4, Math.max(1, scaleRaw)) : 1;
+    target.objectPosition = "50% 50%";
+    target.transform = `translate(${x}%, ${y}%) scale(${scale})`;
+    target.transformOrigin = "center center";
+    return;
+  }
+  if (!imageCrop || typeof imageCrop !== "object") return;
+  if (fit !== "cover" && fit !== "contain") return;
+  const x = Number(imageCrop.x ?? 0);
+  const y = Number(imageCrop.y ?? 0);
+  const scaleRaw = Number(imageCrop.scale ?? 1);
+  const scale = Number.isFinite(scaleRaw) ? Math.min(4, Math.max(1, scaleRaw)) : 1;
+  target.objectPosition = "50% 50%";
+  target.transform = `translate(${x}%, ${y}%) scale(${scale})`;
+  target.transformOrigin = "center center";
+}
+
 type ComputedElementImagePresentation = {
   fillHeight: boolean;
   hasSource: boolean;
@@ -39,6 +68,7 @@ export function computeElementImagePresentation(
     marginBottom,
     marginLeft,
     marginRight,
+    zIndex,
     effects,
     wrapperStyle,
     opacity,
@@ -56,6 +86,7 @@ export function computeElementImagePresentation(
     link,
     aspectRatio,
     figmaConstraints,
+    imageCrop,
   } = props;
 
   const fillHeight = height === "100%";
@@ -70,6 +101,7 @@ export function computeElementImagePresentation(
     marginBottom,
     marginLeft,
     marginRight,
+    zIndex,
     figmaConstraints,
     effects,
     wrapperStyle,
@@ -101,6 +133,7 @@ export function computeElementImagePresentation(
 
   const isFillWidth = objectFit === "fillWidth";
   const isFillHeight = objectFit === "fillHeight";
+  const isCropFit = objectFit === "crop";
   if (isFillWidth) {
     innerStyle.height = "auto";
     innerStyle.alignItems = "stretch";
@@ -116,11 +149,11 @@ export function computeElementImagePresentation(
     maxWidth: "100%",
     maxHeight: "100%",
   };
-  if (objectFit === "cover" || objectFit === "contain") {
+  if (objectFit === "cover" || objectFit === "contain" || isCropFit) {
     imgStyle.width = "100%";
     imgStyle.height = "100%";
-    imgStyle.objectFit = objectFit;
-    imgStyle.objectPosition = resolvedObjectPosition;
+    imgStyle.objectFit = isCropFit ? "cover" : objectFit;
+    imgStyle.objectPosition = isCropFit ? "50% 50%" : resolvedObjectPosition;
   } else if (isFillWidth) {
     imgStyle.width = "100%";
     imgStyle.height = "auto";
@@ -134,11 +167,20 @@ export function computeElementImagePresentation(
     imgStyle.objectPosition = resolvedObjectPosition;
   }
 
+  applyImageCropToImageStyles(imgStyle, imageCrop, objectFit);
+
   const nextImageFillStyle: CSSProperties = {
     display: "block",
-    objectFit: objectFit === "cover" || objectFit === "contain" ? objectFit : "cover",
-    objectPosition: resolvedObjectPosition,
+    objectFit:
+      objectFit === "cover" || objectFit === "contain"
+        ? objectFit
+        : objectFit === "crop"
+          ? "cover"
+          : "cover",
+    objectPosition: isCropFit ? "50% 50%" : resolvedObjectPosition,
   };
+
+  applyImageCropToImageStyles(nextImageFillStyle, imageCrop, objectFit);
 
   const hasSource = src != null && String(src).trim() !== "";
   const useIntrinsicSizing = height === "hug" || fillHeight;
@@ -148,10 +190,14 @@ export function computeElementImagePresentation(
           display: "block",
           width: "100%",
           height: "100%",
-          objectFit: objectFit === "contain" ? "contain" : "cover",
-          objectPosition: resolvedObjectPosition,
+          objectFit: objectFit === "contain" ? "contain" : objectFit === "crop" ? "cover" : "cover",
+          objectPosition: isCropFit ? "50% 50%" : resolvedObjectPosition,
         }
       : imgStyle;
+
+  if (fillHeight && useIntrinsicSizing) {
+    applyImageCropToImageStyles(fillImgStyle, imageCrop, objectFit);
+  }
 
   const effectiveMinHeight =
     constraints && !Array.isArray(constraints) ? constraints.minHeight : undefined;

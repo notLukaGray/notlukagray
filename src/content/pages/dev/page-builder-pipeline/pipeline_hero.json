@@ -41,7 +41,6 @@
       "type": "elementBody",
       "level": 1,
       "text": "I tried building a site in Node. Routes, components, copy—everything was code. Adding a page meant new files and new routes. I wanted something easier and reusable. So the idea became: treat the site as data. One pipeline. Load → Expand → Resolve → Render. This is how that pipeline works, and why it’s shaped this way.",
-      "variant": "medium-regular",
       "align": "center",
       "textAlign": "center",
       "width": ["90%", "66%"],

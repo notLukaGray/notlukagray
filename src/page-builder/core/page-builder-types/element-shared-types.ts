@@ -20,7 +20,7 @@ export type ElementLayout = {
   effects?: SectionEffect[];
 };
 
-export type ElementImageObjectFit = "cover" | "contain" | "fillWidth" | "fillHeight";
+export type ElementImageObjectFit = "cover" | "contain" | "fillWidth" | "fillHeight" | "crop";
 
 export type VectorShapeStyle = {
   fill?: string;

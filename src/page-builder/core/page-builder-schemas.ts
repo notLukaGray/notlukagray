@@ -37,6 +37,7 @@ import { moduleBlockSchema, moduleSlotSchema } from "./page-builder-schemas/modu
 import {
   backgroundTransitionEffectSchema,
   pageBuilderDefinitionBlockSchema,
+  pageDensitySchema,
   pageBuilderSchema,
   pageScrollConfigSchema,
   resolvedPageSchema,
@@ -191,6 +192,7 @@ export type PageBuilder = z.infer<typeof pageBuilderSchema>;
 export type ResolvedPage = z.infer<typeof resolvedPageSchema>;
 export type BackgroundTransitionEffect = z.infer<typeof backgroundTransitionEffectSchema>;
 export type PageScrollConfig = z.infer<typeof pageScrollConfigSchema>;
+export type PageDensity = z.infer<typeof pageDensitySchema>;
 
 export type BaseSectionProps = z.infer<typeof baseSectionPropsSchema>;
 

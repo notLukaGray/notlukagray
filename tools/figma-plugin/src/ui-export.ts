@@ -107,7 +107,7 @@ function flashButtonLabel(btn: HTMLButtonElement, doneLabel: string, restoreLabe
   }, 1500);
 }
 
-/** One merged page object for pb-dev / disk; multiple pages → `{ pages }` root for playground. */
+/** One merged page object for /playground paste / disk; multiple pages → `{ pages }` root. */
 export function mergedPageClipboardPayload(result: ExportResult): string {
   const keys = Object.keys(result.pages);
   if (keys.length === 0) return "{}";
@@ -220,8 +220,8 @@ export async function handleResult(
       errors.length > 0
         ? `Done with errors — merged page JSON copied`
         : pageCount === 1
-          ? `Done! Copied single page document for pb-dev / content.`
-          : `Done! Copied ${pageCount} pages as { pages, presets } wrapper (pb-dev compatible).`;
+          ? `Done! Copied single page document for /playground or content.`
+          : `Done! Copied ${pageCount} pages as { pages, presets } wrapper (/playground compatible).`;
     try {
       await copyToClipboard(mergedPageClipboardPayload(result));
       setStatus(els.statusEl, statusMsg, errors.length > 0 ? "error" : "success");

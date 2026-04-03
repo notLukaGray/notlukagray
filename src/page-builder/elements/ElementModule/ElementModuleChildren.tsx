@@ -2,6 +2,7 @@
 
 import type { CSSProperties } from "react";
 import type { CssInlineStyle, ElementBlock } from "@/page-builder/core/page-builder-schemas";
+import { pbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
 import { generateElementKey } from "@/page-builder/core/element-keys";
 import { LayoutMotionDiv } from "@/page-builder/integrations/framer-motion";
@@ -36,7 +37,7 @@ export function ElementModuleChildren({
   blocks,
   overlapGap,
   flexDirection = "row",
-  parentAlignItems = "center",
+  parentAlignItems = pbContentGuidelines.frameAlignItemsDefault,
   inDimensionGesture,
   isMobile,
   layoutChildren,

@@ -37,8 +37,10 @@ export function ElementImage({
   marginBottom,
   marginLeft,
   marginRight,
+  zIndex,
   objectFit = "cover",
   objectPosition,
+  imageCrop,
   rotate,
   flipHorizontal = false,
   flipVertical = false,
@@ -62,6 +64,7 @@ export function ElementImage({
   const hasGlassEffect = (imageEffects ?? []).some((effect) => effect.type === "glass");
   const { isMobile } = useDeviceType();
   const resolvedAspectRatio = resolveResponsiveValue(aspectRatio, isMobile);
+  const resolvedObjectFit = resolveResponsiveValue(objectFit, isMobile) ?? "cover";
 
   const handleImgError = useCallback(() => {
     setHasError(true);
@@ -96,8 +99,10 @@ export function ElementImage({
     marginBottom,
     marginLeft,
     marginRight,
-    objectFit,
+    zIndex,
+    objectFit: resolvedObjectFit,
     objectPosition,
+    imageCrop,
     rotate,
     flipHorizontal,
     flipVertical,

@@ -3,11 +3,21 @@
 import { useMemo, useRef, type CSSProperties } from "react";
 import { useDeviceType } from "@/core/providers/device-type-provider";
 import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
+import { pbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
 import {
+  scaleRadiusForDensity,
+  scaleSpaceShorthandForDensity,
+} from "@/page-builder/core/page-density";
+import {
+  coalesceEmptyString,
   getElementLayoutStyle,
-  pageBuilderFlexGapToCss,
+  normalizeFlexAlignItemsValue,
+  normalizeFlexJustifyContentValue,
   pageBuilderJustifyContentForGap,
   pageBuilderOverlapGapToCss,
+  resolveFrameColumnGapCss,
+  resolveFrameGapCss,
+  resolveFrameRowGapCss,
 } from "@/page-builder/core/element-layout-utils";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";
 import { useSlotDefaultWrapperStyle } from "@/page-builder/elements/ElementModule/ModuleSlotContext";
@@ -33,8 +43,8 @@ export function ElementModuleGroup({
   maxWidth,
   maxHeight,
   display = "flex",
-  flexDirection = "row",
-  alignItems = "center",
+  flexDirection,
+  alignItems,
   justifyContent,
   gap,
   rowGap,
@@ -53,6 +63,7 @@ export function ElementModuleGroup({
   marginRight,
   align,
   figmaConstraints,
+  borderRadius,
   wrapperStyle: groupWrapperStyle,
   borderGradient,
   effects,
@@ -114,22 +125,42 @@ export function ElementModuleGroup({
       )
     : rawBlocks;
 
-  const layoutStyle = getElementLayoutStyle({
-    width: resolvedWidth,
-    height: resolvedHeight,
-    constraints: {
-      ...(minWidth != null ? { minWidth: String(minWidth) } : {}),
-      ...(minHeight != null ? { minHeight: String(minHeight) } : {}),
-      ...(maxWidth != null ? { maxWidth: String(maxWidth) } : {}),
-      ...(maxHeight != null ? { maxHeight: String(maxHeight) } : {}),
+  const layoutStyle = getElementLayoutStyle(
+    {
+      width: resolvedWidth,
+      height: resolvedHeight,
+      borderRadius,
+      constraints: {
+        ...(minWidth != null ? { minWidth: String(minWidth) } : {}),
+        ...(minHeight != null ? { minHeight: String(minHeight) } : {}),
+        ...(maxWidth != null ? { maxWidth: String(maxWidth) } : {}),
+        ...(maxHeight != null ? { maxHeight: String(maxHeight) } : {}),
+      },
+      align,
+      marginTop,
+      marginBottom,
+      marginLeft,
+      marginRight,
+      figmaConstraints,
     },
-    align,
-    marginTop,
-    marginBottom,
-    marginLeft,
-    marginRight,
-    figmaConstraints,
-  });
+    isMobile
+  );
+
+  const resolvedFlexDirection =
+    (coalesceEmptyString(flexDirection) as CSSProperties["flexDirection"] | undefined) ??
+    pbContentGuidelines.frameFlexDirectionDefault;
+  const resolvedAlignItems = normalizeFlexAlignItemsValue(
+    coalesceEmptyString(alignItems) ?? pbContentGuidelines.frameAlignItemsDefault
+  );
+  const resolvedFlexWrap =
+    (coalesceEmptyString(flexWrap) as CSSProperties["flexWrap"] | undefined) ??
+    pbContentGuidelines.frameFlexWrapDefault;
+
+  const layoutRadius = layoutStyle.borderRadius;
+  const effectiveBorderRadius =
+    layoutRadius != null && String(layoutRadius).trim() !== ""
+      ? layoutRadius
+      : scaleRadiusForDensity(pbContentGuidelines.frameBorderRadiusDefault);
 
   const hasBorderGradient =
     borderGradient != null &&
@@ -138,33 +169,50 @@ export function ElementModuleGroup({
     (typeof (borderGradient as BorderGradient).width === "string" ||
       typeof (borderGradient as BorderGradient).width === "number");
 
-  const resolvedFlexGap = pageBuilderFlexGapToCss(gap);
+  const resolvedFlexGap = resolveFrameGapCss(gap);
+  const resolvedRowGap = resolveFrameRowGapCss(
+    rowGap === undefined || rowGap === null ? rowGap : String(rowGap)
+  );
+  const resolvedColGap = resolveFrameColumnGapCss(
+    columnGap === undefined || columnGap === null ? columnGap : String(columnGap)
+  );
   const overlapGap = pageBuilderOverlapGapToCss(gap);
   const resolvedJustifyContent = pageBuilderJustifyContentForGap(
-    justifyContent as CSSProperties["justifyContent"] | undefined,
+    normalizeFlexJustifyContentValue(
+      coalesceEmptyString(justifyContent) ?? pbContentGuidelines.frameJustifyContentDefault
+    ) as CSSProperties["justifyContent"] | undefined,
     gap
   );
+  const hasExplicitPadding =
+    padding != null ||
+    paddingTop != null ||
+    paddingRight != null ||
+    paddingBottom != null ||
+    paddingLeft != null;
+  const framePaddingFallback = !hasExplicitPadding
+    ? { padding: scaleSpaceShorthandForDensity(pbContentGuidelines.framePaddingDefault) }
+    : {};
 
   const groupStyleBase: CSSProperties = {
     ...layoutStyle,
+    borderRadius: effectiveBorderRadius,
     display: (display as CSSProperties["display"]) ?? "flex",
-    flexDirection: (flexDirection as CSSProperties["flexDirection"]) ?? "row",
+    flexDirection: resolvedFlexDirection,
     // Inside a dimension gesture, override alignItems to stretch so child wrappers
     // get a defined width (cross-axis fills the container) rather than shrinking to
     // content. Without this, width:100% on nested elements resolves to content-width.
-    alignItems: inDimensionGesture
-      ? "stretch"
-      : ((alignItems as CSSProperties["alignItems"]) ?? "center"),
+    alignItems: inDimensionGesture ? "stretch" : resolvedAlignItems,
     ...(resolvedJustifyContent ? { justifyContent: resolvedJustifyContent } : {}),
     ...(resolvedFlexGap != null ? { gap: resolvedFlexGap } : {}),
-    ...(rowGap != null ? { rowGap } : {}),
-    ...(columnGap != null ? { columnGap } : {}),
+    ...(resolvedRowGap != null ? { rowGap: resolvedRowGap } : {}),
+    ...(resolvedColGap != null ? { columnGap: resolvedColGap } : {}),
     ...(padding != null ? { padding } : {}),
     ...(paddingTop != null ? { paddingTop } : {}),
     ...(paddingRight != null ? { paddingRight } : {}),
     ...(paddingBottom != null ? { paddingBottom } : {}),
     ...(paddingLeft != null ? { paddingLeft } : {}),
-    ...(flexWrap ? { flexWrap: flexWrap as CSSProperties["flexWrap"] } : {}),
+    ...framePaddingFallback,
+    flexWrap: resolvedFlexWrap,
     ...(flex ? { flex } : {}),
     overflow: (overflow ?? (layoutChildren ? "visible" : "hidden")) as CSSProperties["overflow"],
     ...(groupWrapperStyle as CSSProperties),
@@ -236,8 +284,8 @@ export function ElementModuleGroup({
       <ElementModuleChildren
         blocks={blocks}
         overlapGap={overlapGap}
-        flexDirection={(flexDirection as CSSProperties["flexDirection"]) ?? "row"}
-        parentAlignItems={(alignItems as CSSProperties["alignItems"]) ?? "center"}
+        flexDirection={resolvedFlexDirection}
+        parentAlignItems={resolvedAlignItems}
         inDimensionGesture={inDimensionGesture}
         isMobile={isMobile}
         layoutChildren={layoutChildren}

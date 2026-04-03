@@ -20,6 +20,7 @@ export type {
   PageBuilder,
   PageBuilderDefinitionBlock,
   PageScrollConfig,
+  PageDensity,
   SectionBlockWithElementOrder,
 } from "@/page-builder/core/page-builder-schemas";
 export { ASSET_URL_KEYS } from "@/page-builder/core/page-builder-schemas";

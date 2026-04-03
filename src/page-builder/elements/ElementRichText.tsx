@@ -75,7 +75,9 @@ export function ElementRichText({
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeHighlight]}
             components={{
-              p: ({ children }) => <span className="block m-0 [&+&]:mt-2">{children}</span>,
+              p: ({ children }) => (
+                <span className="block m-0 [&+&]:mt-(--pb-rich-text-p-gap)">{children}</span>
+              ),
               a: ({ href, children, ...props }) => (
                 <a
                   href={href}
@@ -90,18 +92,24 @@ export function ElementRichText({
               strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
               em: ({ children }) => <em className="italic">{children}</em>,
               h1: ({ children }) => (
-                <span className="block text-2xl font-bold mt-4 mb-1 first:mt-0">{children}</span>
+                <span className="block text-2xl font-bold first:mt-0 mt-(--pb-rich-text-h1-mt) mb-(--pb-rich-text-h1-mb)">
+                  {children}
+                </span>
               ),
               h2: ({ children }) => (
-                <span className="block text-xl font-bold mt-3 mb-1 first:mt-0">{children}</span>
+                <span className="block text-xl font-bold first:mt-0 mt-(--pb-rich-text-h2-mt) mb-(--pb-rich-text-h2-mb)">
+                  {children}
+                </span>
               ),
               h3: ({ children }) => (
-                <span className="block text-lg font-bold mt-2 mb-1 first:mt-0">{children}</span>
+                <span className="block text-lg font-bold first:mt-0 mt-(--pb-rich-text-h3-mt) mb-(--pb-rich-text-h3-mb)">
+                  {children}
+                </span>
               ),
               code: ({ className, children, ...props }) =>
                 className ? (
                   <code
-                    className={`block text-sm overflow-x-auto p-3 rounded-lg font-mono [&.hljs]:p-3 [&.hljs]:text-[13px] [&.hljs]:leading-relaxed ${className}`}
+                    className={`block text-sm overflow-x-auto p-3 rounded-(--pb-rich-text-code-radius) font-mono [&.hljs]:p-3 [&.hljs]:text-[13px] [&.hljs]:leading-relaxed ${className}`}
                     {...props}
                   >
                     {children}
@@ -118,7 +126,7 @@ export function ElementRichText({
                 const lang =
                   isValidElement(codeEl) && codeEl.props?.className?.match(/language-(\w+)/)?.[1];
                 return (
-                  <div className="my-3 rounded-lg overflow-hidden border border-white/10 bg-[#0d1117]">
+                  <div className="my-(--pb-rich-text-pre-my) rounded-(--pb-rich-text-code-radius) overflow-hidden border border-white/10 bg-[#0d1117]">
                     {lang && (
                       <div className="flex items-center justify-between border-b border-white/10 bg-white/5 px-3 py-1.5">
                         <span className="font-mono text-[11px] uppercase tracking-wider text-white/60">
@@ -133,21 +141,25 @@ export function ElementRichText({
                 );
               },
               blockquote: ({ children }) => (
-                <span className="block border-l-2 border-current pl-3 my-2 opacity-90">
+                <span className="block border-l-2 border-current pl-3 my-(--pb-rich-text-bq-my) opacity-90">
                   {children}
                 </span>
               ),
               ul: ({ children }) => (
-                <ul className="list-disc list-inside my-2 space-y-0.5">{children}</ul>
+                <ul className="list-disc list-inside my-(--pb-rich-text-list-my) space-y-0.5">
+                  {children}
+                </ul>
               ),
               ol: ({ children }) => (
-                <ol className="list-decimal list-inside my-2 space-y-0.5">{children}</ol>
+                <ol className="list-decimal list-inside my-(--pb-rich-text-list-my) space-y-0.5">
+                  {children}
+                </ol>
               ),
               li: ({ children }) => <li className="[&>p]:inline">{children}</li>,
-              hr: () => <hr className="border-current opacity-30 my-3" />,
+              hr: () => <hr className="border-current opacity-30 my-(--pb-rich-text-hr-my)" />,
               del: ({ children }) => <del className="opacity-80">{children}</del>,
               table: ({ children }) => (
-                <div className="overflow-x-auto my-2">
+                <div className="overflow-x-auto my-(--pb-rich-text-list-my)">
                   <table className="border-collapse border border-current text-sm w-full min-w-48">
                     {children}
                   </table>

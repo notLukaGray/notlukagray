@@ -14,6 +14,9 @@ const cdnHostname = getCdnHostname(cdnBase);
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  async redirects() {
+    return [{ source: "/pb-dev/playground", destination: "/playground", permanent: false }];
+  },
   logging: {
     incomingRequests: {
       ignore: [/\/api\/dev\/content-watch/, /\/api\/dev\/page-validation/],

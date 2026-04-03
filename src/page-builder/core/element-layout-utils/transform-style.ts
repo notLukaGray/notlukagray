@@ -39,3 +39,22 @@ export function getElementTransformStyle(
     justifyContent: "center",
   };
 }
+
+/**
+ * Rotate + flip only (no flex fill shell). Use on typography / inline layout wrappers so
+ * `elementLayoutSchema` flip/rotate fields render in the page builder.
+ */
+export function getLayoutRotateFlipStyle(
+  options:
+    | Pick<ElementLayoutTransformOptions, "rotate" | "flipHorizontal" | "flipVertical">
+    | undefined
+): CSSProperties {
+  if (!options) return {};
+  const rotateDeg = resolveRotate(options.rotate);
+  const parts: string[] = [];
+  if (rotateDeg) parts.push(`rotate(${rotateDeg})`);
+  if (options.flipHorizontal) parts.push("scaleX(-1)");
+  if (options.flipVertical) parts.push("scaleY(-1)");
+  if (parts.length === 0) return {};
+  return { transform: parts.join(" ") };
+}

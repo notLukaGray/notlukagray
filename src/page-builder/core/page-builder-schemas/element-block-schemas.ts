@@ -36,8 +36,10 @@ const elementGroupSchema = z
     flexDirection: z.string().optional(),
     alignItems: z.string().optional(),
     justifyContent: z.string().optional(),
+    /** Spacing between items; theme fallback when unset — `pbContentGuidelines.frameGapWhenUnset`. */
     gap: z.string().optional(),
     flexWrap: z.enum(["nowrap", "wrap", "wrap-reverse"]).optional(),
+    /** Theme fallback when unset — `pbContentGuidelines.frameRowGapWhenUnset`. */
     rowGap: z.union([z.string(), z.number()]).optional(),
     padding: z.string().optional(),
     /** Per-side padding. Overrides the shorthand `padding` field if set. */
@@ -50,6 +52,7 @@ const elementGroupSchema = z
     paddingLeft: z.union([z.string(), z.number()]).optional(),
     flex: z.string().optional(),
     columnCount: z.number().int().positive().optional(),
+    /** Theme fallback when unset — `pbContentGuidelines.frameColumnGapWhenUnset`. */
     columnGap: z.union([z.string(), z.number()]).optional(),
     effects: z.array(sectionEffectSchema).optional(),
   })

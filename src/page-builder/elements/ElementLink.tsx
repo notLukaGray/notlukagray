@@ -3,13 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
+import { applyPbDefaultTextAlign } from "@/app/theme/pb-content-guidelines";
 import type { ElementBlock, ElementBodyVariant } from "@/page-builder/core/page-builder-schemas";
-import { getElementLayoutStyle } from "@/page-builder/core/element-layout-utils";
+import {
+  getElementLayoutStyle,
+  getLayoutRotateFlipStyle,
+} from "@/page-builder/core/element-layout-utils";
 import {
   getBodyTypographyClass,
   getHeadingTypographyClass,
   DEFAULT_BODY_LEVEL,
 } from "@/page-builder/core/element-body-typography";
+import { resolveFontFamily } from "@/page-builder/core/element-font-slot";
 
 type Props = Extract<ElementBlock, { type: "elementLink" }>;
 
@@ -34,6 +39,9 @@ export function ElementLink({
   external = false,
   copyType,
   level,
+  fontFamily,
+  fontSize,
+  fontWeight,
   align,
   textAlign,
   width,
@@ -49,6 +57,9 @@ export function ElementLink({
   linkDisabled,
   linkTransition,
   disabled = false,
+  rotate,
+  flipHorizontal,
+  flipVertical,
   ...rest
 }: Props) {
   const pathname = usePathname();
@@ -88,15 +99,22 @@ export function ElementLink({
       marginRight,
       ...rest,
     }),
+    ...getLayoutRotateFlipStyle({ rotate, flipHorizontal, flipVertical }),
   };
-  const multilineAlign = textAlign ?? align;
-  if (multilineAlign)
-    blockStyle.textAlign = multilineAlign as "left" | "right" | "center" | "justify";
+  applyPbDefaultTextAlign(blockStyle, align, textAlign);
   blockStyle.whiteSpace = wordWrap ? "normal" : "nowrap";
   if (!wordWrap) {
     blockStyle.overflow = "hidden";
     blockStyle.textOverflow = "ellipsis";
   }
+
+  const textStyle: CSSProperties = {
+    ...(resolveFontFamily(fontFamily) !== undefined
+      ? { fontFamily: resolveFontFamily(fontFamily) }
+      : {}),
+    ...(fontSize !== undefined ? { fontSize } : {}),
+    ...(fontWeight !== undefined ? { fontWeight: fontWeight as CSSProperties["fontWeight"] } : {}),
+  };
 
   const linkClassName = [
     "element-link m-0 block",
@@ -110,14 +128,14 @@ export function ElementLink({
   return (
     <div className="shrink-0" style={blockStyle}>
       {isInternal ? (
-        <Link href={href} className={linkClassName} style={linkStyle}>
+        <Link href={href} className={linkClassName} style={{ ...linkStyle, ...textStyle }}>
           {label}
         </Link>
       ) : (
         <a
           href={href}
           className={linkClassName}
-          style={linkStyle}
+          style={{ ...linkStyle, ...textStyle }}
           {...(external && {
             target: "_blank",
             rel: "noopener noreferrer",
