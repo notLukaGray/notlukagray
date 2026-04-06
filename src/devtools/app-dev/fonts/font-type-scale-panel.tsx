@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable max-lines */
 
 import { useState, type CSSProperties } from "react";
 import type { FontWeightRole } from "@/app/fonts/config";

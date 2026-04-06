@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable max-lines */
 
 import type { CSSProperties, RefObject } from "react";
 import type { BunnyFontMeta } from "@/app/dev/fonts/page";

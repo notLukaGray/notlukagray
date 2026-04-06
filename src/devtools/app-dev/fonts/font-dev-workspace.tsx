@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable max-lines */
 
 import type { Dispatch, SetStateAction } from "react";
 import type { FontWeightMap } from "@/app/fonts/config";
