@@ -41,6 +41,9 @@ export const motionTriggerSchema = z.enum([
   "onTrigger",
 ]);
 
+/** When exit animations run relative to presence / viewport (see ElementExitWrapper). */
+export const motionExitTriggerSchema = z.enum(["manual", "leaveViewport"]);
+
 const motionStateSchema = z
   .object({
     initial: motionKeyframesSchema,
@@ -69,6 +72,10 @@ export const motionTimingSchema = z
   .object({
     trigger: motionTriggerSchema.optional(),
     viewport: viewportSchema.optional(),
+    /** How `ElementExitWrapper` decides `show` (manual prop vs leave-viewport). */
+    exitTrigger: motionExitTriggerSchema.optional(),
+    /** Intersection options when `exitTrigger` is `leaveViewport` (e.g. negative margin = exit before fully off-screen). */
+    exitViewport: viewportSchema.optional(),
     entrancePreset: z.enum(ENTRANCE_PRESET_NAMES).optional(),
     exitPreset: z.enum(EXIT_PRESET_NAMES).optional(),
     entranceMotion: motionStateSchema,

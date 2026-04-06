@@ -7,10 +7,12 @@ import { HeadingRuntimeControls } from "./controls/HeadingRuntimeControls";
 import { HeadingTraitsControls } from "./controls/HeadingTraitsControls";
 import type { HeadingElementDevController } from "./useHeadingElementDevController";
 
+function getSettingsLabel(controller: HeadingElementDevController): string {
+  return controller.isCustomVariant ? "Custom" : VARIANT_LABELS[controller.activeVariant];
+}
+
 export function HeadingSettingsPanel({ controller }: { controller: HeadingElementDevController }) {
-  const settingsLabel = controller.isCustomVariant
-    ? "Custom"
-    : VARIANT_LABELS[controller.activeVariant];
+  const settingsLabel = getSettingsLabel(controller);
   const hasAnyCategoryVisible = Object.values(controller.visibleCategories).some(Boolean);
 
   return (

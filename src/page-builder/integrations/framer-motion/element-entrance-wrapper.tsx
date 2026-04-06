@@ -7,6 +7,18 @@ import type { MotionTiming } from "@/page-builder/core/page-builder-schemas";
 
 type MotionDivProps = React.ComponentProps<typeof motion.div>;
 
+/** Collapse per-property keyframe arrays to the final rest state (reduced-motion / in-view skip). */
+function finalTargetFromAnimate(animate: unknown): Record<string, unknown> | undefined {
+  if (animate == null || typeof animate !== "object" || Array.isArray(animate)) return undefined;
+  const rec = animate as Record<string, unknown>;
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(rec)) {
+    if (Array.isArray(v) && v.length > 0) out[k] = v[v.length - 1];
+    else out[k] = v;
+  }
+  return out;
+}
+
 const ALIGN_TO_JUSTIFY: Record<"left" | "center" | "right", string> = {
   left: "flex-start",
   center: "center",
@@ -29,6 +41,11 @@ export type ElementEntranceWrapperProps = {
   animateOverrideFromTrigger?: Record<string, unknown>;
   /** When false, ignore system reduced-motion preference for this element. */
   reduceMotion?: boolean;
+  /**
+   * Dev / lab: when true, never apply the in-viewport-on-mount shortcut (final state + 0s duration).
+   * Otherwise presets like slideUp are invisible in nested previews because the element is always in view.
+   */
+  forceEntranceAnimation?: boolean;
   children: React.ReactNode;
 };
 
@@ -56,12 +73,15 @@ export function ElementEntranceWrapper({
   aria,
   animateOverrideFromTrigger,
   reduceMotion,
+  forceEntranceAnimation = false,
   children,
 }: ElementEntranceWrapperProps) {
   const skip = useShouldReduceMotion(reduceMotion === false);
   const ref = useRef<HTMLDivElement | null>(null);
   // null = pre-hydration (SSR) | false = hydrated, below fold | true = hydrated, in viewport on mount
-  const [viewOnMount, setViewOnMount] = useState<boolean | null>(null);
+  const [viewOnMount, setViewOnMount] = useState<boolean | null>(() =>
+    forceEntranceAnimation ? false : null
+  );
 
   const setMountRef = useCallback(
     (el: HTMLDivElement | null) => {
@@ -81,11 +101,19 @@ export function ElementEntranceWrapper({
     resolved;
   const trigger = motionTiming?.trigger ?? "onFirstVisible";
 
-  const effectiveInitial = skip || viewOnMount === true ? animate : initial;
+  const restAfterEntrance: Record<string, unknown> =
+    finalTargetFromAnimate(animate) ??
+    (animate && typeof animate === "object" && !Array.isArray(animate)
+      ? (animate as Record<string, unknown>)
+      : {});
+  const effectiveInitial = skip || viewOnMount === true ? { ...restAfterEntrance } : initial;
   const effectiveTransition = skip || viewOnMount === true ? { duration: 0 } : transition;
 
-  const hasScaleGesture =
-    (whileHover != null && "scale" in whileHover) || (whileTap != null && "scale" in whileTap);
+  // Only clip when scale is genuinely non-unity — "scale": 1 is the default no-op value
+  // and should not cause overflow:hidden (which clips descenders and outlines).
+  const hasRealScale = (g: Record<string, unknown> | undefined) =>
+    g != null && typeof g.scale === "number" && g.scale !== 1;
+  const hasScaleGesture = hasRealScale(whileHover) || hasRealScale(whileTap);
 
   const containerStyle: React.CSSProperties = layoutFixed
     ? {

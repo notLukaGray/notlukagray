@@ -3,6 +3,7 @@ export * from "./field-primitives";
 export * from "./font-slot-field";
 export * from "./foundation-constants";
 export * from "./media-geometry-fields";
+export * from "./runtime-advanced-passthrough-fields";
 export * from "./runtime-draft-types";
 export * from "./shared-foundation-layout-fields";
 export * from "./shared-layout-sizing-fields";

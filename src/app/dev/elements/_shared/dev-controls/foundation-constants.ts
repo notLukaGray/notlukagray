@@ -33,6 +33,24 @@ export const TEXT_ALIGN_OPTIONS = ["left", "center", "right", "justify"] as cons
 /** Media geometry: `elementImageObjectFitSchema` */
 export const OBJECT_FIT_OPTIONS = ["cover", "contain", "fillWidth", "fillHeight", "crop"] as const;
 
+/** Common `object-position` values (CSS keywords); single-axis entries use implicit center on the other axis. */
+export const OBJECT_POSITION_OPTIONS = [
+  "center",
+  "left top",
+  "center top",
+  "right top",
+  "left center",
+  "center center",
+  "right center",
+  "left bottom",
+  "center bottom",
+  "right bottom",
+  "left",
+  "right",
+  "top",
+  "bottom",
+] as const;
+
 export const INTERACTION_CURSOR_OPTIONS = [
   "",
   "pointer",

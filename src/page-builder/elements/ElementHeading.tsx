@@ -67,9 +67,6 @@ export function ElementHeading({
     ...getLayoutRotateFlipStyle({ rotate, flipHorizontal, flipVertical }),
   };
   applyPbDefaultTextAlign(blockStyle, align, textAlign);
-  blockStyle.whiteSpace = wordWrap ? "normal" : "nowrap";
-  if (!wordWrap) blockStyle.overflow = "hidden";
-  blockStyle.textOverflow = wordWrap ? undefined : "ellipsis";
   const textStyle: CSSProperties = {
     letterSpacing,
     lineHeight: lineSpacing,
@@ -78,10 +75,15 @@ export function ElementHeading({
       : {}),
     ...(fontSize !== undefined ? { fontSize } : {}),
     ...(fontWeight !== undefined ? { fontWeight: fontWeight as CSSProperties["fontWeight"] } : {}),
+    // word wrap / overflow — must be on the text element, not the wrapper, for text-overflow to work
+    whiteSpace: wordWrap ? "normal" : "nowrap",
+    overflowWrap: wordWrap ? "break-word" : "normal",
+    wordBreak: wordWrap ? "break-word" : "normal",
+    ...(wordWrap ? {} : { overflow: "hidden", textOverflow: "ellipsis" }),
   };
 
   return (
-    <div className="shrink-0" style={blockStyle}>
+    <div className="shrink-0 max-w-full" style={blockStyle}>
       {createElement(
         tag,
         {

@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   DEFAULT_PB_BUILDER_FOUNDATIONS,
+  buildImageMotionTimingFromAnimationDefaults,
   createPbBuilderDefaultsFromFoundations,
+  buildLayeredHybridEntranceMotion,
+  buildSequentialHybridEntranceMotion,
+  mergeHybridExitStackKeyframes,
   pbBuilderDefaultsV1,
   toPbContentGuidelines,
   withUnifiedRadius,
@@ -43,9 +47,54 @@ describe("pb-builder-defaults", () => {
     expect(pbBuilderDefaultsV1.elements.link.variants.emphasis.copyType).toBe("heading");
   });
 
+  it("builds sequential hybrid entrance as per-property keyframe arrays", () => {
+    const seq = buildSequentialHybridEntranceMotion("slideUp", ["zoomIn", "tiltIn"], 0.6);
+    expect(Array.isArray(seq.animate.y)).toBe(true);
+    const yKeys = seq.animate.y as unknown[];
+    expect(yKeys.length).toBeGreaterThanOrEqual(3);
+    const times = (seq.transition as { times?: number[] }).times;
+    expect(times?.length).toBe(yKeys.length);
+    const outKf = mergeHybridExitStackKeyframes(["zoomOut", "tiltIn"]);
+    expect(Object.keys(outKf.exit).length).toBeGreaterThan(0);
+  });
+
+  it("honors custom ordered hybrid segment weights in transition.times", () => {
+    const seq = buildSequentialHybridEntranceMotion("fade", ["zoomIn"], 1, [0.2, 0.8]);
+    const times = (seq.transition as { times?: number[] }).times;
+    expect(times).toEqual([0, 0.2, 1]);
+  });
+
+  it("builds layered hybrid as merged keyframes with optional per-property stagger", () => {
+    const flat = buildLayeredHybridEntranceMotion("fade", ["zoomIn"], 0.5);
+    expect(flat.animate).toMatchObject({ opacity: 1 });
+    expect((flat.transition as { duration?: number }).duration).toBe(0.5);
+    const staggered = buildLayeredHybridEntranceMotion("fade", ["zoomIn"], 0.5, {
+      staggerEnabled: true,
+      staggerSec: 0.05,
+    });
+    expect(typeof (staggered.transition as Record<string, unknown>).opacity).toBe("object");
+  });
+
+  it("applies preset duration overrides when fineTune is disabled", () => {
+    const anim = {
+      ...pbBuilderDefaultsV1.elements.image.variants.hero.animation,
+      presetEntranceDuration: 0.8,
+      presetExitDuration: 0.3,
+    };
+    const mt = buildImageMotionTimingFromAnimationDefaults(anim);
+    expect(mt.exitTrigger).toBe("manual");
+    expect(mt.entranceMotion?.transition).toMatchObject({
+      duration: 0.8,
+    });
+    expect(mt.exitMotion?.transition).toMatchObject({
+      duration: 0.3,
+    });
+  });
+
   it("includes animation defaults for image variants", () => {
     expect(pbBuilderDefaultsV1.elements.image.variants.hero.animation).toMatchObject({
       trigger: "onFirstVisible",
+      exitTrigger: "manual",
       entrancePreset: "slideUp",
       exitPreset: "fade",
     });
@@ -54,7 +103,6 @@ describe("pb-builder-defaults", () => {
       entrancePreset: "fade",
       exitPreset: "fade",
     });
-    expect(pbBuilderDefaultsV1.elements.image.variants.hero.animation.fineTune.enabled).toBe(false);
   });
 
   it("supports mode-based image layout defaults", () => {

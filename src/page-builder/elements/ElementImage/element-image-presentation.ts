@@ -9,6 +9,52 @@ import { resolveElementImageLink } from "./element-image-link";
 
 type ElementImageProps = Extract<ElementBlock, { type: "elementImage" }>;
 
+function buildImageFilterCss(
+  imageFilters: ElementImageProps["imageFilters"] | undefined
+): string | undefined {
+  if (!imageFilters) return undefined;
+  const parts: string[] = [];
+  const { brightness, contrast, saturate, blur, grayscale, sepia, hueRotate, invert } =
+    imageFilters;
+
+  if (brightness !== undefined && brightness !== 1) {
+    parts.push(`brightness(${brightness * 100}%)`);
+  }
+  if (contrast !== undefined && contrast !== 1) {
+    parts.push(`contrast(${contrast * 100}%)`);
+  }
+  if (saturate !== undefined && saturate !== 1) {
+    parts.push(`saturate(${saturate * 100}%)`);
+  }
+  if (blur !== undefined && blur !== 0) {
+    parts.push(`blur(${blur}px)`);
+  }
+  if (grayscale !== undefined && grayscale !== 0) {
+    parts.push(`grayscale(${grayscale * 100}%)`);
+  }
+  if (sepia !== undefined && sepia !== 0) {
+    parts.push(`sepia(${sepia * 100}%)`);
+  }
+  if (hueRotate !== undefined && hueRotate !== 0) {
+    parts.push(`hue-rotate(${hueRotate}deg)`);
+  }
+  if (invert !== undefined && invert !== 0) {
+    parts.push(`invert(${invert * 100}%)`);
+  }
+
+  return parts.length > 0 ? parts.join(" ") : undefined;
+}
+
+function composeTransform(
+  existingTransform: CSSProperties["transform"] | undefined,
+  transformToAppend: string
+): string {
+  if (typeof existingTransform !== "string" || existingTransform.trim() === "") {
+    return transformToAppend;
+  }
+  return `${existingTransform} ${transformToAppend}`;
+}
+
 function applyImageCropToImageStyles(
   target: CSSProperties,
   imageCrop: NonNullable<ElementImageProps["imageCrop"]> | undefined,
@@ -87,6 +133,9 @@ export function computeElementImagePresentation(
     aspectRatio,
     figmaConstraints,
     imageCrop,
+    imageFilters,
+    fillOpacity,
+    imageRotation,
   } = props;
 
   const fillHeight = height === "100%";
@@ -199,6 +248,28 @@ export function computeElementImagePresentation(
     applyImageCropToImageStyles(fillImgStyle, imageCrop, objectFit);
   }
 
+  const imageFilterCss = buildImageFilterCss(imageFilters);
+  const shouldApplyFillOpacity = fillOpacity !== undefined && fillOpacity !== 1;
+  const shouldApplyImageRotation = imageRotation !== undefined && imageRotation !== 0;
+  const imageStyleTargets = [imgStyle, fillImgStyle, nextImageFillStyle].filter(
+    (style, index, all) => all.indexOf(style) === index
+  );
+
+  for (const targetStyle of imageStyleTargets) {
+    if (imageFilterCss !== undefined) {
+      targetStyle.filter = imageFilterCss;
+    }
+    if (shouldApplyFillOpacity) {
+      targetStyle.opacity = fillOpacity;
+    }
+    if (shouldApplyImageRotation) {
+      targetStyle.transform = composeTransform(
+        targetStyle.transform,
+        `rotate(${imageRotation}deg)`
+      );
+    }
+  }
+
   const effectiveMinHeight =
     constraints && !Array.isArray(constraints) ? constraints.minHeight : undefined;
 
@@ -209,21 +280,42 @@ export function computeElementImagePresentation(
         ? `${aspectRatio[0]}/${aspectRatio[1]}`
         : aspectRatio;
 
+  /** Only suppress aspect for full-bleed fill (`width` + `height` both `100%`). `fillHeight` already implies `height === "100%"`. */
+  const suppressAspectForFullBleedFill =
+    fillHeight && typeof width === "string" && width.trim() === "100%";
+
+  /**
+   * Aspect-ratio sizing needs a definite inline size. In a flex row, `width: auto` + `min-width: 0`
+   * can shrink the figure to 0 so `next/image` `fill` has no layout box (dev preview + real layouts).
+   */
+  const aspectDrivenFigure =
+    cssAspectRatio != null && !suppressAspectForFullBleedFill && !fillHeight;
+
+  const aspectFigureWidth =
+    layoutStyle.width != null &&
+    String(layoutStyle.width).trim() !== "" &&
+    layoutStyle.width !== "auto"
+      ? layoutStyle.width
+      : "100%";
+
   const figureStyle: CSSProperties = {
     ...layoutStyle,
-    ...(cssAspectRatio != null ? { aspectRatio: cssAspectRatio } : {}),
+    ...(cssAspectRatio != null && !suppressAspectForFullBleedFill
+      ? { aspectRatio: cssAspectRatio }
+      : {}),
+    ...(aspectDrivenFigure
+      ? {
+          width: aspectFigureWidth,
+          maxWidth: layoutStyle.maxWidth ?? "100%",
+          minWidth: layoutStyle.minWidth ?? 0,
+        }
+      : {}),
     ...(fillHeight
-      ? effectiveMinHeight != null
-        ? {
-            height: effectiveMinHeight,
-            flexShrink: 0,
-            alignSelf: "stretch",
-          }
-        : {
-            flex: "1 1 0",
-            minHeight: "200px",
-            alignSelf: "stretch",
-          }
+      ? {
+          height: "100%",
+          ...(effectiveMinHeight != null ? { minHeight: effectiveMinHeight } : { minHeight: 0 }),
+          alignSelf: "stretch",
+        }
       : effectiveMinHeight != null
         ? { minHeight: effectiveMinHeight }
         : {}),
@@ -244,7 +336,9 @@ export function computeElementImagePresentation(
     height: useIntrinsicSizing && !fillHeight ? "auto" : "100%",
     overflow: "hidden",
     ...(fillHeight
-      ? { minHeight: effectiveMinHeight ?? "200px" }
+      ? effectiveMinHeight != null
+        ? { minHeight: effectiveMinHeight }
+        : {}
       : effectiveMinHeight != null && !useIntrinsicSizing
         ? { minHeight: effectiveMinHeight }
         : {}),
@@ -252,9 +346,9 @@ export function computeElementImagePresentation(
 
   const figureClassName =
     fillHeight && effectiveMinHeight != null
-      ? "m-0 min-w-0 shrink-0 overflow-hidden"
+      ? "m-0 min-h-0 min-w-0 overflow-hidden"
       : fillHeight
-        ? "m-0 min-h-0 flex-1 min-w-0 overflow-hidden"
+        ? "m-0 min-h-0 min-w-0 overflow-hidden"
         : "m-0 shrink-0 overflow-hidden";
 
   return {

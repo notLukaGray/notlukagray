@@ -1,9 +1,9 @@
 import {
-  pbBuilderDefaultsV1,
   type PbImageAnimationDefaults,
   type PbImageLayoutMode,
   type PbImageVariantKey,
 } from "@/app/theme/pb-builder-defaults";
+import { DEV_NEUTRAL_IMAGE_DEFAULTS } from "@/app/dev/elements/element-dev-baseline";
 import { MOTION_DEFAULTS } from "@/page-builder/core/page-builder-motion-defaults";
 import {
   MOTION_CURVE_PRESET_OPTIONS,
@@ -32,10 +32,11 @@ export {
 };
 
 export const STORAGE_KEY = "pb-element-image-dev-v1";
+export const PREVIEW_FALLBACK_IMAGE_SRC = "/dev/image-preview-placeholder.svg";
 
 export const BASE_DEFAULTS = {
-  defaultVariant: pbBuilderDefaultsV1.elements.image.defaultVariant,
-  variants: pbBuilderDefaultsV1.elements.image.variants,
+  defaultVariant: DEV_NEUTRAL_IMAGE_DEFAULTS.defaultVariant,
+  variants: DEV_NEUTRAL_IMAGE_DEFAULTS.variants,
 } as const;
 
 export const VARIANT_ORDER: PbImageVariantKey[] = [
@@ -65,6 +66,12 @@ export const ANIMATION_TRIGGER_OPTIONS: PbImageAnimationDefaults["trigger"][] = 
   "onMount",
   "onFirstVisible",
   "onEveryVisible",
+  "onTrigger",
+];
+
+export const ANIMATION_EXIT_TRIGGER_OPTIONS: PbImageAnimationDefaults["exitTrigger"][] = [
+  "manual",
+  "leaveViewport",
 ];
 
 export const ENTRANCE_PRESET_OPTIONS =

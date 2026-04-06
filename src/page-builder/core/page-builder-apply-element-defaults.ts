@@ -39,6 +39,10 @@ function isBoolean(value: unknown): value is boolean {
   return typeof value === "boolean";
 }
 
+function isMotionExitTrigger(value: unknown): value is "manual" | "leaveViewport" {
+  return value === "manual" || value === "leaveViewport";
+}
+
 function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
 }
@@ -306,6 +310,17 @@ function applyImageDefaults(el: ElementBlock): ElementBlock {
       }
       if (!isNonEmptyString(nextMotionTiming.exitPreset)) {
         nextMotionTiming.exitPreset = variantMotionTiming.exitPreset;
+        motionChanged = true;
+      }
+      if (
+        !isMotionExitTrigger(nextMotionTiming.exitTrigger) &&
+        isMotionExitTrigger(variantMotionTiming.exitTrigger)
+      ) {
+        nextMotionTiming.exitTrigger = variantMotionTiming.exitTrigger;
+        motionChanged = true;
+      }
+      if (nextMotionTiming.exitViewport == null && variantMotionTiming.exitViewport != null) {
+        nextMotionTiming.exitViewport = variantMotionTiming.exitViewport;
         motionChanged = true;
       }
       if (nextMotionTiming.entranceMotion == null && variantMotionTiming.entranceMotion != null) {

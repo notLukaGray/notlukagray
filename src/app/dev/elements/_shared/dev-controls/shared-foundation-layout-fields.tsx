@@ -23,47 +23,47 @@ type Props<T extends FoundationLayoutMarginsShape> = {
   intro?: ReactNode;
 };
 
+type ResponsiveTextState = {
+  desktop: string;
+  mobile: string;
+  hasMobile: boolean;
+};
+
+function readResponsiveTextState(
+  value: PbResponsiveValue<string> | undefined
+): ResponsiveTextState {
+  const desktop = resolveResponsiveValueForDevice(value, "desktop") ?? "";
+  return {
+    desktop,
+    mobile: resolveResponsiveValueForDevice(value, "mobile") ?? desktop,
+    hasMobile: hasMobileOverride(value),
+  };
+}
+
 export function SharedFoundationLayoutFields<T extends FoundationLayoutMarginsShape>({
   variant,
   onPatch,
   intro,
 }: Props<T>) {
-  const borderDesktop = resolveResponsiveValueForDevice(variant.borderRadius, "desktop") ?? "";
-  const borderMobile =
-    resolveResponsiveValueForDevice(variant.borderRadius, "mobile") ?? borderDesktop;
-  const borderHasMobile = hasMobileOverride(variant.borderRadius);
-
-  const marginTopDesktop = resolveResponsiveValueForDevice(variant.marginTop, "desktop") ?? "";
-  const marginTopMobile =
-    resolveResponsiveValueForDevice(variant.marginTop, "mobile") ?? marginTopDesktop;
-  const marginTopHasMobile = hasMobileOverride(variant.marginTop);
-  const marginBottomDesktop =
-    resolveResponsiveValueForDevice(variant.marginBottom, "desktop") ?? "";
-  const marginBottomMobile =
-    resolveResponsiveValueForDevice(variant.marginBottom, "mobile") ?? marginBottomDesktop;
-  const marginBottomHasMobile = hasMobileOverride(variant.marginBottom);
-  const marginLeftDesktop = resolveResponsiveValueForDevice(variant.marginLeft, "desktop") ?? "";
-  const marginLeftMobile =
-    resolveResponsiveValueForDevice(variant.marginLeft, "mobile") ?? marginLeftDesktop;
-  const marginLeftHasMobile = hasMobileOverride(variant.marginLeft);
-  const marginRightDesktop = resolveResponsiveValueForDevice(variant.marginRight, "desktop") ?? "";
-  const marginRightMobile =
-    resolveResponsiveValueForDevice(variant.marginRight, "mobile") ?? marginRightDesktop;
-  const marginRightHasMobile = hasMobileOverride(variant.marginRight);
+  const border = readResponsiveTextState(variant.borderRadius);
+  const marginTop = readResponsiveTextState(variant.marginTop);
+  const marginBottom = readResponsiveTextState(variant.marginBottom);
+  const marginLeft = readResponsiveTextState(variant.marginLeft);
+  const marginRight = readResponsiveTextState(variant.marginRight);
 
   return (
     <>
       {intro}
       <ResponsiveTextField
         label="Border radius"
-        desktopValue={borderDesktop}
-        mobileValue={borderMobile}
-        hasMobile={borderHasMobile}
+        desktopValue={border.desktop}
+        mobileValue={border.mobile}
+        hasMobile={border.hasMobile}
         placeholderDesktop="e.g. 0.375rem"
         onToggleMobile={(enabled) =>
           onPatch({
             borderRadius:
-              toggleMobileOverride(variant.borderRadius, enabled, borderDesktop) ?? borderDesktop,
+              toggleMobileOverride(variant.borderRadius, enabled, border.desktop) ?? border.desktop,
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -73,20 +73,20 @@ export function SharedFoundationLayoutFields<T extends FoundationLayoutMarginsSh
         }
         onMobileChange={(value) =>
           onPatch({
-            borderRadius: setMobileResponsiveValue(variant.borderRadius, value, borderDesktop),
+            borderRadius: setMobileResponsiveValue(variant.borderRadius, value, border.desktop),
           } as Partial<T>)
         }
       />
 
       <ResponsiveTextField
         label="Margin top"
-        desktopValue={marginTopDesktop}
-        mobileValue={marginTopMobile}
-        hasMobile={marginTopHasMobile}
+        desktopValue={marginTop.desktop}
+        mobileValue={marginTop.mobile}
+        hasMobile={marginTop.hasMobile}
         placeholderDesktop="optional"
         onToggleMobile={(enabled) =>
           onPatch({
-            marginTop: toggleMobileOverride(variant.marginTop, enabled, marginTopDesktop),
+            marginTop: toggleMobileOverride(variant.marginTop, enabled, marginTop.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -94,19 +94,19 @@ export function SharedFoundationLayoutFields<T extends FoundationLayoutMarginsSh
         }
         onMobileChange={(value) =>
           onPatch({
-            marginTop: setMobileResponsiveValue(variant.marginTop, value, marginTopDesktop),
+            marginTop: setMobileResponsiveValue(variant.marginTop, value, marginTop.desktop),
           } as Partial<T>)
         }
       />
       <ResponsiveTextField
         label="Margin bottom"
-        desktopValue={marginBottomDesktop}
-        mobileValue={marginBottomMobile}
-        hasMobile={marginBottomHasMobile}
+        desktopValue={marginBottom.desktop}
+        mobileValue={marginBottom.mobile}
+        hasMobile={marginBottom.hasMobile}
         placeholderDesktop="optional"
         onToggleMobile={(enabled) =>
           onPatch({
-            marginBottom: toggleMobileOverride(variant.marginBottom, enabled, marginBottomDesktop),
+            marginBottom: toggleMobileOverride(variant.marginBottom, enabled, marginBottom.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -119,20 +119,20 @@ export function SharedFoundationLayoutFields<T extends FoundationLayoutMarginsSh
             marginBottom: setMobileResponsiveValue(
               variant.marginBottom,
               value,
-              marginBottomDesktop
+              marginBottom.desktop
             ),
           } as Partial<T>)
         }
       />
       <ResponsiveTextField
         label="Margin left"
-        desktopValue={marginLeftDesktop}
-        mobileValue={marginLeftMobile}
-        hasMobile={marginLeftHasMobile}
+        desktopValue={marginLeft.desktop}
+        mobileValue={marginLeft.mobile}
+        hasMobile={marginLeft.hasMobile}
         placeholderDesktop="optional"
         onToggleMobile={(enabled) =>
           onPatch({
-            marginLeft: toggleMobileOverride(variant.marginLeft, enabled, marginLeftDesktop),
+            marginLeft: toggleMobileOverride(variant.marginLeft, enabled, marginLeft.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -142,19 +142,19 @@ export function SharedFoundationLayoutFields<T extends FoundationLayoutMarginsSh
         }
         onMobileChange={(value) =>
           onPatch({
-            marginLeft: setMobileResponsiveValue(variant.marginLeft, value, marginLeftDesktop),
+            marginLeft: setMobileResponsiveValue(variant.marginLeft, value, marginLeft.desktop),
           } as Partial<T>)
         }
       />
       <ResponsiveTextField
         label="Margin right"
-        desktopValue={marginRightDesktop}
-        mobileValue={marginRightMobile}
-        hasMobile={marginRightHasMobile}
+        desktopValue={marginRight.desktop}
+        mobileValue={marginRight.mobile}
+        hasMobile={marginRight.hasMobile}
         placeholderDesktop="optional"
         onToggleMobile={(enabled) =>
           onPatch({
-            marginRight: toggleMobileOverride(variant.marginRight, enabled, marginRightDesktop),
+            marginRight: toggleMobileOverride(variant.marginRight, enabled, marginRight.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -164,7 +164,7 @@ export function SharedFoundationLayoutFields<T extends FoundationLayoutMarginsSh
         }
         onMobileChange={(value) =>
           onPatch({
-            marginRight: setMobileResponsiveValue(variant.marginRight, value, marginRightDesktop),
+            marginRight: setMobileResponsiveValue(variant.marginRight, value, marginRight.desktop),
           } as Partial<T>)
         }
       />

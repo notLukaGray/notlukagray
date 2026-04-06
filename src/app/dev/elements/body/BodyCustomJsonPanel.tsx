@@ -77,8 +77,8 @@ export function BodyCustomJsonPanel({ controller }: { controller: BodyElementDev
         </div>
       </div>
       <p className="text-[10px] text-muted-foreground">
-        Patch merges keys into this variant defaults object. Replace rebuilds from{" "}
-        <code className="font-mono">pbBuilderDefaultsV1</code> preset base, then applies your JSON.
+        Patch merges keys into this variant defaults object. Replace rebuilds from the neutral dev
+        preset base, then applies your JSON.
       </p>
       <textarea
         value={text}

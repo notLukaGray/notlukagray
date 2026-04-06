@@ -81,7 +81,7 @@ export const ELEMENT_DEV_ENTRIES: ElementDevEntry[] = [
     title: "Elements · Heading",
     description:
       "Preset heading variants (display / section / label), live preview, layout + runtime passthrough, and JSON export.",
-    note: "Variant presets are sourced from pbBuilderDefaultsV1.elements.heading.",
+    note: "Variant presets start from the dev neutral foundation baseline.",
     batch: "batch-1-content",
     editor: { kind: "headingDev" },
     status: "live",
@@ -92,7 +92,7 @@ export const ELEMENT_DEV_ENTRIES: ElementDevEntry[] = [
     navLabel: "Body",
     title: "Elements · Body",
     description:
-      "Body presets (lead / standard / fine), typography level, preview, and export — defaults live in pbBuilderDefaultsV1.elements.body.",
+      "Body presets (lead / standard / fine), typography level, preview, and export — defaults start from the dev neutral foundation baseline.",
     batch: "batch-1-content",
     editor: { kind: "bodyDev" },
     status: "live",
@@ -103,7 +103,7 @@ export const ELEMENT_DEV_ENTRIES: ElementDevEntry[] = [
     navLabel: "Link",
     title: "Elements · Link",
     description:
-      "Link presets (inline / emphasis / nav), body vs heading copy, link color tokens, preview, and export — defaults live in pbBuilderDefaultsV1.elements.link.",
+      "Link presets (inline / emphasis / nav), body vs heading copy, link color tokens, preview, and export — defaults start from the dev neutral foundation baseline.",
     batch: "batch-1-content",
     editor: { kind: "linkDev" },
     status: "live",

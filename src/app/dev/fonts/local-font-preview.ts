@@ -91,39 +91,43 @@ function inferWeightFromCompact(compact: string): number | null {
   return null;
 }
 
+function inferStyleFromStem(stem: string): InferredFontStyle {
+  return /italic|oblique|_it\b|-it\b|ital\b/.test(stem) ? "italic" : "normal";
+}
+
+function parseSeparatedWeight(stem: string): number | null {
+  const match = stem.match(/(?:^|[-_\s])([1-9]\d{2,3})(?=([-_\s]|$))/);
+  const numStr = match?.[1];
+  if (numStr === undefined) return null;
+  const n = parseInt(numStr, 10);
+  return n >= 100 && n <= 900 ? n : null;
+}
+
+function parseEmbeddedWeight(stem: string): number | null {
+  const match = stem.match(/(?:^|[^0-9])([1-9]00|400|500|600|700|800|900)(?![0-9])/);
+  const numStr = match?.[1];
+  if (numStr === undefined) return null;
+  const n = parseInt(numStr, 10);
+  return n >= 100 && n <= 900 ? n : null;
+}
+
+function inferWeightFromStem(stem: string): number {
+  const compact = stem.replace(/[^a-z0-9]+/g, "");
+  const fromCompact = inferWeightFromCompact(compact);
+  if (fromCompact !== null) return fromCompact;
+  return parseSeparatedWeight(stem) ?? parseEmbeddedWeight(stem) ?? 400;
+}
+
 /** Best-effort weight/style from common static-font filenames (user can still verify in the weight grid). */
 export function inferWeightStyleFromFileName(fileName: string): {
   weight: number;
   style: InferredFontStyle;
 } {
   const stem = fileName.replace(/\.[^.]+$/i, "").toLowerCase();
-  // Run-on suffixes like `BoldItalic` have no `\b` before `italic` — substring is enough for files.
-  const style: InferredFontStyle = /italic|oblique|_it\b|-it\b|ital\b/.test(stem)
-    ? "italic"
-    : "normal";
+  const style = inferStyleFromStem(stem);
 
   const forWeight = stem.replace(/\bitalic\b|italic|oblique|_it\b|-it\b|ital\b/gi, " ");
-  const compact = forWeight.replace(/[^a-z0-9]+/g, "");
-
-  const fromCompact = inferWeightFromCompact(compact);
-  if (fromCompact !== null) return { weight: fromCompact, style };
-
-  // Separators present: `Font-700-Bold`, `Name_wght_500`
-  const num = forWeight.match(/(?:^|[-_\s])([1-9]\d{2,3})(?=([-_\s]|$))/);
-  const numStr = num?.[1];
-  if (numStr !== undefined) {
-    const n = parseInt(numStr, 10);
-    if (n >= 100 && n <= 900) return { weight: n, style };
-  }
-
-  // Embedded triples: `Inter18pt-600`, `FileW700`
-  const embedded = forWeight.match(/(?:^|[^0-9])([1-9]00|400|500|600|700|800|900)(?![0-9])/);
-  if (embedded?.[1] !== undefined) {
-    const n = parseInt(embedded[1], 10);
-    if (n >= 100 && n <= 900) return { weight: n, style };
-  }
-
-  return { weight: 400, style };
+  return { weight: inferWeightFromStem(forWeight), style };
 }
 
 /**
@@ -133,11 +137,8 @@ export function deriveLocalDisplayFamily(fileNames: string[]): string {
   if (fileNames.length === 0) return "Local";
   const stems = fileNames.map((n) => n.replace(/\.[^.]+$/i, ""));
   let prefix = stems[0]!;
-  for (let i = 1; i < stems.length; i++) {
-    const s = stems[i]!;
-    while (s && !s.startsWith(prefix) && prefix.length > 0) {
-      prefix = prefix.slice(0, -1);
-    }
+  for (const stem of stems.slice(1)) {
+    while (prefix.length > 0 && !stem.startsWith(prefix)) prefix = prefix.slice(0, -1);
   }
   prefix = prefix.replace(/[-_.\s]+$/g, "");
   if (prefix.length >= 2) return prefix;
@@ -149,8 +150,8 @@ export function deriveLocalDisplayFamily(fileNames: string[]): string {
         ""
       )
       .replace(/[-_.\s]+$/g, "");
-  const one = stripTrail(stems[0]!) || stems[0]!;
-  return one.length >= 1 ? one : "Local";
+  const fallback = stripTrail(stems[0]!) || stems[0]!;
+  return fallback.length >= 1 ? fallback : "Local";
 }
 
 export function inferFontFormat(fileName: string): "woff2" | "woff" | "truetype" | "opentype" {

@@ -42,9 +42,13 @@ export const MOTION_CUSTOM_FIELD_KEYS = [
   "trigger",
 ] as const;
 
-export function getAnimationBehavior(
-  fineTune: Pick<PbImageAnimationFineTune, "enabled" | "usePresetAsBase">
-): AnimationBehavior {
-  if (!fineTune.enabled) return "preset";
-  return fineTune.usePresetAsBase ? "hybrid" : "custom";
+/** Coarse lab mode for badges / overlays when sides differ (custom > hybrid > preset). */
+export function getAnimationBehavior(fineTune: PbImageAnimationFineTune): AnimationBehavior {
+  if (fineTune.entranceBehavior === "custom" || fineTune.exitBehavior === "custom") {
+    return "custom";
+  }
+  if (fineTune.entranceBehavior === "hybrid" || fineTune.exitBehavior === "hybrid") {
+    return "hybrid";
+  }
+  return "preset";
 }

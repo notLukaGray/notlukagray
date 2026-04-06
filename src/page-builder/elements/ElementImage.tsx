@@ -41,11 +41,15 @@ export function ElementImage({
   objectFit = "cover",
   objectPosition,
   imageCrop,
+  imageFilters,
+  fillOpacity,
+  imageRotation,
   rotate,
   flipHorizontal = false,
   flipVertical = false,
   link,
   aspectRatio,
+  figmaConstraints,
   effects,
   wrapperStyle,
   opacity,
@@ -103,11 +107,15 @@ export function ElementImage({
     objectFit: resolvedObjectFit,
     objectPosition,
     imageCrop,
+    imageFilters,
+    fillOpacity,
+    imageRotation,
     rotate,
     flipHorizontal,
     flipVertical,
     link,
     aspectRatio: resolvedAspectRatio,
+    figmaConstraints,
     effects,
     wrapperStyle,
     opacity,
@@ -120,6 +128,7 @@ export function ElementImage({
   });
   const showError = hasError && hasSource;
   const showImage = !showError && hasSource;
+  const isBlobSrc = typeof src === "string" && src.startsWith("blob:");
 
   const hasInteractions = !!(
     interactions?.onClick ||
@@ -184,6 +193,7 @@ export function ElementImage({
               src={src}
               alt={alt ?? ""}
               fill
+              unoptimized={isBlobSrc}
               priority={!!priority}
               fetchPriority={priority ? "high" : "auto"}
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"

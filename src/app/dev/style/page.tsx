@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { StyleDevClient } from "./StyleDevClient";
+import { StyleDevClient } from "./index";
 
 export const metadata: Metadata = {
   title: "Spacing / Style (dev)",

@@ -1,16 +1,19 @@
-import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
+import { useMemo } from "react";
 import { TypographyLiveMotionPreview } from "@/app/dev/elements/_shared/TypographyLiveMotionPreview";
-import { ElementHeading } from "@/page-builder/elements/ElementHeading";
+import { buildResolvedTypographyWorkbenchBlock } from "@/app/dev/elements/_shared/typography-workbench-preview";
 import { VARIANT_LABELS } from "./constants";
 import type { HeadingElementDevController } from "./useHeadingElementDevController";
 
 export function HeadingPreviewPanel({ controller }: { controller: HeadingElementDevController }) {
-  const { active, runtimePreview } = controller;
-  const { animation: _animation, ...headingRest } = active;
-  const block = { type: "elementHeading" as const, ...headingRest } satisfies Extract<
-    ElementBlock,
-    { type: "elementHeading" }
-  >;
+  const { runtimePreview } = controller;
+  const previewBlock = useMemo(
+    () =>
+      buildResolvedTypographyWorkbenchBlock(controller.runtimeDraft, {
+        type: "elementHeading",
+        ...controller.active,
+      }),
+    [controller.active, controller.runtimeDraft]
+  );
   const hiddenByVisibleWhen =
     controller.runtimeDraft.visibleWhenEnabled && !runtimePreview.visibleWhenMatches;
   const variantLabel = controller.isCustomVariant
@@ -21,9 +24,6 @@ export function HeadingPreviewPanel({ controller }: { controller: HeadingElement
     <TypographyLiveMotionPreview
       previewVisible={controller.previewVisible}
       previewKey={controller.previewKey}
-      previewMotion={controller.previewMotion}
-      motionTiming={active.animation ? undefined : active.motionTiming}
-      exitPreset={active.animation ? undefined : active.exitPreset}
       autoLoop={controller.autoLoop}
       setAutoLoop={controller.setAutoLoop}
       animateInPreview={controller.animateInPreview}
@@ -31,9 +31,10 @@ export function HeadingPreviewPanel({ controller }: { controller: HeadingElement
       showPreview={controller.showPreview}
       variantLabel={variantLabel}
       hiddenByVisibleWhen={hiddenByVisibleWhen}
-      frameStyle={runtimePreview.wrapperStyle}
-    >
-      <ElementHeading {...block} />
-    </TypographyLiveMotionPreview>
+      runtimeDraft={controller.runtimeDraft}
+      previewBlock={previewBlock}
+      onPreviewExitComplete={controller.onPreviewExitComplete}
+      animationSource={controller.active.animation}
+    />
   );
 }

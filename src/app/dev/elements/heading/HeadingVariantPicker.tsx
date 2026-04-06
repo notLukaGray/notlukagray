@@ -8,8 +8,8 @@ export function HeadingVariantPicker({ controller }: { controller: HeadingElemen
         Variant picker
       </p>
       <p className="text-[10px] text-muted-foreground">
-        Presets match `elementHeadingSchema` + `elementLayoutSchema`. Variant seeds come from
-        `pbBuilderDefaultsV1.elements.heading`.
+        Presets match `elementHeadingSchema` + `elementLayoutSchema`. Variant seeds start from the
+        neutral dev foundation baseline.
       </p>
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {controller.variantOrder.map((key) => {

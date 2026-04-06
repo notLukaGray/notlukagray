@@ -1,5 +1,4 @@
-import { pbBuilderDefaultsV1, type PbBodyVariantKey } from "@/app/theme/pb-builder-defaults";
-import { addTypographyAnimationToVariants } from "@/app/dev/elements/_shared/typography-animation-seed";
+import { DEV_NEUTRAL_BODY_DEFAULTS } from "@/app/dev/elements/element-dev-baseline";
 import type { BodyVariantDefaults, BodyVariantKey } from "./types";
 
 export const STORAGE_KEY = "pb-element-body-dev-v1";
@@ -12,11 +11,11 @@ export const VARIANT_LABELS: Record<BodyVariantKey, string> = {
   fine: "Fine",
 };
 
-/** Presets mirror `pbBuilderDefaultsV1.elements.body` plus the same animation lab model as image dev. */
+/** Neutral starting presets for body variants in dev foundation authoring. */
 export const BASE_DEFAULTS: {
   defaultVariant: BodyVariantKey;
   variants: Record<BodyVariantKey, BodyVariantDefaults>;
 } = {
-  defaultVariant: pbBuilderDefaultsV1.elements.body.defaultVariant as PbBodyVariantKey,
-  variants: addTypographyAnimationToVariants(pbBuilderDefaultsV1.elements.body.variants),
+  defaultVariant: DEV_NEUTRAL_BODY_DEFAULTS.defaultVariant,
+  variants: DEV_NEUTRAL_BODY_DEFAULTS.variants as Record<BodyVariantKey, BodyVariantDefaults>,
 };

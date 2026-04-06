@@ -20,8 +20,7 @@ function HandoffSnippetPanel({ controller }: { controller: LinkElementDevControl
         Handoff snippet
       </p>
       <p className="text-[10px] leading-snug text-muted-foreground">
-        Share this JSON with engineering to wire these link variants into runtime defaults
-        (`pbBuilderDefaultsV1.elements.link`).
+        Share this JSON with engineering to wire these link variants into runtime defaults.
       </p>
       <pre className="max-h-96 overflow-x-auto overflow-y-auto whitespace-pre-wrap rounded bg-muted/40 p-3 font-mono text-[11px] leading-relaxed text-foreground">
         {controller.exportJson}

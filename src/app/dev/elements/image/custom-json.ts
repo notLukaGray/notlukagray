@@ -21,24 +21,27 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
   return value != null && typeof value === "object" && !Array.isArray(value);
 }
 
+function arraysDeepEqual(a: unknown[], b: unknown[]): boolean {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i += 1) {
+    if (!deepEqual(a[i], b[i])) return false;
+  }
+  return true;
+}
+
+function objectsDeepEqual(a: Record<string, unknown>, b: Record<string, unknown>): boolean {
+  const keysA = Object.keys(a);
+  if (keysA.length !== Object.keys(b).length) return false;
+  for (const key of keysA) {
+    if (!deepEqual(a[key], b[key])) return false;
+  }
+  return true;
+}
+
 function deepEqual(a: unknown, b: unknown): boolean {
   if (Object.is(a, b)) return true;
-  if (Array.isArray(a) && Array.isArray(b)) {
-    if (a.length !== b.length) return false;
-    for (let i = 0; i < a.length; i += 1) {
-      if (!deepEqual(a[i], b[i])) return false;
-    }
-    return true;
-  }
-  if (isPlainObject(a) && isPlainObject(b)) {
-    const keysA = Object.keys(a);
-    const keysB = Object.keys(b);
-    if (keysA.length !== keysB.length) return false;
-    for (const key of keysA) {
-      if (!deepEqual(a[key], b[key])) return false;
-    }
-    return true;
-  }
+  if (Array.isArray(a) && Array.isArray(b)) return arraysDeepEqual(a, b);
+  if (isPlainObject(a) && isPlainObject(b)) return objectsDeepEqual(a, b);
   return false;
 }
 

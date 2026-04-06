@@ -1,0 +1,119 @@
+import Link from "next/link";
+import { ELEMENT_DEV_ENTRIES } from "@/app/dev/elements/element-dev-registry";
+
+type NavItem = {
+  label: string;
+  href?: string;
+  disabled?: boolean;
+};
+
+export type NavGroup = {
+  title: string;
+  wip?: boolean;
+  items: NavItem[];
+};
+
+export const DEV_WORKBENCH_NAV_GROUPS: NavGroup[] = [
+  {
+    title: "Foundations",
+    items: [
+      { label: "Color", href: "/dev/colors" },
+      { label: "Fonts", href: "/dev/fonts" },
+      { label: "Style", href: "/dev/style" },
+    ],
+  },
+  {
+    title: "Layout",
+    items: [
+      { label: "Pages", href: "/dev/layout/pages" },
+      { label: "Sections", href: "/dev/layout/sections" },
+      { label: "Frames", href: "/dev/layout/frames" },
+    ],
+  },
+  {
+    title: "Elements",
+    items: [
+      { label: "All Elements", href: "/dev/elements" },
+      ...ELEMENT_DEV_ENTRIES.map((entry) => ({
+        label: entry.navLabel,
+        href: `/dev/elements/${entry.slug}`,
+      })),
+    ],
+  },
+  {
+    title: "Preview",
+    items: [
+      { label: "Test Page", href: "/dev/test" },
+      { label: "Style Guide", href: "/style-guide" },
+    ],
+  },
+  {
+    title: "Builder",
+    wip: true,
+    items: [
+      { label: "Modules (WIP)", disabled: true },
+      { label: "Modals (WIP)", disabled: true },
+    ],
+  },
+];
+
+function isActivePath(pathname: string, href: string): boolean {
+  if (pathname === href) return true;
+  return href !== "/" && pathname.startsWith(`${href}/`);
+}
+
+export function DevWorkbenchNavDropdown({
+  group,
+  pathname,
+}: {
+  group: NavGroup;
+  pathname: string;
+}) {
+  const groupIsActive = group.items.some(
+    (item) => !!item.href && isActivePath(pathname, item.href)
+  );
+  return (
+    <details className="relative">
+      <summary
+        className={`list-none cursor-pointer rounded border px-3 py-1.5 text-[11px] font-mono transition-colors ${
+          groupIsActive
+            ? "border-foreground/40 bg-foreground/10 text-foreground"
+            : "border-border bg-background text-foreground hover:bg-muted/60"
+        }`}
+      >
+        {group.title}
+        {group.wip ? " (WIP)" : ""}
+      </summary>
+      <div className="absolute left-0 top-full z-40 mt-1 min-w-44 rounded-md border border-border bg-background/95 p-1.5 shadow-lg backdrop-blur">
+        <div className="flex flex-col gap-1">
+          {group.items.map((item) => {
+            if (!item.href || item.disabled) {
+              return (
+                <span
+                  key={item.label}
+                  className="inline-flex items-center rounded border border-border/60 px-2.5 py-1.5 text-[11px] font-mono text-muted-foreground"
+                >
+                  {item.label}
+                </span>
+              );
+            }
+            const active = isActivePath(pathname, item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`inline-flex items-center rounded border px-2.5 py-1.5 text-[11px] font-mono transition-colors ${
+                  active
+                    ? "border-foreground/40 bg-foreground/10 text-foreground"
+                    : "border-border text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </details>
+  );
+}

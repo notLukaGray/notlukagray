@@ -7,10 +7,12 @@ import { LinkRuntimeControls } from "./controls/LinkRuntimeControls";
 import { LinkTraitsControls } from "./controls/LinkTraitsControls";
 import type { LinkElementDevController } from "./useLinkElementDevController";
 
+function getSettingsLabel(controller: LinkElementDevController): string {
+  return controller.isCustomVariant ? "Custom" : VARIANT_LABELS[controller.activeVariant];
+}
+
 export function LinkSettingsPanel({ controller }: { controller: LinkElementDevController }) {
-  const settingsLabel = controller.isCustomVariant
-    ? "Custom"
-    : VARIANT_LABELS[controller.activeVariant];
+  const settingsLabel = getSettingsLabel(controller);
   const hasAnyCategoryVisible = Object.values(controller.visibleCategories).some(Boolean);
 
   return (

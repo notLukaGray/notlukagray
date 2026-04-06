@@ -26,6 +26,23 @@ type Props<T extends FoundationVisualTraitsShape> = {
   showPriorityLoading?: boolean;
 };
 
+function toRotateInputValue(value: FoundationVisualTraitsShape["rotate"]): string {
+  return value === undefined || value === null ? "" : String(value);
+}
+
+function PriorityLoadingToggle({
+  enabled,
+  checked,
+  onChange,
+}: {
+  enabled: boolean;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  if (!enabled) return null;
+  return <ToggleField label="Priority loading" checked={checked} onChange={onChange} />;
+}
+
 export function SharedVisualTraitsFields<T extends FoundationVisualTraitsShape>({
   variant,
   onPatch,
@@ -36,9 +53,7 @@ export function SharedVisualTraitsFields<T extends FoundationVisualTraitsShape>(
       <TextField
         label="Rotate"
         placeholder="e.g. 6deg"
-        value={
-          variant.rotate === undefined || variant.rotate === null ? "" : String(variant.rotate)
-        }
+        value={toRotateInputValue(variant.rotate)}
         onChange={(value) => onPatch({ rotate: value } as Partial<T>)}
       />
       <label className="space-y-1.5">
@@ -60,7 +75,6 @@ export function SharedVisualTraitsFields<T extends FoundationVisualTraitsShape>(
       <SelectField
         label="Overflow"
         options={OVERFLOW_OPTIONS}
-        fallback="visible"
         value={(variant.overflow as string | undefined) ?? "visible"}
         onChange={(value) =>
           onPatch({ overflow: value as FoundationVisualTraitsShape["overflow"] } as Partial<T>)
@@ -76,13 +90,11 @@ export function SharedVisualTraitsFields<T extends FoundationVisualTraitsShape>(
         checked={!!variant.flipVertical}
         onChange={(checked) => onPatch({ flipVertical: checked } as Partial<T>)}
       />
-      {showPriorityLoading ? (
-        <ToggleField
-          label="Priority loading"
-          checked={!!variant.priority}
-          onChange={(checked) => onPatch({ priority: checked } as Partial<T>)}
-        />
-      ) : null}
+      <PriorityLoadingToggle
+        enabled={showPriorityLoading}
+        checked={!!variant.priority}
+        onChange={(checked) => onPatch({ priority: checked } as Partial<T>)}
+      />
       <ToggleField
         label="Hidden by default"
         checked={!!variant.hidden}
@@ -157,13 +169,11 @@ function TextField({
 function SelectField({
   label,
   options,
-  fallback,
   value,
   onChange,
 }: {
   label: string;
   options: readonly string[];
-  fallback: string;
   value: string;
   onChange: (value: string) => void;
 }) {
@@ -174,7 +184,7 @@ function SelectField({
       </span>
       <select
         className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-        value={value ?? fallback}
+        value={value}
         onChange={(e) => onChange(e.target.value)}
       >
         {options.map((opt) => (

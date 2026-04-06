@@ -6,6 +6,7 @@ import type {
 import { CURVE_PRESET_OPTIONS, DIRECTION_OPTIONS } from "../constants";
 import { clampNumber } from "../utils";
 import type { PbAnimationLabController } from "@/app/dev/elements/_shared/pb-animation-lab-controller";
+import { BezierTimingPathPreview } from "@/app/dev/elements/_shared/BezierTimingPathPreview";
 
 type NumericField = {
   key: keyof PbImageExitFineTune;
@@ -104,6 +105,7 @@ export function ImageAnimationCustomOutPanel({
             ))}
           </select>
         </label>
+        <BezierTimingPathPreview curve={exit.curve} className="sm:col-span-2" />
         {exit.curve.preset === "customBezier"
           ? exit.curve.customBezier.map((value, index) => (
               <label key={`out-bezier-${index}`} className="space-y-1">

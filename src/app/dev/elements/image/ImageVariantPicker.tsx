@@ -12,17 +12,30 @@ export function ImageVariantPicker({ controller }: { controller: ImageElementDev
           const isActive = !controller.isCustomVariant && key === controller.activeVariant;
           const isDefault = key === controller.defaultVariant;
           return (
-            <button
+            <div
               key={key}
-              type="button"
-              onClick={() => controller.selectVariant(key)}
-              className={`rounded border p-3 text-left transition-colors ${isActive ? "border-foreground/40 bg-foreground/10" : "border-border bg-background hover:bg-muted/60"}`}
+              className={`rounded border p-3 transition-colors ${isActive ? "border-foreground/40 bg-foreground/10" : "border-border bg-background"}`}
             >
-              <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
-                {isDefault ? "Default" : "Variant"}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-foreground">{VARIANT_LABELS[key]}</p>
-            </button>
+              <button
+                type="button"
+                onClick={() => controller.selectVariant(key)}
+                className="w-full text-left"
+              >
+                <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
+                  {isDefault ? "Default" : "Variant"}
+                </p>
+                <p className="mt-1 text-sm font-semibold text-foreground">{VARIANT_LABELS[key]}</p>
+              </button>
+              {isActive && !isDefault ? (
+                <button
+                  type="button"
+                  onClick={() => controller.setDefaultVariant(key)}
+                  className="mt-2 font-mono text-[10px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+                >
+                  Make default
+                </button>
+              ) : null}
+            </div>
           );
         })}
         <button

@@ -18,6 +18,10 @@ export const M1_ON_PAIR: Partial<Record<M1TokenId, M1TokenId>> = {
   "--pb-on-primary": "--pb-primary",
   "--pb-on-secondary": "--pb-secondary",
   "--pb-on-accent": "--pb-accent",
+  // Links appear on the secondary surface — measure contrast there
+  "--pb-link": "--pb-secondary",
+  "--pb-link-hover": "--pb-secondary",
+  "--pb-link-active": "--pb-secondary",
 };
 
 export type M1TokenMeta = {

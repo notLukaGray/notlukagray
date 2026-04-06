@@ -17,7 +17,8 @@ function normalizeViewportAmount(amount: unknown): number {
   return MOTION_DEFAULTS.viewport.amount;
 }
 
-function resolveEntranceMotion(
+/** Resolves entrance preset / entranceMotion (+ optional element `motion`) into FM props. */
+export function resolveEntranceMotion(
   motionTiming: Record<string, unknown>,
   elementMotion?: Record<string, unknown>
 ): ResolvedEntranceMotion | undefined {
@@ -89,6 +90,11 @@ function resolveEntranceMotion(
     ...(whileHover != null && Object.keys(whileHover).length > 0 ? { whileHover } : {}),
     ...(whileTap != null && Object.keys(whileTap).length > 0 ? { whileTap } : {}),
   };
+}
+
+/** Resolves `motionTiming.resolvedEntranceMotion` for a single element record (same as section walk). */
+export function resolveEntranceMotionsForElement(el: unknown): unknown {
+  return processElement(el);
 }
 
 function processElement(el: unknown): unknown {

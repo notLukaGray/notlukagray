@@ -6,6 +6,7 @@ import type {
 import { CURVE_PRESET_OPTIONS, DIRECTION_OPTIONS } from "../constants";
 import { clampNumber } from "../utils";
 import type { PbAnimationLabController } from "@/app/dev/elements/_shared/pb-animation-lab-controller";
+import { BezierTimingPathPreview } from "@/app/dev/elements/_shared/BezierTimingPathPreview";
 
 type NumericField = {
   key: keyof PbImageEntranceFineTune;
@@ -109,6 +110,7 @@ export function ImageAnimationCustomInPanel({
             ))}
           </select>
         </label>
+        <BezierTimingPathPreview curve={entrance.curve} className="sm:col-span-2" />
         {entrance.curve.preset === "customBezier"
           ? entrance.curve.customBezier.map((value, index) => (
               <label key={`in-bezier-${index}`} className="space-y-1">
@@ -134,14 +136,24 @@ export function ImageAnimationCustomInPanel({
   );
 }
 
+const OPACITY_KEYS = new Set<keyof PbImageEntranceFineTune>(["fromOpacity", "toOpacity"]);
+const SCALE_KEYS = new Set<keyof PbImageEntranceFineTune>(["fromScale", "toScale"]);
+
+function normalizeWithinBounds(value: number, min?: number, max?: number): number {
+  if (min === undefined && max === undefined) return value;
+  const floor = min ?? value;
+  const ceiling = max ?? value;
+  return clampNumber(value, floor, ceiling);
+}
+
 function normalizeValue(
   key: keyof PbImageEntranceFineTune,
   value: number,
   min?: number,
   max?: number
 ) {
-  if (key === "fromOpacity" || key === "toOpacity") return clampNumber(value, 0, 1);
-  if (key === "fromScale" || key === "toScale") return Math.max(0, value);
-  if (min !== undefined || max !== undefined) return clampNumber(value, min ?? value, max ?? value);
+  if (OPACITY_KEYS.has(key)) return clampNumber(value, 0, 1);
+  if (SCALE_KEYS.has(key)) return Math.max(0, value);
+  if (min !== undefined || max !== undefined) return normalizeWithinBounds(value, min, max);
   return value;
 }

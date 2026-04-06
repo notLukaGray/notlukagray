@@ -8,8 +8,8 @@ export function BodyVariantPicker({ controller }: { controller: BodyElementDevCo
         Variant picker
       </p>
       <p className="text-[10px] text-muted-foreground">
-        Presets match `elementBodySchema` + `elementLayoutSchema`. Variant seeds come from
-        `pbBuilderDefaultsV1.elements.body`.
+        Presets match `elementBodySchema` + `elementLayoutSchema`. Variant seeds start from the
+        neutral dev foundation baseline.
       </p>
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {controller.variantOrder.map((key) => {

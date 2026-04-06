@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ColorToolClient } from "./ColorToolClient";
+import { ColorToolClient } from "./index";
 
 export const metadata: Metadata = {
   title: "Colors (dev)",

@@ -23,43 +23,46 @@ type Props<T extends TypographySizingShape> = {
   onPatch: (patch: Partial<T>) => void;
 };
 
+type ResponsiveValueState<TValue extends string> = {
+  desktop: TValue;
+  mobile: TValue;
+  hasMobile: boolean;
+};
+
+function readResponsiveState<TValue extends string>(
+  value: PbResponsiveValue<TValue> | undefined,
+  fallback: TValue
+): ResponsiveValueState<TValue> {
+  const desktop = resolveResponsiveValueForDevice(value, "desktop") ?? fallback;
+  return {
+    desktop,
+    mobile: resolveResponsiveValueForDevice(value, "mobile") ?? desktop,
+    hasMobile: hasMobileOverride(value),
+  };
+}
+
 export function SharedTypographySizingFields<T extends TypographySizingShape>({
   variant,
   onPatch,
 }: Props<T>) {
-  const widthDesktop = resolveResponsiveValueForDevice(variant.width, "desktop") ?? "";
-  const widthMobile = resolveResponsiveValueForDevice(variant.width, "mobile") ?? widthDesktop;
-  const widthHasMobile = hasMobileOverride(variant.width);
-
-  const heightDesktop = resolveResponsiveValueForDevice(variant.height, "desktop") ?? "";
-  const heightMobile = resolveResponsiveValueForDevice(variant.height, "mobile") ?? heightDesktop;
-  const heightHasMobile = hasMobileOverride(variant.height);
-
-  const alignDesktop = resolveResponsiveValueForDevice(variant.align, "desktop") ?? "center";
-  const alignMobile = resolveResponsiveValueForDevice(variant.align, "mobile") ?? alignDesktop;
-  const alignHasMobile = hasMobileOverride(variant.align);
-
-  const alignYDesktop = resolveResponsiveValueForDevice(variant.alignY, "desktop") ?? "center";
-  const alignYMobile = resolveResponsiveValueForDevice(variant.alignY, "mobile") ?? alignYDesktop;
-  const alignYHasMobile = hasMobileOverride(variant.alignY);
-
-  const textAlignDesktop = resolveResponsiveValueForDevice(variant.textAlign, "desktop") ?? "left";
-  const textAlignMobile =
-    resolveResponsiveValueForDevice(variant.textAlign, "mobile") ?? textAlignDesktop;
-  const textAlignHasMobile = hasMobileOverride(variant.textAlign);
+  const width = readResponsiveState(variant.width, "");
+  const height = readResponsiveState(variant.height, "");
+  const align = readResponsiveState(variant.align, "center");
+  const alignY = readResponsiveState(variant.alignY, "center");
+  const textAlign = readResponsiveState(variant.textAlign, "left");
 
   return (
     <>
       <ResponsiveTextField
         label="Width"
-        desktopValue={widthDesktop}
-        mobileValue={widthMobile}
-        hasMobile={widthHasMobile}
+        desktopValue={width.desktop}
+        mobileValue={width.mobile}
+        hasMobile={width.hasMobile}
         placeholderDesktop="optional"
         placeholderMobile="mobile width"
         onToggleMobile={(enabled) =>
           onPatch({
-            width: toggleMobileOverride(variant.width, enabled, widthDesktop),
+            width: toggleMobileOverride(variant.width, enabled, width.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -67,20 +70,20 @@ export function SharedTypographySizingFields<T extends TypographySizingShape>({
         }
         onMobileChange={(value) =>
           onPatch({
-            width: setMobileResponsiveValue(variant.width, value, widthDesktop),
+            width: setMobileResponsiveValue(variant.width, value, width.desktop),
           } as Partial<T>)
         }
       />
       <ResponsiveTextField
         label="Height"
-        desktopValue={heightDesktop}
-        mobileValue={heightMobile}
-        hasMobile={heightHasMobile}
+        desktopValue={height.desktop}
+        mobileValue={height.mobile}
+        hasMobile={height.hasMobile}
         placeholderDesktop="optional"
         placeholderMobile="mobile height"
         onToggleMobile={(enabled) =>
           onPatch({
-            height: toggleMobileOverride(variant.height, enabled, heightDesktop),
+            height: toggleMobileOverride(variant.height, enabled, height.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -88,7 +91,7 @@ export function SharedTypographySizingFields<T extends TypographySizingShape>({
         }
         onMobileChange={(value) =>
           onPatch({
-            height: setMobileResponsiveValue(variant.height, value, heightDesktop),
+            height: setMobileResponsiveValue(variant.height, value, height.desktop),
           } as Partial<T>)
         }
       />
@@ -96,12 +99,12 @@ export function SharedTypographySizingFields<T extends TypographySizingShape>({
       <ResponsiveSelectField
         label="Align X"
         options={ALIGN_OPTIONS}
-        desktopValue={alignDesktop}
-        mobileValue={alignMobile}
-        hasMobile={alignHasMobile}
+        desktopValue={align.desktop}
+        mobileValue={align.mobile}
+        hasMobile={align.hasMobile}
         onToggleMobile={(enabled) =>
           onPatch({
-            align: toggleMobileOverride(variant.align, enabled, alignDesktop),
+            align: toggleMobileOverride(variant.align, enabled, align.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -114,7 +117,7 @@ export function SharedTypographySizingFields<T extends TypographySizingShape>({
             align: setMobileResponsiveValue(
               variant.align,
               value as "left" | "center" | "right",
-              alignDesktop as "left" | "center" | "right"
+              align.desktop as "left" | "center" | "right"
             ),
           } as Partial<T>)
         }
@@ -122,12 +125,12 @@ export function SharedTypographySizingFields<T extends TypographySizingShape>({
       <ResponsiveSelectField
         label="Align Y"
         options={ALIGN_Y_OPTIONS}
-        desktopValue={alignYDesktop}
-        mobileValue={alignYMobile}
-        hasMobile={alignYHasMobile}
+        desktopValue={alignY.desktop}
+        mobileValue={alignY.mobile}
+        hasMobile={alignY.hasMobile}
         onToggleMobile={(enabled) =>
           onPatch({
-            alignY: toggleMobileOverride(variant.alignY, enabled, alignYDesktop),
+            alignY: toggleMobileOverride(variant.alignY, enabled, alignY.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -140,7 +143,7 @@ export function SharedTypographySizingFields<T extends TypographySizingShape>({
             alignY: setMobileResponsiveValue(
               variant.alignY,
               value as "top" | "center" | "bottom",
-              alignYDesktop as "top" | "center" | "bottom"
+              alignY.desktop as "top" | "center" | "bottom"
             ),
           } as Partial<T>)
         }
@@ -148,12 +151,12 @@ export function SharedTypographySizingFields<T extends TypographySizingShape>({
       <ResponsiveSelectField
         label="Text align"
         options={TEXT_ALIGN_OPTIONS}
-        desktopValue={textAlignDesktop}
-        mobileValue={textAlignMobile}
-        hasMobile={textAlignHasMobile}
+        desktopValue={textAlign.desktop}
+        mobileValue={textAlign.mobile}
+        hasMobile={textAlign.hasMobile}
         onToggleMobile={(enabled) =>
           onPatch({
-            textAlign: toggleMobileOverride(variant.textAlign, enabled, textAlignDesktop),
+            textAlign: toggleMobileOverride(variant.textAlign, enabled, textAlign.desktop),
           } as Partial<T>)
         }
         onDesktopChange={(value) =>
@@ -169,7 +172,7 @@ export function SharedTypographySizingFields<T extends TypographySizingShape>({
             textAlign: setMobileResponsiveValue(
               variant.textAlign,
               value as "left" | "center" | "right" | "justify",
-              textAlignDesktop as "left" | "center" | "right" | "justify"
+              textAlign.desktop as "left" | "center" | "right" | "justify"
             ),
           } as Partial<T>)
         }

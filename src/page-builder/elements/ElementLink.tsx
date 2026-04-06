@@ -102,18 +102,18 @@ export function ElementLink({
     ...getLayoutRotateFlipStyle({ rotate, flipHorizontal, flipVertical }),
   };
   applyPbDefaultTextAlign(blockStyle, align, textAlign);
-  blockStyle.whiteSpace = wordWrap ? "normal" : "nowrap";
-  if (!wordWrap) {
-    blockStyle.overflow = "hidden";
-    blockStyle.textOverflow = "ellipsis";
-  }
 
+  // word wrap / overflow — must be on the text element, not the wrapper, for text-overflow to work
   const textStyle: CSSProperties = {
     ...(resolveFontFamily(fontFamily) !== undefined
       ? { fontFamily: resolveFontFamily(fontFamily) }
       : {}),
     ...(fontSize !== undefined ? { fontSize } : {}),
     ...(fontWeight !== undefined ? { fontWeight: fontWeight as CSSProperties["fontWeight"] } : {}),
+    whiteSpace: wordWrap ? "normal" : "nowrap",
+    overflowWrap: wordWrap ? "break-word" : "normal",
+    wordBreak: wordWrap ? "break-word" : "normal",
+    ...(wordWrap ? {} : { overflow: "hidden", textOverflow: "ellipsis" }),
   };
 
   const linkClassName = [
@@ -126,7 +126,7 @@ export function ElementLink({
     .join(" ");
 
   return (
-    <div className="shrink-0" style={blockStyle}>
+    <div className="shrink-0 max-w-full" style={blockStyle}>
       {isInternal ? (
         <Link href={href} className={linkClassName} style={{ ...linkStyle, ...textStyle }}>
           {label}

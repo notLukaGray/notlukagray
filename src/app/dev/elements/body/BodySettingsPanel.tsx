@@ -7,10 +7,12 @@ import { BodyRuntimeControls } from "./controls/BodyRuntimeControls";
 import { BodyTraitsControls } from "./controls/BodyTraitsControls";
 import type { BodyElementDevController } from "./useBodyElementDevController";
 
+function getSettingsLabel(controller: BodyElementDevController): string {
+  return controller.isCustomVariant ? "Custom" : VARIANT_LABELS[controller.activeVariant];
+}
+
 export function BodySettingsPanel({ controller }: { controller: BodyElementDevController }) {
-  const settingsLabel = controller.isCustomVariant
-    ? "Custom"
-    : VARIANT_LABELS[controller.activeVariant];
+  const settingsLabel = getSettingsLabel(controller);
   const hasAnyCategoryVisible = Object.values(controller.visibleCategories).some(Boolean);
 
   return (

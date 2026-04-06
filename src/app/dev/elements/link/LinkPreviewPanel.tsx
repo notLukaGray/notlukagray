@@ -1,16 +1,19 @@
-import type { ElementBlock } from "@/page-builder/core/page-builder-schemas";
+import { useMemo } from "react";
 import { TypographyLiveMotionPreview } from "@/app/dev/elements/_shared/TypographyLiveMotionPreview";
-import { ElementLink } from "@/page-builder/elements/ElementLink";
+import { buildResolvedTypographyWorkbenchBlock } from "@/app/dev/elements/_shared/typography-workbench-preview";
 import { VARIANT_LABELS } from "./constants";
 import type { LinkElementDevController } from "./useLinkElementDevController";
 
 export function LinkPreviewPanel({ controller }: { controller: LinkElementDevController }) {
-  const { active, runtimePreview } = controller;
-  const { animation: _animation, ...linkRest } = active;
-  const block: Extract<ElementBlock, { type: "elementLink" }> = {
-    type: "elementLink",
-    ...linkRest,
-  };
+  const { runtimePreview } = controller;
+  const previewBlock = useMemo(
+    () =>
+      buildResolvedTypographyWorkbenchBlock(controller.runtimeDraft, {
+        type: "elementLink",
+        ...controller.active,
+      }),
+    [controller.active, controller.runtimeDraft]
+  );
   const hiddenByVisibleWhen =
     controller.runtimeDraft.visibleWhenEnabled && !runtimePreview.visibleWhenMatches;
   const variantLabel = controller.isCustomVariant
@@ -21,9 +24,6 @@ export function LinkPreviewPanel({ controller }: { controller: LinkElementDevCon
     <TypographyLiveMotionPreview
       previewVisible={controller.previewVisible}
       previewKey={controller.previewKey}
-      previewMotion={controller.previewMotion}
-      motionTiming={active.animation ? undefined : active.motionTiming}
-      exitPreset={active.animation ? undefined : active.exitPreset}
       autoLoop={controller.autoLoop}
       setAutoLoop={controller.setAutoLoop}
       animateInPreview={controller.animateInPreview}
@@ -31,9 +31,10 @@ export function LinkPreviewPanel({ controller }: { controller: LinkElementDevCon
       showPreview={controller.showPreview}
       variantLabel={variantLabel}
       hiddenByVisibleWhen={hiddenByVisibleWhen}
-      frameStyle={runtimePreview.wrapperStyle}
-    >
-      <ElementLink {...block} />
-    </TypographyLiveMotionPreview>
+      runtimeDraft={controller.runtimeDraft}
+      previewBlock={previewBlock}
+      onPreviewExitComplete={controller.onPreviewExitComplete}
+      animationSource={controller.active.animation}
+    />
   );
 }

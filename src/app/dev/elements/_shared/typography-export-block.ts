@@ -8,10 +8,9 @@ import type { PbImageAnimationDefaults } from "@/app/theme/pb-builder-defaults";
 export function typographyVariantForThemeExport(
   variant: Record<string, unknown>
 ): Record<string, unknown> {
-  const { animation, ...rest } = variant as { animation?: PbImageAnimationDefaults } & Record<
-    string,
-    unknown
-  >;
+  const { animation, ...rest } = variant as {
+    animation?: PbImageAnimationDefaults;
+  } & Record<string, unknown>;
   if (animation == null) return rest;
   return {
     ...rest,

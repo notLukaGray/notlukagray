@@ -65,12 +65,10 @@ export function ElementBody({
     ...getLayoutRotateFlipStyle({ rotate, flipHorizontal, flipVertical }),
   };
   applyPbDefaultTextAlign(blockStyle, align, textAlign);
-  blockStyle.whiteSpace = wordWrap ? "normal" : "nowrap";
-  if (!wordWrap) blockStyle.overflow = "hidden";
-  blockStyle.textOverflow = wordWrap ? undefined : "ellipsis";
 
   // Build text inline styles. Explicit props override whatever the typography class sets.
   // lineSpacing maps to lineHeight (legacy prop name); lineHeight is the newer direct prop.
+  // word wrap / overflow — must be on the text element, not the wrapper, for text-overflow to work
   const textStyle: CSSProperties = {
     ...(letterSpacing !== undefined ? { letterSpacing } : {}),
     ...(lineSpacing !== undefined ? { lineHeight: lineSpacing } : {}),
@@ -84,10 +82,14 @@ export function ElementBody({
       ? { textAlign: textAlign as CSSProperties["textAlign"] }
       : {}),
     ...(color !== undefined ? { color } : {}),
+    whiteSpace: wordWrap ? "normal" : "nowrap",
+    overflowWrap: wordWrap ? "break-word" : "normal",
+    wordBreak: wordWrap ? "break-word" : "normal",
+    ...(wordWrap ? {} : { overflow: "hidden", textOverflow: "ellipsis" }),
   };
 
   return (
-    <div className="shrink-0" style={blockStyle}>
+    <div className="shrink-0 max-w-full" style={blockStyle}>
       <p className={`m-0 block${typographyClass ? ` ${typographyClass}` : ""}`} style={textStyle}>
         {resolvedText}
       </p>

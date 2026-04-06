@@ -78,7 +78,17 @@ export type PbImageDefaults = {
 
 export type PbImageVariantKey = "hero" | "inline" | "fullCover" | "feature" | "crop";
 
-export type PbImageAnimationTrigger = "onMount" | "onFirstVisible" | "onEveryVisible";
+export type PbImageAnimationTrigger = "onMount" | "onFirstVisible" | "onEveryVisible" | "onTrigger";
+
+/** Exit presence semantics for `motionTiming` / ElementExitWrapper. */
+export type PbImageExitTrigger = "manual" | "leaveViewport";
+
+/** Intersection options (mirrors motion `viewport` / `exitViewport` schema). */
+export type PbImageMotionViewport = {
+  once?: boolean;
+  amount?: number | "some" | "all";
+  margin?: string;
+};
 
 export type PbImageAnimationPreset = string;
 
@@ -128,20 +138,42 @@ export type PbImageExitFineTune = {
   curve: PbImageAnimationCurve;
 };
 
+/** Independent animation mode per side (UI labels: Preset / Hybrid / Complex). */
+export type PbImageSideAnimationBehavior = "preset" | "hybrid" | "custom";
+
 export type PbImageAnimationFineTune = {
-  enabled: boolean;
-  usePresetAsBase: boolean;
-  hybridStackInPreset: PbImageHybridStackPreset;
-  hybridStackOutPreset: PbImageHybridStackPreset;
-  hybridDuration: number;
+  entranceBehavior: PbImageSideAnimationBehavior;
+  exitBehavior: PbImageSideAnimationBehavior;
+  /** Hybrid entrance: parallel vs sequential keyframes. */
+  hybridCompositionIn: "ordered" | "layered";
+  /** Layered hybrid only: stagger each stack layer by this delay (seconds) when enabled. */
+  hybridLayerStaggerEnabled: boolean;
+  hybridLayerStaggerSec: number;
+  /** Ordered hybrid entrance: per-step weights vs equal splits. */
+  hybridOrderedUseStepDurations: boolean;
+  hybridOrderedStepDurations: number[];
+  /** Ordered stack layers merged shallowly on top of base entrance preset (first → last wins on conflicts). */
+  hybridStackIn: PbImageHybridStackPreset[];
+  /** Ordered stack layers merged on top of base exit preset. */
+  hybridStackOut: PbImageHybridStackPreset[];
+  /** Hybrid / ordered entrance total duration (seconds); independent from exit. */
+  hybridEntranceDuration: number;
+  /** Hybrid exit total duration (seconds). */
+  hybridExitDuration: number;
   entrance: PbImageEntranceFineTune;
   exit: PbImageExitFineTune;
 };
 
 export type PbImageAnimationDefaults = {
   trigger: PbImageAnimationTrigger;
+  /** When / how exit runs in ElementExitWrapper (mirrors `motionTiming.exitTrigger`). */
+  exitTrigger: PbImageExitTrigger;
+  exitViewport?: PbImageMotionViewport;
   entrancePreset: PbImageAnimationPreset;
   exitPreset: PbImageAnimationPreset;
+  /** Optional tween duration overrides for preset-based entrance/exit resolution (seconds). */
+  presetEntranceDuration?: number;
+  presetExitDuration?: number;
   fineTune: PbImageAnimationFineTune;
 };
 
@@ -374,16 +406,240 @@ function getHybridExitStackKeyframes(stack: PbImageHybridStackPreset): {
   return getExitPresetKeyframes(stack);
 }
 
+export function mergeHybridExitStackKeyframes(stacks: PbImageHybridStackPreset[]): {
+  exit: Record<string, unknown>;
+} {
+  let exit: Record<string, unknown> = {};
+  const layers: PbImageHybridStackPreset[] = stacks.length > 0 ? stacks : ["none"];
+  for (const stack of layers) {
+    const kf = getHybridExitStackKeyframes(stack);
+    exit = { ...exit, ...kf.exit };
+  }
+  return { exit };
+}
+
+/** Shallow merge of motion snapshot objects; later arguments override earlier for the same key. */
+function mergeAnimationRecords(...parts: Record<string, unknown>[]): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const p of parts) {
+    for (const [k, v] of Object.entries(p)) {
+      if (v !== undefined) out[k] = v;
+    }
+  }
+  return out;
+}
+
+/** Ensure every keyframe has the same keys (forward-fill, then backward-fill gaps). */
+function densifyHybridKeyframes(frames: Record<string, unknown>[]): Record<string, unknown>[] {
+  if (frames.length === 0) return [];
+  const keys = new Set<string>();
+  for (const f of frames) {
+    Object.keys(f).forEach((k) => keys.add(k));
+  }
+  const filled = frames.map((f) => ({ ...f }));
+  for (const key of keys) {
+    let last: unknown = undefined;
+    for (let i = 0; i < filled.length; i++) {
+      const row = filled[i];
+      if (!row) continue;
+      if (row[key] !== undefined) last = row[key];
+      else if (last !== undefined) (row as Record<string, unknown>)[key] = last;
+    }
+    let next: unknown = undefined;
+    for (let i = filled.length - 1; i >= 0; i--) {
+      const row = filled[i];
+      if (!row) continue;
+      if (row[key] !== undefined) next = row[key];
+      else if (next !== undefined) (row as Record<string, unknown>)[key] = next;
+    }
+  }
+  return filled;
+}
+
+/**
+ * Per-property keyframe arrays + `times` for Framer Motion (`whileInView` / `animate` compatible).
+ */
+function hybridKeyframesToAnimateAndTimes(frames: Record<string, unknown>[]): {
+  animate: Record<string, unknown>;
+  times: number[];
+} {
+  const K = frames.length;
+  if (K === 0) {
+    return { animate: {}, times: [0, 1] };
+  }
+  const keys = new Set<string>();
+  for (const f of frames) Object.keys(f).forEach((k) => keys.add(k));
+  const animate: Record<string, unknown> = {};
+  for (const key of keys) {
+    animate[key] = frames.map((f) => (f as Record<string, unknown>)[key]);
+  }
+  const times =
+    K === 1 ? [0] : Array.from({ length: K }, (_, i) => (i === K - 1 ? 1 : i / (K - 1)));
+  return { animate, times };
+}
+
+/** Converts per-segment durations (seconds, relative weights) to Framer `transition.times` knots. */
+function segmentDurationsToTimes(segmentDurations: number[]): number[] {
+  if (segmentDurations.length === 0) return [0, 1];
+  const w = segmentDurations.map((x) => (Number.isFinite(x) && x > 0 ? x : 0.0001));
+  const sum = w.reduce((a, b) => a + b, 0);
+  const times: number[] = [0];
+  let acc = 0;
+  for (let i = 0; i < w.length; i++) {
+    const wi = w[i] ?? 0.0001;
+    acc += wi / sum;
+    times.push(i === w.length - 1 ? 1 : acc);
+  }
+  return times;
+}
+
+/**
+ * Hybrid entrance: base preset completes first, then each stack layer finishes in order.
+ * Encoded as one tween with per-property keyframe arrays (sequential in time, not parallel merge).
+ */
+export function buildSequentialHybridEntranceMotion(
+  entrancePreset: PbImageAnimationPreset,
+  hybridStackIn: PbImageHybridStackPreset[],
+  hybridDuration: number,
+  segmentDurations?: number[]
+): {
+  initial: Record<string, unknown>;
+  animate: Record<string, unknown>;
+  transition: Record<string, unknown>;
+} {
+  const base = getEntrancePresetKeyframes(entrancePreset);
+  const layers = hybridStackIn
+    .filter((s) => s !== "none")
+    .map((s) => getHybridEntranceStackKeyframes(s));
+
+  const frames: Record<string, unknown>[] = [];
+
+  const startParts: Record<string, unknown>[] = [base.initial];
+  for (const l of layers) startParts.push(l.initial);
+  frames.push(mergeAnimationRecords(...startParts));
+
+  const midParts: Record<string, unknown>[] = [base.animate];
+  for (const l of layers) midParts.push(l.initial);
+  frames.push(mergeAnimationRecords(...midParts));
+
+  for (let i = 0; i < layers.length; i++) {
+    const chunk: Record<string, unknown>[] = [base.animate];
+    for (let j = 0; j < layers.length; j++) {
+      const layer = layers[j];
+      if (!layer) continue;
+      chunk.push(j <= i ? layer.animate : layer.initial);
+    }
+    frames.push(mergeAnimationRecords(...chunk));
+  }
+
+  const dense = densifyHybridKeyframes(frames);
+  const initial = dense[0] ?? {};
+  const { animate, times: uniformTimes } = hybridKeyframesToAnimateAndTimes(dense);
+  const F = dense.length;
+  const segmentCount = Math.max(0, F - 1);
+  const times =
+    segmentDurations && segmentDurations.length === segmentCount && segmentCount > 0
+      ? segmentDurationsToTimes(segmentDurations)
+      : uniformTimes;
+  const duration = Math.max(0, Number(hybridDuration) || 0.45);
+
+  return {
+    initial,
+    animate,
+    transition: {
+      type: "tween" as const,
+      duration,
+      delay: 0,
+      ease: "easeOut" as const,
+      times,
+    },
+  };
+}
+
+function propertyStaggerIndex(
+  key: string,
+  base: { initial: Record<string, unknown>; animate: Record<string, unknown> },
+  layers: { initial: Record<string, unknown>; animate: Record<string, unknown> }[]
+): number {
+  if (base.initial[key] !== base.animate[key]) return 0;
+  for (let i = 0; i < layers.length; i++) {
+    const L = layers[i];
+    if (L && L.initial[key] !== L.animate[key]) return i + 1;
+  }
+  return 0;
+}
+
+/**
+ * Hybrid entrance — layered: all stack presets reach their resting state in parallel (shallow merge).
+ * Optional stagger uses per-property Framer transition delays (`transition.<prop>.delay`).
+ */
+export function buildLayeredHybridEntranceMotion(
+  entrancePreset: PbImageAnimationPreset,
+  hybridStackIn: PbImageHybridStackPreset[],
+  hybridDuration: number,
+  options?: { staggerEnabled?: boolean; staggerSec?: number }
+): {
+  initial: Record<string, unknown>;
+  animate: Record<string, unknown>;
+  transition: Record<string, unknown>;
+} {
+  const base = getEntrancePresetKeyframes(entrancePreset);
+  const layers = hybridStackIn
+    .filter((s) => s !== "none")
+    .map((s) => getHybridEntranceStackKeyframes(s));
+  const initialMerged = mergeAnimationRecords(base.initial, ...layers.map((l) => l.initial));
+  const animateMerged = mergeAnimationRecords(base.animate, ...layers.map((l) => l.animate));
+  const duration = Math.max(0.05, Number(hybridDuration) || 0.45);
+  const staggerEnabled = options?.staggerEnabled === true;
+  const staggerSec = Math.max(0, Number(options?.staggerSec ?? 0));
+
+  if (staggerEnabled && staggerSec > 0 && layers.length > 0) {
+    const keys = new Set([...Object.keys(initialMerged), ...Object.keys(animateMerged)]);
+    const transition: Record<string, unknown> = {};
+    for (const key of keys) {
+      const idx = propertyStaggerIndex(key, base, layers);
+      transition[key] = {
+        type: "tween" as const,
+        duration,
+        delay: idx * staggerSec,
+        ease: "easeOut" as const,
+      };
+    }
+    return {
+      initial: initialMerged,
+      animate: animateMerged,
+      transition,
+    };
+  }
+
+  return {
+    initial: initialMerged,
+    animate: animateMerged,
+    transition: {
+      type: "tween" as const,
+      duration,
+      delay: 0,
+      ease: "easeOut" as const,
+    },
+  };
+}
+
 function createImageAnimationFineTune(
   entranceDirection: PbImageAnimationDirection,
   exitDirection: PbImageAnimationDirection
 ): PbImageAnimationFineTune {
   return {
-    enabled: false,
-    usePresetAsBase: true,
-    hybridStackInPreset: "none",
-    hybridStackOutPreset: "none",
-    hybridDuration: 0.45,
+    entranceBehavior: "preset",
+    exitBehavior: "preset",
+    hybridCompositionIn: "ordered",
+    hybridLayerStaggerEnabled: false,
+    hybridLayerStaggerSec: 0.08,
+    hybridOrderedUseStepDurations: false,
+    hybridOrderedStepDurations: [],
+    hybridStackIn: ["none"],
+    hybridStackOut: ["none"],
+    hybridEntranceDuration: 0.45,
+    hybridExitDuration: 0.45,
     entrance: {
       direction: entranceDirection,
       distancePx: 24,
@@ -559,6 +815,7 @@ export function createPbBuilderDefaultsFromFoundations(
             priority: true,
             animation: {
               trigger: "onFirstVisible",
+              exitTrigger: "manual",
               entrancePreset: "slideUp",
               exitPreset: "fade",
               fineTune: createImageAnimationFineTune("up", "up"),
@@ -580,6 +837,7 @@ export function createPbBuilderDefaultsFromFoundations(
             priority: false,
             animation: {
               trigger: "onFirstVisible",
+              exitTrigger: "manual",
               entrancePreset: "fade",
               exitPreset: "fade",
               fineTune: createImageAnimationFineTune("none", "none"),
@@ -602,6 +860,7 @@ export function createPbBuilderDefaultsFromFoundations(
             priority: true,
             animation: {
               trigger: "onMount",
+              exitTrigger: "manual",
               entrancePreset: "fade",
               exitPreset: "fade",
               fineTune: createImageAnimationFineTune("none", "none"),
@@ -623,6 +882,7 @@ export function createPbBuilderDefaultsFromFoundations(
             priority: false,
             animation: {
               trigger: "onFirstVisible",
+              exitTrigger: "manual",
               entrancePreset: "slideLeft",
               exitPreset: "slideRight",
               fineTune: createImageAnimationFineTune("left", "right"),
@@ -645,6 +905,7 @@ export function createPbBuilderDefaultsFromFoundations(
             priority: false,
             animation: {
               trigger: "onFirstVisible",
+              exitTrigger: "manual",
               entrancePreset: "fade",
               exitPreset: "fade",
               fineTune: createImageAnimationFineTune("none", "none"),
@@ -853,6 +1114,8 @@ export function withUnifiedRadius(
 
 export function buildImageMotionTimingFromAnimationDefaults(animation: PbImageAnimationDefaults): {
   trigger: PbImageAnimationTrigger;
+  exitTrigger: PbImageExitTrigger;
+  exitViewport?: PbImageMotionViewport;
   entrancePreset?: PbImageAnimationPreset;
   exitPreset?: PbImageAnimationPreset;
   entranceMotion?: Record<string, unknown>;
@@ -860,10 +1123,16 @@ export function buildImageMotionTimingFromAnimationDefaults(animation: PbImageAn
 } {
   const base: {
     trigger: PbImageAnimationTrigger;
+    exitTrigger: PbImageExitTrigger;
+    exitViewport?: PbImageMotionViewport;
     entrancePreset?: PbImageAnimationPreset;
     exitPreset?: PbImageAnimationPreset;
+    entranceMotion?: Record<string, unknown>;
+    exitMotion?: Record<string, unknown>;
   } = {
     trigger: animation.trigger,
+    exitTrigger: animation.exitTrigger ?? "manual",
+    ...(animation.exitViewport ? { exitViewport: animation.exitViewport } : {}),
   };
   if (animation.entrancePreset.trim().length > 0) {
     base.entrancePreset = animation.entrancePreset;
@@ -872,91 +1141,147 @@ export function buildImageMotionTimingFromAnimationDefaults(animation: PbImageAn
     base.exitPreset = animation.exitPreset;
   }
 
-  if (!animation.fineTune.enabled) return base;
+  const ft = animation.fineTune;
+  const entranceFt = ft.entrance;
+  const exitFt = ft.exit;
+  const entranceTransition = toMotionTransition(
+    entranceFt.duration,
+    entranceFt.delay,
+    entranceFt.curve
+  );
+  const exitTransition = toMotionTransition(exitFt.duration, exitFt.delay, exitFt.curve);
 
-  const entrance = animation.fineTune.entrance;
-  const exit = animation.fineTune.exit;
-  const entranceTransition = toMotionTransition(entrance.duration, entrance.delay, entrance.curve);
-  const exitTransition = toMotionTransition(exit.duration, exit.delay, exit.curve);
+  /** Both sides use named presets only (optional duration overrides on `animation`). */
+  if (ft.entranceBehavior === "preset" && ft.exitBehavior === "preset") {
+    const pe = animation.presetEntranceDuration;
+    const px = animation.presetExitDuration;
+    if (pe != null && Number.isFinite(pe) && pe > 0) {
+      base.entranceMotion = {
+        transition: { type: "tween", duration: pe, delay: 0, ease: "easeOut" },
+      };
+    }
+    if (px != null && Number.isFinite(px) && px > 0) {
+      base.exitMotion = {
+        transition: { type: "tween", duration: px, delay: 0, ease: "easeOut" },
+      };
+    }
+    return base;
+  }
 
-  if (animation.fineTune.usePresetAsBase) {
-    const hybridDuration = Math.max(0, Number(animation.fineTune.hybridDuration || 0.45));
-    const baseEntrance = getEntrancePresetKeyframes(animation.entrancePreset);
-    const stackEntrance = getHybridEntranceStackKeyframes(animation.fineTune.hybridStackInPreset);
-    const baseExit = getExitPresetKeyframes(animation.exitPreset);
-    const stackExit = getHybridExitStackKeyframes(animation.fineTune.hybridStackOutPreset);
-    const hybridTransition = {
-      type: "tween" as const,
-      duration: hybridDuration,
-      delay: 0,
-      ease: "easeOut" as const,
-    };
-    return {
-      ...base,
-      entranceMotion: {
-        initial: { ...baseEntrance.initial, ...stackEntrance.initial },
-        animate: { ...baseEntrance.animate, ...stackEntrance.animate },
-        transition: hybridTransition,
+  let entranceMotion: Record<string, unknown> | undefined;
+  let exitMotion: Record<string, unknown> | undefined;
+
+  if (ft.entranceBehavior === "preset") {
+    const pe = animation.presetEntranceDuration;
+    if (pe != null && Number.isFinite(pe) && pe > 0) {
+      entranceMotion = {
+        transition: { type: "tween", duration: pe, delay: 0, ease: "easeOut" },
+      };
+    }
+  } else if (ft.entranceBehavior === "hybrid") {
+    const hybridEntranceDuration = Math.max(0, Number(ft.hybridEntranceDuration || 0.45));
+    const composition = ft.hybridCompositionIn ?? "ordered";
+    const activeLayers = ft.hybridStackIn.filter((s) => s !== "none");
+    const segmentCount = Math.max(0, 1 + activeLayers.length);
+    const segmentDurations =
+      ft.hybridOrderedUseStepDurations &&
+      Array.isArray(ft.hybridOrderedStepDurations) &&
+      ft.hybridOrderedStepDurations.length === segmentCount &&
+      segmentCount > 0
+        ? ft.hybridOrderedStepDurations
+        : undefined;
+    entranceMotion =
+      composition === "layered"
+        ? buildLayeredHybridEntranceMotion(
+            animation.entrancePreset,
+            ft.hybridStackIn,
+            hybridEntranceDuration,
+            {
+              staggerEnabled: ft.hybridLayerStaggerEnabled,
+              staggerSec: ft.hybridLayerStaggerSec,
+            }
+          )
+        : buildSequentialHybridEntranceMotion(
+            animation.entrancePreset,
+            ft.hybridStackIn,
+            hybridEntranceDuration,
+            segmentDurations
+          );
+  } else {
+    const entranceOffset = toEntranceOffset(entranceFt.direction, entranceFt.distancePx);
+    const entranceInitialX = (entranceFt.fromX ?? 0) + (entranceOffset.x ?? 0);
+    const entranceInitialY = (entranceFt.fromY ?? 0) + (entranceOffset.y ?? 0);
+    entranceMotion = {
+      initial: {
+        opacity: clampNumber(entranceFt.fromOpacity, 0, 1),
+        x: entranceInitialX,
+        y: entranceInitialY,
+        scale: Number.isFinite(entranceFt.fromScale) ? entranceFt.fromScale : 1,
+        rotate: Number.isFinite(entranceFt.fromRotate) ? entranceFt.fromRotate : 0,
       },
-      exitMotion: {
-        exit: { ...baseExit.exit, ...stackExit.exit },
-        transition: hybridTransition,
+      animate: {
+        opacity: clampNumber(entranceFt.toOpacity, 0, 1),
+        x: entranceFt.toX ?? 0,
+        y: entranceFt.toY ?? 0,
+        scale: Number.isFinite(entranceFt.toScale) ? entranceFt.toScale : 1,
+        rotate: Number.isFinite(entranceFt.toRotate) ? entranceFt.toRotate : 0,
       },
+      transition: entranceTransition,
     };
   }
 
-  const entranceOffset = toEntranceOffset(entrance.direction, entrance.distancePx);
-  const exitOffset = toExitOffset(exit.direction, exit.distancePx);
-  const entranceInitialX = (entrance.fromX ?? 0) + (entranceOffset.x ?? 0);
-  const entranceInitialY = (entrance.fromY ?? 0) + (entranceOffset.y ?? 0);
-  const entranceAnimateX = entrance.toX ?? 0;
-  const entranceAnimateY = entrance.toY ?? 0;
-  const exitTargetX = (exit.toX ?? 0) + (exitOffset.x ?? 0);
-  const exitTargetY = (exit.toY ?? 0) + (exitOffset.y ?? 0);
-  const entranceMotion: Record<string, unknown> = {
-    initial: {
-      opacity: clampNumber(entrance.fromOpacity, 0, 1),
-      x: entranceInitialX,
-      y: entranceInitialY,
-      scale: Number.isFinite(entrance.fromScale) ? entrance.fromScale : 1,
-      rotate: Number.isFinite(entrance.fromRotate) ? entrance.fromRotate : 0,
-    },
-    animate: {
-      opacity: clampNumber(entrance.toOpacity, 0, 1),
-      x: entranceAnimateX,
-      y: entranceAnimateY,
-      scale: Number.isFinite(entrance.toScale) ? entrance.toScale : 1,
-      rotate: Number.isFinite(entrance.toRotate) ? entrance.toRotate : 0,
-    },
-    transition: entranceTransition,
-  };
-  const exitMotion: Record<string, unknown> = {
-    exit: {
-      opacity: clampNumber(exit.toOpacity, 0, 1),
-      x: exitTargetX,
-      y: exitTargetY,
-      scale: Number.isFinite(exit.toScale) ? exit.toScale : 1,
-      rotate: Number.isFinite(exit.toRotate) ? exit.toRotate : 0,
-    },
-    transition: exitTransition,
-  };
+  if (ft.exitBehavior === "preset") {
+    const px = animation.presetExitDuration;
+    if (px != null && Number.isFinite(px) && px > 0) {
+      exitMotion = {
+        transition: { type: "tween", duration: px, delay: 0, ease: "easeOut" },
+      };
+    }
+  } else if (ft.exitBehavior === "hybrid") {
+    const hybridExitDuration = Math.max(0, Number(ft.hybridExitDuration || 0.45));
+    const baseExit = getExitPresetKeyframes(animation.exitPreset);
+    const stackExit = mergeHybridExitStackKeyframes(ft.hybridStackOut);
+    exitMotion = {
+      exit: { ...baseExit.exit, ...stackExit.exit },
+      transition: {
+        type: "tween" as const,
+        duration: hybridExitDuration,
+        delay: 0,
+        ease: "easeOut" as const,
+      },
+    };
+  } else {
+    const exitOffset = toExitOffset(exitFt.direction, exitFt.distancePx);
+    const exitTargetX = (exitFt.toX ?? 0) + (exitOffset.x ?? 0);
+    const exitTargetY = (exitFt.toY ?? 0) + (exitOffset.y ?? 0);
+    exitMotion = {
+      exit: {
+        opacity: clampNumber(exitFt.toOpacity, 0, 1),
+        x: exitTargetX,
+        y: exitTargetY,
+        scale: Number.isFinite(exitFt.toScale) ? exitFt.toScale : 1,
+        rotate: Number.isFinite(exitFt.toRotate) ? exitFt.toRotate : 0,
+      },
+      transition: exitTransition,
+    };
+  }
 
-  const withCustom: {
+  const out: {
     trigger: PbImageAnimationTrigger;
+    exitTrigger: PbImageExitTrigger;
+    exitViewport?: PbImageMotionViewport;
     entrancePreset?: PbImageAnimationPreset;
     exitPreset?: PbImageAnimationPreset;
-    entranceMotion: Record<string, unknown>;
-    exitMotion: Record<string, unknown>;
+    entranceMotion?: Record<string, unknown>;
+    exitMotion?: Record<string, unknown>;
   } = {
     ...base,
-    entranceMotion,
-    exitMotion,
+    ...(entranceMotion ? { entranceMotion } : {}),
+    ...(exitMotion ? { exitMotion } : {}),
   };
 
-  if (!animation.fineTune.usePresetAsBase) {
-    delete withCustom.entrancePreset;
-    delete withCustom.exitPreset;
-  }
+  if (ft.entranceBehavior === "custom") delete out.entrancePreset;
+  if (ft.exitBehavior === "custom") delete out.exitPreset;
 
-  return withCustom;
+  return out;
 }

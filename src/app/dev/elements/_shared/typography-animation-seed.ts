@@ -1,11 +1,12 @@
-import { pbBuilderDefaultsV1 } from "@/app/theme/pb-builder-defaults";
+import {
+  cloneTypographyAnimationFromImageDefaults,
+  DEV_NEUTRAL_IMAGE_DEFAULTS,
+} from "@/app/dev/elements/element-dev-baseline";
 import type { PbImageAnimationDefaults } from "@/app/theme/pb-builder-defaults";
 
-/** Deep clone of the image hero animation defaults — same animation lab starting point for typography dev. */
+/** Deep clone of the neutral image defaults — shared animation-lab starting point for typography dev. */
 export function cloneDefaultTypographyAnimation(): PbImageAnimationDefaults {
-  return JSON.parse(
-    JSON.stringify(pbBuilderDefaultsV1.elements.image.variants.hero.animation)
-  ) as PbImageAnimationDefaults;
+  return cloneTypographyAnimationFromImageDefaults(DEV_NEUTRAL_IMAGE_DEFAULTS);
 }
 
 export function addTypographyAnimationToVariants<

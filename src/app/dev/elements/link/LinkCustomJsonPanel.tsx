@@ -77,8 +77,8 @@ export function LinkCustomJsonPanel({ controller }: { controller: LinkElementDev
         </div>
       </div>
       <p className="text-[10px] text-muted-foreground">
-        Patch merges keys into this variant defaults object. Replace rebuilds from{" "}
-        <code className="font-mono">pbBuilderDefaultsV1</code> preset base, then applies your JSON.{" "}
+        Patch merges keys into this variant defaults object. Replace rebuilds from the neutral dev
+        preset base, then applies your JSON.{" "}
         <code className="font-mono">copyType: &quot;heading&quot;</code> requires{" "}
         <code className="font-mono">level</code>.
       </p>

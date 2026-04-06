@@ -115,7 +115,8 @@ function rewriteMotionBackgroundTargets(
 
 /** Build layout style for entrance wrapper from block (align from JSON). Gives full-width containing block and justifies child. */
 function buildEntranceWrapperStyle(
-  align: "left" | "center" | "right" | undefined
+  align: "left" | "center" | "right" | undefined,
+  fillHeight?: boolean
 ): React.CSSProperties {
   const justifyContent =
     align === "center" ? "center" : align === "right" ? "flex-end" : "flex-start";
@@ -123,14 +124,39 @@ function buildEntranceWrapperStyle(
     width: "100%",
     display: "flex",
     justifyContent,
+    ...(fillHeight ? { height: "100%", alignItems: "stretch" } : {}),
   };
 }
 
 type Props = {
   block: ElementBlock;
+  /**
+   * When the block uses `motionTiming.exitPreset` / top-level `exitPreset`, `ElementExitWrapper`
+   * is applied inside this renderer. Dev previews can drive that wrapper’s `show` for AnimatePresence.
+   * Omitted / undefined defaults to `true` (production behavior).
+   */
+  exitPresenceShow?: boolean;
+  /** Forwarded to `ElementExitWrapper` when exit presence is active (AnimatePresence child key). */
+  exitPresenceKey?: string;
+  /** When exit presence is active, forwarded to `AnimatePresence` / exit wrapper. */
+  onExitComplete?: () => void;
+  /** When exit presence is active, passed to `ElementExitWrapper` (`AnimatePresence` mode). */
+  exitPresenceMode?: "sync" | "wait" | "popLayout";
+  /**
+   * Forwarded to `ElementEntranceWrapper`: play full entrance preset in nested dev previews
+   * (slide/scale/etc. are otherwise skipped when the preview is already in the viewport).
+   */
+  forceEntranceAnimation?: boolean;
 };
 
-export function ElementRenderer({ block }: Props) {
+export function ElementRenderer({
+  block,
+  exitPresenceShow,
+  exitPresenceKey,
+  onExitComplete,
+  exitPresenceMode,
+  forceEntranceAnimation,
+}: Props) {
   const { isMobile } = useDeviceType();
   const resolvedBlock = useMemo(
     () => resolveElementBlockForBreakpoint(block, isMobile),
@@ -168,8 +194,9 @@ export function ElementRenderer({ block }: Props) {
     const ext = resolvedBlock as typeof resolvedBlock & {
       fixed?: boolean;
       align?: "left" | "center" | "right";
+      height?: string | number;
     };
-    return ext.fixed ? undefined : buildEntranceWrapperStyle(ext.align);
+    return ext.fixed ? undefined : buildEntranceWrapperStyle(ext.align, ext.height === "100%");
   }, [hasEntranceTiming, resolvedBlock]);
 
   const Component = ELEMENT_COMPONENTS[resolvedBlock.type];
@@ -261,6 +288,7 @@ export function ElementRenderer({ block }: Props) {
         alignY={alignY}
         aria={aria}
         reduceMotion={reduceMotion}
+        forceEntranceAnimation={forceEntranceAnimation}
       >
         {content}
       </ElementEntranceWrapper>
@@ -323,13 +351,20 @@ export function ElementRenderer({ block }: Props) {
     );
   }
 
-  if (exitPreset || motionTiming?.exitPreset) {
+  const exitMotionRecord = motionTiming?.exitMotion as { exit?: unknown } | undefined;
+  const hasExitFromTiming =
+    exitMotionRecord?.exit != null && typeof exitMotionRecord.exit === "object";
+  const useExitWrapper = Boolean(exitPreset || motionTiming?.exitPreset) || hasExitFromTiming;
+  if (useExitWrapper) {
     wrapped = (
       <ElementExitWrapper
-        show={true}
+        show={exitPresenceShow ?? true}
+        exitKey={exitPresenceKey}
         exitPreset={exitPreset ?? motionTiming?.exitPreset}
         motionTiming={motionTiming}
         motion={motionFromJson}
+        onExitComplete={onExitComplete}
+        presenceMode={exitPresenceMode}
       >
         {wrapped}
       </ElementExitWrapper>

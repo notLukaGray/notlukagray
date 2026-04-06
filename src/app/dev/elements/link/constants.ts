@@ -1,5 +1,4 @@
-import { pbBuilderDefaultsV1, type PbLinkVariantKey } from "@/app/theme/pb-builder-defaults";
-import { addTypographyAnimationToVariants } from "@/app/dev/elements/_shared/typography-animation-seed";
+import { DEV_NEUTRAL_LINK_DEFAULTS } from "@/app/dev/elements/element-dev-baseline";
 import type { LinkVariantDefaults, LinkVariantKey } from "./types";
 
 export const STORAGE_KEY = "pb-element-link-dev-v1";
@@ -12,11 +11,11 @@ export const VARIANT_LABELS: Record<LinkVariantKey, string> = {
   nav: "Nav",
 };
 
-/** Presets mirror `pbBuilderDefaultsV1.elements.link` plus the same animation lab model as image dev. */
+/** Neutral starting presets for link variants in dev foundation authoring. */
 export const BASE_DEFAULTS: {
   defaultVariant: LinkVariantKey;
   variants: Record<LinkVariantKey, LinkVariantDefaults>;
 } = {
-  defaultVariant: pbBuilderDefaultsV1.elements.link.defaultVariant as PbLinkVariantKey,
-  variants: addTypographyAnimationToVariants(pbBuilderDefaultsV1.elements.link.variants),
+  defaultVariant: DEV_NEUTRAL_LINK_DEFAULTS.defaultVariant,
+  variants: DEV_NEUTRAL_LINK_DEFAULTS.variants as Record<LinkVariantKey, LinkVariantDefaults>,
 };

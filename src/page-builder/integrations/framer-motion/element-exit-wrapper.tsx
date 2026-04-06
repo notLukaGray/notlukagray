@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import type { UseInViewOptions } from "framer-motion";
+import { useMemo, useRef, useState } from "react";
 import { AnimatePresence, MotionFromJson } from "@/page-builder/integrations/framer-motion";
+import { useInView } from "@/page-builder/integrations/framer-motion/viewport";
 import {
   MOTION_DEFAULTS,
   mergeMotionDefaults,
@@ -24,6 +26,10 @@ export type ElementExitWrapperProps = {
   exitEasing?: string | [number, number, number, number];
   /** Stable unique key for AnimatePresence child. Required when multiple exit wrappers are siblings to avoid shared key bugs. */
   exitKey?: string;
+  /** Passed to `AnimatePresence`. Use `"wait"` so exit finishes before the next child enters (avoids stacked layout during remount). */
+  presenceMode?: "sync" | "wait" | "popLayout";
+  /** Fires when all exit animations in this presence scope have finished. */
+  onExitComplete?: () => void;
   /** Optional className applied to the motion wrapper rendered by this component. */
   className?: string;
   /** Optional style applied to the motion wrapper rendered by this component. */
@@ -32,8 +38,13 @@ export type ElementExitWrapperProps = {
 };
 
 /**
- * Wraps content in AnimatePresence + MotionFromJson. When show becomes false, exit animation
+ * Wraps content in AnimatePresence + MotionFromJson. When presence becomes false, exit animation
  * runs from motion.exit, exitPreset, or motionComponent.exit (motion-defaults).
+ *
+ * `motionTiming.exitTrigger`:
+ * - `manual` (default): presence follows the `show` prop only (parent / dev preview).
+ * - `leaveViewport`: after the element has been in view at least once, presence becomes false
+ *   when it leaves the intersection root (see `motionTiming.exitViewport`, e.g. margin).
  */
 export function ElementExitWrapper({
   show,
@@ -43,10 +54,15 @@ export function ElementExitWrapper({
   exitDuration = MOTION_DEFAULTS.transition.exitDuration ?? MOTION_DEFAULTS.transition.duration,
   exitEasing = MOTION_DEFAULTS.transition.ease,
   exitKey = "element-exit",
+  presenceMode = "sync",
+  onExitComplete,
   className,
   style,
   children,
 }: ElementExitWrapperProps) {
+  const exitTrigger = motionTiming?.exitTrigger ?? "manual";
+  const exitVp = motionTiming?.exitViewport;
+
   const effectiveExitPreset = motionTiming?.exitPreset ?? exitPreset;
   const effectiveExitMotion = motionTiming?.exitMotion ?? motionFromJson;
   const exitTransitionOverrides = useMemo(() => {
@@ -116,13 +132,74 @@ export function ElementExitWrapper({
     resolvedExitEasing,
   ]);
 
+  if (exitTrigger !== "leaveViewport") {
+    return (
+      <AnimatePresence mode={presenceMode} onExitComplete={onExitComplete}>
+        {show && (
+          <MotionFromJson key={exitKey} motion={motionConfig} className={className} style={style}>
+            {children}
+          </MotionFromJson>
+        )}
+      </AnimatePresence>
+    );
+  }
+
   return (
-    <AnimatePresence>
-      {show && (
-        <MotionFromJson key={exitKey} motion={motionConfig} className={className} style={style}>
-          {children}
-        </MotionFromJson>
-      )}
-    </AnimatePresence>
+    <LeaveViewportExitPresence
+      show={show}
+      exitVp={exitVp}
+      exitKey={exitKey}
+      motionConfig={motionConfig}
+      presenceMode={presenceMode}
+      onExitComplete={onExitComplete}
+      className={className}
+      style={style}
+    >
+      {children}
+    </LeaveViewportExitPresence>
+  );
+}
+
+type LeaveViewportExitPresenceProps = Pick<
+  ElementExitWrapperProps,
+  "show" | "presenceMode" | "onExitComplete" | "className" | "style" | "children"
+> & {
+  exitVp: NonNullable<MotionTiming>["exitViewport"] | undefined;
+  exitKey: string;
+  motionConfig: MotionPropsFromJson;
+};
+
+function LeaveViewportExitPresence({
+  show,
+  exitVp,
+  exitKey,
+  motionConfig,
+  presenceMode,
+  onExitComplete,
+  className,
+  style,
+  children,
+}: LeaveViewportExitPresenceProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const isInView = useInView(containerRef, {
+    once: exitVp?.once ?? false,
+    margin: exitVp?.margin,
+    amount: exitVp?.amount,
+  } as UseInViewOptions);
+  const [wasEverInView, setWasEverInView] = useState(false);
+  if (isInView && !wasEverInView) setWasEverInView(true);
+
+  const presenceShow = show && (!wasEverInView || isInView);
+
+  return (
+    <div ref={containerRef}>
+      <AnimatePresence mode={presenceMode} onExitComplete={onExitComplete}>
+        {presenceShow && (
+          <MotionFromJson key={exitKey} motion={motionConfig} className={className} style={style}>
+            {children}
+          </MotionFromJson>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

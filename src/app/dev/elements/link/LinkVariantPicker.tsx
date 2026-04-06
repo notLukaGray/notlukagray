@@ -8,8 +8,8 @@ export function LinkVariantPicker({ controller }: { controller: LinkElementDevCo
         Variant picker
       </p>
       <p className="text-[10px] text-muted-foreground">
-        Presets match `elementLinkSchema` + `elementLayoutSchema`. Variant seeds come from
-        `pbBuilderDefaultsV1.elements.link`. When `copyType` is `heading`, `level` is required.
+        Presets match `elementLinkSchema` + `elementLayoutSchema`. Variant seeds start from the
+        neutral dev foundation baseline. When `copyType` is `heading`, `level` is required.
       </p>
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {controller.variantOrder.map((key) => {

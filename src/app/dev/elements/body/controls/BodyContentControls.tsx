@@ -58,12 +58,6 @@ export function BodyContentControls({ controller }: { controller: BodyElementDev
         </select>
       </label>
 
-      <SharedFontSlotField
-        idSuffix={`body-${activeVariant}`}
-        value={active.fontFamily}
-        onChange={(next) => setVariantPatch(activeVariant, { fontFamily: next })}
-      />
-
       <label className="space-y-1.5">
         <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
           Color
@@ -91,6 +85,12 @@ export function BodyContentControls({ controller }: { controller: BodyElementDev
           placeholder="e.g. 1.5 or 1.5rem"
         />
       </label>
+
+      <SharedFontSlotField
+        idSuffix={`body-${activeVariant}`}
+        value={active.fontFamily}
+        onChange={(value) => setVariantPatch(activeVariant, { fontFamily: value })}
+      />
 
       <label className="inline-flex items-center gap-2 rounded border border-border/60 bg-background/60 px-3 py-2 text-[11px] text-foreground sm:col-span-2">
         <input

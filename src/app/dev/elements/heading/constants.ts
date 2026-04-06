@@ -1,5 +1,4 @@
-import { pbBuilderDefaultsV1, type PbHeadingVariantKey } from "@/app/theme/pb-builder-defaults";
-import { addTypographyAnimationToVariants } from "@/app/dev/elements/_shared/typography-animation-seed";
+import { DEV_NEUTRAL_HEADING_DEFAULTS } from "@/app/dev/elements/element-dev-baseline";
 import type { HeadingVariantDefaults, HeadingVariantKey } from "./types";
 
 export const STORAGE_KEY = "pb-element-heading-dev-v1";
@@ -12,11 +11,14 @@ export const VARIANT_LABELS: Record<HeadingVariantKey, string> = {
   label: "Label",
 };
 
-/** Presets mirror `pbBuilderDefaultsV1.elements.heading` plus the same animation lab model as image dev. */
+/** Neutral starting presets for heading variants in dev foundation authoring. */
 export const BASE_DEFAULTS: {
   defaultVariant: HeadingVariantKey;
   variants: Record<HeadingVariantKey, HeadingVariantDefaults>;
 } = {
-  defaultVariant: pbBuilderDefaultsV1.elements.heading.defaultVariant as PbHeadingVariantKey,
-  variants: addTypographyAnimationToVariants(pbBuilderDefaultsV1.elements.heading.variants),
+  defaultVariant: DEV_NEUTRAL_HEADING_DEFAULTS.defaultVariant,
+  variants: DEV_NEUTRAL_HEADING_DEFAULTS.variants as Record<
+    HeadingVariantKey,
+    HeadingVariantDefaults
+  >,
 };

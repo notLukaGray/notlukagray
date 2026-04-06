@@ -14,19 +14,13 @@ export function ImageSettingsPanel({ controller }: { controller: ImageElementDev
 
   return (
     <section className="space-y-4 rounded-lg border border-border bg-card/20 p-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center gap-2">
         <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
-          {settingsLabel} Settings
+          Image Settings
         </p>
-        {!controller.isCustomVariant ? (
-          <button
-            type="button"
-            onClick={() => controller.setDefaultVariant(controller.activeVariant)}
-            className="rounded border border-border px-3 py-1.5 text-[11px] font-mono text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground"
-          >
-            Make Default
-          </button>
-        ) : null}
+        <span className="rounded bg-foreground/[0.07] px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+          {settingsLabel}
+        </span>
       </div>
       <ImageCategoryTabs controller={controller} />
       {hasAnyCategoryVisible ? (

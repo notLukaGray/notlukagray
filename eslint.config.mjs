@@ -60,6 +60,21 @@ const eslintConfig = defineConfig([
     },
   },
 
+  {
+    files: ["src/app/dev/**/*.{ts,tsx}", "src/devtools/app-dev/**/*.{ts,tsx}"],
+    rules: {
+      complexity: ["error", 8],
+      "max-lines": [
+        "error",
+        {
+          max: 250,
+          skipBlankLines: true,
+          skipComments: true,
+        },
+      ],
+    },
+  },
+
   globalIgnores([
     ".next/**",
     "out/**",

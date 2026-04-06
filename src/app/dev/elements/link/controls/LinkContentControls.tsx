@@ -10,9 +10,28 @@ function levelToSelectValue(level: LinkVariantDefaults["level"]): string {
   return String(level);
 }
 
+function getNextLevelForCopyType(
+  copyType: "heading" | "body",
+  current: LinkVariantDefaults
+): LinkVariantDefaults["level"] {
+  if (copyType !== "heading") return current.level;
+  return current.level === undefined || current.level === null ? 3 : current.level;
+}
+
+function getLevelFieldValue(
+  level: LinkVariantDefaults["level"],
+  needsHeadingLevel: boolean
+): string {
+  const parsed = levelToSelectValue(level);
+  if (!needsHeadingLevel) return parsed;
+  return parsed || "3";
+}
+
 export function LinkContentControls({ controller }: { controller: LinkElementDevController }) {
   const { active, activeVariant, setVariantPatch } = controller;
   const needsHeadingLevel = active.copyType === "heading";
+  const levelFieldValue = getLevelFieldValue(active.level, needsHeadingLevel);
+  const transitionValue = active.linkTransition === undefined ? "" : String(active.linkTransition);
 
   return (
     <>
@@ -79,10 +98,7 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
             const copyType = e.target.value as "heading" | "body";
             setVariantPatch(activeVariant, {
               copyType,
-              level:
-                copyType === "heading" && (active.level === undefined || active.level === null)
-                  ? 3
-                  : active.level,
+              level: getNextLevelForCopyType(copyType, active),
             });
           }}
         >
@@ -97,11 +113,7 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
         </span>
         <select
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={
-            needsHeadingLevel
-              ? levelToSelectValue(active.level) || "3"
-              : levelToSelectValue(active.level)
-          }
+          value={levelFieldValue}
           onChange={(e) => {
             const v = e.target.value;
             setVariantPatch(activeVariant, {
@@ -109,7 +121,9 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
             });
           }}
         >
-          {!needsHeadingLevel ? <option value="">Unset</option> : null}
+          <option value="" disabled={needsHeadingLevel}>
+            Unset
+          </option>
           {LEVELS.map((lv) => (
             <option key={lv} value={lv}>
               Level {lv}
@@ -117,12 +131,6 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
           ))}
         </select>
       </label>
-
-      <SharedFontSlotField
-        idSuffix={`link-${activeVariant}`}
-        value={active.fontFamily}
-        onChange={(next) => setVariantPatch(activeVariant, { fontFamily: next })}
-      />
 
       <label className="inline-flex items-center gap-2 rounded border border-border/60 bg-background/60 px-3 py-2 text-[11px] text-foreground sm:col-span-2">
         <input
@@ -132,6 +140,12 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
         />
         Word wrap
       </label>
+
+      <SharedFontSlotField
+        idSuffix={`link-${activeVariant}`}
+        value={active.fontFamily}
+        onChange={(value) => setVariantPatch(activeVariant, { fontFamily: value })}
+      />
 
       <div className="sm:col-span-2 rounded border border-border/60 bg-muted/20 px-3 py-2">
         <p className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
@@ -197,7 +211,7 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
         <input
           type="text"
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={active.linkTransition === undefined ? "" : String(active.linkTransition)}
+          value={transitionValue}
           onChange={(e) =>
             setVariantPatch(activeVariant, { linkTransition: e.target.value || undefined })
           }
