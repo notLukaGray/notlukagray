@@ -134,6 +134,82 @@ describe("page-builder-apply-element-defaults", () => {
     expect(image.aspectRatio).toBeUndefined();
   });
 
+  it("resolves image variant aliases (full cover/full-cover/fullcover)", () => {
+    const fromWords = applyBuilderElementDefaultsToSections([
+      imageSection({
+        type: "elementImage",
+        id: "img-words",
+        variant: "full cover",
+        src: "/cover-words.webp",
+        alt: "Cover words",
+      }),
+    ]);
+    const fromHyphen = applyBuilderElementDefaultsToSections([
+      imageSection({
+        type: "elementImage",
+        id: "img-hyphen",
+        variant: "full-cover",
+        src: "/cover-hyphen.webp",
+        alt: "Cover hyphen",
+      }),
+    ]);
+    const fromFlat = applyBuilderElementDefaultsToSections([
+      imageSection({
+        type: "elementImage",
+        id: "img-flat",
+        variant: "fullcover",
+        src: "/cover-flat.webp",
+        alt: "Cover flat",
+      }),
+    ]);
+
+    for (const section of [fromWords, fromHyphen, fromFlat]) {
+      const image = (section[0] as unknown as { elements: Array<Record<string, unknown>> })
+        .elements[0]!;
+      expect(image.width).toBe("100%");
+      expect(image.height).toBe("100%");
+      expect(image.objectFit).toBe("cover");
+      expect(image.aspectRatio).toBeUndefined();
+    }
+  });
+
+  it("resolves heading/body/link aliases to canonical variants", () => {
+    const sections = applyBuilderElementDefaultsToSections([
+      imageSection({
+        type: "elementHeading",
+        id: "h-alias",
+        variant: "headline",
+        level: 1,
+        text: "Headline",
+      }),
+      imageSection({
+        type: "elementBody",
+        id: "b-alias",
+        variant: "body text",
+        text: "Body",
+      }),
+      imageSection({
+        type: "elementLink",
+        id: "l-alias",
+        variant: "navigation",
+        label: "Nav",
+        href: "/",
+        copyType: "body",
+      }),
+    ]);
+
+    const heading = (sections[0] as unknown as { elements: Array<Record<string, unknown>> })
+      .elements[0]!;
+    const body = (sections[1] as unknown as { elements: Array<Record<string, unknown>> })
+      .elements[0]!;
+    const link = (sections[2] as unknown as { elements: Array<Record<string, unknown>> })
+      .elements[0]!;
+
+    expect(heading.alignY).toBe("center");
+    expect(body.wordWrap).toBe(true);
+    expect(link.align).toBe("center");
+  });
+
   it("applies crop variant defaults including imageCrop", () => {
     const sections = applyBuilderElementDefaultsToSections([
       imageSection({

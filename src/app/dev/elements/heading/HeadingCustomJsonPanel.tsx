@@ -3,7 +3,6 @@ import {
   createVariantDiff,
   parseVariantJson,
   stringifyJson,
-  type CustomJsonMode,
 } from "@/app/dev/elements/image/custom-json";
 import { BASE_DEFAULTS } from "./constants";
 import type { HeadingVariantDefaults } from "./types";
@@ -14,7 +13,6 @@ export function HeadingCustomJsonPanel({
 }: {
   controller: HeadingElementDevController;
 }) {
-  const [mode, setMode] = useState<CustomJsonMode>("patch");
   const [text, setText] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -52,13 +50,12 @@ export function HeadingCustomJsonPanel({
       return;
     }
     const next = controller.normalizeVariant(
-      mode === "replace" ? BASE_DEFAULTS.variants[controller.activeVariant] : controller.active,
+      controller.active,
       parsed.value as Partial<HeadingVariantDefaults>
     );
-    if (mode === "replace") controller.setVariantExact(controller.activeVariant, next);
-    else controller.setVariantPatch(controller.activeVariant, next);
+    controller.setVariantExact(controller.activeVariant, next);
     setError(null);
-    setMessage(mode === "replace" ? "Applied JSON in replace mode." : "Applied JSON patch.");
+    setMessage("Applied JSON to create-custom draft.");
   };
 
   return (
@@ -67,22 +64,9 @@ export function HeadingCustomJsonPanel({
         <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
           Custom JSON
         </p>
-        <div className="inline-flex rounded border border-border/60 bg-background/60 p-0.5">
-          {(["patch", "replace"] as const).map((item) => (
-            <button
-              key={item}
-              type="button"
-              onClick={() => setMode(item)}
-              className={`rounded px-2 py-1 text-[10px] font-mono uppercase tracking-wide ${mode === item ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
       </div>
       <p className="text-[10px] text-muted-foreground">
-        Patch merges keys into this variant defaults object. Replace rebuilds from the neutral dev
-        preset base, then applies your JSON.
+        Custom JSON edits only the Create Custom draft. Built-in variants remain unchanged.
       </p>
       <textarea
         value={text}
@@ -110,7 +94,7 @@ export function HeadingCustomJsonPanel({
           onClick={applyJson}
           className="rounded border border-border px-2 py-1 text-[10px] font-mono text-foreground hover:bg-muted"
         >
-          Validate + Apply
+          Apply To Draft
         </button>
         <button
           type="button"

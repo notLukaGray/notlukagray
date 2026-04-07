@@ -19,7 +19,7 @@ export const TYPOGRAPHY_CATEGORY_LABELS: Record<TypographySettingsCategoryKey, s
 };
 
 export const DEFAULT_TYPOGRAPHY_VISIBLE_CATEGORIES: TypographyVisibleCategories = {
-  content: false,
+  content: true,
   layout: false,
   traits: false,
   animation: false,

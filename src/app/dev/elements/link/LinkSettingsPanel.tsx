@@ -8,7 +8,7 @@ import { LinkTraitsControls } from "./controls/LinkTraitsControls";
 import type { LinkElementDevController } from "./useLinkElementDevController";
 
 function getSettingsLabel(controller: LinkElementDevController): string {
-  return controller.isCustomVariant ? "Custom" : VARIANT_LABELS[controller.activeVariant];
+  return controller.isCustomVariant ? "Create Custom" : VARIANT_LABELS[controller.activeVariant];
 }
 
 export function LinkSettingsPanel({ controller }: { controller: LinkElementDevController }) {

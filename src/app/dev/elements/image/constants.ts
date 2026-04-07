@@ -56,6 +56,7 @@ export const VARIANT_LABELS: Record<PbImageVariantKey, string> = {
 };
 
 export const CATEGORY_LABELS: Record<SettingsCategoryKey, string> = {
+  content: "Content",
   layout: "Layout",
   traits: "Traits",
   animation: "Animation",

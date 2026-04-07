@@ -25,7 +25,7 @@ export type PersistedImageDefaultsLegacyV1 = {
   variants: Record<PbImageVariantKey, Omit<PbImageVariantDefaults, "animation">>;
 };
 
-export const CATEGORY_ORDER = ["layout", "traits", "animation", "runtime"] as const;
+export const CATEGORY_ORDER = ["content", "layout", "traits", "animation", "runtime"] as const;
 
 export type SettingsCategoryKey = (typeof CATEGORY_ORDER)[number];
 

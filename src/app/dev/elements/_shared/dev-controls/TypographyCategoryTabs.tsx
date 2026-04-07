@@ -6,14 +6,19 @@ import {
 } from "./typography-settings-categories";
 
 type Props = {
+  categories?: readonly TypographySettingsCategoryKey[];
   visibleCategories: TypographyVisibleCategories;
   toggleCategoryVisibility: (key: TypographySettingsCategoryKey) => void;
 };
 
-export function TypographyCategoryTabs({ visibleCategories, toggleCategoryVisibility }: Props) {
+export function TypographyCategoryTabs({
+  categories = TYPOGRAPHY_SETTINGS_CATEGORY_ORDER,
+  visibleCategories,
+  toggleCategoryVisibility,
+}: Props) {
   return (
     <div className="flex flex-wrap gap-2">
-      {TYPOGRAPHY_SETTINGS_CATEGORY_ORDER.map((category) => (
+      {categories.map((category) => (
         <button
           key={category}
           type="button"

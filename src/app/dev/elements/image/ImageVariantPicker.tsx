@@ -50,7 +50,7 @@ export function ImageVariantPicker({ controller }: { controller: ImageElementDev
           <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
             Variant
           </p>
-          <p className="mt-1 text-sm font-semibold text-foreground">Custom</p>
+          <p className="mt-1 text-sm font-semibold text-foreground">Create Custom</p>
         </button>
       </div>
     </section>

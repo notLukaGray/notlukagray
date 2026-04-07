@@ -31,6 +31,7 @@ import { useImageVariantActions } from "./use-image-variant-actions";
 import { useImagePreviewUpload } from "./use-image-preview-upload";
 
 const DEFAULT_VISIBLE_CATEGORIES: VisibleCategories = {
+  content: false,
   layout: false,
   traits: false,
   animation: false,

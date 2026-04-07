@@ -7,8 +7,8 @@ export function LinkDevHeader() {
       title="Link defaults"
       description={
         <>
-          Tune <code>elementLink</code> presets (body vs heading copy, link tokens, layout). Schema:{" "}
-          <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          Tune <code>elementLink</code> variants (body vs heading copy, link tokens, layout).
+          Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
         </>
       }
     />

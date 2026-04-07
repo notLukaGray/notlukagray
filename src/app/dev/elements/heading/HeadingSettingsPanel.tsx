@@ -8,7 +8,7 @@ import { HeadingTraitsControls } from "./controls/HeadingTraitsControls";
 import type { HeadingElementDevController } from "./useHeadingElementDevController";
 
 function getSettingsLabel(controller: HeadingElementDevController): string {
-  return controller.isCustomVariant ? "Custom" : VARIANT_LABELS[controller.activeVariant];
+  return controller.isCustomVariant ? "Create Custom" : VARIANT_LABELS[controller.activeVariant];
 }
 
 export function HeadingSettingsPanel({ controller }: { controller: HeadingElementDevController }) {

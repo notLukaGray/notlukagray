@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, useState, useCallback } from "react";
+import { useRef, useMemo, useState, useCallback, type CSSProperties } from "react";
 import type {
   ElementBlock,
   ModuleBlock,
@@ -27,10 +27,58 @@ type Props = Extract<ElementBlock, { type: "elementVideo" }> & {
   moduleConfig?: ModuleBlock;
 };
 
-function NoVideoSource() {
+function resolveAspectRatioValue(aspectRatio: Props["aspectRatio"]): string {
+  if (typeof aspectRatio === "string" && aspectRatio.trim().length > 0) return aspectRatio;
+  if (
+    Array.isArray(aspectRatio) &&
+    typeof aspectRatio[0] === "string" &&
+    aspectRatio[0].trim().length > 0
+  ) {
+    return aspectRatio[0];
+  }
+  return "16 / 9";
+}
+
+function NoVideoSource({ poster, aspectRatio }: { poster?: string; aspectRatio?: string }) {
+  const fallbackStyle: CSSProperties = {
+    display: "block",
+    width: "100%",
+    minHeight: "10rem",
+    aspectRatio: aspectRatio ?? "16 / 9",
+    borderRadius: "inherit",
+    overflow: "hidden",
+    backgroundColor: "rgba(255,255,255,0.06)",
+  };
+
+  if (poster && poster.trim().length > 0) {
+    return (
+      <span
+        className="relative"
+        style={{
+          ...fallbackStyle,
+          backgroundImage: `url("${poster}")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.75,
+        }}
+      >
+        <span className="pointer-events-none absolute inset-0 grid place-items-center text-[11px] uppercase tracking-[0.2em] text-white/70">
+          Video source missing
+        </span>
+      </span>
+    );
+  }
+
   return (
-    <span className="text-muted-foreground text-sm" role="status">
-      No video source.
+    <span
+      className="grid place-items-center text-[11px] uppercase tracking-[0.2em] text-white/65"
+      role="status"
+      style={fallbackStyle}
+    >
+      Video source missing
+      <span className="mt-1 block text-[9px] normal-case tracking-normal text-white/50">
+        Add a URL or Bunny key to see live playback.
+      </span>
     </span>
   );
 }
@@ -201,6 +249,7 @@ export function ElementVideo({
   });
   const showVideo = hasSource;
   const resolvedPoster = poster;
+  const resolvedAspectRatio = resolveAspectRatioValue(aspectRatio);
   const resolvedAriaLabel = (ariaLabel?.trim() || "Video").trim();
 
   const { contentSlotKey, slotsObj, useSectionSlots } = useMemo(
@@ -226,47 +275,50 @@ export function ElementVideo({
 
   const videoContent = moduleConfig ? (
     <VideoControlContext.Provider value={videoContextValue}>
-      {!hasSource && <NoVideoSource />}
-      {showVideo && src && (
-        <ElementVideoInteractiveContainer
-          containerRef={containerRef}
-          isFullscreen={state.isFullscreen}
-          onContextMenu={(e) => e.preventDefault()}
-          onTouchStart={() => {
-            armVideoLoad();
-            controls.showControlsTemporarily();
-          }}
-          onTouchEnd={undefined}
-          onMouseEnter={() => {
-            armVideoLoad();
-            controls.showControlsTemporarily();
-          }}
-          onMouseLeave={controls.scheduleHideControls}
-          onMouseMove={controls.showControlsTemporarily}
-          onClick={undefined}
-        >
-          <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>{videoCore}</div>
-          {useSectionSlots && showPlayButton && (
-            <ElementVideoSlotsOverlay
-              slotsObj={slotsObj as Record<string, unknown>}
-              contentSlotKey={contentSlotKey}
-              moduleConfig={moduleConfig}
-              showControls={state.showControls}
-              isPlaying={state.isPlaying}
-              isMuted={state.isMuted}
-              isFullscreen={state.isFullscreen}
-              onPointerEnter={controls.showControlsTemporarily}
-              onPointerLeave={controls.scheduleHideControls}
-              onPointerMove={controls.showControlsTemporarily}
-              onPointerDown={controls.showControlsTemporarily}
-            />
+      <ElementVideoInteractiveContainer
+        containerRef={containerRef}
+        isFullscreen={state.isFullscreen}
+        onContextMenu={(e) => e.preventDefault()}
+        onTouchStart={() => {
+          armVideoLoad();
+          controls.showControlsTemporarily();
+        }}
+        onTouchEnd={undefined}
+        onMouseEnter={() => {
+          armVideoLoad();
+          controls.showControlsTemporarily();
+        }}
+        onMouseLeave={controls.scheduleHideControls}
+        onMouseMove={controls.showControlsTemporarily}
+        onClick={undefined}
+      >
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          {showVideo && src ? (
+            videoCore
+          ) : (
+            <NoVideoSource poster={resolvedPoster} aspectRatio={resolvedAspectRatio} />
           )}
-        </ElementVideoInteractiveContainer>
-      )}
+        </div>
+        {useSectionSlots && showPlayButton && (
+          <ElementVideoSlotsOverlay
+            slotsObj={slotsObj as Record<string, unknown>}
+            contentSlotKey={contentSlotKey}
+            moduleConfig={moduleConfig}
+            showControls={state.showControls}
+            isPlaying={state.isPlaying}
+            isMuted={state.isMuted}
+            isFullscreen={state.isFullscreen}
+            onPointerEnter={controls.showControlsTemporarily}
+            onPointerLeave={controls.scheduleHideControls}
+            onPointerMove={controls.showControlsTemporarily}
+            onPointerDown={controls.showControlsTemporarily}
+          />
+        )}
+      </ElementVideoInteractiveContainer>
     </VideoControlContext.Provider>
   ) : (
     <>
-      {!hasSource && <NoVideoSource />}
+      {!hasSource && <NoVideoSource poster={resolvedPoster} aspectRatio={resolvedAspectRatio} />}
       {showVideo && src && (
         <span
           ref={containerRef}

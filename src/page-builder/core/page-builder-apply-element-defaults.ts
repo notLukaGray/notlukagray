@@ -47,28 +47,107 @@ function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
 }
 
+function normalizeVariantAlias(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_-]+/g, "");
+}
+
+function resolveVariantKey<K extends string>(
+  value: unknown,
+  variants: Record<K, unknown>,
+  fallback: K,
+  aliases?: Record<string, K>
+): K {
+  if (typeof value !== "string") return fallback;
+  const raw = value.trim();
+  if (!raw) return fallback;
+  if (raw in variants) return raw as K;
+
+  const normalized = normalizeVariantAlias(raw);
+  for (const key of Object.keys(variants) as K[]) {
+    if (normalizeVariantAlias(key) === normalized) return key;
+  }
+
+  if (aliases?.[normalized]) return aliases[normalized];
+  return fallback;
+}
+
+const IMAGE_VARIANT_ALIASES: Record<string, PbImageVariantKey> = {
+  cover: "fullCover",
+  full: "fullCover",
+  fullscreen: "fullCover",
+  fullbleed: "fullCover",
+  featured: "feature",
+  cropped: "crop",
+};
+
+const HEADING_VARIANT_ALIASES: Record<string, PbHeadingVariantKey> = {
+  headline: "display",
+  title: "display",
+  subheading: "section",
+  subhead: "section",
+  eyebrow: "label",
+  overline: "label",
+};
+
+const BODY_VARIANT_ALIASES: Record<string, PbBodyVariantKey> = {
+  intro: "lead",
+  paragraph: "standard",
+  body: "standard",
+  bodytext: "standard",
+  caption: "fine",
+  fineprint: "fine",
+  small: "fine",
+};
+
+const LINK_VARIANT_ALIASES: Record<string, PbLinkVariantKey> = {
+  primary: "inline",
+  cta: "emphasis",
+  navigation: "nav",
+  navbar: "nav",
+  menu: "nav",
+};
+
 function resolveImageVariantKey(value: unknown): PbImageVariantKey {
   const variants = pbBuilderDefaultsV1.elements.image.variants;
-  if (typeof value === "string" && value in variants) return value as PbImageVariantKey;
-  return pbBuilderDefaultsV1.elements.image.defaultVariant;
+  return resolveVariantKey(
+    value,
+    variants,
+    pbBuilderDefaultsV1.elements.image.defaultVariant,
+    IMAGE_VARIANT_ALIASES
+  );
 }
 
 function resolveHeadingVariantKey(value: unknown): PbHeadingVariantKey {
   const variants = pbBuilderDefaultsV1.elements.heading.variants;
-  if (typeof value === "string" && value in variants) return value as PbHeadingVariantKey;
-  return pbBuilderDefaultsV1.elements.heading.defaultVariant;
+  return resolveVariantKey(
+    value,
+    variants,
+    pbBuilderDefaultsV1.elements.heading.defaultVariant,
+    HEADING_VARIANT_ALIASES
+  );
 }
 
 function resolveBodyVariantKey(value: unknown): PbBodyVariantKey {
   const variants = pbBuilderDefaultsV1.elements.body.variants;
-  if (typeof value === "string" && value in variants) return value as PbBodyVariantKey;
-  return pbBuilderDefaultsV1.elements.body.defaultVariant;
+  return resolveVariantKey(
+    value,
+    variants,
+    pbBuilderDefaultsV1.elements.body.defaultVariant,
+    BODY_VARIANT_ALIASES
+  );
 }
 
 function resolveLinkVariantKey(value: unknown): PbLinkVariantKey {
   const variants = pbBuilderDefaultsV1.elements.link.variants;
-  if (typeof value === "string" && value in variants) return value as PbLinkVariantKey;
-  return pbBuilderDefaultsV1.elements.link.defaultVariant;
+  return resolveVariantKey(
+    value,
+    variants,
+    pbBuilderDefaultsV1.elements.link.defaultVariant,
+    LINK_VARIANT_ALIASES
+  );
 }
 
 function mergeMissingFromTemplate(

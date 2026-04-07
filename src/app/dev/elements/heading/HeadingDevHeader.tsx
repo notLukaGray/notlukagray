@@ -7,7 +7,7 @@ export function HeadingDevHeader() {
       title="Heading defaults"
       description={
         <>
-          Tune <code>elementHeading</code> presets, preview with real typography classes, then copy
+          Tune <code>elementHeading</code> variants, preview with real typography classes, then copy
           JSON. Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
         </>
       }

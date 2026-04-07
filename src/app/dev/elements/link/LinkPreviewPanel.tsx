@@ -17,7 +17,7 @@ export function LinkPreviewPanel({ controller }: { controller: LinkElementDevCon
   const hiddenByVisibleWhen =
     controller.runtimeDraft.visibleWhenEnabled && !runtimePreview.visibleWhenMatches;
   const variantLabel = controller.isCustomVariant
-    ? "Custom"
+    ? "Create Custom"
     : VARIANT_LABELS[controller.activeVariant];
 
   return (

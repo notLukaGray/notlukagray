@@ -8,7 +8,7 @@ import { BodyTraitsControls } from "./controls/BodyTraitsControls";
 import type { BodyElementDevController } from "./useBodyElementDevController";
 
 function getSettingsLabel(controller: BodyElementDevController): string {
-  return controller.isCustomVariant ? "Custom" : VARIANT_LABELS[controller.activeVariant];
+  return controller.isCustomVariant ? "Create Custom" : VARIANT_LABELS[controller.activeVariant];
 }
 
 export function BodySettingsPanel({ controller }: { controller: BodyElementDevController }) {

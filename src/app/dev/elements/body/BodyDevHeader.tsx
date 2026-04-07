@@ -7,7 +7,7 @@ export function BodyDevHeader() {
       title="Body defaults"
       description={
         <>
-          Tune presets for <code>elementBody</code> and copy JSON. Schema:{" "}
+          Tune variants for <code>elementBody</code> and copy JSON. Schema:{" "}
           <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
         </>
       }

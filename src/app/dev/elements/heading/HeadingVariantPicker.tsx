@@ -8,7 +8,7 @@ export function HeadingVariantPicker({ controller }: { controller: HeadingElemen
         Variant picker
       </p>
       <p className="text-[10px] text-muted-foreground">
-        Presets match `elementHeadingSchema` + `elementLayoutSchema`. Variant seeds start from the
+        Variants match `elementHeadingSchema` + `elementLayoutSchema`. Variant seeds start from the
         neutral dev foundation baseline.
       </p>
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
@@ -41,7 +41,7 @@ export function HeadingVariantPicker({ controller }: { controller: HeadingElemen
           <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
             Variant
           </p>
-          <p className="mt-1 text-sm font-semibold text-foreground">Custom</p>
+          <p className="mt-1 text-sm font-semibold text-foreground">Create Custom</p>
         </button>
       </div>
     </section>

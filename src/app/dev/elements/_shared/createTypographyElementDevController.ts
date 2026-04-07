@@ -40,6 +40,7 @@ export function createTypographyElementDevController<
     const [variants, setVariants] = useState<Record<K, V>>(options.defaults.variants);
     const [activeVariant, setActiveVariant] = useState<K>(options.defaults.defaultVariant);
     const [isCustomVariant, setIsCustomVariant] = useState(false);
+    const [customVariant, setCustomVariant] = useState<V | null>(null);
     const [hydrated, setHydrated] = useState(false);
     const [copied, setCopied] = useState(false);
     const [visibleCategories, setVisibleCategories] = useState<TypographyVisibleCategories>(
@@ -89,9 +90,19 @@ export function createTypographyElementDevController<
         window.removeEventListener(WORKBENCH_SESSION_CHANGED_EVENT, syncFromSession);
       };
     }, [hydrated]);
-    const updateVariant = useCallback((key: K, apply: (v: V) => V) => {
-      setVariants((prev) => ({ ...prev, [key]: apply(prev[key]) }));
-    }, []);
+    const updateVariant = useCallback(
+      (key: K, apply: (v: V) => V) => {
+        if (isCustomVariant) {
+          setCustomVariant((prev) => {
+            const base = prev ?? variants[activeVariant];
+            return apply(base);
+          });
+          return;
+        }
+        setVariants((prev) => ({ ...prev, [key]: apply(prev[key]) }));
+      },
+      [activeVariant, isCustomVariant, variants]
+    );
     const setVariantPatch = useCallback(
       (key: K, patch: Partial<V>) => updateVariant(key, (variant) => ({ ...variant, ...patch })),
       [updateVariant]
@@ -137,47 +148,57 @@ export function createTypographyElementDevController<
       [updateVariant]
     );
     const setEntranceCurvePreset = useCallback(
-      (key: K, preset: PbImageAnimationCurvePreset) =>
+      (key: K, preset: PbImageAnimationCurvePreset) => {
+        const source = isCustomVariant ? (customVariant ?? variants[activeVariant]) : variants[key];
         patchEntranceFineTune(key, {
-          curve: { ...variants[key].animation.fineTune.entrance.curve, preset },
-        }),
-      [patchEntranceFineTune, variants]
+          curve: { ...source.animation.fineTune.entrance.curve, preset },
+        });
+      },
+      [activeVariant, customVariant, isCustomVariant, patchEntranceFineTune, variants]
     );
     const setExitCurvePreset = useCallback(
-      (key: K, preset: PbImageAnimationCurvePreset) =>
+      (key: K, preset: PbImageAnimationCurvePreset) => {
+        const source = isCustomVariant ? (customVariant ?? variants[activeVariant]) : variants[key];
         patchExitFineTune(key, {
-          curve: { ...variants[key].animation.fineTune.exit.curve, preset },
-        }),
-      [patchExitFineTune, variants]
+          curve: { ...source.animation.fineTune.exit.curve, preset },
+        });
+      },
+      [activeVariant, customVariant, isCustomVariant, patchExitFineTune, variants]
     );
     const setEntranceBezierValue = useCallback(
-      (key: K, index: number, value: number) =>
+      (key: K, index: number, value: number) => {
+        const source = isCustomVariant ? (customVariant ?? variants[activeVariant]) : variants[key];
         patchEntranceFineTune(key, {
           curve: {
-            ...variants[key].animation.fineTune.entrance.curve,
-            customBezier: variants[key].animation.fineTune.entrance.curve.customBezier.map(
-              (entry, i) => (i === index ? value : entry)
+            ...source.animation.fineTune.entrance.curve,
+            customBezier: source.animation.fineTune.entrance.curve.customBezier.map((entry, i) =>
+              i === index ? value : entry
             ) as [number, number, number, number],
           },
-        }),
-      [patchEntranceFineTune, variants]
+        });
+      },
+      [activeVariant, customVariant, isCustomVariant, patchEntranceFineTune, variants]
     );
     const setExitBezierValue = useCallback(
-      (key: K, index: number, value: number) =>
+      (key: K, index: number, value: number) => {
+        const source = isCustomVariant ? (customVariant ?? variants[activeVariant]) : variants[key];
         patchExitFineTune(key, {
           curve: {
-            ...variants[key].animation.fineTune.exit.curve,
-            customBezier: variants[key].animation.fineTune.exit.curve.customBezier.map(
-              (entry, i) => (i === index ? value : entry)
+            ...source.animation.fineTune.exit.curve,
+            customBezier: source.animation.fineTune.exit.curve.customBezier.map((entry, i) =>
+              i === index ? value : entry
             ) as [number, number, number, number],
           },
-        }),
-      [patchExitFineTune, variants]
+        });
+      },
+      [activeVariant, customVariant, isCustomVariant, patchExitFineTune, variants]
     );
     const setRuntimePatch = useCallback((patch: Partial<ImageRuntimeDraft>) => {
       setRuntimeDraft((prev) => ({ ...prev, ...patch }));
     }, []);
-    const active = variants[activeVariant];
+    const active = isCustomVariant
+      ? (customVariant ?? variants[activeVariant])
+      : variants[activeVariant];
     const runtimePreview = useMemo(() => buildRuntimePreviewState(runtimeDraft), [runtimeDraft]);
     const motionPreview = useTypographyMotionPreview(active as unknown as Record<string, unknown>);
     const { resetMotionPreview } = motionPreview;
@@ -205,6 +226,7 @@ export function createTypographyElementDevController<
       setVariants(options.defaults.variants);
       setActiveVariant(options.defaults.defaultVariant);
       setIsCustomVariant(false);
+      setCustomVariant(null);
       setVisibleCategories(DEFAULT_TYPOGRAPHY_VISIBLE_CATEGORIES);
       setRuntimeDraft(DEFAULT_IMAGE_RUNTIME_DRAFT);
       resetMotionPreview();
@@ -240,7 +262,10 @@ export function createTypographyElementDevController<
       showPresetControls: ft.entranceBehavior !== "custom" || ft.exitBehavior !== "custom",
       toggleCategoryVisibility: (key: TypographySettingsCategoryKey) =>
         setVisibleCategories((prev) => ({ ...prev, [key]: !prev[key] })),
-      selectCustomVariant: () => setIsCustomVariant(true),
+      selectCustomVariant: () => {
+        setCustomVariant(JSON.parse(JSON.stringify(variants[activeVariant])) as V);
+        setIsCustomVariant(true);
+      },
       selectVariant: (key: K) => {
         setActiveVariant(key);
         setIsCustomVariant(false);

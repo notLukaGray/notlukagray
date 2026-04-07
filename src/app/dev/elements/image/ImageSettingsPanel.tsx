@@ -2,13 +2,14 @@ import { VARIANT_LABELS } from "./constants";
 import { ImageCategoryTabs } from "./ImageCategoryTabs";
 import type { ImageElementDevController } from "./useImageElementDevController";
 import { ImageAnimationControls } from "./controls/ImageAnimationControls";
+import { ImageContentControls } from "./controls/ImageContentControls";
 import { ImageLayoutControls } from "./controls/ImageLayoutControls";
 import { ImageRuntimeControls } from "./controls/ImageRuntimeControls";
 import { ImageTraitsControls } from "./controls/ImageTraitsControls";
 
 export function ImageSettingsPanel({ controller }: { controller: ImageElementDevController }) {
   const settingsLabel = controller.isCustomVariant
-    ? "Custom"
+    ? "Create Custom"
     : VARIANT_LABELS[controller.activeVariant];
   const hasAnyCategoryVisible = Object.values(controller.visibleCategories).some(Boolean);
 
@@ -25,6 +26,9 @@ export function ImageSettingsPanel({ controller }: { controller: ImageElementDev
       <ImageCategoryTabs controller={controller} />
       {hasAnyCategoryVisible ? (
         <div className="grid gap-4 sm:grid-cols-2">
+          {controller.visibleCategories.content ? (
+            <ImageContentControls controller={controller} />
+          ) : null}
           {controller.visibleCategories.layout ? (
             <ImageLayoutControls controller={controller} />
           ) : null}
@@ -40,8 +44,8 @@ export function ImageSettingsPanel({ controller }: { controller: ImageElementDev
         </div>
       ) : (
         <div className="rounded border border-border/60 bg-muted/20 px-3 py-2 text-[10px] text-muted-foreground">
-          Layout, Traits, Animation, and Runtime start minimized. Use the section toggles above to
-          expand what you want to edit.
+          Content, Layout, Traits, Animation, and Runtime start minimized. Use the section toggles
+          above to expand what you want to edit.
         </div>
       )}
     </section>

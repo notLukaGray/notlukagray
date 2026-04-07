@@ -1,0 +1,194 @@
+{
+  "type": "module",
+  "contextType": "video",
+  "contentSlot": "main",
+  "container": {
+    "padding": "8px",
+    "borderRadius": "12px"
+  },
+  "behavior": {
+    "sleepAfterMs": 1800,
+    "sleepFadeMs": 500,
+    "controlsTransitionMs": 280,
+    "controlsTransitionEasing": "easeOut",
+    "transitionEasing": "easeOut",
+    "feedbackDurationMs": 100
+  },
+  "overlayMotion": {
+    "initial": {
+      "opacity": 0
+    },
+    "animate": {
+      "opacity": 1
+    },
+    "transition": {
+      "duration": 0.5,
+      "ease": "easeOut"
+    },
+    "whileHover": {},
+    "whileTap": {
+      "scale": 1,
+      "opacity": 1
+    },
+    "whileFocus": {
+      "opacity": 1
+    }
+  },
+  "slots": {
+    "main": {
+      "position": "absolute",
+      "inset": "0",
+      "zIndex": 0
+    },
+    "bottomBar": {
+      "position": "absolute",
+      "bottom": "8px",
+      "left": "8px",
+      "right": "8px",
+      "zIndex": 10,
+      "display": "flex",
+      "flexDirection": "row",
+      "alignItems": "center",
+      "justifyContent": "flex-start",
+      "height": "32px",
+      "gap": "2px",
+      "visibleWhen": ["awake"],
+      "transformInherit": "disable",
+      "slotWrapperGestures": false,
+      "wrapperMotion": {
+        "whileHover": {
+          "opacity": 1
+        },
+        "whileTap": {
+          "opacity": 1
+        },
+        "whileFocus": {
+          "opacity": 1
+        }
+      },
+      "defaultWrapperStyle": {
+        "width": "32px",
+        "height": "32px",
+        "minWidth": "32px",
+        "minHeight": "32px"
+      },
+      "style": {
+        "background": "linear-gradient(270deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%)",
+        "backdropFilter": "blur(8px)",
+        "WebkitBackdropFilter": "blur(8px)",
+        "borderRadius": "9999px"
+      },
+      "section": {
+        "elementOrder": ["seek-wrap", "right-controls"],
+        "definitions": {
+          "left-controls": {
+            "type": "elementGroup",
+            "width": "88px",
+            "height": "44px",
+            "display": "flex",
+            "flexDirection": "row",
+            "alignItems": "center",
+            "padding": "0",
+            "gap": "0px",
+            "section": {
+              "elementOrder": ["ui-play", "ui-pause", "mute-btn", "unmute-btn"],
+              "definitions": {
+                "ui-play": {
+                  "preset": "video-controls-play-bar",
+                  "action": "assetTogglePlay",
+                  "showWhen": "assetPaused",
+                  "wrapperStyle": {
+                    "transform": "translateY(1px)"
+                  }
+                },
+                "ui-pause": {
+                  "preset": "video-controls-pause-bar",
+                  "action": "assetTogglePlay",
+                  "showWhen": "assetPlaying",
+                  "wrapperStyle": {
+                    "transform": "translateY(1px)"
+                  }
+                },
+                "mute-btn": {
+                  "preset": "video-controls-mute-bar",
+                  "action": "assetMute",
+                  "showWhen": "assetUnmuted",
+                  "wrapperStyle": {
+                    "transform": "translateY(1px)"
+                  }
+                },
+                "unmute-btn": {
+                  "preset": "video-controls-unmute-bar",
+                  "action": "assetMute",
+                  "showWhen": "assetMuted",
+                  "wrapperStyle": {
+                    "transform": "translateY(1px)"
+                  }
+                }
+              }
+            }
+          },
+          "seek-wrap": {
+            "type": "elementGroup",
+            "flex": "1",
+            "height": "32px",
+            "display": "flex",
+            "flexDirection": "row",
+            "alignItems": "center",
+            "justifyContent": "center",
+            "padding": "0 8px",
+            "section": {
+              "elementOrder": ["seek"],
+              "definitions": {
+                "seek": {
+                  "preset": "video-controls-seek",
+                  "wrapperStyle": {
+                    "width": "100%",
+                    "height": "20px"
+                  },
+                  "width": "100%",
+                  "height": "20px",
+                  "style": {
+                    "trackColor": "rgba(255,255,255,0.38)",
+                    "fillColor": "#FFFFFF",
+                    "trackHeight": "3px",
+                    "thumbSize": "10px"
+                  }
+                }
+              }
+            }
+          },
+          "right-controls": {
+            "type": "elementGroup",
+            "width": "hug",
+            "display": "flex",
+            "flexDirection": "row",
+            "alignItems": "center",
+            "justifyContent": "flex-end",
+            "gap": "2px",
+            "section": {
+              "elementOrder": ["time", "fullscreen", "minimize"],
+              "definitions": {
+                "time": {
+                  "preset": "video-controls-time",
+                  "paddingLeft": "4px",
+                  "paddingRight": "4px"
+                },
+                "fullscreen": {
+                  "preset": "video-controls-fullscreen-bar",
+                  "action": "videoFullscreen",
+                  "showWhen": "videoContained"
+                },
+                "minimize": {
+                  "preset": "video-controls-minimize-bar",
+                  "action": "videoFullscreen",
+                  "showWhen": "videoFullscreen"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
