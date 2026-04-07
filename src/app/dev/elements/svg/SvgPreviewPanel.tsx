@@ -6,6 +6,8 @@ import type { SvgElementDevController } from "./useSvgElementDevController";
 
 export function SvgPreviewPanel({ controller }: { controller: SvgElementDevController }) {
   const { runtimePreview } = controller;
+  const hasMarkup =
+    typeof controller.active.markup === "string" && controller.active.markup.trim().length > 0;
   const previewBlock = useMemo(
     () =>
       buildResolvedTypographyWorkbenchBlock(controller.runtimeDraft, {
@@ -22,20 +24,32 @@ export function SvgPreviewPanel({ controller }: { controller: SvgElementDevContr
     : VARIANT_LABELS[controller.activeVariant];
 
   return (
-    <TypographyLiveMotionPreview
-      previewVisible={controller.previewVisible}
-      previewKey={controller.previewKey}
-      autoLoop={controller.autoLoop}
-      setAutoLoop={controller.setAutoLoop}
-      animateInPreview={controller.animateInPreview}
-      animateOutPreview={controller.animateOutPreview}
-      showPreview={controller.showPreview}
-      variantLabel={variantLabel}
-      hiddenByVisibleWhen={hiddenByVisibleWhen}
-      runtimeDraft={controller.runtimeDraft}
-      previewBlock={previewBlock}
-      onPreviewExitComplete={controller.onPreviewExitComplete}
-      animationSource={controller.active.animation}
-    />
+    <div className="space-y-3">
+      <TypographyLiveMotionPreview
+        previewVisible={controller.previewVisible}
+        previewKey={controller.previewKey}
+        autoLoop={controller.autoLoop}
+        setAutoLoop={controller.setAutoLoop}
+        animateInPreview={controller.animateInPreview}
+        animateOutPreview={controller.animateOutPreview}
+        showPreview={controller.showPreview}
+        variantLabel={variantLabel}
+        hiddenByVisibleWhen={hiddenByVisibleWhen}
+        runtimeDraft={controller.runtimeDraft}
+        previewBlock={previewBlock}
+        onPreviewExitComplete={controller.onPreviewExitComplete}
+        animationSource={controller.active.animation}
+      />
+      {!hasMarkup ? (
+        <div className="rounded border border-border/60 bg-muted/10 px-3 py-2">
+          <p className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
+            Missing Fields
+          </p>
+          <p className="mt-1 text-[10px] text-muted-foreground">
+            Markup is empty, so preview falls back to starter SVG content.
+          </p>
+        </div>
+      ) : null}
+    </div>
   );
 }

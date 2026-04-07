@@ -11,8 +11,13 @@ function getSettingsLabel(controller: VectorElementDevController): string {
   return controller.isCustomVariant ? "Create Custom" : VARIANT_LABELS[controller.activeVariant];
 }
 
+function getContentScopeKey(controller: VectorElementDevController): string {
+  return `${controller.activeVariant}-${controller.isCustomVariant ? "custom" : "variant"}`;
+}
+
 export function VectorSettingsPanel({ controller }: { controller: VectorElementDevController }) {
   const settingsLabel = getSettingsLabel(controller);
+  const contentScopeKey = getContentScopeKey(controller);
   const hasAnyCategoryVisible = Object.values(controller.visibleCategories).some(Boolean);
 
   return (
@@ -38,7 +43,7 @@ export function VectorSettingsPanel({ controller }: { controller: VectorElementD
       {hasAnyCategoryVisible ? (
         <div className="grid gap-4 sm:grid-cols-2">
           {controller.visibleCategories.content ? (
-            <VectorContentControls controller={controller} />
+            <VectorContentControls key={contentScopeKey} controller={controller} />
           ) : null}
           {controller.visibleCategories.layout ? (
             <VectorLayoutControls controller={controller} />

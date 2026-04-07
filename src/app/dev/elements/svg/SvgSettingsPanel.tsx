@@ -11,8 +11,13 @@ function getSettingsLabel(controller: SvgElementDevController): string {
   return controller.isCustomVariant ? "Create Custom" : VARIANT_LABELS[controller.activeVariant];
 }
 
+function getContentScopeKey(controller: SvgElementDevController): string {
+  return `${controller.activeVariant}-${controller.isCustomVariant ? "custom" : "variant"}`;
+}
+
 export function SvgSettingsPanel({ controller }: { controller: SvgElementDevController }) {
   const settingsLabel = getSettingsLabel(controller);
+  const contentScopeKey = getContentScopeKey(controller);
   const hasAnyCategoryVisible = Object.values(controller.visibleCategories).some(Boolean);
 
   return (
@@ -38,7 +43,7 @@ export function SvgSettingsPanel({ controller }: { controller: SvgElementDevCont
       {hasAnyCategoryVisible ? (
         <div className="grid gap-4 sm:grid-cols-2">
           {controller.visibleCategories.content ? (
-            <SvgContentControls controller={controller} />
+            <SvgContentControls key={contentScopeKey} controller={controller} />
           ) : null}
           {controller.visibleCategories.layout ? (
             <SvgLayoutControls controller={controller} />
