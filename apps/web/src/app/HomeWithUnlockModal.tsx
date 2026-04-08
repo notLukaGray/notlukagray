@@ -2,6 +2,7 @@
 
 import type { ModalProps } from "@pb/core";
 import { ModalRenderer } from "@pb/runtime-react/modal";
+import { DeviceTypeProvider as RuntimeDeviceTypeProvider } from "@pb/runtime-react/core/providers/device-type-provider";
 
 type Props = {
   children: React.ReactNode;
@@ -16,7 +17,11 @@ export function HomeWithUnlockModal({ children, unlockModalProps }: Props) {
   return (
     <>
       {children}
-      {unlockModalProps && <ModalRenderer {...unlockModalProps} />}
+      {unlockModalProps && (
+        <RuntimeDeviceTypeProvider>
+          <ModalRenderer {...unlockModalProps} />
+        </RuntimeDeviceTypeProvider>
+      )}
     </>
   );
 }
