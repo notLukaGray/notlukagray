@@ -26,14 +26,18 @@ import {
   pageBuilderSchema,
   pageBuilderDefinitionBlockSchema,
   moduleBlockSchema,
-} from "../src/page-builder/core/page-builder-schemas";
+} from "@pb/contracts";
 
 // Sections file: work/slug-sections.json has only { definitions: { ... } }
 const definitionsFileSchema = z.object({
   definitions: z.record(z.string(), pageBuilderDefinitionBlockSchema),
 });
 
-const SCHEMAS_DIR = path.join(process.cwd(), "src/content/schemas");
+const APP_ROOT = fs.existsSync(path.join(process.cwd(), "src/content"))
+  ? process.cwd()
+  : path.join(process.cwd(), "apps/web");
+
+const SCHEMAS_DIR = path.join(APP_ROOT, "src/content/schemas");
 
 const toJSONSchemaOptions = {
   target: "draft-2020-12" as const,

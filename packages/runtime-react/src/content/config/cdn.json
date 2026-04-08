@@ -1,0 +1,35 @@
+{
+  "cdnBase": "https://media.notlukagray.com/website",
+  "cdn": {
+    "tokenExpiryDays": 7,
+    "clientCacheExpiryHours": 168,
+    "apiCacheMaxAge": 2592000,
+    "apiCacheStaleWhileRevalidate": 86400,
+    "allowedExtensions": [
+      ".webm",
+      ".mp4",
+      ".webp",
+      ".jpg",
+      ".jpeg",
+      ".png",
+      ".glb",
+      ".gltf",
+      ".exr",
+      ".hdr"
+    ],
+    "images": {
+      "defaultWidth": 1200,
+      "defaultPosterWidth": 1920,
+      "posterWidth": 1280,
+      "posterQuality": 60,
+      "mobileMaxWidth": 768,
+      "mobileMaxWidth2x": 1536,
+      "defaultQuality": 75,
+      "defaultFormat": "webp",
+      "defaultAspectRatio": null,
+      "posterAspectRatio": "16/9",
+      "class": null,
+      "posterClass": null
+    }
+  }
+}

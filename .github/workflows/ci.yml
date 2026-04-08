@@ -25,6 +25,11 @@ jobs:
       - name: Check (type-check, lint, format)
         run: npm run check
 
+      - name: Boundary lint
+        run: npm run lint:boundaries
+
       - name: Build
         run: npm run build
 
+      - name: Route budget check
+        run: npm run check:route-budgets

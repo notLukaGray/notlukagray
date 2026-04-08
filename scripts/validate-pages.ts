@@ -8,11 +8,11 @@
 import {
   runPageBuilderValidation,
   summarizeValidation,
-} from "../src/page-builder/dev/page-builder-validation";
+} from "../packages/runtime-react/src/page-builder/dev/page-builder-validation";
 import fs from "fs";
 import path from "path";
-import { discoverAllPages } from "../src/page-builder/core/load/page-builder-discover-pages";
-import { parseJsonSafe } from "../src/page-builder/core/load/page-builder-load-io";
+import { discoverAllPages } from "@pb/core";
+import { parseJsonSafe } from "@pb/core/internal/load/page-builder-load-io";
 
 interface ValidateConfig {
   slugs: string[];
@@ -28,10 +28,11 @@ type SectionWaiverConfig = {
   pages?: Record<string, string[]>;
 };
 
-const SECTION_WAIVER_PATH = path.join(
-  process.cwd(),
-  "src/content/config/section-file-waivers.json"
-);
+const APP_ROOT = fs.existsSync(path.join(process.cwd(), "src/content"))
+  ? process.cwd()
+  : path.join(process.cwd(), "apps/web");
+
+const SECTION_WAIVER_PATH = path.join(APP_ROOT, "src/content/config/section-file-waivers.json");
 
 function parseArgs(argv: string[]): ValidateConfig {
   const slugs = argv.length > 0 ? argv : [];

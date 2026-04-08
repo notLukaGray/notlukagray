@@ -1,0 +1,23 @@
+{
+  "name": "@pb/core",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./host-config": "./src/host-config.ts",
+    "./defaults": "./src/defaults.ts",
+    "./expand": "./src/expand.ts",
+    "./internal/*": "./src/internal/*.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run src/internal/*.test.ts src/internal/**/*.test.ts"
+  },
+  "dependencies": {
+    "@pb/contracts": "1.0.0"
+  }
+}

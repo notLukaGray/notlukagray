@@ -1,0 +1,23 @@
+{
+  "name": "@pb/contracts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./capability-schemas": "./src/capability-schemas.ts",
+    "./version": "./src/version.ts"
+  },
+  "files": [
+    "src",
+    "dist",
+    "fixtures"
+  ],
+  "scripts": {
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "generate-schemas": "tsx scripts/generate-schemas.ts"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
+}

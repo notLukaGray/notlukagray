@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "generatedAt": "2026-04-08T12:34:41.011Z",
+  "routes": {
+    "/": {
+      "bytes": 1408275,
+      "chunkCount": 10
+    },
+    "/[...slug]": {
+      "bytes": 1768778,
+      "chunkCount": 14
+    },
+    "/playground": {
+      "bytes": 1781695,
+      "chunkCount": 13
+    },
+    "/style-guide": {
+      "bytes": 259050,
+      "chunkCount": 5
+    },
+    "/unlock": {
+      "bytes": 1767694,
+      "chunkCount": 13
+    }
+  },
+  "exceptions": {}
+}
