@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import { cdnBase } from "./src/core/lib/globals";
+import { cdnBase } from "./apps/web/src/core/lib/globals";
 
 function getCdnHostname(url: string): string | null {
   try {
@@ -42,7 +42,7 @@ const nextConfig: NextConfig = {
           },
         ],
         loader: "custom",
-        loaderFile: "./src/core/lib/next-image-loader.ts",
+        loaderFile: "./apps/web/src/core/lib/next-image-loader.ts",
       }
     : undefined,
 };

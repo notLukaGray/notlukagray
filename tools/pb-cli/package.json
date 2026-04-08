@@ -1,0 +1,13 @@
+{
+  "name": "@pb/pb-cli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "cli": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@pb/contracts": "1.0.0",
+    "@pb/sdk": "1.0.0"
+  }
+}

@@ -24,21 +24,87 @@ const eslintConfig = defineConfig([
       "no-var": "error",
       "object-shorthand": "error",
       "prefer-arrow-callback": "error",
+      "@next/next/no-html-link-for-pages": "off",
     },
   },
 
   {
-    files: ["scripts*.ts"],
+    files: ["scripts/*.ts", "scripts/**/*.ts"],
     rules: {
       "no-console": "off",
     },
   },
 
   {
-    files: ["src/page-builder/elements/ElementImage.tsx"],
+    files: [
+      "src/page-builder/elements/ElementImage.tsx",
+      "apps/web/src/page-builder/elements/ElementImage.tsx",
+      "packages/runtime-react/src/page-builder/elements/ElementImage.tsx",
+    ],
     rules: {
       // Intrinsic/hug sizing branch intentionally uses a native <img>.
       "@next/next/no-img-element": "off",
+    },
+  },
+
+  {
+    files: [
+      "src/page-builder/core/**/*.{ts,tsx}",
+      "apps/web/src/page-builder/core/**/*.{ts,tsx}",
+      "packages/core/src/internal/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/app/**"],
+              message:
+                "src/page-builder/core/** cannot import from src/app/**. Use the host config adapter instead.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    files: ["src/core/**/*.{ts,tsx}", "apps/web/src/core/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/page-builder/**"],
+              message: "src/core/** cannot import from src/page-builder/**.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+
+  {
+    files: [
+      "src/page-builder/elements/**/*.{ts,tsx}",
+      "apps/web/src/page-builder/elements/**/*.{ts,tsx}",
+      "packages/runtime-react/src/page-builder/elements/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/app/theme/**"],
+              message:
+                "src/page-builder/elements/** cannot import app theme modules directly. Use the host config adapter.",
+            },
+          ],
+        },
+      ],
     },
   },
 
@@ -61,7 +127,12 @@ const eslintConfig = defineConfig([
   },
 
   {
-    files: ["src/app/dev/**/*.{ts,tsx}", "src/devtools/app-dev/**/*.{ts,tsx}"],
+    files: [
+      "src/app/dev/**/*.{ts,tsx}",
+      "src/devtools/app-dev/**/*.{ts,tsx}",
+      "apps/web/src/app/dev/**/*.{ts,tsx}",
+      "apps/web/src/devtools/app-dev/**/*.{ts,tsx}",
+    ],
     rules: {
       complexity: ["error", 8],
       "max-lines": [
@@ -76,10 +147,14 @@ const eslintConfig = defineConfig([
   },
 
   globalIgnores([
+    "**/.next/**",
     ".next/**",
+    "apps/web/.next/**",
     "out/**",
+    "apps/web/out/**",
     "build/**",
     "next-env.d.ts",
+    "apps/web/next-env.d.ts",
 
     ".claude/**",
 

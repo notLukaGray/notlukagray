@@ -24,7 +24,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/page-builder/*": ["./packages/runtime-react/src/page-builder/*"],
+      "@pb/runtime-react/*": ["./packages/runtime-react/src/*"],
+      "@/core/*": ["./apps/web/src/core/*"],
+      "@/content/*": ["./apps/web/src/content/*"],
+      "@/*": ["./apps/web/src/*"]
     }
   },
   "include": [
@@ -35,5 +39,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", ".dead", "tools", "temp"]
+  "exclude": ["node_modules", ".dead", "tools", "packages", "temp"]
 }

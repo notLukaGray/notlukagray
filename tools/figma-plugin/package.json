@@ -15,6 +15,7 @@
     "typescript": "5.9.3"
   },
   "dependencies": {
+    "@pb/contracts": "1.0.0",
     "@figma-plugin/helpers": "0.15.2",
     "jszip": "3.10.1"
   }

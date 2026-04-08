@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "@pb/contracts/1.0.0/capability-importer.schema.json",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "importer"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "supportedContractVersions": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "supportedElementTypes": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "supportedSectionTypes": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "diagnosticCodes": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "type",
+    "name",
+    "version",
+    "supportedContractVersions",
+    "supportedElementTypes",
+    "supportedSectionTypes",
+    "diagnosticCodes"
+  ],
+  "additionalProperties": false
+}

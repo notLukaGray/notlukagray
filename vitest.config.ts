@@ -7,8 +7,23 @@ export default defineConfig({
     include: ["**/*.test.ts", "**/*.test.tsx"],
   },
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
+    alias: [
+      {
+        find: "@/page-builder",
+        replacement: path.resolve(__dirname, "./packages/runtime-react/src/page-builder"),
+      },
+      {
+        find: "@/core",
+        replacement: path.resolve(__dirname, "./apps/web/src/core"),
+      },
+      {
+        find: "@/content",
+        replacement: path.resolve(__dirname, "./apps/web/src/content"),
+      },
+      {
+        find: "@",
+        replacement: path.resolve(__dirname, "./apps/web/src"),
+      },
+    ],
   },
 });

@@ -1,0 +1,26 @@
+{
+  "ui": {
+    "preloadMinDurationMs": 3000,
+    "resizeDebounceMs": 50,
+    "canvasLoadTimeoutMs": 5000,
+    "crossfadeDurationMs": 400,
+    "videoPauseButtonHideDelayMs": 2000,
+    "video": {
+      "doubleTapThresholdMs": 450,
+      "holdThresholdMs": 400,
+      "holdRepeatMs": 500,
+      "feedbackDurationMs": 500,
+      "slotExpandDurationMs": 400,
+      "slotElementRevealMs": 300,
+      "slotElementRevealStaggerMs": 50,
+      "slotTransitionMs": 500,
+      "slotTransitionEasing": "ease",
+      "seekBackSeconds": 10,
+      "seekForwardSeconds": 30,
+      "defaultAspectRatio": "16/9"
+    }
+  },
+  "cache": {
+    "videoUrlPrefix": "video_url_"
+  }
+}

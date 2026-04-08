@@ -1,0 +1,17 @@
+{
+  "name": "@notlukagray/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run generate-json-schemas && next dev",
+    "build": "npm run generate-protected-slugs && next build",
+    "start": "next start",
+    "generate-protected-slugs": "tsx ../../scripts/generate-protected-slugs.ts",
+    "type-check": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint . --max-warnings 0",
+    "lint:boundaries": "eslint ../../packages/core/src/internal ../../packages/runtime-react/src/page-builder/elements src/core src/app/layout.tsx --max-warnings 0 && tsx ../../scripts/check-boundaries.ts",
+    "generate-json-schemas": "tsx ../../scripts/generate-json-schemas.ts && prettier --write src/content/schemas/page-builder.schema.json src/content/schemas/definition-block.schema.json src/content/schemas/definitions-file.schema.json src/content/schemas/module.schema.json",
+    "validate-pages": "tsx ../../scripts/validate-pages.ts",
+    "list-assets": "tsx ../../scripts/list-page-builder-assets.ts"
+  }
+}

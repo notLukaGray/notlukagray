@@ -1,0 +1,2854 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "page-builder.schema.json",
+  "$defs": {
+    "__schema0": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "backgroundVideo"
+            },
+            "video": {
+              "type": "string"
+            },
+            "poster": {
+              "type": "string"
+            },
+            "overlay": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{8}$"
+            }
+          },
+          "required": ["type", "video"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "backgroundImage"
+            },
+            "image": {
+              "type": "string"
+            }
+          },
+          "required": ["type", "image"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "backgroundVariable"
+            },
+            "layers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fill": {
+                    "type": "string"
+                  },
+                  "blendMode": {
+                    "type": "string"
+                  },
+                  "opacity": {
+                    "type": "number"
+                  },
+                  "backgroundSize": {
+                    "type": "string"
+                  },
+                  "backgroundPosition": {
+                    "type": "string"
+                  },
+                  "motion": {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "loop"
+                            },
+                            "animate": {
+                              "$ref": "#/$defs/Def15"
+                            },
+                            "transition": {
+                              "type": "object",
+                              "properties": {
+                                "duration": {
+                                  "type": "number",
+                                  "exclusiveMinimum": 0
+                                },
+                                "ease": {
+                                  "$ref": "#/$defs/Def26"
+                                },
+                                "delay": {
+                                  "type": "number",
+                                  "minimum": 0
+                                },
+                                "repeatType": {
+                                  "type": "string",
+                                  "enum": ["loop", "reverse", "mirror"]
+                                }
+                              },
+                              "required": ["duration"],
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": ["type", "transition"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "entrance"
+                            },
+                            "initial": {
+                              "$ref": "#/$defs/Def15"
+                            },
+                            "animate": {
+                              "$ref": "#/$defs/Def15"
+                            },
+                            "transition": {
+                              "type": "object",
+                              "properties": {
+                                "$ref": "#/$defs/Def313"
+                              },
+                              "required": ["duration"],
+                              "additionalProperties": false
+                            },
+                            "trigger": {
+                              "type": "string",
+                              "enum": ["onMount", "onFirstVisible", "onEveryVisible"]
+                            },
+                            "viewport": {
+                              "type": "object",
+                              "properties": {
+                                "once": {
+                                  "type": "boolean"
+                                },
+                                "amount": {
+                                  "$ref": "#/$defs/Def37"
+                                },
+                                "margin": {
+                                  "type": "string"
+                                }
+                              },
+                              "additionalProperties": false
+                            }
+                          },
+                          "required": ["type", "initial", "transition"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "scroll"
+                            },
+                            "properties": {
+                              "$ref": "#/$defs/Def314"
+                            },
+                            "offset": {
+                              "type": "array",
+                              "prefixItems": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            },
+                            "clamp": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": ["type", "properties"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "pointer"
+                            },
+                            "x": {
+                              "$ref": "#/$defs/Def314"
+                            },
+                            "y": {
+                              "$ref": "#/$defs/Def314"
+                            },
+                            "ease": {
+                              "$ref": "#/$defs/Def38"
+                            }
+                          },
+                          "required": ["type"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "parallax"
+                            },
+                            "speed": {
+                              "type": "number"
+                            },
+                            "axis": {
+                              "type": "string",
+                              "enum": ["x", "y"]
+                            },
+                            "offset": {
+                              "type": "array",
+                              "prefixItems": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "string"
+                                }
+                              ]
+                            }
+                          },
+                          "required": ["type", "speed"],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "const": "trigger"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "from": {
+                              "$ref": "#/$defs/Def15"
+                            },
+                            "to": {
+                              "$ref": "#/$defs/Def15"
+                            },
+                            "transition": {
+                              "type": "object",
+                              "properties": {
+                                "$ref": "#/$defs/Def313"
+                              },
+                              "additionalProperties": false
+                            },
+                            "autoPlay": {
+                              "type": "boolean"
+                            },
+                            "autoPlayDelay": {
+                              "type": "number",
+                              "minimum": 0
+                            },
+                            "toggle": {
+                              "type": "boolean"
+                            }
+                          },
+                          "required": ["type", "id", "from", "to"],
+                          "additionalProperties": false
+                        }
+                      ]
+                    }
+                  }
+                },
+                "required": ["fill"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": ["type", "layers"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "backgroundPattern"
+            },
+            "image": {
+              "type": "string"
+            },
+            "repeat": {
+              "type": "string",
+              "enum": ["repeat", "repeat-x", "repeat-y", "no-repeat"]
+            }
+          },
+          "required": ["type", "image"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "backgroundTransition"
+            },
+            "from": {
+              "$ref": "#/$defs/__schema0"
+            },
+            "to": {
+              "$ref": "#/$defs/__schema0"
+            },
+            "duration": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "easing": {
+              "type": "string"
+            },
+            "mode": {
+              "type": "string",
+              "enum": ["progress", "time"]
+            },
+            "trigger": {
+              "$ref": "#/$defs/__schema1"
+            },
+            "time": {
+              "type": "number",
+              "minimum": 0
+            },
+            "position": {
+              "$ref": "#/$defs/Def116"
+            },
+            "progress": {
+              "$ref": "#/$defs/Def38"
+            },
+            "progressRange": {
+              "$ref": "#/$defs/Def312"
+            }
+          },
+          "required": ["type", "from", "to"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "__schema1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "contentOverride"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def315"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "backgroundSwitch"
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "$ref": "#/$defs/Def15"
+                }
+              ]
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "startTransition"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def316"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "stopTransition"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def316"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "updateTransitionProgress"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "progress": {
+                  "type": "number"
+                },
+                "invert": {
+                  "type": "boolean"
+                }
+              },
+              "required": ["id"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "back"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "navigate"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "href": {
+                  "type": "string"
+                },
+                "replace": {
+                  "type": "boolean"
+                }
+              },
+              "required": ["href"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "scrollTo"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "offset": {
+                  "type": "number"
+                },
+                "behavior": {
+                  "type": "string",
+                  "enum": ["smooth", "instant"]
+                },
+                "block": {
+                  "type": "string",
+                  "enum": ["start", "center", "end", "nearest"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "scrollLock"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def317"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "scrollUnlock"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def317"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "modalOpen"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def316"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "modalClose"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "modalToggle"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def316"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setVariable"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def315"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "fireMultiple"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "actions": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/__schema1"
+                  }
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": ["parallel", "sequence"]
+                },
+                "delayBetween": {
+                  "type": "number"
+                }
+              },
+              "required": ["actions"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "conditionalAction"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "variable": {
+                  "type": "string"
+                },
+                "operator": {
+                  "type": "string",
+                  "enum": [
+                    "equals",
+                    "notEquals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "contains",
+                    "startsWith"
+                  ]
+                },
+                "value": {
+                  "$ref": "#/$defs/__schema2"
+                },
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/Def94"
+                  }
+                },
+                "logic": {
+                  "type": "string",
+                  "enum": ["and", "or"]
+                },
+                "then": {
+                  "$ref": "#/$defs/__schema1"
+                },
+                "elseIf": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/$defs/Def94"
+                        }
+                      },
+                      "logic": {
+                        "type": "string",
+                        "enum": ["and", "or"]
+                      },
+                      "then": {
+                        "$ref": "#/$defs/__schema1"
+                      }
+                    },
+                    "required": ["conditions", "then"],
+                    "additionalProperties": false
+                  }
+                },
+                "else": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "required": ["then"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "elementShow"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def316"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "elementHide"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def316"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "elementToggle"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def316"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "playSound"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "src": {
+                  "type": "string"
+                },
+                "volume": {
+                  "type": "number"
+                },
+                "loop": {
+                  "type": "boolean"
+                }
+              },
+              "required": ["src"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "stopSound"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "src": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setVolume"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "volume": {
+                  "type": "number"
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": ["volume"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "copyToClipboard"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": ["text"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "vibrate"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "pattern": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setDocumentTitle"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "required": ["title"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "openExternalUrl"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              },
+              "required": ["url"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "trackEvent"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "properties": {
+                  "$ref": "#/$defs/Def318"
+                }
+              },
+              "required": ["event"],
+              "additionalProperties": false
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setLocalStorage"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def315"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setSessionStorage"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def315"
+            }
+          },
+          "required": ["type", "payload"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.load"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.unload"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.toggleLoaded"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setVisibility"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.fadeIn"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.fadeOut"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.playAnimation"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.pauseAnimation"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.toggleAnimation"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setAnimation"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.crossFadeAnimation"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.scrubAnimation"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setCameraPreset"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.nextCameraPreset"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.resetCamera"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.playVideoTexture"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.pauseVideoTexture"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.toggleVideoTexture"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setCameraEffectsPreset"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setPosition"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.translateBy"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setRotation"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.rotateBy"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setScale"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.scaleBy"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.resetTransform"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.animateTo"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.startContinuousRotate"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.stopContinuousRotate"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.startContinuousFloat"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.stopContinuousFloat"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.startContinuousScale"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.stopContinuousScale"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.animateCamera"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.orbitEnable"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.orbitDisable"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setMaterialColor"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setMaterialOpacity"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setEmissiveIntensity"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setLightIntensity"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setLightColor"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setPostProcessingParam"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.togglePostEffect"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetPlay"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetPause"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetTogglePlay"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetSeek"
+            },
+            "payload": {
+              "type": "number"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetMute"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "videoFullscreen"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.setInput"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.fireTrigger"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.play"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.pause"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.reset"
+            },
+            "payload": {
+              "$ref": "#/$defs/Def15"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "__schema2": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema2"
+          }
+        },
+        {
+          "$ref": "#/$defs/Def318"
+        }
+      ]
+    },
+    "Def1": {
+      "$ref": "#/$defs/Def1"
+    },
+    "Def2": {
+      "$ref": "#/$defs/Def2"
+    },
+    "Def3": {
+      "$ref": "#/$defs/Def3"
+    },
+    "Def4": {
+      "$ref": "#/$defs/Def4"
+    },
+    "Def5": {
+      "$ref": "#/$defs/Def5"
+    },
+    "Def6": {
+      "$ref": "#/$defs/Def6"
+    },
+    "Def7": {
+      "$ref": "#/$defs/Def7"
+    },
+    "Def8": {
+      "$ref": "#/$defs/Def8"
+    },
+    "Def9": {
+      "$ref": "#/$defs/Def9"
+    },
+    "Def10": {
+      "$ref": "#/$defs/Def10"
+    },
+    "Def11": {
+      "$ref": "#/$defs/Def11"
+    },
+    "Def12": {
+      "$ref": "#/$defs/Def12"
+    },
+    "Def13": {
+      "$ref": "#/$defs/Def13"
+    },
+    "Def14": {
+      "$ref": "#/$defs/Def14"
+    },
+    "Def15": {
+      "$ref": "#/$defs/Def15"
+    },
+    "Def16": {
+      "$ref": "#/$defs/Def16"
+    },
+    "Def17": {
+      "$ref": "#/$defs/Def17"
+    },
+    "Def18": {
+      "$ref": "#/$defs/Def18"
+    },
+    "Def19": {
+      "$ref": "#/$defs/Def19"
+    },
+    "Def20": {
+      "$ref": "#/$defs/Def20"
+    },
+    "Def21": {
+      "$ref": "#/$defs/Def21"
+    },
+    "Def22": {
+      "$ref": "#/$defs/Def22"
+    },
+    "Def23": {
+      "$ref": "#/$defs/Def23"
+    },
+    "Def24": {
+      "$ref": "#/$defs/Def24"
+    },
+    "Def25": {
+      "$ref": "#/$defs/Def25"
+    },
+    "Def26": {
+      "$ref": "#/$defs/Def26"
+    },
+    "Def27": {
+      "$ref": "#/$defs/Def27"
+    },
+    "Def28": {
+      "$ref": "#/$defs/Def28"
+    },
+    "Def29": {
+      "$ref": "#/$defs/Def29"
+    },
+    "Def30": {
+      "$ref": "#/$defs/Def30"
+    },
+    "Def31": {
+      "$ref": "#/$defs/Def31"
+    },
+    "Def32": {
+      "$ref": "#/$defs/Def32"
+    },
+    "Def33": {
+      "$ref": "#/$defs/Def33"
+    },
+    "Def34": {
+      "$ref": "#/$defs/Def34"
+    },
+    "Def35": {
+      "$ref": "#/$defs/Def35"
+    },
+    "Def36": {
+      "$ref": "#/$defs/Def36"
+    },
+    "Def37": {
+      "$ref": "#/$defs/Def37"
+    },
+    "Def38": {
+      "$ref": "#/$defs/Def38"
+    },
+    "Def39": {
+      "$ref": "#/$defs/Def39"
+    },
+    "Def40": {
+      "$ref": "#/$defs/Def40"
+    },
+    "Def41": {
+      "$ref": "#/$defs/Def41"
+    },
+    "Def42": {
+      "$ref": "#/$defs/Def42"
+    },
+    "Def43": {
+      "$ref": "#/$defs/Def43"
+    },
+    "Def44": {
+      "$ref": "#/$defs/Def44"
+    },
+    "Def45": {
+      "$ref": "#/$defs/Def45"
+    },
+    "Def46": {
+      "$ref": "#/$defs/Def46"
+    },
+    "Def47": {
+      "$ref": "#/$defs/Def47"
+    },
+    "Def48": {
+      "$ref": "#/$defs/Def48"
+    },
+    "Def49": {
+      "$ref": "#/$defs/Def49"
+    },
+    "Def50": {
+      "$ref": "#/$defs/Def50"
+    },
+    "Def51": {
+      "$ref": "#/$defs/Def51"
+    },
+    "Def52": {
+      "$ref": "#/$defs/Def52"
+    },
+    "Def53": {
+      "$ref": "#/$defs/Def53"
+    },
+    "Def54": {
+      "$ref": "#/$defs/Def54"
+    },
+    "Def55": {
+      "$ref": "#/$defs/Def55"
+    },
+    "Def56": {
+      "$ref": "#/$defs/Def56"
+    },
+    "Def57": {
+      "$ref": "#/$defs/Def57"
+    },
+    "Def58": {
+      "$ref": "#/$defs/Def58"
+    },
+    "Def59": {
+      "$ref": "#/$defs/Def59"
+    },
+    "Def60": {
+      "$ref": "#/$defs/Def60"
+    },
+    "Def61": {
+      "$ref": "#/$defs/Def61"
+    },
+    "Def62": {
+      "$ref": "#/$defs/Def62"
+    },
+    "Def63": {
+      "$ref": "#/$defs/Def63"
+    },
+    "Def64": {
+      "$ref": "#/$defs/Def64"
+    },
+    "Def65": {
+      "$ref": "#/$defs/Def65"
+    },
+    "Def66": {
+      "$ref": "#/$defs/Def66"
+    },
+    "Def67": {
+      "$ref": "#/$defs/Def67"
+    },
+    "Def68": {
+      "$ref": "#/$defs/Def68"
+    },
+    "Def69": {
+      "$ref": "#/$defs/Def69"
+    },
+    "Def70": {
+      "$ref": "#/$defs/Def70"
+    },
+    "Def71": {
+      "$ref": "#/$defs/Def71"
+    },
+    "Def72": {
+      "$ref": "#/$defs/Def72"
+    },
+    "Def73": {
+      "$ref": "#/$defs/Def73"
+    },
+    "Def74": {
+      "$ref": "#/$defs/Def74"
+    },
+    "Def75": {
+      "$ref": "#/$defs/Def75"
+    },
+    "Def76": {
+      "$ref": "#/$defs/Def76"
+    },
+    "Def77": {
+      "$ref": "#/$defs/Def77"
+    },
+    "Def78": {
+      "$ref": "#/$defs/Def78"
+    },
+    "Def79": {
+      "$ref": "#/$defs/Def79"
+    },
+    "Def80": {
+      "$ref": "#/$defs/Def80"
+    },
+    "Def81": {
+      "$ref": "#/$defs/Def81"
+    },
+    "Def82": {
+      "$ref": "#/$defs/Def82"
+    },
+    "Def83": {
+      "$ref": "#/$defs/Def83"
+    },
+    "Def84": {
+      "$ref": "#/$defs/Def84"
+    },
+    "Def85": {
+      "$ref": "#/$defs/Def85"
+    },
+    "Def86": {
+      "$ref": "#/$defs/Def86"
+    },
+    "Def87": {
+      "$ref": "#/$defs/Def87"
+    },
+    "Def88": {
+      "$ref": "#/$defs/Def88"
+    },
+    "Def89": {
+      "$ref": "#/$defs/Def89"
+    },
+    "Def90": {
+      "$ref": "#/$defs/Def90"
+    },
+    "Def91": {
+      "$ref": "#/$defs/Def91"
+    },
+    "Def92": {
+      "$ref": "#/$defs/Def92"
+    },
+    "Def93": {
+      "$ref": "#/$defs/Def93"
+    },
+    "Def94": {
+      "$ref": "#/$defs/Def94"
+    },
+    "Def95": {
+      "$ref": "#/$defs/Def95"
+    },
+    "Def96": {
+      "$ref": "#/$defs/Def96"
+    },
+    "Def97": {
+      "$ref": "#/$defs/Def97"
+    },
+    "Def98": {
+      "$ref": "#/$defs/Def98"
+    },
+    "Def99": {
+      "$ref": "#/$defs/Def99"
+    },
+    "Def100": {
+      "$ref": "#/$defs/Def100"
+    },
+    "Def101": {
+      "$ref": "#/$defs/Def101"
+    },
+    "Def102": {
+      "$ref": "#/$defs/Def102"
+    },
+    "Def103": {
+      "$ref": "#/$defs/Def103"
+    },
+    "Def104": {
+      "$ref": "#/$defs/Def104"
+    },
+    "Def105": {
+      "$ref": "#/$defs/Def105"
+    },
+    "Def106": {
+      "$ref": "#/$defs/Def106"
+    },
+    "Def107": {
+      "$ref": "#/$defs/Def107"
+    },
+    "Def108": {
+      "$ref": "#/$defs/Def108"
+    },
+    "Def109": {
+      "$ref": "#/$defs/Def109"
+    },
+    "Def110": {
+      "$ref": "#/$defs/Def110"
+    },
+    "Def111": {
+      "$ref": "#/$defs/Def111"
+    },
+    "Def112": {
+      "$ref": "#/$defs/Def112"
+    },
+    "Def113": {
+      "$ref": "#/$defs/Def113"
+    },
+    "Def114": {
+      "$ref": "#/$defs/Def114"
+    },
+    "Def115": {
+      "$ref": "#/$defs/Def115"
+    },
+    "Def116": {
+      "$ref": "#/$defs/Def116"
+    },
+    "Def117": {
+      "$ref": "#/$defs/Def117"
+    },
+    "Def118": {
+      "$ref": "#/$defs/Def118"
+    },
+    "Def119": {
+      "$ref": "#/$defs/Def119"
+    },
+    "Def120": {
+      "$ref": "#/$defs/Def120"
+    },
+    "Def121": {
+      "$ref": "#/$defs/Def121"
+    },
+    "Def122": {
+      "$ref": "#/$defs/Def122"
+    },
+    "Def123": {
+      "$ref": "#/$defs/Def123"
+    },
+    "Def124": {
+      "$ref": "#/$defs/Def124"
+    },
+    "Def125": {
+      "$ref": "#/$defs/Def125"
+    },
+    "Def126": {
+      "$ref": "#/$defs/Def126"
+    },
+    "Def127": {
+      "$ref": "#/$defs/Def127"
+    },
+    "Def128": {
+      "$ref": "#/$defs/Def128"
+    },
+    "Def129": {
+      "$ref": "#/$defs/Def129"
+    },
+    "Def130": {
+      "$ref": "#/$defs/Def130"
+    },
+    "Def131": {
+      "$ref": "#/$defs/Def131"
+    },
+    "Def132": {
+      "$ref": "#/$defs/Def132"
+    },
+    "Def133": {
+      "$ref": "#/$defs/Def133"
+    },
+    "Def134": {
+      "$ref": "#/$defs/Def134"
+    },
+    "Def135": {
+      "$ref": "#/$defs/Def135"
+    },
+    "Def136": {
+      "$ref": "#/$defs/Def136"
+    },
+    "Def137": {
+      "$ref": "#/$defs/Def137"
+    },
+    "Def138": {
+      "$ref": "#/$defs/Def138"
+    },
+    "Def139": {
+      "$ref": "#/$defs/Def139"
+    },
+    "Def140": {
+      "$ref": "#/$defs/Def140"
+    },
+    "Def141": {
+      "$ref": "#/$defs/Def141"
+    },
+    "Def142": {
+      "$ref": "#/$defs/Def142"
+    },
+    "Def143": {
+      "$ref": "#/$defs/Def143"
+    },
+    "Def144": {
+      "$ref": "#/$defs/Def144"
+    },
+    "Def145": {
+      "$ref": "#/$defs/Def145"
+    },
+    "Def146": {
+      "$ref": "#/$defs/Def146"
+    },
+    "Def147": {
+      "$ref": "#/$defs/Def147"
+    },
+    "Def148": {
+      "$ref": "#/$defs/Def148"
+    },
+    "Def149": {
+      "$ref": "#/$defs/Def149"
+    },
+    "Def150": {
+      "$ref": "#/$defs/Def150"
+    },
+    "Def151": {
+      "$ref": "#/$defs/Def151"
+    },
+    "Def152": {
+      "$ref": "#/$defs/Def152"
+    },
+    "Def153": {
+      "$ref": "#/$defs/Def153"
+    },
+    "Def154": {
+      "$ref": "#/$defs/Def154"
+    },
+    "Def155": {
+      "$ref": "#/$defs/Def155"
+    },
+    "Def156": {
+      "$ref": "#/$defs/Def156"
+    },
+    "Def157": {
+      "$ref": "#/$defs/Def157"
+    },
+    "Def158": {
+      "$ref": "#/$defs/Def158"
+    },
+    "Def159": {
+      "$ref": "#/$defs/Def159"
+    },
+    "Def160": {
+      "$ref": "#/$defs/Def160"
+    },
+    "Def161": {
+      "$ref": "#/$defs/Def161"
+    },
+    "Def162": {
+      "$ref": "#/$defs/Def162"
+    },
+    "Def163": {
+      "$ref": "#/$defs/Def163"
+    },
+    "Def164": {
+      "$ref": "#/$defs/Def164"
+    },
+    "Def165": {
+      "$ref": "#/$defs/Def165"
+    },
+    "Def166": {
+      "$ref": "#/$defs/Def166"
+    },
+    "Def167": {
+      "$ref": "#/$defs/Def167"
+    },
+    "Def168": {
+      "$ref": "#/$defs/Def168"
+    },
+    "Def169": {
+      "$ref": "#/$defs/Def169"
+    },
+    "Def170": {
+      "$ref": "#/$defs/Def170"
+    },
+    "Def171": {
+      "$ref": "#/$defs/Def171"
+    },
+    "Def172": {
+      "$ref": "#/$defs/Def172"
+    },
+    "Def173": {
+      "$ref": "#/$defs/Def173"
+    },
+    "Def174": {
+      "$ref": "#/$defs/Def174"
+    },
+    "Def175": {
+      "$ref": "#/$defs/Def175"
+    },
+    "Def176": {
+      "$ref": "#/$defs/Def176"
+    },
+    "Def177": {
+      "$ref": "#/$defs/Def177"
+    },
+    "Def178": {
+      "$ref": "#/$defs/Def178"
+    },
+    "Def179": {
+      "$ref": "#/$defs/Def179"
+    },
+    "Def180": {
+      "$ref": "#/$defs/Def180"
+    },
+    "Def181": {
+      "$ref": "#/$defs/Def181"
+    },
+    "Def182": {
+      "$ref": "#/$defs/Def182"
+    },
+    "Def183": {
+      "$ref": "#/$defs/Def183"
+    },
+    "Def184": {
+      "$ref": "#/$defs/Def184"
+    },
+    "Def185": {
+      "$ref": "#/$defs/Def185"
+    },
+    "Def186": {
+      "$ref": "#/$defs/Def186"
+    },
+    "Def187": {
+      "$ref": "#/$defs/Def187"
+    },
+    "Def188": {
+      "$ref": "#/$defs/Def188"
+    },
+    "Def189": {
+      "$ref": "#/$defs/Def189"
+    },
+    "Def190": {
+      "$ref": "#/$defs/Def190"
+    },
+    "Def191": {
+      "$ref": "#/$defs/Def191"
+    },
+    "Def192": {
+      "$ref": "#/$defs/Def192"
+    },
+    "Def193": {
+      "$ref": "#/$defs/Def193"
+    },
+    "Def194": {
+      "$ref": "#/$defs/Def194"
+    },
+    "Def195": {
+      "$ref": "#/$defs/Def195"
+    },
+    "Def196": {
+      "$ref": "#/$defs/Def196"
+    },
+    "Def197": {
+      "$ref": "#/$defs/Def197"
+    },
+    "Def198": {
+      "$ref": "#/$defs/Def198"
+    },
+    "Def199": {
+      "$ref": "#/$defs/Def199"
+    },
+    "Def200": {
+      "$ref": "#/$defs/Def200"
+    },
+    "Def201": {
+      "$ref": "#/$defs/Def201"
+    },
+    "Def202": {
+      "$ref": "#/$defs/Def202"
+    },
+    "Def203": {
+      "$ref": "#/$defs/Def203"
+    },
+    "Def204": {
+      "$ref": "#/$defs/Def204"
+    },
+    "Def205": {
+      "$ref": "#/$defs/Def205"
+    },
+    "Def206": {
+      "$ref": "#/$defs/Def206"
+    },
+    "Def207": {
+      "$ref": "#/$defs/Def207"
+    },
+    "Def208": {
+      "$ref": "#/$defs/Def208"
+    },
+    "Def209": {
+      "$ref": "#/$defs/Def209"
+    },
+    "Def210": {
+      "$ref": "#/$defs/Def210"
+    },
+    "Def211": {
+      "$ref": "#/$defs/Def211"
+    },
+    "Def212": {
+      "$ref": "#/$defs/Def212"
+    },
+    "Def213": {
+      "$ref": "#/$defs/Def213"
+    },
+    "Def214": {
+      "$ref": "#/$defs/Def214"
+    },
+    "Def215": {
+      "$ref": "#/$defs/Def215"
+    },
+    "Def216": {
+      "$ref": "#/$defs/Def216"
+    },
+    "Def217": {
+      "$ref": "#/$defs/Def217"
+    },
+    "Def218": {
+      "$ref": "#/$defs/Def218"
+    },
+    "Def219": {
+      "$ref": "#/$defs/Def219"
+    },
+    "Def220": {
+      "$ref": "#/$defs/Def220"
+    },
+    "Def221": {
+      "$ref": "#/$defs/Def221"
+    },
+    "Def222": {
+      "$ref": "#/$defs/Def222"
+    },
+    "Def223": {
+      "$ref": "#/$defs/Def223"
+    },
+    "Def224": {
+      "$ref": "#/$defs/Def224"
+    },
+    "Def225": {
+      "$ref": "#/$defs/Def225"
+    },
+    "Def226": {
+      "$ref": "#/$defs/Def226"
+    },
+    "Def227": {
+      "$ref": "#/$defs/Def227"
+    },
+    "Def228": {
+      "$ref": "#/$defs/Def228"
+    },
+    "Def229": {
+      "$ref": "#/$defs/Def229"
+    },
+    "Def230": {
+      "$ref": "#/$defs/Def230"
+    },
+    "Def231": {
+      "$ref": "#/$defs/Def231"
+    },
+    "Def232": {
+      "$ref": "#/$defs/Def232"
+    },
+    "Def233": {
+      "$ref": "#/$defs/Def233"
+    },
+    "Def234": {
+      "$ref": "#/$defs/Def234"
+    },
+    "Def235": {
+      "$ref": "#/$defs/Def235"
+    },
+    "Def236": {
+      "$ref": "#/$defs/Def236"
+    },
+    "Def237": {
+      "$ref": "#/$defs/Def237"
+    },
+    "Def238": {
+      "$ref": "#/$defs/Def238"
+    },
+    "Def239": {
+      "$ref": "#/$defs/Def239"
+    },
+    "Def240": {
+      "$ref": "#/$defs/Def240"
+    },
+    "Def241": {
+      "$ref": "#/$defs/Def241"
+    },
+    "Def242": {
+      "$ref": "#/$defs/Def242"
+    },
+    "Def243": {
+      "$ref": "#/$defs/Def243"
+    },
+    "Def244": {
+      "$ref": "#/$defs/Def244"
+    },
+    "Def245": {
+      "$ref": "#/$defs/Def245"
+    },
+    "Def246": {
+      "$ref": "#/$defs/Def246"
+    },
+    "Def247": {
+      "$ref": "#/$defs/Def247"
+    },
+    "Def248": {
+      "$ref": "#/$defs/Def248"
+    },
+    "Def249": {
+      "$ref": "#/$defs/Def249"
+    },
+    "Def250": {
+      "$ref": "#/$defs/Def250"
+    },
+    "Def251": {
+      "$ref": "#/$defs/Def251"
+    },
+    "Def252": {
+      "$ref": "#/$defs/Def252"
+    },
+    "Def253": {
+      "$ref": "#/$defs/Def253"
+    },
+    "Def254": {
+      "$ref": "#/$defs/Def254"
+    },
+    "Def255": {
+      "$ref": "#/$defs/Def255"
+    },
+    "Def256": {
+      "$ref": "#/$defs/Def256"
+    },
+    "Def257": {
+      "$ref": "#/$defs/Def257"
+    },
+    "Def258": {
+      "$ref": "#/$defs/Def258"
+    },
+    "Def259": {
+      "$ref": "#/$defs/Def259"
+    },
+    "Def260": {
+      "$ref": "#/$defs/Def260"
+    },
+    "Def261": {
+      "$ref": "#/$defs/Def261"
+    },
+    "Def262": {
+      "$ref": "#/$defs/Def262"
+    },
+    "Def263": {
+      "$ref": "#/$defs/Def263"
+    },
+    "Def264": {
+      "$ref": "#/$defs/Def264"
+    },
+    "Def265": {
+      "$ref": "#/$defs/Def265"
+    },
+    "Def266": {
+      "$ref": "#/$defs/Def266"
+    },
+    "Def267": {
+      "$ref": "#/$defs/Def267"
+    },
+    "Def268": {
+      "$ref": "#/$defs/Def268"
+    },
+    "Def269": {
+      "$ref": "#/$defs/Def269"
+    },
+    "Def270": {
+      "$ref": "#/$defs/Def270"
+    },
+    "Def271": {
+      "$ref": "#/$defs/Def271"
+    },
+    "Def272": {
+      "$ref": "#/$defs/Def272"
+    },
+    "Def273": {
+      "$ref": "#/$defs/Def273"
+    },
+    "Def274": {
+      "$ref": "#/$defs/Def274"
+    },
+    "Def275": {
+      "$ref": "#/$defs/Def275"
+    },
+    "Def276": {
+      "$ref": "#/$defs/Def276"
+    },
+    "Def277": {
+      "$ref": "#/$defs/Def277"
+    },
+    "Def278": {
+      "$ref": "#/$defs/Def278"
+    },
+    "Def279": {
+      "$ref": "#/$defs/Def279"
+    },
+    "Def280": {
+      "$ref": "#/$defs/Def280"
+    },
+    "Def281": {
+      "$ref": "#/$defs/Def281"
+    },
+    "Def282": {
+      "$ref": "#/$defs/Def282"
+    },
+    "Def283": {
+      "$ref": "#/$defs/Def283"
+    },
+    "Def284": {
+      "$ref": "#/$defs/Def284"
+    },
+    "Def285": {
+      "$ref": "#/$defs/Def285"
+    },
+    "Def286": {
+      "$ref": "#/$defs/Def286"
+    },
+    "Def287": {
+      "$ref": "#/$defs/Def287"
+    },
+    "Def288": {
+      "$ref": "#/$defs/Def288"
+    },
+    "Def289": {
+      "$ref": "#/$defs/Def289"
+    },
+    "Def290": {
+      "$ref": "#/$defs/Def290"
+    },
+    "Def291": {
+      "$ref": "#/$defs/Def291"
+    },
+    "Def292": {
+      "$ref": "#/$defs/Def292"
+    },
+    "Def293": {
+      "$ref": "#/$defs/Def293"
+    },
+    "Def294": {
+      "$ref": "#/$defs/Def294"
+    },
+    "Def295": {
+      "$ref": "#/$defs/Def295"
+    },
+    "Def296": {
+      "$ref": "#/$defs/Def296"
+    },
+    "Def297": {
+      "$ref": "#/$defs/Def297"
+    },
+    "Def298": {
+      "$ref": "#/$defs/Def298"
+    },
+    "Def299": {
+      "$ref": "#/$defs/Def299"
+    },
+    "Def300": {
+      "$ref": "#/$defs/Def300"
+    },
+    "Def301": {
+      "$ref": "#/$defs/Def301"
+    },
+    "Def302": {
+      "$ref": "#/$defs/Def302"
+    },
+    "Def303": {
+      "$ref": "#/$defs/Def303"
+    },
+    "Def304": {
+      "$ref": "#/$defs/Def304"
+    },
+    "Def305": {
+      "$ref": "#/$defs/Def305"
+    },
+    "Def306": {
+      "$ref": "#/$defs/Def306"
+    },
+    "Def307": {
+      "$ref": "#/$defs/Def307"
+    },
+    "Def308": {
+      "$ref": "#/$defs/Def308"
+    },
+    "Def309": {
+      "$ref": "#/$defs/Def309"
+    },
+    "Def310": {
+      "$ref": "#/$defs/Def310"
+    },
+    "Def311": {
+      "$ref": "#/$defs/Def311"
+    },
+    "Def312": {
+      "$ref": "#/$defs/Def312"
+    },
+    "Def313": {
+      "$ref": "#/$defs/Def313"
+    },
+    "Def314": {
+      "$ref": "#/$defs/Def314"
+    },
+    "Def315": {
+      "$ref": "#/$defs/Def315"
+    },
+    "Def316": {
+      "$ref": "#/$defs/Def316"
+    },
+    "Def317": {
+      "$ref": "#/$defs/Def317"
+    },
+    "Def318": {
+      "$ref": "#/$defs/Def318"
+    }
+  },
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "ogImage": {
+      "type": "string"
+    },
+    "definitions": {
+      "$ref": "#/$defs/Def1"
+    },
+    "sectionOrder": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "preset": {
+      "$ref": "#/$defs/Def1"
+    },
+    "presets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "bgKey": {
+      "type": "string"
+    },
+    "passwordProtected": {
+      "type": "boolean"
+    },
+    "assetBaseUrl": {
+      "type": "string"
+    },
+    "onPageProgress": {
+      "$ref": "#/$defs/__schema1"
+    },
+    "transitions": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Def305"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Def305"
+          }
+        }
+      ]
+    },
+    "disableOverlays": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scroll": {
+      "type": "object",
+      "properties": {
+        "smooth": {
+          "type": "boolean"
+        },
+        "lockBody": {
+          "type": "boolean"
+        },
+        "overflowX": {
+          "type": "string",
+          "enum": ["hidden", "auto", "visible"]
+        },
+        "overflowY": {
+          "type": "string",
+          "enum": ["auto", "scroll", "hidden"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "figmaExportDiagnostics": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "converted": {
+          "type": "number"
+        },
+        "fallback": {
+          "type": "number"
+        },
+        "dropped": {
+          "type": "number"
+        },
+        "topFallbackReasons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "count": {
+                "type": "number"
+              }
+            },
+            "required": ["code", "count"],
+            "additionalProperties": false
+          }
+        },
+        "dropReasons": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "highRiskWarnings": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "category": {
+                "type": "string"
+              },
+              "count": {
+                "type": "number"
+              }
+            },
+            "required": ["category", "count"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["version", "converted", "fallback", "dropped", "topFallbackReasons"],
+      "additionalProperties": false
+    },
+    "density": {
+      "type": "string",
+      "enum": ["comfortable", "balanced", "compact"]
+    }
+  },
+  "required": ["slug", "title", "definitions", "sectionOrder"],
+  "additionalProperties": {}
+}

@@ -2,9 +2,13 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { discoverAllPages } from "../src/page-builder/core/load/page-builder-discover-pages";
+import { discoverAllPages } from "@pb/core";
 
-const OUT_PATH = path.join(process.cwd(), "src/core/lib/protected-slugs.generated.ts");
+const APP_ROOT = fs.existsSync(path.join(process.cwd(), "src/content"))
+  ? process.cwd()
+  : path.join(process.cwd(), "apps/web");
+
+const OUT_PATH = path.join(APP_ROOT, "src/core/lib/protected-slugs.generated.ts");
 
 function isPasswordProtected(contentPath: string): boolean {
   try {

@@ -34,6 +34,7 @@ import {
   recordUpstreamDropOnParity,
 } from "./export-parity";
 import { buildSectionExportArtifact } from "./main-section-export-artifact";
+import { pageBuilderSchema } from "@pb/contracts";
 
 interface SelectionState {
   frames: FrameNode[];
@@ -287,6 +288,27 @@ function hasGlassEffectInResult(result: ExportResult): boolean {
   );
 }
 
+function appendContractsValidationDiagnostics(
+  result: ExportResult,
+  warnings: string[],
+  errors: string[]
+): void {
+  for (const [slug, page] of Object.entries(result.pages)) {
+    const parsed = pageBuilderSchema.safeParse(page);
+    if (parsed.success) continue;
+
+    errors.push(`[error] [contracts] Page "${slug}" failed @pb/contracts validation.`);
+
+    const firstIssue = parsed.error.issues[0];
+    if (!firstIssue) continue;
+    const issuePath =
+      firstIssue.path.length > 0
+        ? firstIssue.path.map((segment) => String(segment)).join(".")
+        : "$";
+    warnings.push(`[warn] [contracts] ${slug} ${issuePath}: ${firstIssue.message}`);
+  }
+}
+
 export async function runExport(
   targetOverrides: Record<string, string>,
   annotationOverrides: Record<string, Record<string, string>>,
@@ -396,6 +418,7 @@ export async function runExport(
     ctx,
     result
   );
+  appendContractsValidationDiagnostics(result, ctx.warnings, ctx.errors);
 
   result.elementCount = countElementsInResult(result);
   recomputeOutputParityFromExportResult(exportParity, result);
