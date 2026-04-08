@@ -2,7 +2,7 @@
 
 Exports selected Figma frames to page-builder JSON. Each top-level frame is converted to a section block; child layers become typed element blocks. Image fills are exported as PNG assets. The output is a ZIP containing structured JSON files, an `assets/` folder, and `export-notes.txt` with a conversion summary and all warnings.
 
-Page exports are emitted in contract-native shape (`slug`, `title`, `sectionOrder`, `definitions`) so they can be dropped directly into `src/content/pages/` and validated with the same page-builder schema used at runtime.
+Page exports are emitted in contract-native shape (`slug`, `title`, `sectionOrder`, `definitions`) so they can be dropped directly into `apps/web/src/content/pages/` and validated with the same page-builder schema used at runtime.
 Modal exports follow the same section-order/definitions pattern, and module exports are emitted as schema-valid `contentSlot + slots.main.section` scaffolds.
 
 ---
@@ -18,13 +18,13 @@ Modal exports follow the same section-order/definitions pattern, and module expo
 7. Click **Export Selection**.
 8. Click **Download ZIP** when conversion completes.
 
-After export: unzip, copy JSON files to `src/content/` paths, copy `assets/` to CDN or public directory, then validate:
+After export: unzip, copy JSON files to `apps/web/src/content/` paths, copy `assets/` to CDN or public directory, then validate:
 
 ```bash
 npx tsx scripts/validate-pages.ts
 ```
 
-**Copy page JSON** (pb-dev) attaches root `figmaExportDiagnostics` with `converted` / `fallback` / `dropped` and reason histograms — see [Figma → Page Builder export contract](../../docs/16-figma-page-builder-export-contract.md).
+**Copy page JSON** (pb-dev) attaches root `figmaExportDiagnostics` with `converted` / `fallback` / `dropped` and reason histograms — see [system integration docs](../../../docs/integration.md#figma-tooling).
 
 ---
 

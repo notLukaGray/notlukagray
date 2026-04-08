@@ -14,8 +14,8 @@ export const figmaExporterMetaSchema = z
     /**
      * Stable reason code when the exporter used a fallback representation.
      * Examples: `unsupported-node-type`, `group-conversion-fallback`, `instance-conversion-fallback`.
-     * Drop-side codes (losses) live on `ExportResult.trace.counts.parity.dropReasons` — see
-     * `docs/16-figma-page-builder-export-contract.md`.
+     * Drop-side codes (losses) live on `ExportResult.trace.counts.parity.dropReasons`.
+     * See system docs in `docs/integration.md` and plugin docs in `tools/figma-plugin/docs/`.
      */
     fallbackReason: z.string().optional(),
     /**

@@ -23,10 +23,10 @@ export function generateExportNotes(
   lines.push("");
   lines.push("Each page is also under content/pages/{slug}/ as index.json + {sectionKey}.json");
   lines.push(
-    "(mirrors src/content/pages split layout). See docs/12-page-builder-expand-parity.md."
+    "(mirrors apps/web/src/content/pages split layout). See docs/12-page-builder-expand-parity.md."
   );
   lines.push(
-    "globals.json is NOT auto-loaded by the site — merge into modules/definitions (docs/14-globals-and-modules.md)."
+    "globals.json is NOT auto-loaded by the site — merge into apps/web/src/content/modules or page definitions (docs/14-globals-and-modules.md)."
   );
   lines.push(`Errors: ${errors.length}`);
   lines.push(`Comments: ${warningCount + infoCount}`);
