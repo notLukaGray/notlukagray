@@ -37,6 +37,8 @@ const elementRangeStyleSchema = z
 export const elementRangeSchema = z
   .object({
     type: z.literal("elementRange"),
+    /** Preset key for `pbBuilderDefaultsV1.elements.range` variant templates. */
+    variant: z.enum(["default", "slim", "accent"]).optional(),
     /** Minimum value of the slider. Defaults to 0 in the component. */
     min: z.number().optional(),
     /** Maximum value of the slider. Defaults to 1 in the component. */

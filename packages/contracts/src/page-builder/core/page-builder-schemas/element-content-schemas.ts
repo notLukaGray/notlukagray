@@ -180,6 +180,8 @@ const elementImageSchema = z
 const elementVideoSchema = z
   .object({
     type: z.literal("elementVideo"),
+    /** Preset key for `pbBuilderDefaultsV1.elements.video` variant templates. */
+    variant: z.enum(["inline", "compact", "fullcover", "hero"]).optional(),
     src: z.string(),
     /** Poster (Bunny asset key or resolved URL). Required. */
     poster: z.string(),
@@ -264,7 +266,11 @@ const elementVideoTimeSchema = z
   .merge(elementLayoutSchema);
 
 const elementSpacerSchema = z
-  .object({ type: z.literal("elementSpacer") })
+  .object({
+    type: z.literal("elementSpacer"),
+    /** Preset key for `pbBuilderDefaultsV1.elements.spacer` variant templates. */
+    variant: z.enum(["sm", "md", "lg"]).optional(),
+  })
   .merge(elementLayoutSchema);
 
 /** Scroll progress bar element. Tracks parent section scroll (0→1) via SectionScrollTargetContext. */

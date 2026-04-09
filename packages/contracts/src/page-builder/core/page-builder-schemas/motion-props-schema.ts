@@ -1,9 +1,127 @@
 import { z } from "zod";
 import { ENTRANCE_PRESET_NAMES, EXIT_PRESET_NAMES } from "../page-builder-motion-defaults";
 
-const motionKeyframesValueSchema = z.union([z.number(), z.string(), z.array(z.number())]);
+const motionKeyframesValueSchema = z.union([
+  z.number(),
+  z.string(),
+  z.array(z.number()),
+  // per-property transition override: { duration, ease, delay, ... }
+  z.record(z.string(), z.unknown()),
+]);
 
-const motionKeyframesSchema = z.record(z.string(), motionKeyframesValueSchema).optional();
+/**
+ * Known Framer Motion animatable properties.
+ * CSS custom properties (--*) are always allowed as an escape hatch.
+ */
+const KNOWN_FM_KEYFRAME_KEYS = new Set([
+  // transforms
+  "x",
+  "y",
+  "z",
+  "rotate",
+  "rotateX",
+  "rotateY",
+  "rotateZ",
+  "scale",
+  "scaleX",
+  "scaleY",
+  "skew",
+  "skewX",
+  "skewY",
+  "translateX",
+  "translateY",
+  "translateZ",
+  "perspective",
+  "transformPerspective",
+  "originX",
+  "originY",
+  "originZ",
+  // opacity & visibility
+  "opacity",
+  "visibility",
+  // colors
+  "color",
+  "backgroundColor",
+  "borderColor",
+  "fill",
+  "stroke",
+  "fillOpacity",
+  "strokeOpacity",
+  // dimensions & position
+  "width",
+  "height",
+  "maxWidth",
+  "maxHeight",
+  "minWidth",
+  "minHeight",
+  "top",
+  "left",
+  "right",
+  "bottom",
+  "margin",
+  "padding",
+  // border
+  "borderRadius",
+  "borderTopLeftRadius",
+  "borderTopRightRadius",
+  "borderBottomLeftRadius",
+  "borderBottomRightRadius",
+  "borderWidth",
+  "borderStyle",
+  // stroke (SVG)
+  "strokeWidth",
+  "strokeDasharray",
+  "strokeDashoffset",
+  "strokeLinecap",
+  // path (SVG)
+  "pathLength",
+  "pathOffset",
+  "pathSpacing",
+  // filters
+  "filter",
+  "backdropFilter",
+  "WebkitBackdropFilter",
+  "blur",
+  "brightness",
+  "contrast",
+  "saturate",
+  "grayscale",
+  "invert",
+  "sepia",
+  // layout & appearance
+  "boxShadow",
+  "textShadow",
+  "outline",
+  "clipPath",
+  "backgroundSize",
+  "backgroundPosition",
+  "cursor",
+  "zIndex",
+  // text
+  "fontSize",
+  "fontWeight",
+  "lineHeight",
+  "letterSpacing",
+  "textDecoration",
+  // per-property transition override (valid inside initial/animate/exit)
+  "transition",
+]);
+
+const motionKeyframesSchema = z
+  .record(z.string(), motionKeyframesValueSchema)
+  .superRefine((kf, ctx) => {
+    for (const key of Object.keys(kf)) {
+      if (key.startsWith("--")) continue; // CSS custom property escape hatch
+      if (!KNOWN_FM_KEYFRAME_KEYS.has(key)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: [key],
+          message: `Unknown motion keyframe property "${key}". Use a known FM property or a CSS custom property (--*).`,
+        });
+      }
+    }
+  })
+  .optional();
 
 const baseTransitionSchema = z.object({
   duration: z.number().optional(),
@@ -151,8 +269,11 @@ export const motionPropsSchema = z
     dragSnapToOrigin: z.boolean().optional(),
     dragDirectionLock: z.boolean().optional(),
     dragPropagation: z.boolean().optional(),
+    /** Pass-through data available inside variant resolver functions. */
+    custom: z.unknown().optional(),
+    /** When true, element still affects layout during AnimatePresence exit. */
+    presenceAffectsLayout: z.boolean().optional(),
   })
-  .passthrough()
   .optional();
 
 export type MotionPropsFromJson = NonNullable<z.infer<typeof motionPropsSchema>>;

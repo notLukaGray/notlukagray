@@ -153,197 +153,202 @@ export type SetSessionStorageAction = {
 };
 
 // 3D element actions — discriminated union by type.
-// Payloads are all typed as optional Record<string, unknown> to stay compatible
-// with the Zod-inferred schema (which uses a loose threePayload for all three.* actions).
-// Field-level specificity is documented in comments; the dispatcher reads them dynamically.
-export type ThreeLoadAction = { type: "three.load"; payload?: Record<string, unknown> };
-export type ThreeUnloadAction = { type: "three.unload"; payload?: Record<string, unknown> };
-export type ThreeToggleLoadedAction = {
-  type: "three.toggleLoaded";
-  payload?: Record<string, unknown>;
-};
-/** payload.visible: boolean */
+// All payload fields are optional. id targets a specific element; omit to broadcast.
+// Zod validates field types at parse time; TypeScript enforces them at author time.
+
+type Vec3 = [number, number, number];
+type ThreeBasePayload = { id?: string };
+
+export type ThreeLoadAction = { type: "three.load"; payload?: ThreeBasePayload };
+export type ThreeUnloadAction = { type: "three.unload"; payload?: ThreeBasePayload };
+export type ThreeToggleLoadedAction = { type: "three.toggleLoaded"; payload?: ThreeBasePayload };
 export type ThreeSetVisibilityAction = {
   type: "three.setVisibility";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { visible?: boolean };
 };
-export type ThreeFadeInAction = { type: "three.fadeIn"; payload?: Record<string, unknown> };
-export type ThreeFadeOutAction = { type: "three.fadeOut"; payload?: Record<string, unknown> };
-/** payload.name: string — animation clip name */
+export type ThreeFadeInAction = {
+  type: "three.fadeIn";
+  payload?: ThreeBasePayload & { durationMs?: number };
+};
+export type ThreeFadeOutAction = {
+  type: "three.fadeOut";
+  payload?: ThreeBasePayload & { durationMs?: number };
+};
 export type ThreePlayAnimationAction = {
   type: "three.playAnimation";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { name?: string };
 };
 export type ThreePauseAnimationAction = {
   type: "three.pauseAnimation";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { name?: string };
 };
 export type ThreeToggleAnimationAction = {
   type: "three.toggleAnimation";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { name?: string };
 };
-/** payload.name: string — animation clip name */
 export type ThreeSetAnimationAction = {
   type: "three.setAnimation";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { name?: string };
 };
-/** payload.preset?: string */
 export type ThreeSetCameraPresetAction = {
   type: "three.setCameraPreset";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { preset?: string };
 };
-/** payload.preset?: string */
 export type ThreeNextCameraPresetAction = {
   type: "three.nextCameraPreset";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { preset?: string };
 };
-/** payload.preset?: string */
-export type ThreeResetCameraAction = {
-  type: "three.resetCamera";
-  payload?: Record<string, unknown>;
-};
+export type ThreeResetCameraAction = { type: "three.resetCamera"; payload?: ThreeBasePayload };
 export type ThreePlayVideoTextureAction = {
   type: "three.playVideoTexture";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload;
 };
 export type ThreePauseVideoTextureAction = {
   type: "three.pauseVideoTexture";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload;
 };
 export type ThreeToggleVideoTextureAction = {
   type: "three.toggleVideoTexture";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload;
 };
-/** payload.preset: string */
 export type ThreeSetCameraEffectsPresetAction = {
   type: "three.setCameraEffectsPreset";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { preset?: string };
 };
-/** payload.name: string; payload.durationMs?: number; payload.warp?: boolean */
 export type ThreeCrossFadeAnimationAction = {
   type: "three.crossFadeAnimation";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { name?: string; durationMs?: number; warp?: boolean };
 };
-/** payload.clip?: string; payload.progress?: number — or progress injected from trigger event detail */
 export type ThreeScrubAnimationAction = {
   type: "three.scrubAnimation";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { clip?: string; progress?: number };
 };
 
 // --- Transform actions ---
-/** payload.position?: [x,y,z]; payload.x?/y?/z?; payload.durationMs? */
 export type ThreeSetPositionAction = {
   type: "three.setPosition";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & {
+    position?: Vec3;
+    x?: number;
+    y?: number;
+    z?: number;
+    durationMs?: number;
+  };
 };
-/** payload.x?/y?/z? (relative delta); payload.durationMs? */
 export type ThreeTranslateByAction = {
   type: "three.translateBy";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { x?: number; y?: number; z?: number; durationMs?: number };
 };
-/** payload.rotation?: [x,y,z] radians; payload.x?/y?/z?; payload.durationMs? */
 export type ThreeSetRotationAction = {
   type: "three.setRotation";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & {
+    rotation?: Vec3;
+    x?: number;
+    y?: number;
+    z?: number;
+    durationMs?: number;
+  };
 };
-/** payload.x?/y?/z? (relative delta radians) */
-export type ThreeRotateByAction = { type: "three.rotateBy"; payload?: Record<string, unknown> };
-/** payload.scale: number | [x,y,z]; payload.durationMs? */
-export type ThreeSetScaleAction = { type: "three.setScale"; payload?: Record<string, unknown> };
-/** payload.factor: number — multiplies current scale */
-export type ThreeScaleByAction = { type: "three.scaleBy"; payload?: Record<string, unknown> };
-/** Snaps back to schema-defined position/rotation/scale */
+export type ThreeRotateByAction = {
+  type: "three.rotateBy";
+  payload?: ThreeBasePayload & { x?: number; y?: number; z?: number };
+};
+export type ThreeSetScaleAction = {
+  type: "three.setScale";
+  payload?: ThreeBasePayload & { scale?: number | Vec3; durationMs?: number };
+};
+export type ThreeScaleByAction = {
+  type: "three.scaleBy";
+  payload?: ThreeBasePayload & { factor?: number };
+};
 export type ThreeResetTransformAction = {
   type: "three.resetTransform";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload;
 };
-/** payload.position?/rotation?/scale?; payload.durationMs — lerped tween to all at once */
-export type ThreeAnimateToAction = { type: "three.animateTo"; payload?: Record<string, unknown> };
+export type ThreeAnimateToAction = {
+  type: "three.animateTo";
+  payload?: ThreeBasePayload & {
+    position?: Vec3;
+    rotation?: Vec3;
+    scale?: number | Vec3;
+    durationMs?: number;
+  };
+};
 
 // --- Continuous loop actions ---
-/** payload.axis?: [x,y,z] (default [0,1,0]); payload.speed?: number (radians/sec, default 1) */
 export type ThreeStartContinuousRotateAction = {
   type: "three.startContinuousRotate";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { axis?: "x" | "y" | "z"; speed?: number };
 };
 export type ThreeStopContinuousRotateAction = {
   type: "three.stopContinuousRotate";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload;
 };
-/** payload.amount?: number (units, default 0.1); payload.speed?: number (Hz, default 1) */
 export type ThreeStartContinuousFloatAction = {
   type: "three.startContinuousFloat";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { amount?: number; speed?: number };
 };
 export type ThreeStopContinuousFloatAction = {
   type: "three.stopContinuousFloat";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload;
 };
-/** payload.min?: number (default 0.9); payload.max?: number (default 1.1); payload.speed?: number (Hz) */
 export type ThreeStartContinuousScaleAction = {
   type: "three.startContinuousScale";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { min?: number; max?: number; speed?: number };
 };
 export type ThreeStopContinuousScaleAction = {
   type: "three.stopContinuousScale";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload;
 };
 
 // --- Camera extended actions ---
-/** payload.position?/lookAt?/fov?; payload.durationMs — smooth lerped camera move */
 export type ThreeAnimateCameraAction = {
   type: "three.animateCamera";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & {
+    position?: Vec3;
+    lookAt?: Vec3;
+    fov?: number;
+    durationMs?: number;
+  };
 };
-/** payload.autoRotate?: boolean; payload.autoRotateSpeed?: number */
 export type ThreeOrbitEnableAction = {
   type: "three.orbitEnable";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { autoRotate?: boolean; autoRotateSpeed?: number };
 };
-export type ThreeOrbitDisableAction = {
-  type: "three.orbitDisable";
-  payload?: Record<string, unknown>;
-};
+export type ThreeOrbitDisableAction = { type: "three.orbitDisable"; payload?: ThreeBasePayload };
 
 // --- Material actions ---
-/** payload.color: string (hex or css); payload.meshName?: string */
 export type ThreeSetMaterialColorAction = {
   type: "three.setMaterialColor";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { color?: string; meshName?: string };
 };
-/** payload.opacity: number 0–1; payload.meshName?; payload.durationMs? */
 export type ThreeSetMaterialOpacityAction = {
   type: "three.setMaterialOpacity";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { opacity?: number; meshName?: string; durationMs?: number };
 };
-/** payload.intensity: number; payload.meshName? */
 export type ThreeSetEmissiveIntensityAction = {
   type: "three.setEmissiveIntensity";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { intensity?: number; meshName?: string };
 };
 
 // --- Scene object actions ---
-/** payload.intensity: number; payload.index?: number; payload.name?: string */
 export type ThreeSetLightIntensityAction = {
   type: "three.setLightIntensity";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { intensity?: number; index?: number; name?: string };
 };
-/** payload.color: string; payload.index?: number; payload.name?: string */
 export type ThreeSetLightColorAction = {
   type: "three.setLightColor";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { color?: string; index?: number; name?: string };
 };
 
 // --- Post-processing actions ---
-/** payload.effect: string (type key); payload.param: string; payload.value: number */
 export type ThreeSetPostProcessingParamAction = {
   type: "three.setPostProcessingParam";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { effect?: string; param?: string; value?: number };
 };
-/** payload.effect: string; payload.enabled?: boolean (omit to toggle) */
 export type ThreeTogglePostEffectAction = {
   type: "three.togglePostEffect";
-  payload?: Record<string, unknown>;
+  payload?: ThreeBasePayload & { effect?: string; enabled?: boolean };
 };
 
 // rive.* element actions

@@ -78,6 +78,7 @@ export const pageBuilderDefinitionBlockSchema = z.union([
 export const backgroundTransitionEffectSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("TIME"),
+    id: z.string().min(1),
     from: z.string(),
     to: z.string(),
     duration: z.number().positive(),
@@ -85,14 +86,15 @@ export const backgroundTransitionEffectSchema = z.discriminatedUnion("type", [
   }),
   z.object({
     type: z.literal("TRIGGER"),
+    id: z.string().min(1),
     from: z.string(),
     to: z.string(),
     duration: z.number().positive(),
     easing: z.string().optional(),
-    id: z.string().optional(),
   }),
   z.object({
     type: z.literal("SCROLL"),
+    id: z.string().min(1),
     from: z.string(),
     to: z.string(),
     source: z.enum(["page", "trigger"]).optional(),

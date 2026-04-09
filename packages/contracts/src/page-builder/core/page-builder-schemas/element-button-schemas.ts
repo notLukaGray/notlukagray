@@ -87,6 +87,8 @@ export function parseButtonAction(value: string | undefined): ButtonAction | und
 export const elementButtonSchema = z
   .object({
     type: z.literal("elementButton"),
+    /** Preset key for `pbBuilderDefaultsV1.elements.button` variant templates. */
+    variant: z.enum(["default", "accent", "ghost", "text"]).optional(),
     label: z.string().optional(),
     copyType: z.enum(["heading", "body"]).optional(),
     level: z
@@ -96,7 +98,7 @@ export const elementButtonSchema = z
     vectorRef: z.string().optional(),
     href: z.string().optional(),
     external: z.boolean().optional(),
-    action: z.string().optional(),
+    action: buttonActionSchema.optional(),
     actionPayload: z.unknown().optional(),
     linkDefault: z.string().optional(),
     linkHover: z.string().optional(),
@@ -114,10 +116,13 @@ export const elementButtonSchema = z
     pointerUpAction: triggerActionSchema.optional(),
   })
   .merge(elementLayoutSchema)
+  // elementLayoutSchema has `action: z.string()` for generic element interactions.
+  // .extend() re-asserts the stricter buttonActionSchema enum after the merge overrides it.
+  .extend({ action: buttonActionSchema.optional() })
   .refine(
     (data) => {
       const hasLink = data.href != null && data.href !== "";
-      const hasAction = data.action != null && data.action !== "";
+      const hasAction = data.action != null;
       return !hasLink || !hasAction;
     },
     {

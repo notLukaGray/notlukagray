@@ -36,7 +36,7 @@ export function createTransitionControlHandlers({
     const transition = transitionsArray.find((t) => {
       if (t.type === "TRIGGER") {
         const triggerTransition = t as Extract<BackgroundTransitionEffect, { type: "TRIGGER" }>;
-        return (triggerTransition.id || "default") === transitionId;
+        return triggerTransition.id === transitionId;
       }
       return false;
     });

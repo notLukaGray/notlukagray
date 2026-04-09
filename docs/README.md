@@ -8,6 +8,7 @@ This directory contains canonical system-level documentation.
 - [`integration.md`](./integration.md): integration surfaces across packages, tools, and app consumer
 - [`operations-quality-checks.md`](./operations-quality-checks.md): CI gates and local verification commands
 - [`scripts-lifecycle.md`](./scripts-lifecycle.md): root script inventory and ownership intent
+- [`page-builder-schema-semantics.md`](./page-builder-schema-semantics.md): full page-builder variable/value semantics, constraints, defaults, and runtime precedence
 
 ## Workspace Docs
 

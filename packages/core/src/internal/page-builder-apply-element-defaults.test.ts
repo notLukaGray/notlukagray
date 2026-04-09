@@ -210,6 +210,75 @@ describe("page-builder-apply-element-defaults", () => {
     expect(link.align).toBe("center");
   });
 
+  it("applies button accent variant — injects wrapperFill and copyType", () => {
+    const sections = applyBuilderElementDefaultsToSections([
+      imageSection({
+        type: "elementButton",
+        id: "btn-accent",
+        variant: "accent",
+        label: "Buy now",
+      }),
+    ]);
+    const btn = (sections[0] as unknown as { elements: Array<Record<string, unknown>> })
+      .elements[0]!;
+    expect(btn.copyType).toBe("body");
+    expect(btn.level).toBe(3);
+    expect(btn.wrapperFill).toBe("var(--pb-accent)");
+    expect(btn.wrapperBorderRadius).toBeTruthy();
+    expect(btn.wrapperStroke).toBeUndefined();
+  });
+
+  it("applies button ghost variant — injects wrapperStroke, no fill", () => {
+    const sections = applyBuilderElementDefaultsToSections([
+      imageSection({ type: "elementButton", id: "btn-ghost", variant: "ghost", label: "Learn" }),
+    ]);
+    const btn = (sections[0] as unknown as { elements: Array<Record<string, unknown>> })
+      .elements[0]!;
+    expect(btn.wrapperStroke).toBe("var(--pb-border)");
+    expect(btn.wrapperFill).toBeUndefined();
+  });
+
+  it("applies button text variant — no wrapper styling injected", () => {
+    const sections = applyBuilderElementDefaultsToSections([
+      imageSection({ type: "elementButton", id: "btn-text", variant: "text", label: "Read more" }),
+    ]);
+    const btn = (sections[0] as unknown as { elements: Array<Record<string, unknown>> })
+      .elements[0]!;
+    expect(btn.copyType).toBe("body");
+    expect(btn.level).toBe(5);
+    expect(btn.wrapperFill).toBeUndefined();
+    expect(btn.wrapperStroke).toBeUndefined();
+    expect(btn.wrapperPadding).toBeUndefined();
+  });
+
+  it("resolves button alias 'primary' to accent", () => {
+    const sections = applyBuilderElementDefaultsToSections([
+      imageSection({ type: "elementButton", id: "btn-primary", variant: "primary", label: "Go" }),
+    ]);
+    const btn = (sections[0] as unknown as { elements: Array<Record<string, unknown>> })
+      .elements[0]!;
+    expect(btn.wrapperFill).toBe("var(--pb-accent)");
+  });
+
+  it("respects explicit button fields — does not overwrite set values", () => {
+    const sections = applyBuilderElementDefaultsToSections([
+      imageSection({
+        type: "elementButton",
+        id: "btn-explicit",
+        variant: "accent",
+        label: "Custom",
+        copyType: "heading",
+        level: 1,
+        wrapperFill: "#ff0000",
+      }),
+    ]);
+    const btn = (sections[0] as unknown as { elements: Array<Record<string, unknown>> })
+      .elements[0]!;
+    expect(btn.copyType).toBe("heading");
+    expect(btn.level).toBe(1);
+    expect(btn.wrapperFill).toBe("#ff0000");
+  });
+
   it("applies crop variant defaults including imageCrop", () => {
     const sections = applyBuilderElementDefaultsToSections([
       imageSection({

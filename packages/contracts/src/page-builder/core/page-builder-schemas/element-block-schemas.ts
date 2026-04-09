@@ -20,16 +20,17 @@ import { elementModel3DSchema } from "./element-model3d-schemas";
 import { elementRiveSchema } from "./element-rive-schemas";
 import { sectionEffectSchema } from "./section-effect-schemas";
 
+// z.lazy breaks the circular init (TS7022) by deferring evaluation until parse time.
+// z.ZodType<unknown> annotation prevents TypeScript from trying to infer the recursive type.
+const lazyElementBlock: z.ZodType<unknown> = z.lazy(() => elementBlockSchema);
+
 const elementGroupSchema = z
   .object({
     type: z.literal("elementGroup"),
     section: z
       .object({
         elementOrder: z.array(z.string()).optional(),
-        // definitions holds child ElementBlocks. z.unknown() is required here because
-        // elementGroupSchema is part of elementBlockSchema — z.lazy(() => elementBlockSchema)
-        // would cause a circular initializer TS error (TS7022). The tree-walk casts to ElementBlock.
-        definitions: z.record(z.string(), z.unknown()),
+        definitions: z.record(z.string(), lazyElementBlock),
       })
       .passthrough(),
     display: z.string().optional(),

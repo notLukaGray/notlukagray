@@ -35,10 +35,19 @@ export function usePageBuilderTriggers({
   bgDefinitions,
   transitions,
 }: PageBuilderTriggersParams): PageBuilderTriggersResult {
-  const transitionsArray = useMemo(
-    () => (transitions ? (Array.isArray(transitions) ? transitions : [transitions]) : []),
-    [transitions]
-  );
+  const transitionsArray = useMemo(() => {
+    const raw = transitions ? (Array.isArray(transitions) ? transitions : [transitions]) : [];
+    const filtered = raw.filter((transition) => {
+      const id = transition.id;
+      return typeof id === "string" && id.trim().length > 0;
+    });
+    if (process.env.NODE_ENV === "development" && filtered.length !== raw.length) {
+      console.warn(
+        `[page-builder] usePageBuilderTriggers: dropped ${raw.length - filtered.length} transition(s) with missing/empty id`
+      );
+    }
+    return filtered;
+  }, [transitions]);
 
   const { currentBg, sectionsWithOverrides, setOverrides } = usePageBuilderOverrides({
     resolvedBg,

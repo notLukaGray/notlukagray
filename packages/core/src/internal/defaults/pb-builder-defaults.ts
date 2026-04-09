@@ -47,7 +47,7 @@ export type PbRichTextDefaults = {
   preWrapMarginY: string;
 };
 
-export type PbButtonVariantKey = "default" | "accent" | "ghost";
+export type PbButtonVariantKey = "default" | "accent" | "ghost" | "text";
 
 export type PbButtonVariantDefaults = {
   typography: PbTypographyBinding;
@@ -63,6 +63,7 @@ export type PbButtonDefaults = {
   nakedPaddingY: string | null;
   nakedPaddingX: string | null;
   nakedBorderRadius: string;
+  defaultVariant: PbButtonVariantKey;
   variants: Record<PbButtonVariantKey, PbButtonVariantDefaults>;
 };
 
@@ -217,6 +218,64 @@ export type PbImageVariantDefaults = {
   animation: PbImageAnimationDefaults;
 };
 
+export type PbInputVariantKey = "default" | "compact" | "minimal";
+
+export type PbInputVariantDefaults = {
+  showIcon?: boolean;
+  color?: string;
+  height?: string;
+};
+
+export type PbInputDefaults = {
+  defaultVariant: PbInputVariantKey;
+  variants: Record<PbInputVariantKey, PbInputVariantDefaults>;
+};
+
+export type PbRangeVariantKey = "default" | "slim" | "accent";
+
+export type PbRangeVariantDefaults = {
+  style: {
+    trackColor: string;
+    fillColor: string;
+    trackHeight: string;
+    thumbSize: string;
+    borderRadius: string;
+  };
+};
+
+export type PbRangeDefaults = {
+  defaultVariant: PbRangeVariantKey;
+  variants: Record<PbRangeVariantKey, PbRangeVariantDefaults>;
+};
+
+export type PbSpacerVariantKey = "sm" | "md" | "lg";
+
+export type PbSpacerVariantDefaults = {
+  height: string;
+};
+
+export type PbSpacerDefaults = {
+  defaultVariant: PbSpacerVariantKey;
+  variants: Record<PbSpacerVariantKey, PbSpacerVariantDefaults>;
+};
+
+export type PbVideoVariantKey = "inline" | "compact" | "fullcover" | "hero";
+
+export type PbVideoVariantDefaults = {
+  objectFit: "cover" | "contain" | "fillWidth" | "fillHeight";
+  aspectRatio?: string;
+  module?: string;
+  showPlayButton?: boolean;
+  autoplay?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+};
+
+export type PbVideoDefaults = {
+  defaultVariant: PbVideoVariantKey;
+  variants: Record<PbVideoVariantKey, PbVideoVariantDefaults>;
+};
+
 export type PbHeadingVariantKey = "display" | "section" | "label";
 
 export type PbBodyVariantKey = "lead" | "standard" | "fine";
@@ -251,6 +310,10 @@ export type PbElementDefaults = {
   richText: PbRichTextDefaults;
   button: PbButtonDefaults;
   image: PbImageDefaults;
+  video: PbVideoDefaults;
+  input: PbInputDefaults;
+  range: PbRangeDefaults;
+  spacer: PbSpacerDefaults;
   heading: PbHeadingDefaults;
   body: PbBodyDefaults;
   link: PbLinkDefaults;
@@ -775,6 +838,7 @@ export function createPbBuilderDefaultsFromFoundations(
         nakedPaddingY: null,
         nakedPaddingX: null,
         nakedBorderRadius: radiusCss,
+        defaultVariant: "default",
         variants: {
           default: {
             typography: { copyType: "body", level: 4 },
@@ -788,6 +852,10 @@ export function createPbBuilderDefaultsFromFoundations(
             typography: { copyType: "body", level: 5 },
             wrapperStroke: "var(--pb-border)",
             wrapperBorderRadius: radiusCss,
+          },
+          /** Naked text link — no wrapper styling, just typography binding. */
+          text: {
+            typography: { copyType: "body", level: 5 },
           },
         },
       },
@@ -907,6 +975,94 @@ export function createPbBuilderDefaultsFromFoundations(
               fineTune: createImageAnimationFineTune("none", "none"),
             },
           },
+        },
+      },
+      video: {
+        defaultVariant: "inline",
+        variants: {
+          inline: {
+            objectFit: "cover",
+            aspectRatio: "16 / 9",
+            showPlayButton: true,
+          },
+          compact: {
+            objectFit: "cover",
+            aspectRatio: "4 / 3",
+            module: "video-player-compact",
+            showPlayButton: true,
+          },
+          fullcover: {
+            objectFit: "cover",
+            module: "video-player-full",
+            showPlayButton: false,
+          },
+          hero: {
+            objectFit: "cover",
+            aspectRatio: "21 / 9",
+            module: "video-player",
+            showPlayButton: true,
+            autoplay: true,
+            loop: true,
+            muted: true,
+          },
+        },
+      },
+      input: {
+        defaultVariant: "default",
+        variants: {
+          default: {
+            showIcon: true,
+            color: "rgba(255,255,255,0.85)",
+          },
+          compact: {
+            showIcon: false,
+            color: "rgba(255,255,255,0.7)",
+            height: "2.25rem",
+          },
+          minimal: {
+            showIcon: false,
+            color: "rgba(255,255,255,0.5)",
+          },
+        },
+      },
+      range: {
+        defaultVariant: "default",
+        variants: {
+          default: {
+            style: {
+              trackColor: "rgba(255,255,255,0.2)",
+              fillColor: "rgba(255,255,255,0.9)",
+              trackHeight: "4px",
+              thumbSize: "14px",
+              borderRadius: "9999px",
+            },
+          },
+          slim: {
+            style: {
+              trackColor: "rgba(255,255,255,0.1)",
+              fillColor: "rgba(255,255,255,0.7)",
+              trackHeight: "2px",
+              thumbSize: "10px",
+              borderRadius: "9999px",
+            },
+          },
+          accent: {
+            style: {
+              trackColor: "rgba(255,255,255,0.15)",
+              fillColor: "#a78bfa",
+              trackHeight: "4px",
+              thumbSize: "16px",
+              borderRadius: "9999px",
+            },
+          },
+        },
+      },
+      spacer: {
+        defaultVariant: "md",
+        variants: {
+          sm: { height: "1rem" },
+          md: { height: "2rem" },
+          lg: { height: "4rem" },
         },
       },
       heading: {

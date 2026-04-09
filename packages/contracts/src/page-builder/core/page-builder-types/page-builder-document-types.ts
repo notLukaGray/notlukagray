@@ -6,28 +6,28 @@ import type { TriggerAction } from "./trigger-action-types";
 export type BackgroundTransitionEffect =
   | {
       type: "TIME";
+      id: string;
       from: string;
       to: string;
       duration: number;
       easing?: string;
-      id?: string;
     }
   | {
       type: "TRIGGER";
+      id: string;
       from: string;
       to: string;
       duration: number;
       easing?: string;
-      id?: string;
     }
   | {
       type: "SCROLL";
+      id: string;
       from: string;
       to: string;
       source?: "page" | "trigger";
       progress?: number;
       progressRange?: { start: number; end: number };
-      id?: string;
     };
 
 export type ResolvedPage = {

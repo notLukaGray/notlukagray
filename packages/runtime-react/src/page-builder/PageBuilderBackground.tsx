@@ -51,11 +51,11 @@ export function PageBuilderBackground({
 
   const activeNonScroll = transitionsArray
     .filter((t) => t.type !== "SCROLL")
-    .filter((t) => activeTransitionIds.has(t.id || "default"));
+    .filter((t) => activeTransitionIds.has(t.id));
 
   if (activeNonScroll.length > 0) {
     return activeNonScroll.map((transition) => {
-      const transitionId = transition.id || "default";
+      const transitionId = transition.id;
       const backgrounds = resolvedTransitionBackgrounds.get(transitionId);
       if (!backgrounds) return null;
       return (
@@ -86,7 +86,7 @@ export function PageBuilderBackground({
   }
 
   const scrollTransition = transitionsArray.find((t) => t.type === "SCROLL");
-  const scrollTransitionId = scrollTransition ? scrollTransition.id || "default" : null;
+  const scrollTransitionId = scrollTransition ? scrollTransition.id : null;
   const hasScrollProgress =
     scrollTransitionId != null && transitionProgress.has(scrollTransitionId);
 

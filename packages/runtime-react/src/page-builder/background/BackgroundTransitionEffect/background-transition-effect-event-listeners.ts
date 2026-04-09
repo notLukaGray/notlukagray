@@ -1,13 +1,15 @@
 import { useEffect } from "react";
 import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 
-export function normalizeTransitionEventId(id: string | undefined): string {
-  return id || "default";
+export function normalizeTransitionEventId(id: string | undefined): string | null {
+  if (typeof id !== "string") return null;
+  const trimmed = id.trim();
+  return trimmed.length > 0 ? trimmed : null;
 }
 
 type StartListenerParams = {
   effect: BackgroundTransitionEffect;
-  transitionId?: string;
+  transitionId: string;
   isForward: boolean;
   transitionStarted: boolean;
   reverseCompleteTimeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | null>;
@@ -30,6 +32,7 @@ export function useBackgroundTransitionStartListener({
     const handler = (e: CustomEvent<{ forward?: boolean; id?: string }>) => {
       const normalizedTransitionId = normalizeTransitionEventId(transitionId);
       const normalizedEventId = normalizeTransitionEventId(e.detail?.id);
+      if (!normalizedTransitionId || !normalizedEventId) return;
       if (normalizedTransitionId !== normalizedEventId) return;
 
       const forward = e.detail?.forward ?? true;
@@ -72,7 +75,7 @@ export function useBackgroundTransitionStartListener({
 
 type ProgressListenerParams = {
   effect: BackgroundTransitionEffect;
-  transitionId?: string;
+  transitionId: string;
   lastProgressRef: React.MutableRefObject<number | null>;
   setProgress: (value: number) => void;
 };
@@ -89,6 +92,7 @@ export function useBackgroundTransitionProgressListener({
     const handler = (e: CustomEvent<{ progress?: number; id?: string }>) => {
       const normalizedTransitionId = normalizeTransitionEventId(transitionId);
       const normalizedEventId = normalizeTransitionEventId(e.detail?.id);
+      if (!normalizedTransitionId || !normalizedEventId) return;
       if (normalizedTransitionId !== normalizedEventId) return;
 
       if (e.detail.progress != null && e.detail.progress !== lastProgressRef.current) {

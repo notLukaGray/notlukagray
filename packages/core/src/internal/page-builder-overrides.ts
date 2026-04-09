@@ -5,7 +5,6 @@ import type {
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 const KNOWN_BG_TYPES = new Set([
-  "backgroundColor",
   "backgroundImage",
   "backgroundVideo",
   "backgroundPattern",

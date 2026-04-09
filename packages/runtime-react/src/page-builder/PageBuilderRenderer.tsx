@@ -53,7 +53,7 @@ export function PageBuilderRenderer({
       return new Map<string, { fromBg: bgBlock | null; toBg: bgBlock | null }>();
     const resolved = new Map<string, { fromBg: bgBlock | null; toBg: bgBlock | null }>();
     for (const transition of transitionsArray) {
-      const transitionId = transition.id || "default";
+      const transitionId = transition.id;
       const fromBgRaw = bgDefinitions[transition.from];
       const toBgRaw = bgDefinitions[transition.to];
       if (!fromBgRaw || !toBgRaw) {

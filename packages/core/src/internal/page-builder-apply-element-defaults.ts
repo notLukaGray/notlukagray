@@ -1,9 +1,14 @@
 import {
   buildImageMotionTimingFromAnimationDefaults,
   type PbBodyVariantKey,
+  type PbButtonVariantKey,
   type PbHeadingVariantKey,
   type PbImageVariantKey,
+  type PbInputVariantKey,
   type PbLinkVariantKey,
+  type PbRangeVariantKey,
+  type PbSpacerVariantKey,
+  type PbVideoVariantKey,
 } from "@pb/core/internal/defaults/pb-builder-defaults";
 import { getPbBuilderDefaults } from "@pb/core/internal/adapters/host-config";
 import type { ElementBlock, SectionBlock } from "@pb/contracts";
@@ -110,6 +115,42 @@ const LINK_VARIANT_ALIASES: Record<string, PbLinkVariantKey> = {
   menu: "nav",
 };
 
+const BUTTON_VARIANT_ALIASES: Record<string, PbButtonVariantKey> = {
+  primary: "accent",
+  secondary: "ghost",
+  tertiary: "text",
+  link: "text",
+  naked: "text",
+};
+
+const VIDEO_VARIANT_ALIASES: Record<string, PbVideoVariantKey> = {
+  full: "fullcover",
+  fullscreen: "fullcover",
+  cover: "fullcover",
+  featured: "hero",
+};
+
+const INPUT_VARIANT_ALIASES: Record<string, PbInputVariantKey> = {
+  search: "default",
+  text: "default",
+  condensed: "compact",
+  bare: "minimal",
+};
+
+const RANGE_VARIANT_ALIASES: Record<string, PbRangeVariantKey> = {
+  thick: "default",
+  thin: "slim",
+  colored: "accent",
+};
+
+const SPACER_VARIANT_ALIASES: Record<string, PbSpacerVariantKey> = {
+  small: "sm",
+  medium: "md",
+  large: "lg",
+  xs: "sm",
+  xl: "lg",
+};
+
 function resolveImageVariantKey(value: unknown): PbImageVariantKey {
   const defaults = getPbBuilderDefaults();
   const variants = defaults.elements.image.variants;
@@ -151,6 +192,61 @@ function resolveLinkVariantKey(value: unknown): PbLinkVariantKey {
     variants,
     defaults.elements.link.defaultVariant,
     LINK_VARIANT_ALIASES
+  );
+}
+
+function resolveButtonVariantKey(value: unknown): PbButtonVariantKey {
+  const defaults = getPbBuilderDefaults();
+  const variants = defaults.elements.button.variants;
+  return resolveVariantKey(
+    value,
+    variants,
+    defaults.elements.button.defaultVariant,
+    BUTTON_VARIANT_ALIASES
+  );
+}
+
+function resolveVideoVariantKey(value: unknown): PbVideoVariantKey {
+  const defaults = getPbBuilderDefaults();
+  const variants = defaults.elements.video.variants;
+  return resolveVariantKey(
+    value,
+    variants,
+    defaults.elements.video.defaultVariant,
+    VIDEO_VARIANT_ALIASES
+  );
+}
+
+function resolveInputVariantKey(value: unknown): PbInputVariantKey {
+  const defaults = getPbBuilderDefaults();
+  const variants = defaults.elements.input.variants;
+  return resolveVariantKey(
+    value,
+    variants,
+    defaults.elements.input.defaultVariant,
+    INPUT_VARIANT_ALIASES
+  );
+}
+
+function resolveRangeVariantKey(value: unknown): PbRangeVariantKey {
+  const defaults = getPbBuilderDefaults();
+  const variants = defaults.elements.range.variants;
+  return resolveVariantKey(
+    value,
+    variants,
+    defaults.elements.range.defaultVariant,
+    RANGE_VARIANT_ALIASES
+  );
+}
+
+function resolveSpacerVariantKey(value: unknown): PbSpacerVariantKey {
+  const defaults = getPbBuilderDefaults();
+  const variants = defaults.elements.spacer.variants;
+  return resolveVariantKey(
+    value,
+    variants,
+    defaults.elements.spacer.defaultVariant,
+    SPACER_VARIANT_ALIASES
   );
 }
 
@@ -203,6 +299,160 @@ function applyLinkDefaults(el: ElementBlock): ElementBlock {
     unknown
   >;
   return mergeMissingFromTemplate(rec, template) ? (rec as ElementBlock) : el;
+}
+
+function applyButtonDefaults(el: ElementBlock): ElementBlock {
+  if (el.type !== "elementButton") return el;
+  const defaults = getPbBuilderDefaults();
+  const variantKey = resolveButtonVariantKey((el as unknown as Record<string, unknown>).variant);
+  const variant = defaults.elements.button.variants[variantKey];
+  const rec = { ...(el as unknown as Record<string, unknown>) };
+  let changed = false;
+
+  // typography binding — nested in defaults but flat on the element
+  if (rec.copyType == null && variant.typography.copyType) {
+    rec.copyType = variant.typography.copyType;
+    changed = true;
+  }
+  if (rec.level == null && variant.typography.level != null) {
+    rec.level = variant.typography.level;
+    changed = true;
+  }
+
+  // wrapper styling
+  if (rec.wrapperFill == null && isNonEmptyString(variant.wrapperFill)) {
+    rec.wrapperFill = variant.wrapperFill;
+    changed = true;
+  }
+  if (rec.wrapperStroke == null && isNonEmptyString(variant.wrapperStroke)) {
+    rec.wrapperStroke = variant.wrapperStroke;
+    changed = true;
+  }
+  if (rec.wrapperPadding == null && isNonEmptyString(variant.wrapperPadding)) {
+    rec.wrapperPadding = variant.wrapperPadding;
+    changed = true;
+  }
+  if (rec.wrapperBorderRadius == null && isNonEmptyString(variant.wrapperBorderRadius)) {
+    rec.wrapperBorderRadius = variant.wrapperBorderRadius;
+    changed = true;
+  }
+
+  return changed ? (rec as ElementBlock) : el;
+}
+
+function applyVideoDefaults(el: ElementBlock): ElementBlock {
+  if (el.type !== "elementVideo") return el;
+  const defaults = getPbBuilderDefaults();
+  const variantKey = resolveVideoVariantKey((el as unknown as Record<string, unknown>).variant);
+  const variant = defaults.elements.video.variants[variantKey];
+  const rec = { ...(el as unknown as Record<string, unknown>) };
+  let changed = false;
+
+  if (rec.objectFit == null && variant.objectFit) {
+    rec.objectFit = variant.objectFit;
+    changed = true;
+  }
+  if (isMissingResponsiveString(rec.aspectRatio) && isResponsiveStringValue(variant.aspectRatio)) {
+    rec.aspectRatio = variant.aspectRatio;
+    changed = true;
+  }
+  if (rec.module == null && isNonEmptyString(variant.module)) {
+    rec.module = variant.module;
+    changed = true;
+  }
+  if (!isBoolean(rec.showPlayButton) && isBoolean(variant.showPlayButton)) {
+    rec.showPlayButton = variant.showPlayButton;
+    changed = true;
+  }
+  if (!isBoolean(rec.autoplay) && isBoolean(variant.autoplay)) {
+    rec.autoplay = variant.autoplay;
+    changed = true;
+  }
+  if (!isBoolean(rec.loop) && isBoolean(variant.loop)) {
+    rec.loop = variant.loop;
+    changed = true;
+  }
+  if (!isBoolean(rec.muted) && isBoolean(variant.muted)) {
+    rec.muted = variant.muted;
+    changed = true;
+  }
+
+  return changed ? (rec as ElementBlock) : el;
+}
+
+function applySpacerDefaults(el: ElementBlock): ElementBlock {
+  if (el.type !== "elementSpacer") return el;
+  const defaults = getPbBuilderDefaults();
+  const variantKey = resolveSpacerVariantKey((el as unknown as Record<string, unknown>).variant);
+  const variant = defaults.elements.spacer.variants[variantKey];
+  const rec = { ...(el as unknown as Record<string, unknown>) };
+  let changed = false;
+
+  if (!isNonEmptyString(rec.height) && isNonEmptyString(variant.height)) {
+    rec.height = variant.height;
+    changed = true;
+  }
+
+  return changed ? (rec as ElementBlock) : el;
+}
+
+function applyInputDefaults(el: ElementBlock): ElementBlock {
+  if (el.type !== "elementInput") return el;
+  const defaults = getPbBuilderDefaults();
+  const variantKey = resolveInputVariantKey((el as unknown as Record<string, unknown>).variant);
+  const variant = defaults.elements.input.variants[variantKey];
+  const rec = { ...(el as unknown as Record<string, unknown>) };
+  let changed = false;
+
+  if (!isBoolean(rec.showIcon) && isBoolean(variant.showIcon)) {
+    rec.showIcon = variant.showIcon;
+    changed = true;
+  }
+  if (!isNonEmptyString(rec.color) && isNonEmptyString(variant.color)) {
+    rec.color = variant.color;
+    changed = true;
+  }
+  if (!isNonEmptyString(rec.height) && isNonEmptyString(variant.height)) {
+    rec.height = variant.height;
+    changed = true;
+  }
+
+  return changed ? (rec as ElementBlock) : el;
+}
+
+function applyRangeDefaults(el: ElementBlock): ElementBlock {
+  if (el.type !== "elementRange") return el;
+  const defaults = getPbBuilderDefaults();
+  const variantKey = resolveRangeVariantKey((el as unknown as Record<string, unknown>).variant);
+  const variant = defaults.elements.range.variants[variantKey];
+  const rec = { ...(el as unknown as Record<string, unknown>) };
+  let changed = false;
+
+  // Merge style sub-keys individually — do not overwrite a partially-set style object
+  const existingStyle = asRecord(rec.style) ?? {};
+  const variantStyle = variant.style;
+  const nextStyle: Record<string, unknown> = { ...existingStyle };
+  let styleChanged = false;
+
+  for (const key of [
+    "trackColor",
+    "fillColor",
+    "trackHeight",
+    "thumbSize",
+    "borderRadius",
+  ] as const) {
+    if (!isNonEmptyString(nextStyle[key]) && isNonEmptyString(variantStyle[key])) {
+      nextStyle[key] = variantStyle[key];
+      styleChanged = true;
+    }
+  }
+
+  if (styleChanged) {
+    rec.style = nextStyle;
+    changed = true;
+  }
+
+  return changed ? (rec as ElementBlock) : el;
 }
 
 function applyImageDefaults(el: ElementBlock): ElementBlock {
@@ -435,9 +685,14 @@ function processElement(el: unknown): unknown {
   let changed = false;
   let withDefaults = el as ElementBlock;
   withDefaults = applyImageDefaults(withDefaults);
+  withDefaults = applyVideoDefaults(withDefaults);
   withDefaults = applyHeadingDefaults(withDefaults);
   withDefaults = applyBodyDefaults(withDefaults);
   withDefaults = applyLinkDefaults(withDefaults);
+  withDefaults = applyButtonDefaults(withDefaults);
+  withDefaults = applyInputDefaults(withDefaults);
+  withDefaults = applyRangeDefaults(withDefaults);
+  withDefaults = applySpacerDefaults(withDefaults);
   if (withDefaults !== el) changed = true;
   const result = { ...(withDefaults as Record<string, unknown>) };
 

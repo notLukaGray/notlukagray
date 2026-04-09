@@ -2,6 +2,9 @@
 
 This document is for writing page-builder JSON without reading TypeScript source.
 
+For exhaustive variable/value semantics (including runtime defaults, precedence, and known schema gaps), see
+[`../../docs/page-builder-schema-semantics.md`](../../docs/page-builder-schema-semantics.md).
+
 ## Conventions
 
 - **Responsive string fields** accept either:

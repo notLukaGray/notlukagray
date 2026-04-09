@@ -5,7 +5,7 @@ export type BackgroundTransitionEffectProps = {
   effect: BackgroundTransitionEffect;
   fromBg: bgBlock | null;
   toBg: bgBlock | null;
-  transitionId?: string;
+  transitionId: string;
   isReversing?: boolean;
   onReverseComplete?: () => void;
 };

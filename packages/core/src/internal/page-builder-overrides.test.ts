@@ -122,6 +122,7 @@ describe("page-builder-overrides", () => {
     });
 
     it("returns false for unknown type string", () => {
+      expect(isBgBlockPayload({ type: "backgroundColor" })).toBe(false);
       expect(isBgBlockPayload({ type: "unknownBg" })).toBe(false);
     });
   });

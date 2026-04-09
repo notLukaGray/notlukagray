@@ -83,7 +83,39 @@ export const formFieldBlockSchema = z
     multiple: z.boolean().optional(),
     loadingText: z.string().optional(),
   })
-  .merge(formFieldStyleSchema);
+  .merge(formFieldStyleSchema)
+  .superRefine((field, ctx) => {
+    const needsOptions =
+      field.fieldType === "select" ||
+      field.fieldType === "radio" ||
+      field.fieldType === "checkboxGroup";
+    if (needsOptions && (!Array.isArray(field.options) || field.options.length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["options"],
+        message: `${field.fieldType} fields require a non-empty options array`,
+      });
+    }
+
+    if (field.fieldType === "submit") {
+      const label = typeof field.label === "string" ? field.label.trim() : "";
+      if (!label) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["label"],
+          message: "submit fields require a non-empty label",
+        });
+      }
+    }
+
+    if (field.multiple === true && field.fieldType !== "file" && field.fieldType !== "select") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["multiple"],
+        message: `multiple is only valid on file and select fields, not "${field.fieldType}"`,
+      });
+    }
+  });
 
 export type FormFieldOption = z.infer<typeof formFieldOptionSchema>;
 export type FormFieldStyle = z.infer<typeof formFieldStyleSchema>;

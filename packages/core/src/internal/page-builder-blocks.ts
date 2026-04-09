@@ -12,6 +12,7 @@ const BG_BLOCK_TYPES = new Set([
   "backgroundImage",
   "backgroundVariable",
   "backgroundPattern",
+  "backgroundTransition",
 ]);
 
 export function isBgBlockShape(value: unknown): value is bgBlock {

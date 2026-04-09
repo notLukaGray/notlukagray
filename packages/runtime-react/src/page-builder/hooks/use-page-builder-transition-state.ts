@@ -35,7 +35,7 @@ export function usePageBuilderTransitionState({
       transitionsArray.forEach((transition) => {
         if (transition.type === "SCROLL") {
           if (transition.source === "trigger") return;
-          const transitionId = transition.id || "default";
+          const transitionId = transition.id;
           const start = transition.progressRange?.start ?? 0;
           const end = transition.progressRange?.end ?? 1;
           const denom = end - start;
@@ -60,9 +60,7 @@ export function usePageBuilderTransitionState({
 
   useEffect(() => {
     if (transitionsArray.length === 0) return;
-    const timeTransitionIds = transitionsArray
-      .filter((t) => t.type === "TIME")
-      .map((t) => t.id || "default");
+    const timeTransitionIds = transitionsArray.filter((t) => t.type === "TIME").map((t) => t.id);
     if (timeTransitionIds.length === 0) return;
     queueMicrotask(() => {
       setActiveTransitionIds((prev) => {

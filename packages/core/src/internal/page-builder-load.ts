@@ -1,7 +1,7 @@
 import fs from "fs";
 import { isSafePathSegment } from "@pb/core/internal/page-builder-paths";
 import type { PageBuilder } from "@pb/contracts";
-import { pageBuilderSchema } from "@pb/contracts";
+import { pageBuilderSchema, buttonActionSchema } from "@pb/contracts";
 import {
   readPageJson,
   readPageJsonAsync,
@@ -36,7 +36,37 @@ export function isPageBuilder(data: Record<string, unknown>): data is PageBuilde
   );
 }
 
+const knownButtonActions = new Set(buttonActionSchema.options);
+
+function warnUnknownButtonActions(pageBuilder: PageBuilder, slug: string): void {
+  if (process.env.NODE_ENV !== "development") return;
+  const definitions = pageBuilder.definitions ?? {};
+  for (const [defKey, block] of Object.entries(definitions)) {
+    const elements =
+      block != null && typeof block === "object" && "elements" in block
+        ? (block as { elements?: unknown[] }).elements
+        : undefined;
+    if (!Array.isArray(elements)) continue;
+    for (const el of elements) {
+      if (
+        el != null &&
+        typeof el === "object" &&
+        (el as Record<string, unknown>).type === "elementButton"
+      ) {
+        const action = (el as Record<string, unknown>).action;
+        if (typeof action === "string" && !knownButtonActions.has(action as never)) {
+          console.warn(
+            `[page-builder] ${slug}/${defKey}: unknown button action "${action}" — ` +
+              `will fail strict validation. Update to a known action or remove.`
+          );
+        }
+      }
+    }
+  }
+}
+
 function validatePageBuilderNonBlocking(pageBuilder: PageBuilder, slug: string): void {
+  warnUnknownButtonActions(pageBuilder, slug);
   const validationResult = pageBuilderSchema.safeParse(pageBuilder);
   if (validationResult.success) return;
   const isDev = process.env.NODE_ENV === "development";
