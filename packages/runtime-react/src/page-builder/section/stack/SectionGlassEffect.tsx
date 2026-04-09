@@ -9,7 +9,7 @@ import {
   useSyncExternalStore,
   type RefObject,
 } from "react";
-import type { SectionEffect } from "@pb/core/internal/page-builder-schemas";
+import type { SectionEffect } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { GlassFilter } from "./GlassFilter";
 import { GlassClipPath } from "./GlassClipPath";
 import {

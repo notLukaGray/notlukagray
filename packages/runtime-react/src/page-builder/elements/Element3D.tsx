@@ -2,7 +2,10 @@
 
 import { useMemo, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import type { ElementBlock, MotionPropsFromJson } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  MotionPropsFromJson,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { Model3DScene } from "./Element3D/Model3DScene";
@@ -24,11 +27,11 @@ import { MotionFromJson } from "@/page-builder/integrations/framer-motion";
 import {
   mergeMotionDefaults,
   getExitMotionFromPreset,
-} from "@pb/core/internal/page-builder-motion-defaults";
-import { MOTION_DEFAULTS } from "@pb/core/internal/page-builder-motion-defaults";
+} from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
+import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 
 type Props = Extract<ElementBlock, { type: "elementModel3D" }> & {
-  moduleConfig?: import("@pb/core/internal/page-builder-schemas").ModuleBlock;
+  moduleConfig?: import("@pb/contracts/page-builder/core/page-builder-schemas").ModuleBlock;
 };
 
 type LayoutProps = Pick<
@@ -36,7 +39,7 @@ type LayoutProps = Pick<
   "width" | "height" | "align" | "marginTop" | "marginBottom" | "marginLeft" | "marginRight"
 > & {
   zIndex?: number;
-  constraints?: import("@pb/core/internal/page-builder-schemas").ElementLayout["constraints"];
+  constraints?: import("@pb/contracts/page-builder/core/page-builder-schemas").ElementLayout["constraints"];
   [key: string]: unknown;
 };
 

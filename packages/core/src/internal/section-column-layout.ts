@@ -25,7 +25,7 @@ import {
   type ResolvedColumnSpanInput,
   type ResolvedItemLayoutInput,
   type ResolvedItemStylesInput,
-} from "./section-column-layout-types";
+} from "@pb/contracts/page-builder/core/page-builder-types/section-column-layout-types";
 
 export {
   DEFAULT_COLUMN_WIDTHS,
@@ -51,7 +51,7 @@ export {
   type ResolvedColumnWidthsInput,
   type ResolvedItemLayoutInput,
   type ResolvedItemStylesInput,
-} from "./section-column-layout-types";
+} from "@pb/contracts/page-builder/core/page-builder-types/section-column-layout-types";
 
 export {
   buildColumnLayoutSegments,

@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useTexture } from "@react-three/drei";
 import { useVideoTexture } from "./video-texture";
-import type { TextureDef } from "@pb/core/internal/page-builder-schemas";
+import type { TextureDef } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import * as THREE from "three";
 
 export const PLACEHOLDER_IMAGE =

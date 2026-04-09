@@ -2,7 +2,7 @@
 
 import { useMemo, useEffect, useState, useRef } from "react";
 import { createElement } from "react";
-import type { bgBlock } from "@pb/core/internal/page-builder-schemas";
+import type { bgBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { BG_COMPONENTS, isKnownBgType } from "./index";
 import { useScrollContainerRef } from "@/page-builder/section/position/use-scroll-container";
 import { useScroll, useMotionValueEvent } from "@/page-builder/integrations/framer-motion";

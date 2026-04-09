@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { firePageBuilderAction } from "@/page-builder/triggers";
-import type { PageBuilderAction } from "@pb/core/internal/page-builder-schemas";
+import type { PageBuilderAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type KeyboardTriggerDef = {
   /** Key value matching `event.key` (e.g. "ArrowRight", "Space", "Enter", "Escape", "a") */

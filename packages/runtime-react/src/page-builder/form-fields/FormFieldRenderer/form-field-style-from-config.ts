@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { FormFieldBlock } from "@pb/core/internal/page-builder-schemas";
+import type { FormFieldBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 
 /**

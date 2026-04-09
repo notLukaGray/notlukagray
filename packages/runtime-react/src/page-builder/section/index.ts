@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { SectionBlock } from "@pb/core/internal/page-builder-schemas";
+import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { SectionDivider } from "./SectionDivider";
 import { SectionContentBlock } from "./SectionContentBlock";
 import { ScrollContainerSection } from "./ScrollContainerSection";

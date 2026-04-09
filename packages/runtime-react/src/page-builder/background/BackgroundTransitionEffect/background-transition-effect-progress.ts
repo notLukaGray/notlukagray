@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { BackgroundTransitionEffect } from "@pb/core/internal/page-builder-types";
+import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 import type {
   ScrollBackgroundTransitionEffect,
   TriggerBackgroundTransitionEffect,

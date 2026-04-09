@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import type { bgBlock, SectionBlock } from "@pb/core/internal/page-builder-schemas";
+import type { bgBlock, SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { SECTION_COMPONENTS } from "@/page-builder/section";
 import { generateSectionKey } from "@pb/core/internal/section-keys";
-import type { TriggerAction } from "@pb/core/internal/page-builder-schemas";
-import type { BackgroundTransitionEffect } from "@pb/core/internal/page-builder-types";
+import type { TriggerAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 import { usePageBuilderTriggers } from "@/page-builder/hooks/use-page-builder-triggers";
 import { ServerBreakpointProvider } from "@pb/runtime-react/core/providers/device-type-provider";
 import { PageBuilderBackground } from "./PageBuilderBackground";

@@ -4,7 +4,10 @@ import { useMemo, useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
-import type { ElementBlock, SectionEffect } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  SectionEffect,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
 import { useDefinitions } from "@/page-builder/elements/ElementModule/ModuleSlotContext";
 import { firePageBuilderAction } from "@/page-builder/triggers";
@@ -12,7 +15,7 @@ import { AnimatePresence, MotionFromJson } from "@/page-builder/integrations/fra
 import {
   mergeMotionDefaults,
   getExitMotionFromPreset,
-} from "@pb/core/internal/page-builder-motion-defaults";
+} from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 import {
   buildElementButtonBlockStyle,
   buildElementButtonWrapperStyles,

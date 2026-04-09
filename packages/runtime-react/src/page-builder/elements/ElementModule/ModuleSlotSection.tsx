@@ -2,13 +2,16 @@
 
 import { useMemo } from "react";
 import type { CSSProperties } from "react";
-import type { ElementBlock, MotionPropsFromJson } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  MotionPropsFromJson,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { uiVideoFeedbackDurationMs } from "@pb/runtime-react/core/lib/globals";
 import {
   MOTION_DEFAULTS,
   mergeMotionDefaults,
   getEntranceMotionFromPreset,
-} from "@pb/core/internal/page-builder-motion-defaults";
+} from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 import { resolveSlotElements, getModuleSlotBaseStyle } from "@pb/core/internal/module-slot-utils";
 import { MotionFromJson } from "@/page-builder/integrations/framer-motion";
 import { useSlotGestures } from "@/page-builder/hooks/use-slot-gestures";

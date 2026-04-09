@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { FormFieldBlock } from "@pb/core/internal/page-builder-schemas";
+import type { FormFieldBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { FormFieldValue } from "@/page-builder/form-fields";
 import { validateFormField } from "@/page-builder/form-fields/FormFieldRenderer/form-field-validation";
 

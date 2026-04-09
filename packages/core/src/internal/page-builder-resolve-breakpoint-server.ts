@@ -5,7 +5,7 @@
  * resolve at request time from User-Agent (or explicit isMobile).
  */
 
-import { resolveResponsiveValue } from "@/core/lib/responsive-value";
+import { resolveResponsiveValue } from "../lib/responsive-value";
 import { resolveElementBlockForBreakpoint } from "@pb/core/internal/element-layout-utils/breakpoint-resolution";
 import {
   resolveColumnAssignments,
@@ -37,7 +37,7 @@ import type {
   ElementBlock,
   FormFieldBlock,
   SectionBlock,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import {
   resolveResponsiveBooleanProp,
   resolveResponsiveStringProp,

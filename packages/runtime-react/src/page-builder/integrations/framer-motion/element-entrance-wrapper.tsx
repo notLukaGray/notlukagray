@@ -3,7 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import { motion } from "@/page-builder/integrations/framer-motion";
 import { useShouldReduceMotion } from "./reduced-motion";
-import type { MotionTiming } from "@pb/core/internal/page-builder-schemas";
+import type { MotionTiming } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 type MotionDivProps = React.ComponentProps<typeof motion.div>;
 

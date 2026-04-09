@@ -6,12 +6,12 @@ import type {
   CssInlineStyle,
   ElementBlock,
   SectionDefinitionBlock,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
 import { generateElementKey } from "@pb/core/internal/element-keys";
 import { motion } from "@/page-builder/integrations/framer-motion";
 import type { Easing } from "@/page-builder/integrations/framer-motion";
-import { MOTION_DEFAULTS } from "@pb/core/internal/page-builder-motion-defaults";
+import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 import { SlotDefaultWrapperStyleContext, SlotDefinitionsContext } from "./ModuleSlotContext";
 
 export type ModuleSlotContentProps = {

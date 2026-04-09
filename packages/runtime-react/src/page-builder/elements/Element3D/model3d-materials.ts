@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import type { MaterialDef, TextureDef } from "@pb/core/internal/page-builder-schemas";
+import type { MaterialDef, TextureDef } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 type MaterialSlotProp =
   | "map"

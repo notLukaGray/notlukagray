@@ -1,6 +1,6 @@
 "use client";
 
-import type { SceneDef } from "@pb/core/internal/page-builder-schemas";
+import type { SceneDef } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type Vec3Tuple = [number, number, number];
 

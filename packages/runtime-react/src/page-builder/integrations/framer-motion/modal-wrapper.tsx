@@ -3,11 +3,11 @@
 import { useMemo } from "react";
 import { AnimatePresence } from "@/page-builder/integrations/framer-motion";
 import type { ModalTransitionConfig } from "@pb/core/internal/modal-types";
-import type { MotionPropsFromJson } from "@pb/core/internal/page-builder-schemas";
+import type { MotionPropsFromJson } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import {
   MOTION_DEFAULTS,
   mergeMotionDefaults,
-} from "@pb/core/internal/page-builder-motion-defaults";
+} from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 import { MotionFromJson } from "./motion-from-json";
 
 type ModalAnimationWrapperProps = {

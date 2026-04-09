@@ -4,7 +4,10 @@ import { forwardRef, useLayoutEffect, useRef, useState, type RefObject } from "r
 import { MotionFromJson } from "./motion-from-json";
 import { motion } from "./animations";
 import { useShouldReduceMotion } from "./reduced-motion";
-import type { MotionPropsFromJson, MotionTiming } from "@pb/core/internal/page-builder-schemas";
+import type {
+  MotionPropsFromJson,
+  MotionTiming,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 type SectionElementProps = React.ComponentPropsWithoutRef<"section"> & {
   ref?: RefObject<HTMLElement>;

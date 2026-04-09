@@ -1,6 +1,6 @@
 "use client";
 
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { GridLayoutItem } from "@pb/core/internal/section-column-layout";
 
 export function buildGridItemStyle(item: GridLayoutItem<ElementBlock>): React.CSSProperties {

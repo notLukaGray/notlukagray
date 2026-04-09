@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import type { bgBlock, SectionBlock } from "@pb/core/internal/page-builder-schemas";
-import { OVERRIDE_KEY_BG } from "@pb/core/internal/page-builder-schemas";
+import type { bgBlock, SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { OVERRIDE_KEY_BG } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import {
   applyElementOverrides,
   isBgBlockPayload,

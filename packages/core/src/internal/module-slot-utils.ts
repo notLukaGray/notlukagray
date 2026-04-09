@@ -13,8 +13,8 @@ import {
   resolveFrameGapCss,
   resolveFrameRowGapCss,
 } from "@pb/core/internal/element-layout-utils";
-import { scaleSpaceShorthandForDensity } from "@pb/core/internal/page-density";
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import { scaleSpaceShorthandForDensity } from "@pb/contracts/page-builder/core/page-density";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ModuleSlotConfig } from "@pb/core/internal/module-slot-types";
 
 /**

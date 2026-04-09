@@ -1,8 +1,7 @@
-import * as cdnAssetServerModule from "@/core/lib/cdn-asset-server";
-import * as proxyUrlModule from "@/core/lib/proxy-url";
+import { getSignedCdnUrl, validateAssetKey } from "../lib/cdn-asset-server";
+import { buildProxyUrl, needsProxyUrl } from "../lib/proxy-url";
 import { resolveBgBlockUrls } from "@pb/core/internal/page-builder-blocks";
 import type { bgBlock, PageBuilderDefinitionBlock, SectionBlock } from "@pb/contracts";
-import { readInteropExport } from "@pb/core/internal/interop";
 import type { GetSignedImageUrlFn } from "@pb/core/internal/page-builder-resolved-assets";
 import { getBunnyImageParams } from "@pb/core/internal/page-builder-resolved-assets";
 import {
@@ -12,16 +11,6 @@ import {
 } from "@pb/core/internal/page-builder-resolved-assets";
 import type { BackgroundTransitionEffect } from "@pb/contracts";
 import { createMemoizedComputeContainerWidthPx } from "./server/page-builder-container-width-server";
-
-const getSignedCdnUrl = readInteropExport<
-  (assetKey: string, extraParams?: Record<string, string>) => string
->(cdnAssetServerModule, "getSignedCdnUrl");
-const validateAssetKey = readInteropExport<(key: string) => string | null>(
-  cdnAssetServerModule,
-  "validateAssetKey"
-);
-const buildProxyUrl = readInteropExport<(ref: string) => string>(proxyUrlModule, "buildProxyUrl");
-const needsProxyUrl = readInteropExport<(ref: string) => boolean>(proxyUrlModule, "needsProxyUrl");
 
 const BG_TYPES_FOR_DEFINITIONS = new Set([
   "backgroundVideo",

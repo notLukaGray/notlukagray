@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { firePageBuilderAction } from "@/page-builder/triggers";
-import type { PageBuilderAction } from "@pb/core/internal/page-builder-schemas";
+import type { PageBuilderAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type TimerTriggerDef = {
   /** Fire once after this many ms */

@@ -3,7 +3,7 @@
 import { forwardRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ElementGraphicLink } from "@pb/core/internal/page-builder-types";
+import type { ElementGraphicLink } from "@pb/contracts/page-builder/core/page-builder-types";
 import { GraphicLinkHoverContext } from "./GraphicLinkHoverContext";
 
 type GradientForResolve = { id?: string; stops?: Array<{ color?: string } | null> };

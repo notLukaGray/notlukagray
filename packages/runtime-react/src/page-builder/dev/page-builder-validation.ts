@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { z } from "zod";
-import { pageBuilderSchema } from "@pb/core/internal/page-builder-schemas";
+import { pageBuilderSchema } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import {
   loadPageBuilder,
   loadPageBuilderByPath,

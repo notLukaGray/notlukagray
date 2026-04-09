@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { GraphicLinkWrapper } from "./Shared/GraphicLinkWrapper";
 import type { ElementVectorProps, VectorLayoutProps } from "./ElementVector/element-vector-types";
-import type { VectorShape } from "@pb/core/internal/page-builder-schemas";
+import type { VectorShape } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolvePaint } from "./ElementVector/element-vector-paint";
 import { toVectorTransitionDuration } from "./ElementVector/element-vector-paint";
 import {

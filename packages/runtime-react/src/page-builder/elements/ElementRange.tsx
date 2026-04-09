@@ -5,9 +5,9 @@ import type {
   ElementBlock,
   PageBuilderAction,
   SectionEffect,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
-import type { ElementLayout } from "@pb/core/internal/page-builder-schemas";
+import type { ElementLayout } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";
 import { firePageBuilderProgressTrigger } from "@/page-builder/triggers";

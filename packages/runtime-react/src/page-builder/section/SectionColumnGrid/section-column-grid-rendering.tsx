@@ -1,6 +1,6 @@
 "use client";
 
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { pageBuilderFlexGapToCss } from "@pb/core/internal/element-layout-utils";
 import { borderToCss } from "@pb/core/internal/section-utils";
 import { generateElementKey } from "@pb/core/internal/element-keys";

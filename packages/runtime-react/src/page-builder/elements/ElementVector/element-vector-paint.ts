@@ -1,4 +1,4 @@
-import type { VectorGradient } from "@pb/core/internal/page-builder-schemas";
+import type { VectorGradient } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 /**
  * Resolve a fill/stroke reference to an SVG paint value.

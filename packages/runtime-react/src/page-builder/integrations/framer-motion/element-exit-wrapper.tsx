@@ -8,8 +8,11 @@ import {
   MOTION_DEFAULTS,
   mergeMotionDefaults,
   getExitMotionFromPreset,
-} from "@pb/core/internal/page-builder-motion-defaults";
-import type { MotionPropsFromJson, MotionTiming } from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
+import type {
+  MotionPropsFromJson,
+  MotionTiming,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type ElementExitWrapperProps = {
   /** When false, child unmounts after exit animation. */

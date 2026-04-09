@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import type { TriggerAction } from "@pb/core/internal/page-builder-schemas";
-import type { BackgroundTransitionEffect } from "@pb/core/internal/page-builder-types";
+import type { TriggerAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 import { firePageBuilderProgressTrigger } from "@/page-builder/triggers";
 import { usePageScrollProgress } from "@/page-builder/hooks/use-page-scroll-progress";
 

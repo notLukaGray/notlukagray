@@ -8,7 +8,7 @@ export {
   type ConditionOperator,
   type VariableCondition,
   type VisibleWhenConfig,
-} from "@pb/core/internal/page-builder-condition-evaluator";
+} from "@pb/contracts/page-builder/core/page-builder-condition-evaluator";
 export {
   useVariableStore,
   useVariable,

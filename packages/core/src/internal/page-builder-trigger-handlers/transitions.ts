@@ -1,6 +1,6 @@
 import type React from "react";
-import type { UpdateTransitionProgressAction } from "@pb/core/internal/page-builder-schemas";
-import type { BackgroundTransitionEffect } from "@pb/core/internal/page-builder-types";
+import type { UpdateTransitionProgressAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 import type { TriggerHandlerContext } from "./context-and-bg-progress";
 
 function shouldDebounce(

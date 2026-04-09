@@ -1,4 +1,4 @@
-import { resolveResponsiveValue } from "@/core/lib/responsive-value";
+import { resolveResponsiveValue } from "../lib/responsive-value";
 import type { ColumnSpanInput } from "@pb/core/internal/section-column-layout";
 
 type ColumnSpanValue = number | "all";

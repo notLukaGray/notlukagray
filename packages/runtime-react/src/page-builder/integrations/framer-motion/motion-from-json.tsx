@@ -2,8 +2,8 @@
 
 import { forwardRef } from "react";
 import { motion } from "@/page-builder/integrations/framer-motion";
-import { mergeMotionDefaults } from "@pb/core/internal/page-builder-motion-defaults";
-import type { MotionPropsFromJson } from "@pb/core/internal/page-builder-schemas";
+import { mergeMotionDefaults } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
+import type { MotionPropsFromJson } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 /** Motion div props type; we cast JSON-derived props to this for the motion component. */
 type MotionDivProps = React.ComponentProps<typeof motion.div>;

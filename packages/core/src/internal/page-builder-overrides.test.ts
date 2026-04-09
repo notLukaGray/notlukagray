@@ -5,7 +5,10 @@ import {
   isBgBlockPayload,
   type OverridesMap,
 } from "./page-builder-overrides";
-import type { SectionBlock, ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type {
+  SectionBlock,
+  ElementBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 describe("page-builder-overrides", () => {
   describe("looksLikeElementBlock", () => {

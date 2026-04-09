@@ -7,12 +7,12 @@
 
 import { useMemo, useState, useEffect } from "react";
 import type { CSSProperties } from "react";
-import type { ModuleBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ModuleBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ModuleSlotConfig } from "@/page-builder/elements/ElementModule/types";
 import { VideoSlotSection } from "./VideoSlotSection";
 import { motion, MotionFromJson } from "@/page-builder/integrations/framer-motion";
 import type { Transition } from "@/page-builder/integrations/framer-motion/types";
-import { mergeMotionDefaults } from "@pb/core/internal/page-builder-motion-defaults";
+import { mergeMotionDefaults } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 
 export type ElementVideoSlotsOverlayProps = {
   slotsObj: Record<string, unknown>;

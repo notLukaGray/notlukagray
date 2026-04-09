@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { MOTION_DEFAULTS } from "@pb/core/internal/page-builder-motion-defaults";
+import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 
 export type FeedbackType = "play" | "pause" | "seekBack" | "seekForward";
 

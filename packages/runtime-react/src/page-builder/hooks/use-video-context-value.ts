@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { ModuleBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ModuleBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveVideoShowWhen, getVideoActionHandler } from "@pb/core/internal/element-video-utils";
 import type { UseVideoPlayerStateResult } from "./use-video-player-state";
 import type { VideoControlContextValue } from "@/page-builder/elements/ElementVideo/VideoControlContext";

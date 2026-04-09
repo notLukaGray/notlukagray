@@ -5,7 +5,7 @@
  */
 import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
-import type { JsonValue } from "@pb/core/internal/page-builder-types/json-value";
+import type { JsonValue } from "@pb/contracts/page-builder/core/page-builder-types/json-value";
 
 // ---------------------------------------------------------------------------
 // Dev-only action log store

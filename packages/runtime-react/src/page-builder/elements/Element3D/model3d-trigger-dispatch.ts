@@ -1,6 +1,6 @@
 "use client";
 
-import type { Model3DAction } from "@pb/core/internal/page-builder-schemas";
+import type { Model3DAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type {
   Model3DAnimationCommand,
   Model3DCameraCommand,
@@ -12,7 +12,7 @@ import type {
   Model3DSceneCommand,
   Model3DPostProcessingCommand,
 } from "./model3d-controls";
-import { MOTION_DEFAULTS } from "@pb/core/internal/page-builder-motion-defaults";
+import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 import {
   matchesTargetId,
   parseBoolean,

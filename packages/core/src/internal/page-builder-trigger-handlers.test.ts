@@ -5,7 +5,7 @@ import {
   isBgTransitionProgressOverride,
   computeBgProgressOverrides,
 } from "./page-builder-trigger-handlers";
-import { OVERRIDE_KEY_BG } from "@pb/core/internal/page-builder-schemas";
+import { OVERRIDE_KEY_BG } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 describe("page-builder-trigger-handlers", () => {
   describe("getTransitionId", () => {

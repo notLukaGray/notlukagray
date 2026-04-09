@@ -3,7 +3,7 @@ import {
   buildPageDensityCssVars,
   scaleSpaceForDensity,
   scaleSpaceShorthandForDensity,
-} from "@pb/core/internal/page-density";
+} from "@pb/contracts/page-builder/core/page-density";
 
 describe("page-density", () => {
   it("builds density multipliers for comfortable mode", () => {

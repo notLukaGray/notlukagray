@@ -4,7 +4,10 @@ import { Children, isValidElement, useMemo, type CSSProperties, type ReactElemen
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
-import type { ElementBlock, ElementBodyVariant } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  ElementBodyVariant,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getElementLayoutStyle } from "@pb/core/internal/element-layout-utils";
 import { sanitizeRichTextMarkup } from "@pb/runtime-react/core/lib/sanitize-rich-text";
 import {

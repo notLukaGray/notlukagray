@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
 import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
-import { scaleSpaceForDensity } from "@pb/core/internal/page-density";
-import type { ElementLayout } from "../page-builder-schemas";
-import { resolveResponsiveValue } from "@/core/lib/responsive-value";
+import { scaleSpaceForDensity } from "@pb/contracts/page-builder/core/page-density";
+import type { ElementLayout } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { resolveResponsiveValue } from "../../lib/responsive-value";
 import { resolveConstraintStyle } from "./figma-constraints-style";
 
 /** JSON often sends `""` for “unset”; treat like undefined so guideline defaults apply. */

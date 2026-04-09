@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useEffectEvent, useRef } from "react";
-import type { SectionBlock } from "@pb/core/internal/page-builder-schemas";
+import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useSectionBaseStyles } from "@/page-builder/section/position/use-section-base-styles";
 import { firePageBuilderTrigger, firePageBuilderProgressTrigger } from "./core/trigger-event";
 import { useSectionScrollProgress } from "@/page-builder/section/position/use-section-scroll-progress";

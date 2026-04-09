@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { bgBlock } from "@pb/core/internal/page-builder-schemas";
+import type { bgBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { BackgroundVideo } from "./BackgroundVideo";
 import { BackgroundImage } from "./BackgroundImage";
 import { BackgroundVariable } from "./BackgroundVariable";

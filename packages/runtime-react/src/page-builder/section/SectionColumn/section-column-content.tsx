@@ -1,7 +1,7 @@
 "use client";
 
 import type { UseColumnLayoutResult } from "@/page-builder/hooks/use-column-layout";
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { SectionColumnGrid } from "../SectionColumnGrid";
 
 type SectionColumnContentProps = {

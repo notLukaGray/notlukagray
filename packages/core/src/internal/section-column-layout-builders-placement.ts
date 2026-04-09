@@ -3,7 +3,7 @@ import type {
   ItemLayoutEntryInput,
   ResolvedColumnSpanInput,
   ResolvedItemLayoutInput,
-} from "./section-column-layout-types";
+} from "@pb/contracts/page-builder/core/page-builder-types/section-column-layout-types";
 import {
   normalizeColumnSpanValue,
   type ColumnLayoutSegment,

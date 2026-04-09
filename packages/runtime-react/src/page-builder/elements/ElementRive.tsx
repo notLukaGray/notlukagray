@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useCallback } from "react";
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { RivePlayer, type Rive } from "@/page-builder/integrations/rive";
@@ -15,7 +15,7 @@ type LayoutProps = Pick<
   "width" | "height" | "align" | "marginTop" | "marginBottom" | "marginLeft" | "marginRight"
 > & {
   zIndex?: number;
-  constraints?: import("@pb/core/internal/page-builder-schemas").ElementLayout["constraints"];
+  constraints?: import("@pb/contracts/page-builder/core/page-builder-schemas").ElementLayout["constraints"];
   [key: string]: unknown;
 };
 
@@ -144,7 +144,7 @@ export function ElementRive({
           onStateChange.payload && typeof onStateChange.payload === "object"
             ? { ...onStateChange.payload, stateName }
             : { stateName },
-      } as import("@pb/core/internal/page-builder-schemas").PageBuilderAction;
+      } as import("@pb/contracts/page-builder/core/page-builder-schemas").PageBuilderAction;
       firePageBuilderAction(enriched, "system");
     },
     [onStateChange]

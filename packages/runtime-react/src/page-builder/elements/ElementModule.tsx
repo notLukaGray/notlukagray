@@ -2,12 +2,12 @@
 
 import { useMemo, useRef, type CSSProperties } from "react";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
 import {
   scaleRadiusForDensity,
   scaleSpaceShorthandForDensity,
-} from "@pb/core/internal/page-density";
+} from "@pb/contracts/page-builder/core/page-density";
 import {
   coalesceEmptyString,
   getElementLayoutStyle,

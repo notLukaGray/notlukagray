@@ -1,4 +1,4 @@
-import type { ElementBlock } from "./page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export function generateElementKey(block: ElementBlock, index: number): string {
   const type = block.type;

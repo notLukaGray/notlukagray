@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useInView } from "@/page-builder/integrations/framer-motion/viewport";
-import { MOTION_DEFAULTS } from "@pb/core/internal/page-builder-motion-defaults";
+import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 
 type UseVideoLazyLoadParams = {
   autoplay: boolean;

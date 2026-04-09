@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { VectorShape } from "@pb/core/internal/page-builder-schemas";
+import type { VectorShape } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type VectorShapeCommonProps = Record<string, string | number | React.CSSProperties>;
 

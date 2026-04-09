@@ -8,7 +8,7 @@ import {
   firePageBuilderAction,
 } from "@/page-builder/triggers";
 import { setVariable, useVariableStore } from "@/page-builder/runtime/page-builder-variable-store";
-import { evaluateConditions } from "@pb/core/internal/page-builder-condition-evaluator";
+import { evaluateConditions } from "@pb/contracts/page-builder/core/page-builder-condition-evaluator";
 
 /** Mounts once at root level. Handles all non-section-context page-builder actions. */
 export function usePageBuilderActionRunner(): void {

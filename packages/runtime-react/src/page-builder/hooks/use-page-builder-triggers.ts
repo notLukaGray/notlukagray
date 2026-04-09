@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import type { bgBlock, SectionBlock } from "@pb/core/internal/page-builder-schemas";
-import type { TriggerAction } from "@pb/core/internal/page-builder-schemas";
-import type { BackgroundTransitionEffect } from "@pb/core/internal/page-builder-types";
+import type { bgBlock, SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { TriggerAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 import { usePageBuilderOverrides } from "./use-page-builder-overrides";
 import { usePageBuilderTransitionState } from "./use-page-builder-transition-state";
 import { usePageBuilderTriggerListener } from "./use-page-builder-trigger-listener";

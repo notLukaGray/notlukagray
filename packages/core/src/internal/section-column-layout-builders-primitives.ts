@@ -2,7 +2,7 @@ import {
   DEFAULT_COLUMN_WIDTHS,
   type ElementWithId,
   type ResolvedColumnWidthsInput,
-} from "./section-column-layout-types";
+} from "@pb/contracts/page-builder/core/page-builder-types/section-column-layout-types";
 
 export function normalizeColumnSpanValue(
   value: number | "all" | undefined,

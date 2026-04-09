@@ -1,4 +1,4 @@
-import type { TriggerAction } from "@pb/core/internal/page-builder-schemas";
+import type { TriggerAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import {
   createBackgroundSwitchHandler,
   createBgTransitionProgressOverrideHandler,

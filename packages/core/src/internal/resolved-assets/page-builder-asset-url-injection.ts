@@ -1,10 +1,7 @@
-import * as proxyUrlModule from "@/core/lib/proxy-url";
+import { isImageRef } from "../../lib/proxy-url";
 import type { bgBlock, ElementBlock, SectionBlock } from "@pb/contracts";
-import { readInteropExport } from "@pb/core/internal/interop";
 import { walkBgBlock, walkElement, walkSectionKeys } from "./page-builder-asset-tree-walk";
 import type { GetSignedImageUrlFn, ElementInjectionContext } from "./page-builder-asset-url-map";
-
-const isImageRef = readInteropExport<(ref: string) => boolean>(proxyUrlModule, "isImageRef");
 
 function resolveAssetRef(
   ref: string,

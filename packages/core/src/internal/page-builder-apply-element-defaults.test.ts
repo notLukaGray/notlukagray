@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { applyBuilderElementDefaultsToSections } from "@pb/core/internal/page-builder-apply-element-defaults";
-import type { SectionBlock } from "@pb/core/internal/page-builder-schemas";
+import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 function imageSection(element: Record<string, unknown>): SectionBlock {
   return {

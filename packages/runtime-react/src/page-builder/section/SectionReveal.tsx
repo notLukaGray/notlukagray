@@ -2,8 +2,11 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
-import type { ElementBlock, SectionBlock } from "@pb/core/internal/page-builder-schemas";
-import type { MotionPropsFromJson } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  SectionBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { MotionPropsFromJson } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { SectionMotionWrapper } from "@/page-builder/integrations/framer-motion";
@@ -12,7 +15,7 @@ import type { Easing } from "@/page-builder/integrations/framer-motion";
 import {
   MOTION_DEFAULTS,
   mergeMotionDefaults,
-} from "@pb/core/internal/page-builder-motion-defaults";
+} from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 import { applySectionFillStyle } from "@pb/core/internal/section-style-utils";
 import { useSectionBaseStyles } from "@/page-builder/section/position/use-section-base-styles";
 import { LayerStack } from "@/page-builder/section/stack/LayerStack";

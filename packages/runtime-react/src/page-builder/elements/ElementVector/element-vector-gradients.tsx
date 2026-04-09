@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import { convertRotateToMatrix } from "@pb/runtime-react/core/lib/svg-transform-utils";
-import type { VectorGradient, VectorGradientStop } from "@pb/core/internal/page-builder-schemas";
+import type {
+  VectorGradient,
+  VectorGradientStop,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export function renderGradientStop(stop: VectorGradientStop, index: number): ReactNode {
   return (

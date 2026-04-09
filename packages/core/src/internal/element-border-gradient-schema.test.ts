@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { elementBlockSchema } from "@pb/core/internal/page-builder-schemas/element-block-schemas";
+import { elementBlockSchema } from "@pb/contracts/page-builder/core/page-builder-schemas/element-block-schemas";
 
 describe("element borderGradient schema rules", () => {
   const baseGroup = {

@@ -10,7 +10,7 @@ import type {
   PageBuilderAction,
   ElementLayout,
   SectionEffect,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 
 type LayoutProps = Pick<

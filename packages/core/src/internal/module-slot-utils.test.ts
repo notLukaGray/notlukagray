@@ -11,7 +11,7 @@ import type { ModuleSlotConfig } from "@pb/core/internal/module-slot-types";
 import {
   elementBlockSchema,
   cssGradientDefinitionSchema,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 function elImage(overrides: { id?: string } & Record<string, unknown> = {}) {
   return elementBlockSchema.parse({ type: "elementImage", src: "", alt: "", ...overrides });

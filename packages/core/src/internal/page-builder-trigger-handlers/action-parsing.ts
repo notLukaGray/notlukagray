@@ -2,8 +2,8 @@ import type {
   TriggerAction,
   StartTransitionAction,
   StopTransitionAction,
-} from "@pb/core/internal/page-builder-schemas";
-import { OVERRIDE_KEY_BG } from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { OVERRIDE_KEY_BG } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 /** @deprecated Use StartTransitionAction | StopTransitionAction directly. Kept for callers that guard type before calling. */
 export type ActionWithId = StartTransitionAction | StopTransitionAction;

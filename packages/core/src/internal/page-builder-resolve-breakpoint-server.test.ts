@@ -3,7 +3,7 @@ import {
   isMobileFromUserAgent,
   resolvePageBuilderBreakpoint,
 } from "./page-builder-resolve-breakpoint-server";
-import type { bgBlock, SectionBlock } from "./page-builder-schemas";
+import type { bgBlock, SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 describe("page-builder-resolve-breakpoint-server", () => {
   describe("resolvePageBuilderBreakpoint", () => {

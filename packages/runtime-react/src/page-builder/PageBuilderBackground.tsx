@@ -2,9 +2,9 @@
 
 import { createElement } from "react";
 import dynamic from "next/dynamic";
-import type { bgBlock } from "@pb/core/internal/page-builder-schemas";
+import type { bgBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { BG_COMPONENTS, isKnownBgType } from "@/page-builder/background";
-import type { BackgroundTransitionEffect } from "@pb/core/internal/page-builder-types";
+import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 
 const BackgroundTransitionEffectComponent = dynamic(
   () =>

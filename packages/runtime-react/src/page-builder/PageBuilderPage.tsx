@@ -1,7 +1,10 @@
-import type { TriggerAction, SectionBlock } from "@pb/core/internal/page-builder-schemas";
-import type { BackgroundTransitionEffect } from "@pb/core/internal/page-builder-types";
+import type {
+  TriggerAction,
+  SectionBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 import type { PageBuilderPageProps } from "@pb/core";
-import { buildPageDensityCssVars } from "@pb/core/internal/page-density";
+import { buildPageDensityCssVars } from "@pb/contracts/page-builder/core/page-density";
 import { PageBuilderRenderer } from "@/page-builder/hooks";
 import { FigmaExportDiagnosticsBridge } from "@/page-builder/dev/FigmaExportDiagnosticsBridge";
 import { PageScrollProvider } from "@/page-builder/section/position/page-scroll-provider";

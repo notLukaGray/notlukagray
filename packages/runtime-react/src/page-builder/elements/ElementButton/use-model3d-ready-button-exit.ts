@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MOTION_DEFAULTS } from "@pb/core/internal/page-builder-motion-defaults";
+import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 import {
   MODEL3D_READY_EVENT,
   type Model3DReadyDetail,

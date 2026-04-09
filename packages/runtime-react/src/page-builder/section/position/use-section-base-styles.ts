@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, type CSSProperties } from "react";
-import type { BaseSectionProps } from "@pb/core/internal/page-builder-schemas";
+import type { BaseSectionProps } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { sectionEffectsToStyle } from "@pb/core/internal/section-effects";
 import {

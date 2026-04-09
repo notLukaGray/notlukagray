@@ -1,7 +1,10 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import type { ElementBlock, ElementBodyVariant } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  ElementBodyVariant,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getElementLayoutStyle } from "@pb/core/internal/element-layout-utils";
 import { getBodyTypographyClass } from "@pb/core/internal/element-body-typography";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";

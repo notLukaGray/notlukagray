@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef, useEffect, useMemo, useState } from "react";
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { sanitizeSvgMarkup } from "@pb/runtime-react/core/lib/sanitize-svg";
 import {
   parseTransformString,
@@ -9,7 +9,7 @@ import {
   serializeTransformMatrix,
 } from "@pb/runtime-react/core/lib/svg-transform-utils";
 import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
-import type { ElementLayout } from "@pb/core/internal/page-builder-schemas";
+import type { ElementLayout } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { GraphicLinkWrapper } from "./Shared/GraphicLinkWrapper";
 

@@ -1,16 +1,11 @@
-import * as globalsModule from "@/core/lib/globals";
-import * as proxyUrlModule from "@/core/lib/proxy-url";
+import { getCoreGlobals } from "../lib/globals";
+import { buildProxyUrl, isAssetKey } from "../lib/proxy-url";
 import type { ElementBlock, ResolvedPage, SectionBlock, bgBlock } from "@pb/contracts";
-import { readInteropExport } from "@pb/core/internal/interop";
 import {
   walkBgBlock,
   walkElement,
   walkSection,
 } from "@pb/core/internal/resolved-assets/page-builder-asset-tree-walk";
-
-const globalAssetBaseUrl = readInteropExport<string>(globalsModule, "assetBaseUrl");
-const buildProxyUrl = readInteropExport<(ref: string) => string>(proxyUrlModule, "buildProxyUrl");
-const isAssetKey = readInteropExport<(value: string) => boolean>(proxyUrlModule, "isAssetKey");
 
 const BG_BLOCK_TYPES = new Set([
   "backgroundVideo",
@@ -31,7 +26,7 @@ export function isBgBlockShape(value: unknown): value is bgBlock {
 
 export function getAssetBaseUrl(page: ResolvedPage | null): string {
   if (page?.assetBaseUrl != null && typeof page.assetBaseUrl === "string") return page.assetBaseUrl;
-  return globalAssetBaseUrl;
+  return getCoreGlobals().assetBaseUrl;
 }
 
 export function resolveBgBlockUrls(block: bgBlock, _base: string): bgBlock {

@@ -6,7 +6,7 @@ import type {
   ElementBlock,
   MotionPropsFromJson,
   MotionTiming,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveElementBlockForBreakpoint } from "@pb/core/internal/element-layout-utils";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { MotionFromJson } from "@/page-builder/integrations/framer-motion/motion-from-json";
@@ -16,8 +16,8 @@ import { useVariableStore } from "@/page-builder/runtime/page-builder-variable-s
 import {
   evaluateConditions,
   type VisibleWhenConfig,
-} from "@pb/core/internal/page-builder-condition-evaluator";
-import type { JsonValue } from "@pb/core/internal/page-builder-types/json-value";
+} from "@pb/contracts/page-builder/core/page-builder-condition-evaluator";
+import type { JsonValue } from "@pb/contracts/page-builder/core/page-builder-types/json-value";
 import { ELEMENT_COMPONENTS } from "..";
 import { ElementEntranceWrapper } from "./ElementEntranceWrapper";
 import { DimensionGestureContext } from "./DimensionGestureContext";

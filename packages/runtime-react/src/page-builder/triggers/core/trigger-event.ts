@@ -1,6 +1,6 @@
 "use client";
 
-import type { PageBuilderAction } from "@pb/core/internal/page-builder-schemas";
+import type { PageBuilderAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useActionLogStore } from "@/page-builder/runtime/page-builder-variable-store";
 
 /** Event dispatched by triggers; renderer applies contentOverride, backgroundSwitch, etc. */

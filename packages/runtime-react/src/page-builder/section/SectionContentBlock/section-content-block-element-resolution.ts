@@ -1,4 +1,7 @@
-import type { ElementBlock, SectionDefinitionBlock } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  SectionDefinitionBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export function resolveSectionContentBlockElements(args: {
   elementsProp?: ElementBlock[];

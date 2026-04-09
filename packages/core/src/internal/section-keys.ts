@@ -1,4 +1,4 @@
-import type { SectionBlock } from "./page-builder-schemas";
+import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 /** Normalize a value into a safe key part (alphanumeric + underscores). */
 export function normalizeKeyPart(value: string, maxLen = 20): string {

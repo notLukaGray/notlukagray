@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import type { SectionBlock } from "@pb/core/internal/page-builder-schemas";
+import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getFormActionUrl } from "@pb/runtime-react/core/lib/forms";
 import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/internal/section-utils";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";

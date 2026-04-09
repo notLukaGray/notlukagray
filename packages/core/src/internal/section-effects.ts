@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { SectionEffect } from "./page-builder-schemas";
+import type { SectionEffect } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { DEFAULT_BACKDROP_BLUR_AMOUNT } from "./section-constants";
 
 export type EffectStyleResult = CSSProperties;

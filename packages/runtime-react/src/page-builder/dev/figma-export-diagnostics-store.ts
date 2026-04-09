@@ -4,7 +4,7 @@
 
 import { create } from "zustand";
 import type { z } from "zod";
-import { figmaExportDiagnosticsPageFieldSchema } from "@pb/core/internal/page-builder-schemas";
+import { figmaExportDiagnosticsPageFieldSchema } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { computeFallbackStatsFromPageDefinitions } from "@/page-builder/dev/compute-figma-fallback-walk";
 
 export const figmaExportDiagnosticsV1Schema = figmaExportDiagnosticsPageFieldSchema;

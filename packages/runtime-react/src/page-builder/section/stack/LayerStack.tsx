@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { dividerLayer } from "@pb/core/internal/page-builder-schemas";
+import type { dividerLayer } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { castBlendMode } from "@pb/core/internal/section-utils";
 
 type LayerStackProps = {

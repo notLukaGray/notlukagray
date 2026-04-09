@@ -1,4 +1,4 @@
-import type { ModuleBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ModuleBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 type ElementVideoSlotsInfo = {
   contentSlotKey: string;

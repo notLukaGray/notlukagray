@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { SectionDefinitionBlock } from "@pb/core/internal/page-builder-schemas";
+import type { SectionDefinitionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 const SlotDefaultWrapperStyleContext = createContext<Record<string, unknown> | undefined>(
   undefined

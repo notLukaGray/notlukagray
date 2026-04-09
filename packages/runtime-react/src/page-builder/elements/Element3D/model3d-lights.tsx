@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { SpotLightWithTarget } from "./model3d-spot-light";
-import type { SceneDef, LightDef } from "@pb/core/internal/page-builder-schemas";
+import type { SceneDef, LightDef } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 type LightRenderer = (light: LightDef, key: number) => ReactNode;
 

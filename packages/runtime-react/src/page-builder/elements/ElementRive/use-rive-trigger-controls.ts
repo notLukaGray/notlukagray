@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { PAGE_BUILDER_TRIGGER_EVENT, type PageBuilderTriggerDetail } from "@/page-builder/triggers";
-import type { RiveAction } from "@pb/core/internal/page-builder-schemas";
+import type { RiveAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { Rive } from "@/page-builder/integrations/rive";
 
 type UseRiveTriggerControlsArgs = {

@@ -2,7 +2,10 @@
 
 import { useMemo, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
-import type { SectionBlock, SectionDefinitionBlock } from "@pb/core/internal/page-builder-schemas";
+import type {
+  SectionBlock,
+  SectionDefinitionBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/internal/section-utils";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
@@ -25,8 +28,8 @@ import { useVariableStore } from "@/page-builder/runtime/page-builder-variable-s
 import {
   evaluateConditions,
   type VisibleWhenConfig,
-} from "@pb/core/internal/page-builder-condition-evaluator";
-import type { JsonValue } from "@pb/core/internal/page-builder-types/json-value";
+} from "@pb/contracts/page-builder/core/page-builder-condition-evaluator";
+import type { JsonValue } from "@pb/contracts/page-builder/core/page-builder-types/json-value";
 
 type ContentBlockBase = Extract<SectionBlock, { type: "contentBlock" }>;
 type Props = ContentBlockBase & {

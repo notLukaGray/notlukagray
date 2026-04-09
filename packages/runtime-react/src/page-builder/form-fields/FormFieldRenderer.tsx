@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { FormFieldBlock } from "@pb/core/internal/page-builder-schemas";
+import type { FormFieldBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { formFieldStyleFromConfig } from "./FormFieldRenderer/form-field-style-from-config";

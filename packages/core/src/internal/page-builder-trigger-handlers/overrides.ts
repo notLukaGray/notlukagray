@@ -3,8 +3,8 @@ import type {
   BackgroundSwitchAction,
   ContentOverrideAction,
   bgBlock,
-} from "@pb/core/internal/page-builder-schemas";
-import { OVERRIDE_KEY_BG } from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { OVERRIDE_KEY_BG } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { isBgBlockPayload, type OverridesMap } from "@pb/core/internal/page-builder-overrides";
 import { computeBgProgressOverrides } from "./context-and-bg-progress";
 

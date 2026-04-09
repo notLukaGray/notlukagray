@@ -1,8 +1,11 @@
 import type { CSSProperties } from "react";
-import type { ElementBlock, ElementLayout } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  ElementLayout,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
 import type { LinkState } from "../Shared/GraphicLinkWrapper";
-import type { VectorShape } from "@pb/core/internal/page-builder-schemas";
+import type { VectorShape } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type ElementVectorProps = Extract<ElementBlock, { type: "elementVector" }>;
 

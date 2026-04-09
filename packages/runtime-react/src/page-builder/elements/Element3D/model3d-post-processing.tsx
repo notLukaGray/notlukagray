@@ -9,7 +9,7 @@ import {
   Bloom,
   SSAO,
 } from "@react-three/postprocessing";
-import type { PostProcessingEffectDef } from "@pb/core/internal/page-builder-schemas";
+import type { PostProcessingEffectDef } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useDeviceType } from "@pb/runtime-react/core/hooks/use-device-type";
 import type { Model3DPostProcessingCommand } from "./model3d-controls";
 

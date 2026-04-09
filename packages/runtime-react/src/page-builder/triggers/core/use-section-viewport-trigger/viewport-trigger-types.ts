@@ -1,4 +1,4 @@
-import type { TriggerAction } from "@pb/core/internal/page-builder-schemas";
+import type { TriggerAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 /** Sentinel used internally by viewport trigger when a trigger is "present" but the real action comes from section props. */
 export type ViewportSentinelAction = { type: "__present__"; payload?: unknown };

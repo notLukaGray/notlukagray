@@ -21,7 +21,7 @@ import type {
   Model3DPostProcessingCommand,
 } from "./model3d-controls";
 import type { Block } from "./model3d-types";
-import type { PageBuilderAction } from "@pb/core/internal/page-builder-schemas";
+import type { PageBuilderAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 const CAMERA_EASINGS: Record<string, (t: number) => number> = {
   linear: (t) => t,

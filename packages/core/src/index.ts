@@ -55,6 +55,7 @@ import {
   setPageBuilderHostConfig,
   type PageBuilderHostConfig,
 } from "@pb/core/internal/adapters/host-config";
+import { configureCoreGlobals } from "@pb/core/lib/globals";
 import {
   toPbContentGuidelines,
   type PbBuilderDefaults,
@@ -84,6 +85,10 @@ let coreConfig: CoreConfig = {};
 
 export function setCoreConfig(config: CoreConfig): void {
   coreConfig = { ...coreConfig, ...config };
+
+  if (typeof config.assetBaseUrl === "string") {
+    configureCoreGlobals({ assetBaseUrl: config.assetBaseUrl });
+  }
 
   const hostConfigPatch: Partial<PageBuilderHostConfig> = {};
   if (config.builderDefaults) {

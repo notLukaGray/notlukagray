@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import type { PageBuilderDefinitionBlock } from "@pb/core/internal/page-builder-schemas";
-import { elementBlockSchema } from "@pb/core/internal/page-builder-schemas";
+import type { PageBuilderDefinitionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { elementBlockSchema } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import {
   resolvePresets,
   isPresetRef,

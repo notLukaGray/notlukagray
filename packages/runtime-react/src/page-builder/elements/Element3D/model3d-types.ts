@@ -5,7 +5,7 @@ import type {
   SceneDef,
   CanvasDef,
   PostProcessingEffectDef,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type Block = {
   textures?: Record<string, TextureDef>;

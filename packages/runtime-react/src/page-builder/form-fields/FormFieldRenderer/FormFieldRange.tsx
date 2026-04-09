@@ -1,7 +1,7 @@
 "use client";
 
-import type { FormFieldBlock } from "@pb/core/internal/page-builder-schemas";
-import type { ElementBodyVariant } from "@pb/core/internal/page-builder-schemas";
+import type { FormFieldBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { ElementBodyVariant } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { FormFieldValue } from "..";
 import {
   getFormFieldLabelClass,

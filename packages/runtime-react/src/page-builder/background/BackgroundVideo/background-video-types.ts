@@ -1,3 +1,3 @@
-import type { bgBlock } from "@pb/core/internal/page-builder-schemas";
+import type { bgBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type BackgroundVideoProps = Extract<bgBlock, { type: "backgroundVideo" }>;

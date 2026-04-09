@@ -1,5 +1,5 @@
-import type { ElementBlock } from "../page-builder-schemas";
-import { resolveResponsiveValue } from "@/core/lib/responsive-value";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { resolveResponsiveValue } from "../../lib/responsive-value";
 
 const LAYOUT_KEYS = [
   "width",

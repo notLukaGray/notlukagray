@@ -3,7 +3,7 @@
  * typography as elements (getBodyTypographyClass) so "level" in JSON drives default
  * text size; labelClassName/inputClassName/errorClassName override when set.
  */
-import type { ElementBodyVariant } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBodyVariant } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getBodyTypographyClass } from "@pb/core/internal/element-body-typography";
 
 const STRUCTURAL_LABEL = "block text-foreground mb-1";

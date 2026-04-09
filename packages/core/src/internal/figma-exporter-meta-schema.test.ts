@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { elementBlockSchema } from "@pb/core/internal/page-builder-schemas/element-block-schemas";
+import { elementBlockSchema } from "@pb/contracts/page-builder/core/page-builder-schemas/element-block-schemas";
 import {
   figmaExporterMetaSchema,
   pageBuilderMetaSchema,
-} from "@pb/core/internal/page-builder-schemas/figma-exporter-meta-schema";
+} from "@pb/contracts/page-builder/core/page-builder-schemas/figma-exporter-meta-schema";
 
 describe("pageBuilderMetaSchema", () => {
   it("accepts meta.figma and preserves extension keys on meta and figma", () => {

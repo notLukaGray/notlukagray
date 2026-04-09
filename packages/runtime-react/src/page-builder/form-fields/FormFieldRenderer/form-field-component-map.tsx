@@ -3,7 +3,7 @@ import type {
   FormFieldBlock,
   FormFieldType,
   ElementBodyVariant,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { FormFieldValue } from "..";
 import { FormFieldInput } from "./FormFieldInput";
 import { FormFieldParagraph } from "./FormFieldParagraph";

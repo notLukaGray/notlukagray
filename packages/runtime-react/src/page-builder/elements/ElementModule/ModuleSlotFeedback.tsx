@@ -1,7 +1,10 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import type { CssInlineStyle, ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type {
+  CssInlineStyle,
+  ElementBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { uiVideoFeedbackDurationMs } from "@pb/runtime-react/core/lib/globals";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
 import { getFeedbackJustifyContent, getFeedbackPadding } from "@pb/core/internal/module-slot-utils";

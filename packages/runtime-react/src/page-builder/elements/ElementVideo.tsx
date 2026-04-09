@@ -5,7 +5,7 @@ import type {
   ElementBlock,
   ModuleBlock,
   SectionEffect,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { firePageBuilderAction } from "@/page-builder/triggers";
 import { resolveVideoLink } from "@pb/core/internal/element-video-utils";
 import {

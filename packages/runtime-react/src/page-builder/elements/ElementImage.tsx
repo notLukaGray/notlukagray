@@ -3,7 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useCallback, useMemo, useRef } from "react";
-import type { ElementBlock, SectionEffect } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementBlock,
+  SectionEffect,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { computeElementImagePresentation } from "./ElementImage/element-image-presentation";

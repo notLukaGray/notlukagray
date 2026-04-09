@@ -1,7 +1,10 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import type { CssInlineStyle, ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type {
+  CssInlineStyle,
+  ElementBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
 import { generateElementKey } from "@pb/core/internal/element-keys";

@@ -1,9 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
-import type { ElementLayout, SectionEffect } from "@pb/core/internal/page-builder-schemas";
+import type {
+  ElementLayout,
+  SectionEffect,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 
 type Props = Extract<ElementBlock, { type: "elementInput" }>;

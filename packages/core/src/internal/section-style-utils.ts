@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { dividerLayer } from "./page-builder-schemas";
+import type { dividerLayer } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 /** Apply fill to style when no layers; used by section components. Fill is applied after baseStyle so it is not overwritten. */
 export function applySectionFillStyle(

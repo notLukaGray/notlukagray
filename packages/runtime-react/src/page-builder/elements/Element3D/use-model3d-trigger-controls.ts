@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { PAGE_BUILDER_TRIGGER_EVENT, type PageBuilderTriggerDetail } from "@/page-builder/triggers";
-import type { Model3DAction } from "@pb/core/internal/page-builder-schemas";
+import type { Model3DAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type {
   Model3DAnimationCommand,
   Model3DCameraCommand,

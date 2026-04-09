@@ -1,24 +1,4 @@
-import * as globalsModule from "@/core/lib/globals";
-import { readInteropExport } from "@pb/core/internal/interop";
-
-const imageDefaultWidth = readInteropExport<number>(globalsModule, "imageDefaultWidth");
-const imageDefaultPosterWidth = readInteropExport<number>(globalsModule, "imageDefaultPosterWidth");
-const imagePosterWidth = readInteropExport<number>(globalsModule, "imagePosterWidth");
-const imagePosterQuality = readInteropExport<number>(globalsModule, "imagePosterQuality");
-const imageMobileMaxWidth = readInteropExport<number>(globalsModule, "imageMobileMaxWidth");
-const imageMobileMaxWidth2x = readInteropExport<number>(globalsModule, "imageMobileMaxWidth2x");
-const imageDefaultQuality = readInteropExport<number>(globalsModule, "imageDefaultQuality");
-const imageDefaultFormat = readInteropExport<string>(globalsModule, "imageDefaultFormat");
-const imageDefaultAspectRatio = readInteropExport<string | null>(
-  globalsModule,
-  "imageDefaultAspectRatio"
-);
-const imagePosterAspectRatio = readInteropExport<string | null>(
-  globalsModule,
-  "imagePosterAspectRatio"
-);
-const imageClass = readInteropExport<string | null>(globalsModule, "imageClass");
-const imagePosterClass = readInteropExport<string | null>(globalsModule, "imagePosterClass");
+import { getCoreGlobals } from "../../lib/globals";
 
 export function normalizeAspectRatioForBunny(ratio: string | undefined): string | undefined {
   if (ratio == null || typeof ratio !== "string") return undefined;
@@ -108,6 +88,21 @@ export function getBunnyImageParams(
   assetKey: string,
   options?: { isMobile?: boolean; containerWidthPx?: number }
 ): BunnyImageParams {
+  const {
+    imageDefaultWidth,
+    imageDefaultPosterWidth,
+    imagePosterWidth,
+    imagePosterQuality,
+    imageMobileMaxWidth,
+    imageMobileMaxWidth2x,
+    imageDefaultQuality,
+    imageDefaultFormat,
+    imageDefaultAspectRatio,
+    imagePosterAspectRatio,
+    imageClass,
+    imagePosterClass,
+  } = getCoreGlobals();
+
   const blockType = obj.type as string | undefined;
   const isPosterOrBackground =
     blockType === "backgroundVideo" ||

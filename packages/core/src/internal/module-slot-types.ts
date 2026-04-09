@@ -1,7 +1,7 @@
 import type {
   CssInlineStyle,
   SectionDefinitionBlock,
-} from "@pb/core/internal/page-builder-schemas";
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type GestureDef = {
   gesture: string;
@@ -47,7 +47,7 @@ export type ModuleSlotConfig = {
   feedbackDurationMs?: number;
   transition?: { durationMs?: number; easing?: string };
   /** Optional full motion config for slot visibility. From framer-motion-presets or inline. */
-  motion?: import("@pb/core/internal/page-builder-schemas").MotionPropsFromJson;
+  motion?: import("@pb/contracts/page-builder/core/page-builder-schemas").MotionPropsFromJson;
   /** When false, slot wrapper does not get default hover/tap/focus gestures (avoids bar expanding and blocking buttons). */
   slotWrapperGestures?: boolean;
   /** Gesture keyframes for the slot wrapper (whileHover, whileTap, whileFocus). From JSON; overrides merged motion when set. No hardcoding. */

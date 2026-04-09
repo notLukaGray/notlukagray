@@ -1,6 +1,6 @@
 "use client";
 
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useSectionScrollTarget } from "@/page-builder/section/position/SectionScrollTargetContext";
 import { SectionScrollProgressBar } from "@/page-builder/integrations/framer-motion";
 

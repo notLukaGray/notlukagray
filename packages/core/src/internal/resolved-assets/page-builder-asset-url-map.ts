@@ -1,9 +1,6 @@
-import * as proxyUrlModule from "@/core/lib/proxy-url";
+import { isImageRef } from "../../lib/proxy-url";
 import type { bgBlock, ElementBlock, SectionBlock } from "@pb/contracts";
 import { ASSET_URL_KEYS } from "@pb/contracts";
-import { readInteropExport } from "@pb/core/internal/interop";
-
-const isImageRef = readInteropExport<(ref: string) => boolean>(proxyUrlModule, "isImageRef");
 
 /** Optional context when resolving URLs for an element; used to compute container width per-element. */
 export type ElementInjectionContext = { section: SectionBlock; element: ElementBlock };

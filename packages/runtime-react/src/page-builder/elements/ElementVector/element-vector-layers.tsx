@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { VectorGradient } from "@pb/core/internal/page-builder-schemas";
+import type { VectorGradient } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { renderGradient } from "./element-vector-gradients";
 import { renderVectorShape } from "./element-vector-shapes";
 import type { SvgRenderContext } from "./element-vector-types";

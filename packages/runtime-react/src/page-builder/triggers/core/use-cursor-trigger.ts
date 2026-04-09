@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { firePageBuilderProgressTrigger } from "@/page-builder/triggers";
-import type { PageBuilderAction } from "@pb/core/internal/page-builder-schemas";
+import type { PageBuilderAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 export type CursorTriggerDef = {
   /** Which axis drives progress: "x", "y", or "both" (fires separate events) */

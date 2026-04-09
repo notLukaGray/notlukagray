@@ -1,6 +1,6 @@
 import { createElement, type CSSProperties } from "react";
 import { applyPbDefaultTextAlign } from "@pb/core/internal/adapters/host-config";
-import type { ElementBlock } from "@pb/core/internal/page-builder-schemas";
+import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import {
   getElementLayoutStyle,
   getLayoutRotateFlipStyle,

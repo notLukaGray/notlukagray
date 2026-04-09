@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { PageScrollConfig } from "@pb/core/internal/page-builder-schemas";
+import type { PageScrollConfig } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useSmoothScroll } from "@pb/runtime-react/core/hooks/use-smooth-scroll";
 import { ScrollContainerProvider, useScrollContainerRef } from "./use-scroll-container";
 

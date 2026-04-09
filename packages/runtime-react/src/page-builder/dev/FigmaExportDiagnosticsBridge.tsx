@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import type { FigmaExportDiagnosticsPageField } from "@pb/core/internal/page-builder-schemas";
+import type { FigmaExportDiagnosticsPageField } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useFigmaExportDiagnosticsStore } from "@/page-builder/dev/figma-export-diagnostics-store";
 
 type FigmaExportDiagnosticsBridgeProps = {

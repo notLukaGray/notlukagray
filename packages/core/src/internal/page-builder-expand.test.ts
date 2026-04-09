@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { expandPageBuilder } from "./page-builder-expand";
-import type { PageBuilder, SectionBlock } from "./page-builder-schemas";
+import type {
+  PageBuilder,
+  SectionBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 describe("expandPageBuilder", () => {
   it("uses default bg key when bgKey is omitted", () => {
