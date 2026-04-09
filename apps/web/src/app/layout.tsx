@@ -15,6 +15,9 @@ import { pbBrandCssInline } from "@/app/theme/config";
 import { pbBuilderDefaultsV1 } from "@/app/theme/pb-builder-defaults";
 import { pbContentGuidelinesCssInline } from "@/app/theme/pb-content-guidelines-config";
 import { pbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
+import { getProductionWorkbenchSession } from "@/app/dev/workbench/workbench-defaults";
+import { serializePbFoundationsCss } from "@/app/theme/pb-foundation-css";
+import { PbFoundationsRuntimeSync } from "@/app/theme/PbFoundationsRuntimeSync";
 import { setCoreConfig } from "@pb/core";
 import { PageBuilderRuntimeEffects } from "@pb/runtime-react/effects";
 
@@ -59,6 +62,7 @@ const fontCssVars = generateFontCssVars(
   monoFontConfig,
   typeScaleConfig
 );
+const pbFoundationsCss = serializePbFoundationsCss(getProductionWorkbenchSession());
 
 // Only apply a slot's next/font variable className when that slot uses local files.
 // Webfont slots get their --font-* var set via the generated <style> block above.
@@ -95,6 +99,11 @@ export default function RootLayout({
         {/* PB brand `--pb-*` tokens: `theme/config.ts`. Layout & copy vars: `theme/pb-content-guidelines-config.ts`. */}
         <style dangerouslySetInnerHTML={{ __html: pbBrandCssInline() }} suppressHydrationWarning />
         <style
+          id="pb-foundations-runtime"
+          dangerouslySetInnerHTML={{ __html: pbFoundationsCss }}
+          suppressHydrationWarning
+        />
+        <style
           dangerouslySetInnerHTML={{ __html: pbContentGuidelinesCssInline() }}
           suppressHydrationWarning
         />
@@ -109,6 +118,7 @@ export default function RootLayout({
               <>
                 <DevPageValidationClient />
                 <DevContentReloadClient />
+                <PbFoundationsRuntimeSync />
               </>
             )}
             <AppLayout>

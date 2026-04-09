@@ -141,4 +141,68 @@ describe("expandPageBuilder", () => {
     expect(sections).toHaveLength(1);
     expect(sections[0]?.type).toBe("contentBlock");
   });
+
+  it("resolves responsive elementOrder.mobile when viewport is below custom desktop breakpoint", () => {
+    const page: PageBuilder = {
+      slug: "test",
+      title: "Test",
+      sectionOrder: ["hero"],
+      definitions: {
+        hero: {
+          id: "hero",
+          type: "contentBlock",
+          elementOrder: {
+            mobile: ["mobileEl"],
+            desktop: ["desktopEl"],
+          },
+        } as unknown as PageBuilder["definitions"][string],
+        mobileEl: { type: "heading", text: "Mobile" } as unknown as PageBuilder["definitions"][string],
+        desktopEl: {
+          type: "heading",
+          text: "Desktop",
+        } as unknown as PageBuilder["definitions"][string],
+      },
+      bgKey: "_none",
+    };
+
+    const { sections } = expandPageBuilder(page, {
+      breakpoints: { desktop: 1024 },
+      viewportWidthPx: 768,
+    });
+    const section = sections[0] as SectionBlock & { elements?: Array<{ id?: string }> };
+    const resolvedIds = (section.elements ?? []).map((element: { id?: string }) => element.id);
+    expect(resolvedIds).toEqual(["hero:mobileEl"]);
+  });
+
+  it("resolves responsive elementOrder.desktop when viewport is at custom desktop breakpoint", () => {
+    const page: PageBuilder = {
+      slug: "test",
+      title: "Test",
+      sectionOrder: ["hero"],
+      definitions: {
+        hero: {
+          id: "hero",
+          type: "contentBlock",
+          elementOrder: {
+            mobile: ["mobileEl"],
+            desktop: ["desktopEl"],
+          },
+        } as unknown as PageBuilder["definitions"][string],
+        mobileEl: { type: "heading", text: "Mobile" } as unknown as PageBuilder["definitions"][string],
+        desktopEl: {
+          type: "heading",
+          text: "Desktop",
+        } as unknown as PageBuilder["definitions"][string],
+      },
+      bgKey: "_none",
+    };
+
+    const { sections } = expandPageBuilder(page, {
+      breakpoints: { desktop: 1024 },
+      viewportWidthPx: 1024,
+    });
+    const section = sections[0] as SectionBlock & { elements?: Array<{ id?: string }> };
+    const resolvedIds = (section.elements ?? []).map((element: { id?: string }) => element.id);
+    expect(resolvedIds).toEqual(["hero:desktopEl"]);
+  });
 });

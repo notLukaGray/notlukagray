@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -10,12 +11,15 @@ import {
   mergeGuidelinesWithLocks,
   PB_GUIDELINE_KEYS,
   proposePbContentGuidelines,
+  resolveSpacingScaleFromSeeds,
   type StyleToolSeeds,
 } from "@/app/theme/pb-style-suggest";
+import { deriveSectionMarginScale, type SectionMarginScale } from "@/app/theme/pb-spacing-tokens";
 import { DEV_NEUTRAL_STYLE_SEEDS } from "@/app/dev/style/style-tool-baseline";
 import {
   coerceStyleToolPersisted,
-  type StyleToolPersistedV2,
+  getDefaultStyleToolPersistedV3,
+  type StyleToolPersistedV3,
 } from "@/app/dev/style/style-tool-persistence";
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageHeader } from "@/app/dev/_components/DevWorkbenchPageHeader";
@@ -40,9 +44,42 @@ import { StyleGuidelineSections } from "./style-guideline-sections";
 import { StyleHandoffPanel } from "./style-handoff-panel";
 import { renderStyleScopeDescription } from "./style-scope-description";
 
+function mergeSectionMarginsWithLocks(
+  previous: Pick<StyleToolPersistedV3, "sectionMarginScale" | "sectionMarginScaleLocks">,
+  spacingScale: StyleToolPersistedV3["spacingScale"]
+): SectionMarginScale {
+  const derived = deriveSectionMarginScale(spacingScale);
+  for (const key of Object.keys(derived) as (keyof SectionMarginScale)[]) {
+    if (previous.sectionMarginScaleLocks[key]) {
+      derived[key] = previous.sectionMarginScale[key];
+    }
+  }
+  return derived;
+}
+
+function toSpacingLocks(seedLocks: StyleToolSeeds["spacingScaleLocks"]): StyleToolPersistedV3["spacingScaleLocks"] {
+  const out: StyleToolPersistedV3["spacingScaleLocks"] = {
+    none: false,
+    xs: false,
+    sm: false,
+    md: false,
+    lg: false,
+    xl: false,
+    "2xl": false,
+    "3xl": false,
+    "4xl": false,
+  };
+  for (const key of ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"] as const) {
+    out[key] = seedLocks?.[key] === true;
+  }
+  return out;
+}
+
 export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScope }) {
   const view = SCOPE_CONFIG[scope];
-  const [initialStyle] = useState(() => coerceStyleToolPersisted(getWorkbenchSession().style));
+  const [initialStyle] = useState(
+    () => coerceStyleToolPersisted(getWorkbenchSession().style) ?? getDefaultStyleToolPersistedV3()
+  );
   const [seeds, setSeeds] = useState<StyleToolSeeds>(
     () => initialStyle?.seeds ?? { ...DEV_NEUTRAL_STYLE_SEEDS }
   );
@@ -50,13 +87,34 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
     () => initialStyle?.locks ?? emptyLocks()
   );
   const [guidelines, setGuidelines] = useState<PbContentGuidelines>(() => {
-    if (!initialStyle) return proposePbContentGuidelines(DEV_NEUTRAL_STYLE_SEEDS);
     return mergeGuidelinesWithLocks(
       proposePbContentGuidelines(initialStyle.seeds),
       initialStyle.guidelines,
       initialStyle.locks
     );
   });
+  const [foundationSlices, setFoundationSlices] = useState<
+    Pick<
+      StyleToolPersistedV3,
+      | "shadowScale"
+      | "shadowScaleDark"
+      | "borderWidthScale"
+      | "motion"
+      | "breakpoints"
+      | "contentWidths"
+      | "sectionMarginScale"
+      | "sectionMarginScaleLocks"
+    >
+  >(() => ({
+    shadowScale: initialStyle.shadowScale,
+    shadowScaleDark: initialStyle.shadowScaleDark,
+    borderWidthScale: initialStyle.borderWidthScale,
+    motion: initialStyle.motion,
+    breakpoints: initialStyle.breakpoints,
+    contentWidths: initialStyle.contentWidths,
+    sectionMarginScale: initialStyle.sectionMarginScale,
+    sectionMarginScaleLocks: initialStyle.sectionMarginScaleLocks,
+  }));
   const [previewDensity, setPreviewDensity] = useState<PageDensity>("balanced");
   const [exportCopied, setExportCopied] = useState(false);
 
@@ -69,6 +127,17 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
         setSeeds(nextSeeds);
         setLocks(emptyLocks());
         setGuidelines(proposePbContentGuidelines(nextSeeds));
+        const defaults = getDefaultStyleToolPersistedV3();
+        setFoundationSlices({
+          shadowScale: defaults.shadowScale,
+          shadowScaleDark: defaults.shadowScaleDark,
+          borderWidthScale: defaults.borderWidthScale,
+          motion: defaults.motion,
+          breakpoints: defaults.breakpoints,
+          contentWidths: defaults.contentWidths,
+          sectionMarginScale: defaults.sectionMarginScale,
+          sectionMarginScaleLocks: defaults.sectionMarginScaleLocks,
+        });
         return;
       }
       setSeeds(saved.seeds);
@@ -80,6 +149,16 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
           saved.locks
         )
       );
+      setFoundationSlices({
+        shadowScale: saved.shadowScale,
+        shadowScaleDark: saved.shadowScaleDark,
+        borderWidthScale: saved.borderWidthScale,
+        motion: saved.motion,
+        breakpoints: saved.breakpoints,
+        contentWidths: saved.contentWidths,
+        sectionMarginScale: saved.sectionMarginScale,
+        sectionMarginScaleLocks: saved.sectionMarginScaleLocks,
+      });
     };
     const onStorage = (event: StorageEvent) => {
       if (event.key === WORKBENCH_SESSION_STORAGE_KEY) syncStyleFromSession();
@@ -93,9 +172,33 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
   }, []);
 
   useEffect(() => {
-    const payload: StyleToolPersistedV2 = { v: 2, seeds, locks, guidelines };
+    const spacingScale = resolveSpacingScaleFromSeeds(seeds);
+    const spacingScaleLocks = toSpacingLocks(seeds.spacingScaleLocks);
+    const sectionMarginScale = mergeSectionMarginsWithLocks(
+      {
+        sectionMarginScale: foundationSlices.sectionMarginScale,
+        sectionMarginScaleLocks: foundationSlices.sectionMarginScaleLocks,
+      },
+      spacingScale
+    );
+    const payload: StyleToolPersistedV3 = {
+      v: 3,
+      seeds,
+      locks,
+      guidelines,
+      spacingScale,
+      spacingScaleLocks,
+      shadowScale: foundationSlices.shadowScale,
+      shadowScaleDark: foundationSlices.shadowScaleDark,
+      borderWidthScale: foundationSlices.borderWidthScale,
+      motion: foundationSlices.motion,
+      breakpoints: foundationSlices.breakpoints,
+      contentWidths: foundationSlices.contentWidths,
+      sectionMarginScale,
+      sectionMarginScaleLocks: foundationSlices.sectionMarginScaleLocks,
+    };
     patchWorkbenchStyle(payload);
-  }, [guidelines, locks, seeds]);
+  }, [foundationSlices, guidelines, locks, seeds]);
 
   const onSeedsChange = useCallback(
     (patch: Partial<StyleToolSeeds>) => {

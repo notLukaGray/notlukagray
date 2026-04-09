@@ -36,7 +36,7 @@ import {
   readFontDevPrefs,
   syncSlotPreviewModeWithWebfontSource,
   writeFontDevPrefs,
-  type FontDevPrefsV1,
+  type FontDevPrefsV2,
   type SlotName,
   type SlotPreviewMode,
   type SlotState,
@@ -51,7 +51,7 @@ type Props = {
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function FontDevClient({ fontList, initialConfigs, initialTypeScale }: Props) {
-  const [initialHydratedPrefs] = useState<Omit<FontDevPrefsV1, "v"> | null>(() =>
+  const [initialHydratedPrefs] = useState<Omit<FontDevPrefsV2, "v"> | null>(() =>
     readFontDevPrefs(initialConfigs, initialTypeScale)
   );
   const [configs, setConfigs] = useState<Record<SlotName, SlotState>>(

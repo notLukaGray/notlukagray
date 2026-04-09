@@ -6,10 +6,19 @@ import { buildPresets } from "@pb/core/internal/load/page-builder-load-presets";
 import { resolveDefinitionPresets } from "@pb/core/internal/load/page-builder-load-definitions";
 import { expandPageBuilder } from "@pb/core/internal/page-builder-expand";
 import type { PageBuilderDefinitionBlock, SectionBlock } from "@pb/contracts";
+import type { BreakpointDefinitions } from "@pb/core/internal/defaults/pb-breakpoint-defaults";
 
 const OVERLAYS_DIR = path.join(CONTENT_DIR, "site/overlays");
 
-export function loadOverlaySections(disableOverlays?: string[]): SectionBlock[] {
+type LoadOverlaySectionsOptions = {
+  breakpoints?: Partial<BreakpointDefinitions>;
+  viewportWidthPx?: number;
+};
+
+export function loadOverlaySections(
+  disableOverlays?: string[],
+  options?: LoadOverlaySectionsOptions
+): SectionBlock[] {
   if (!fs.existsSync(OVERLAYS_DIR) || !fs.statSync(OVERLAYS_DIR).isDirectory()) return [];
 
   const disabled = new Set(disableOverlays ?? []);
@@ -45,12 +54,18 @@ export function loadOverlaySections(disableOverlays?: string[]): SectionBlock[] 
     const presets = buildPresets({});
     const resolvedDefinitions = resolveDefinitionPresets(definitions, presets);
 
-    const { sections: expanded } = expandPageBuilder({
-      slug: id,
-      title: id,
-      sectionOrder: [sectionKey],
-      definitions: resolvedDefinitions,
-    });
+    const { sections: expanded } = expandPageBuilder(
+      {
+        slug: id,
+        title: id,
+        sectionOrder: [sectionKey],
+        definitions: resolvedDefinitions,
+      },
+      {
+        breakpoints: options?.breakpoints,
+        viewportWidthPx: options?.viewportWidthPx,
+      }
+    );
 
     for (const section of expanded) {
       sections.push(section);

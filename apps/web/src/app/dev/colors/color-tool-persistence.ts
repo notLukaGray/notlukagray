@@ -11,7 +11,7 @@ import {
   DEV_NEUTRAL_M1_SEEDS_LIGHT,
 } from "@/app/dev/colors/color-tool-baseline";
 
-/** Legacy localStorage key; kept for one-time migration into `workbench-session-v1`. */
+/** Legacy localStorage key; kept for one-time migration into `workbench-session-v2`. */
 export const COLOR_TOOL_LEGACY_STORAGE_KEY = "pb-color-tool-m1";
 
 export type ColorToolPersistedV2 = {

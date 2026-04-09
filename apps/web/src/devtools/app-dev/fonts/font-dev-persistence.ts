@@ -11,6 +11,12 @@ import {
   getWorkbenchSession,
   patchWorkbenchFonts,
 } from "@/app/dev/workbench/workbench-session";
+import {
+  DEFAULT_LETTER_SPACING_SCALE,
+  DEFAULT_LINE_HEIGHT_SCALE,
+  type LetterSpacingScale,
+  type LineHeightScale,
+} from "@/app/theme/pb-spacing-tokens";
 
 export type SlotName = "primary" | "secondary" | "mono";
 export type SlotPreviewMode = "catalog" | "local";
@@ -23,13 +29,18 @@ export type SlotState = {
   localRoleFiles?: Partial<Record<keyof FontWeightMap, string>>;
 };
 
-export type FontDevPrefsV1 = {
-  v: 1;
+export type FontDevPrefsV2 = {
+  v: 2;
   configs: Record<SlotName, SlotState>;
   slotPreviewMode: Record<SlotName, SlotPreviewMode>;
   typeScale: TypeScaleConfig;
   previewSampleText: string;
+  lineHeightScale: LineHeightScale;
+  letterSpacingScale: LetterSpacingScale;
 };
+
+type FontDevPrefsWritePayload = Omit<FontDevPrefsV2, "v" | "lineHeightScale" | "letterSpacingScale"> &
+  Partial<Pick<FontDevPrefsV2, "lineHeightScale" | "letterSpacingScale">>;
 
 export const SLOT_NAMES: SlotName[] = ["primary", "secondary", "mono"];
 export const WEIGHT_NAMES: (keyof FontWeightMap)[] = [
@@ -166,24 +177,24 @@ function mergeTypeScaleFromStored(baseline: TypeScaleConfig, stored: unknown): T
   return out;
 }
 
-function isFontDevPrefsV1(value: unknown): value is FontDevPrefsV1 {
+function isFontDevPrefsV2(value: unknown): value is FontDevPrefsV2 {
   if (!value || typeof value !== "object") return false;
   const candidate = value as Record<string, unknown>;
-  return candidate.v === 1 && !!candidate.configs && typeof candidate.configs === "object";
+  return candidate.v === 2 && !!candidate.configs && typeof candidate.configs === "object";
 }
 
-function readStoredFontDevPrefs(): FontDevPrefsV1 | null {
+function readStoredFontDevPrefs(): FontDevPrefsV2 | null {
   const sessionFonts = getWorkbenchSession().fonts;
-  if (isFontDevPrefsV1(sessionFonts)) return sessionFonts;
+  if (isFontDevPrefsV2(sessionFonts)) return sessionFonts;
   const raw = localStorage.getItem(FONT_DEV_LEGACY_STORAGE_KEY);
   if (!raw) return null;
   const parsed = JSON.parse(raw) as unknown;
-  return isFontDevPrefsV1(parsed) ? parsed : null;
+  return isFontDevPrefsV2(parsed) ? parsed : null;
 }
 
 function mergeStoredConfigs(
   baselineConfigs: Record<SlotName, SlotState>,
-  parsed: FontDevPrefsV1
+  parsed: FontDevPrefsV2
 ): Record<SlotName, SlotState> {
   const next = { ...baselineConfigs };
   for (const slot of SLOT_NAMES)
@@ -192,7 +203,7 @@ function mergeStoredConfigs(
 }
 
 function mergeStoredSlotPreviewMode(
-  parsed: FontDevPrefsV1,
+  parsed: FontDevPrefsV2,
   configs: Record<SlotName, SlotState>
 ): Record<SlotName, SlotPreviewMode> {
   const spm = parsed.slotPreviewMode;
@@ -211,7 +222,7 @@ function normalizePreviewSampleText(raw: unknown): string {
 export function readFontDevPrefs(
   baselineConfigs: Record<SlotName, SlotState>,
   baselineScale: TypeScaleConfig
-): Omit<FontDevPrefsV1, "v"> | null {
+): Omit<FontDevPrefsV2, "v"> | null {
   if (typeof window === "undefined") return null;
   try {
     const parsed = readStoredFontDevPrefs();
@@ -220,16 +231,30 @@ export function readFontDevPrefs(
     const slotPreviewMode = mergeStoredSlotPreviewMode(parsed, configs);
     const typeScale = mergeTypeScaleFromStored(baselineScale, parsed.typeScale);
     const previewSampleText = normalizePreviewSampleText(parsed.previewSampleText);
-    return { configs, slotPreviewMode, typeScale, previewSampleText };
+    return {
+      configs,
+      slotPreviewMode,
+      typeScale,
+      previewSampleText,
+      lineHeightScale: parsed.lineHeightScale ?? { ...DEFAULT_LINE_HEIGHT_SCALE },
+      letterSpacingScale: parsed.letterSpacingScale ?? { ...DEFAULT_LETTER_SPACING_SCALE },
+    };
   } catch {
     return null;
   }
 }
 
-export function writeFontDevPrefs(payload: Omit<FontDevPrefsV1, "v">): void {
+export function writeFontDevPrefs(payload: FontDevPrefsWritePayload): void {
   if (typeof window === "undefined") return;
   try {
-    patchWorkbenchFonts({ v: 1, ...payload });
+    const current = getWorkbenchSession().fonts;
+    const lineHeightScale =
+      payload.lineHeightScale ??
+      (current.v === 2 ? current.lineHeightScale : DEFAULT_LINE_HEIGHT_SCALE);
+    const letterSpacingScale =
+      payload.letterSpacingScale ??
+      (current.v === 2 ? current.letterSpacingScale : DEFAULT_LETTER_SPACING_SCALE);
+    patchWorkbenchFonts({ v: 2, ...payload, lineHeightScale, letterSpacingScale });
   } catch {
     // ignore quota / private mode
   }

@@ -6,7 +6,7 @@ type WorkbenchElementsShape = {
 };
 
 type WorkbenchShape = {
-  v: 1;
+  v: 2;
   colors: unknown;
   fonts: unknown;
   style: unknown;
@@ -14,9 +14,23 @@ type WorkbenchShape = {
 };
 
 type WorkbenchInFlight = Partial<Omit<WorkbenchShape, "elements">> & {
-  v?: 1;
+  v?: 2;
   elements?: Partial<WorkbenchShape["elements"]>;
 };
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object";
+}
+
+function deepMergeRecord(defaults: unknown, patch: unknown): unknown {
+  if (!isRecord(defaults) || !isRecord(patch)) return patch ?? defaults;
+  const out: Record<string, unknown> = { ...defaults };
+  for (const [key, value] of Object.entries(patch)) {
+    if (value === undefined) continue;
+    out[key] = deepMergeRecord(out[key], value);
+  }
+  return out;
+}
 
 function mergeElements(
   elements: WorkbenchInFlight["elements"],
@@ -36,16 +50,12 @@ export function mergeWorkbenchSessionShape(
   defaults: WorkbenchShape
 ): WorkbenchShape {
   return {
-    v: 1,
-    colors: session.colors ?? defaults.colors,
-    fonts: session.fonts ?? defaults.fonts,
-    style: session.style ?? defaults.style,
+    v: 2,
+    colors: deepMergeRecord(defaults.colors, session.colors),
+    fonts: deepMergeRecord(defaults.fonts, session.fonts),
+    style: deepMergeRecord(defaults.style, session.style),
     elements: mergeElements(session.elements, defaults.elements),
   };
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === "object";
 }
 
 function hasRequiredElements(elements: unknown): boolean {
@@ -63,7 +73,7 @@ export function hasCompleteWorkbenchStorageShape(raw: string | null): boolean {
   try {
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     return (
-      parsed.v === 1 &&
+      parsed.v === 2 &&
       parsed.colors != null &&
       parsed.fonts != null &&
       parsed.style != null &&

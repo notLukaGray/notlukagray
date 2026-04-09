@@ -11,27 +11,27 @@ import {
   getProductionWorkbenchSession,
   isWorkbenchStorageJsonComplete,
   mergeWorkbenchSessionWithDefaults,
-  type WorkbenchSessionV1,
+  type WorkbenchSessionV2,
 } from "@/app/dev/workbench/workbench-defaults";
 import {
   STYLE_TOOL_LEGACY_STORAGE_KEY_V1,
   STYLE_TOOL_LEGACY_STORAGE_KEY_V2,
-  type StyleToolPersistedV2,
+  type StyleToolPersistedV3,
 } from "@/app/dev/style/style-tool-persistence";
 import {
   parseImportedWorkbenchSessionJson,
-  type WorkbenchSessionV1InFlight,
+  type WorkbenchSessionV2InFlight,
 } from "@/app/dev/workbench/workbench-session-import";
 import { migrateLegacyIntoSession } from "@/app/dev/workbench/workbench-session-legacy-migration";
 
-export type { WorkbenchSessionV1 } from "@/app/dev/workbench/workbench-defaults";
+export type { WorkbenchSessionV2 } from "@/app/dev/workbench/workbench-defaults";
 
-export type WorkbenchElementKey = keyof WorkbenchSessionV1["elements"];
+export type WorkbenchElementKey = keyof WorkbenchSessionV2["elements"];
 
-export const WORKBENCH_SESSION_STORAGE_KEY = "workbench-session-v1";
+export const WORKBENCH_SESSION_STORAGE_KEY = "workbench-session-v2";
 
 /** Named bookmark written by “Save” in the workbench nav (separate from the live session). */
-export const WORKBENCH_SESSION_BOOKMARK_KEY = "workbench-session-bookmark-v1";
+export const WORKBENCH_SESSION_BOOKMARK_KEY = "workbench-session-bookmark-v2";
 
 /** Dispatched after Load bookmark or Import so mounted tools resync in the same tab (storage events are other-tabs only). */
 export const WORKBENCH_SESSION_CHANGED_EVENT = "pb-workbench-session-changed";
@@ -55,14 +55,14 @@ export const ALL_WORKBENCH_DEV_STORAGE_KEYS = [
   ...WORKBENCH_LEGACY_LOCAL_STORAGE_KEYS,
 ] as const;
 
-function readParsedOnly(): WorkbenchSessionV1InFlight | null {
+function readParsedOnly(): WorkbenchSessionV2InFlight | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(WORKBENCH_SESSION_STORAGE_KEY);
     if (!raw) return null;
-    const p = JSON.parse(raw) as Partial<WorkbenchSessionV1>;
-    if (p?.v !== 1) return null;
-    return p as WorkbenchSessionV1InFlight;
+    const p = JSON.parse(raw) as Partial<WorkbenchSessionV2>;
+    if (p?.v !== 2) return null;
+    return p as WorkbenchSessionV2InFlight;
   } catch {
     return null;
   }
@@ -84,7 +84,7 @@ export function dispatchWorkbenchSessionChanged(): void {
   window.dispatchEvent(new CustomEvent(WORKBENCH_SESSION_CHANGED_EVENT));
 }
 
-export function applyImportedWorkbenchSession(session: WorkbenchSessionV1InFlight): void {
+export function applyImportedWorkbenchSession(session: WorkbenchSessionV2InFlight): void {
   clearWorkbenchLegacyLocalStorageKeys();
   saveWorkbenchSession(session);
   dispatchWorkbenchSessionChanged();
@@ -133,7 +133,7 @@ export function exportWorkbenchSessionJson(): string {
 }
 
 /** Persist canonical full session (merges any missing slices from defaults). */
-export function saveWorkbenchSession(session: WorkbenchSessionV1InFlight): void {
+export function saveWorkbenchSession(session: WorkbenchSessionV2InFlight): void {
   if (typeof window === "undefined") return;
   const complete = mergeWorkbenchSessionWithDefaults(session);
   try {
@@ -144,12 +144,12 @@ export function saveWorkbenchSession(session: WorkbenchSessionV1InFlight): void 
 }
 
 /**
- * Single canonical dev workbench snapshot: migrates legacy keys, merges defaults for any missing slice,
- * upgrades storage to a complete document when needed, and returns the full object.
+ * Single canonical dev workbench snapshot:
+ * merges defaults for any missing slice, upgrades storage to a complete document, and returns the full object.
  */
-export function getWorkbenchSession(): WorkbenchSessionV1 {
-  const base = readParsedOnly() ?? { v: 1 as const };
-  const normalized: WorkbenchSessionV1InFlight = { ...base, v: 1 };
+export function getWorkbenchSession(): WorkbenchSessionV2 {
+  const base = readParsedOnly() ?? { v: 2 as const };
+  const normalized: WorkbenchSessionV2InFlight = { ...base, v: 2 };
   const migratedDirty = migrateLegacyIntoSession(normalized);
   const complete = mergeWorkbenchSessionWithDefaults(normalized);
   const raw =
@@ -185,7 +185,7 @@ export function clearWorkbenchColors(): void {
   saveWorkbenchSession({ ...s, colors: d.colors });
 }
 
-export function patchWorkbenchStyle(next: StyleToolPersistedV2): void {
+export function patchWorkbenchStyle(next: StyleToolPersistedV3): void {
   const s = getWorkbenchSession();
   try {
     localStorage.removeItem(STYLE_TOOL_LEGACY_STORAGE_KEY_V1);
@@ -215,7 +215,7 @@ export function patchWorkbenchFonts(payload: unknown): void {
   } catch {
     /* ignore */
   }
-  saveWorkbenchSession({ ...s, fonts: payload as WorkbenchSessionV1["fonts"] });
+  saveWorkbenchSession({ ...s, fonts: payload as WorkbenchSessionV2["fonts"] });
 }
 
 export function clearWorkbenchFonts(): void {
@@ -238,7 +238,7 @@ const ELEMENT_LEGACY_KEYS: Record<WorkbenchElementKey, string> = {
 
 export function patchWorkbenchElement<K extends WorkbenchElementKey>(
   key: K,
-  value: WorkbenchSessionV1["elements"][K]
+  value: WorkbenchSessionV2["elements"][K]
 ): void {
   const s = getWorkbenchSession();
   try {

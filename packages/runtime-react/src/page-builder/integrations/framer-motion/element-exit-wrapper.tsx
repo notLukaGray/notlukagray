@@ -1,9 +1,10 @@
 "use client";
 
 import type { UseInViewOptions } from "framer-motion";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, MotionFromJson } from "@/page-builder/integrations/framer-motion";
 import { useInView } from "@/page-builder/integrations/framer-motion/viewport";
+import { resolveFoundationMotionControls } from "./foundation-motion-policy";
 import {
   MOTION_DEFAULTS,
   mergeMotionDefaults,
@@ -37,6 +38,8 @@ export type ElementExitWrapperProps = {
   className?: string;
   /** Optional style applied to the motion wrapper rendered by this component. */
   style?: React.CSSProperties;
+  /** When false, ignore OS reduced-motion preference for this element. */
+  reduceMotion?: boolean;
   children: React.ReactNode;
 };
 
@@ -61,19 +64,30 @@ export function ElementExitWrapper({
   onExitComplete,
   className,
   style,
+  reduceMotion,
   children,
 }: ElementExitWrapperProps) {
+  const motionControls = resolveFoundationMotionControls(reduceMotion);
+  if (motionControls.disableAll) return show ? <>{children}</> : null;
+
   const exitTrigger = motionTiming?.exitTrigger ?? "manual";
   const exitVp = motionTiming?.exitViewport;
 
-  const effectiveExitPreset = motionTiming?.exitPreset ?? exitPreset;
-  const effectiveExitMotion = motionTiming?.exitMotion ?? motionFromJson;
-  const exitTransitionOverrides = useMemo(() => {
-    if (!effectiveExitMotion || typeof effectiveExitMotion !== "object") return undefined;
-    const transition = (effectiveExitMotion as MotionPropsFromJson).transition;
-    if (!transition || typeof transition !== "object") return undefined;
-    return transition as Record<string, unknown>;
-  }, [effectiveExitMotion]);
+  const effectiveExitPreset = motionControls.replaceWithFade
+    ? "fade"
+    : motionTiming?.exitPreset ?? exitPreset;
+  const effectiveExitMotion = motionControls.replaceWithFade
+    ? undefined
+    : motionTiming?.exitMotion ?? motionFromJson;
+  const exitTransitionOverrides =
+    effectiveExitMotion && typeof effectiveExitMotion === "object"
+      ? (() => {
+          const transition = (effectiveExitMotion as MotionPropsFromJson).transition;
+          return transition && typeof transition === "object"
+            ? (transition as Record<string, unknown>)
+            : undefined;
+        })()
+      : undefined;
   const resolvedExitDuration =
     (exitTransitionOverrides?.duration as number | undefined) ?? exitDuration;
   const resolvedExitDelay = (exitTransitionOverrides?.delay as number | undefined) ?? 0;
@@ -81,7 +95,7 @@ export function ElementExitWrapper({
     (exitTransitionOverrides?.ease as string | [number, number, number, number] | undefined) ??
     exitEasing;
 
-  const motionConfig = useMemo<MotionPropsFromJson>(() => {
+  const motionConfig: MotionPropsFromJson = (() => {
     const hasMotionExit =
       effectiveExitMotion != null &&
       typeof effectiveExitMotion === "object" &&
@@ -127,13 +141,7 @@ export function ElementExitWrapper({
         transition: exitTransition,
       } as MotionPropsFromJson) ?? ({} as MotionPropsFromJson)
     );
-  }, [
-    effectiveExitMotion,
-    effectiveExitPreset,
-    resolvedExitDuration,
-    resolvedExitDelay,
-    resolvedExitEasing,
-  ]);
+  })();
 
   if (exitTrigger !== "leaveViewport") {
     return (

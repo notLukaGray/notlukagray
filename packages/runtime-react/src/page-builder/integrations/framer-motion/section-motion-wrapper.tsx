@@ -4,6 +4,7 @@ import { forwardRef, useLayoutEffect, useRef, useState, type RefObject } from "r
 import { MotionFromJson } from "./motion-from-json";
 import { motion } from "./animations";
 import { useShouldReduceMotion } from "./reduced-motion";
+import { resolveFoundationMotionControls } from "./foundation-motion-policy";
 import type {
   MotionPropsFromJson,
   MotionTiming,
@@ -25,6 +26,40 @@ export type SectionMotionWrapperProps = {
   children: React.ReactNode;
 } & Omit<SectionElementProps, "ref">;
 
+function toOpacity(value: unknown, fallback: number): number {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (Array.isArray(value) && value.length > 0) {
+    const candidate = value[value.length - 1];
+    if (typeof candidate === "number" && Number.isFinite(candidate)) return candidate;
+  }
+  return fallback;
+}
+
+type SectionResolvedMotion = {
+  initial?: unknown;
+  animate?: unknown;
+  whileHover?: unknown;
+  whileTap?: unknown;
+} & Record<string, unknown>;
+
+function toFadeOnlySectionMotion<T extends SectionResolvedMotion>(resolved: T): T {
+  const animate =
+    resolved.animate && typeof resolved.animate === "object" && !Array.isArray(resolved.animate)
+      ? (resolved.animate as Record<string, unknown>)
+      : {};
+  const initial =
+    resolved.initial && typeof resolved.initial === "object" && !Array.isArray(resolved.initial)
+      ? (resolved.initial as Record<string, unknown>)
+      : {};
+  return {
+    ...resolved,
+    initial: { opacity: toOpacity(initial.opacity, 0) },
+    animate: { opacity: toOpacity(animate.opacity, 1) },
+    whileHover: undefined,
+    whileTap: undefined,
+  } as T;
+}
+
 /**
  * Wraps a section element with optional MotionFromJson (raw FM props via `motion`) or
  * entrance animation (via `motionTiming`, resolved server-side — same pipeline as elements).
@@ -45,12 +80,12 @@ export const SectionMotionWrapper = forwardRef<HTMLElement, SectionMotionWrapper
       ref?: RefObject<HTMLElement>;
     };
 
+    const motionControls = resolveFoundationMotionControls(reduceMotion);
+
     // ── motionTiming path (entrance animation, same semantics as ElementEntranceWrapper) ──
     const resolved = motionTiming?.resolvedEntranceMotion;
-    // Fix 1: reduceMotion=true (default) → respect OS preference; reduceMotion=false → ignore it.
-    // useShouldReduceMotion takes `ignorePreference`, so invert: ignore when reduceMotion is explicitly false.
-    const ignorePreference = reduceMotion === false;
-    const skip = useShouldReduceMotion(ignorePreference);
+    const reduceFromPreference = useShouldReduceMotion(motionControls.ignorePreference);
+    const skip = motionControls.disableAll || reduceFromPreference;
     // null = pre-hydration (SSR) | false = hydrated, below fold | true = hydrated, in viewport
     const [viewOnMount, setViewOnMount] = useState<boolean | null>(null);
 
@@ -81,8 +116,11 @@ export const SectionMotionWrapper = forwardRef<HTMLElement, SectionMotionWrapper
     }, [resolved, motionTiming]);
 
     if (resolved) {
+      const effectiveResolved = motionControls.replaceWithFade
+        ? toFadeOnlySectionMotion(resolved)
+        : resolved;
       const { initial, animate, transition, viewportAmount, viewportOnce, whileHover, whileTap } =
-        resolved;
+        effectiveResolved;
       const trigger = motionTiming?.trigger ?? "onFirstVisible";
 
       const effectiveInitial = skip || viewOnMount === true ? animate : initial;

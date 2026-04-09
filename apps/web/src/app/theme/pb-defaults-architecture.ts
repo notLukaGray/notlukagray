@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import type { ElementBodyVariant, ElementImageObjectFit } from "@pb/contracts";
 import type { PbContentGuidelines } from "@/app/theme/pb-guidelines-expand";
+import { deriveSpacingScale } from "@/app/theme/pb-spacing-tokens";
 
 /**
  * Next-generation page-builder defaults model.
@@ -33,6 +34,17 @@ export interface PbFoundationDefaults {
   spacing: {
     /** Base spacing dial used for derived defaults across frames, rich text, and button padding. */
     baseRem: number;
+    scale: {
+      none: string;
+      xs: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      "2xl": string;
+      "3xl": string;
+      "4xl": string;
+    };
   };
   radius: {
     none: string;
@@ -312,11 +324,12 @@ export function createPbDefaultsFromLegacyGuidelines(
   guidelines: PbContentGuidelines
 ): PbBuilderDefaultsV3 {
   const baseRem = parseRemNumber(guidelines.richTextParagraphGap, 0.5);
+  const spacingScale = deriveSpacingScale(baseRem);
 
   return {
     version: 3,
     foundation: {
-      spacing: { baseRem },
+      spacing: { baseRem, scale: spacingScale },
       radius: {
         none: "0",
         sm: "0.25rem",
@@ -456,6 +469,30 @@ export function createPbDefaultsFromLegacyGuidelines(
           sourcePath: "foundation.spacing.baseRem",
           targetPath: "elements.frame.gap",
           transform: { kind: "remScale", multiplier: 2, precision: 3 },
+          mode: "fillIfUnset",
+        },
+        {
+          sourcePath: "foundation.spacing.scale.md",
+          targetPath: "elements.frame.gap",
+          transform: { kind: "identity" },
+          mode: "overwrite",
+        },
+        {
+          sourcePath: "foundation.spacing.scale.md",
+          targetPath: "elements.frame.rowGap",
+          transform: { kind: "identity" },
+          mode: "fillIfUnset",
+        },
+        {
+          sourcePath: "foundation.radius.md",
+          targetPath: "elements.frame.borderRadius",
+          transform: { kind: "identity" },
+          mode: "fillIfUnset",
+        },
+        {
+          sourcePath: "foundation.radius.md",
+          targetPath: "section.borderRadius",
+          transform: { kind: "identity" },
           mode: "fillIfUnset",
         },
       ],

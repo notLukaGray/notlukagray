@@ -1,0 +1,27 @@
+/* [project]/apps/web/src/app/fonts/primaryfontlocal_9bafa9a1.module.css [app-client] (css) */
+@font-face {
+  font-family: primaryFontLocal;
+  src: url("/_next/static/media/_local_loader_stub-s.a9507876.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: primaryFontLocal Fallback;
+  src: local(Arial);
+  ascent-override: 92.43%;
+  descent-override: 24.32%;
+  line-gap-override: 0.0%;
+  size-adjust: 100.37%;
+}
+
+.primaryfontlocal_9bafa9a1-module__XV023q__className {
+  font-family: primaryFontLocal, primaryFontLocal Fallback;
+}
+
+.primaryfontlocal_9bafa9a1-module__XV023q__variable {
+  --font-primary: "primaryFontLocal", "primaryFontLocal Fallback";
+}
+
+/*# sourceMappingURL=apps_web_src_app_fonts_primaryfontlocal_9bafa9a1_module_css_bad6b30c._.single.css.map*/

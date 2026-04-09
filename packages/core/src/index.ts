@@ -61,6 +61,10 @@ import {
   type PbBuilderDefaults,
 } from "@pb/core/internal/defaults/pb-builder-defaults";
 import type { PbContentGuidelines } from "@pb/core/internal/defaults/pb-guidelines-expand";
+import {
+  resolveBreakpointDefinitions,
+  type BreakpointDefinitions,
+} from "@pb/core/internal/defaults/pb-breakpoint-defaults";
 
 export type PageBuilderDiagnostic = {
   code: string;
@@ -129,6 +133,8 @@ export type LoadPageResult = {
 export type ResolveAssetsOptions = {
   isMobile?: boolean;
   assetBaseUrl?: string;
+  breakpoints?: Partial<BreakpointDefinitions>;
+  viewportWidthPx?: number;
 };
 
 export type ResolveAssetsResult = ResolvePageBuilderAssetsResult & {
@@ -148,11 +154,21 @@ export type GetPageBuilderPropsOptions = {
   assetBaseUrl?: string;
   transformSections?: (sections: SectionBlock[]) => SectionBlock[];
   isMobile?: boolean;
+  breakpoints?: Partial<BreakpointDefinitions>;
+  viewportWidthPx?: number;
 };
 
 export type GetModalPropsOptions = {
   transformSections?: (sections: SectionBlock[]) => SectionBlock[];
   isMobile?: boolean;
+  breakpoints?: Partial<BreakpointDefinitions>;
+  viewportWidthPx?: number;
+};
+
+export type GetPageOptions = {
+  isMobile?: boolean;
+  breakpoints?: Partial<BreakpointDefinitions>;
+  viewportWidthPx?: number;
 };
 
 export type PageBuilderPageClientPage = {
@@ -266,6 +282,15 @@ function resolveAssetBase(page: PageBuilder, options?: ResolveAssetsOptions): st
   return getAssetBaseUrl(page as ResolvedPage);
 }
 
+function resolveViewportWidthForExpansion(options?: GetPageOptions): number | undefined {
+  if (typeof options?.viewportWidthPx === "number" && Number.isFinite(options.viewportWidthPx)) {
+    return options.viewportWidthPx;
+  }
+  if (options?.isMobile === undefined) return undefined;
+  const breakpoints = resolveBreakpointDefinitions(options.breakpoints);
+  return options.isMobile ? breakpoints.desktop - 1 : breakpoints.desktop;
+}
+
 function parseSlugSegments(slug: string): string[] | null {
   if (typeof slug !== "string" || slug.length === 0) return null;
   const segments = slug.split("/");
@@ -347,8 +372,13 @@ export function resolveAssets(
 ): ResolveAssetsResult {
   const preparedPage = buildPageForExpansion(page);
   const assetBase = resolveAssetBase(preparedPage, options);
+  const viewportWidthPx = resolveViewportWidthForExpansion(options);
 
-  const expanded = expandPageBuilder(preparedPage, { assetBase });
+  const expanded = expandPageBuilder(preparedPage, {
+    assetBase,
+    breakpoints: options?.breakpoints,
+    ...(viewportWidthPx !== undefined ? { viewportWidthPx } : {}),
+  });
   const withDefaults = applyBuilderElementDefaultsToSections(expanded.sections);
   const withEntranceMotions = resolveEntranceMotionsIntoSections(withDefaults);
 
@@ -484,7 +514,7 @@ export function migratePage(
   };
 }
 
-export function getPage(slug: string): ResolvedPageWithDefinitions | null {
+export function getPage(slug: string, options?: GetPageOptions): ResolvedPageWithDefinitions | null {
   const segments = parseSlugSegments(slug);
   if (!segments) return null;
 
@@ -498,7 +528,12 @@ export function getPage(slug: string): ResolvedPageWithDefinitions | null {
   if (!page) return null;
 
   const assetBase = getAssetBaseUrl(page as ResolvedPage);
-  const expanded = expandPageBuilder(page, { assetBase });
+  const viewportWidthPx = resolveViewportWidthForExpansion(options);
+  const expanded = expandPageBuilder(page, {
+    assetBase,
+    breakpoints: options?.breakpoints,
+    ...(viewportWidthPx !== undefined ? { viewportWidthPx } : {}),
+  });
 
   return {
     ...(page as ResolvedPage),
@@ -508,7 +543,10 @@ export function getPage(slug: string): ResolvedPageWithDefinitions | null {
   } as ResolvedPageWithDefinitions;
 }
 
-export async function getPageAsync(slug: string): Promise<ResolvedPageWithDefinitions | null> {
+export async function getPageAsync(
+  slug: string,
+  options?: GetPageOptions
+): Promise<ResolvedPageWithDefinitions | null> {
   const segments = parseSlugSegments(slug);
   if (!segments) return null;
 
@@ -522,7 +560,12 @@ export async function getPageAsync(slug: string): Promise<ResolvedPageWithDefini
   if (!page) return null;
 
   const assetBase = getAssetBaseUrl(page as ResolvedPage);
-  const expanded = expandPageBuilder(page, { assetBase });
+  const viewportWidthPx = resolveViewportWidthForExpansion(options);
+  const expanded = expandPageBuilder(page, {
+    assetBase,
+    breakpoints: options?.breakpoints,
+    ...(viewportWidthPx !== undefined ? { viewportWidthPx } : {}),
+  });
 
   return {
     ...(page as ResolvedPage),
@@ -545,7 +588,12 @@ export function getModalProps(id: string, options?: GetModalPropsOptions): Modal
   };
 
   const modalAssetBase = getAssetBaseUrl(null);
-  const expanded = expandPageBuilder(minimalPage, { assetBase: modalAssetBase });
+  const viewportWidthPx = resolveViewportWidthForExpansion(options);
+  const expanded = expandPageBuilder(minimalPage, {
+    assetBase: modalAssetBase,
+    breakpoints: options?.breakpoints,
+    ...(viewportWidthPx !== undefined ? { viewportWidthPx } : {}),
+  });
   const bgDefinitionsRaw = buildRawBgDefinitions(modal.definitions);
 
   const resolved = resolvePageBuilderAssetsOnServer(
@@ -576,7 +624,7 @@ export function getPageBuilderProps(
   slug: string,
   options?: GetPageBuilderPropsOptions
 ): PageBuilderPageProps | null {
-  const page = getPage(slug);
+  const page = getPage(slug, options);
   if (!page) return null;
 
   const assetBase = getAssetBaseUrl(page);
@@ -595,8 +643,13 @@ export function getPageBuilderProps(
   resolvedSections = resolveEntranceMotionsIntoSections(resolvedSections);
 
   const bgDefinitions = buildResolvedBgDefinitions(page.definitions, assetBase);
+  const overlayViewportWidthPx = resolveViewportWidthForExpansion(options);
   const overlaySections = loadOverlaySections(
-    (page as { disableOverlays?: string[] }).disableOverlays
+    (page as { disableOverlays?: string[] }).disableOverlays,
+    {
+      breakpoints: options?.breakpoints,
+      viewportWidthPx: overlayViewportWidthPx,
+    }
   );
 
   return {
@@ -612,7 +665,7 @@ export async function getPageBuilderPropsAsync(
   slug: string,
   options?: GetPageBuilderPropsOptions
 ): Promise<PageBuilderPageProps | null> {
-  const page = await getPageAsync(slug);
+  const page = await getPageAsync(slug, options);
   if (!page) return null;
 
   const assetBase = getAssetBaseUrl(page);
@@ -645,8 +698,13 @@ export async function getPageBuilderPropsAsync(
   );
 
   const injectedSections = resolveEntranceMotionsIntoSections(injected.resolvedSections);
+  const overlayViewportWidthPx = resolveViewportWidthForExpansion(options);
   const overlaySections = loadOverlaySections(
-    (page as { disableOverlays?: string[] }).disableOverlays
+    (page as { disableOverlays?: string[] }).disableOverlays,
+    {
+      breakpoints: options?.breakpoints,
+      viewportWidthPx: overlayViewportWidthPx,
+    }
   );
 
   return {

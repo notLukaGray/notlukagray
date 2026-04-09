@@ -4,6 +4,7 @@ import { useCallback, useRef, useState } from "react";
 import { motion } from "@/page-builder/integrations/framer-motion";
 import { useShouldReduceMotion } from "./reduced-motion";
 import type { MotionTiming } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { resolveFoundationMotionControls } from "./foundation-motion-policy";
 
 type MotionDivProps = React.ComponentProps<typeof motion.div>;
 
@@ -17,6 +18,41 @@ function finalTargetFromAnimate(animate: unknown): Record<string, unknown> | und
     else out[k] = v;
   }
   return out;
+}
+
+function toOpacity(value: unknown, fallback: number): number {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (Array.isArray(value) && value.length > 0) {
+    const candidate = value[value.length - 1];
+    if (typeof candidate === "number" && Number.isFinite(candidate)) return candidate;
+  }
+  return fallback;
+}
+
+type EntranceResolvedMotion = {
+  initial?: unknown;
+  animate?: unknown;
+  whileHover?: unknown;
+  whileTap?: unknown;
+} & Record<string, unknown>;
+
+function toFadeOnlyResolvedMotion<T extends EntranceResolvedMotion>(resolved: T): T {
+  const animateTarget =
+    finalTargetFromAnimate(resolved.animate) ??
+    (resolved.animate && typeof resolved.animate === "object" && !Array.isArray(resolved.animate)
+      ? (resolved.animate as Record<string, unknown>)
+      : {});
+  const initialTarget =
+    resolved.initial && typeof resolved.initial === "object" && !Array.isArray(resolved.initial)
+      ? (resolved.initial as Record<string, unknown>)
+      : {};
+  return {
+    ...resolved,
+    initial: { opacity: toOpacity(initialTarget.opacity, 0) },
+    animate: { opacity: toOpacity(animateTarget.opacity, 1) },
+    whileHover: undefined,
+    whileTap: undefined,
+  } as T;
 }
 
 const ALIGN_TO_JUSTIFY: Record<"left" | "center" | "right", string> = {
@@ -76,7 +112,9 @@ export function ElementEntranceWrapper({
   forceEntranceAnimation = false,
   children,
 }: ElementEntranceWrapperProps) {
-  const skip = useShouldReduceMotion(reduceMotion === false);
+  const motionControls = resolveFoundationMotionControls(reduceMotion);
+  const reduceFromPreference = useShouldReduceMotion(motionControls.ignorePreference);
+  const skip = motionControls.disableAll || reduceFromPreference;
   const ref = useRef<HTMLDivElement | null>(null);
   // null = pre-hydration (SSR) | false = hydrated, below fold | true = hydrated, in viewport on mount
   const [viewOnMount, setViewOnMount] = useState<boolean | null>(() =>
@@ -96,9 +134,12 @@ export function ElementEntranceWrapper({
 
   const resolved = motionTiming?.resolvedEntranceMotion;
   if (!resolved) return <>{children}</>;
+  const effectiveResolved = motionControls.replaceWithFade
+    ? toFadeOnlyResolvedMotion(resolved)
+    : resolved;
 
   const { initial, animate, transition, viewportAmount, viewportOnce, whileHover, whileTap } =
-    resolved;
+    effectiveResolved;
   const trigger = motionTiming?.trigger ?? "onFirstVisible";
 
   const restAfterEntrance: Record<string, unknown> =

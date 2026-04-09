@@ -23,13 +23,19 @@ import {
   type FontWorkbenchSlotConfig,
 } from "@/app/dev/fonts/font-tool-baseline";
 import {
-  getDefaultStyleToolPersistedV2,
-  getProductionStyleToolPersistedV2,
-  type StyleToolPersistedV2,
+  getDefaultStyleToolPersistedV3,
+  getProductionStyleToolPersistedV3,
+  type StyleToolPersistedV3,
 } from "@/app/dev/style/style-tool-persistence";
 import type { FontWeightMap } from "@/app/fonts/config";
 import { monoFontConfig, primaryFontConfig, secondaryFontConfig } from "@/app/fonts/config";
 import { typeScaleConfig } from "@/app/fonts/type-scale";
+import {
+  DEFAULT_LETTER_SPACING_SCALE,
+  DEFAULT_LINE_HEIGHT_SCALE,
+  type LetterSpacingScale,
+  type LineHeightScale,
+} from "@/app/theme/pb-spacing-tokens";
 import {
   hasCompleteWorkbenchStorageShape,
   mergeWorkbenchSessionShape,
@@ -37,8 +43,8 @@ import {
 
 const DEFAULT_PREVIEW_PHRASE = "The quick brown fox jumps over the lazy dog. 0123456789";
 
-type FontWorkbenchPrefsV1 = {
-  v: 1;
+export type FontWorkbenchPrefsV2 = {
+  v: 2;
   configs: Record<
     "primary" | "secondary" | "mono",
     {
@@ -52,9 +58,11 @@ type FontWorkbenchPrefsV1 = {
   slotPreviewMode: Record<"primary" | "secondary" | "mono", "catalog" | "local">;
   typeScale: typeof typeScaleConfig;
   previewSampleText: string;
+  lineHeightScale: LineHeightScale;
+  letterSpacingScale: LetterSpacingScale;
 };
 
-function toSlotState(config: FontWorkbenchSlotConfig): FontWorkbenchPrefsV1["configs"]["primary"] {
+function toSlotState(config: FontWorkbenchSlotConfig): FontWorkbenchPrefsV2["configs"]["primary"] {
   return {
     family: config.family,
     weights: { ...config.weights },
@@ -65,7 +73,7 @@ function toSlotState(config: FontWorkbenchSlotConfig): FontWorkbenchPrefsV1["con
 
 function toProductionSlotState(
   cfg: typeof primaryFontConfig
-): FontWorkbenchPrefsV1["configs"]["primary"] {
+): FontWorkbenchPrefsV2["configs"]["primary"] {
   return {
     family: cfg.webfont.family,
     weights: { ...cfg.weights },
@@ -75,19 +83,23 @@ function toProductionSlotState(
 }
 
 function createFontsWorkbenchPrefs(
-  configs: Record<"primary" | "secondary" | "mono", FontWorkbenchPrefsV1["configs"]["primary"]>,
-  scale: FontWorkbenchPrefsV1["typeScale"]
-): FontWorkbenchPrefsV1 {
+  configs: Record<"primary" | "secondary" | "mono", FontWorkbenchPrefsV2["configs"]["primary"]>,
+  scale: FontWorkbenchPrefsV2["typeScale"],
+  lineHeightScale: LineHeightScale = DEFAULT_LINE_HEIGHT_SCALE,
+  letterSpacingScale: LetterSpacingScale = DEFAULT_LETTER_SPACING_SCALE
+): FontWorkbenchPrefsV2 {
   return {
-    v: 1,
+    v: 2,
     configs,
     slotPreviewMode: { primary: "catalog", secondary: "catalog", mono: "catalog" },
     typeScale: structuredClone(scale),
     previewSampleText: DEFAULT_PREVIEW_PHRASE,
+    lineHeightScale: { ...lineHeightScale },
+    letterSpacingScale: { ...letterSpacingScale },
   };
 }
 
-export function getDefaultFontsWorkbenchPrefs(): FontWorkbenchPrefsV1 {
+export function getDefaultFontsWorkbenchPrefs(): FontWorkbenchPrefsV2 {
   return createFontsWorkbenchPrefs(
     {
       primary: toSlotState(DEV_NEUTRAL_FONT_CONFIGS.primary),
@@ -98,7 +110,7 @@ export function getDefaultFontsWorkbenchPrefs(): FontWorkbenchPrefsV1 {
   );
 }
 
-export function getProductionFontsWorkbenchPrefs(): FontWorkbenchPrefsV1 {
+export function getProductionFontsWorkbenchPrefs(): FontWorkbenchPrefsV2 {
   return createFontsWorkbenchPrefs(
     {
       primary: toProductionSlotState(primaryFontConfig),
@@ -185,11 +197,11 @@ export function getProductionLinkElementPersisted(): PersistedLinkDefaults {
   };
 }
 
-export type WorkbenchSessionV1 = {
-  v: 1;
+export type WorkbenchSessionV2 = {
+  v: 2;
   colors: ColorToolPersistedV2;
-  fonts: FontWorkbenchPrefsV1;
-  style: StyleToolPersistedV2;
+  fonts: FontWorkbenchPrefsV2;
+  style: StyleToolPersistedV3;
   elements: {
     image: PersistedImageDefaults;
     body: PersistedBodyDefaults;
@@ -200,18 +212,18 @@ export type WorkbenchSessionV1 = {
 
 function createWorkbenchSession(
   colors: ColorToolPersistedV2,
-  fonts: FontWorkbenchPrefsV1,
-  style: StyleToolPersistedV2,
-  elements: WorkbenchSessionV1["elements"]
-): WorkbenchSessionV1 {
-  return { v: 1, colors, fonts, style, elements };
+  fonts: FontWorkbenchPrefsV2,
+  style: StyleToolPersistedV3,
+  elements: WorkbenchSessionV2["elements"]
+): WorkbenchSessionV2 {
+  return { v: 2, colors, fonts, style, elements };
 }
 
-export function getDefaultWorkbenchSession(): WorkbenchSessionV1 {
+export function getDefaultWorkbenchSession(): WorkbenchSessionV2 {
   return createWorkbenchSession(
     getDefaultColorToolPersistedV2(),
     getDefaultFontsWorkbenchPrefs(),
-    getDefaultStyleToolPersistedV2(),
+    getDefaultStyleToolPersistedV3(),
     {
       image: getDefaultImageElementPersisted(),
       body: getDefaultBodyElementPersisted(),
@@ -221,11 +233,11 @@ export function getDefaultWorkbenchSession(): WorkbenchSessionV1 {
   );
 }
 
-export function getProductionWorkbenchSession(): WorkbenchSessionV1 {
+export function getProductionWorkbenchSession(): WorkbenchSessionV2 {
   return createWorkbenchSession(
     getProductionColorToolPersistedV2(),
     getProductionFontsWorkbenchPrefs(),
-    getProductionStyleToolPersistedV2(),
+    getProductionStyleToolPersistedV3(),
     {
       image: getProductionImageElementPersisted(),
       body: getProductionBodyElementPersisted(),
@@ -236,12 +248,12 @@ export function getProductionWorkbenchSession(): WorkbenchSessionV1 {
 }
 
 export function mergeWorkbenchSessionWithDefaults(
-  session: Partial<Omit<WorkbenchSessionV1, "elements">> & {
-    v?: 1;
-    elements?: Partial<WorkbenchSessionV1["elements"]>;
+  session: Partial<Omit<WorkbenchSessionV2, "elements">> & {
+    v?: 2;
+    elements?: Partial<WorkbenchSessionV2["elements"]>;
   }
-): WorkbenchSessionV1 {
-  return mergeWorkbenchSessionShape(session, getDefaultWorkbenchSession()) as WorkbenchSessionV1;
+): WorkbenchSessionV2 {
+  return mergeWorkbenchSessionShape(session, getDefaultWorkbenchSession()) as WorkbenchSessionV2;
 }
 
 export function isWorkbenchStorageJsonComplete(raw: string | null): boolean {

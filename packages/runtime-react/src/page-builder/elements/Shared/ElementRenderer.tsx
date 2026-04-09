@@ -11,6 +11,7 @@ import { resolveElementBlockForBreakpoint } from "@pb/core/internal/element-layo
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { MotionFromJson } from "@/page-builder/integrations/framer-motion/motion-from-json";
 import { ElementExitWrapper } from "@/page-builder/integrations/framer-motion";
+import { resolveFoundationMotionControls } from "@/page-builder/integrations/framer-motion/foundation-motion-policy";
 import { useElementVisibilityListener } from "@/page-builder/hooks/use-element-visibility-listener";
 import { useVariableStore } from "@/page-builder/runtime/page-builder-variable-store";
 import {
@@ -234,6 +235,7 @@ export function ElementRenderer({
 
   const useEntranceWrapper = hasEntranceTiming;
   const rewrittenMotionFromJson = rewriteMotionBackgroundTargets(motionFromJson, wrapperStyle);
+  const foundationMotionControls = resolveFoundationMotionControls(reduceMotion);
 
   // When a gesture target animates width or height, the motion wrapper owns those dimensions.
   // Strip them from the inner component (replace with "100%") so they don't fight the animation.
@@ -300,7 +302,7 @@ export function ElementRenderer({
   }
 
   let wrapped = output;
-  if (rewrittenMotionFromJson && !hasEntranceTiming) {
+  if (rewrittenMotionFromJson && !hasEntranceTiming && !foundationMotionControls.disableAll) {
     // For gesture/layout-only motion, fall back to an empty style — not
     // buildEntranceWrapperStyle, which injects width:100% and is designed for
     // entrance wrappers only. An outer group with layout:true must size to its
@@ -363,6 +365,7 @@ export function ElementRenderer({
         exitPreset={exitPreset ?? motionTiming?.exitPreset}
         motionTiming={motionTiming}
         motion={motionFromJson}
+        reduceMotion={reduceMotion}
         onExitComplete={onExitComplete}
         presenceMode={exitPresenceMode}
       >

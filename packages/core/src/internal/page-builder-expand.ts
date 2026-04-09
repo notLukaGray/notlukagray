@@ -14,10 +14,26 @@ import { applyColumnNamespace } from "./page-builder-expand/column-namespacing";
 import { resolveSectionTriggerPayloads } from "./page-builder-expand/trigger-payload-resolution";
 import type { DefinitionsMap, SectionWithElements } from "./page-builder-expand/section-shapes";
 import { resolveTriggerPayloadUrls } from "./page-builder-triggers";
+import {
+  DEFAULT_BREAKPOINTS,
+  isMobileViewportWidth,
+  resolveBreakpointDefinitions,
+  type BreakpointDefinitions,
+} from "@pb/core/internal/defaults/pb-breakpoint-defaults";
 
 export type ExpandPageBuilderOptions = {
   /** When set, trigger payloads get asset URLs resolved in the same pass (avoids second walk in getPage). */
   assetBase?: string;
+  /**
+   * Breakpoint thresholds used when responsive object values are resolved during expansion.
+   * Defaults to DEFAULT_BREAKPOINTS when omitted.
+   */
+  breakpoints?: Partial<BreakpointDefinitions>;
+  /**
+   * When provided, expansion resolves responsive object orders (`elementOrder.mobile/desktop`)
+   * using this viewport width and `breakpoints.desktop`.
+   */
+  viewportWidthPx?: number;
 };
 
 function warnExpandFallbacks(page: PageBuilder, displayOrder: string[]): void {
@@ -84,6 +100,13 @@ export function expandPageBuilder(
   bg: bgBlock | null;
   sections: SectionBlock[];
 } {
+  const breakpoints = options?.breakpoints
+    ? resolveBreakpointDefinitions(options.breakpoints)
+    : DEFAULT_BREAKPOINTS;
+  const responsiveIsMobile =
+    typeof options?.viewportWidthPx === "number"
+      ? isMobileViewportWidth(options.viewportWidthPx, breakpoints)
+      : undefined;
   const defs = page.definitions;
   const displayOrder = buildDisplayOrder(page);
   const bgKey = page.bgKey ?? "bg";
@@ -106,7 +129,7 @@ export function expandPageBuilder(
     if (!SECTION_TYPE_STRINGS.has(type)) continue;
 
     const section = { ...block } as SectionWithElements;
-    const order = getElementOrder(section);
+    const order = getElementOrder(section, responsiveIsMobile);
     if (order?.length) {
       const sectionDefs = (section as { definitions?: DefinitionsMap }).definitions;
       const defsForElements: DefinitionsMap =
