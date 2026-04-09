@@ -83,3 +83,49 @@ export type SectionColumnItemLayout =
       mobile?: Record<string, Record<string, unknown>>;
       desktop?: Record<string, Record<string, unknown>>;
     };
+
+// Core-facing aliases used by layout resolution internals.
+export const DEFAULT_COLUMN_WIDTHS = "hug" as const;
+
+export type ColumnCountInput = number | { mobile?: number; desktop?: number };
+export type ElementOrderInput = string[] | { mobile?: string[]; desktop?: string[] } | undefined;
+export type ColumnAssignmentsInput = SectionColumnAssignments;
+export type ColumnGapsInput = SectionColumnGaps | undefined;
+export type ColumnWidthsValueInput =
+  | typeof DEFAULT_COLUMN_WIDTHS
+  | "equal"
+  | (number | "hug" | "equal" | string)[];
+export type ColumnWidthsInput =
+  | ColumnWidthsValueInput
+  | { mobile?: ColumnWidthsValueInput; desktop?: ColumnWidthsValueInput };
+export type ResolvedColumnWidthsInput = ColumnWidthsValueInput | undefined;
+
+export type ColumnStyleInput = SectionColumnStyle;
+export type ColumnStylesInput = SectionColumnStyles | undefined;
+export type ColumnSpanValueInput = SectionColumnSpanMap;
+export type ColumnSpanInput = SectionColumnSpanMap | ResponsiveSectionColumnSpanMap | undefined;
+export type ResolvedColumnSpanInput = ColumnSpanValueInput | undefined;
+
+export type ItemStyleInput = SectionColumnStyle;
+export type ItemStylesValueInput = Record<string, ItemStyleInput>;
+export type ItemStylesInput =
+  | ItemStylesValueInput
+  | { mobile?: ItemStylesValueInput; desktop?: ItemStylesValueInput }
+  | undefined;
+export type ResolvedItemStylesInput = ItemStylesValueInput | undefined;
+
+export type GridModeValue = "columns" | "grid";
+export type GridModeInput =
+  | GridModeValue
+  | { mobile?: GridModeValue; desktop?: GridModeValue }
+  | undefined;
+
+export type ItemLayoutEntryInput = SectionColumnItemLayoutEntry;
+export type ItemLayoutValueInput = Record<string, ItemLayoutEntryInput>;
+export type ItemLayoutInput =
+  | ItemLayoutValueInput
+  | { mobile?: ItemLayoutValueInput; desktop?: ItemLayoutValueInput }
+  | undefined;
+export type ResolvedItemLayoutInput = ItemLayoutValueInput | undefined;
+
+export type ElementWithId = { id?: string; [key: string]: unknown };
