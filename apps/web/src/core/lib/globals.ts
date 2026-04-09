@@ -1,3 +1,4 @@
+import { configureCoreGlobals } from "@pb/core/lib/globals";
 import personRaw from "../../content/site/person.json";
 import cdnRaw from "../../content/config/cdn.json";
 import authRaw from "../../content/config/auth.json";
@@ -204,3 +205,22 @@ export const uiVideoDefaultAspectRatio: string =
 const cacheConfig = (uiRaw as { cache?: Record<string, unknown> }).cache;
 export const cacheVideoUrlPrefix: string =
   typeof cacheConfig?.videoUrlPrefix === "string" ? cacheConfig.videoUrlPrefix : "video_url_";
+
+configureCoreGlobals({
+  assetBaseUrl,
+  cdnBase,
+  cdnTokenExpiryDays,
+  cdnAllowedExtensions,
+  imageDefaultWidth,
+  imageDefaultPosterWidth,
+  imagePosterWidth,
+  imageMobileMaxWidth,
+  imageMobileMaxWidth2x,
+  imageDefaultQuality,
+  imagePosterQuality,
+  imageDefaultFormat,
+  imageDefaultAspectRatio,
+  imagePosterAspectRatio,
+  imageClass,
+  imagePosterClass,
+});

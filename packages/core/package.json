@@ -8,6 +8,7 @@
     "./host-config": "./src/host-config.ts",
     "./defaults": "./src/defaults.ts",
     "./expand": "./src/expand.ts",
+    "./lib/*": "./src/lib/*.ts",
     "./internal/*": "./src/internal/*.ts"
   },
   "files": [

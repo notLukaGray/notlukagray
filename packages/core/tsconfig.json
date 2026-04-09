@@ -12,8 +12,7 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@pb/core/internal/*": ["./src/internal/*"],
-      "@/*": ["../../apps/web/src/*"]
+      "@pb/core/internal/*": ["./src/internal/*"]
     }
   },
   "include": ["src/**/*.ts"]

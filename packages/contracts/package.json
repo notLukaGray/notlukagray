@@ -6,7 +6,12 @@
   "exports": {
     ".": "./src/index.ts",
     "./capability-schemas": "./src/capability-schemas.ts",
-    "./version": "./src/version.ts"
+    "./version": "./src/version.ts",
+    "./core/lib/*": "./src/core/lib/*.ts",
+    "./page-builder/background/motion/*": "./src/page-builder/background/motion/*.ts",
+    "./page-builder/core/*": "./src/page-builder/core/*.ts",
+    "./page-builder/core/page-builder-schemas/*": "./src/page-builder/core/page-builder-schemas/*.ts",
+    "./page-builder/core/page-builder-types/*": "./src/page-builder/core/page-builder-types/*.ts"
   },
   "files": [
     "src",
