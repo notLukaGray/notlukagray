@@ -18,6 +18,7 @@ This is a plan document only. Nothing in the codebase is modified here.
 **Foundations are the ground truth.** Colors, typography, spacing, shadows, transitions, and motion are defined once and cascade into elements and layout. You do not pull these values from arbitrary references in the codebase — you pull them from the workbench session. An element knows nothing about `--pb-primary` until foundations say what `--pb-primary` is.
 
 **The override model is explicit.** You can override any foundation value on any element or section, but:
+
 - Common overrides (color, fill, stroke) surface as first-class controls
 - Rare overrides (z-index, letter-spacing, cursor) sit behind an **Overrides** drawer
 - Dangerous overrides (wrapperStyle raw CSS) require a forced checkbox confirmation before unlocking
@@ -70,12 +71,12 @@ Foundations changes cascade into element and layout defaults at read time (not w
 
 **What the editor should expose:**
 
-| Control | Input Type | Notes |
-|---|---|---|
-| Brand seeds (light/dark) | Color picker (Oklch) | 4 seeds × 2 themes |
-| Sync seeds across themes | Toggle | Shared default |
+| Control                  | Input Type               | Notes                                                         |
+| ------------------------ | ------------------------ | ------------------------------------------------------------- |
+| Brand seeds (light/dark) | Color picker (Oklch)     | 4 seeds × 2 themes                                            |
+| Sync seeds across themes | Toggle                   | Shared default                                                |
 | Semantic token overrides | Expandable row per token | Hidden behind **Overrides** drawer; forced checkbox to unlock |
-| Neutral baseline | Toggle | "Start from neutral" mode vs production |
+| Neutral baseline         | Toggle                   | "Start from neutral" mode vs production                       |
 
 **Override model:** The 34 derived semantic tokens are automatically computed. If a user wants to manually override `--pb-surface-raised`, they open the Overrides drawer, enable the checkbox for that token, and set an absolute Oklch value. Override rows are visually flagged as "manual — breaks cascade."
 
@@ -89,13 +90,13 @@ Foundations changes cascade into element and layout defaults at read time (not w
 
 **What needs to be added:**
 
-| Control | Input Type | Notes |
-|---|---|---|
-| Type scale steps | Number inputs per level (1–6) | Currently exists as ratio — expose individual overrides |
-| Line-height scale | Named steps: tight/snug/normal/relaxed/loose | Maps to CSS `line-height` values; foundations sets defaults |
-| Letter-spacing scale | Named steps: tighter/tight/normal/wide/wider | Maps to CSS `letter-spacing` |
-| Paragraph spacing | Rem multiplier | Used by rich text and body defaults |
-| Font feature settings | Toggle checklist | `kern`, `liga`, `calt`, `onum`, etc. |
+| Control               | Input Type                                   | Notes                                                       |
+| --------------------- | -------------------------------------------- | ----------------------------------------------------------- |
+| Type scale steps      | Number inputs per level (1–6)                | Currently exists as ratio — expose individual overrides     |
+| Line-height scale     | Named steps: tight/snug/normal/relaxed/loose | Maps to CSS `line-height` values; foundations sets defaults |
+| Letter-spacing scale  | Named steps: tighter/tight/normal/wide/wider | Maps to CSS `letter-spacing`                                |
+| Paragraph spacing     | Rem multiplier                               | Used by rich text and body defaults                         |
+| Font feature settings | Toggle checklist                             | `kern`, `liga`, `calt`, `onum`, etc.                        |
 
 **Override model:** The type scale drives heading and body element defaults. Per-element overrides sit in the element editor, not here.
 
@@ -109,11 +110,11 @@ Foundations changes cascade into element and layout defaults at read time (not w
 
 **What needs to be added (see also `foundations_missing_values.md`):**
 
-| Control | Input Type | Notes |
-|---|---|---|
-| Spacing scale steps (xs–5xl) | Number inputs (rem) | 8 named steps used by gap, padding, margin controls throughout elements and layout |
-| Radius scale (none–pill + custom) | Number inputs (rem) | Extends existing system; `pill` = 9999rem |
-| Border width scale (hairline/sm/md/lg) | Number inputs (px) | Used by stroke controls in elements |
+| Control                                | Input Type          | Notes                                                                              |
+| -------------------------------------- | ------------------- | ---------------------------------------------------------------------------------- |
+| Spacing scale steps (xs–5xl)           | Number inputs (rem) | 8 named steps used by gap, padding, margin controls throughout elements and layout |
+| Radius scale (none–pill + custom)      | Number inputs (rem) | Extends existing system; `pill` = 9999rem                                          |
+| Border width scale (hairline/sm/md/lg) | Number inputs (px)  | Used by stroke controls in elements                                                |
 
 **Override model:** Spacing scale values are locked by default. The **Overrides** button unlocks individual steps. Changing a step re-derives all element defaults that reference it.
 
@@ -127,10 +128,10 @@ Foundations changes cascade into element and layout defaults at read time (not w
 
 **What this section introduces:**
 
-| Control | Input Type | Notes |
-|---|---|---|
+| Control                            | Input Type              | Notes                                                                                    |
+| ---------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------- |
 | Shadow scale (none/xs/sm/md/lg/xl) | Shadow editor per level | Each level: offsetX, offsetY, blur, spread, color (token reference or raw), inset toggle |
-| Inner shadow toggle per level | Checkbox | Produces `inset` variants automatically |
+| Inner shadow toggle per level      | Checkbox                | Produces `inset` variants automatically                                                  |
 
 **Override model:** All levels visible and editable directly (no forced checkbox — shadows are a deliberate design decision).
 
@@ -144,13 +145,13 @@ Foundations changes cascade into element and layout defaults at read time (not w
 
 **What this section introduces:**
 
-| Control | Input Type | Notes |
-|---|---|---|
-| Duration scale (instant/fast/normal/slow/slower) | Number inputs (ms) | 5 named steps |
-| Easing presets | Named list with curve editor | e.g., `ease-in`, `ease-out`, `spring-bouncy`, etc. Custom Bézier/spring input |
-| Default entrance preset | Select from validated preset list | Replaces free-string entrancePreset |
-| Default exit preset | Select | Same as above |
-| Reduce motion policy | Toggle: disable-all / replace-with-fade / honor-system | Sets global `reduceMotion` default |
+| Control                                          | Input Type                                             | Notes                                                                         |
+| ------------------------------------------------ | ------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Duration scale (instant/fast/normal/slow/slower) | Number inputs (ms)                                     | 5 named steps                                                                 |
+| Easing presets                                   | Named list with curve editor                           | e.g., `ease-in`, `ease-out`, `spring-bouncy`, etc. Custom Bézier/spring input |
+| Default entrance preset                          | Select from validated preset list                      | Replaces free-string entrancePreset                                           |
+| Default exit preset                              | Select                                                 | Same as above                                                                 |
+| Reduce motion policy                             | Toggle: disable-all / replace-with-fade / honor-system | Sets global `reduceMotion` default                                            |
 
 **Override model:** Duration and easing are named references. Elements reference the name, not the value. Override at element level by unlocking the field.
 
@@ -164,10 +165,10 @@ Foundations changes cascade into element and layout defaults at read time (not w
 
 **What this section introduces:**
 
-| Control | Input Type | Notes |
-|---|---|---|
-| Breakpoint definitions (sm/md/lg/xl/2xl) | Number inputs (px) | Sets the px thresholds for responsive value resolution |
-| Default preview viewport | Select | Which breakpoint to show by default in element/layout previews |
+| Control                                  | Input Type         | Notes                                                          |
+| ---------------------------------------- | ------------------ | -------------------------------------------------------------- |
+| Breakpoint definitions (sm/md/lg/xl/2xl) | Number inputs (px) | Sets the px thresholds for responsive value resolution         |
+| Default preview viewport                 | Select             | Which breakpoint to show by default in element/layout previews |
 
 ---
 
@@ -177,18 +178,18 @@ Every schema field needs a corresponding input control. This section maps field 
 
 ### B1. Primitive Controls
 
-| Schema Type | Control | Notes |
-|---|---|---|
-| `string` (free) | Text input | |
-| `string` (long) | Textarea | Triggers: `content`, `description` fields |
-| `number` | Stepper input | Min/max/step derived from schema |
-| `boolean` | Toggle switch | |
-| `z.enum([...])` (2–3 options) | Segmented control | |
-| `z.enum([...])` (4+ options) | Select dropdown | |
-| `string` (color CSS) | Color picker | Inline Oklch picker + token reference picker tab |
-| `string` (size CSS) | Size input | Number + unit selector (px/rem/em/%) |
-| `string` (duration CSS/ms) | Duration input | Number + unit selector (ms/s) + named step picker |
-| `string` (CSS function) | Raw + computed preview | Smart input that detects calc(), clamp(), var() |
+| Schema Type                   | Control                | Notes                                             |
+| ----------------------------- | ---------------------- | ------------------------------------------------- |
+| `string` (free)               | Text input             |                                                   |
+| `string` (long)               | Textarea               | Triggers: `content`, `description` fields         |
+| `number`                      | Stepper input          | Min/max/step derived from schema                  |
+| `boolean`                     | Toggle switch          |                                                   |
+| `z.enum([...])` (2–3 options) | Segmented control      |                                                   |
+| `z.enum([...])` (4+ options)  | Select dropdown        |                                                   |
+| `string` (color CSS)          | Color picker           | Inline Oklch picker + token reference picker tab  |
+| `string` (size CSS)           | Size input             | Number + unit selector (px/rem/em/%)              |
+| `string` (duration CSS/ms)    | Duration input         | Number + unit selector (ms/s) + named step picker |
+| `string` (CSS function)       | Raw + computed preview | Smart input that detects calc(), clamp(), var()   |
 
 ### B2. Responsive Controls
 
@@ -200,40 +201,42 @@ The preview viewport selector (from Breakpoints foundations) controls which valu
 
 ### B3. Composite Controls
 
-| Schema Type | Control |
-|---|---|
-| CSS margin/padding (1–4 sides) | Box model editor (visual quad) |
-| `borderRadius` | Corner editor (visual quad, lock-all toggle) |
-| `boxShadow` | Shadow picker (uses foundation shadow tokens as presets + raw override) |
-| `filter` / `backdropFilter` | Filter stack editor (add/remove/reorder filters) |
-| `objectPosition` | 2D position picker (x/y, with named anchor grid) |
-| `imageCrop` | Crop editor (visual crop interface) |
-| `imageFilters` | Per-filter sliders (brightness, contrast, saturation, blur, etc.) |
-| Flex properties (direction/align/justify/wrap) | Visual flex editor |
-| Grid columns | Column builder (count + width distribution + gap) |
+| Schema Type                                    | Control                                                                 |
+| ---------------------------------------------- | ----------------------------------------------------------------------- |
+| CSS margin/padding (1–4 sides)                 | Box model editor (visual quad)                                          |
+| `borderRadius`                                 | Corner editor (visual quad, lock-all toggle)                            |
+| `boxShadow`                                    | Shadow picker (uses foundation shadow tokens as presets + raw override) |
+| `filter` / `backdropFilter`                    | Filter stack editor (add/remove/reorder filters)                        |
+| `objectPosition`                               | 2D position picker (x/y, with named anchor grid)                        |
+| `imageCrop`                                    | Crop editor (visual crop interface)                                     |
+| `imageFilters`                                 | Per-filter sliders (brightness, contrast, saturation, blur, etc.)       |
+| Flex properties (direction/align/justify/wrap) | Visual flex editor                                                      |
+| Grid columns                                   | Column builder (count + width distribution + gap)                       |
 
 ### B4. Token Reference Controls
 
 For any field that can reference a foundation token (color, spacing, radius, shadow, duration, easing), the control has two modes:
+
 - **Token mode** (default): Select from a token picker. Shows the resolved value.
 - **Override mode**: Unlocked by a small "Override" button. Shows raw input. Override values are flagged visually.
 
 ### B5. Trigger Action Controls
 
 Trigger actions are discriminated unions. The control is:
+
 1. A type selector (select dropdown showing all action types)
 2. A contextual payload form that appears below, shaped by the selected type
 
-| Action Type | Payload Form |
-|---|---|
-| `setState` | Key input + value input |
-| `transition` | Target page/section input + transition options |
-| `togglePlay` / `seek` | Media target reference |
-| `scrollTo` | Section ID picker |
-| `setVolume` | Range slider |
-| `openModal` / `closeModal` | Modal ID picker |
-| `runAnimation` | Element ID + preset picker |
-| ... | ... |
+| Action Type                | Payload Form                                   |
+| -------------------------- | ---------------------------------------------- |
+| `setState`                 | Key input + value input                        |
+| `transition`               | Target page/section input + transition options |
+| `togglePlay` / `seek`      | Media target reference                         |
+| `scrollTo`                 | Section ID picker                              |
+| `setVolume`                | Range slider                                   |
+| `openModal` / `closeModal` | Modal ID picker                                |
+| `runAnimation`             | Element ID + preset picker                     |
+| ...                        | ...                                            |
 
 ### B6. Motion Controls
 
@@ -247,11 +250,11 @@ The motion editor is a dedicated collapsible panel:
 
 ### B7. Visibility & Conditional Controls
 
-| Field | Control |
-|---|---|
+| Field         | Control                                                         |
+| ------------- | --------------------------------------------------------------- |
 | `visibleWhen` | State key picker + operator (truthy/falsy/equals) + value input |
-| `showWhen` | Same pattern, asset-state specific |
-| `hidden` | Toggle, displayed prominently as a "Hide element" shortcut |
+| `showWhen`    | Same pattern, asset-state specific                              |
+| `hidden`      | Toggle, displayed prominently as a "Hide element" shortcut      |
 
 ---
 
@@ -262,6 +265,7 @@ This is the most nuanced section. The goal is: **what you see in `/dev` is what 
 ### C1. The Foundation Context Provider
 
 All `/dev` previews are wrapped in a `<WorkbenchPreviewContext>` that:
+
 - Injects all CSS custom properties from the active workbench foundations (colors, spacing, radius, shadows, motion durations/easings, typography variables)
 - Sets the active breakpoint viewport from the foundations breakpoint selection
 - Provides the PbFoundationDefaults context that the page-builder renderer reads
@@ -272,20 +276,21 @@ This context re-renders whenever the workbench session changes.
 
 Elements need to be wrapped in a simulated frame context. Here is what each element type needs:
 
-| Element Type | Preview Encapsulation |
-|---|---|
-| **Heading / Body / Link** | A `contentBlock` frame with configurable background (light/dark toggle) and configurable width. Shows the element at rest, on-hover, and in reduced-motion mode via tabs. |
-| **Button** | A `contentBlock` frame. Shows all states: default, hover, active, disabled, loading. State tabs + interactive mode toggle (actually hover/click to see live transitions). |
-| **Input** | A frame with realistic label and error state simulation. Empty, filled, focused, error states shown via state tabs. |
-| **Range** | A frame showing track, fill, and thumb. Draggable in interactive mode. Shows custom render (when trackHeight/thumbSize set) vs default. |
-| **Image** | A constrained frame that respects the variant's width/height/aspectRatio constraints. Background toggle (checkerboard for transparent images). Crop tool visible when crop is active. |
-| **Video** | A constrained frame with a poster image. Play/pause interactive in preview. Shows autoplay behavior indicator. |
-| **Vector / SVG** | A frame with configurable background (to test fill/stroke contrast). Shows hover state if vectorTransition is defined. |
-| **3D Model** | A WebGL-capable preview canvas. Camera/orbit controls active. Lighting from the 3D scene definition. |
-| **Rive** | A canvas-backed preview. State machine inputs surfaced as controls when a state machine is defined. |
-| **Spacer** | A frame showing the spacer as a visible ruler with a dimension overlay. Not visually interesting alone — shows dimension value prominently. |
+| Element Type              | Preview Encapsulation                                                                                                                                                                 |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Heading / Body / Link** | A `contentBlock` frame with configurable background (light/dark toggle) and configurable width. Shows the element at rest, on-hover, and in reduced-motion mode via tabs.             |
+| **Button**                | A `contentBlock` frame. Shows all states: default, hover, active, disabled, loading. State tabs + interactive mode toggle (actually hover/click to see live transitions).             |
+| **Input**                 | A frame with realistic label and error state simulation. Empty, filled, focused, error states shown via state tabs.                                                                   |
+| **Range**                 | A frame showing track, fill, and thumb. Draggable in interactive mode. Shows custom render (when trackHeight/thumbSize set) vs default.                                               |
+| **Image**                 | A constrained frame that respects the variant's width/height/aspectRatio constraints. Background toggle (checkerboard for transparent images). Crop tool visible when crop is active. |
+| **Video**                 | A constrained frame with a poster image. Play/pause interactive in preview. Shows autoplay behavior indicator.                                                                        |
+| **Vector / SVG**          | A frame with configurable background (to test fill/stroke contrast). Shows hover state if vectorTransition is defined.                                                                |
+| **3D Model**              | A WebGL-capable preview canvas. Camera/orbit controls active. Lighting from the 3D scene definition.                                                                                  |
+| **Rive**                  | A canvas-backed preview. State machine inputs surfaced as controls when a state machine is defined.                                                                                   |
+| **Spacer**                | A frame showing the spacer as a visible ruler with a dimension overlay. Not visually interesting alone — shows dimension value prominently.                                           |
 
 **Common element preview affordances:**
+
 - Background color toggle (light surface / dark surface / transparent / custom)
 - Viewport width selector (from foundations breakpoints)
 - Entrance animation playback button (plays the entrance then resets)
@@ -297,15 +302,16 @@ Elements need to be wrapped in a simulated frame context. Here is what each elem
 
 Sections and layout containers need a viewport simulation:
 
-| Section Type | Preview Encapsulation |
-|---|---|
+| Section Type             | Preview Encapsulation                                                                                                                          |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | **contentBlock (frame)** | Full-width viewport simulation. Fill, effects, and margins rendered. Elements inside are real rendered elements (using their active defaults). |
-| **sectionColumn** | Viewport simulation with grid overlay toggle. Column widths, gaps, and column styles all rendered. Responsive breakpoint simulator. |
-| **scrollContainer** | Constrained-height frame with scrollable content. Scroll progress bar shown as overlay if scroll progress trigger is defined. |
-| **revealSection** | Two-state preview: collapsed and revealed. Button to toggle between states in preview. |
-| **section base** | For motion/trigger testing: a taller viewport so scroll-triggered events can be tested. |
+| **sectionColumn**        | Viewport simulation with grid overlay toggle. Column widths, gaps, and column styles all rendered. Responsive breakpoint simulator.            |
+| **scrollContainer**      | Constrained-height frame with scrollable content. Scroll progress bar shown as overlay if scroll progress trigger is defined.                  |
+| **revealSection**        | Two-state preview: collapsed and revealed. Button to toggle between states in preview.                                                         |
+| **section base**         | For motion/trigger testing: a taller viewport so scroll-triggered events can be tested.                                                        |
 
 **Section preview affordances:**
+
 - Viewport width slider (continuous, or snap to breakpoint)
 - Scroll position scrubber (for testing scroll-triggered motion)
 - Theme toggle (light/dark)
@@ -316,13 +322,13 @@ Sections and layout containers need a viewport simulation:
 
 Backgrounds wrap sections and need to be previewed over representative content:
 
-| Background Type | Preview Context |
-|---|---|
-| `video` | Shows the video playing/paused with content overlaid. Blend mode and opacity controls visible. |
-| `image` | Shows image with objectFit applied and content overlaid. |
-| `variable` (color) | Shows the color fill with content overlaid. |
-| `pattern` | Shows the pattern tile with content overlaid. |
-| `transition` | Shows a crossfade/animation between two background states. Scrubber to position the transition. |
+| Background Type    | Preview Context                                                                                 |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| `video`            | Shows the video playing/paused with content overlaid. Blend mode and opacity controls visible.  |
+| `image`            | Shows image with objectFit applied and content overlaid.                                        |
+| `variable` (color) | Shows the color fill with content overlaid.                                                     |
+| `pattern`          | Shows the pattern tile with content overlaid.                                                   |
+| `transition`       | Shows a crossfade/animation between two background states. Scrubber to position the transition. |
 
 **Missing:** There is no solid-color or gradient background type. See `schema_core_missing_values.md`.
 
@@ -330,14 +336,14 @@ Backgrounds wrap sections and need to be previewed over representative content:
 
 Each foundations section has a dedicated preview panel:
 
-| Foundation | Preview |
-|---|---|
-| Colors | Token swatch grid, light + dark side-by-side, WCAG contrast badges |
-| Typography | Type specimen (all levels, both fonts), paragraph sample |
-| Spacing | Ruler visualization + box demo per step |
-| Shadows | Card grid showing each shadow level |
-| Motion | Looping animation demo card (entrance → pause → exit) |
-| Breakpoints | Viewport ruler with breakpoint markers |
+| Foundation  | Preview                                                            |
+| ----------- | ------------------------------------------------------------------ |
+| Colors      | Token swatch grid, light + dark side-by-side, WCAG contrast badges |
+| Typography  | Type specimen (all levels, both fonts), paragraph sample           |
+| Spacing     | Ruler visualization + box demo per step                            |
+| Shadows     | Card grid showing each shadow level                                |
+| Motion      | Looping animation demo card (entrance → pause → exit)              |
+| Breakpoints | Viewport ruler with breakpoint markers                             |
 
 ---
 
@@ -348,6 +354,7 @@ Each foundations section has a dedicated preview panel:
 All existing batch elements plus gaps filled in:
 
 **Batch 1 · Content**
+
 - Heading (exists)
 - Body (exists)
 - Link (exists)
@@ -355,23 +362,27 @@ All existing batch elements plus gaps filled in:
 - Divider (element-level, not section-level — see schema gaps)
 
 **Batch 2 · Interaction**
+
 - Button (exists)
 - Input (exists)
 - Range (exists)
 - Form (full form block editor — new)
 
 **Batch 3 · Media**
+
 - Image (exists)
 - Video (exists)
 - Video Time (exists)
 
 **Batch 4 · Graphics**
+
 - Vector (exists)
 - SVG (exists)
 - Model 3D (exists)
 - Rive (exists)
 
 **Batch 5 · Utility**
+
 - Spacer (exists)
 - Scroll Progress Bar (exists)
 - Element Group (new — container element with layout controls)
@@ -416,6 +427,7 @@ Layout editing is currently absent from `/dev`. This section specifies what is n
 Controls what the default `contentBlock` section looks like.
 
 **Settings:**
+
 - Default content width (full / hug / CSS)
 - Default content height
 - Frame gap (references spacing scale)
@@ -436,6 +448,7 @@ Controls what the default `contentBlock` section looks like.
 Controls default grid behavior.
 
 **Settings:**
+
 - Default column count (responsive)
 - Default column widths (equal / hug / custom)
 - Default column gap (references spacing scale)
@@ -448,6 +461,7 @@ Controls default grid behavior.
 ### E3. Scroll Container Editor
 
 **Settings:**
+
 - Default scroll direction
 - Snap behavior (none / mandatory / proximity)
 - Scrollbar visibility
@@ -459,6 +473,7 @@ Controls default grid behavior.
 Controls the defaults applied to every section.
 
 **Settings:**
+
 - Default section align
 - Default width / max-width
 - Default margins (vertical rhythm — references spacing scale)
@@ -476,6 +491,7 @@ Custom mode is a JSON-in, JSON-out scratch pad. It does not affect any variants.
 **Entry:** Available on every element and section editor as a "Custom" option in the variant picker. Also accessible as a standalone `/dev/custom` route that accepts any element or section type.
 
 **How it works:**
+
 1. User selects element/section type
 2. The editor loads with an empty template (minimum required fields populated)
 3. All controls are available, same as in variant editing
@@ -507,6 +523,7 @@ The workbench save system already exists at a basic level (snapshot/restore). Fo
 Every piece of state in the workbench must be structured so it can feed directly into a drag-and-drop page builder without restructuring.
 
 **Requirements:**
+
 1. Every element variant produces a valid `elementBlock` JSON node when exported
 2. Every section default produces a valid `sectionBlock` JSON node
 3. All IDs (`id` field) follow the same format used by the page-builder load system

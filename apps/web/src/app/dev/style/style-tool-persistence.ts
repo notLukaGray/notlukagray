@@ -9,14 +9,8 @@ import {
   proposePbContentGuidelines,
   type StyleToolSeeds,
 } from "@/app/theme/pb-style-suggest";
-import {
-  DEFAULT_BREAKPOINTS,
-  type BreakpointDefinitions,
-} from "@/app/theme/pb-breakpoint-tokens";
-import {
-  DEFAULT_MOTION_FOUNDATIONS,
-  type MotionFoundations,
-} from "@/app/theme/pb-motion-tokens";
+import { DEFAULT_BREAKPOINTS, type BreakpointDefinitions } from "@/app/theme/pb-breakpoint-tokens";
+import { DEFAULT_MOTION_FOUNDATIONS, type MotionFoundations } from "@/app/theme/pb-motion-tokens";
 import {
   DEFAULT_SHADOW_SCALE,
   DEFAULT_SHADOW_SCALE_DARK,
@@ -99,7 +93,9 @@ function pickBoolLocks<T extends string>(keys: readonly T[], source: unknown): R
   return out;
 }
 
-function toSpacingSeedScale(scale: SpacingScale): Record<(typeof _SPACING_SCALE_SEED_KEYS)[number], string> {
+function toSpacingSeedScale(
+  scale: SpacingScale
+): Record<(typeof _SPACING_SCALE_SEED_KEYS)[number], string> {
   return {
     xs: scale.xs,
     sm: scale.sm,
@@ -301,10 +297,18 @@ function readStyleFromV3Raw(raw: string): StyleToolPersistedV3 | null {
       data.shadowScaleDark,
       DEFAULT_SHADOW_SCALE_DARK
     ),
-    borderWidthScale: pickStringMap(BORDER_WIDTH_KEYS, data.borderWidthScale, DEFAULT_BORDER_WIDTH_SCALE),
+    borderWidthScale: pickStringMap(
+      BORDER_WIDTH_KEYS,
+      data.borderWidthScale,
+      DEFAULT_BORDER_WIDTH_SCALE
+    ),
     motion: coerceMotionFoundations(data.motion),
     breakpoints: coerceBreakpoints(data.breakpoints),
-    contentWidths: pickStringMap(CONTENT_WIDTH_KEYS, data.contentWidths, DEFAULT_CONTENT_WIDTH_PRESETS),
+    contentWidths: pickStringMap(
+      CONTENT_WIDTH_KEYS,
+      data.contentWidths,
+      DEFAULT_CONTENT_WIDTH_PRESETS
+    ),
     sectionMarginScale,
     sectionMarginScaleLocks,
   };

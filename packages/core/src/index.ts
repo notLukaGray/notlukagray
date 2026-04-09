@@ -514,7 +514,10 @@ export function migratePage(
   };
 }
 
-export function getPage(slug: string, options?: GetPageOptions): ResolvedPageWithDefinitions | null {
+export function getPage(
+  slug: string,
+  options?: GetPageOptions
+): ResolvedPageWithDefinitions | null {
   const segments = parseSlugSegments(slug);
   if (!segments) return null;
 

@@ -39,7 +39,10 @@ export type FontDevPrefsV2 = {
   letterSpacingScale: LetterSpacingScale;
 };
 
-type FontDevPrefsWritePayload = Omit<FontDevPrefsV2, "v" | "lineHeightScale" | "letterSpacingScale"> &
+type FontDevPrefsWritePayload = Omit<
+  FontDevPrefsV2,
+  "v" | "lineHeightScale" | "letterSpacingScale"
+> &
   Partial<Pick<FontDevPrefsV2, "lineHeightScale" | "letterSpacingScale">>;
 
 export const SLOT_NAMES: SlotName[] = ["primary", "secondary", "mono"];

@@ -12,7 +12,9 @@ export function getElementOrder(
   if (Array.isArray(section.elementOrder)) return section.elementOrder;
   const eo = section.elementOrder;
   if (eo && typeof eo === "object" && ("mobile" in eo || "desktop" in eo)) {
-    return isMobile === true ? (eo.mobile ?? eo.desktop ?? null) : (eo.desktop ?? eo.mobile ?? null);
+    return isMobile === true
+      ? (eo.mobile ?? eo.desktop ?? null)
+      : (eo.desktop ?? eo.mobile ?? null);
   }
   if (
     Array.isArray(section.elements) &&

@@ -156,7 +156,10 @@ describe("expandPageBuilder", () => {
             desktop: ["desktopEl"],
           },
         } as unknown as PageBuilder["definitions"][string],
-        mobileEl: { type: "heading", text: "Mobile" } as unknown as PageBuilder["definitions"][string],
+        mobileEl: {
+          type: "heading",
+          text: "Mobile",
+        } as unknown as PageBuilder["definitions"][string],
         desktopEl: {
           type: "heading",
           text: "Desktop",
@@ -188,7 +191,10 @@ describe("expandPageBuilder", () => {
             desktop: ["desktopEl"],
           },
         } as unknown as PageBuilder["definitions"][string],
-        mobileEl: { type: "heading", text: "Mobile" } as unknown as PageBuilder["definitions"][string],
+        mobileEl: {
+          type: "heading",
+          text: "Mobile",
+        } as unknown as PageBuilder["definitions"][string],
         desktopEl: {
           type: "heading",
           text: "Desktop",

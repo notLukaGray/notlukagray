@@ -19,6 +19,7 @@ packages/core/src/internal/defaults/pb-builder-defaults.ts ← actual PbContentG
 ```
 
 The pattern for everything that already exists:
+
 - **Seeds** = minimal user-controlled inputs
 - **Propose** = a pure function that derives all values from seeds
 - **Locks** = per-key booleans that pin a value and prevent seed re-derivation
@@ -40,6 +41,7 @@ Follow this exact pattern for every new token family below.
 **1a. Extend `StyleToolSeeds` in `apps/web/src/app/theme/pb-style-suggest.ts`**
 
 Add to the existing `StyleToolSeeds` type:
+
 ```ts
 spacingScale?: {
   xs: string;    // defaults: derived from spacingBaseRem
@@ -57,6 +59,7 @@ spacingScaleLocks?: Partial<Record<"xs"|"sm"|"md"|"lg"|"xl"|"2xl"|"3xl"|"4xl", b
 The `spacingBaseRem` seed stays and remains the single dial. The `spacingScale` stores per-step overrides. A step is overridden only if its lock is true; otherwise it is derived from `spacingBaseRem`.
 
 **Default derivation ratios (use these exactly):**
+
 ```
 xs  = baseRem × 0.333  (round to 3dp)
 sm  = baseRem × 0.667
@@ -75,6 +78,7 @@ Pure function. Takes the base rem value, returns an object with all 9 keys as re
 **1c. Extend `PbFoundationDefaults` in `apps/web/src/app/theme/pb-defaults-architecture.ts`**
 
 Change the `spacing` field:
+
 ```ts
 spacing: {
   baseRem: number;
@@ -121,7 +125,7 @@ In `apps/web/src/app/dev/style/style-tool-persistence.ts`, add:
 ```ts
 export type StyleToolPersistedV3 = {
   v: 3;
-  seeds: StyleToolSeeds;          // seeds now includes spacingScale + spacingScaleLocks
+  seeds: StyleToolSeeds; // seeds now includes spacingScale + spacingScaleLocks
   locks: Record<keyof PbContentGuidelines, boolean>;
   guidelines: PbContentGuidelines;
   // NEW
@@ -142,8 +146,8 @@ export type WorkbenchSessionV2 = {
   v: 2;
   colors: ColorToolPersistedV2;
   fonts: FontWorkbenchPrefsV1;
-  style: StyleToolPersistedV3;    // ← updated
-  elements: { image; body; heading; link; };
+  style: StyleToolPersistedV3; // ← updated
+  elements: { image; body; heading; link };
 };
 ```
 
@@ -171,7 +175,7 @@ export type ShadowEntry = {
   inset: boolean;
 };
 
-export type ShadowScale = Record<ShadowLevel, string>;  // resolved CSS box-shadow strings
+export type ShadowScale = Record<ShadowLevel, string>; // resolved CSS box-shadow strings
 
 export const DEFAULT_SHADOW_SCALE: ShadowScale = {
   none: "none",
@@ -193,7 +197,10 @@ export const DEFAULT_SHADOW_SCALE_DARK: ShadowScale = {
   "2xl": "0 25px 50px -12px rgb(0 0 0 / 0.5)",
 };
 
-export function shadowScaleToCssVars(light: ShadowScale, dark: ShadowScale): Record<string, string> {
+export function shadowScaleToCssVars(
+  light: ShadowScale,
+  dark: ShadowScale
+): Record<string, string> {
   // Light mode vars (default)
   const vars: Record<string, string> = {};
   for (const [k, v] of Object.entries(light)) {
@@ -213,8 +220,8 @@ The existing color system injects dark-mode vars via a `.dark` selector class on
 ```ts
 export type StyleToolPersistedV3 = {
   // ... existing fields
-  shadowScale: ShadowScale;         // light
-  shadowScaleDark: ShadowScale;     // dark
+  shadowScale: ShadowScale; // light
+  shadowScaleDark: ShadowScale; // dark
 };
 ```
 
@@ -257,6 +264,7 @@ export function borderWidthScaleToCssVars(scale: BorderWidthScale): Record<strin
 ```
 
 **3b. Add to `StyleToolPersistedV3`:**
+
 ```ts
 borderWidthScale: BorderWidthScale;
 ```
@@ -302,7 +310,7 @@ type FontWorkbenchPrefsV2 = {
   v: 2;
   // ... all existing v1 fields
   lineHeightScale: LineHeightScale;
-  letterSpacingScale: LetterSpacingScale;  // defined in Step 5
+  letterSpacingScale: LetterSpacingScale; // defined in Step 5
 };
 ```
 
@@ -378,7 +386,7 @@ Read `apps/web/src/app/fonts/type-scale.ts` to understand the typeScaleConfig sh
 
 ```ts
 export type DurationScale = {
-  instant: number;   // ms
+  instant: number; // ms
   fast: number;
   normal: number;
   slow: number;
@@ -414,7 +422,7 @@ export const DEFAULT_EASING_PRESETS: EasingPresets = {
 export type MotionFoundations = {
   durations: DurationScale;
   easings: EasingPresets;
-  staggerStep: number;         // ms between staggered elements, default 50
+  staggerStep: number; // ms between staggered elements, default 50
   reduceMotionPolicy: "honor-system" | "disable-all" | "replace-with-fade";
 };
 
@@ -443,6 +451,7 @@ export function motionFoundationsToCssVars(m: MotionFoundations): Record<string,
 ```
 
 **7b. Add `motion` to `StyleToolPersistedV3`:**
+
 ```ts
 motion: MotionFoundations;
 ```
@@ -455,7 +464,10 @@ Do not rename the schema field `reduceMotion` — the schema stays as-is. The po
 
 ```ts
 // Pseudocode for renderer decision
-function shouldRunMotion(elementReduceMotion: boolean | undefined, policy: MotionFoundations["reduceMotionPolicy"]): boolean {
+function shouldRunMotion(
+  elementReduceMotion: boolean | undefined,
+  policy: MotionFoundations["reduceMotionPolicy"]
+): boolean {
   if (policy === "disable-all") return false;
   if (policy === "honor-system") return elementReduceMotion ?? true;
   // "replace-with-fade" handled separately in the entrance wrapper
@@ -473,8 +485,8 @@ function shouldRunMotion(elementReduceMotion: boolean | undefined, policy: Motio
 
 ```ts
 export type BreakpointDefinitions = {
-  mobile: number;    // max-width for "mobile" (e.g. 767)
-  desktop: number;   // min-width for "desktop" (e.g. 768)
+  mobile: number; // max-width for "mobile" (e.g. 767)
+  desktop: number; // min-width for "desktop" (e.g. 768)
 };
 
 export const DEFAULT_BREAKPOINTS: BreakpointDefinitions = {
@@ -491,6 +503,7 @@ export function breakpointsToCssVars(bp: BreakpointDefinitions): Record<string, 
 ```
 
 **8b. Add to `StyleToolPersistedV3`:**
+
 ```ts
 breakpoints: BreakpointDefinitions;
 ```
@@ -532,6 +545,7 @@ export function contentWidthPresetsToCssVars(presets: ContentWidthPresets): Reco
 ```
 
 **9b. Add to `StyleToolPersistedV3`:**
+
 ```ts
 contentWidths: ContentWidthPresets;
 ```
@@ -557,7 +571,7 @@ export type SectionMarginScale = {
 // Default derivation: multiply spacing scale md step by a section-rhythm multiplier
 export function deriveSectionMarginScale(spacingScale: SpacingScale): SectionMarginScale {
   // Parse spacingScale.md as rem number, then derive by fixed multiples
-  const mdRem = parseRemFloat(spacingScale.md);  // write a small parseRemFloat helper
+  const mdRem = parseRemFloat(spacingScale.md); // write a small parseRemFloat helper
   return {
     none: "0",
     xs: `${(mdRem * 2).toFixed(3)}rem`,
@@ -581,6 +595,7 @@ export function sectionMarginScaleToCssVars(scale: SectionMarginScale): Record<s
 ```
 
 **10b. Add to `StyleToolPersistedV3`:**
+
 ```ts
 sectionMarginScale: SectionMarginScale;
 sectionMarginScaleLocks: Record<keyof SectionMarginScale, boolean>;
@@ -633,6 +648,7 @@ Keep the existing `foundation.spacing.baseRem → elements.frame.gap` rule for b
 Find the file that injects CSS variables into the document (search for `--pb-primary` being set programmatically — likely in a React provider or a `useEffect` in the layout). Add calls to all the new `*ToCssVars` functions there, reading from the active workbench session (in dev) or from the production defaults (in production).
 
 The injection must be:
+
 - **In dev:** Reactive — re-inject when the workbench session changes (listen for `WORKBENCH_SESSION_CHANGED_EVENT`)
 - **In production:** Static — inject once at page load from the committed production defaults
 
@@ -649,8 +665,8 @@ export function migrateV1toV2(v1: WorkbenchSessionV1): WorkbenchSessionV2 {
   return {
     v: 2,
     colors: v1.colors,
-    fonts: migratefontsV1toV2(v1.fonts),   // adds lineHeightScale + letterSpacingScale
-    style: migrateStyleV2toV3(v1.style),   // adds all new style token families
+    fonts: migratefontsV1toV2(v1.fonts), // adds lineHeightScale + letterSpacingScale
+    style: migrateStyleV2toV3(v1.style), // adds all new style token families
     elements: v1.elements,
   };
 }

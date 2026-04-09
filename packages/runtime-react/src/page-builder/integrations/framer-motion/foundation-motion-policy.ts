@@ -1,9 +1,6 @@
 "use client";
 
-export type FoundationReduceMotionPolicy =
-  | "honor-system"
-  | "disable-all"
-  | "replace-with-fade";
+export type FoundationReduceMotionPolicy = "honor-system" | "disable-all" | "replace-with-fade";
 
 const DEFAULT_POLICY: FoundationReduceMotionPolicy = "honor-system";
 

@@ -75,10 +75,10 @@ export function ElementExitWrapper({
 
   const effectiveExitPreset = motionControls.replaceWithFade
     ? "fade"
-    : motionTiming?.exitPreset ?? exitPreset;
+    : (motionTiming?.exitPreset ?? exitPreset);
   const effectiveExitMotion = motionControls.replaceWithFade
     ? undefined
-    : motionTiming?.exitMotion ?? motionFromJson;
+    : (motionTiming?.exitMotion ?? motionFromJson);
   const exitTransitionOverrides =
     effectiveExitMotion && typeof effectiveExitMotion === "object"
       ? (() => {

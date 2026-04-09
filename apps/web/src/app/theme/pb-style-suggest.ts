@@ -13,7 +13,9 @@ import {
 export type StyleAlignmentSeed = "start" | "center" | "end";
 type SpacingScaleStep = Exclude<keyof SpacingScale, "none">;
 const SPACING_SCALE_STEPS: SpacingScaleStep[] = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"];
-const DEFAULT_SPACING_SCALE = deriveSpacingScaleFromBase(DEFAULT_PB_BUILDER_FOUNDATIONS.spacingBaseRem);
+const DEFAULT_SPACING_SCALE = deriveSpacingScaleFromBase(
+  DEFAULT_PB_BUILDER_FOUNDATIONS.spacingBaseRem
+);
 
 export type StyleToolSeeds = {
   /** Drives `copyTextAlign` and `frameAlignItemsDefault` until those rows are locked. */

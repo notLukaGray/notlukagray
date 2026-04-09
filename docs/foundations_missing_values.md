@@ -16,17 +16,17 @@ Organized from broadest impact to narrowest.
 
 A named 9-step scale derived from `baseRem`, individually overridable:
 
-| Step | Name | Example at baseRem=0.75 |
-|---|---|---|
-| 0 | `none` | 0 |
-| 1 | `xs` | ~0.25rem |
-| 2 | `sm` | ~0.5rem |
-| 3 | `md` | ~0.75rem (= baseRem) |
-| 4 | `lg` | ~1rem |
-| 5 | `xl` | ~1.5rem |
-| 6 | `2xl` | ~2rem |
-| 7 | `3xl` | ~3rem |
-| 8 | `4xl` | ~4.5rem |
+| Step | Name   | Example at baseRem=0.75 |
+| ---- | ------ | ----------------------- |
+| 0    | `none` | 0                       |
+| 1    | `xs`   | ~0.25rem                |
+| 2    | `sm`   | ~0.5rem                 |
+| 3    | `md`   | ~0.75rem (= baseRem)    |
+| 4    | `lg`   | ~1rem                   |
+| 5    | `xl`   | ~1.5rem                 |
+| 6    | `2xl`  | ~2rem                   |
+| 7    | `3xl`  | ~3rem                   |
+| 8    | `4xl`  | ~4.5rem                 |
 
 ```ts
 // In PbFoundationDefaults.spacing
@@ -47,6 +47,7 @@ spacing: {
 ```
 
 CSS variables exposed:
+
 ```css
 --pb-space-none: 0;
 --pb-space-xs: 0.25rem;
@@ -98,11 +99,11 @@ These are re-injected whenever the workbench type scale changes.
 ```ts
 // In PbFoundationDefaults.typography
 lineHeight: {
-  tight: string;     // ~1.1
-  snug: string;      // ~1.25
-  normal: string;    // ~1.5
-  relaxed: string;   // ~1.625
-  loose: string;     // ~2
+  tight: string; // ~1.1
+  snug: string; // ~1.25
+  normal: string; // ~1.5
+  relaxed: string; // ~1.625
+  loose: string; // ~2
 }
 ```
 
@@ -124,12 +125,12 @@ lineHeight: {
 
 ```ts
 letterSpacing: {
-  tighter: string;    // -0.05em
-  tight: string;      // -0.025em
-  normal: string;     // 0em
-  wide: string;       // 0.025em
-  wider: string;      // 0.05em
-  widest: string;     // 0.1em
+  tighter: string; // -0.05em
+  tight: string; // -0.025em
+  normal: string; // 0em
+  wide: string; // 0.025em
+  wider: string; // 0.05em
+  widest: string; // 0.1em
 }
 ```
 
@@ -193,34 +194,38 @@ Shadow token values should have light/dark mode variants (dark mode often replac
 **What should be added:**
 
 **Duration scale:**
+
 ```ts
 duration: {
-  instant: number;   // ~80ms
-  fast: number;      // ~150ms
-  normal: number;    // ~300ms
-  slow: number;      // ~500ms
-  slower: number;    // ~800ms
+  instant: number; // ~80ms
+  fast: number; // ~150ms
+  normal: number; // ~300ms
+  slow: number; // ~500ms
+  slower: number; // ~800ms
 }
 ```
 
 **Easing presets (named, editable):**
+
 ```ts
 easing: {
-  easeIn: string;       // cubic-bezier
+  easeIn: string; // cubic-bezier
   easeOut: string;
   easeInOut: string;
-  spring: string;       // spring config or cubic approximation
+  spring: string; // spring config or cubic approximation
   bounce: string;
   linear: string;
 }
 ```
 
 **Stagger step:**
+
 ```ts
-staggerStep: number;  // ms, per-element delay in staggered entrance sequences
+staggerStep: number; // ms, per-element delay in staggered entrance sequences
 ```
 
 CSS variables:
+
 ```css
 --pb-duration-instant: 80ms;
 --pb-duration-fast: 150ms;
@@ -244,12 +249,13 @@ CSS variables:
 ```ts
 // In foundations
 breakpoints: {
-  mobile: number;    // max-width threshold for mobile (e.g. 767)
-  desktop: number;   // min-width threshold for desktop (e.g. 768)
+  mobile: number; // max-width threshold for mobile (e.g. 767)
+  desktop: number; // min-width threshold for desktop (e.g. 768)
 }
 ```
 
 If/when the responsive system expands to more than two breakpoints:
+
 ```ts
 breakpoints: {
   sm: number;   // 640
@@ -273,10 +279,10 @@ breakpoints: {
 ```ts
 // In foundations
 contentWidths: {
-  narrow: string;     // e.g. "640px"
-  standard: string;   // e.g. "1024px"
-  wide: string;       // e.g. "1280px"
-  full: string;       // "100%"
+  narrow: string; // e.g. "640px"
+  standard: string; // e.g. "1024px"
+  wide: string; // e.g. "1280px"
+  full: string; // "100%"
 }
 ```
 
@@ -355,10 +361,10 @@ Named constants used as defaults and referenced in element editors:
 
 ```ts
 opacity: {
-  muted: 0.4;      // placeholder text, inactive states
-  dimmed: 0.6;     // secondary content
-  subtle: 0.75;    // supporting elements
-  strong: 0.9;     // near-full
+  muted: 0.4; // placeholder text, inactive states
+  dimmed: 0.6; // secondary content
+  subtle: 0.75; // supporting elements
+  strong: 0.9; // near-full
   full: 1.0;
 }
 ```
@@ -378,13 +384,13 @@ Not CSS variables (opacity is set via inline style, not CSS custom properties). 
 ```ts
 // In foundations
 layers: {
-  base: number;      // 0
-  raised: number;    // 10
-  overlay: number;   // 20
-  modal: number;     // 30
-  toast: number;     // 40
-  tooltip: number;   // 50
-  max: number;       // 9999
+  base: number; // 0
+  raised: number; // 10
+  overlay: number; // 20
+  modal: number; // 30
+  toast: number; // 40
+  tooltip: number; // 50
+  max: number; // 9999
 }
 ```
 
@@ -420,6 +426,7 @@ These propagate to button, link, and input focus behavior as defaults. Per-eleme
 **What should be added:**
 
 The entrance and exit preset registry should be a foundations-level editable list, not a hardcoded constant. Each entry:
+
 ```ts
 {
   name: string;         // the validated key (e.g. "fadeUp")
@@ -437,20 +444,20 @@ This makes the preset library visible in the workbench and makes the motion toke
 
 ## Override Model Summary
 
-| Foundation Layer | Editor behavior | Override path |
-|---|---|---|
-| Color seeds | Editable directly | No override — seeds are the source |
-| Derived semantic tokens | Auto-computed | Overrides drawer → forced checkbox per token |
-| Spacing scale steps | Auto-derived from baseRem | Overrides drawer → unlock individual step |
-| Type scale levels | Editable per level | Always visible — overriding individual levels is the common case |
-| Line-height / letter-spacing | Named steps, directly editable | No override drawer needed |
-| Shadow scale | Directly editable per level | No override drawer needed |
-| Border-width scale | Directly editable | No override drawer needed |
-| Motion tokens | Directly editable | No override drawer needed |
-| Breakpoints | Directly editable | No override drawer needed |
-| Content widths | Directly editable | No override drawer needed |
-| Section margin scale | Auto-derived from spacing scale | Overrides drawer → unlock individual step |
-| Reduce motion policy | Select control | No override drawer needed |
-| Z-index layers | Directly editable | No override drawer needed |
-| Focus ring tokens | Directly editable | No override drawer needed |
-| Preset library | List editor (add/edit/remove) | No override — this is the source |
+| Foundation Layer             | Editor behavior                 | Override path                                                    |
+| ---------------------------- | ------------------------------- | ---------------------------------------------------------------- |
+| Color seeds                  | Editable directly               | No override — seeds are the source                               |
+| Derived semantic tokens      | Auto-computed                   | Overrides drawer → forced checkbox per token                     |
+| Spacing scale steps          | Auto-derived from baseRem       | Overrides drawer → unlock individual step                        |
+| Type scale levels            | Editable per level              | Always visible — overriding individual levels is the common case |
+| Line-height / letter-spacing | Named steps, directly editable  | No override drawer needed                                        |
+| Shadow scale                 | Directly editable per level     | No override drawer needed                                        |
+| Border-width scale           | Directly editable               | No override drawer needed                                        |
+| Motion tokens                | Directly editable               | No override drawer needed                                        |
+| Breakpoints                  | Directly editable               | No override drawer needed                                        |
+| Content widths               | Directly editable               | No override drawer needed                                        |
+| Section margin scale         | Auto-derived from spacing scale | Overrides drawer → unlock individual step                        |
+| Reduce motion policy         | Select control                  | No override drawer needed                                        |
+| Z-index layers               | Directly editable               | No override drawer needed                                        |
+| Focus ring tokens            | Directly editable               | No override drawer needed                                        |
+| Preset library               | List editor (add/edit/remove)   | No override — this is the source                                 |

@@ -1,6 +1,12 @@
 import { type TypeScaleConfig } from "@/app/fonts/type-scale";
 
-const HEADING_TO_VAR: Record<keyof Pick<TypeScaleConfig, "heading2xl" | "headingXl" | "headingLg" | "headingMd" | "headingSm" | "headingXs">, string> = {
+const HEADING_TO_VAR: Record<
+  keyof Pick<
+    TypeScaleConfig,
+    "heading2xl" | "headingXl" | "headingLg" | "headingMd" | "headingSm" | "headingXs"
+  >,
+  string
+> = {
   heading2xl: "--pb-text-h1",
   headingXl: "--pb-text-h2",
   headingLg: "--pb-text-h3",
@@ -9,7 +15,10 @@ const HEADING_TO_VAR: Record<keyof Pick<TypeScaleConfig, "heading2xl" | "heading
   headingXs: "--pb-text-h6",
 };
 
-const BODY_TO_VAR: Record<keyof Pick<TypeScaleConfig, "body2xl" | "bodyXl" | "bodyLg" | "bodyMd" | "bodySm" | "bodyXs">, string> = {
+const BODY_TO_VAR: Record<
+  keyof Pick<TypeScaleConfig, "body2xl" | "bodyXl" | "bodyLg" | "bodyMd" | "bodySm" | "bodyXs">,
+  string
+> = {
   body2xl: "--pb-text-body-1",
   bodyXl: "--pb-text-body-2",
   bodyLg: "--pb-text-body-3",
@@ -31,11 +40,15 @@ function toClampPx(minPx: number, maxPx: number): string {
 export function typeScaleToCssVars(scale: TypeScaleConfig): Record<string, string> {
   const vars: Record<string, string> = {};
 
-  for (const [key, cssVar] of Object.entries(HEADING_TO_VAR) as [keyof typeof HEADING_TO_VAR, string][]) {
+  for (const [key, cssVar] of Object.entries(HEADING_TO_VAR) as [
+    keyof typeof HEADING_TO_VAR,
+    string,
+  ][]) {
     const entry = scale[key];
-    vars[cssVar] = key === "heading2xl" || key === "headingXl" || key === "headingLg"
-      ? toClampPx(entry.sizeMobile, entry.sizeDesktop)
-      : `${entry.sizeDesktop}px`;
+    vars[cssVar] =
+      key === "heading2xl" || key === "headingXl" || key === "headingLg"
+        ? toClampPx(entry.sizeMobile, entry.sizeDesktop)
+        : `${entry.sizeDesktop}px`;
   }
 
   for (const [key, cssVar] of Object.entries(BODY_TO_VAR) as [keyof typeof BODY_TO_VAR, string][]) {

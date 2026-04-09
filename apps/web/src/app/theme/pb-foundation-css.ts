@@ -1,10 +1,7 @@
 import type { WorkbenchSessionV2 } from "@/app/dev/workbench/workbench-defaults";
 import { breakpointsToCssVars } from "@/app/theme/pb-breakpoint-tokens";
 import { motionFoundationsToCssVars } from "@/app/theme/pb-motion-tokens";
-import {
-  shadowScaleDarkToCssVars,
-  shadowScaleToCssVars,
-} from "@/app/theme/pb-shadow-tokens";
+import { shadowScaleDarkToCssVars, shadowScaleToCssVars } from "@/app/theme/pb-shadow-tokens";
 import {
   borderWidthScaleToCssVars,
   contentWidthPresetsToCssVars,
@@ -53,7 +50,9 @@ export function getPbFoundationCssVarMaps(session: Pick<WorkbenchSessionV2, "sty
   return { root, dark };
 }
 
-export function serializePbFoundationsCss(session: Pick<WorkbenchSessionV2, "style" | "fonts">): string {
+export function serializePbFoundationsCss(
+  session: Pick<WorkbenchSessionV2, "style" | "fonts">
+): string {
   const vars = getPbFoundationCssVarMaps(session);
   return `${serializeCssVarSelector(":root", vars.root)}\n\n${serializeCssVarSelector(".dark", vars.dark)}`;
 }

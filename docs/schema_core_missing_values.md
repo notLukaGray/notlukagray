@@ -13,6 +13,7 @@ Fields, shapes, and concepts absent from the current page-builder schema that vi
 **Gap:** There is no way to directly override a heading's text color in schema without using `wrapperStyle.color`. There is also no `lineHeight` field — heading has `lineSpacing` (line-to-line spacing modifier) but body has both that AND `lineHeight`. Whether `lineSpacing` maps to CSS `line-height` is ambiguous; the body schema treating them as distinct fields suggests they are not the same.
 
 **What should be added to `elementHeadingSchema`:**
+
 ```ts
 lineHeight: z.union([z.string(), z.number()]).optional(),
 color: z.string().optional(),
@@ -27,6 +28,7 @@ color: z.string().optional(),
 **Gap:** You cannot set flex direction, alignment, or gap on a specific `contentBlock` section. These come from the global `PbFoundationDefaults.elements.frame` and can only be overridden via `wrapperStyle`. That means no two `contentBlock` sections can have different flex directions without using the escape hatch.
 
 **What should be added to `sectionContentBlockSchema`:**
+
 ```ts
 flexDirection: z.enum(["row", "column", "row-reverse", "column-reverse"]).optional(),
 alignItems: z.string().optional(),
@@ -48,6 +50,7 @@ These would override the global frame defaults per-section.
 **Gap:** Opening a link in `_parent` or `_top` is impossible. More importantly, `rel` (for `noopener noreferrer` on external links) is currently handled implicitly by the `external` boolean in the renderer, but cannot be overridden. Some links need `rel="nofollow"` or `rel="sponsored"`.
 
 **What should be added:**
+
 ```ts
 // In elementLinkSchema
 target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
@@ -63,6 +66,7 @@ rel: z.string().optional(),
 **Gap:** Async button actions (form submits, fetch triggers) need a loading state that is visually distinct from disabled — typically showing a spinner and preventing re-click, but not the same grey-out treatment.
 
 **What should be added:**
+
 ```ts
 loading: z.boolean().optional(),
 loadingLabel: z.string().optional(),  // replaces label text during loading
@@ -75,11 +79,13 @@ loadingLabel: z.string().optional(),  // replaces label text during loading
 **Observed:** `formFieldBlockSchema` has `required`, `minLength`, `maxLength`, `pattern`, validation fields. None of `disabled`, `readOnly`, or `autocomplete` exist.
 
 **Gap:**
+
 - `disabled`: Fields that should be visible but non-interactable (e.g., read-only calculated values in a form)
 - `readOnly`: HTML input `readonly` — distinct from `disabled` (focusable, copyable)
 - `autocomplete`: Controls browser autofill behavior (e.g., `"email"`, `"given-name"`, `"current-password"`, `"off"`)
 
 **What should be added:**
+
 ```ts
 disabled: z.boolean().optional(),
 readOnly: z.boolean().optional(),
@@ -95,6 +101,7 @@ autocomplete: z.string().optional(),
 **Gap:** Range sliders used in read-only display contexts (showing a current value without allowing interaction) cannot be set to disabled state.
 
 **What should be added:**
+
 ```ts
 disabled: z.boolean().optional(),
 ```
@@ -108,6 +115,7 @@ disabled: z.boolean().optional(),
 **Gap:** A static text shadow (not animated) requires `wrapperStyle: { textShadow: "..." }`. Given that `textDecoration`, `textTransform`, `textStroke` are all first-class fields, `textShadow` belongs alongside them.
 
 **What should be added to `elementLayoutSchema`:**
+
 ```ts
 textShadow: z.string().optional(),
 ```
@@ -121,6 +129,7 @@ textShadow: z.string().optional(),
 **Gap:** Single-line labels that must not wrap (`white-space: nowrap`) — common in nav items, button-adjacent tags, and table-like layouts — require `wrapperStyle.whiteSpace`. Given the precedent of `textDecoration` and `textTransform`, `whiteSpace` belongs as a peer field.
 
 **What should be added to `elementLayoutSchema`:**
+
 ```ts
 whiteSpace: z.enum(["normal", "nowrap", "pre", "pre-wrap", "pre-line"]).optional(),
 ```
@@ -134,6 +143,7 @@ whiteSpace: z.enum(["normal", "nowrap", "pre", "pre-wrap", "pre-line"]).optional
 **Gap:** Diagonal section cutouts, circular image masks, and custom-shaped elements are blocked from clean schema expression. Unlike `boxShadow`, `filter`, and `backdropFilter` (all of which are first-class fields on both element and section schemas), `clipPath` is absent.
 
 **What should be added to both `elementLayoutSchema` and `baseSectionPropsSchema`:**
+
 ```ts
 clipPath: z.string().optional(),
 ```
@@ -147,16 +157,19 @@ clipPath: z.string().optional(),
 **Gap:** A horizontal rule between content blocks within a `contentBlock` frame requires either `elementRichText` content (losing all styling control) or a zero-height spacer with a border via `wrapperStyle`. Neither is semantic.
 
 **What should be added to `elementBlockSchema`:**
+
 ```ts
 // New schema
-const elementDividerSchema = z.object({
-  type: z.literal("elementDivider"),
-  orientation: z.enum(["horizontal", "vertical"]).optional(),
-  thickness: z.string().optional(),
-  color: z.string().optional(),
-  style: z.enum(["solid", "dashed", "dotted"]).optional(),
-  length: responsiveStringSchema.optional(),
-}).merge(elementLayoutSchema);
+const elementDividerSchema = z
+  .object({
+    type: z.literal("elementDivider"),
+    orientation: z.enum(["horizontal", "vertical"]).optional(),
+    thickness: z.string().optional(),
+    color: z.string().optional(),
+    style: z.enum(["solid", "dashed", "dotted"]).optional(),
+    length: responsiveStringSchema.optional(),
+  })
+  .merge(elementLayoutSchema);
 ```
 
 ---
@@ -168,6 +181,7 @@ const elementDividerSchema = z.object({
 **Gap:** Inconsistent validation for the same property. An editor cannot show a proper picker for the section cursor field.
 
 **What should be changed in `baseSectionPropsSchema`:**
+
 ```ts
 cursor: z.enum([
   "pointer", "default", "grab", "grabbing", "crosshair",
@@ -194,6 +208,7 @@ cursor: z.enum([
 **Gap:** Sections that function as media-like containers (hero tiles, card surfaces, aspect-locked panels) need a guaranteed aspect ratio. Without it, height is determined by content, which is often unpredictable for layout-driven designs.
 
 **What should be added:**
+
 ```ts
 aspectRatio: responsiveStringSchema.optional(),
 ```
@@ -207,6 +222,7 @@ aspectRatio: responsiveStringSchema.optional(),
 **Gap:** Ambient videos and slow-motion effects require playback rate control (e.g., `0.5` for half speed). This is a standard HTML video attribute.
 
 **What should be added:**
+
 ```ts
 playbackRate: z.number().positive().optional(),
 ```
@@ -240,6 +256,7 @@ playbackRate: z.number().positive().optional(),
 **Gap:** Pages with full-screen section snapping or horizontal carousels need scroll snap control at the page level. Currently only achievable via external CSS.
 
 **What should be added:**
+
 ```ts
 snapType: z.enum(["none", "x mandatory", "y mandatory", "both mandatory", "x proximity", "y proximity"]).optional(),
 ```
@@ -255,6 +272,7 @@ snapType: z.enum(["none", "x mandatory", "y mandatory", "both mandatory", "x pro
 **Gap:** Gradient text (achieved via `background-clip: text` + a gradient `backgroundImage`) is a common motif for headings. It cannot be expressed without `wrapperStyle: { backgroundImage: "...", backgroundClip: "text", webkitBackgroundClip: "text", color: "transparent" }` — a four-field escape hatch.
 
 **What should be added:** A `textFill` discriminated union on heading and body:
+
 ```ts
 textFill: z.union([
   z.object({ type: z.literal("color"), value: z.string() }),

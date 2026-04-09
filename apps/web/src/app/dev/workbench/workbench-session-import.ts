@@ -1,6 +1,9 @@
 import { coerceColorToolPersisted } from "@/app/dev/colors/color-tool-persistence";
 import { coerceStyleToolPersisted } from "@/app/dev/style/style-tool-persistence";
-import type { FontWorkbenchPrefsV2, WorkbenchSessionV2 } from "@/app/dev/workbench/workbench-defaults";
+import type {
+  FontWorkbenchPrefsV2,
+  WorkbenchSessionV2,
+} from "@/app/dev/workbench/workbench-defaults";
 
 export type WorkbenchSessionV2InFlight = Partial<Omit<WorkbenchSessionV2, "elements">> & {
   v: 2;

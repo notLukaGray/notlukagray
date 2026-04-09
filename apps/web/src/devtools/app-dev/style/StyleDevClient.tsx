@@ -57,7 +57,9 @@ function mergeSectionMarginsWithLocks(
   return derived;
 }
 
-function toSpacingLocks(seedLocks: StyleToolSeeds["spacingScaleLocks"]): StyleToolPersistedV3["spacingScaleLocks"] {
+function toSpacingLocks(
+  seedLocks: StyleToolSeeds["spacingScaleLocks"]
+): StyleToolPersistedV3["spacingScaleLocks"] {
   const out: StyleToolPersistedV3["spacingScaleLocks"] = {
     none: false,
     xs: false,
