@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 1, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/apps/web/src/app/fonts/secondaryfontlocal_8c9028af.module.css"],"sourcesContent":["@font-face {\n    \nfont-family: 'secondaryFontLocal';\n    src: url('@vercel/turbopack-next/internal/font/local/font?{%22path%22:%22../../../public/font/_local-loader-stub.woff2%22,%22preload%22:false,%22has_size_adjust%22:true}') format('woff2');\n    font-display: swap;\n    \nfont-weight: 400;\nfont-style: normal;\n}\n\n@font-face {\n    font-family: 'secondaryFontLocal Fallback';\n    src: local(\"Times New Roman\");\n    ascent-override: 84.50%;\ndescent-override: 22.24%;\nline-gap-override: 0.00%;\nsize-adjust: 109.79%;\n\n}\n\n.className {\n    font-family: 'secondaryFontLocal', 'secondaryFontLocal Fallback';\n    \n}\n.variable {\n    --font-secondary: 'secondaryFontLocal', 'secondaryFontLocal Fallback';\n}\n\n"],"names":[],"mappings":"AAAA;;;;;;;;AAUA;;;;;;;;;AAUA;;;;AAIA"}}]
-}
