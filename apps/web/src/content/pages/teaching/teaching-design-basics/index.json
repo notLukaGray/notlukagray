@@ -17,6 +17,7 @@
     },
     "teaching_hero": {
       "type": "contentBlock",
+      "flexDirection": "column",
       "id": "teaching_hero",
       "width": ["100%", "78%"],
       "height": "hug",
@@ -43,7 +44,8 @@
           "width": "100%",
           "wordWrap": true
         }
-      }
+      },
+      "gap": "1rem"
     }
   }
 }

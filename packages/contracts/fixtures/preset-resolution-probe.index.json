@@ -27,6 +27,7 @@
       "align": "center",
       "fill": "#00000000",
       "padding": "1rem",
+      "gap": "1rem",
       "elementOrder": ["title"],
       "definitions": {
         "title": {

@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_real_lenero_gallery",
   "ariaLabel": "El Leñero stills with motion",
   "width": ["100%", "92%"],
@@ -22,7 +23,11 @@
       "marginBottom": "0.75rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "entranceMotion": { "transition": { "duration": 0.35 } }
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.35
+          }
+        }
       }
     },
     "gallery-row": {
@@ -40,16 +45,29 @@
             "objectFit": "cover",
             "borderRadius": "1.25rem",
             "motion": {
-              "initial": { "opacity": 0, "y": 32 },
-              "animate": { "opacity": 1, "y": 0 },
-              "whileHover": { "scale": 1.03 },
-              "whileTap": { "scale": 0.98 },
+              "initial": {
+                "opacity": 0,
+                "y": 32
+              },
+              "animate": {
+                "opacity": 1,
+                "y": 0
+              },
+              "whileHover": {
+                "scale": 1.03
+              },
+              "whileTap": {
+                "scale": 0.98
+              },
               "transition": {
                 "type": "spring",
                 "stiffness": 220,
                 "damping": 26
               },
-              "viewport": { "once": true, "amount": 0.3 }
+              "viewport": {
+                "once": true,
+                "amount": 0.3
+              }
             }
           },
           "frame-b": {
@@ -110,8 +128,12 @@
                 "min": -80,
                 "max": 80
               },
-              "whileHover": { "scale": 1.04 },
-              "whileDrag": { "scale": 1.05 }
+              "whileHover": {
+                "scale": 1.04
+              },
+              "whileDrag": {
+                "scale": 1.05
+              }
             }
           }
         }
@@ -123,5 +145,6 @@
       "gap": "1rem",
       "padding": "1.5rem 1rem 2rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

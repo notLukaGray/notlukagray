@@ -1,11 +1,17 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "brand_c",
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
   "fill": "#00000060",
-  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "16px"
+    }
+  ],
   "marginBottom": ["2rem", "3rem"],
   "elementOrder": ["c-video"],
   "definitions": {
@@ -24,5 +30,6 @@
       "module": "video-player",
       "ariaLabel": "Brand motion reel"
     }
-  }
+  },
+  "gap": "1rem"
 }

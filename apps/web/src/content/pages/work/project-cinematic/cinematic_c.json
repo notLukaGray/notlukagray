@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "cinematic_c",
   "width": ["100%", "80%"],
   "height": "hug",
@@ -29,5 +30,6 @@
       "module": "video-player",
       "ariaLabel": "Main film"
     }
-  }
+  },
+  "gap": "1rem"
 }

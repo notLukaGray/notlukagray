@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_real_motion_grid",
   "ariaLabel": "Motion grid (variants, layout, drag)",
   "width": ["100%", "92%"],
@@ -11,9 +12,18 @@
   "marginBottom": "1rem",
   "motion": {
     "layout": true,
-    "initial": { "opacity": 0, "y": 32 },
-    "animate": { "opacity": 1, "y": 0 },
-    "transition": { "duration": 0.5, "ease": [0.22, 1, 0.36, 1] }
+    "initial": {
+      "opacity": 0,
+      "y": 32
+    },
+    "animate": {
+      "opacity": 1,
+      "y": 0
+    },
+    "transition": {
+      "duration": 0.5,
+      "ease": [0.22, 1, 0.36, 1]
+    }
   },
   "elementOrder": ["grid-heading", "grid-cells"],
   "definitions": {
@@ -28,7 +38,11 @@
       "marginBottom": "0.75rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "entranceMotion": { "transition": { "duration": 0.35 } }
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.35
+          }
+        }
       }
     },
     "grid-cells": {
@@ -80,14 +94,23 @@
               "borderRadius": "0.75rem"
             },
             "motion": {
-              "initial": { "opacity": 0, "y": 20 },
-              "whileInView": { "opacity": 1, "y": 0 },
+              "initial": {
+                "opacity": 0,
+                "y": 20
+              },
+              "whileInView": {
+                "opacity": 1,
+                "y": 0
+              },
               "transition": {
                 "type": "spring",
                 "stiffness": 220,
                 "damping": 24
               },
-              "viewport": { "once": true, "amount": 0.3 }
+              "viewport": {
+                "once": true,
+                "amount": 0.3
+              }
             }
           },
           "cell-layout": {
@@ -145,8 +168,12 @@
                 "min": -120,
                 "max": 120
               },
-              "whileHover": { "scale": 1.03 },
-              "whileDrag": { "scale": 1.06 }
+              "whileHover": {
+                "scale": 1.03
+              },
+              "whileDrag": {
+                "scale": 1.06
+              }
             }
           }
         }
@@ -156,5 +183,6 @@
       "gap": "1rem",
       "padding": "1.5rem 1.5rem 2rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

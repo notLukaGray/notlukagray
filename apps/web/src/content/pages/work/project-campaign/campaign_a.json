@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "campaign_a",
   "width": ["100%", "88%"],
   "height": ["85vh", "92vh"],
@@ -10,7 +11,7 @@
     "a-brand": {
       "type": "elementHeading",
       "level": 6,
-      "text": "MERIDIAN BANK \u00b7 CAMPAIGN",
+      "text": "MERIDIAN BANK · CAMPAIGN",
       "align": "center",
       "width": "hug",
       "marginTop": ["25vh", "30vh"],
@@ -52,7 +53,7 @@
       "type": "elementHeading",
       "level": 4,
       "semanticLevel": 2,
-      "text": "Meridian \u00b7 Your Future, Designed",
+      "text": "Meridian · Your Future, Designed",
       "align": "center",
       "width": ["85%", "55%"],
       "wordWrap": true,
@@ -73,10 +74,11 @@
     "a-year": {
       "type": "elementBody",
       "level": 5,
-      "text": "Art Direction \u00b7 Campaign Design \u00b7 OOH \u00b7 Digital \u00b7 2024",
+      "text": "Art Direction · Campaign Design · OOH · Digital · 2024",
       "align": "center",
       "textAlign": "center",
       "width": "hug"
     }
-  }
+  },
+  "gap": "1rem"
 }

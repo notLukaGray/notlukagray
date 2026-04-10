@@ -18,6 +18,7 @@
       "align": "center",
       "fill": "#00000000",
       "padding": ["2rem 1rem", "4rem 2rem"],
+      "gap": "1rem",
       "elementOrder": ["heading", "body"],
       "definitions": {
         "heading": {
@@ -48,6 +49,7 @@
       "align": "center",
       "fill": "#00000000",
       "padding": "1rem",
+      "gap": "1rem",
       "elementOrder": ["note"],
       "definitions": {
         "note": {

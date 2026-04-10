@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_real_limits",
   "ariaLabel": "What we push",
   "width": ["100%", "92%"],
@@ -26,7 +27,12 @@
       "marginBottom": "0.5rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.05 } }
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.05
+          }
+        }
       }
     },
     "limits-line-2": {
@@ -40,7 +46,12 @@
       "marginBottom": "0.5rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "entranceMotion": { "transition": { "delay": 0.12, "duration": 0.45 } }
+        "entranceMotion": {
+          "transition": {
+            "delay": 0.12,
+            "duration": 0.45
+          }
+        }
       }
     },
     "limits-line-3": {
@@ -54,8 +65,14 @@
       "marginBottom": "2.5rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "entranceMotion": { "transition": { "delay": 0.18, "duration": 0.45 } }
+        "entranceMotion": {
+          "transition": {
+            "delay": 0.18,
+            "duration": 0.45
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_video_slot",
   "ariaLabel": "Video with module slots",
   "width": ["100%", "92%"],
@@ -45,5 +46,6 @@
       "objectFit": "cover",
       "align": "center"
     }
-  }
+  },
+  "gap": "1rem"
 }

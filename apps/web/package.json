@@ -9,9 +9,9 @@
     "tsx": "^4.21.0"
   },
   "scripts": {
-    "dev": "npm run generate-json-schemas && next dev",
-    "build": "npm run generate-protected-slugs && next build",
-    "start": "next start",
+    "dev": "npm run generate-json-schemas && set -a && [ -f ../../.env ] && . ../../.env || true && set +a && ../../node_modules/.bin/next dev",
+    "build": "npm run generate-protected-slugs && set -a && [ -f ../../.env ] && . ../../.env || true && set +a && ../../node_modules/.bin/next build",
+    "start": "set -a && [ -f ../../.env ] && . ../../.env || true && set +a && ../../node_modules/.bin/next start",
     "generate-protected-slugs": "tsx ../../scripts/generate-protected-slugs.ts",
     "type-check": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint . --max-warnings 0",

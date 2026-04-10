@@ -1,11 +1,16 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_parallax_slow",
   "ariaLabel": "Parallax slow",
   "width": ["70%", "40%"],
   "height": ["hug", "hug"],
   "align": ["full", "left"],
-  "layers": [{ "fill": "#1a1a24" }],
+  "layers": [
+    {
+      "fill": "#1a1a24"
+    }
+  ],
   "fill": "#252530",
   "borderRadius": "1rem",
   "marginTop": ["1.5rem", "1rem"],
@@ -36,5 +41,6 @@
       "wordWrap": true,
       "marginBottom": "2rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

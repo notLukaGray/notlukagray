@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "form_demo_intro",
   "ariaLabel": "Form demo intro",
   "width": ["100%", "92%"],
@@ -8,7 +9,12 @@
   "fill": "#1a1a1a",
   "borderRadius": ["1.5rem 1.5rem 0 0", "2rem 2rem 0 0"],
   "elementOrder": ["intro-heading", "intro-body"],
-  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "16px"
+    }
+  ],
   "definitions": {
     "intro-heading": {
       "type": "elementHeading",
@@ -30,5 +36,6 @@
       "wordWrap": true,
       "marginBottom": "2rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

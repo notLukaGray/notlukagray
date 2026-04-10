@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_section_motion",
   "ariaLabel": "Section root motion",
   "width": ["100%", "92%"],
@@ -10,9 +11,20 @@
   "marginTop": "1rem",
   "marginBottom": "1rem",
   "motion": {
-    "initial": { "opacity": 0, "y": 28, "scale": 0.98 },
-    "animate": { "opacity": 1, "y": 0, "scale": 1 },
-    "transition": { "duration": 0.55, "ease": [0.22, 1, 0.36, 1] }
+    "initial": {
+      "opacity": 0,
+      "y": 28,
+      "scale": 0.98
+    },
+    "animate": {
+      "opacity": 1,
+      "y": 0,
+      "scale": 1
+    },
+    "transition": {
+      "duration": 0.55,
+      "ease": [0.22, 1, 0.36, 1]
+    }
   },
   "elementOrder": ["section-motion-heading", "section-motion-body"],
   "definitions": {
@@ -36,5 +48,6 @@
       "wordWrap": true,
       "marginBottom": "1.5rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

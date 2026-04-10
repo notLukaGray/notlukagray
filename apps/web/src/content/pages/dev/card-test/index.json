@@ -1,7 +1,6 @@
 {
   "title": "Dump 3D Test",
   "slug": "dump-3d-test",
-  "assetBaseUrl": "/work",
   "sectionOrder": ["section-main"],
   "bgKey": "bg-radial",
   "definitions": {

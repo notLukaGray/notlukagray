@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "renv_d",
   "width": ["100%", "92%"],
   "height": "hug",
@@ -28,9 +29,17 @@
       "align": "center",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0.1 },
-        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0 } }
+        "viewport": {
+          "amount": 0.1
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.6,
+            "delay": 0
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

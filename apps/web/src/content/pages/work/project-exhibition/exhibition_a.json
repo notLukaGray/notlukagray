@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "exhibition_a",
   "width": ["100%", "88%"],
   "height": ["85vh", "92vh"],
@@ -17,8 +18,14 @@
       "marginBottom": "1.25rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.6 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.6
+          }
+        }
       }
     },
     "a-title": {
@@ -31,8 +38,15 @@
       "marginBottom": "1.5rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.08 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.7,
+            "delay": 0.08
+          }
+        }
       }
     },
     "a-dates": {
@@ -44,9 +58,17 @@
       "width": "hug",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.2 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.2
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

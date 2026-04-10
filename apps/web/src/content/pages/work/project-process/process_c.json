@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "process_c",
   "width": ["100%", "88%"],
   "height": "hug",
@@ -19,9 +20,16 @@
       "align": "center",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0.2 },
-        "entranceMotion": { "transition": { "duration": 0.7 } }
+        "viewport": {
+          "amount": 0.2
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.7
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

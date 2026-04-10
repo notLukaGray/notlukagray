@@ -23,6 +23,7 @@
     },
     "footer": {
       "type": "contentBlock",
+      "flexDirection": "column",
       "ariaLabel": "Footer",
       "width": "100%",
       "height": "hug",
@@ -41,7 +42,8 @@
           "marginTop": "2rem",
           "marginBottom": "3rem"
         }
-      }
+      },
+      "gap": "1rem"
     }
   }
 }

@@ -11,23 +11,29 @@
         {
           "fill": "#000000"
         },
-
         {
           "fill": "radial-gradient(ellipse 160% 110% at 35% 55%, hsl(var(--h1, 268), 65%, 13%) 0%, transparent 72%)",
           "backgroundSize": "320% 320%",
           "motion": [
             {
               "type": "loop",
-              "animate": { "backgroundPosition": ["15% 25%", "85% 75%", "15% 25%"] },
-              "transition": { "duration": 20, "ease": "easeInOut", "repeatType": "mirror" }
+              "animate": {
+                "backgroundPosition": ["15% 25%", "85% 75%", "15% 25%"]
+              },
+              "transition": {
+                "duration": 20,
+                "ease": "easeInOut",
+                "repeatType": "mirror"
+              }
             },
             {
               "type": "scroll",
-              "properties": { "--h1": [268, 352] }
+              "properties": {
+                "--h1": [268, 352]
+              }
             }
           ]
         },
-
         {
           "fill": "radial-gradient(ellipse 130% 90% at 65% 35%, hsl(var(--h2, 218), 85%, 28%) 0%, transparent 68%)",
           "blendMode": "screen",
@@ -35,16 +41,23 @@
           "motion": [
             {
               "type": "loop",
-              "animate": { "backgroundPosition": ["70% 15%", "15% 85%", "70% 15%"] },
-              "transition": { "duration": 28, "ease": "linear", "repeatType": "loop" }
+              "animate": {
+                "backgroundPosition": ["70% 15%", "15% 85%", "70% 15%"]
+              },
+              "transition": {
+                "duration": 28,
+                "ease": "linear",
+                "repeatType": "loop"
+              }
             },
             {
               "type": "scroll",
-              "properties": { "--h2": [218, 28] }
+              "properties": {
+                "--h2": [218, 28]
+              }
             }
           ]
         },
-
         {
           "fill": "radial-gradient(ellipse 110% 80% at 50% 85%, hsl(var(--h3, 176), 72%, 22%) 0%, transparent 62%)",
           "blendMode": "screen",
@@ -53,12 +66,20 @@
           "motion": [
             {
               "type": "loop",
-              "animate": { "backgroundPosition": ["50% 90%", "50% 10%", "50% 90%"] },
-              "transition": { "duration": 14, "ease": "easeInOut", "repeatType": "mirror" }
+              "animate": {
+                "backgroundPosition": ["50% 90%", "50% 10%", "50% 90%"]
+              },
+              "transition": {
+                "duration": 14,
+                "ease": "easeInOut",
+                "repeatType": "mirror"
+              }
             },
             {
               "type": "scroll",
-              "properties": { "--h3": [176, 328] }
+              "properties": {
+                "--h3": [176, 328]
+              }
             },
             {
               "type": "parallax",
@@ -67,7 +88,6 @@
             }
           ]
         },
-
         {
           "fill": "radial-gradient(circle at 55% 45%, hsl(var(--h4, 248), 90%, 32%) 0%, transparent 52%)",
           "blendMode": "screen",
@@ -76,16 +96,23 @@
           "motion": [
             {
               "type": "loop",
-              "animate": { "backgroundPosition": ["0% 50%", "100% 50%", "0% 50%"] },
-              "transition": { "duration": 9, "ease": "linear", "repeatType": "loop" }
+              "animate": {
+                "backgroundPosition": ["0% 50%", "100% 50%", "0% 50%"]
+              },
+              "transition": {
+                "duration": 9,
+                "ease": "linear",
+                "repeatType": "loop"
+              }
             },
             {
               "type": "scroll",
-              "properties": { "--h4": [248, 12] }
+              "properties": {
+                "--h4": [248, 12]
+              }
             }
           ]
         },
-
         {
           "fill": "radial-gradient(ellipse 90% 60% at 20% 70%, hsl(var(--h5, 290), 55%, 18%) 0%, transparent 58%)",
           "blendMode": "screen",
@@ -94,20 +121,28 @@
           "motion": [
             {
               "type": "loop",
-              "animate": { "backgroundPosition": ["80% 60%", "20% 40%", "80% 60%"] },
-              "transition": { "duration": 17, "ease": "easeInOut", "repeatType": "mirror" }
+              "animate": {
+                "backgroundPosition": ["80% 60%", "20% 40%", "80% 60%"]
+              },
+              "transition": {
+                "duration": 17,
+                "ease": "easeInOut",
+                "repeatType": "mirror"
+              }
             },
             {
               "type": "scroll",
-              "properties": { "--h5": [290, 42] }
+              "properties": {
+                "--h5": [290, 42]
+              }
             }
           ]
         }
       ]
     },
-
     "scroll-stage": {
       "type": "contentBlock",
+      "flexDirection": "column",
       "ariaLabel": "Background motion demo scroll stage",
       "width": "100%",
       "height": "500vh",
@@ -182,7 +217,8 @@
           "opacity": 0.35,
           "marginTop": "108vh"
         }
-      }
+      },
+      "gap": "1rem"
     }
   }
 }

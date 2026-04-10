@@ -1,9 +1,12 @@
 import { person } from "@/core/lib/globals";
 import { HomeView } from "@/core/ui//HomeView";
 import { PersonJsonLd } from "@/core/ui/PersonJsonLd";
+import type { HeroProject } from "@/core/lib/globals";
 import type { SectionBlock } from "@pb/contracts";
 import { getModalProps } from "@pb/core";
 import { HomeWithUnlockModal } from "./HomeWithUnlockModal";
+// Temporary: load hero data from archived file until homepage is rebuilt as a page-builder page
+import deadHome from "@/content/_dead/home.json";
 
 function safeRedirect(value: unknown): string | null {
   if (typeof value !== "string" || !value.trim()) return null;
@@ -35,7 +38,7 @@ export default async function Home({ searchParams }: Props) {
   return (
     <HomeWithUnlockModal unlockModalProps={unlockModalProps}>
       {person && <PersonJsonLd person={person} />}
-      <HomeView heroProjects={[]} />
+      <HomeView heroProjects={deadHome.heroProjects as HeroProject[]} />
     </HomeWithUnlockModal>
   );
 }

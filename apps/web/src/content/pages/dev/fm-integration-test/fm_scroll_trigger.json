@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_scroll_trigger",
   "ariaLabel": "Scroll and viewport triggers",
   "width": ["100%", "92%"],
@@ -34,5 +35,6 @@
       "wordWrap": true,
       "marginBottom": "1.5rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

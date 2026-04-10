@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_stagger_grid",
   "ariaLabel": "Stagger grid",
   "width": ["100%", "88%"],
@@ -22,7 +23,11 @@
       "marginBottom": "1rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "entranceMotion": { "transition": { "duration": 0.3 } }
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.3
+          }
+        }
       }
     },
     "g1": {
@@ -34,9 +39,17 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35
+          }
         }
       }
     },
@@ -49,9 +62,18 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.06 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.06
+          }
         }
       }
     },
@@ -64,9 +86,18 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.12 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.12
+          }
         }
       }
     },
@@ -79,9 +110,18 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.18 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.18
+          }
         }
       }
     },
@@ -94,9 +134,18 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.24 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.24
+          }
         }
       }
     },
@@ -109,9 +158,18 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.3 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.3
+          }
         }
       }
     },
@@ -124,9 +182,18 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.36 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.36
+          }
         }
       }
     },
@@ -139,9 +206,18 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.42 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.42
+          }
         }
       }
     },
@@ -154,9 +230,18 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.48 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.48
+          }
         }
       }
     },
@@ -170,11 +255,21 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 20 },
-          "animate": { "opacity": 1, "y": 0 },
-          "transition": { "duration": 0.35, "delay": 0.54 }
+          "initial": {
+            "opacity": 0,
+            "y": 20
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
+          "transition": {
+            "duration": 0.35,
+            "delay": 0.54
+          }
         }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

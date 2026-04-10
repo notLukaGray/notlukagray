@@ -252,7 +252,7 @@ export const sectionContentBlockSchema = baseSectionPropsSchema.extend({
       ]),
     ])
     .optional(),
-  gap: responsiveStringSchema.optional(),
+  gap: responsiveStringSchema,
   rowGap: responsiveStringSchema.optional(),
   columnGap: responsiveStringSchema.optional(),
 

@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_stagger_motion",
   "ariaLabel": "Sequenced motion from JSON",
   "width": ["100%", "88%"],
@@ -34,11 +35,26 @@
         "margin": "0 auto"
       },
       "motion": {
-        "initial": { "opacity": 0, "x": -16 },
-        "animate": { "opacity": 1, "x": 0 },
-        "transition": { "duration": 0.4, "delay": 0, "ease": "easeOut" }
+        "initial": {
+          "opacity": 0,
+          "x": -16
+        },
+        "animate": {
+          "opacity": 1,
+          "x": 0
+        },
+        "transition": {
+          "duration": 0.4,
+          "delay": 0,
+          "ease": "easeOut"
+        }
       },
-      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+      "motionTiming": {
+        "trigger": "onFirstVisible",
+        "viewport": {
+          "amount": 1
+        }
+      }
     },
     "seq-2": {
       "type": "elementBody",
@@ -53,11 +69,26 @@
         "margin": "0 auto"
       },
       "motion": {
-        "initial": { "opacity": 0, "x": -16 },
-        "animate": { "opacity": 1, "x": 0 },
-        "transition": { "duration": 0.4, "delay": 0.1, "ease": "easeOut" }
+        "initial": {
+          "opacity": 0,
+          "x": -16
+        },
+        "animate": {
+          "opacity": 1,
+          "x": 0
+        },
+        "transition": {
+          "duration": 0.4,
+          "delay": 0.1,
+          "ease": "easeOut"
+        }
       },
-      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+      "motionTiming": {
+        "trigger": "onFirstVisible",
+        "viewport": {
+          "amount": 1
+        }
+      }
     },
     "seq-3": {
       "type": "elementBody",
@@ -72,11 +103,26 @@
         "margin": "0 auto"
       },
       "motion": {
-        "initial": { "opacity": 0, "x": -16 },
-        "animate": { "opacity": 1, "x": 0 },
-        "transition": { "duration": 0.4, "delay": 0.2, "ease": "easeOut" }
+        "initial": {
+          "opacity": 0,
+          "x": -16
+        },
+        "animate": {
+          "opacity": 1,
+          "x": 0
+        },
+        "transition": {
+          "duration": 0.4,
+          "delay": 0.2,
+          "ease": "easeOut"
+        }
       },
-      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+      "motionTiming": {
+        "trigger": "onFirstVisible",
+        "viewport": {
+          "amount": 1
+        }
+      }
     },
     "seq-4": {
       "type": "elementBody",
@@ -91,11 +137,26 @@
         "margin": "0 auto"
       },
       "motion": {
-        "initial": { "opacity": 0, "x": -16 },
-        "animate": { "opacity": 1, "x": 0 },
-        "transition": { "duration": 0.4, "delay": 0.3, "ease": "easeOut" }
+        "initial": {
+          "opacity": 0,
+          "x": -16
+        },
+        "animate": {
+          "opacity": 1,
+          "x": 0
+        },
+        "transition": {
+          "duration": 0.4,
+          "delay": 0.3,
+          "ease": "easeOut"
+        }
       },
-      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+      "motionTiming": {
+        "trigger": "onFirstVisible",
+        "viewport": {
+          "amount": 1
+        }
+      }
     },
     "seq-5": {
       "type": "elementBody",
@@ -110,11 +171,27 @@
         "margin": "0 auto"
       },
       "motion": {
-        "initial": { "opacity": 0, "x": -16 },
-        "animate": { "opacity": 1, "x": 0 },
-        "transition": { "duration": 0.4, "delay": 0.4, "ease": "easeOut" }
+        "initial": {
+          "opacity": 0,
+          "x": -16
+        },
+        "animate": {
+          "opacity": 1,
+          "x": 0
+        },
+        "transition": {
+          "duration": 0.4,
+          "delay": 0.4,
+          "ease": "easeOut"
+        }
       },
-      "motionTiming": { "trigger": "onFirstVisible", "viewport": { "amount": 1 } }
+      "motionTiming": {
+        "trigger": "onFirstVisible",
+        "viewport": {
+          "amount": 1
+        }
+      }
     }
-  }
+  },
+  "gap": "1rem"
 }

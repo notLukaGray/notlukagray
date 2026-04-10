@@ -58,6 +58,7 @@ export function loadOverlaySections(
       {
         slug: id,
         title: id,
+        bgKey: "__overlay-bg-unused__",
         sectionOrder: [sectionKey],
         definitions: resolvedDefinitions,
       },

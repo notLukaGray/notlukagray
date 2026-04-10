@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "product_b",
   "width": ["100%", "88%"],
   "height": "hug",
@@ -36,5 +37,6 @@
       "module": "video-player",
       "ariaLabel": "Product walkthrough"
     }
-  }
+  },
+  "gap": "1rem"
 }

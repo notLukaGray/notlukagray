@@ -1,10 +1,12 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "lenero_section_b",
   "width": "100%",
   "height": "hug",
   "align": "full",
   "fill": "#00000000",
+  "gap": "0",
   "scrollSpeed": 0.9,
   "zIndex": 1,
   "reduceMotion": false,

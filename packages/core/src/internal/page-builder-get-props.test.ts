@@ -30,6 +30,7 @@ describe("page-builder-get-props", () => {
         definitions: {
           hero: {
             type: "contentBlock",
+            gap: "0",
             elements: [{ type: "elementBody", text: "Hello unlock" }],
           },
         } as ModalBuilder["definitions"],
@@ -58,8 +59,8 @@ describe("page-builder-get-props", () => {
         title: "Unlock",
         sectionOrder: ["a", "b"],
         definitions: {
-          a: { type: "contentBlock", elements: [] },
-          b: { type: "contentBlock", elements: [] },
+          a: { type: "contentBlock", gap: "0", elements: [] },
+          b: { type: "contentBlock", gap: "0", elements: [] },
         } as ModalBuilder["definitions"],
       };
       vi.doMock("@pb/core/internal/modal-load", () => ({
@@ -79,7 +80,7 @@ describe("page-builder-get-props", () => {
         title: "Unlock",
         sectionOrder: ["hero"],
         definitions: {
-          hero: { type: "contentBlock", elements: [] },
+          hero: { type: "contentBlock", gap: "0", elements: [] },
         } as ModalBuilder["definitions"],
       };
       vi.doMock("@pb/core/internal/modal-load", () => ({

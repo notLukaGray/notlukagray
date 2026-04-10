@@ -1,12 +1,18 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "cinematic_b",
   "width": ["100%", "80%"],
   "height": "hug",
   "align": ["full", "center"],
   "fill": "#00000088",
   "borderRadius": ["2rem 2rem 0 0", "3rem 3rem 0 0"],
-  "effects": [{ "type": "backdropBlur", "amount": "32px" }],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "32px"
+    }
+  ],
   "elementOrder": ["c-label", "c-title", "c-logline", "c-meta"],
   "definitions": {
     "c-label": {
@@ -19,8 +25,14 @@
       "marginBottom": "0.75rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.5 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5
+          }
+        }
       }
     },
     "c-title": {
@@ -33,8 +45,15 @@
       "marginBottom": "1rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.55, "delay": 0.1 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.55,
+            "delay": 0.1
+          }
+        }
       }
     },
     "c-logline": {
@@ -48,8 +67,15 @@
       "marginBottom": ["2rem", "2.5rem"],
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.2 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.2
+          }
+        }
       }
     },
     "c-meta": {
@@ -62,9 +88,17 @@
       "marginBottom": "2.5rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0.32 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0.32
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

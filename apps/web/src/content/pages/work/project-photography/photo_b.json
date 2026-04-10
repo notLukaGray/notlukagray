@@ -1,12 +1,18 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "photo_b",
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
   "fill": "#00000080",
   "borderRadius": ["2rem 2rem 0 0", "3rem 3rem 0 0"],
-  "effects": [{ "type": "backdropBlur", "amount": "24px" }],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "24px"
+    }
+  ],
   "elementOrder": ["b-location", "b-title", "b-medium"],
   "definitions": {
     "b-location": {
@@ -19,8 +25,14 @@
       "marginBottom": "1rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.5 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5
+          }
+        }
       }
     },
     "b-title": {
@@ -33,8 +45,15 @@
       "marginBottom": "1rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.08 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.6,
+            "delay": 0.08
+          }
+        }
       }
     },
     "b-medium": {
@@ -46,5 +65,6 @@
       "width": "hug",
       "marginBottom": "2.5rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

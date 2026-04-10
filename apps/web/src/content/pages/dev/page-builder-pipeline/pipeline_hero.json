@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "pipeline_hero",
   "ariaLabel": "Pipeline intro",
   "width": ["100%", "92%"],
@@ -8,7 +9,12 @@
   "fill": "#00000080",
   "borderRadius": ["2rem 2rem 0 0", "4rem 4rem 0 0"],
   "elementOrder": ["hero-heading", "hero-subtitle", "hero-body"],
-  "effects": [{ "type": "backdropBlur", "amount": "24px" }],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "24px"
+    }
+  ],
   "definitions": {
     "hero-heading": {
       "type": "elementHeading",
@@ -21,7 +27,11 @@
       "marginBottom": "0.5rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "entranceMotion": { "transition": { "delay": 0.1 } }
+        "entranceMotion": {
+          "transition": {
+            "delay": 0.1
+          }
+        }
       }
     },
     "hero-subtitle": {
@@ -34,7 +44,11 @@
       "marginBottom": ["1.5rem", "2rem"],
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "entranceMotion": { "transition": { "delay": 0.2 } }
+        "entranceMotion": {
+          "transition": {
+            "delay": 0.2
+          }
+        }
       }
     },
     "hero-body": {
@@ -48,8 +62,13 @@
       "marginBottom": ["2rem", "3rem"],
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "entranceMotion": { "transition": { "delay": 0.35 } }
+        "entranceMotion": {
+          "transition": {
+            "delay": 0.35
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

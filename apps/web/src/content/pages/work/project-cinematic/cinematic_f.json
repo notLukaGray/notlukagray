@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "cinematic_f",
   "width": ["100%", "80%"],
   "height": "hug",
@@ -20,8 +21,14 @@
       "marginBottom": "2rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0.4 },
-        "entranceMotion": { "transition": { "duration": 0.7 } }
+        "viewport": {
+          "amount": 0.4
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.7
+          }
+        }
       }
     },
     "f-link": {
@@ -34,5 +41,6 @@
       "align": "center",
       "marginBottom": "3rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

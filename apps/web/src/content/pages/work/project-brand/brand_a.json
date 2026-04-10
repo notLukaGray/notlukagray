@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "brand_a",
   "width": ["100%", "88%"],
   "height": ["85vh", "92vh"],
@@ -52,7 +53,7 @@
       "type": "elementHeading",
       "level": 4,
       "semanticLevel": 2,
-      "text": "Brand Identity \u00b7 Visual System \u00b7 Brand Guidelines",
+      "text": "Brand Identity · Visual System · Brand Guidelines",
       "align": "center",
       "width": ["88%", "60%"],
       "wordWrap": true,
@@ -90,5 +91,6 @@
         }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

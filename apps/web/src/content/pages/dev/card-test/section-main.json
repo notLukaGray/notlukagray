@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "width": "100%",
   "height": "100vh",
   "align": "full",
@@ -21,9 +22,18 @@
           "loop": true,
           "useAsAlphaMap": false
         },
-        "albedo": { "type": "image", "source": "dump_3d_test/albedo_card.webp" },
-        "maps": { "type": "image", "source": "dump_3d_test/maps_card.webp" },
-        "normal": { "type": "image", "source": "dump_3d_test/card_normal_map.webp" }
+        "albedo": {
+          "type": "image",
+          "source": "dump_3d_test/albedo_card.webp"
+        },
+        "maps": {
+          "type": "image",
+          "source": "dump_3d_test/maps_card.webp"
+        },
+        "normal": {
+          "type": "image",
+          "source": "dump_3d_test/card_normal_map.webp"
+        }
       },
       "materials": {
         "base": {
@@ -37,13 +47,22 @@
       "models": {
         "main": {
           "geometry": "dump_3d_test/test2.glb",
-          "materialBindings": { "Material.001": "base" }
+          "materialBindings": {
+            "Material.001": "base"
+          }
         }
       },
       "scene": {
-        "environment": { "type": "hdri", "path": "dump_3d_test/hdri.exr", "intensity": 1 },
+        "environment": {
+          "type": "hdri",
+          "path": "dump_3d_test/hdri.exr",
+          "intensity": 1
+        },
         "lights": [
-          { "type": "ambient", "intensity": 0 },
+          {
+            "type": "ambient",
+            "intensity": 0
+          },
           {
             "type": "spot",
             "position": [1, 1, 1],
@@ -61,19 +80,50 @@
             "intensity": 1
           }
         ],
-        "camera": { "type": "orthographic", "size": 0.1 },
+        "camera": {
+          "type": "orthographic",
+          "size": 0.1
+        },
         "cameraEffects": {
-          "bobbing": { "amount": 0.3, "speed": 0.8 },
-          "mouseFollow": { "sensitivity": -0.1, "smoothness": 0.1, "desktopOnly": true }
+          "bobbing": {
+            "amount": 0.3,
+            "speed": 0.8
+          },
+          "mouseFollow": {
+            "sensitivity": -0.1,
+            "smoothness": 0.1,
+            "desktopOnly": true
+          }
         },
         "contents": {
-          "models": [{ "model": "main", "animation": { "clip": "RotateCW", "loop": true } }]
+          "models": [
+            {
+              "model": "main",
+              "animation": {
+                "clip": "RotateCW",
+                "loop": true
+              }
+            }
+          ]
         }
       },
-      "canvas": { "dpr": 2, "gl": { "antialias": true, "powerPreference": "high-performance" } },
+      "canvas": {
+        "dpr": 2,
+        "gl": {
+          "antialias": true,
+          "powerPreference": "high-performance"
+        }
+      },
       "postProcessing": [
-        { "type": "brightnessContrast", "brightness": 0, "contrast": 0.5 },
-        { "type": "noise", "opacity": 0.1 }
+        {
+          "type": "brightnessContrast",
+          "brightness": 0,
+          "contrast": 0.5
+        },
+        {
+          "type": "noise",
+          "opacity": 0.1
+        }
       ]
     },
     "loadModelButton": {
@@ -82,8 +132,12 @@
       "action": "three.load",
       "actionPayload": {
         "id": "card-test-model",
-        "fadeInOnReady": { "durationMs": 1000 },
-        "buttonFadeOutOnModelReady": { "durationMs": 1000 },
+        "fadeInOnReady": {
+          "durationMs": 1000
+        },
+        "buttonFadeOutOnModelReady": {
+          "durationMs": 1000
+        },
         "buttonUnmountOnModelReady": true
       },
       "width": "hug",
@@ -98,10 +152,18 @@
       "linkDefault": "#ffffff",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0.2 },
+        "viewport": {
+          "amount": 0.2
+        },
         "entranceMotion": {
-          "initial": { "opacity": 0, "y": 48 },
-          "animate": { "opacity": 1, "y": 0 },
+          "initial": {
+            "opacity": 0,
+            "y": 48
+          },
+          "animate": {
+            "opacity": 1,
+            "y": 0
+          },
           "transition": {
             "duration": 0.6,
             "delay": 0,
@@ -110,5 +172,6 @@
         }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

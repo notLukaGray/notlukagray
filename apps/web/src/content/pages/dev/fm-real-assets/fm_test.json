@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "glass_temp_showcase",
   "ariaLabel": "glass_temp_showcase",
   "width": ["100%", "92%"],
@@ -10,9 +11,18 @@
   "marginTop": "1rem",
   "marginBottom": "2rem",
   "motion": {
-    "initial": { "opacity": 0, "y": 24 },
-    "animate": { "opacity": 1, "y": 0 },
-    "transition": { "duration": 0.55, "ease": [0.22, 1, 0.36, 1] }
+    "initial": {
+      "opacity": 0,
+      "y": 24
+    },
+    "animate": {
+      "opacity": 1,
+      "y": 0
+    },
+    "transition": {
+      "duration": 0.55,
+      "ease": [0.22, 1, 0.36, 1]
+    }
   },
   "elementOrder": [
     "title",
@@ -36,7 +46,11 @@
       "marginBottom": "0.4rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "entranceMotion": { "transition": { "duration": 0.4 } }
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4
+          }
+        }
       }
     },
     "subtitle": {
@@ -49,10 +63,14 @@
       "marginBottom": "1rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "entranceMotion": { "transition": { "duration": 0.42, "delay": 0.06 } }
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.42,
+            "delay": 0.06
+          }
+        }
       }
     },
-
     "search-input": {
       "type": "elementInput",
       "placeholder": "Search",
@@ -64,15 +82,37 @@
       "align": "center",
       "zIndex": 4,
       "marginBottom": "0.9rem",
-      "wrapperStyle": { "position": "relative", "zIndex": 30 },
+      "wrapperStyle": {
+        "position": "relative",
+        "zIndex": 30
+      },
       "motion": {
-        "initial": { "opacity": 0, "y": 18 },
-        "whileInView": { "opacity": 1, "y": 0 },
-        "whileHover": { "scale": 1.02 },
-        "whileFocus": { "scale": 1.02 },
-        "whileTap": { "scale": 0.995 },
-        "transition": { "type": "spring", "stiffness": 240, "damping": 24 },
-        "viewport": { "once": true, "amount": 0.2 }
+        "initial": {
+          "opacity": 0,
+          "y": 18
+        },
+        "whileInView": {
+          "opacity": 1,
+          "y": 0
+        },
+        "whileHover": {
+          "scale": 1.02
+        },
+        "whileFocus": {
+          "scale": 1.02
+        },
+        "whileTap": {
+          "scale": 0.995
+        },
+        "transition": {
+          "type": "spring",
+          "stiffness": 240,
+          "damping": 24
+        },
+        "viewport": {
+          "once": true,
+          "amount": 0.2
+        }
       },
       "effects": [
         {
@@ -91,7 +131,6 @@
         }
       ]
     },
-
     "switch-glass": {
       "type": "elementSVG",
       "markup": "<svg width=\"160\" height=\"92\" viewBox=\"0 0 160 92\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"0\" y=\"12\" width=\"160\" height=\"67\" rx=\"33.5\" fill=\"black\" fill-opacity=\"0.01\"/><rect x=\"7\" y=\"0\" width=\"146\" height=\"92\" rx=\"46\" fill=\"black\" fill-opacity=\"0.01\"/></svg>",
@@ -102,19 +141,48 @@
       "align": "center",
       "zIndex": 4,
       "marginBottom": "1rem",
-      "wrapperStyle": { "position": "relative", "zIndex": 30 },
+      "wrapperStyle": {
+        "position": "relative",
+        "zIndex": 30
+      },
       "motion": {
-        "initial": { "opacity": 0, "y": 18, "zIndex": 30 },
-        "whileInView": { "opacity": 1, "y": 0, "zIndex": 30 },
-        "whileHover": { "y": -1, "zIndex": 90 },
-        "whileTap": { "zIndex": 90 },
+        "initial": {
+          "opacity": 0,
+          "y": 18,
+          "zIndex": 30
+        },
+        "whileInView": {
+          "opacity": 1,
+          "y": 0,
+          "zIndex": 30
+        },
+        "whileHover": {
+          "y": -1,
+          "zIndex": 90
+        },
+        "whileTap": {
+          "zIndex": 90
+        },
         "drag": "x",
-        "dragConstraints": { "left": -120, "right": 120 },
+        "dragConstraints": {
+          "left": -120,
+          "right": 120
+        },
         "dragElastic": 0.2,
         "dragMomentum": true,
-        "whileDrag": { "scale": 1.04, "zIndex": 95 },
-        "transition": { "type": "spring", "stiffness": 260, "damping": 26 },
-        "viewport": { "once": true, "amount": 0.2 }
+        "whileDrag": {
+          "scale": 1.04,
+          "zIndex": 95
+        },
+        "transition": {
+          "type": "spring",
+          "stiffness": 260,
+          "damping": 26
+        },
+        "viewport": {
+          "once": true,
+          "amount": 0.2
+        }
       },
       "effects": [
         {
@@ -133,7 +201,6 @@
         }
       ]
     },
-
     "slider-glass": {
       "type": "elementRange",
       "ariaLabel": "Slider control",
@@ -147,7 +214,10 @@
       "align": "center",
       "zIndex": 4,
       "marginBottom": "1rem",
-      "wrapperStyle": { "position": "relative", "zIndex": 30 },
+      "wrapperStyle": {
+        "position": "relative",
+        "zIndex": 30
+      },
       "style": {
         "trackColor": "#89898F66",
         "fillColor": "#0377F7",
@@ -162,12 +232,32 @@
         "thumbActiveOpacity": 0.1
       },
       "motion": {
-        "initial": { "opacity": 0, "y": 14, "zIndex": 30 },
-        "whileInView": { "opacity": 1, "y": 0, "zIndex": 30 },
-        "whileHover": { "scale": 1.015, "zIndex": 90 },
-        "whileTap": { "zIndex": 90 },
-        "transition": { "type": "spring", "stiffness": 260, "damping": 28 },
-        "viewport": { "once": true, "amount": 0.2 }
+        "initial": {
+          "opacity": 0,
+          "y": 14,
+          "zIndex": 30
+        },
+        "whileInView": {
+          "opacity": 1,
+          "y": 0,
+          "zIndex": 30
+        },
+        "whileHover": {
+          "scale": 1.015,
+          "zIndex": 90
+        },
+        "whileTap": {
+          "zIndex": 90
+        },
+        "transition": {
+          "type": "spring",
+          "stiffness": 260,
+          "damping": 28
+        },
+        "viewport": {
+          "once": true,
+          "amount": 0.2
+        }
       },
       "effects": [
         {
@@ -185,7 +275,6 @@
         }
       ]
     },
-
     "magnifier-scene": {
       "type": "elementSVG",
       "markup": "<svg width=\"420\" height=\"200\" viewBox=\"0 0 420 200\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"210\" cy=\"75\" r=\"24\" stroke=\"#34D399\" stroke-width=\"2.5\" opacity=\"0.85\"/><circle cx=\"210\" cy=\"75\" r=\"52\" stroke=\"#34D399\" stroke-width=\"1.5\" opacity=\"0.55\"/><circle cx=\"210\" cy=\"75\" r=\"88\" stroke=\"#34D399\" stroke-width=\"1\" opacity=\"0.28\"/><circle cx=\"210\" cy=\"75\" r=\"5\" fill=\"#34D399\" opacity=\"0.95\"/><polyline points=\"0,75 5,86 10,94 15,97 20,94 25,86 30,75 35,64 40,56 45,53 50,56 55,64 60,75 65,86 70,94 75,97 80,94 85,86 90,75 95,64 100,56 105,53 110,56 115,64 120,75 125,86 130,94 135,97 140,94 145,86 150,75 155,64 160,56 165,53 170,56 175,64 180,75 185,86 190,94 195,97 200,94 205,86 210,75 215,64 220,56 225,53 230,56 235,64 240,75 245,86 250,94 255,97 260,94 265,86 270,75 275,64 280,56 285,53 290,56 295,64 300,75 305,86 310,94 315,97 320,94 325,86 330,75 335,64 340,56 345,53 350,56 355,64 360,75 365,86 370,94 375,97 380,94 385,86 390,75 395,64 400,56 405,53 410,56 415,64 420,75\" stroke=\"#F472B6\" stroke-width=\"2.5\" opacity=\"0.75\"/><circle cx=\"80\" cy=\"36\" r=\"16\" fill=\"#3B82F6\" fill-opacity=\"0.35\"/><circle cx=\"344\" cy=\"148\" r=\"20\" fill=\"#8B5CF6\" fill-opacity=\"0.32\"/></svg>",
@@ -197,7 +286,6 @@
       "zIndex": 1,
       "marginBottom": "-200px"
     },
-
     "magnifier-glass": {
       "type": "elementSVG",
       "markup": "<svg width=\"210\" height=\"150\" viewBox=\"0 0 210 150\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"210\" height=\"150\" rx=\"75\" fill=\"black\" fill-opacity=\"0.01\"/></svg>",
@@ -208,30 +296,67 @@
       "align": "center",
       "zIndex": 4,
       "marginBottom": "0.8rem",
-      "wrapperStyle": { "position": "relative", "zIndex": 30 },
+      "wrapperStyle": {
+        "position": "relative",
+        "zIndex": 30
+      },
       "interactions": {
         "onPointerDown": {
           "type": "setVariable",
-          "payload": { "key": "glass.dragging", "value": "dragging" }
+          "payload": {
+            "key": "glass.dragging",
+            "value": "dragging"
+          }
         },
         "onPointerUp": {
           "type": "setVariable",
-          "payload": { "key": "glass.dragging", "value": "idle" }
+          "payload": {
+            "key": "glass.dragging",
+            "value": "idle"
+          }
         },
         "cursor": "grab"
       },
       "motion": {
-        "initial": { "opacity": 0, "scale": 0.94, "zIndex": 30 },
-        "whileInView": { "opacity": 1, "scale": 1, "zIndex": 30 },
-        "whileHover": { "y": -1, "zIndex": 90 },
-        "whileTap": { "zIndex": 90 },
+        "initial": {
+          "opacity": 0,
+          "scale": 0.94,
+          "zIndex": 30
+        },
+        "whileInView": {
+          "opacity": 1,
+          "scale": 1,
+          "zIndex": 30
+        },
+        "whileHover": {
+          "y": -1,
+          "zIndex": 90
+        },
+        "whileTap": {
+          "zIndex": 90
+        },
         "drag": true,
-        "dragConstraints": { "left": -96, "right": 96, "top": -54, "bottom": 54 },
+        "dragConstraints": {
+          "left": -96,
+          "right": 96,
+          "top": -54,
+          "bottom": 54
+        },
         "dragElastic": 0.13,
         "dragMomentum": false,
-        "whileDrag": { "scale": 1.05, "zIndex": 95 },
-        "transition": { "type": "spring", "stiffness": 260, "damping": 24 },
-        "viewport": { "once": true, "amount": 0.2 }
+        "whileDrag": {
+          "scale": 1.05,
+          "zIndex": 95
+        },
+        "transition": {
+          "type": "spring",
+          "stiffness": 260,
+          "damping": 24
+        },
+        "viewport": {
+          "once": true,
+          "amount": 0.2
+        }
       },
       "effects": [
         {
@@ -250,7 +375,6 @@
         }
       ]
     },
-
     "drag-state-label": {
       "type": "elementBody",
       "level": 2,
@@ -272,5 +396,6 @@
       "marginBottom": "1.2rem",
       "color": "rgba(255, 255, 255, 0.95)"
     }
-  }
+  },
+  "gap": "1rem"
 }

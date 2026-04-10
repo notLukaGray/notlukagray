@@ -10,6 +10,7 @@ describe("modalBuilderSchema", () => {
       definitions: {
         hero: {
           type: "contentBlock",
+          gap: "1rem",
           elements: [],
         },
       },

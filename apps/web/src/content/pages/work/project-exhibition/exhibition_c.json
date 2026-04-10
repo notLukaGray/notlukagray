@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "exhibition_c",
   "width": ["100%", "88%"],
   "height": "hug",
@@ -29,9 +30,16 @@
       "marginBottom": "2rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0.4 },
-        "entranceMotion": { "transition": { "duration": 0.8 } }
+        "viewport": {
+          "amount": 0.4
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.8
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_reduced_motion_note",
   "ariaLabel": "Reduced motion QA note",
   "width": ["100%", "88%"],
@@ -22,7 +23,11 @@
       "marginBottom": "0.5rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "entranceMotion": { "transition": { "duration": 0.3 } }
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.3
+          }
+        }
       }
     },
     "reduced-body": {
@@ -36,8 +41,13 @@
       "marginBottom": "1.5rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "entranceMotion": { "transition": { "delay": 0.05 } }
+        "entranceMotion": {
+          "transition": {
+            "delay": 0.05
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

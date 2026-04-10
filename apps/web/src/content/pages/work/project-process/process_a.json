@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "process_a",
   "width": ["100%", "88%"],
   "height": ["80vh", "88vh"],
@@ -17,8 +18,14 @@
       "marginBottom": "1rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.5 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5
+          }
+        }
       }
     },
     "a-title": {
@@ -31,8 +38,15 @@
       "marginBottom": "1.5rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.6, "delay": 0.08 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.6,
+            "delay": 0.08
+          }
+        }
       }
     },
     "a-brief": {
@@ -46,8 +60,15 @@
       "marginBottom": "2rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.18 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.18
+          }
+        }
       }
     },
     "a-timeline": {
@@ -58,5 +79,6 @@
       "textAlign": "center",
       "width": "hug"
     }
-  }
+  },
+  "gap": "1rem"
 }

@@ -29,8 +29,23 @@ import {
   triggerActionSchema,
 } from "./schema-primitives";
 
-const sectionBlockWithElementOrderSchema = baseSectionPropsSchema.extend({
-  type: z.enum(["contentBlock", "scrollContainer"]),
+const contentBlockWithElementOrderSchema = baseSectionPropsSchema.extend({
+  type: z.literal("contentBlock"),
+  gap: responsiveStringSchema,
+  rowGap: responsiveStringSchema.optional(),
+  columnGap: responsiveStringSchema.optional(),
+  alignItems: responsiveStringSchema.optional(),
+  justifyContent: responsiveStringSchema.optional(),
+  contentWidth: responsiveSectionContentSizeSchema.optional(),
+  contentHeight: responsiveSectionContentSizeSchema.optional(),
+  elementOrder: z.array(z.string()),
+  definitions: z.record(z.string(), sectionDefinitionBlockSchema).optional(),
+});
+
+const scrollContainerWithElementOrderSchema = baseSectionPropsSchema.extend({
+  type: z.literal("scrollContainer"),
+  contentWidth: responsiveSectionContentSizeSchema.optional(),
+  contentHeight: responsiveSectionContentSizeSchema.optional(),
   elementOrder: z.array(z.string()),
   definitions: z.record(z.string(), sectionDefinitionBlockSchema).optional(),
 });
@@ -71,7 +86,8 @@ export const pageBuilderDefinitionBlockSchema = z.union([
   bgBlockSchema,
   sectionBlockSchema,
   elementBlockSchema,
-  sectionBlockWithElementOrderSchema,
+  contentBlockWithElementOrderSchema,
+  scrollContainerWithElementOrderSchema,
   sectionColumnDefinitionSchema,
 ]);
 

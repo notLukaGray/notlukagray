@@ -16,6 +16,15 @@ function encodePathPreservingSlashes(path: string): string {
     .join("/");
 }
 
+function getSigningPathPrefixFromCdnBase(cdnBase: string): string {
+  try {
+    const pathname = new URL(cdnBase).pathname.replace(/\/+$/, "");
+    return pathname === "/" ? "" : pathname;
+  } catch {
+    return "";
+  }
+}
+
 export function validateAssetKey(key: string): string | null {
   if (!key || typeof key !== "string") return null;
 
@@ -121,7 +130,8 @@ export function getSignedCdnUrl(assetKey: string, extraParams?: Record<string, s
   const expiresAt = Math.floor(Date.now() / 1000) + tokenExpirySeconds;
 
   const encodedKey = encodePathPreservingSlashes(assetKey);
-  const pathForSigning = `/website/${encodedKey}`;
+  const signingPrefix = getSigningPathPrefixFromCdnBase(cdnBase);
+  const pathForSigning = `${signingPrefix}/${encodedKey}`;
 
   const parameterData = extraParams ? buildSortedParamString(extraParams) : "";
   const token = generateBunnyToken(pathForSigning, expiresAt, parameterData);

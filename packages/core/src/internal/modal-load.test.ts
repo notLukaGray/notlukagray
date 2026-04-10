@@ -49,6 +49,7 @@ describe("modal-load schema validation", () => {
         definitions: {
           hero: {
             type: "contentBlock",
+            gap: "1rem",
             elements: [],
           },
         },

@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "systems_d",
   "width": ["100%", "72%"],
   "height": "hug",
@@ -19,8 +20,15 @@
       "marginBottom": "1.5rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0.3 },
-        "entranceMotion": { "transition": { "duration": 0.4, "delay": 0 } }
+        "viewport": {
+          "amount": 0.3
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.4,
+            "delay": 0
+          }
+        }
       }
     },
     "d-statement": {
@@ -34,8 +42,15 @@
       "wordWrap": true,
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0.3 },
-        "entranceMotion": { "transition": { "duration": 0.7, "delay": 0.15 } }
+        "viewport": {
+          "amount": 0.3
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.7,
+            "delay": 0.15
+          }
+        }
       }
     },
     "d-footnote": {
@@ -49,9 +64,17 @@
       "wordWrap": true,
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0.3 },
-        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.35 } }
+        "viewport": {
+          "amount": 0.3
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.35
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

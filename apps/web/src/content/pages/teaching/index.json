@@ -15,6 +15,7 @@
     },
     "hero": {
       "type": "contentBlock",
+      "flexDirection": "column",
       "ariaLabel": "Teaching index",
       "width": "100%",
       "height": "hug",
@@ -58,7 +59,8 @@
           "linkActive": "#ffffff",
           "linkTransition": ".3s"
         }
-      }
+      },
+      "gap": "1rem"
     }
   }
 }

@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_drag_demo",
   "ariaLabel": "Draggable cards",
   "width": ["100%", "88%"],
@@ -46,8 +47,13 @@
               "drag": true,
               "dragConstraints": "parent",
               "dragElastic": 0.15,
-              "whileHover": { "scale": 1.03 },
-              "whileDrag": { "scale": 1.05, "cursor": "grabbing" }
+              "whileHover": {
+                "scale": 1.03
+              },
+              "whileDrag": {
+                "scale": 1.05,
+                "cursor": "grabbing"
+              }
             }
           },
           "card2": {
@@ -70,8 +76,12 @@
               "drag": "x",
               "dragConstraints": "parent",
               "dragElastic": 0.2,
-              "whileHover": { "scale": 1.02 },
-              "whileDrag": { "scale": 1.04 }
+              "whileHover": {
+                "scale": 1.02
+              },
+              "whileDrag": {
+                "scale": 1.04
+              }
             }
           },
           "card3": {
@@ -93,8 +103,12 @@
               "drag": "y",
               "dragConstraints": "parent",
               "dragElastic": 0.1,
-              "whileHover": { "scale": 1.03 },
-              "whileDrag": { "scale": 1.05 }
+              "whileHover": {
+                "scale": 1.03
+              },
+              "whileDrag": {
+                "scale": 1.05
+              }
             }
           }
         }
@@ -124,5 +138,6 @@
       "wordWrap": true,
       "marginBottom": "1.5rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

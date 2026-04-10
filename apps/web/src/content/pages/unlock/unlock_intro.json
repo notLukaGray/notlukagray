@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "unlock_intro",
   "ariaLabel": "Unlock intro",
   "width": ["100%", "92%"],
@@ -29,5 +30,6 @@
       "wordWrap": true,
       "marginBottom": "2rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

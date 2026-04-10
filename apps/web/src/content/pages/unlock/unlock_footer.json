@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "unlock_footer",
   "ariaLabel": "Unlock footer",
   "width": ["100%", "92%"],
@@ -29,5 +30,6 @@
       "width": "hug",
       "marginBottom": "2rem"
     }
-  }
+  },
+  "gap": "1rem"
 }

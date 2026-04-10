@@ -9,7 +9,6 @@ This directory contains canonical system-level documentation.
 - [`operations-quality-checks.md`](./operations-quality-checks.md): CI gates and local verification commands
 - [`scripts-lifecycle.md`](./scripts-lifecycle.md): root script inventory and ownership intent
 - [`page-builder-schema-semantics.md`](./page-builder-schema-semantics.md): full page-builder variable/value semantics, constraints, defaults, and runtime precedence
-- [`dev_0.5_plan.md`](./dev_0.5_plan.md): `/dev` workbench roadmap, implementation status, and consolidated backlog
 
 ## Workspace Docs
 
@@ -37,4 +36,4 @@ App consumer:
 
 - Legacy migration docs and validation playbooks were removed and replaced by this structure.
 - Quality/validation guidance now lives in `operations-quality-checks.md`.
-- Product roadmap for the dev workbench lives in [`dev_0.5_plan.md`](./dev_0.5_plan.md). A **local** repo-root `.plans/` directory (gitignored) is for personal scratch only.
+- Product planning notes are kept in a **local** repo-root `.plans/` directory (gitignored) and are not part of public documentation.

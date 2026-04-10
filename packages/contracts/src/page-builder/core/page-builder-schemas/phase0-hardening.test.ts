@@ -165,6 +165,7 @@ describe("phase 0 schema hardening", () => {
     it("normalizes invalid section cursor to undefined", () => {
       const result = sectionContentBlockSchema.safeParse({
         type: "contentBlock",
+        gap: "0",
         elements: [],
         cursor: "made-up-cursor-value",
       });

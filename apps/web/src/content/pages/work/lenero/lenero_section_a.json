@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "lenero_section_a",
   "width": ["100%", "88%"],
   "height": ["100vh", "100vh"],
@@ -7,7 +8,12 @@
   "fill": "#00000000",
   "zIndex": 0,
   "fixed": true,
-  "scrollOpacityRange": { "input": [0.6, 0.8], "output": [1, 0] },
+  "alignY": "center",
+  "gap": "0.35rem",
+  "scrollOpacityRange": {
+    "input": [0.6, 0.8],
+    "output": [1, 0]
+  },
   "elementOrder": ["a-label", "a-title", "a-subtitle", "a-logline"],
   "definitions": {
     "a-label": {
@@ -15,18 +21,17 @@
       "level": 6,
       "text": "ECHO · SHORT DOCUMENTARY · 2024",
       "align": "center",
-      "width": "hug",
-      "marginTop": ["30vh", "33vh"],
-      "marginBottom": "1rem"
+      "alignY": "top",
+      "width": "hug"
     },
     "a-title": {
       "type": "elementHeading",
       "level": 1,
       "text": "EL LEÑERO",
       "align": "center",
+      "alignY": "top",
       "width": ["100%", "80%"],
-      "wordWrap": true,
-      "marginBottom": "1.25rem"
+      "wordWrap": true
     },
     "a-subtitle": {
       "type": "elementHeading",
@@ -34,15 +39,16 @@
       "semanticLevel": 2,
       "text": "{The Woodcutter}",
       "align": "center",
+      "alignY": "top",
       "width": ["90%", "60%"],
-      "wordWrap": true,
-      "marginBottom": "2rem"
+      "wordWrap": true
     },
     "a-logline": {
       "type": "elementBody",
       "level": 5,
       "text": "A short documentary about Alex Lopez, the Carson National Forest, and the work of keeping both alive.",
       "align": "center",
+      "alignY": "top",
       "textAlign": "center",
       "width": ["88%", "46%"],
       "wordWrap": true

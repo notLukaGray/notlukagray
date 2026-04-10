@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "editorial_a",
   "width": ["100%", "88%"],
   "height": ["80vh", "90vh"],
@@ -17,8 +18,14 @@
       "marginBottom": "1.25rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.6 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.6
+          }
+        }
       }
     },
     "a-title": {
@@ -31,8 +38,15 @@
       "marginBottom": "1.5rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.65, "delay": 0.08 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.65,
+            "delay": 0.08
+          }
+        }
       }
     },
     "a-subtitle": {
@@ -46,8 +60,15 @@
       "marginBottom": "2.5rem",
       "motionTiming": {
         "entrancePreset": "slideUp",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.55, "delay": 0.18 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.55,
+            "delay": 0.18
+          }
+        }
       }
     },
     "a-tags": {
@@ -59,9 +80,17 @@
       "width": "hug",
       "motionTiming": {
         "entrancePreset": "fade",
-        "viewport": { "amount": 0 },
-        "entranceMotion": { "transition": { "duration": 0.5, "delay": 0.28 } }
+        "viewport": {
+          "amount": 0
+        },
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5,
+            "delay": 0.28
+          }
+        }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

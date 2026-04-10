@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_intro",
   "ariaLabel": "FM integration showcase intro",
   "width": ["100%", "92%"],
@@ -8,7 +9,12 @@
   "fill": "#1a1a1a",
   "borderRadius": ["1.5rem 1.5rem 0 0", "2rem 2rem 0 0"],
   "elementOrder": ["intro-heading", "intro-sub", "intro-body"],
-  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "effects": [
+    {
+      "type": "backdropBlur",
+      "amount": "16px"
+    }
+  ],
   "definitions": {
     "intro-heading": {
       "type": "elementHeading",
@@ -21,7 +27,11 @@
       "marginBottom": "0.25rem",
       "motionTiming": {
         "entrancePreset": "fade",
-        "entranceMotion": { "transition": { "duration": 0.5 } }
+        "entranceMotion": {
+          "transition": {
+            "duration": 0.5
+          }
+        }
       }
     },
     "intro-sub": {
@@ -36,7 +46,10 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "transition": { "delay": 0.08, "duration": 0.4 }
+          "transition": {
+            "delay": 0.08,
+            "duration": 0.4
+          }
         }
       }
     },
@@ -52,9 +65,13 @@
       "motionTiming": {
         "entrancePreset": "slideUp",
         "entranceMotion": {
-          "transition": { "delay": 0.15, "duration": 0.4 }
+          "transition": {
+            "delay": 0.15,
+            "duration": 0.4
+          }
         }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

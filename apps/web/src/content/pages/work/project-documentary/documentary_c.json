@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "documentary_c",
   "width": ["100%", "92%"],
   "height": "hug",
@@ -31,5 +32,6 @@
         }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }

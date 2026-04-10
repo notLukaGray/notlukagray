@@ -1,5 +1,6 @@
 {
   "type": "contentBlock",
+  "flexDirection": "column",
   "id": "fm_real_lenero_hero",
   "ariaLabel": "El Leñero hero with motion",
   "width": ["100%", "92%"],
@@ -146,5 +147,6 @@
         }
       }
     }
-  }
+  },
+  "gap": "1rem"
 }
