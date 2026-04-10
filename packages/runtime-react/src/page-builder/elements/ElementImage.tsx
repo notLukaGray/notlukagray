@@ -132,6 +132,14 @@ export function ElementImage({
   const showError = hasError && hasSource;
   const showImage = !showError && hasSource;
   const isBlobSrc = typeof src === "string" && src.startsWith("blob:");
+  const resolvedTarget = link?.target ?? (!isInternal && resolvedHref ? "_blank" : undefined);
+  const resolvedRel =
+    link?.rel ??
+    (!isInternal && resolvedHref
+      ? "noopener noreferrer"
+      : resolvedTarget === "_blank"
+        ? "noopener noreferrer"
+        : undefined);
 
   const hasInteractions = !!(
     interactions?.onClick ||
@@ -242,14 +250,19 @@ export function ElementImage({
       <SectionGlassEffect effects={imageEffects} sectionRef={figureRef} variant="auto" />
       {resolvedHref ? (
         isInternal ? (
-          <Link href={resolvedHref} className="block w-full h-full">
+          <Link
+            href={resolvedHref}
+            className="block w-full h-full"
+            target={resolvedTarget}
+            rel={resolvedRel}
+          >
             {content}
           </Link>
         ) : (
           <a
             href={resolvedHref}
-            target="_blank"
-            rel="noopener noreferrer"
+            target={resolvedTarget ?? "_blank"}
+            rel={resolvedRel ?? "noopener noreferrer"}
             className="block w-full h-full"
           >
             {content}

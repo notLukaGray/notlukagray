@@ -40,11 +40,17 @@ export function ElementLink({
   label,
   href,
   external = false,
+  target,
+  rel,
   copyType,
   level,
   fontFamily,
   fontSize,
   fontWeight,
+  textShadow,
+  textDecoration,
+  textTransform,
+  whiteSpace,
   align,
   textAlign,
   width,
@@ -113,10 +119,13 @@ export function ElementLink({
       : {}),
     ...(fontSize !== undefined ? { fontSize } : {}),
     ...(fontWeight !== undefined ? { fontWeight: fontWeight as CSSProperties["fontWeight"] } : {}),
-    whiteSpace: wordWrap ? "normal" : "nowrap",
+    ...(textShadow !== undefined ? { textShadow } : {}),
+    ...(textDecoration !== undefined ? { textDecoration } : {}),
+    ...(textTransform !== undefined ? { textTransform } : {}),
+    whiteSpace: whiteSpace ?? (wordWrap ? "normal" : "nowrap"),
     overflowWrap: wordWrap ? "break-word" : "normal",
     wordBreak: wordWrap ? "break-word" : "normal",
-    ...(wordWrap ? {} : { overflow: "hidden", textOverflow: "ellipsis" }),
+    ...(!wordWrap && whiteSpace == null ? { overflow: "hidden", textOverflow: "ellipsis" } : {}),
   };
 
   const linkClassName = [
@@ -131,7 +140,13 @@ export function ElementLink({
   return (
     <div className="shrink-0 max-w-full" style={blockStyle}>
       {isInternal ? (
-        <Link href={href} className={linkClassName} style={{ ...linkStyle, ...textStyle }}>
+        <Link
+          href={href}
+          className={linkClassName}
+          style={{ ...linkStyle, ...textStyle }}
+          target={target}
+          rel={rel}
+        >
           {label}
         </Link>
       ) : (
@@ -139,10 +154,8 @@ export function ElementLink({
           href={href}
           className={linkClassName}
           style={{ ...linkStyle, ...textStyle }}
-          {...(external && {
-            target: "_blank",
-            rel: "noopener noreferrer",
-          })}
+          target={target ?? (external ? "_blank" : undefined)}
+          rel={rel ?? (external ? "noopener noreferrer" : undefined)}
         >
           {label}
         </a>

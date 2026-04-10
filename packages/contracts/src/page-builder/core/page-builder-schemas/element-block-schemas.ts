@@ -3,6 +3,7 @@ import { elementLayoutSchema } from "./element-foundation-schemas";
 import {
   elementBodySchema,
   elementButtonSchema,
+  elementDividerSchema,
   elementHeadingSchema,
   elementImageSchema,
   elementLinkSchema,
@@ -74,6 +75,7 @@ export const elementBlockSchema = z
     elementInputSchema,
     elementVideoTimeSchema,
     elementSpacerSchema,
+    elementDividerSchema,
     elementScrollProgressBarSchema,
     elementButtonSchema,
     elementModel3DSchema,

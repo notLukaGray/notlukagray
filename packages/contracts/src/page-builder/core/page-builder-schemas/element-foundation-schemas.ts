@@ -205,6 +205,12 @@ export const elementLayoutSchema = z
     textDecoration: z.string().optional(),
     /** CSS text-transform e.g. "uppercase". */
     textTransform: z.string().optional(),
+    /** CSS text-shadow string. */
+    textShadow: z.string().optional(),
+    /** CSS white-space behavior. */
+    whiteSpace: z.enum(["normal", "nowrap", "pre", "pre-wrap", "pre-line"]).optional(),
+    /** CSS clip-path e.g. "circle(50%)". */
+    clipPath: z.string().optional(),
   })
   .superRefine((value, ctx) => {
     if (!value.borderGradient || !value.wrapperStyle) return;
@@ -264,12 +270,16 @@ export const responsiveElementBodyVariantSchema = z.union([
 export const elementSimpleLinkSchema = z.object({
   ref: z.string().min(1),
   external: z.boolean(),
+  target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
+  rel: z.string().optional(),
 });
 
 export const elementGraphicLinkSchema = z
   .object({
     ref: z.string().optional(),
     external: z.boolean().optional(),
+    target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
+    rel: z.string().optional(),
     hoverScale: z.number().optional(),
     hoverFill: z.string().optional(),
     activeFill: z.string().optional(),

@@ -12,6 +12,7 @@ import { ElementRange } from "./ElementRange";
 import { ElementInput } from "./ElementInput";
 import { ElementVideoTime } from "./ElementVideoTime";
 import { ElementSpacer } from "./ElementSpacer";
+import { ElementDivider } from "./ElementDivider";
 import { ElementButton } from "./ElementButton";
 import { ElementScrollProgressBar } from "./ElementScrollProgressBar";
 import dynamic from "next/dynamic";
@@ -42,6 +43,7 @@ export {
   ElementInput,
   ElementVideoTime,
   ElementSpacer,
+  ElementDivider,
   ElementButton,
   ElementScrollProgressBar,
 };
@@ -59,6 +61,7 @@ export const ELEMENT_COMPONENTS: Record<string, ComponentType<ElementBlock>> = {
   elementInput: ElementInput as ComponentType<ElementBlock>,
   elementVideoTime: ElementVideoTime as ComponentType<ElementBlock>,
   elementSpacer: ElementSpacer as ComponentType<ElementBlock>,
+  elementDivider: ElementDivider as ComponentType<ElementBlock>,
   elementScrollProgressBar: ElementScrollProgressBar as ComponentType<ElementBlock>,
   elementButton: ElementButton as ComponentType<ElementBlock>,
   elementModel3D: ElementModel3D as ComponentType<ElementBlock>,

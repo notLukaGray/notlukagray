@@ -34,6 +34,21 @@ export type BaseSectionProps = {
   boxShadow?: string;
   filter?: string;
   backdropFilter?: string;
+  clipPath?: string;
+  cursor?:
+    | "pointer"
+    | "default"
+    | "grab"
+    | "grabbing"
+    | "crosshair"
+    | "zoom-in"
+    | "zoom-out"
+    | "text"
+    | "move"
+    | "not-allowed"
+    | "auto"
+    | "none";
+  aspectRatio?: string;
   scrollSpeed?: number;
   initialX?: string;
   initialY?: string;
@@ -78,6 +93,13 @@ export type SectionBlock =
   | (BaseSectionProps & {
       type: "contentBlock";
       elements: ElementBlock[];
+      flexDirection?: "row" | "column" | "row-reverse" | "column-reverse";
+      alignItems?: string;
+      justifyContent?: string;
+      flexWrap?: "nowrap" | "wrap" | "wrap-reverse";
+      gap?: string;
+      rowGap?: string;
+      columnGap?: string;
       contentWidth?: "full" | "hug" | string;
       contentHeight?: "full" | "hug" | string;
     })

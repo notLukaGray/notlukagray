@@ -22,6 +22,7 @@ type Props = {
 export function FormFieldFile({ field, error, disabled, style, resolvedLevel }: Props) {
   if (field.fieldType !== "file") return null;
 
+  const fieldDisabled = disabled || field.disabled === true;
   const id = field.name ? `form-${field.name}` : undefined;
   const hasError = Boolean(error);
   const labelClass = getFormFieldLabelClass(resolvedLevel, field.labelClassName);
@@ -51,7 +52,7 @@ export function FormFieldFile({ field, error, disabled, style, resolvedLevel }: 
         accept={field.accept}
         multiple={field.multiple}
         required={field.required}
-        disabled={disabled}
+        disabled={fieldDisabled}
         aria-invalid={hasError}
         aria-describedby={hasError && id ? `${id}-error` : undefined}
         className={inputClass}

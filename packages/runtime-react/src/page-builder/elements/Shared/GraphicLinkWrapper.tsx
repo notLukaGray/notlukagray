@@ -91,6 +91,9 @@ export const GraphicLinkWrapper = forwardRef<HTMLAnchorElement | HTMLDivElement,
       : refVal.startsWith("/") || refVal.startsWith("#")
         ? refVal
         : `#${refVal}`;
+    const target = link.target ?? (link.external ? "_blank" : undefined);
+    const rel =
+      link.rel ?? (link.external || target === "_blank" ? "noopener noreferrer" : undefined);
 
     const isInternal = !link.external && href.startsWith("/");
     const isActive =
@@ -165,8 +168,8 @@ export const GraphicLinkWrapper = forwardRef<HTMLAnchorElement | HTMLDivElement,
           <a
             ref={ref as React.Ref<HTMLAnchorElement>}
             href={href}
-            target="_blank"
-            rel="noopener noreferrer"
+            target={target ?? "_blank"}
+            rel={rel ?? "noopener noreferrer"}
             className={linkClassName}
             style={linkStyle}
             {...dataAttrs}
@@ -183,6 +186,8 @@ export const GraphicLinkWrapper = forwardRef<HTMLAnchorElement | HTMLDivElement,
         <Link
           ref={ref as React.Ref<HTMLAnchorElement>}
           href={href}
+          target={target}
+          rel={rel}
           className={linkClassName}
           style={linkStyle}
           {...dataAttrs}

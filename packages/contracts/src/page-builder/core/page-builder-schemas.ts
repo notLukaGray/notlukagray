@@ -35,6 +35,10 @@ import {
 } from "./page-builder-schemas/element-model3d-schemas";
 import { moduleBlockSchema, moduleSlotSchema } from "./page-builder-schemas/module-block-schemas";
 import {
+  modalBuilderSchema,
+  modalTransitionConfigSchema,
+} from "./page-builder-schemas/modal-block-schemas";
+import {
   backgroundTransitionEffectSchema,
   pageBuilderDefinitionBlockSchema,
   pageDensitySchema,
@@ -115,6 +119,7 @@ export * from "./page-builder-schemas/section-block-base-schemas";
 export * from "./page-builder-schemas/section-block-schemas";
 export * from "./page-builder-schemas/form-field-schemas";
 export * from "./page-builder-schemas/module-block-schemas";
+export * from "./page-builder-schemas/modal-block-schemas";
 export * from "./page-builder-schemas/motion-props-schema";
 export * from "./page-builder-schemas/page-definition-and-resolution-schemas";
 
@@ -187,6 +192,8 @@ export type FormFieldType = z.infer<typeof formFieldTypeSchema>;
 export type FormFieldBlock = z.infer<typeof formFieldBlockSchema>;
 export type ModuleBlock = z.infer<typeof moduleBlockSchema>;
 export type ModuleSlot = z.infer<typeof moduleSlotSchema>;
+export type ModalBuilder = z.infer<typeof modalBuilderSchema>;
+export type ModalTransitionConfigFromSchema = z.infer<typeof modalTransitionConfigSchema>;
 export type PageBuilderDefinitionBlock = z.infer<typeof pageBuilderDefinitionBlockSchema>;
 export type PageBuilder = z.infer<typeof pageBuilderSchema>;
 export type ResolvedPage = z.infer<typeof resolvedPageSchema>;

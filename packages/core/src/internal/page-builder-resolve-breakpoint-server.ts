@@ -114,6 +114,7 @@ const BASE_SECTION_RESPONSIVE_KEYS = [
   "marginTop",
   "marginBottom",
   "borderRadius",
+  "aspectRatio",
   "initialX",
   "initialY",
   "stickyOffset",
@@ -233,6 +234,13 @@ function resolveSectionBlock(block: SectionBlock, isMobile: boolean): SectionBlo
       elements?: ElementBlock[];
       contentWidth?: unknown;
       contentHeight?: unknown;
+      flexDirection?: unknown;
+      alignItems?: unknown;
+      justifyContent?: unknown;
+      flexWrap?: unknown;
+      gap?: unknown;
+      rowGap?: unknown;
+      columnGap?: unknown;
     };
     const elements = content.elements ?? [];
     return {
@@ -241,6 +249,13 @@ function resolveSectionBlock(block: SectionBlock, isMobile: boolean): SectionBlo
       elements: elements.map((el) => resolveElementBlock(el, isMobile)),
       contentWidth: resolveForBreakpoint(content.contentWidth, isMobile),
       contentHeight: resolveForBreakpoint(content.contentHeight, isMobile),
+      flexDirection: resolveForBreakpoint(content.flexDirection, isMobile),
+      alignItems: resolveForBreakpoint(content.alignItems, isMobile),
+      justifyContent: resolveForBreakpoint(content.justifyContent, isMobile),
+      flexWrap: resolveForBreakpoint(content.flexWrap, isMobile),
+      gap: resolveForBreakpoint(content.gap, isMobile),
+      rowGap: resolveForBreakpoint(content.rowGap, isMobile),
+      columnGap: resolveForBreakpoint(content.columnGap, isMobile),
     } as SectionBlock;
   }
 

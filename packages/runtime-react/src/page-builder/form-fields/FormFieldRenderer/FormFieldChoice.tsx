@@ -43,6 +43,7 @@ export function FormFieldChoice({
 }: Props) {
   if (!isChoiceFieldType(field.fieldType)) return null;
 
+  const fieldDisabled = disabled || field.disabled === true;
   const id = field.name ? `form-${field.name}` : undefined;
   const hasError = Boolean(error);
   const labelClass = getFormFieldLabelClass(resolvedLevel, field.labelClassName);
@@ -61,7 +62,7 @@ export function FormFieldChoice({
             checked={checked}
             onChange={(e) => onChange(e.target.checked)}
             required={field.required}
-            disabled={disabled}
+            disabled={fieldDisabled}
             aria-invalid={hasError}
             aria-describedby={hasError && id ? `${id}-error` : undefined}
             className={field.inputClassName ?? formFieldStructuralClasses.checkbox}
@@ -110,7 +111,8 @@ export function FormFieldChoice({
           value={strVal}
           onChange={(e) => onChange(e.target.value)}
           required={field.required}
-          disabled={disabled}
+          disabled={fieldDisabled}
+          autoComplete={field.autocomplete}
           aria-invalid={hasError}
           aria-describedby={hasError && id ? `${id}-error` : undefined}
           className={getFormFieldInputClass(
@@ -164,7 +166,7 @@ export function FormFieldChoice({
                 value={opt.value}
                 checked={strVal === opt.value}
                 onChange={() => onChange(opt.value)}
-                disabled={disabled}
+                disabled={fieldDisabled}
                 className={formFieldStructuralClasses.radio}
               />
               <span className={labelInlineClass}>{opt.label}</span>
@@ -211,7 +213,7 @@ export function FormFieldChoice({
                 value={opt.value}
                 checked={arrVal.includes(opt.value)}
                 onChange={() => toggle(opt.value)}
-                disabled={disabled}
+                disabled={fieldDisabled}
                 aria-invalid={hasError}
                 className={formFieldStructuralClasses.checkboxGroupItem}
               />

@@ -110,11 +110,15 @@ export type ElementLinkStateStyle = {
 export type ElementSimpleLink = {
   ref: string;
   external: boolean;
+  target?: "_self" | "_blank" | "_parent" | "_top";
+  rel?: string;
 };
 
 export type ElementGraphicLink = {
   ref?: string;
   external?: boolean;
+  target?: "_self" | "_blank" | "_parent" | "_top";
+  rel?: string;
   hoverScale?: number;
   hoverFill?: string;
   activeFill?: string;

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { REVEAL_PRESET_NAMES } from "../page-builder-motion-defaults";
 import { elementBlockSchema } from "./element-block-schemas";
 import { formFieldBlockSchema } from "./form-field-schemas";
 import { motionPropsSchema, motionTimingSchema } from "./motion-props-schema";
@@ -43,6 +44,37 @@ const responsiveSectionContentSizeSchema = z.union([
   z.tuple([sectionContentSizeSchema, sectionContentSizeSchema]),
 ]);
 
+const SECTION_CURSOR_VALUES = [
+  "pointer",
+  "default",
+  "grab",
+  "grabbing",
+  "crosshair",
+  "zoom-in",
+  "zoom-out",
+  "text",
+  "move",
+  "not-allowed",
+  "auto",
+  "none",
+] as const;
+
+const sectionCursorSchema = z.preprocess(
+  (value) =>
+    typeof value === "string" && !(SECTION_CURSOR_VALUES as readonly string[]).includes(value)
+      ? undefined
+      : value,
+  z.enum(SECTION_CURSOR_VALUES).optional()
+);
+
+const revealPresetSchema = z.preprocess(
+  (value) =>
+    typeof value === "string" && !(REVEAL_PRESET_NAMES as readonly string[]).includes(value)
+      ? undefined
+      : value,
+  z.enum(REVEAL_PRESET_NAMES).optional()
+);
+
 export const baseSectionPropsSchema = z.object({
   id: z.string().optional(),
   /** Namespaced metadata (`meta.figma`, etc.); passthrough preserves extension keys. */
@@ -71,12 +103,14 @@ export const baseSectionPropsSchema = z.object({
   filter: z.string().optional(),
 
   backdropFilter: z.string().optional(),
+  clipPath: z.string().optional(),
   overflow: z.enum(["hidden", "visible", "auto", "scroll"]).optional(),
   borderTop: z.string().optional(),
   borderRight: z.string().optional(),
   borderBottom: z.string().optional(),
   borderLeft: z.string().optional(),
-  cursor: z.string().optional(),
+  cursor: sectionCursorSchema,
+  aspectRatio: responsiveStringSchema.optional(),
   scrollSpeed: z.number().optional(),
   initialX: responsiveStringSchema.optional(),
   initialY: responsiveStringSchema.optional(),
@@ -198,6 +232,29 @@ export const sectionDividerSchema = baseSectionPropsSchema.extend({
 export const sectionContentBlockSchema = baseSectionPropsSchema.extend({
   type: z.literal("contentBlock"),
   elements: z.array(elementBlockSchema),
+  flexDirection: z
+    .union([
+      z.enum(["row", "column", "row-reverse", "column-reverse"]),
+      z.tuple([
+        z.enum(["row", "column", "row-reverse", "column-reverse"]),
+        z.enum(["row", "column", "row-reverse", "column-reverse"]),
+      ]),
+    ])
+    .optional(),
+  alignItems: responsiveStringSchema.optional(),
+  justifyContent: responsiveStringSchema.optional(),
+  flexWrap: z
+    .union([
+      z.enum(["nowrap", "wrap", "wrap-reverse"]),
+      z.tuple([
+        z.enum(["nowrap", "wrap", "wrap-reverse"]),
+        z.enum(["nowrap", "wrap", "wrap-reverse"]),
+      ]),
+    ])
+    .optional(),
+  gap: responsiveStringSchema.optional(),
+  rowGap: responsiveStringSchema.optional(),
+  columnGap: responsiveStringSchema.optional(),
 
   reorderable: z.boolean().optional(),
 
@@ -320,5 +377,5 @@ export const sectionRevealSchema = baseSectionPropsSchema.extend({
 
   revealDurationMs: z.number().optional(),
 
-  revealPreset: z.string().optional(),
+  revealPreset: revealPresetSchema,
 });

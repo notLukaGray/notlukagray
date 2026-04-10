@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { elementButtonSchema } from "./element-button-schemas";
 import { formFieldBlockSchema } from "./form-field-schemas";
-import { pageBuilderSchema } from "./page-definition-and-resolution-schemas";
+import {
+  pageBuilderSchema,
+  pageScrollConfigSchema,
+} from "./page-definition-and-resolution-schemas";
+import { sectionContentBlockSchema, sectionRevealSchema } from "./section-block-base-schemas";
 
 describe("phase 0 schema hardening", () => {
   describe("elementButton.action", () => {
@@ -19,6 +23,27 @@ describe("phase 0 schema hardening", () => {
         action: "modalOpen",
       });
       expect(result.success).toBe(true);
+    });
+
+    it("accepts newly parity-mapped actions", () => {
+      expect(
+        elementButtonSchema.safeParse({
+          type: "elementButton",
+          action: "back",
+        }).success
+      ).toBe(true);
+      expect(
+        elementButtonSchema.safeParse({
+          type: "elementButton",
+          action: "contentOverride",
+        }).success
+      ).toBe(true);
+      expect(
+        elementButtonSchema.safeParse({
+          type: "elementButton",
+          action: "rive.fireTrigger",
+        }).success
+      ).toBe(true);
     });
   });
 
@@ -133,6 +158,38 @@ describe("phase 0 schema hardening", () => {
         ],
       });
       expect(result.success).toBe(true);
+    });
+  });
+
+  describe("compat-first enum hardening", () => {
+    it("normalizes invalid section cursor to undefined", () => {
+      const result = sectionContentBlockSchema.safeParse({
+        type: "contentBlock",
+        elements: [],
+        cursor: "made-up-cursor-value",
+      });
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.cursor).toBeUndefined();
+      }
+    });
+
+    it("normalizes unknown revealPreset to undefined", () => {
+      const result = sectionRevealSchema.safeParse({
+        type: "revealSection",
+        revealPreset: "not-a-real-preset",
+      });
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.revealPreset).toBeUndefined();
+      }
+    });
+  });
+
+  describe("page scroll config", () => {
+    it("accepts snapType values", () => {
+      expect(pageScrollConfigSchema.safeParse({ snapType: "y mandatory" }).success).toBe(true);
+      expect(pageScrollConfigSchema.safeParse({ snapType: "none" }).success).toBe(true);
     });
   });
 });

@@ -116,6 +116,9 @@ export const pageScrollConfigSchema = z.object({
   lockBody: z.boolean().optional(),
   overflowX: z.enum(["hidden", "auto", "visible"]).optional(),
   overflowY: z.enum(["auto", "scroll", "hidden"]).optional(),
+  snapType: z
+    .enum(["none", "x mandatory", "y mandatory", "both mandatory", "x proximity", "y proximity"])
+    .optional(),
 });
 
 export const pageDensitySchema = z.enum(PAGE_DENSITY_LEVELS);

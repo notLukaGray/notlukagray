@@ -108,6 +108,7 @@ export function ElementRange({
   hidden,
   action,
   actionPayload,
+  disabled = false,
   style,
   interactions,
 }: Props) {
@@ -155,6 +156,8 @@ export function ElementRange({
   const seekDuration = isSeek ? Math.max(0, videoCtx.duration || 0) : 0;
   const seekRatio = isSeek && seekDuration > 0 ? (videoCtx.currentTime || 0) / seekDuration : 0;
   const value = isVolume ? (videoCtx.isMuted ? 0 : videoCtx.volume) : isSeek ? seekRatio : progress;
+  const isDisabled =
+    disabled || (action === "volume" ? !isVolume : action === "seek" ? !isSeek : false);
   const valueRatio = max === min ? 0 : (value - min) / (max - min);
   const onVolumeChange = isVolume ? videoCtx.onVolumeChange : undefined;
   const onSeekTo = isSeek ? videoCtx.onSeekTo : undefined;
@@ -421,7 +424,7 @@ export function ElementRange({
             onMouseDown={() => setIsActive(true)}
             onTouchStart={() => setIsActive(true)}
             onPointerUp={() => setIsActive(false)}
-            disabled={action === "volume" ? !isVolume : action === "seek" ? !isSeek : false}
+            disabled={isDisabled}
             style={inputStyle}
             aria-label={ariaLabel ?? "Range"}
           />
@@ -472,7 +475,7 @@ export function ElementRange({
         step={step}
         value={value}
         onChange={handleChange}
-        disabled={action === "volume" ? !isVolume : action === "seek" ? !isSeek : false}
+        disabled={isDisabled}
         style={{
           width: "100%",
           minWidth: 0,

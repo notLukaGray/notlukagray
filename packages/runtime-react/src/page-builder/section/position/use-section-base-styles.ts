@@ -36,6 +36,9 @@ type UseSectionBaseStylesProps = Pick<
   | "boxShadow"
   | "filter"
   | "backdropFilter"
+  | "clipPath"
+  | "cursor"
+  | "aspectRatio"
   | "scrollSpeed"
   | "initialX"
   | "initialY"
@@ -79,6 +82,9 @@ export function useSectionBaseStyles({
   boxShadow,
   filter,
   backdropFilter,
+  clipPath,
+  cursor,
+  aspectRatio,
   scrollSpeed = getDefaultScrollSpeed(),
   initialX,
   initialY,
@@ -136,6 +142,7 @@ export function useSectionBaseStyles({
     });
 
   const resolvedBorderRadius = resolveResponsiveValue(borderRadius, isMobile);
+  const resolvedAspectRatio = resolveResponsiveValue(aspectRatio, isMobile);
 
   const baseStyle = useMemo<CSSProperties>(() => {
     const effectStyle = sectionEffectsToStyle(effects);
@@ -175,6 +182,9 @@ export function useSectionBaseStyles({
             WebkitBackdropFilter: mergedBackdropFilter,
           }
         : {}),
+      ...(clipPath ? { clipPath } : {}),
+      ...(cursor ? { cursor } : {}),
+      ...(resolvedAspectRatio ? { aspectRatio: resolvedAspectRatio } : {}),
     };
 
     if (usePadding) {
@@ -213,6 +223,9 @@ export function useSectionBaseStyles({
     boxShadow,
     filter,
     backdropFilter,
+    clipPath,
+    cursor,
+    resolvedAspectRatio,
     usePadding,
   ]);
 

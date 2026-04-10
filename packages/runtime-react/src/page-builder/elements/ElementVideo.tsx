@@ -105,6 +105,7 @@ export function ElementVideo({
   autoplay = false,
   loop = false,
   muted = false,
+  playbackRate,
   width,
   height,
   align,
@@ -238,7 +239,7 @@ export function ElementVideo({
     fullscreen,
   });
 
-  const { isLinkable, resolvedHref, isInternal } = useMemo(
+  const { isLinkable, resolvedHref, isInternal, target, rel } = useMemo(
     () => resolveVideoLink(link, showPlayButton),
     [link, showPlayButton]
   );
@@ -273,6 +274,7 @@ export function ElementVideo({
       autoplay={autoplay}
       loop={loop}
       muted={muted}
+      playbackRate={playbackRate}
     />
   );
 
@@ -351,6 +353,8 @@ export function ElementVideo({
           isLinkable={isLinkable}
           resolvedHref={resolvedHref}
           isInternal={isInternal}
+          target={target}
+          rel={rel}
         >
           {videoContent}
         </ElementVideoLinkWrap>

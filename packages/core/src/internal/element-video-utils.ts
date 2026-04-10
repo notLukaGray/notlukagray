@@ -73,6 +73,8 @@ export type VideoLinkInput =
   | {
       ref?: string;
       external?: boolean;
+      target?: "_self" | "_blank" | "_parent" | "_top";
+      rel?: string;
     }
   | null
   | undefined;
@@ -81,6 +83,8 @@ export type ResolvedVideoLink = {
   isLinkable: boolean;
   resolvedHref: string | null;
   isInternal: boolean;
+  target?: "_self" | "_blank" | "_parent" | "_top";
+  rel?: string;
 };
 
 /** Resolve link ref to href and whether internal. */
@@ -93,7 +97,17 @@ export function resolveVideoLink(link: VideoLinkInput, showPlayButton: boolean):
   const resolvedHref =
     link!.external || ref.startsWith("/") || ref.startsWith("#") ? ref : `#${ref}`;
   const isInternal = !link!.external && resolvedHref.startsWith("/");
-  return { isLinkable, resolvedHref, isInternal };
+  const resolvedTarget = link?.target ?? (link?.external ? "_blank" : undefined);
+  const resolvedRel =
+    link?.rel ??
+    (link?.external || resolvedTarget === "_blank" ? "noopener noreferrer" : undefined);
+  return {
+    isLinkable,
+    resolvedHref,
+    isInternal,
+    ...(resolvedTarget ? { target: resolvedTarget } : {}),
+    ...(resolvedRel ? { rel: resolvedRel } : {}),
+  };
 }
 
 export type ElementVideoObjectFit = "cover" | "contain" | "fillWidth" | "fillHeight" | undefined;

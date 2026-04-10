@@ -24,6 +24,7 @@ export function PageScrollProvider({
   const lockBody = scroll.lockBody ?? false;
   const overflowX = scroll.overflowX ?? "hidden";
   const overflowY = scroll.overflowY ?? "auto";
+  const snapType = scroll.snapType;
 
   const inheritedScrollRef =
     useScrollContainerRef() as React.RefObject<HTMLDivElement | null> | null;
@@ -57,13 +58,20 @@ export function PageScrollProvider({
     if (!el) return;
     const prevOverflowX = el.style.overflowX;
     const prevOverflowY = el.style.overflowY;
+    const prevSnapType = el.style.scrollSnapType;
     el.style.overflowX = overflowX;
     el.style.overflowY = overflowY;
+    if (snapType) {
+      el.style.scrollSnapType = snapType;
+    } else {
+      el.style.removeProperty("scroll-snap-type");
+    }
     return () => {
       el.style.overflowX = prevOverflowX;
       el.style.overflowY = prevOverflowY;
+      el.style.scrollSnapType = prevSnapType;
     };
-  }, [activeScrollRef, overflowX, overflowY]);
+  }, [activeScrollRef, overflowX, overflowY, snapType]);
 
   const overflowXClass =
     overflowX === "hidden"

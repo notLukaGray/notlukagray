@@ -1,12 +1,22 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, type CSSProperties } from "react";
 import { useShallow } from "zustand/react/shallow";
 import type {
   SectionBlock,
   SectionDefinitionBlock,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/internal/section-utils";
+import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
+import {
+  coalesceEmptyString,
+  normalizeFlexAlignItemsValue,
+  normalizeFlexJustifyContentValue,
+  pageBuilderJustifyContentForGap,
+  resolveFrameColumnGapCss,
+  resolveFrameGapCss,
+  resolveFrameRowGapCss,
+} from "@pb/core/internal/element-layout-utils";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { SectionMotionWrapper } from "@/page-builder/integrations/framer-motion";
@@ -56,6 +66,9 @@ export function SectionContentBlock({
   boxShadow,
   filter,
   backdropFilter,
+  clipPath,
+  cursor,
+  aspectRatio,
   scrollSpeed = getDefaultScrollSpeed(),
   initialX,
   initialY,
@@ -66,6 +79,13 @@ export function SectionContentBlock({
   reorderAxis,
   reorderDragUnit,
   reorderDragBehavior,
+  flexDirection,
+  alignItems,
+  justifyContent,
+  flexWrap,
+  gap,
+  rowGap,
+  columnGap,
   definitions: sectionDefinitions,
   contentWidth,
   contentHeight,
@@ -114,21 +134,9 @@ export function SectionContentBlock({
   );
 
   const resolvedFill = resolveResponsiveValue(fill, isMobile);
-  const resolvedAlign = resolveResponsiveValue(align, isMobile) as
-    | "left"
-    | "center"
-    | "right"
-    | "full"
-    | undefined;
   const resolvedStickyOffset = resolveResponsiveValue(stickyOffset, isMobile) ?? "0px";
   const resolvedFixedOffset = resolveResponsiveValue(fixedOffset, isMobile) ?? "0px";
-
-  const contentColumnAlignItems =
-    resolvedAlign === "center"
-      ? "items-center"
-      : resolvedAlign === "right"
-        ? "items-end"
-        : "items-start";
+  const pbContentGuidelines = getPbContentGuidelines();
 
   const scrollOpacityStyle = useSectionScrollOpacityStyle(sectionRef, scrollOpacityRange, {
     respectReducedMotion: reduceMotion !== false,
@@ -192,6 +200,9 @@ export function SectionContentBlock({
       boxShadow,
       filter,
       backdropFilter,
+      clipPath,
+      cursor,
+      aspectRatio,
       scrollSpeed,
       initialX,
       initialY,
@@ -235,22 +246,63 @@ export function SectionContentBlock({
 
   const resolvedContentWidth = resolveResponsiveValue(contentWidth, isMobile);
   const resolvedContentHeight = resolveResponsiveValue(contentHeight, isMobile);
+  const resolvedFlexDirection =
+    (coalesceEmptyString(resolveResponsiveValue(flexDirection, isMobile)) as
+      | CSSProperties["flexDirection"]
+      | undefined) ?? pbContentGuidelines.frameFlexDirectionDefault;
+  const resolvedAlignItems = normalizeFlexAlignItemsValue(
+    coalesceEmptyString(resolveResponsiveValue(alignItems, isMobile)) ??
+      pbContentGuidelines.frameAlignItemsDefault
+  );
+  const resolvedFlexWrap =
+    (coalesceEmptyString(resolveResponsiveValue(flexWrap, isMobile)) as
+      | CSSProperties["flexWrap"]
+      | undefined) ?? pbContentGuidelines.frameFlexWrapDefault;
+  const rawGap = coalesceEmptyString(resolveResponsiveValue(gap, isMobile));
+  const rawRowGap = coalesceEmptyString(resolveResponsiveValue(rowGap, isMobile));
+  const rawColumnGap = coalesceEmptyString(resolveResponsiveValue(columnGap, isMobile));
+  const resolvedGap = resolveFrameGapCss(rawGap);
+  const resolvedRowGap = resolveFrameRowGapCss(rawRowGap);
+  const resolvedColumnGap = resolveFrameColumnGapCss(rawColumnGap);
+  const resolvedJustifyContent = pageBuilderJustifyContentForGap(
+    normalizeFlexJustifyContentValue(
+      coalesceEmptyString(resolveResponsiveValue(justifyContent, isMobile)) ??
+        pbContentGuidelines.frameJustifyContentDefault
+    ) as CSSProperties["justifyContent"] | undefined,
+    rawGap
+  );
   const contentBackgroundWhenLayers = layers?.length && resolvedFill ? resolvedFill : undefined;
   const contentWrapperStyle = useMemo(
-    () =>
-      buildSectionContentWrapperStyle({
+    () => ({
+      ...buildSectionContentWrapperStyle({
         resolvedContentWidth,
         resolvedContentHeight,
         sectionHasExplicitHeight: !!resolvedLayout?.height,
         elementCount: elements.length,
         contentBackground: contentBackgroundWhenLayers,
       }),
+      display: "flex",
+      flexDirection: resolvedFlexDirection,
+      alignItems: resolvedAlignItems,
+      flexWrap: resolvedFlexWrap,
+      ...(resolvedJustifyContent ? { justifyContent: resolvedJustifyContent } : {}),
+      ...(resolvedGap != null ? { gap: resolvedGap } : {}),
+      ...(resolvedRowGap != null ? { rowGap: resolvedRowGap } : {}),
+      ...(resolvedColumnGap != null ? { columnGap: resolvedColumnGap } : {}),
+    }),
     [
       resolvedContentWidth,
       resolvedContentHeight,
       resolvedLayout?.height,
       elements.length,
       contentBackgroundWhenLayers,
+      resolvedFlexDirection,
+      resolvedAlignItems,
+      resolvedFlexWrap,
+      resolvedJustifyContent,
+      resolvedGap,
+      resolvedRowGap,
+      resolvedColumnGap,
     ]
   );
 
@@ -262,10 +314,7 @@ export function SectionContentBlock({
         <LayerStack fill={resolvedFill} />
       ) : null}
       <SectionGlassEffect effects={effects} sectionRef={sectionRef} isSectionFixed={!!fixed} />
-      <div
-        className={`relative z-10 flex min-h-0 flex-col ${contentColumnAlignItems}`}
-        style={contentWrapperStyle}
-      >
+      <div className="relative z-10 min-h-0" style={contentWrapperStyle}>
         {reorderable ? (
           <ReorderableElementList
             elements={elements}

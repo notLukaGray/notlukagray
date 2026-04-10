@@ -67,6 +67,8 @@ export function ElementButton({
   linkDisabled,
   linkTransition,
   disabled = false,
+  loading = false,
+  loadingLabel,
   wrapperFill,
   wrapperStroke,
   wrapperFillRef,
@@ -79,6 +81,7 @@ export function ElementButton({
 }: Props) {
   const pathname = usePathname();
   const shellRef = useRef<HTMLDivElement | null>(null);
+  const isDisabled = disabled || loading;
   const definitions = useDefinitions();
   const typographyClass = getElementButtonTypographyClass({
     type: "elementButton",
@@ -105,7 +108,7 @@ export function ElementButton({
       linkActive,
       linkDisabled,
       linkTransition,
-      disabled,
+      disabled: isDisabled,
     },
     typographyClass
   );
@@ -153,7 +156,8 @@ export function ElementButton({
     };
   }, [rest.motion, rest.exitPreset, model3DExit.exitDurationMs, model3DExit.exitEasing]);
 
-  const hasLabel = label != null && label !== "";
+  const resolvedLabel = loading && loadingLabel != null ? loadingLabel : label;
+  const hasLabel = resolvedLabel != null && resolvedLabel !== "";
   const hasVector = vectorBlock != null;
   const hasAction = !!action && !href;
   const contentWrapStyle: CSSProperties =
@@ -184,9 +188,9 @@ export function ElementButton({
       {hasLabel && (
         <span
           className={`m-0 block ${typographyClass}`}
-          style={disabled && hasLink ? { opacity: 0.6 } : undefined}
+          style={isDisabled && hasLink ? { opacity: 0.6 } : undefined}
         >
-          {label}
+          {resolvedLabel}
         </span>
       )}
       {hasVector && <ElementRenderer block={vectorBlock as ElementBlock} />}
@@ -195,7 +199,15 @@ export function ElementButton({
 
   const inner = hasLink ? (
     isInternal ? (
-      <Link href={href!} className={linkClassName} style={{ ...linkStyle, ...nakedSurfacePadding }}>
+      <Link
+        href={href!}
+        className={linkClassName}
+        style={{ ...linkStyle, ...nakedSurfacePadding }}
+        aria-disabled={isDisabled || undefined}
+        aria-busy={loading || undefined}
+        tabIndex={isDisabled ? -1 : undefined}
+        onClick={isDisabled ? (event) => event.preventDefault() : undefined}
+      >
         {content}
       </Link>
     ) : (
@@ -204,6 +216,10 @@ export function ElementButton({
         className={linkClassName}
         style={{ ...linkStyle, ...nakedSurfacePadding }}
         {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+        aria-disabled={isDisabled || undefined}
+        aria-busy={loading || undefined}
+        tabIndex={isDisabled ? -1 : undefined}
+        onClick={isDisabled ? (event) => event.preventDefault() : undefined}
       >
         {content}
       </a>
@@ -212,6 +228,7 @@ export function ElementButton({
     <button
       type="button"
       onClick={() => {
+        if (isDisabled) return;
         model3DExit.arm();
         firePageBuilderAction(
           { type: action!, payload: actionPayload } as Parameters<typeof firePageBuilderAction>[0],
@@ -236,8 +253,9 @@ export function ElementButton({
               )
           : undefined
       }
-      disabled={disabled}
-      className={`inline-flex items-center justify-center ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
+      className={`inline-flex items-center justify-center ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"}`}
       style={{
         appearance: "none",
         background: "transparent",
@@ -246,7 +264,7 @@ export function ElementButton({
         font: "inherit",
         textAlign: "inherit",
         ...(hasWrapper ? { padding: 0 } : nakedSurfacePadding),
-        ...(disabled ? { opacity: 0.6 } : {}),
+        ...(isDisabled ? { opacity: 0.6 } : {}),
       }}
     >
       {content}

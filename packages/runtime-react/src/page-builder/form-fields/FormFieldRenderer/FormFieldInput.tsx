@@ -39,6 +39,7 @@ export function FormFieldInput({
 }: Props) {
   if (!isInputFieldType(field.fieldType)) return null;
 
+  const fieldDisabled = disabled || field.disabled === true;
   const strValue = typeof value === "string" ? value : "";
   const id = field.name ? `form-${field.name}` : undefined;
   const hasError = Boolean(error);
@@ -70,7 +71,9 @@ export function FormFieldInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={field.placeholder}
         required={field.required}
-        disabled={disabled}
+        disabled={fieldDisabled}
+        readOnly={field.readOnly}
+        autoComplete={field.autocomplete}
         min={field.min as string | number | undefined}
         max={field.max as string | number | undefined}
         step={field.step as string | number | undefined}

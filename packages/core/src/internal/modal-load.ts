@@ -1,10 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { isSafePathSegment, resolvePathUnder } from "@pb/core/internal/page-builder-paths";
-import type { PageBuilderDefinitionBlock } from "@pb/contracts";
-import { MOTION_DEFAULTS } from "@pb/contracts";
+import type { ModalBuilderFromSchema, PageBuilderDefinitionBlock } from "@pb/contracts";
+import { modalBuilderSchema, MOTION_DEFAULTS } from "@pb/contracts";
 import type { ModalTransitionConfig } from "@pb/core/internal/modal-types";
-import type { MotionPropsFromJson } from "@pb/contracts";
 import { motionPropsSchema } from "@pb/contracts";
 import { CONTENT_DIR } from "@pb/core/internal/load/page-builder-load-io";
 
@@ -100,16 +99,7 @@ function hydrateModalSectionFiles(
  * Modal definition: same structure as a page (sectionOrder + definitions) but for modal content.
  * Used as input to expandPageBuilder (with no bg) to get sections.
  */
-export type ModalBuilder = {
-  id: string;
-  title?: string;
-  sectionOrder: string[];
-  definitions: Record<string, PageBuilderDefinitionBlock>;
-  /** Optional; when set, modal enter/exit animation is driven by these values from JSON. */
-  transition?: ModalTransitionConfig;
-  /** Optional full FM config from JSON (initial, animate, exit, transition, variants). */
-  motion?: MotionPropsFromJson;
-};
+export type ModalBuilder = ModalBuilderFromSchema;
 
 /**
  * Load a modal by id from src/content/modals/<id>.json and modals/<id>/*.json.
@@ -152,7 +142,7 @@ export function loadModal(id: string): ModalBuilder | null {
   const motionResult = motionPropsSchema.safeParse(withId.motion);
   const motion = motionResult.success ? motionResult.data : undefined;
 
-  return {
+  const modalCandidate: ModalBuilder = {
     id,
     title,
     sectionOrder,
@@ -160,4 +150,7 @@ export function loadModal(id: string): ModalBuilder | null {
     transition,
     ...(motion !== undefined ? { motion } : {}),
   };
+  const modalParse = modalBuilderSchema.safeParse(modalCandidate);
+  if (!modalParse.success) return null;
+  return modalParse.data;
 }

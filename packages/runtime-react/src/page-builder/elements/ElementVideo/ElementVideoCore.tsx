@@ -16,6 +16,7 @@ export type ElementVideoCoreProps = {
   autoplay: boolean;
   loop: boolean;
   muted: boolean;
+  playbackRate?: number;
 };
 
 export function ElementVideoCore({
@@ -30,6 +31,7 @@ export function ElementVideoCore({
   autoplay,
   loop,
   muted,
+  playbackRate,
 }: ElementVideoCoreProps) {
   const videoElRef = useRef<HTMLVideoElement | null>(null);
 
@@ -56,6 +58,11 @@ export function ElementVideoCore({
 
     video.load();
   }, [shouldLoad, src]);
+
+  useEffect(() => {
+    if (!videoElRef.current || playbackRate == null) return;
+    videoElRef.current.playbackRate = playbackRate;
+  }, [playbackRate]);
 
   return (
     <video

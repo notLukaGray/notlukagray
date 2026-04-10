@@ -53,9 +53,11 @@ export const buttonActionSchema = z.enum([
   "three.setPostProcessingParam",
   "three.togglePostEffect",
   "navigate",
+  "back",
   "scrollTo",
   "scrollLock",
   "scrollUnlock",
+  "contentOverride",
   "modalOpen",
   "modalClose",
   "modalToggle",
@@ -75,6 +77,11 @@ export const buttonActionSchema = z.enum([
   "trackEvent",
   "setLocalStorage",
   "setSessionStorage",
+  "rive.setInput",
+  "rive.fireTrigger",
+  "rive.play",
+  "rive.pause",
+  "rive.reset",
 ]);
 export type ButtonAction = z.infer<typeof buttonActionSchema>;
 
@@ -106,6 +113,8 @@ export const elementButtonSchema = z
     linkDisabled: z.string().optional(),
     linkTransition: z.union([z.string(), z.number()]).optional(),
     disabled: z.boolean().optional(),
+    loading: z.boolean().optional(),
+    loadingLabel: z.string().optional(),
     wrapperFill: z.string().optional(),
     wrapperStroke: z.string().optional(),
     wrapperFillRef: z.string().optional(),

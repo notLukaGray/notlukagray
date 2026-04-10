@@ -33,6 +33,11 @@ const headingLevelSchema = z.union([
   z.literal(6),
 ]);
 
+const textFillSchema = z.union([
+  z.object({ type: z.literal("color"), value: z.string() }),
+  z.object({ type: z.literal("gradient"), value: z.string() }),
+]);
+
 const elementHeadingSchema = z
   .object({
     type: z.literal("elementHeading"),
@@ -45,6 +50,9 @@ const elementHeadingSchema = z
     wordWrap: z.boolean().optional(),
     letterSpacing: z.union([z.string(), z.number()]).optional(),
     lineSpacing: z.union([z.string(), z.number()]).optional(),
+    lineHeight: z.union([z.string(), z.number()]).optional(),
+    color: z.string().optional(),
+    textFill: textFillSchema.optional(),
     /** When set, renders the variable value from the store instead of static `text`. */
     variableKey: z.string().optional(),
     /**
@@ -87,6 +95,7 @@ const elementBodySchema = z
     lineHeight: z.union([z.string(), z.number()]).optional(),
     /** Direct text color override. Takes precedence over typography class color. */
     color: z.string().optional(),
+    textFill: textFillSchema.optional(),
     fontFeatureSettings: z.string().optional(),
     textOverflow: z.string().optional(),
     textStroke: z.string().optional(),
@@ -104,6 +113,8 @@ const elementLinkSchema = z
     label: z.string(),
     href: z.string(),
     external: z.boolean().optional(),
+    target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
+    rel: z.string().optional(),
     copyType: z.enum(["heading", "body"]),
     level: responsiveElementBodyVariantSchema.optional(),
     wordWrap: z.boolean().optional(),
@@ -189,6 +200,7 @@ const elementVideoSchema = z
     autoplay: z.boolean().optional(),
     loop: z.boolean().optional(),
     muted: z.boolean().optional(),
+    playbackRate: z.number().positive().optional(),
     objectFit: responsiveVideoObjectFitSchema,
     objectPosition: z.string().optional(),
     rotate: z.union([z.number(), z.string()]).optional(),
@@ -273,6 +285,17 @@ const elementSpacerSchema = z
   })
   .merge(elementLayoutSchema);
 
+const elementDividerSchema = z
+  .object({
+    type: z.literal("elementDivider"),
+    orientation: z.enum(["horizontal", "vertical"]).optional(),
+    thickness: z.string().optional(),
+    color: z.string().optional(),
+    style: z.enum(["solid", "dashed", "dotted"]).optional(),
+    length: responsiveStringSchema.optional(),
+  })
+  .merge(elementLayoutSchema);
+
 /** Scroll progress bar element. Tracks parent section scroll (0→1) via SectionScrollTargetContext. */
 const elementScrollProgressBarSchema = z
   .object({
@@ -302,6 +325,7 @@ export {
   elementRichTextSchema,
   elementSVGSchema,
   elementSpacerSchema,
+  elementDividerSchema,
   elementScrollProgressBarSchema,
   elementVectorSchema,
   elementVideoSchema,

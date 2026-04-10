@@ -111,6 +111,23 @@ describe("element-video-utils", () => {
         isLinkable: true,
         resolvedHref: "https://example.com",
         isInternal: false,
+        target: "_blank",
+        rel: "noopener noreferrer",
+      });
+    });
+
+    it("respects explicit target/rel overrides", () => {
+      expect(
+        resolveVideoLink(
+          { ref: "https://example.com", external: true, target: "_self", rel: "nofollow" },
+          false
+        )
+      ).toEqual({
+        isLinkable: true,
+        resolvedHref: "https://example.com",
+        isInternal: false,
+        target: "_self",
+        rel: "nofollow",
       });
     });
   });

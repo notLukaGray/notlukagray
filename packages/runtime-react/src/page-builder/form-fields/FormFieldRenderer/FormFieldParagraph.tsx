@@ -31,6 +31,7 @@ export function FormFieldParagraph({
 }: Props) {
   if (field.fieldType !== "paragraph") return null;
 
+  const fieldDisabled = disabled || field.disabled === true;
   const strValue = typeof value === "string" ? value : "";
   const id = field.name ? `form-${field.name}` : undefined;
   const hasError = Boolean(error);
@@ -61,7 +62,9 @@ export function FormFieldParagraph({
         onChange={(e) => onChange(e.target.value)}
         placeholder={field.placeholder}
         required={field.required}
-        disabled={disabled}
+        disabled={fieldDisabled}
+        readOnly={field.readOnly}
+        autoComplete={field.autocomplete}
         rows={field.rows ?? 3}
         maxLength={field.maxLength}
         aria-invalid={hasError}

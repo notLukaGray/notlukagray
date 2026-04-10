@@ -30,6 +30,7 @@ export function FormFieldRange({
 }: Props) {
   if (field.fieldType !== "range") return null;
 
+  const fieldDisabled = disabled || field.disabled === true;
   const strValue = typeof value === "string" ? value : "";
   const id = field.name ? `form-${field.name}` : undefined;
   const numVal = strValue === "" ? (field.min ?? 0) : Number(strValue);
@@ -58,7 +59,7 @@ export function FormFieldRange({
         min={field.min as number | string | undefined}
         max={field.max as number | string | undefined}
         step={field.step as number | string | undefined}
-        disabled={disabled}
+        disabled={fieldDisabled}
         aria-invalid={hasError}
         aria-describedby={hasError && id ? `${id}-error` : undefined}
         className={field.inputClassName ?? "w-full"}

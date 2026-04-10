@@ -165,5 +165,40 @@ describe("page-builder-resolve-breakpoint-server", () => {
       expect((mobile.sections[0] as Record<string, unknown>).contentHeight).toBe("auto");
       expect((desktop.sections[0] as Record<string, unknown>).contentHeight).toBe("80vh");
     });
+
+    it("resolves responsive contentBlock flex controls and section aspectRatio", () => {
+      const section = {
+        type: "contentBlock",
+        elements: [],
+        aspectRatio: ["4 / 3", "16 / 9"],
+        flexDirection: ["column", "row"],
+        alignItems: ["center", "stretch"],
+        justifyContent: ["center", "space-between"],
+        flexWrap: ["nowrap", "wrap"],
+        gap: ["8px", "24px"],
+        rowGap: ["4px", "12px"],
+        columnGap: ["2px", "10px"],
+      } as unknown as SectionBlock;
+
+      const mobile = resolvePageBuilderBreakpoint({
+        sections: [section],
+        bg: null,
+        bgDefinitions: {},
+        isMobile: true,
+      });
+      const desktop = resolvePageBuilderBreakpoint({
+        sections: [section],
+        bg: null,
+        bgDefinitions: {},
+        isMobile: false,
+      });
+
+      expect((mobile.sections[0] as Record<string, unknown>).aspectRatio).toBe("4 / 3");
+      expect((desktop.sections[0] as Record<string, unknown>).aspectRatio).toBe("16 / 9");
+      expect((mobile.sections[0] as Record<string, unknown>).flexDirection).toBe("column");
+      expect((desktop.sections[0] as Record<string, unknown>).flexDirection).toBe("row");
+      expect((mobile.sections[0] as Record<string, unknown>).gap).toBe("8px");
+      expect((desktop.sections[0] as Record<string, unknown>).gap).toBe("24px");
+    });
   });
 });

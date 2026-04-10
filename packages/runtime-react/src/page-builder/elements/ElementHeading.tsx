@@ -29,6 +29,9 @@ export function ElementHeading({
   variableKey,
   letterSpacing,
   lineSpacing,
+  lineHeight,
+  color,
+  textFill,
   fontFamily,
   fontSize,
   fontWeight,
@@ -41,6 +44,10 @@ export function ElementHeading({
   marginLeft,
   marginRight,
   wordWrap = true,
+  textShadow,
+  textDecoration,
+  textTransform,
+  whiteSpace,
   rotate,
   flipHorizontal,
   flipVertical,
@@ -69,18 +76,33 @@ export function ElementHeading({
   applyPbDefaultTextAlign(blockStyle, align, textAlign);
   const textStyle: CSSProperties = {
     letterSpacing,
-    lineHeight: lineSpacing,
+    ...(lineSpacing !== undefined ? { lineHeight: lineSpacing } : {}),
+    ...(lineHeight !== undefined ? { lineHeight } : {}),
     ...(resolveFontFamily(fontFamily) !== undefined
       ? { fontFamily: resolveFontFamily(fontFamily) }
       : {}),
     ...(fontSize !== undefined ? { fontSize } : {}),
     ...(fontWeight !== undefined ? { fontWeight: fontWeight as CSSProperties["fontWeight"] } : {}),
+    ...(textShadow !== undefined ? { textShadow } : {}),
+    ...(textDecoration !== undefined ? { textDecoration } : {}),
+    ...(textTransform !== undefined ? { textTransform } : {}),
     // word wrap / overflow — must be on the text element, not the wrapper, for text-overflow to work
-    whiteSpace: wordWrap ? "normal" : "nowrap",
+    whiteSpace: whiteSpace ?? (wordWrap ? "normal" : "nowrap"),
     overflowWrap: wordWrap ? "break-word" : "normal",
     wordBreak: wordWrap ? "break-word" : "normal",
-    ...(wordWrap ? {} : { overflow: "hidden", textOverflow: "ellipsis" }),
+    ...(!wordWrap && whiteSpace == null ? { overflow: "hidden", textOverflow: "ellipsis" } : {}),
   };
+  if (textFill?.type === "gradient" && textFill.value) {
+    textStyle.backgroundImage = textFill.value;
+    textStyle.backgroundClip = "text";
+    textStyle.WebkitBackgroundClip = "text";
+    textStyle.color = "transparent";
+    (textStyle as Record<string, unknown>).WebkitTextFillColor = "transparent";
+  } else if (textFill?.type === "color" && textFill.value) {
+    textStyle.color = textFill.value;
+  } else if (color !== undefined) {
+    textStyle.color = color;
+  }
 
   return (
     <div className="shrink-0 max-w-full" style={blockStyle}>

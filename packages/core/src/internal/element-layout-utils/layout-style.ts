@@ -230,6 +230,11 @@ function computeVisualStyle(
     ...(layout.boxShadow ? { boxShadow: layout.boxShadow } : {}),
     ...(layout.filter ? { filter: layout.filter } : {}),
     ...(layout.backdropFilter ? { backdropFilter: layout.backdropFilter } : {}),
+    ...(layout.clipPath ? { clipPath: layout.clipPath } : {}),
+    ...(layout.textShadow ? { textShadow: layout.textShadow } : {}),
+    ...(layout.whiteSpace ? { whiteSpace: layout.whiteSpace } : {}),
+    ...(layout.textDecoration ? { textDecoration: layout.textDecoration } : {}),
+    ...(layout.textTransform ? { textTransform: layout.textTransform } : {}),
     ...(typeof webkitBackdrop === "string"
       ? { WebkitBackdropFilter: webkitBackdrop }
       : layout.backdropFilter

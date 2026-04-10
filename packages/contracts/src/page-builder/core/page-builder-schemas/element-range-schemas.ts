@@ -62,6 +62,8 @@ export const elementRangeSchema = z
     actionPayload: z.unknown().optional(),
     /** Accessible label for the `<input type="range">`. Defaults to "Range". */
     ariaLabel: z.string().optional(),
+    /** Disabled state for non-interactive/read-only slider contexts. */
+    disabled: z.boolean().optional(),
     /**
      * Inline style overrides.  The component reads specific sub-keys for custom rendering
      * (`trackColor`, `fillColor`, `trackHeight`, `thumbSize`, `borderRadius`, `accentColor`).

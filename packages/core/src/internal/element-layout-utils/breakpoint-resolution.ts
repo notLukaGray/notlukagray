@@ -13,6 +13,7 @@ const LAYOUT_KEYS = [
   "marginLeft",
   "marginRight",
   "gap",
+  "length",
   "padding",
   "level",
 ] as const;
