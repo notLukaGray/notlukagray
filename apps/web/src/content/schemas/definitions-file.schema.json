@@ -8268,7 +8268,7 @@
                     "$ref": "#/$defs/Def76"
                   }
                 },
-                "required": ["type", "elements"],
+                "required": ["type", "elements", "gap"],
                 "additionalProperties": false
               },
               {
@@ -9960,7 +9960,281 @@
               },
               "type": {
                 "type": "string",
-                "enum": ["contentBlock", "scrollContainer"]
+                "const": "contentBlock"
+              },
+              "gap": {
+                "$ref": "#/$defs/Def38"
+              },
+              "rowGap": {
+                "$ref": "#/$defs/Def38"
+              },
+              "columnGap": {
+                "$ref": "#/$defs/Def38"
+              },
+              "alignItems": {
+                "$ref": "#/$defs/Def38"
+              },
+              "justifyContent": {
+                "$ref": "#/$defs/Def38"
+              },
+              "contentWidth": {
+                "$ref": "#/$defs/Def76"
+              },
+              "contentHeight": {
+                "$ref": "#/$defs/Def76"
+              },
+              "elementOrder": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "definitions": {
+                "$ref": "#/$defs/Def124"
+              },
+              "reorderable": {
+                "type": "boolean"
+              },
+              "reorderAxis": {
+                "type": "string",
+                "enum": ["x", "y"]
+              },
+              "reorderDragUnit": {
+                "type": "string",
+                "enum": ["frame", "content"]
+              },
+              "reorderDragBehavior": {
+                "type": "string",
+                "enum": ["elasticSnap", "free", "none"]
+              }
+            },
+            "required": ["type", "gap", "elementOrder"],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "meta": {
+                "$ref": "#/$defs/Def1"
+              },
+              "ariaLabel": {
+                "$ref": "#/$defs/Def38"
+              },
+              "fill": {
+                "$ref": "#/$defs/Def38"
+              },
+              "layers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Def4"
+                }
+              },
+              "effects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Def39"
+                }
+              },
+              "width": {
+                "$ref": "#/$defs/Def38"
+              },
+              "height": {
+                "$ref": "#/$defs/Def38"
+              },
+              "minWidth": {
+                "$ref": "#/$defs/Def38"
+              },
+              "maxWidth": {
+                "$ref": "#/$defs/Def38"
+              },
+              "minHeight": {
+                "$ref": "#/$defs/Def38"
+              },
+              "maxHeight": {
+                "$ref": "#/$defs/Def38"
+              },
+              "align": {
+                "$ref": "#/$defs/Def58"
+              },
+              "marginLeft": {
+                "$ref": "#/$defs/Def38"
+              },
+              "marginRight": {
+                "$ref": "#/$defs/Def38"
+              },
+              "marginTop": {
+                "$ref": "#/$defs/Def38"
+              },
+              "marginBottom": {
+                "$ref": "#/$defs/Def38"
+              },
+              "borderRadius": {
+                "$ref": "#/$defs/Def38"
+              },
+              "border": {
+                "$ref": "#/$defs/Def59"
+              },
+              "boxShadow": {
+                "type": "string"
+              },
+              "filter": {
+                "type": "string"
+              },
+              "backdropFilter": {
+                "type": "string"
+              },
+              "clipPath": {
+                "type": "string"
+              },
+              "overflow": {
+                "type": "string",
+                "enum": ["hidden", "visible", "auto", "scroll"]
+              },
+              "borderTop": {
+                "type": "string"
+              },
+              "borderRight": {
+                "type": "string"
+              },
+              "borderBottom": {
+                "type": "string"
+              },
+              "borderLeft": {
+                "type": "string"
+              },
+              "cursor": {
+                "type": "string",
+                "enum": [
+                  "pointer",
+                  "default",
+                  "grab",
+                  "grabbing",
+                  "crosshair",
+                  "zoom-in",
+                  "zoom-out",
+                  "text",
+                  "move",
+                  "not-allowed",
+                  "auto",
+                  "none"
+                ]
+              },
+              "aspectRatio": {
+                "$ref": "#/$defs/Def38"
+              },
+              "scrollSpeed": {
+                "type": "number"
+              },
+              "initialX": {
+                "$ref": "#/$defs/Def38"
+              },
+              "initialY": {
+                "$ref": "#/$defs/Def38"
+              },
+              "zIndex": {
+                "type": "number"
+              },
+              "onVisible": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "onInvisible": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "onProgress": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "onViewportProgress": {
+                "$ref": "#/$defs/__schema1"
+              },
+              "threshold": {
+                "type": "number"
+              },
+              "triggerOnce": {
+                "type": "boolean"
+              },
+              "rootMargin": {
+                "type": "string"
+              },
+              "delay": {
+                "type": "number"
+              },
+              "motion": {
+                "$ref": "#/$defs/Def9"
+              },
+              "reduceMotion": {
+                "type": "boolean"
+              },
+              "motionTiming": {
+                "$ref": "#/$defs/Def22"
+              },
+              "scrollOpacityRange": {
+                "$ref": "#/$defs/Def61"
+              },
+              "sticky": {
+                "type": "boolean"
+              },
+              "stickyOffset": {
+                "$ref": "#/$defs/Def38"
+              },
+              "stickyPosition": {
+                "type": "string",
+                "enum": ["top", "bottom"]
+              },
+              "fixed": {
+                "type": "boolean"
+              },
+              "fixedPosition": {
+                "type": "string",
+                "enum": ["top", "bottom", "left", "right"]
+              },
+              "fixedOffset": {
+                "$ref": "#/$defs/Def38"
+              },
+              "keyboardTriggers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Def62"
+                }
+              },
+              "timerTriggers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Def64"
+                }
+              },
+              "cursorTriggers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Def66"
+                }
+              },
+              "scrollDirectionTriggers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Def68"
+                }
+              },
+              "idleTriggers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Def70"
+                }
+              },
+              "visibleWhen": {
+                "$ref": "#/$defs/Def72"
+              },
+              "type": {
+                "type": "string",
+                "const": "scrollContainer"
+              },
+              "contentWidth": {
+                "$ref": "#/$defs/Def76"
+              },
+              "contentHeight": {
+                "$ref": "#/$defs/Def76"
               },
               "elementOrder": {
                 "type": "array",

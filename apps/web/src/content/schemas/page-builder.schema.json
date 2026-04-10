@@ -122,7 +122,7 @@
                             "transition": {
                               "type": "object",
                               "properties": {
-                                "$ref": "#/$defs/Def180"
+                                "$ref": "#/$defs/Def182"
                               },
                               "required": ["duration"],
                               "additionalProperties": false
@@ -158,7 +158,7 @@
                               "const": "scroll"
                             },
                             "properties": {
-                              "$ref": "#/$defs/Def181"
+                              "$ref": "#/$defs/Def183"
                             },
                             "offset": {
                               "type": "array",
@@ -186,10 +186,10 @@
                               "const": "pointer"
                             },
                             "x": {
-                              "$ref": "#/$defs/Def181"
+                              "$ref": "#/$defs/Def183"
                             },
                             "y": {
-                              "$ref": "#/$defs/Def181"
+                              "$ref": "#/$defs/Def183"
                             },
                             "ease": {
                               "$ref": "#/$defs/Def38"
@@ -246,7 +246,7 @@
                             "transition": {
                               "type": "object",
                               "properties": {
-                                "$ref": "#/$defs/Def180"
+                                "$ref": "#/$defs/Def182"
                               },
                               "additionalProperties": false
                             },
@@ -332,7 +332,7 @@
               "$ref": "#/$defs/Def38"
             },
             "progressRange": {
-              "$ref": "#/$defs/Def179"
+              "$ref": "#/$defs/Def181"
             }
           },
           "required": ["type", "from", "to"],
@@ -350,7 +350,7 @@
               "const": "contentOverride"
             },
             "payload": {
-              "$ref": "#/$defs/Def182"
+              "$ref": "#/$defs/Def184"
             }
           },
           "required": ["type", "payload"],
@@ -385,7 +385,7 @@
               "const": "startTransition"
             },
             "payload": {
-              "$ref": "#/$defs/Def183"
+              "$ref": "#/$defs/Def185"
             }
           },
           "required": ["type", "payload"],
@@ -399,7 +399,7 @@
               "const": "stopTransition"
             },
             "payload": {
-              "$ref": "#/$defs/Def183"
+              "$ref": "#/$defs/Def185"
             }
           },
           "required": ["type", "payload"],
@@ -506,7 +506,7 @@
               "const": "scrollLock"
             },
             "payload": {
-              "$ref": "#/$defs/Def184"
+              "$ref": "#/$defs/Def186"
             }
           },
           "required": ["type"],
@@ -520,7 +520,7 @@
               "const": "scrollUnlock"
             },
             "payload": {
-              "$ref": "#/$defs/Def184"
+              "$ref": "#/$defs/Def186"
             }
           },
           "required": ["type"],
@@ -534,7 +534,7 @@
               "const": "modalOpen"
             },
             "payload": {
-              "$ref": "#/$defs/Def183"
+              "$ref": "#/$defs/Def185"
             }
           },
           "required": ["type", "payload"],
@@ -548,7 +548,7 @@
               "const": "modalClose"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -562,7 +562,7 @@
               "const": "modalToggle"
             },
             "payload": {
-              "$ref": "#/$defs/Def183"
+              "$ref": "#/$defs/Def185"
             }
           },
           "required": ["type", "payload"],
@@ -576,7 +576,7 @@
               "const": "setVariable"
             },
             "payload": {
-              "$ref": "#/$defs/Def182"
+              "$ref": "#/$defs/Def184"
             }
           },
           "required": ["type", "payload"],
@@ -697,7 +697,7 @@
               "const": "elementShow"
             },
             "payload": {
-              "$ref": "#/$defs/Def183"
+              "$ref": "#/$defs/Def185"
             }
           },
           "required": ["type", "payload"],
@@ -711,7 +711,7 @@
               "const": "elementHide"
             },
             "payload": {
-              "$ref": "#/$defs/Def183"
+              "$ref": "#/$defs/Def185"
             }
           },
           "required": ["type", "payload"],
@@ -725,7 +725,7 @@
               "const": "elementToggle"
             },
             "payload": {
-              "$ref": "#/$defs/Def183"
+              "$ref": "#/$defs/Def185"
             }
           },
           "required": ["type", "payload"],
@@ -912,7 +912,7 @@
                   "type": "string"
                 },
                 "properties": {
-                  "$ref": "#/$defs/Def186"
+                  "$ref": "#/$defs/Def188"
                 }
               },
               "required": ["event"],
@@ -930,7 +930,7 @@
               "const": "setLocalStorage"
             },
             "payload": {
-              "$ref": "#/$defs/Def182"
+              "$ref": "#/$defs/Def184"
             }
           },
           "required": ["type", "payload"],
@@ -944,7 +944,7 @@
               "const": "setSessionStorage"
             },
             "payload": {
-              "$ref": "#/$defs/Def182"
+              "$ref": "#/$defs/Def184"
             }
           },
           "required": ["type", "payload"],
@@ -958,7 +958,7 @@
               "const": "three.load"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -972,7 +972,7 @@
               "const": "three.unload"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -986,7 +986,7 @@
               "const": "three.toggleLoaded"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1023,7 +1023,7 @@
               "const": "three.fadeIn"
             },
             "payload": {
-              "$ref": "#/$defs/Def187"
+              "$ref": "#/$defs/Def189"
             }
           },
           "required": ["type"],
@@ -1037,7 +1037,7 @@
               "const": "three.fadeOut"
             },
             "payload": {
-              "$ref": "#/$defs/Def187"
+              "$ref": "#/$defs/Def189"
             }
           },
           "required": ["type"],
@@ -1051,7 +1051,7 @@
               "const": "three.playAnimation"
             },
             "payload": {
-              "$ref": "#/$defs/Def188"
+              "$ref": "#/$defs/Def190"
             }
           },
           "required": ["type"],
@@ -1065,7 +1065,7 @@
               "const": "three.pauseAnimation"
             },
             "payload": {
-              "$ref": "#/$defs/Def188"
+              "$ref": "#/$defs/Def190"
             }
           },
           "required": ["type"],
@@ -1079,7 +1079,7 @@
               "const": "three.toggleAnimation"
             },
             "payload": {
-              "$ref": "#/$defs/Def188"
+              "$ref": "#/$defs/Def190"
             }
           },
           "required": ["type"],
@@ -1093,7 +1093,7 @@
               "const": "three.setAnimation"
             },
             "payload": {
-              "$ref": "#/$defs/Def188"
+              "$ref": "#/$defs/Def190"
             }
           },
           "required": ["type"],
@@ -1162,7 +1162,7 @@
               "const": "three.setCameraPreset"
             },
             "payload": {
-              "$ref": "#/$defs/Def189"
+              "$ref": "#/$defs/Def191"
             }
           },
           "required": ["type"],
@@ -1176,7 +1176,7 @@
               "const": "three.nextCameraPreset"
             },
             "payload": {
-              "$ref": "#/$defs/Def189"
+              "$ref": "#/$defs/Def191"
             }
           },
           "required": ["type"],
@@ -1190,7 +1190,7 @@
               "const": "three.resetCamera"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1204,7 +1204,7 @@
               "const": "three.playVideoTexture"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1218,7 +1218,7 @@
               "const": "three.pauseVideoTexture"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1232,7 +1232,7 @@
               "const": "three.toggleVideoTexture"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1246,7 +1246,7 @@
               "const": "three.setCameraEffectsPreset"
             },
             "payload": {
-              "$ref": "#/$defs/Def189"
+              "$ref": "#/$defs/Def191"
             }
           },
           "required": ["type"],
@@ -1419,7 +1419,7 @@
                   "type": "string"
                 },
                 "scale": {
-                  "$ref": "#/$defs/Def190"
+                  "$ref": "#/$defs/Def192"
                 },
                 "durationMs": {
                   "type": "number"
@@ -1462,7 +1462,7 @@
               "const": "three.resetTransform"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1510,7 +1510,7 @@
                   ]
                 },
                 "scale": {
-                  "$ref": "#/$defs/Def190"
+                  "$ref": "#/$defs/Def192"
                 },
                 "durationMs": {
                   "type": "number"
@@ -1557,7 +1557,7 @@
               "const": "three.stopContinuousRotate"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1597,7 +1597,7 @@
               "const": "three.stopContinuousFloat"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1640,7 +1640,7 @@
               "const": "three.stopContinuousScale"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -1734,7 +1734,7 @@
               "const": "three.orbitDisable"
             },
             "payload": {
-              "$ref": "#/$defs/Def185"
+              "$ref": "#/$defs/Def187"
             }
           },
           "required": ["type"],
@@ -2153,7 +2153,7 @@
           }
         },
         {
-          "$ref": "#/$defs/Def186"
+          "$ref": "#/$defs/Def188"
         }
       ]
     },
@@ -2195,7 +2195,7 @@
               "type": "string"
             },
             "textFill": {
-              "$ref": "#/$defs/Def191"
+              "$ref": "#/$defs/Def193"
             },
             "variableKey": {
               "type": "string"
@@ -2225,7 +2225,7 @@
               "$ref": "#/$defs/Def13"
             },
             "maxLines": {
-              "$ref": "#/$defs/Def194"
+              "$ref": "#/$defs/Def196"
             },
             "id": {
               "type": "string"
@@ -2243,13 +2243,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -2293,16 +2293,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -2329,7 +2329,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -2436,7 +2436,7 @@
               "type": "string"
             },
             "textFill": {
-              "$ref": "#/$defs/Def191"
+              "$ref": "#/$defs/Def193"
             },
             "fontFeatureSettings": {
               "type": "string"
@@ -2454,7 +2454,7 @@
               "$ref": "#/$defs/Def13"
             },
             "maxLines": {
-              "$ref": "#/$defs/Def194"
+              "$ref": "#/$defs/Def196"
             },
             "id": {
               "type": "string"
@@ -2472,13 +2472,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -2522,16 +2522,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -2558,7 +2558,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -2715,13 +2715,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -2765,16 +2765,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -2801,7 +2801,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -2914,7 +2914,7 @@
               "type": "boolean"
             },
             "link": {
-              "$ref": "#/$defs/Def206"
+              "$ref": "#/$defs/Def208"
             },
             "aspectRatio": {
               "$ref": "#/$defs/Def58"
@@ -2992,13 +2992,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -3042,16 +3042,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -3078,7 +3078,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -3201,7 +3201,7 @@
               "type": "boolean"
             },
             "link": {
-              "$ref": "#/$defs/Def206"
+              "$ref": "#/$defs/Def208"
             },
             "aspectRatio": {
               "$ref": "#/$defs/Def58"
@@ -3234,13 +3234,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -3284,16 +3284,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -3320,7 +3320,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -3695,7 +3695,7 @@
               }
             },
             "colors": {
-              "$ref": "#/$defs/Def208"
+              "$ref": "#/$defs/Def210"
             },
             "gradients": {
               "type": "array",
@@ -3733,7 +3733,7 @@
                       "stops": {
                         "type": "array",
                         "items": {
-                          "$ref": "#/$defs/Def209"
+                          "$ref": "#/$defs/Def211"
                         }
                       }
                     },
@@ -3772,7 +3772,7 @@
                       "stops": {
                         "type": "array",
                         "items": {
-                          "$ref": "#/$defs/Def209"
+                          "$ref": "#/$defs/Def211"
                         }
                       }
                     },
@@ -3818,7 +3818,7 @@
               "type": "boolean"
             },
             "link": {
-              "$ref": "#/$defs/Def211"
+              "$ref": "#/$defs/Def213"
             },
             "id": {
               "type": "string"
@@ -3836,13 +3836,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -3886,16 +3886,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -3922,7 +3922,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -3998,7 +3998,7 @@
               "type": "boolean"
             },
             "link": {
-              "$ref": "#/$defs/Def211"
+              "$ref": "#/$defs/Def213"
             },
             "id": {
               "type": "string"
@@ -4016,13 +4016,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -4066,16 +4066,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -4102,7 +4102,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -4190,13 +4190,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -4240,16 +4240,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -4276,7 +4276,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -4415,13 +4415,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -4459,16 +4459,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -4495,7 +4495,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -4596,13 +4596,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -4646,16 +4646,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -4682,7 +4682,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -4779,13 +4779,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -4829,16 +4829,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -4865,7 +4865,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -4954,13 +4954,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -5004,16 +5004,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -5040,7 +5040,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -5142,13 +5142,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -5192,16 +5192,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -5228,7 +5228,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -5330,13 +5330,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -5380,16 +5380,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -5416,7 +5416,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -5662,13 +5662,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -5706,16 +5706,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -5742,7 +5742,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -5912,7 +5912,7 @@
                     "type": "string"
                   },
                   "materialBindings": {
-                    "$ref": "#/$defs/Def208"
+                    "$ref": "#/$defs/Def210"
                   }
                 },
                 "required": ["geometry"],
@@ -6223,7 +6223,7 @@
                             ]
                           },
                           "scale": {
-                            "$ref": "#/$defs/Def190"
+                            "$ref": "#/$defs/Def192"
                           },
                           "animation": {
                             "type": "object",
@@ -6444,13 +6444,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -6494,16 +6494,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -6530,7 +6530,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -6633,13 +6633,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -6683,16 +6683,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -6719,7 +6719,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -6851,7 +6851,7 @@
               "type": "string"
             },
             "columnCount": {
-              "$ref": "#/$defs/Def194"
+              "$ref": "#/$defs/Def196"
             },
             "columnGap": {
               "$ref": "#/$defs/Def13"
@@ -6878,13 +6878,13 @@
               "$ref": "#/$defs/Def58"
             },
             "constraints": {
-              "$ref": "#/$defs/Def195"
+              "$ref": "#/$defs/Def197"
             },
             "align": {
               "$ref": "#/$defs/Def158"
             },
             "alignY": {
-              "$ref": "#/$defs/Def198"
+              "$ref": "#/$defs/Def200"
             },
             "textAlign": {
               "$ref": "#/$defs/Def159"
@@ -6928,16 +6928,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def199"
+              "$ref": "#/$defs/Def201"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def200"
+              "$ref": "#/$defs/Def202"
             },
             "wrapperStyle": {
               "$ref": "#/$defs/Def50"
             },
             "aria": {
-              "$ref": "#/$defs/Def202"
+              "$ref": "#/$defs/Def204"
             },
             "motion": {
               "$ref": "#/$defs/Def20"
@@ -6964,7 +6964,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def204"
+              "$ref": "#/$defs/Def206"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def92"
@@ -7657,6 +7657,12 @@
     },
     "Def212": {
       "$ref": "#/$defs/Def212"
+    },
+    "Def213": {
+      "$ref": "#/$defs/Def213"
+    },
+    "Def214": {
+      "$ref": "#/$defs/Def214"
     }
   },
   "type": "object",
@@ -7712,12 +7718,12 @@
     "transitions": {
       "anyOf": [
         {
-          "$ref": "#/$defs/Def172"
+          "$ref": "#/$defs/Def174"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/Def172"
+            "$ref": "#/$defs/Def174"
           }
         }
       ]

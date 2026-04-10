@@ -29,7 +29,7 @@ describe("proxy", () => {
     const req = new NextRequest("https://example.com/research/secret-case");
     const res = await proxy(req);
     expect(res.status).toBe(307);
-    expect(res.headers.get("location")).toContain("unlock_redirect=%2Fresearch%2Fsecret-case");
+    expect(res.headers.get("location")).toContain("/research/secret-case?unlock=1");
   });
 
   it("passes through protected path when cookie is valid", async () => {
@@ -72,6 +72,27 @@ describe("proxy", () => {
     const req = new NextRequest("https://example.com/research/secret-case/");
     const res = await proxy(req);
     expect(res.status).toBe(307);
-    expect(res.headers.get("location")).toContain("unlock_redirect=%2Fresearch%2Fsecret-case");
+    expect(res.headers.get("location")).toContain("/research/secret-case/?unlock=1");
+  });
+
+  it("passes through protected path when unlock=1 and cookie invalid", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockResolvedValue(false);
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/research/secret-case?unlock=1");
+    const res = await proxy(req);
+    expect(res.status).toBe(200);
+  });
+
+  it("strips unlock=1 from protected path when cookie is valid", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockResolvedValue(true);
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/research/secret-case?unlock=1");
+    req.cookies.set(accessCookieName, "valid-token");
+    const res = await proxy(req);
+    expect(res.status).toBe(307);
+    expect(res.headers.get("location")).toContain("/research/secret-case");
+    expect(res.headers.get("location")).not.toContain("unlock=1");
   });
 });

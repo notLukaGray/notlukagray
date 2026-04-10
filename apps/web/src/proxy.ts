@@ -5,8 +5,9 @@ import { verifyAccessTokenEdge } from "@/core/lib/access-cookie-edge";
 
 /**
  * Proxy for protected page paths:
- * When path is protected and SITE_PASSWORD is set, redirect to /
- * with unlock_redirect if the access cookie is missing or invalid.
+ * When path is protected and SITE_PASSWORD is set:
+ * - redirect to the same path with `?unlock=1` if the access cookie is missing/invalid
+ * - allow the request through when `unlock=1` is present so the page can render under unlock modal
  *
  * NOTE: Do not rewrite to /mobile or /desktop variants. The app now uses
  * a universal catch-all route and resolves breakpoint from request headers.
@@ -24,9 +25,19 @@ export async function proxy(request: NextRequest) {
 
   const token = request.cookies.get(accessCookieName)?.value;
   const valid = await verifyAccessTokenEdge(token);
+  const wantsUnlock = request.nextUrl.searchParams.get("unlock") === "1";
+
   if (!valid) {
-    const url = new URL("/", request.url);
-    url.searchParams.set("unlock_redirect", `/${normalizedPath}`);
+    if (wantsUnlock) return NextResponse.next();
+
+    const url = request.nextUrl.clone();
+    url.searchParams.set("unlock", "1");
+    return NextResponse.redirect(url);
+  }
+
+  if (wantsUnlock) {
+    const url = request.nextUrl.clone();
+    url.searchParams.delete("unlock");
     return NextResponse.redirect(url);
   }
 

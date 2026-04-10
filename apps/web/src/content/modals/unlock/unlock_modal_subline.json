@@ -1,0 +1,24 @@
+{
+  "type": "contentBlock",
+  "id": "unlock_modal_subline",
+  "ariaLabel": "Unlock subline",
+  "width": "100%",
+  "height": "hug",
+  "align": "center",
+  "fill": "transparent",
+  "gap": "0",
+  "elementOrder": ["unlock_modal_description"],
+  "definitions": {
+    "unlock_modal_description": {
+      "type": "elementBody",
+      "id": "unlock_modal_description",
+      "level": 3,
+      "text": "Enter the password you received to view the content.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "wordWrap": true,
+      "marginBottom": "1rem"
+    }
+  }
+}

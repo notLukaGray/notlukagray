@@ -170,6 +170,7 @@
       }
     },
     "g-ack": {
+      "id": "g-ack",
       "type": "elementBody",
       "level": 5,
       "text": "Special thanks to Cramer-Kassalt, Jake Brusha, and Alex Lopez — whose story was always worth telling.",

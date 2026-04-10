@@ -6,6 +6,7 @@
   "height": "hug",
   "align": "center",
   "fill": "transparent",
+  "gap": "1rem",
   "elementOrder": ["unlock_modal_lock_link"],
   "definitions": {
     "unlock_modal_lock_link": {
