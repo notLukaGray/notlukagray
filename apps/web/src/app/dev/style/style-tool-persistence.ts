@@ -17,6 +17,12 @@ import {
   type ShadowScale,
 } from "@/app/theme/pb-shadow-tokens";
 import {
+  DEFAULT_OPACITY_SCALE,
+  OPACITY_SCALE_KEYS,
+  clampUnitOpacity,
+  type OpacityScale,
+} from "@/app/theme/pb-opacity-tokens";
+import {
   DEFAULT_BORDER_WIDTH_SCALE,
   DEFAULT_CONTENT_WIDTH_PRESETS,
   deriveSectionMarginScale,
@@ -26,6 +32,11 @@ import {
   type SectionMarginScale,
   type SpacingScale,
 } from "@/app/theme/pb-spacing-tokens";
+import {
+  DEFAULT_Z_INDEX_LAYERS,
+  Z_INDEX_LAYER_KEYS,
+  type ZIndexLayerScale,
+} from "@/app/theme/pb-z-index-layers";
 import {
   createNeutralStyleGuidelines,
   DEV_NEUTRAL_STYLE_SEEDS,
@@ -39,7 +50,7 @@ const SPACING_SCALE_KEYS = ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", 
 const _SPACING_SCALE_SEED_KEYS = ["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl"] as const;
 const SHADOW_SCALE_KEYS = ["none", "xs", "sm", "md", "lg", "xl", "2xl"] as const;
 const BORDER_WIDTH_KEYS = ["hairline", "sm", "md", "lg", "xl"] as const;
-const CONTENT_WIDTH_KEYS = ["narrow", "standard", "wide"] as const;
+const CONTENT_WIDTH_KEYS = ["narrow", "standard", "wide", "full"] as const;
 const SECTION_MARGIN_KEYS = ["none", "xs", "sm", "md", "lg", "xl"] as const;
 
 export type StyleToolPersistedV2 = {
@@ -64,6 +75,8 @@ export type StyleToolPersistedV3 = {
   contentWidths: ContentWidthPresets;
   sectionMarginScale: SectionMarginScale;
   sectionMarginScaleLocks: Record<keyof SectionMarginScale, boolean>;
+  opacityScale: OpacityScale;
+  zIndexLayers: ZIndexLayerScale;
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -89,6 +102,30 @@ function pickBoolLocks<T extends string>(keys: readonly T[], source: unknown): R
   if (!isRecord(source)) return out;
   for (const key of keys) {
     out[key] = source[key] === true;
+  }
+  return out;
+}
+
+function coerceOpacityScale(source: unknown): OpacityScale {
+  const out: OpacityScale = { ...DEFAULT_OPACITY_SCALE };
+  if (!isRecord(source)) return out;
+  for (const key of OPACITY_SCALE_KEYS) {
+    const v = source[key];
+    if (typeof v === "number" && Number.isFinite(v)) {
+      out[key] = clampUnitOpacity(v);
+    }
+  }
+  return out;
+}
+
+function coerceZIndexLayers(source: unknown): ZIndexLayerScale {
+  const out: ZIndexLayerScale = { ...DEFAULT_Z_INDEX_LAYERS };
+  if (!isRecord(source)) return out;
+  for (const key of Z_INDEX_LAYER_KEYS) {
+    const v = source[key];
+    if (typeof v === "number" && Number.isFinite(v)) {
+      out[key] = Math.round(v);
+    }
   }
   return out;
 }
@@ -311,6 +348,8 @@ function readStyleFromV3Raw(raw: string): StyleToolPersistedV3 | null {
     ),
     sectionMarginScale,
     sectionMarginScaleLocks,
+    opacityScale: coerceOpacityScale(data.opacityScale),
+    zIndexLayers: coerceZIndexLayers(data.zIndexLayers),
   };
 }
 
@@ -348,6 +387,8 @@ export function coerceStyleToolV2toV3(v2: StyleToolPersistedV2): StyleToolPersis
     contentWidths: { ...DEFAULT_CONTENT_WIDTH_PRESETS },
     sectionMarginScale,
     sectionMarginScaleLocks,
+    opacityScale: { ...DEFAULT_OPACITY_SCALE },
+    zIndexLayers: { ...DEFAULT_Z_INDEX_LAYERS },
   };
 }
 

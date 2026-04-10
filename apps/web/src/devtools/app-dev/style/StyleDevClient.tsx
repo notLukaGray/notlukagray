@@ -106,6 +106,8 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
       | "contentWidths"
       | "sectionMarginScale"
       | "sectionMarginScaleLocks"
+      | "opacityScale"
+      | "zIndexLayers"
     >
   >(() => ({
     shadowScale: initialStyle.shadowScale,
@@ -116,6 +118,8 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
     contentWidths: initialStyle.contentWidths,
     sectionMarginScale: initialStyle.sectionMarginScale,
     sectionMarginScaleLocks: initialStyle.sectionMarginScaleLocks,
+    opacityScale: initialStyle.opacityScale,
+    zIndexLayers: initialStyle.zIndexLayers,
   }));
   const [previewDensity, setPreviewDensity] = useState<PageDensity>("balanced");
   const [exportCopied, setExportCopied] = useState(false);
@@ -139,6 +143,8 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
           contentWidths: defaults.contentWidths,
           sectionMarginScale: defaults.sectionMarginScale,
           sectionMarginScaleLocks: defaults.sectionMarginScaleLocks,
+          opacityScale: defaults.opacityScale,
+          zIndexLayers: defaults.zIndexLayers,
         });
         return;
       }
@@ -160,6 +166,8 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
         contentWidths: saved.contentWidths,
         sectionMarginScale: saved.sectionMarginScale,
         sectionMarginScaleLocks: saved.sectionMarginScaleLocks,
+        opacityScale: saved.opacityScale,
+        zIndexLayers: saved.zIndexLayers,
       });
     };
     const onStorage = (event: StorageEvent) => {
@@ -198,6 +206,8 @@ export function StyleDevClient({ scope = "foundations" }: { scope?: StyleDevScop
       contentWidths: foundationSlices.contentWidths,
       sectionMarginScale,
       sectionMarginScaleLocks: foundationSlices.sectionMarginScaleLocks,
+      opacityScale: foundationSlices.opacityScale,
+      zIndexLayers: foundationSlices.zIndexLayers,
     };
     patchWorkbenchStyle(payload);
   }, [foundationSlices, guidelines, locks, seeds]);

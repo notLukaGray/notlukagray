@@ -10,6 +10,7 @@ import {
   sectionMarginScaleToCssVars,
   spacingScaleToCssVars,
 } from "@/app/theme/pb-spacing-tokens";
+import { zIndexLayersToCssVars } from "@/app/theme/pb-z-index-layers";
 import { typeScaleToCssVars } from "@/app/theme/pb-type-scale-tokens";
 
 function mergeCssVars(...maps: Array<Record<string, string>>): Record<string, string> {
@@ -40,6 +41,7 @@ export function getPbFoundationCssVarMaps(session: Pick<WorkbenchSessionV2, "sty
     breakpointsToCssVars(session.style.breakpoints),
     contentWidthPresetsToCssVars(session.style.contentWidths),
     sectionMarginScaleToCssVars(session.style.sectionMarginScale),
+    zIndexLayersToCssVars(session.style.zIndexLayers),
     lineHeightScaleToCssVars(session.fonts.lineHeightScale),
     letterSpacingScaleToCssVars(session.fonts.letterSpacingScale),
     typeScaleToCssVars(session.fonts.typeScale)

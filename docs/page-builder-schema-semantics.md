@@ -25,6 +25,7 @@ Primary schema sources:
 - `packages/contracts/src/page-builder/core/page-builder-schemas/background-block-schemas.ts`
 - `packages/contracts/src/page-builder/core/page-builder-schemas/module-block-schemas.ts`
 - `packages/contracts/src/page-builder/core/page-builder-schemas/form-field-schemas.ts`
+- `packages/contracts/src/page-builder/core/page-builder-schemas/modal-block-schemas.ts`
 - `packages/contracts/src/page-builder/core/page-builder-schemas/motion-props-schema.ts`
 - `packages/contracts/src/page-builder/core/page-builder-schemas/page-definition-and-resolution-schemas.ts`
 - `packages/contracts/src/page-builder/core/page-builder-schemas/figma-exporter-meta-schema.ts`
@@ -40,6 +41,7 @@ Runtime interpretation sources (defaults, precedence, fallbacks):
 - `packages/runtime-react/src/page-builder/dev/page-builder-validation.ts`
 - `packages/runtime-react/src/page-builder/PageBuilderBackground.tsx`
 - `packages/runtime-react/src/page-builder/integrations/framer-motion/section-motion-wrapper.tsx`
+- `packages/runtime-react/src/page-builder/integrations/framer-motion/foundation-motion-policy.ts`
 - `packages/runtime-react/src/page-builder/elements/Shared/ElementRenderer.tsx`
 
 ## Conventions
@@ -208,6 +210,7 @@ Optional:
 - `lockBody?: boolean`
 - `overflowX?: "hidden" | "auto" | "visible"`
 - `overflowY?: "auto" | "scroll" | "hidden"`
+- `snapType?: "none" | "x mandatory" | "y mandatory" | "both mandatory" | "x proximity" | "y proximity"` — maps to CSS scroll-snap when the page shell applies it
 
 ### Page transition effect types
 
@@ -225,7 +228,7 @@ All transition types **require `id: string` (non-empty)**. Multiple transitions 
 
 ## Definition Block Union (`pageBuilderDefinitionBlockSchema`)
 
-`definitions.<key>` can be:
+`definitions.<key>` on a **page** document can be:
 
 - `moduleBlock`
 - `bgBlock`
@@ -233,6 +236,26 @@ All transition types **require `id: string` (non-empty)**. Multiple transitions 
 - `elementBlock`
 - `sectionBlockWithElementOrder` (definition-time helper)
 - `sectionColumnDefinition` (definition-time helper)
+
+Modal JSON files use the same `definitions` value union via `modalBuilderSchema` (see below); they are not a separate block type inside `pageBuilderDefinitionBlockSchema`.
+
+## Modal documents (`modalBuilderSchema`)
+
+Loaded as standalone modal content (e.g. `modal-load` pipeline), not as entries in a page’s `definitions` map.
+
+Required:
+
+- `id: string` (non-empty)
+- `sectionOrder: string[]`
+- `definitions: Record<string, pageBuilderDefinitionBlock>` — same union as page definitions
+
+Optional:
+
+- `title?: string`
+- `transition?: { enterDurationMs?, exitDurationMs?, easing? }`
+- `motion` — full `motionPropsSchema`
+
+Root is `.passthrough()` for forward-compatible tooling fields.
 
 ## Background Blocks (`bgBlockSchema`)
 
@@ -328,10 +351,12 @@ Bounds examples:
 Common fields available on all section types:
 
 - identity/meta: `id`, `meta`
-- visual surface: `fill`, `layers`, `effects`, `border`, `borderRadius`, `boxShadow`, `filter`, `backdropFilter`
-- sizing: `width`, `height`, `minWidth`, `maxWidth`, `minHeight`, `maxHeight`
+- a11y: `ariaLabel` (responsive string)
+- visual surface: `fill`, `layers`, `effects`, `border`, `borderRadius`, `boxShadow`, `filter`, `backdropFilter`, `clipPath` (CSS clip-path string)
+- sizing: `width`, `height`, `minWidth`, `maxWidth`, `minHeight`, `maxHeight`, `aspectRatio` (responsive string)
 - layout/margins: `align`, `marginLeft`, `marginRight`, `marginTop`, `marginBottom`
 - overflow/border edges: `overflow`, `borderTop`, `borderRight`, `borderBottom`, `borderLeft`
+- pointer: `cursor` — enum (`pointer`, `default`, `grab`, `grabbing`, `crosshair`, `zoom-in`, `zoom-out`, `text`, `move`, `not-allowed`, `auto`, `none`). Values outside the set are preprocessed to `undefined` at parse time (invalid strings are dropped).
 - positioning/scroll transforms: `scrollSpeed`, `initialX`, `initialY`, `zIndex`
 - viewport triggers: `onVisible`, `onInvisible`, `onProgress`, `onViewportProgress`, `threshold`, `triggerOnce`, `rootMargin`, `delay`
 - motion: `motion`, `motionTiming`, `reduceMotion`, `scrollOpacityRange`
@@ -363,6 +388,12 @@ Allowed `type` values:
 ### contentBlock
 
 - `elements: ElementBlock[]` (required)
+- **Per-instance flex** (overrides global frame defaults without `wrapperStyle`):
+  - `flexDirection?: row|column|row-reverse|column-reverse` or responsive tuple of the same
+  - `alignItems?: responsiveString`
+  - `justifyContent?: responsiveString`
+  - `flexWrap?: nowrap|wrap|wrap-reverse` or responsive tuple of the same
+  - `gap?`, `rowGap?`, `columnGap?` — `responsiveString`
 - `reorderable?: boolean`
 - `reorderAxis?: "x" | "y"`
 - `reorderDragUnit?: "frame" | "content"`
@@ -422,7 +453,8 @@ Allowed `type` values:
 - `expandDurationMs?`, `collapseDurationMs?`, `transitionEasing?`
 - `collapsedElements?: ElementBlock[]`
 - `revealedElements?: ElementBlock[]`
-- `revealStaggerMs?`, `revealDurationMs?`, `revealPreset?`
+- `revealStaggerMs?`, `revealDurationMs?`
+- `revealPreset?` — must be one of `REVEAL_PRESET_NAMES` (same name list as entrance animation presets). Unknown strings are preprocessed to `undefined` at parse time.
 
 ## Section Column Layout Primitives
 
@@ -540,7 +572,7 @@ Available on every element type that merges this schema:
 - identity/meta: `id`, `meta`
 - sizing/layout: `width`, `height`, `borderRadius`, `constraints`, `align`, `alignY`, `textAlign`, margins, `zIndex`, `priority`, `fixed`, `figmaConstraints`
 - actions/state: `action`, `actionPayload`, `showWhen`
-- surface/style/accessibility: `borderGradient`, `wrapperStyle`, `aria`, `opacity`, `blendMode`, `hidden`, `overflow`, `boxShadow`, `filter`, `backdropFilter`, `effects`, `rotate`, `flipHorizontal`, `flipVertical`, `textDecoration`, `textTransform`
+- surface/style/accessibility: `borderGradient`, `wrapperStyle`, `aria`, `opacity`, `blendMode`, `hidden`, `overflow`, `boxShadow`, `filter`, `backdropFilter`, `effects`, `rotate`, `flipHorizontal`, `flipVertical`, `textDecoration`, `textTransform`, `textShadow` (CSS string), `whiteSpace` (`normal` | `nowrap` | `pre` | `pre-wrap` | `pre-line`), `clipPath` (CSS clip-path string)
 - motion/drag/interactions: `motion`, `reduceMotion`, `exitPreset`, `motionTiming`, `dragUnit`, `dragBehavior`, `dragAxis`, `interactions`
 - conditional visibility: `visibleWhen`
 
@@ -566,6 +598,7 @@ Supported `type` values:
 - `elementVideoTime`
 - `elementSpacer`
 - `elementScrollProgressBar`
+- `elementDivider`
 - `elementButton`
 - `elementModel3D`
 - `elementRive`
@@ -583,8 +616,9 @@ Optional highlights:
 - `variant: display|section|label`
 - `semanticLevel: 1..6`
 - `variableKey`
-- typography controls (`fontFamily`, `fontSize`, `fontWeight`, spacing, overflow)
-- `maxLines` positive int
+- `color` (flat text color CSS string)
+- `textFill?: { type: "color", value: string } | { type: "gradient", value: string }` — gradient uses a CSS gradient string (e.g. for background-clip text treatments in the renderer)
+- typography: `fontFamily`, `fontSize`, `fontWeight`, `fontFeatureSettings`, `letterSpacing`, `lineSpacing`, `lineHeight` (string or number), `paragraphSpacing`, `textOverflow`, `textStroke`, `verticalAlign`, `wordWrap`, `maxLines` (positive int)
 
 ### elementBody
 
@@ -598,7 +632,8 @@ Optional highlights:
 - `level` responsive body variant
 - `variableKey`
 - `color`
-- typography controls and `maxLines`
+- `textFill` (same discriminated union as heading)
+- typography controls (`fontFamily`, `fontSize`, `fontWeight`, `lineHeight`, spacing, overflow) and `maxLines`
 
 ### elementLink
 
@@ -612,6 +647,8 @@ Optional highlights:
 
 - `variant: inline|emphasis|nav`
 - `external`
+- `target?: "_self" | "_blank" | "_parent" | "_top"`
+- `rel?: string` — e.g. `nofollow`, `sponsored`; use with `external` / `target` as needed
 - `level`
 - link state tokens (`linkDefault`, `linkHover`, `linkActive`, `linkDisabled`, `linkTransition`)
 - `disabled`
@@ -650,6 +687,7 @@ Optional highlights:
 - `variant: inline|compact|fullcover|hero`
 - `ariaLabel`
 - `autoplay`, `loop`, `muted`
+- `playbackRate?: number` (positive) — HTML video playback rate
 - `objectFit` responsive enum
 - `objectPosition`
 - `showPlayButton`
@@ -716,6 +754,7 @@ Optional fields:
 - `min`, `max`, `step`, `defaultValue`
 - `action`, `actionPayload`
 - `ariaLabel`
+- `disabled?: boolean` — non-interactive / read-only slider presentation
 - `style`
 
 `style` supports dedicated range keys:
@@ -811,11 +850,12 @@ Optional fields:
 
 - `variant: default|accent|ghost|text`
 - content/link/action: `label`, `copyType`, `level`, `vectorRef`, `href`, `external`, `action`, `actionPayload`
+- `loading?: boolean`, `loadingLabel?: string` — async / pending state (distinct from `disabled` in UI)
 - link state tokens: `linkDefault`, `linkHover`, `linkActive`, `linkDisabled`, `linkTransition`, `disabled`
 - wrapper tokens: `wrapperFill`, `wrapperStroke`, `wrapperFillRef`, `wrapperStrokeRef`, `wrapperPadding`, `wrapperBorderRadius`
-- trigger hooks: `pointerDownAction`, `pointerUpAction`
+- trigger hooks: `pointerDownAction`, `pointerUpAction` — full `triggerActionSchema` (for advanced gestures)
 
-`action` is bound to `buttonActionSchema` — a strict enum of all supported action strings. Unknown action values fail schema. In dev, a named warning is emitted at load time for unrecognized values (migration grace period before hard fail).
+`action` (primary click action) is bound to `buttonActionSchema`, an enum aligned with the trigger action vocabulary: navigation (`navigate`, `back`, `scrollTo`, …), modals (`modalOpen` / `modalClose` / `modalToggle`), `contentOverride`, `conditionalAction`, `fireMultiple`, `setVariable`, 3D (`three.*`), assets, Rive (`rive.*`), and other bus actions. Unknown primary `action` values fail schema. In dev, a named warning may still be emitted for edge migration cases.
 
 Constraints:
 
@@ -833,6 +873,18 @@ Variant alias map:
 | `naked`     | `text`      |
 
 Default variant: `default`. Fields injected per variant: `copyType`, `level` (from `typography` binding), `wrapperFill`, `wrapperStroke`, `wrapperPadding`, `wrapperBorderRadius`. The `text` variant injects no wrapper styling (naked text link).
+
+### elementDivider
+
+Inline rule between siblings inside a `contentBlock` (semantic alternative to spacer + border hacks).
+
+Optional:
+
+- `orientation?: "horizontal" | "vertical"`
+- `thickness?`, `color?`, `length?` (`responsiveString`)
+- `style?: "solid" | "dashed" | "dotted"`
+
+Merges `elementLayoutSchema` for id, margins, etc.
 
 ### elementModel3D
 
@@ -913,7 +965,7 @@ Required:
 
 Optional content/validation fields:
 
-- `level`, `name`, `label`, `placeholder`, `required`, `value`
+- `level`, `name`, `label`, `placeholder`, `required`, `disabled`, `readOnly`, `autocomplete`, `value`
 - `minLength`, `maxLength`, `pattern`, `rows`
 - `min`, `max`, `step` (number|string)
 - `options` (`{ value, label }[]`)
@@ -963,6 +1015,7 @@ These behaviors are runtime-level and may not be obvious from schema shapes:
 - element ids may be synthesized from the definition key when `id` is absent; in dev, a warning is emitted per synthesized id.
 - element ids are deduplicated with `__N` suffixes when the same base id appears multiple times in a section.
 - section scoping can namespace ids (`sectionId:elementId`) across element order and column maps.
+- responsive `elementOrder` and similar mobile/desktop resolution use optional `expandPageBuilder` options: `viewportWidthPx` and `breakpoints` (defaults live in `@pb/core` breakpoint defaults; workbench can supply thresholds).
 
 ### Default injection pipeline
 
@@ -991,6 +1044,7 @@ These behaviors are runtime-level and may not be obvious from schema shapes:
 - sticky/fixed offsets often default to `"0px"` in runtime components when omitted.
 - section motion timing path can override raw motion behavior.
 - reduced motion and in-viewport-on-mount can force immediate final visual state.
+- **Foundation motion policy**: when dev/prod inject `--pb-reduce-motion-policy` (`honor-system` | `disable-all` | `replace-with-fade`), entrance/exit wrappers consult it before per-node `reduceMotion`. `disable-all` skips motion; `replace-with-fade` collapses entrances/exits to opacity fades. Per-element `reduceMotion: false` still means “ignore the user’s prefers-reduced-motion preference” where that flag is honored.
 - `visibleWhen` defaults to permissive behavior when no condition is provided.
 
 ### Form submission behavior
@@ -1030,6 +1084,8 @@ The FM variant system (`variants` map + `*Variant` string refs) is distinct from
 ## Known Gaps Remaining
 
 - Form `action` key (on `formBlock`) is an unvalidated string — unknown action keys produce silent no-submit behavior at runtime. The valid action keys are handled by an allowlist inside the form submission handler, not enforced at schema level.
+- Entrance/exit **preset definitions** (keyframes and transitions for each preset name) remain authored in `page-builder-motion-defaults.ts` and resolved at expand time. A workbench-editable preset registry (overrides / new names) is not yet part of persisted foundations or the expand API.
+- Page-level `definitions` cannot list a dedicated `modalBlock` type; modals are separate documents validated by `modalBuilderSchema`. Modal ids in `modalOpen` / `modalClose` payloads are not cross-validated against existing modal files at schema parse time.
 
 ## Authoring Guardrails
 
@@ -1041,4 +1097,4 @@ Recommended team rules on top of schema:
 - Prefer explicit `visibleWhen.logic` (`and` or `or`) in authored JSON for readability.
 - Set `bgKey` explicitly on every page document — implicit `"bg"` fallback emits a dev warning.
 - Set explicit `id` on every element — synthesized ids from definition keys emit dev warnings and are unstable across refactors.
-- Only use action strings from the `buttonActionSchema` enum — unknown values emit dev warnings now, and will fail hard in a future strict pass.
+- Only use primary `action` strings from the `buttonActionSchema` enum (parity with common `triggerActionSchema` `type` values). Unknown values fail schema validation; use `pointerDownAction` / `pointerUpAction` when you need a trigger shape that is not in the primary-button enum.

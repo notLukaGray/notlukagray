@@ -139,12 +139,15 @@ export type ContentWidthPresets = {
   narrow: string;
   standard: string;
   wide: string;
+  /** Full-bleed content width (semantic alias for 100%). */
+  full: string;
 };
 
 export const DEFAULT_CONTENT_WIDTH_PRESETS: ContentWidthPresets = {
   narrow: "640px",
   standard: "1024px",
   wide: "1280px",
+  full: "100%",
 };
 
 export function contentWidthPresetsToCssVars(presets: ContentWidthPresets): Record<string, string> {
@@ -152,6 +155,7 @@ export function contentWidthPresetsToCssVars(presets: ContentWidthPresets): Reco
     "--pb-width-narrow": presets.narrow,
     "--pb-width-standard": presets.standard,
     "--pb-width-wide": presets.wide,
+    "--pb-width-full": presets.full,
   };
 }
 

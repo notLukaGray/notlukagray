@@ -65,6 +65,9 @@ pnpm-debug.log*
 lerna-debug.log*
 
 .docs/
+
+# Local planning notes (not committed)
+.plans/
 src/content/page-manifest.json
 .dead/
 .husky/
