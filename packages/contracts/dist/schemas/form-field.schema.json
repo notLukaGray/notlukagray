@@ -134,6 +134,15 @@
     "required": {
       "type": "boolean"
     },
+    "disabled": {
+      "type": "boolean"
+    },
+    "readOnly": {
+      "type": "boolean"
+    },
+    "autocomplete": {
+      "type": "string"
+    },
     "value": {
       "type": "string"
     },

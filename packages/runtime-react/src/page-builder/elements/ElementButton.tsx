@@ -22,12 +22,14 @@ import {
   getElementButtonTypographyClass,
 } from "./ElementButton/element-button-styles";
 import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
+import { resolveResponsiveValue } from "@pb/core/lib/responsive-value";
 import {
   buildElementButtonLinkState,
   resolveElementButtonVectorBlock,
 } from "./ElementButton/element-button-link-and-vector";
 import { useModel3DReadyButtonExit } from "./ElementButton/use-model3d-ready-button-exit";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
+import { useDeviceType } from "@/core/hooks/use-device-type";
 
 type Props = Extract<ElementBlock, { type: "elementButton" }>;
 
@@ -75,8 +77,13 @@ export function ElementButton({
   wrapperStroke,
   wrapperFillRef,
   wrapperStrokeRef,
+  wrapperStrokeWidth,
   wrapperPadding,
   wrapperBorderRadius,
+  wrapperWidth,
+  wrapperHeight,
+  wrapperMinWidth,
+  wrapperMinHeight,
   wrapperFillHover,
   wrapperStrokeHover,
   wrapperFillActive,
@@ -92,34 +99,49 @@ export function ElementButton({
   ...rest
 }: Props) {
   const pathname = usePathname();
+  const { isMobile } = useDeviceType();
   const shellRef = useRef<HTMLDivElement | null>(null);
+  // Ref for the wrapper span when glass is active — overlay anchors and measures from here,
+  // so scale/transform on the wrapper carries the glass along with the content.
+  const glassTargetRef = useRef<HTMLSpanElement | null>(null);
   const isDisabled = disabled || loading;
   const definitions = useDefinitions();
+  const resolvedWrapperBorderRadius = resolveResponsiveValue(wrapperBorderRadius, isMobile);
   const typographyClass = getElementButtonTypographyClass({
     type: "elementButton",
     label,
     copyType,
     level,
   } as Props);
-  const { hasWrapper, useRoundedGradientStroke, wrapperStyle, innerWrapperStyle, hasStateVars } =
-    buildElementButtonWrapperStyles(definitions as Record<string, unknown> | null | undefined, {
-      wrapperFill,
-      wrapperStroke,
-      wrapperFillRef,
-      wrapperStrokeRef,
-      wrapperPadding,
-      wrapperBorderRadius,
-      wrapperFillHover,
-      wrapperStrokeHover,
-      wrapperFillActive,
-      wrapperScaleHover,
-      wrapperScaleActive,
-      wrapperScaleDisabled,
-      wrapperOpacityHover,
-      wrapperFillDisabled,
-      wrapperTransition,
-      wrapperInteractionVars,
-    });
+  const {
+    hasWrapper,
+    useRoundedGradientStroke,
+    wrapperStyle: rawWrapperStyle,
+    innerWrapperStyle,
+    hasStateVars,
+  } = buildElementButtonWrapperStyles(definitions as Record<string, unknown> | null | undefined, {
+    wrapperFill,
+    wrapperStroke,
+    wrapperFillRef,
+    wrapperStrokeRef,
+    wrapperStrokeWidth,
+    wrapperPadding: resolveResponsiveValue(wrapperPadding, isMobile),
+    wrapperBorderRadius: resolvedWrapperBorderRadius,
+    wrapperWidth: resolveResponsiveValue(wrapperWidth, isMobile),
+    wrapperHeight: resolveResponsiveValue(wrapperHeight, isMobile),
+    wrapperMinWidth: resolveResponsiveValue(wrapperMinWidth, isMobile),
+    wrapperMinHeight: resolveResponsiveValue(wrapperMinHeight, isMobile),
+    wrapperFillHover,
+    wrapperStrokeHover,
+    wrapperFillActive,
+    wrapperScaleHover,
+    wrapperScaleActive,
+    wrapperScaleDisabled,
+    wrapperOpacityHover,
+    wrapperFillDisabled,
+    wrapperTransition,
+    wrapperInteractionVars,
+  });
   const { hasLink, isInternal, linkStyle, linkClassName } = buildElementButtonLinkState(
     pathname,
     {
@@ -154,6 +176,22 @@ export function ElementButton({
   const model3DExit = useModel3DReadyButtonExit(action, actionPayload);
   const buttonEffects = useMemo(() => coerceSectionEffects(rest.effects), [rest.effects]);
   const hasGlassEffect = (buttonEffects ?? []).some((effect) => effect.type === "glass");
+  const glassSyncBorderRadius =
+    hasGlassEffect && resolvedWrapperBorderRadius != null && resolvedWrapperBorderRadius !== ""
+      ? resolvedWrapperBorderRadius
+      : undefined;
+
+  // When glass is active, strip `background` from the wrapper's inline style.
+  // Inline styles beat @layer CSS rules so the hover rule can't override them.
+  // Instead, a fill layer div rendered above the glass overlay reads the same
+  // CSS vars (--element-btn-fill / --element-btn-fill-hover etc.) with no
+  // competing inline style, so the CSS rules apply correctly.
+  const wrapperStyle: CSSProperties = useMemo(() => {
+    if (!hasGlassEffect) return rawWrapperStyle;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { background, ...rest } = rawWrapperStyle;
+    return rest;
+  }, [hasGlassEffect, rawWrapperStyle]);
 
   const exitMotion = useMemo(() => {
     const base = mergeMotionDefaults(rest.motion ?? {}) ?? {};
@@ -310,33 +348,81 @@ export function ElementButton({
     .filter(Boolean)
     .join(" ");
 
-  const wrappedInner = hasWrapper ? (
-    <span style={wrapperStyle} className={wrapperClassName}>
-      {useRoundedGradientStroke ? (
-        <span style={innerWrapperStyle} className="inline-flex">
-          {inner}
-        </span>
-      ) : (
-        inner
-      )}
-    </span>
-  ) : hasStateVars ? (
-    // No fill/stroke wrapper, but we still need a span to carry the interactive CSS vars and class.
-    <span style={wrapperStyle} className={wrapperClassName}>
-      {inner}
-    </span>
+  // When glass is active, content must be position:relative so it paints above the absolute overlay.
+  const glassLifted = hasGlassEffect ? (
+    <span style={{ position: "relative" }}>{inner}</span>
   ) : (
     inner
   );
 
+  // Glass lives inside whichever span carries the interactions (.element-btn-wrap) so that
+  // scale/transform on that span moves the overlay together with the content.
+  // `syncBorderRadius` mirrors `wrapperBorderRadius` on the glass overlay + filter sizing.
+  const wrappedInner =
+    hasWrapper || hasStateVars ? (
+      <span
+        ref={hasGlassEffect ? glassTargetRef : undefined}
+        style={{
+          ...wrapperStyle,
+          ...(hasGlassEffect ? { position: "relative" as const } : {}),
+        }}
+        className={wrapperClassName}
+      >
+        {hasGlassEffect && (
+          <>
+            <SectionGlassEffect
+              effects={buttonEffects}
+              sectionRef={glassTargetRef}
+              variant="auto"
+              syncBorderRadius={glassSyncBorderRadius}
+            />
+            {/* Fill layer: above glass, below content. No inline background so CSS hover
+                vars (--element-btn-fill-hover etc.) apply without inline-style interference. */}
+            <span
+              aria-hidden
+              className="element-btn-glass-fill absolute inset-0 pointer-events-none"
+              style={{
+                borderRadius: glassSyncBorderRadius ?? "inherit",
+              }}
+            />
+          </>
+        )}
+        {hasWrapper && useRoundedGradientStroke ? (
+          <span style={innerWrapperStyle} className="inline-flex">
+            {glassLifted}
+          </span>
+        ) : (
+          glassLifted
+        )}
+      </span>
+    ) : (
+      inner
+    );
+
   const shellStyle: CSSProperties = {
     ...blockStyle,
-    ...(hasGlassEffect && blockStyle.position == null ? { position: "relative" } : {}),
+    // Naked glass (no wrapper span): overlay still needs an anchor and border-radius on the shell.
+    ...(hasGlassEffect && !hasWrapper && !hasStateVars
+      ? {
+          ...(blockStyle.position == null ? { position: "relative" as const } : {}),
+          ...(resolvedWrapperBorderRadius != null
+            ? { borderRadius: resolvedWrapperBorderRadius }
+            : {}),
+        }
+      : {}),
   };
 
   const renderButtonShell = (child: ReactNode) => (
     <div ref={shellRef} className="shrink-0" style={shellStyle}>
-      <SectionGlassEffect effects={buttonEffects} sectionRef={shellRef} variant="auto" />
+      {/* Naked glass only — when there's a wrapper span the overlay renders inside it above. */}
+      {hasGlassEffect && !hasWrapper && !hasStateVars && (
+        <SectionGlassEffect
+          effects={buttonEffects}
+          sectionRef={shellRef}
+          variant="auto"
+          syncBorderRadius={glassSyncBorderRadius}
+        />
+      )}
       {child}
     </div>
   );

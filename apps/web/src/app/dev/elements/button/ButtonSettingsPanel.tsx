@@ -6,6 +6,7 @@ import { VARIANT_LABELS } from "./constants";
 import { ButtonAnimationControls } from "./controls/ButtonAnimationControls";
 import { ButtonContentControls } from "./controls/ButtonContentControls";
 import { ButtonLayoutControls } from "./controls/ButtonLayoutControls";
+import { ButtonGlassEffectControls } from "./controls/ButtonGlassEffectControls";
 import { ButtonRuntimeControls } from "./controls/ButtonRuntimeControls";
 import { ButtonStatesPanel } from "./ButtonStatesPanel";
 import { ButtonTraitsControls } from "./controls/ButtonTraitsControls";
@@ -70,6 +71,11 @@ export function ButtonSettingsPanel({ controller }: { controller: ButtonElementD
           layout, traits, animation, or runtime controls.
         </div>
       )}
+      {controller.activeVariant === "glass" ? (
+        <div className="grid gap-4 border-t border-border/60 pt-4 sm:grid-cols-2">
+          <ButtonGlassEffectControls controller={controller} />
+        </div>
+      ) : null}
     </section>
   );
 }

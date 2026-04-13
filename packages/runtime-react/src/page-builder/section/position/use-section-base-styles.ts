@@ -43,6 +43,7 @@ type UseSectionBaseStylesProps = Pick<
   | "initialX"
   | "initialY"
   | "zIndex"
+  | "overflow"
   | "reduceMotion"
 > & {
   sectionRef: React.RefObject<HTMLElement | null>;
@@ -89,6 +90,7 @@ export function useSectionBaseStyles({
   initialX,
   initialY,
   zIndex,
+  overflow,
   effects,
   sectionRef,
   usePadding = false,
@@ -143,6 +145,7 @@ export function useSectionBaseStyles({
 
   const resolvedBorderRadius = resolveResponsiveValue(borderRadius, isMobile);
   const resolvedAspectRatio = resolveResponsiveValue(aspectRatio, isMobile);
+  const resolvedOverflow = resolveResponsiveValue(overflow, isMobile);
 
   const baseStyle = useMemo<CSSProperties>(() => {
     const effectStyle = sectionEffectsToStyle(effects);
@@ -158,6 +161,14 @@ export function useSectionBaseStyles({
 
     const w = resolvedLayout.width;
     const h = resolvedLayout.height;
+    const overflowPair: Pick<CSSProperties, "overflowX" | "overflowY"> =
+      resolvedOverflow === "visible"
+        ? { overflowX: "visible", overflowY: "visible" }
+        : resolvedOverflow === "auto"
+          ? { overflowX: "auto", overflowY: "auto" }
+          : resolvedOverflow === "scroll"
+            ? { overflowX: "scroll", overflowY: "scroll" }
+            : { overflowX: "hidden", overflowY: "hidden" };
     const style: CSSProperties = {
       width: w === "hug" ? "fit-content" : w,
       height: h === "hug" ? "fit-content" : h,
@@ -167,8 +178,7 @@ export function useSectionBaseStyles({
       ...(resolvedLayout.maxHeight != null ? { maxHeight: resolvedLayout.maxHeight } : {}),
       borderRadius: resolvedBorderRadius,
       border: borderToCss(border),
-      overflowX: "hidden",
-      overflowY: "hidden",
+      ...overflowPair,
       scrollBehavior: "smooth",
       ...(zIndex != null ? { zIndex } : {}),
       ...(shouldApplyAlignStyle ? alignStyle : {}),
@@ -227,6 +237,7 @@ export function useSectionBaseStyles({
     cursor,
     resolvedAspectRatio,
     usePadding,
+    resolvedOverflow,
   ]);
 
   return {

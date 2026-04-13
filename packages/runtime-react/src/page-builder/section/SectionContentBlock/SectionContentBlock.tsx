@@ -69,6 +69,7 @@ export function SectionContentBlock({
   clipPath,
   cursor,
   aspectRatio,
+  overflow,
   scrollSpeed = getDefaultScrollSpeed(),
   initialX,
   initialY,
@@ -181,6 +182,18 @@ export function SectionContentBlock({
     )
   );
 
+  const resolvedShellOverflow = fixed
+    ? ("visible" as const)
+    : (resolveResponsiveValue(overflow, isMobile) ?? ("hidden" as const));
+  const shellOverflowClass =
+    resolvedShellOverflow === "visible"
+      ? "overflow-visible"
+      : resolvedShellOverflow === "auto"
+        ? "overflow-auto"
+        : resolvedShellOverflow === "scroll"
+          ? "overflow-scroll"
+          : "overflow-hidden";
+
   const { baseStyle, resolvedLayout, alignStyle, transformY, hasInitialPosition } =
     useSectionBaseStyles({
       fill,
@@ -203,6 +216,7 @@ export function SectionContentBlock({
       clipPath,
       cursor,
       aspectRatio,
+      overflow: fixed ? "visible" : overflow,
       scrollSpeed,
       initialX,
       initialY,
@@ -334,7 +348,7 @@ export function SectionContentBlock({
   );
 
   const sectionProps = {
-    className: `relative z-10 flex shrink-0 flex-col min-h-0 ${fixed ? "overflow-visible" : "overflow-hidden"}`,
+    className: `relative z-10 flex shrink-0 flex-col min-h-0 ${shellOverflowClass}`,
     style: {
       ...applySectionFillStyle(resolvedFill, layers, finalStyle),
       ...(scrollOpacityStyle ?? {}),

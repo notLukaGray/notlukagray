@@ -5637,11 +5637,58 @@
             "wrapperStrokeRef": {
               "type": "string"
             },
+            "wrapperStrokeWidth": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 48
+            },
             "wrapperPadding": {
-              "type": "string"
+              "$ref": "#/$defs/Def58"
             },
             "wrapperBorderRadius": {
+              "$ref": "#/$defs/Def58"
+            },
+            "wrapperWidth": {
+              "$ref": "#/$defs/Def58"
+            },
+            "wrapperHeight": {
+              "$ref": "#/$defs/Def58"
+            },
+            "wrapperMinWidth": {
+              "$ref": "#/$defs/Def58"
+            },
+            "wrapperMinHeight": {
+              "$ref": "#/$defs/Def58"
+            },
+            "wrapperFillHover": {
               "type": "string"
+            },
+            "wrapperStrokeHover": {
+              "type": "string"
+            },
+            "wrapperFillActive": {
+              "type": "string"
+            },
+            "wrapperScaleHover": {
+              "type": "number"
+            },
+            "wrapperScaleActive": {
+              "type": "number"
+            },
+            "wrapperScaleDisabled": {
+              "type": "number"
+            },
+            "wrapperOpacityHover": {
+              "type": "number"
+            },
+            "wrapperFillDisabled": {
+              "type": "string"
+            },
+            "wrapperTransition": {
+              "type": "string"
+            },
+            "wrapperInteractionVars": {
+              "$ref": "#/$defs/Def210"
             },
             "pointerDownAction": {
               "$ref": "#/$defs/__schema1"

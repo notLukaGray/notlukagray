@@ -5647,11 +5647,58 @@
             "wrapperStrokeRef": {
               "type": "string"
             },
+            "wrapperStrokeWidth": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 48
+            },
             "wrapperPadding": {
-              "type": "string"
+              "$ref": "#/$defs/Def38"
             },
             "wrapperBorderRadius": {
+              "$ref": "#/$defs/Def38"
+            },
+            "wrapperWidth": {
+              "$ref": "#/$defs/Def38"
+            },
+            "wrapperHeight": {
+              "$ref": "#/$defs/Def38"
+            },
+            "wrapperMinWidth": {
+              "$ref": "#/$defs/Def38"
+            },
+            "wrapperMinHeight": {
+              "$ref": "#/$defs/Def38"
+            },
+            "wrapperFillHover": {
               "type": "string"
+            },
+            "wrapperStrokeHover": {
+              "type": "string"
+            },
+            "wrapperFillActive": {
+              "type": "string"
+            },
+            "wrapperScaleHover": {
+              "type": "number"
+            },
+            "wrapperScaleActive": {
+              "type": "number"
+            },
+            "wrapperScaleDisabled": {
+              "type": "number"
+            },
+            "wrapperOpacityHover": {
+              "type": "number"
+            },
+            "wrapperFillDisabled": {
+              "type": "string"
+            },
+            "wrapperTransition": {
+              "type": "string"
+            },
+            "wrapperInteractionVars": {
+              "$ref": "#/$defs/Def155"
             },
             "pointerDownAction": {
               "$ref": "#/$defs/__schema1"
@@ -8263,7 +8310,7 @@
               "$ref": "#/$defs/Def76"
             }
           },
-          "required": ["type", "elements", "gap"],
+          "required": ["type", "elements"],
           "additionalProperties": false
         },
         {
@@ -10003,7 +10050,7 @@
           "enum": ["elasticSnap", "free", "none"]
         }
       },
-      "required": ["type", "gap", "elementOrder"],
+      "required": ["type", "elementOrder"],
       "additionalProperties": false
     },
     {

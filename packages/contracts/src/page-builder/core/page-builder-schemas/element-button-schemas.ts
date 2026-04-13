@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { elementLayoutSchema } from "./element-foundation-schemas";
-import { triggerActionSchema } from "./schema-primitives";
+import { responsiveStringSchema, triggerActionSchema } from "./schema-primitives";
 
 export const buttonActionSchema = z.enum([
   "assetPlay",
@@ -124,8 +124,18 @@ export const elementButtonSchema = z
     wrapperStroke: z.string().optional(),
     wrapperFillRef: z.string().optional(),
     wrapperStrokeRef: z.string().optional(),
-    wrapperPadding: z.string().optional(),
-    wrapperBorderRadius: z.string().optional(),
+    /** Border width in px when `wrapperStroke` draws a border (default 2 at runtime). */
+    wrapperStrokeWidth: z.number().min(0).max(48).optional(),
+    wrapperPadding: responsiveStringSchema.optional(),
+    wrapperBorderRadius: responsiveStringSchema.optional(),
+    /** Explicit width for the padded wrapper pill (e.g. "10rem", "100%"). */
+    wrapperWidth: responsiveStringSchema.optional(),
+    /** Explicit height for the padded wrapper pill (e.g. "2.75rem", "44px"). */
+    wrapperHeight: responsiveStringSchema.optional(),
+    /** Minimum width for the padded wrapper pill — useful for fixed-size icon buttons or glass. */
+    wrapperMinWidth: responsiveStringSchema.optional(),
+    /** Minimum height for the padded wrapper pill — sets a minimum tap target without fixed height. */
+    wrapperMinHeight: responsiveStringSchema.optional(),
     /** Fill color on hover. Falls back to a subtle brightness shift if unset. */
     wrapperFillHover: z.string().optional(),
     /** Stroke/border color on hover. */

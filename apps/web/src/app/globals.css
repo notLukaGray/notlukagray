@@ -378,6 +378,28 @@
     pointer-events: none;
   }
 
+  /* Glass fill layer — sits above the glass overlay, below content.
+     No inline background on the element so these rules apply without
+     being blocked by inline-style specificity. */
+  .element-btn-glass-fill {
+    background: var(--element-btn-fill, transparent);
+    transition: var(--element-btn-transition, background 0.15s ease, opacity 0.15s ease);
+  }
+  .element-btn-wrap:hover .element-btn-glass-fill {
+    background: var(--element-btn-fill-hover, var(--element-btn-fill, transparent));
+  }
+  .element-btn-wrap:active .element-btn-glass-fill,
+  .element-btn-wrap:has(button:active) .element-btn-glass-fill,
+  .element-btn-wrap:has(a:active) .element-btn-glass-fill {
+    background: var(
+      --element-btn-fill-active,
+      var(--element-btn-fill-hover, var(--element-btn-fill, transparent))
+    );
+  }
+  .element-btn-wrap--disabled .element-btn-glass-fill {
+    background: var(--element-btn-fill-disabled, var(--element-btn-fill, transparent));
+  }
+
   .element-link {
     font-weight: 500;
     color: var(--element-link-color, var(--pb-link, var(--frame-link)));

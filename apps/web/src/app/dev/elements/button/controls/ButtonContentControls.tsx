@@ -9,12 +9,7 @@ import type { ButtonElementDevController } from "../useButtonElementDevControlle
 
 const LEVELS = [1, 2, 3, 4, 5, 6] as const;
 
-type OptionalStringKey =
-  | "label"
-  | "wrapperFill"
-  | "wrapperStroke"
-  | "wrapperPadding"
-  | "wrapperBorderRadius";
+type OptionalStringKey = "label" | "wrapperFill" | "wrapperStroke";
 
 function normalizeOptionalText(value: string): string | undefined {
   return value.trim().length > 0 ? value : undefined;
@@ -37,10 +32,10 @@ export function ButtonContentControls({ controller }: { controller: ButtonElemen
           Content
         </p>
         <p className="mt-1 text-[10px] text-muted-foreground">
-          Label, typography, and wrapper chrome. Fill/stroke presets mirror the{" "}
-          <code>/dev/colors</code> preview column (Primary / Accent / Ghost). Use custom CSS for
-          literals or advanced <code>color-mix</code>. Href, action, link ink, and hover states live
-          under <span className="font-mono">Interaction</span>.
+          Label, typography, and wrapper fill/stroke. Fill/stroke presets mirror the{" "}
+          <code>/dev/colors</code> preview column (Primary / Accent / Ghost). Padding, radius, and
+          sizing live under <span className="font-mono">Layout</span>. Href, action, link ink, and
+          hover states live under <span className="font-mono">Interaction</span>.
         </p>
       </div>
 
@@ -127,32 +122,6 @@ export function ButtonContentControls({ controller }: { controller: ButtonElemen
         onChange={(next) => setVariantPatch(activeVariant, { wrapperStroke: next })}
         helperText="Border color when the wrapper draws a stroke (ghost / outlined buttons)."
       />
-
-      <label className="space-y-1.5">
-        <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-          Wrapper padding
-        </span>
-        <input
-          type="text"
-          className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={fieldValue(active.wrapperPadding)}
-          onChange={(e) => setOptionalField("wrapperPadding", e.target.value)}
-          placeholder="0.5rem 1rem"
-        />
-      </label>
-
-      <label className="space-y-1.5">
-        <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-          Wrapper radius
-        </span>
-        <input
-          type="text"
-          className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={fieldValue(active.wrapperBorderRadius)}
-          onChange={(e) => setOptionalField("wrapperBorderRadius", e.target.value)}
-          placeholder="0.5rem"
-        />
-      </label>
     </>
   );
 }

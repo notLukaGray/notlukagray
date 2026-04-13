@@ -8,7 +8,7 @@ export type ButtonVariantDefaults = Omit<
   animation: PbImageAnimationDefaults;
 };
 
-export type ButtonVariantKey = "default" | "accent" | "ghost" | "text";
+export type ButtonVariantKey = "default" | "accent" | "ghost" | "text" | "glass";
 
 export type PersistedButtonDefaults = {
   v: 1;

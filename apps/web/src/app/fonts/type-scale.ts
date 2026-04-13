@@ -1,31 +1,16 @@
-/**
- * Type scale configuration.
- *
- * Six **heading** steps and six **body** steps from **extra small** through **double
- * extra large** (XS → 2XL). Size, line-height, letter-spacing, and **weight role** are
- * independent per step — tokens are a ladder only, not a fixed HTML outline slot.
- *
- * Values drive CSS custom properties injected in the layout; globals.css references
- * vars only. To change the scale: edit the numbers here. To preview: /dev/fonts.
- */
-
 import type { FontWeightRole } from "./config";
 
 export type TypeScaleEntry = {
-  /** Desktop font size in px (applied at ≥768px). */
   sizeDesktop: number;
-  /** Mobile font size in px (applied below 768px). */
+
   sizeMobile: number;
-  /** Desktop line height in px. */
+
   lineHeightDesktop: number;
-  /** Mobile line height in px. */
+
   lineHeightMobile: number;
-  /** Letter spacing as a CSS value (e.g. "0", "0.02em", "-0.01em"). */
+
   letterSpacing: string;
-  /**
-   * Which named weight from `primaryFontConfig.weights` this style uses.
-   * Injected as `--type-{...}-fw: var(--font-weight-{name})` so it tracks the font config.
-   */
+
   fontWeightRole: FontWeightRole;
 };
 
@@ -49,104 +34,103 @@ export type TypeScaleConfig = {
 
 export const typeScaleConfig: TypeScaleConfig = {
   headingXs: {
-    sizeDesktop: 24,
+    sizeDesktop: 20,
     sizeMobile: 16,
-    lineHeightDesktop: 28,
+    lineHeightDesktop: 24,
     lineHeightMobile: 20,
     letterSpacing: "0",
-    fontWeightRole: "light",
+    fontWeightRole: "regular",
   },
   headingSm: {
-    sizeDesktop: 30,
-    sizeMobile: 20,
-    lineHeightDesktop: 33,
-    lineHeightMobile: 22,
+    sizeDesktop: 24,
+    sizeMobile: 18,
+    lineHeightDesktop: 30,
+    lineHeightMobile: 24,
     letterSpacing: "0",
-    fontWeightRole: "bold",
+    fontWeightRole: "book",
   },
   headingMd: {
-    sizeDesktop: 32,
+    sizeDesktop: 30,
     sizeMobile: 22,
     lineHeightDesktop: 36,
-    lineHeightMobile: 26,
+    lineHeightMobile: 28,
     letterSpacing: "0",
-    fontWeightRole: "light",
+    fontWeightRole: "book",
   },
   headingLg: {
-    sizeDesktop: 40,
-    sizeMobile: 26,
+    sizeDesktop: 38,
+    sizeMobile: 28,
     lineHeightDesktop: 44,
-    lineHeightMobile: 29,
+    lineHeightMobile: 34,
     letterSpacing: "0",
     fontWeightRole: "bold",
   },
   headingXl: {
-    sizeDesktop: 50,
-    sizeMobile: 30,
-    lineHeightDesktop: 55,
-    lineHeightMobile: 33,
+    sizeDesktop: 48,
+    sizeMobile: 34,
+    lineHeightDesktop: 54,
+    lineHeightMobile: 40,
     letterSpacing: "0",
     fontWeightRole: "bold",
   },
   heading2xl: {
-    sizeDesktop: 76,
-    sizeMobile: 44,
-    lineHeightDesktop: 84,
+    sizeDesktop: 62,
+    sizeMobile: 42,
+    lineHeightDesktop: 70,
     lineHeightMobile: 48,
     letterSpacing: "0",
-    fontWeightRole: "bold",
+    fontWeightRole: "black",
   },
   bodyXs: {
     sizeDesktop: 12,
-    sizeMobile: 8,
+    sizeMobile: 11,
     lineHeightDesktop: 18,
-    lineHeightMobile: 12,
+    lineHeightMobile: 16,
     letterSpacing: "0",
-    fontWeightRole: "light",
+    fontWeightRole: "regular",
   },
   bodySm: {
-    sizeDesktop: 12,
-    sizeMobile: 8,
-    lineHeightDesktop: 18,
-    lineHeightMobile: 12,
+    sizeDesktop: 14,
+    sizeMobile: 12,
+    lineHeightDesktop: 20,
+    lineHeightMobile: 18,
     letterSpacing: "0",
-    fontWeightRole: "book",
+    fontWeightRole: "regular",
   },
   bodyMd: {
-    sizeDesktop: 22,
-    sizeMobile: 12,
-    lineHeightDesktop: 33,
-    lineHeightMobile: 18,
+    sizeDesktop: 16,
+    sizeMobile: 14,
+    lineHeightDesktop: 24,
+    lineHeightMobile: 20,
     letterSpacing: "0",
-    fontWeightRole: "thin",
+    fontWeightRole: "regular",
   },
   bodyLg: {
-    sizeDesktop: 22,
-    sizeMobile: 12,
-    lineHeightDesktop: 33,
-    lineHeightMobile: 18,
+    sizeDesktop: 18,
+    sizeMobile: 16,
+    lineHeightDesktop: 27,
+    lineHeightMobile: 24,
     letterSpacing: "0",
     fontWeightRole: "book",
   },
   bodyXl: {
-    sizeDesktop: 26,
+    sizeDesktop: 22,
     sizeMobile: 18,
-    lineHeightDesktop: 39,
-    lineHeightMobile: 28,
+    lineHeightDesktop: 32,
+    lineHeightMobile: 26,
     letterSpacing: "0",
-    fontWeightRole: "thin",
+    fontWeightRole: "book",
   },
   body2xl: {
     sizeDesktop: 26,
-    sizeMobile: 18,
-    lineHeightDesktop: 39,
-    lineHeightMobile: 28,
+    sizeMobile: 20,
+    lineHeightDesktop: 38,
+    lineHeightMobile: 30,
     letterSpacing: "0",
     fontWeightRole: "book",
   },
 };
 
-/** Maps each config key to its CSS var prefix. */
 export const TYPE_SCALE_VAR_PREFIXES: Record<keyof TypeScaleConfig, string> = {
   headingXs: "--type-heading-xs",
   headingSm: "--type-heading-sm",
@@ -162,7 +146,6 @@ export const TYPE_SCALE_VAR_PREFIXES: Record<keyof TypeScaleConfig, string> = {
   body2xl: "--type-body-2xl",
 };
 
-/** Display labels for the dev tool and UI (full written names). */
 export const TYPE_SCALE_LABELS: Record<keyof TypeScaleConfig, string> = {
   headingXs: "Heading Extra Small",
   headingSm: "Heading Small",
@@ -178,7 +161,6 @@ export const TYPE_SCALE_LABELS: Record<keyof TypeScaleConfig, string> = {
   body2xl: "Body Double Extra Large",
 };
 
-/** Compact tier token (specs, dropdowns). */
 export const TYPE_SCALE_SHORT_TAG: Record<keyof TypeScaleConfig, string> = {
   headingXs: "XS",
   headingSm: "SM",
@@ -194,7 +176,6 @@ export const TYPE_SCALE_SHORT_TAG: Record<keyof TypeScaleConfig, string> = {
   body2xl: "2XL",
 };
 
-/** CSS utility class per scale entry (see `globals.css`). */
 export const TYPE_SCALE_UTILITY_CLASS: Record<keyof TypeScaleConfig, string> = {
   headingXs: "typography-heading-xs",
   headingSm: "typography-heading-sm",
@@ -210,10 +191,6 @@ export const TYPE_SCALE_UTILITY_CLASS: Record<keyof TypeScaleConfig, string> = {
   body2xl: "typography-body-2xl",
 };
 
-/**
- * Oldest persisted keys (primary / legal / …) → current `TypeScaleConfig` keys
- * (XS–2XL semantics).
- */
 export const TYPE_SCALE_LEGACY_KEYS: Record<string, keyof TypeScaleConfig> = {
   headingPrimary: "heading2xl",
   headingSecondary: "headingXl",
@@ -229,11 +206,6 @@ export const TYPE_SCALE_LEGACY_KEYS: Record<string, keyof TypeScaleConfig> = {
   bodyLegalLight: "bodyXs",
 };
 
-/**
- * Next-most-recent save used the same string names as today but with **XL = largest**
- * and **2XS = smallest**. If JSON still has `heading2xs` / `body2xs`, move each blob
- * to the matching XS–2XL key before merging.
- */
 export const TYPE_SCALE_PREVIOUS_TSHIRT_SLOT_MAP: Record<string, keyof TypeScaleConfig> = {
   headingXl: "heading2xl",
   headingLg: "headingXl",

@@ -8,13 +8,14 @@ const NEUTRAL_ANIMATION = cloneTypographyAnimationFromImageDefaults(DEV_NEUTRAL_
 
 export const STORAGE_KEY = "pb-element-button-dev-v1";
 
-export const VARIANT_ORDER: ButtonVariantKey[] = ["default", "accent", "ghost", "text"];
+export const VARIANT_ORDER: ButtonVariantKey[] = ["default", "accent", "ghost", "text", "glass"];
 
 export const VARIANT_LABELS: Record<ButtonVariantKey, string> = {
   default: "Default",
   accent: "Accent",
   ghost: "Ghost",
   text: "Text",
+  glass: "Glass",
 };
 
 export const BASE_DEFAULTS: {
@@ -77,6 +78,31 @@ export const BASE_DEFAULTS: {
       linkHover: "var(--pb-link-hover)",
       linkActive: "var(--pb-link-active)",
       wrapperOpacityHover: 0.7,
+      animation: JSON.parse(JSON.stringify(NEUTRAL_ANIMATION)) as typeof NEUTRAL_ANIMATION,
+    },
+    glass: {
+      label: "Glass",
+      copyType: "body",
+      level: 4,
+      wordWrap: false,
+      linkDefault: "white",
+      wrapperFill: "transparent",
+      wrapperStroke: "transparent",
+      wrapperFillHover: "rgba(255,255,255,0.1)",
+      wrapperStrokeHover: "transparent",
+      wrapperScaleActive: 0.97,
+      wrapperPadding: "0.5rem 1rem",
+      wrapperBorderRadius: "0.75rem",
+      effects: [
+        {
+          type: "glass",
+          lightIntensity: 0.8,
+          lightAngle: 135,
+          refraction: 0.5,
+          depth: 90,
+          frost: "4px",
+        },
+      ],
       animation: JSON.parse(JSON.stringify(NEUTRAL_ANIMATION)) as typeof NEUTRAL_ANIMATION,
     },
   },

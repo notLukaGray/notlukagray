@@ -63,11 +63,9 @@ export function buildElementButtonBlockStyle(
     }),
   };
   applyPbDefaultTextAlign(blockStyle, align, textAlign);
+  // `wordWrap` only toggles wrapping (multi-line vs single-line). It does not imply overflow;
+  // use layout `overflow` / `textOverflow` when you need clipping or ellipsis.
   blockStyle.whiteSpace = wordWrap ? "normal" : "nowrap";
-  if (!wordWrap) {
-    blockStyle.overflow = "hidden";
-    blockStyle.textOverflow = "ellipsis";
-  }
   return blockStyle;
 }
 
@@ -91,6 +89,13 @@ function resolveCssGradientRef(
   return literal;
 }
 
+const DEFAULT_WRAPPER_STROKE_WIDTH_PX = 2;
+
+function clampWrapperStrokeWidthPx(raw: number | undefined): number {
+  if (raw == null || !Number.isFinite(raw)) return DEFAULT_WRAPPER_STROKE_WIDTH_PX;
+  return Math.round(Math.min(Math.max(raw, 0), 48));
+}
+
 export function buildElementButtonWrapperStyles(
   definitions: Record<string, unknown> | null | undefined,
   props: Pick<
@@ -99,8 +104,13 @@ export function buildElementButtonWrapperStyles(
     | "wrapperStroke"
     | "wrapperFillRef"
     | "wrapperStrokeRef"
+    | "wrapperStrokeWidth"
     | "wrapperPadding"
     | "wrapperBorderRadius"
+    | "wrapperWidth"
+    | "wrapperHeight"
+    | "wrapperMinWidth"
+    | "wrapperMinHeight"
     | "wrapperFillHover"
     | "wrapperStrokeHover"
     | "wrapperFillActive"
@@ -118,8 +128,13 @@ export function buildElementButtonWrapperStyles(
     wrapperStroke,
     wrapperFillRef,
     wrapperStrokeRef,
+    wrapperStrokeWidth,
     wrapperPadding,
     wrapperBorderRadius,
+    wrapperWidth,
+    wrapperHeight,
+    wrapperMinWidth,
+    wrapperMinHeight,
     wrapperFillHover,
     wrapperStrokeHover,
     wrapperFillActive,
@@ -134,33 +149,40 @@ export function buildElementButtonWrapperStyles(
   const resolvedFill = resolveCssGradientRef(definitions, wrapperFillRef, wrapperFill);
   const resolvedStroke = resolveCssGradientRef(definitions, wrapperStrokeRef, wrapperStroke);
 
-  const strokeWidth = 2;
+  const strokeWidth = clampWrapperStrokeWidthPx(wrapperStrokeWidth);
   const isGradientStroke = resolvedStroke != null && String(resolvedStroke).includes("gradient");
   const useRoundedGradientStroke = isGradientStroke && wrapperBorderRadius != null;
   const hasWrapper = resolvedFill != null || resolvedStroke != null;
 
-  const wrapperStyle: CSSProperties = hasWrapper
-    ? {
-        ...(resolvedFill != null && !useRoundedGradientStroke && { background: resolvedFill }),
-        ...(wrapperPadding != null && !useRoundedGradientStroke && { padding: wrapperPadding }),
-        ...(wrapperBorderRadius != null && { borderRadius: wrapperBorderRadius }),
-        ...(resolvedStroke != null &&
-          (useRoundedGradientStroke
-            ? { padding: strokeWidth, background: resolvedStroke }
-            : isGradientStroke
-              ? {
-                  border: `${strokeWidth}px solid transparent`,
-                  borderImage: `${resolvedStroke} 1`,
-                  borderImageSlice: 1,
-                }
-              : { border: `${strokeWidth}px solid ${resolvedStroke}` })),
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }
-    : {};
+  /** Callers pass breakpoint-resolved strings; schema types still allow responsive tuples. */
+  const wrapperStyle = (
+    hasWrapper
+      ? {
+          ...(resolvedFill != null && !useRoundedGradientStroke && { background: resolvedFill }),
+          ...(wrapperPadding != null && !useRoundedGradientStroke && { padding: wrapperPadding }),
+          ...(wrapperBorderRadius != null && { borderRadius: wrapperBorderRadius }),
+          ...(wrapperWidth != null && { width: wrapperWidth }),
+          ...(wrapperHeight != null && { height: wrapperHeight }),
+          ...(wrapperMinWidth != null && { minWidth: wrapperMinWidth }),
+          ...(wrapperMinHeight != null && { minHeight: wrapperMinHeight }),
+          ...(resolvedStroke != null &&
+            (useRoundedGradientStroke
+              ? { padding: strokeWidth, background: resolvedStroke }
+              : isGradientStroke
+                ? {
+                    border: `${strokeWidth}px solid transparent`,
+                    borderImage: `${resolvedStroke} 1`,
+                    borderImageSlice: 1,
+                  }
+                : { border: `${strokeWidth}px solid ${resolvedStroke}` })),
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }
+      : {}
+  ) as CSSProperties;
 
-  const innerWrapperStyle: CSSProperties =
+  const innerWrapperStyle = (
     hasWrapper && useRoundedGradientStroke
       ? {
           ...(resolvedFill != null && { background: resolvedFill }),
@@ -177,7 +199,8 @@ export function buildElementButtonWrapperStyles(
           alignItems: "center",
           justifyContent: "center",
         }
-      : {};
+      : {}
+  ) as CSSProperties;
 
   // Interactive CSS vars — explicit props + defaults so :hover/:active always resolve (globals.css
   // uses var(--element-btn-fill-hover, var(--element-btn-fill)) and transitions run on the wrapper).

@@ -31,7 +31,7 @@ import {
 
 const contentBlockWithElementOrderSchema = baseSectionPropsSchema.extend({
   type: z.literal("contentBlock"),
-  gap: responsiveStringSchema,
+  gap: responsiveStringSchema.optional(),
   rowGap: responsiveStringSchema.optional(),
   columnGap: responsiveStringSchema.optional(),
   alignItems: responsiveStringSchema.optional(),

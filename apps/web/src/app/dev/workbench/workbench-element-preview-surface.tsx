@@ -44,6 +44,11 @@ export function WorkbenchElementPreviewSurface({
       style={{
         ...colorVarMap,
         backgroundColor: "var(--pb-surface-root)",
+        backgroundImage: [
+          "linear-gradient(color-mix(in oklab, var(--pb-primary) 10%, transparent) 1px, transparent 1px)",
+          "linear-gradient(90deg, color-mix(in oklab, var(--pb-primary) 10%, transparent) 1px, transparent 1px)",
+        ].join(", "),
+        backgroundSize: "24px 24px",
         color: "var(--pb-text-primary)",
         fontFamily: "var(--font-body, var(--font-sans))",
         ...style,

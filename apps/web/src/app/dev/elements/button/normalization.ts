@@ -8,11 +8,64 @@ import {
   readElementPersistedPayload,
   resolveTypographyDefaultVariant,
 } from "@/app/dev/elements/_shared/typography-normalization-helpers";
+import type { PbResponsiveValue } from "@/app/theme/pb-builder-defaults";
+
+function pickResponsiveString(
+  incoming: unknown,
+  fallback: PbResponsiveValue<string> | undefined
+): PbResponsiveValue<string> | undefined {
+  if (incoming === undefined) return fallback;
+  if (typeof incoming === "string") return incoming || undefined;
+  if (
+    Array.isArray(incoming) &&
+    incoming.length === 2 &&
+    typeof incoming[0] === "string" &&
+    typeof incoming[1] === "string"
+  ) {
+    return incoming as [string, string];
+  }
+  return fallback;
+}
 import { typographyVariantForThemeExport } from "@/app/dev/elements/_shared/typography-export-block";
 import { normalizePbImageAnimationDefaults } from "@/app/dev/elements/image/normalization";
-import { parseButtonAction } from "@pb/contracts";
+import { parseButtonAction, type SectionEffect } from "@pb/contracts";
 import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
 import type { ButtonVariantDefaults, ButtonVariantKey, PersistedButtonDefaults } from "./types";
+
+type GlassEffect = Extract<SectionEffect, { type: "glass" }>;
+
+function isGlassEffect(e: SectionEffect | undefined): e is GlassEffect {
+  return e?.type === "glass";
+}
+
+/**
+ * Persisted JSON often omits glass physics fields. Merge each incoming `glass` entry onto the
+ * seed variant's glass effect so defaults stay stable across exports.
+ */
+function mergeGlassIntoEffects(
+  seedEffects: SectionEffect[] | undefined,
+  incomingEffects: SectionEffect[]
+): SectionEffect[] {
+  const seedGlass = seedEffects?.find(isGlassEffect);
+  return incomingEffects.map((effect) =>
+    isGlassEffect(effect)
+      ? { ...(seedGlass ?? { type: "glass" as const }), ...effect, type: "glass" as const }
+      : effect
+  );
+}
+
+function pickButtonEffects(
+  incoming: ButtonVariantDefaults["effects"] | undefined,
+  seed: ButtonVariantDefaults["effects"]
+): ButtonVariantDefaults["effects"] | undefined {
+  if (incoming === undefined) return seed;
+  if (!Array.isArray(incoming)) return seed;
+  if (incoming.length === 0) return [];
+  if (incoming.some(isGlassEffect)) {
+    return mergeGlassIntoEffects(seed, incoming);
+  }
+  return incoming;
+}
 
 // eslint-disable-next-line complexity
 function pickWrapperInteractionVars(
@@ -57,6 +110,15 @@ function pickButtonLevel(
   return fallback;
 }
 
+function pickWrapperStrokeWidthPx(
+  incoming: unknown,
+  fallback: ButtonVariantDefaults["wrapperStrokeWidth"]
+): ButtonVariantDefaults["wrapperStrokeWidth"] {
+  if (incoming === undefined) return fallback;
+  if (typeof incoming !== "number" || !Number.isFinite(incoming)) return fallback;
+  return Math.round(Math.min(Math.max(incoming, 0), 48));
+}
+
 export function normalizeButtonVariant(
   seed: ButtonVariantDefaults,
   incoming?: Partial<ButtonVariantDefaults>
@@ -84,8 +146,19 @@ export function normalizeButtonVariant(
     linkTransition: pickLinkTransition(incoming.linkTransition, seed.linkTransition),
     wrapperFill: pickString(incoming.wrapperFill, seed.wrapperFill),
     wrapperStroke: pickString(incoming.wrapperStroke, seed.wrapperStroke),
-    wrapperPadding: pickString(incoming.wrapperPadding, seed.wrapperPadding),
-    wrapperBorderRadius: pickString(incoming.wrapperBorderRadius, seed.wrapperBorderRadius),
+    wrapperStrokeWidth: pickWrapperStrokeWidthPx(
+      incoming.wrapperStrokeWidth,
+      seed.wrapperStrokeWidth
+    ),
+    wrapperPadding: pickResponsiveString(incoming.wrapperPadding, seed.wrapperPadding),
+    wrapperBorderRadius: pickResponsiveString(
+      incoming.wrapperBorderRadius,
+      seed.wrapperBorderRadius
+    ),
+    wrapperWidth: pickResponsiveString(incoming.wrapperWidth, seed.wrapperWidth),
+    wrapperHeight: pickResponsiveString(incoming.wrapperHeight, seed.wrapperHeight),
+    wrapperMinWidth: pickResponsiveString(incoming.wrapperMinWidth, seed.wrapperMinWidth),
+    wrapperMinHeight: pickResponsiveString(incoming.wrapperMinHeight, seed.wrapperMinHeight),
     wrapperFillHover: pickString(incoming.wrapperFillHover, seed.wrapperFillHover),
     wrapperFillActive: pickString(incoming.wrapperFillActive, seed.wrapperFillActive),
     wrapperStrokeHover: pickString(incoming.wrapperStrokeHover, seed.wrapperStrokeHover),
@@ -103,6 +176,7 @@ export function normalizeButtonVariant(
     zIndex: pickFiniteNumber(incoming.zIndex, seed.zIndex),
     overflow: pickOverflowValue(incoming.overflow, seed.overflow),
     animation: normalizePbImageAnimationDefaults(seed.animation, incoming?.animation),
+    effects: pickButtonEffects(incoming.effects, seed.effects),
   };
 }
 

@@ -94,7 +94,7 @@ export function ButtonCustomJsonPanel({ controller }: { controller: ButtonElemen
         </button>
         <button
           type="button"
-          onClick={() => void navigator.clipboard.writeText(fullCurrentJson)}
+          onClick={() => void navigator.clipboard.writeText(controller.customElementJson)}
           className="rounded border border-border px-2 py-1 text-[10px] font-mono text-foreground hover:bg-muted"
         >
           Copy Full

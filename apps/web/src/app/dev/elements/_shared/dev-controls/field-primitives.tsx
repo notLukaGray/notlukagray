@@ -54,6 +54,33 @@ export function ResponsiveTextField({
   );
 }
 
+export function PlainTextField({
+  label,
+  value,
+  placeholder,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  placeholder?: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="space-y-1.5">
+      <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
+        {label}
+      </span>
+      <input
+        type="text"
+        className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground placeholder:text-muted-foreground/70"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder ?? "optional"}
+      />
+    </label>
+  );
+}
+
 export function ResponsiveSelectField({
   label,
   hasMobile,

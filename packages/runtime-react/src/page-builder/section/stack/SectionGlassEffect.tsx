@@ -3,6 +3,7 @@
 import {
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -20,6 +21,8 @@ import {
   parseLength,
   parsePx,
   readElementDimensions,
+  readGlassOverlaySyncedDimensions,
+  withGlassPhysicsClamped,
   type GlassDimensions,
 } from "./glass-effect-utils";
 import {
@@ -46,6 +49,11 @@ type SectionGlassEffectProps = {
   sectionRef?: RefObject<HTMLElement | null>;
   isSectionFixed?: boolean;
   variant?: "rich" | "minimal" | "auto";
+  /**
+   * When set, the glass layer uses this exact `border-radius` CSS (same string as the host
+   * surface) and filter sizing reads from the painted overlay so bezel math matches the curve.
+   */
+  syncBorderRadius?: string;
 };
 
 function resolveGlassEffect(effects?: SectionEffect[]): GlassEffect | null {
@@ -111,6 +119,7 @@ export function SectionGlassEffect({
   sectionRef,
   isSectionFixed: _isSectionFixed = false,
   variant: _variant = "rich",
+  syncBorderRadius,
 }: SectionGlassEffectProps) {
   const glass = useMemo(() => resolveGlassEffect(effects), [effects]);
   const runtimeSnapshot = useGlassRuntimeSnapshot();
@@ -126,25 +135,95 @@ export function SectionGlassEffect({
 
   const [dims, setDims] = useState<GlassDimensions | null>(null);
   const observingRef = useRef<HTMLElement | null>(null);
+  const overlayRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     refreshGlassRuntimeSnapshot();
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!glass) return;
-    const target = sectionRef?.current;
-    if (!target) return;
-    observingRef.current = target;
-    const update = () => setDims(readElementDimensions(target));
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(target);
+    let cancelled = false;
+    let ro: ResizeObserver | null = null;
+    let rafRetry = 0;
+    let rafCatchup = 0;
+    let retryFrames = 0;
+
+    const sync =
+      typeof syncBorderRadius === "string" && syncBorderRadius.trim().length > 0
+        ? syncBorderRadius.trim()
+        : undefined;
+
+    const measure = (target: HTMLElement) => {
+      if (cancelled) return;
+      const overlay = overlayRef.current;
+      const raw =
+        sync && overlay
+          ? readGlassOverlaySyncedDimensions(target, overlay)
+          : readElementDimensions(target);
+      setDims(withGlassPhysicsClamped(raw));
+    };
+
+    const attach = (target: HTMLElement) => {
+      if (cancelled) return;
+      observingRef.current = target;
+      ro?.disconnect();
+      const boundMeasure = () => measure(target);
+      boundMeasure();
+      ro = new ResizeObserver(boundMeasure);
+      ro.observe(target);
+      const overlay = overlayRef.current;
+      if (sync && overlay) {
+        try {
+          ro.observe(overlay);
+        } catch {
+          // Some engines throw if observe is duplicated; safe to ignore.
+        }
+      }
+      // Overlay only exists after the first successful `dims` read clears the early `return null`.
+      // Re-measure on the next frame so `syncBorderRadius` + overlay geometry match Chromium.
+      window.cancelAnimationFrame(rafCatchup);
+      rafCatchup = window.requestAnimationFrame(() => {
+        if (cancelled || !ro) return;
+        const overlay2 = overlayRef.current;
+        if (sync && overlay2) {
+          try {
+            ro.observe(overlay2);
+          } catch {
+            /* ignore */
+          }
+        }
+        boundMeasure();
+      });
+    };
+
+    const tryAttach = (): boolean => {
+      const target = sectionRef?.current;
+      if (!target) return false;
+      attach(target);
+      return true;
+    };
+
+    if (!tryAttach()) {
+      const retry = () => {
+        if (cancelled) return;
+        if (tryAttach()) return;
+        // Child layout can run before the host `ref` is attached; retry briefly instead of
+        // leaving `dims` stuck at null (glass invisible everywhere, hover fill only).
+        if (retryFrames++ > 120) return;
+        rafRetry = window.requestAnimationFrame(retry);
+      };
+      rafRetry = window.requestAnimationFrame(retry);
+    }
+
     return () => {
-      ro.disconnect();
+      cancelled = true;
+      window.cancelAnimationFrame(rafRetry);
+      window.cancelAnimationFrame(rafCatchup);
+      ro?.disconnect();
       observingRef.current = null;
     };
-  }, [glass, sectionRef]);
+  }, [glass, sectionRef, syncBorderRadius]);
 
   if (!glass || !dims || dims.width < 2 || dims.height < 2) return null;
 
@@ -357,10 +436,15 @@ export function SectionGlassEffect({
         />
       )}
       <div
+        ref={overlayRef}
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          borderRadius: hasClipPath ? undefined : "inherit",
+          borderRadius: hasClipPath
+            ? undefined
+            : typeof syncBorderRadius === "string" && syncBorderRadius.trim().length > 0
+              ? syncBorderRadius.trim()
+              : "inherit",
           // Parent <figure> is already clipped by GlassClipPath. Avoid clipping the overlay again:
           // double clip-path can suppress backdrop-filter:url(#...) on Chromium.
           clipPath: undefined,

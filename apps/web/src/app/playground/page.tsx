@@ -8,6 +8,7 @@ import {
   useEffect,
   useRef,
   Component,
+  type CSSProperties,
   type ErrorInfo,
   type ReactNode,
   type UIEvent,
@@ -20,6 +21,7 @@ import { PageBuilderRenderer } from "@pb/runtime-react/renderers";
 import { ScrollContainerProvider } from "@pb/runtime-react/scroll";
 import { z } from "zod";
 import { useFigmaExportDiagnosticsStore } from "@pb/runtime-react/dev-client";
+import { getPbPreviewScopeCssVars, type PbPreviewColorScheme } from "@/app/theme/config";
 
 // ---------------------------------------------------------------------------
 // Client-side breakpoint resolver
@@ -504,6 +506,7 @@ function normaliseInput(
             {
               type: "contentBlock",
               id: "playground-wrapper",
+              overflow: "visible",
               elements: raw,
             } as unknown as SectionBlock,
           ],
@@ -613,6 +616,7 @@ function normaliseInput(
     const wrappedSection = {
       type: "contentBlock",
       id: "playground-wrapper",
+      overflow: "visible",
       elements: [obj],
     } as unknown as SectionBlock;
     return { ok: true, sections: [wrappedSection] };
@@ -784,17 +788,24 @@ type ParsedState =
       bgDefinitions: Record<string, bgBlock>;
     };
 
-const PREVIEW_BACKGROUNDS = [
-  { label: "native", mode: "native" as const },
-  { label: "white", mode: "color" as const, value: "#ffffff" },
-  { label: "gray", mode: "color" as const, value: "#d4d4d8" },
-  { label: "black", mode: "color" as const, value: "#000000" },
+type PreviewSurfaceVar = "--pb-surface-root" | "--pb-surface-muted" | "--pb-surface-raised";
+
+type PreviewBackground =
+  | { label: string; mode: "native" }
+  | { label: string; mode: "token"; cssVar: PreviewSurfaceVar };
+
+const PREVIEW_BACKGROUNDS: readonly PreviewBackground[] = [
+  { label: "native", mode: "native" },
+  { label: "canvas", mode: "token", cssVar: "--pb-surface-root" },
+  { label: "muted", mode: "token", cssVar: "--pb-surface-muted" },
+  { label: "raised", mode: "token", cssVar: "--pb-surface-raised" },
 ] as const;
 
 export default function PlaygroundPage() {
   if (process.env.NODE_ENV !== "development") notFound();
   const [jsonText, setJsonText] = useState("");
   const [isMobile, setIsMobile] = useState(false);
+  const [previewScheme, setPreviewScheme] = useState<PbPreviewColorScheme>("light");
   const [previewBgIndex, setPreviewBgIndex] = useState(0);
   const [errorPanelOpen, setErrorPanelOpen] = useState(true);
   const [runtimeError, setRuntimeError] = useState<string | null>(null);
@@ -901,10 +912,17 @@ export default function PlaygroundPage() {
     return resolveBreakpointClient(parsed.sections, isMobile);
   }, [parsed, isMobile]);
 
-  const previewBackground = PREVIEW_BACKGROUNDS[previewBgIndex] ?? PREVIEW_BACKGROUNDS[0];
-  const previewBackgroundColor =
-    previewBackground.mode === "color" ? previewBackground.value : undefined;
-  const previewResetKey = `${isMobile ? "mobile" : "desktop"}:${debouncedText}`;
+  const previewBackground: PreviewBackground =
+    PREVIEW_BACKGROUNDS[previewBgIndex] ?? PREVIEW_BACKGROUNDS[0]!;
+  const previewSurfaceStyle = useMemo((): CSSProperties => {
+    const vars = getPbPreviewScopeCssVars(previewScheme);
+    const style: CSSProperties = { ...vars, minHeight: "100%" };
+    if (previewBackground.mode === "token") {
+      style.backgroundColor = `var(${previewBackground.cssVar})`;
+    }
+    return style;
+  }, [previewScheme, previewBackground]);
+  const previewResetKey = `${isMobile ? "mobile" : "desktop"}:${previewScheme}:${debouncedText}`;
 
   const handleRuntimeError = useCallback((msg: string) => {
     setRuntimeError(msg);
@@ -1029,6 +1047,36 @@ export default function PlaygroundPage() {
                   desktop
                 </button>
               </div>
+              <div className="flex items-center rounded border border-neutral-700 text-xs">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRuntimeError(null);
+                    setPreviewScheme("light");
+                  }}
+                  className={`px-2.5 py-1 transition-colors ${
+                    previewScheme === "light"
+                      ? "bg-neutral-600 text-white"
+                      : "text-neutral-400 hover:text-neutral-200"
+                  }`}
+                >
+                  light
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRuntimeError(null);
+                    setPreviewScheme("dark");
+                  }}
+                  className={`px-2.5 py-1 transition-colors ${
+                    previewScheme === "dark"
+                      ? "bg-neutral-600 text-white"
+                      : "text-neutral-400 hover:text-neutral-200"
+                  }`}
+                >
+                  dark
+                </button>
+              </div>
               <button
                 onClick={() =>
                   setPreviewBgIndex((index) => (index + 1) % PREVIEW_BACKGROUNDS.length)
@@ -1077,50 +1125,44 @@ export default function PlaygroundPage() {
             <div
               ref={previewViewportRef}
               data-pb-preview-root=""
-              className={
-                isMobile ? "mx-auto h-full overflow-auto" : "h-full min-h-full overflow-auto"
-              }
-              style={
-                isMobile
-                  ? {
-                      width: 390,
-                      ...(previewBackgroundColor
-                        ? { backgroundColor: previewBackgroundColor }
-                        : {}),
-                      position: "relative",
-                    }
-                  : {
-                      ...(previewBackgroundColor
-                        ? { backgroundColor: previewBackgroundColor }
-                        : {}),
-                      position: "relative",
-                    }
-              }
+              className="h-full min-h-0 overflow-auto p-10"
+              style={{ position: "relative" }}
             >
-              {parsed.status === "empty" ? (
-                <div className="flex h-full items-center justify-center p-8 text-center text-sm text-neutral-400">
-                  Paste page-builder JSON in the editor on the left to preview it here.
-                </div>
-              ) : parsed.status === "json-error" || parsed.status === "normalise-error" ? (
-                <div className="flex h-full items-center justify-center p-8 text-center text-sm text-red-400">
-                  Fix the JSON to see a preview.
-                </div>
-              ) : (
-                <ScrollContainerProvider containerRef={previewViewportRef}>
-                  <ServerBreakpointProvider isMobile={isMobile}>
-                    <PreviewErrorBoundary key={previewResetKey} onError={handleRuntimeError}>
-                      <PageBuilderRenderer
-                        resolvedBg={previewBackground.mode === "native" ? parsed.resolvedBg : null}
-                        resolvedSections={resolvedSections}
-                        bgDefinitions={
-                          previewBackground.mode === "native" ? parsed.bgDefinitions : {}
-                        }
-                        serverIsMobile={isMobile}
-                      />
-                    </PreviewErrorBoundary>
-                  </ServerBreakpointProvider>
-                </ScrollContainerProvider>
-              )}
+              <div
+                data-pb-preview-scheme={previewScheme}
+                className={`min-h-full min-w-0 ${isMobile ? "mx-auto w-[390px] max-w-full" : ""}`}
+                style={previewSurfaceStyle}
+              >
+                {parsed.status === "empty" ? (
+                  <div
+                    className="flex h-full items-center justify-center p-8 text-center text-sm"
+                    style={{ color: "var(--pb-text-muted)" }}
+                  >
+                    Paste page-builder JSON in the editor on the left to preview it here.
+                  </div>
+                ) : parsed.status === "json-error" || parsed.status === "normalise-error" ? (
+                  <div className="flex h-full items-center justify-center p-8 text-center text-sm text-red-400">
+                    Fix the JSON to see a preview.
+                  </div>
+                ) : (
+                  <ScrollContainerProvider containerRef={previewViewportRef}>
+                    <ServerBreakpointProvider isMobile={isMobile}>
+                      <PreviewErrorBoundary key={previewResetKey} onError={handleRuntimeError}>
+                        <PageBuilderRenderer
+                          resolvedBg={
+                            previewBackground.mode === "native" ? parsed.resolvedBg : null
+                          }
+                          resolvedSections={resolvedSections}
+                          bgDefinitions={
+                            previewBackground.mode === "native" ? parsed.bgDefinitions : {}
+                          }
+                          serverIsMobile={isMobile}
+                        />
+                      </PreviewErrorBoundary>
+                    </ServerBreakpointProvider>
+                  </ScrollContainerProvider>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -55,3 +55,19 @@ export function pbBrandCssInline(): string {
   ].join("\n");
   return `:root {\n${rootLines}\n}\n\n.dark {\n${darkLines}\n}`;
 }
+
+export type PbPreviewColorScheme = "light" | "dark";
+
+/**
+ * Inline `--pb-*` variables for a subtree (e.g. PB playground preview) so light/dark match
+ * `pbBrandCssInline()` without depending on document `:root` / `.dark`.
+ */
+export function getPbPreviewScopeCssVars(mode: PbPreviewColorScheme): Record<string, string> {
+  const brand = mode === "light" ? pbBrandLight : pbBrandDark;
+  const derived = derivePbThemeTokens(brand, mode);
+  const out: Record<string, string> = {};
+  for (const id of M1_TOKEN_IDS) out[id] = brand[id];
+  for (const id of PB_DERIVED_TOKEN_IDS) out[id] = derived[id];
+  for (const [k, v] of Object.entries(PB_A11Y_CONSTANT_TOKENS)) out[k] = v;
+  return out;
+}
