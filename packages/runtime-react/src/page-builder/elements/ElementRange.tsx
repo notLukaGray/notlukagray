@@ -257,7 +257,11 @@ export function ElementRange({
   const containerStyle: React.CSSProperties = {
     position: "relative",
     width: "100%",
+    // Height fills an explicit wrapper height when one is set; minHeight ensures the
+    // container is at least as tall as the thumb so it doesn't collapse to zero when
+    // no explicit height is provided in the block layout.
     height: "100%",
+    minHeight: thumbH ?? trackH ?? "2rem",
     minWidth: 0,
     ...(restStyle as React.CSSProperties),
   };

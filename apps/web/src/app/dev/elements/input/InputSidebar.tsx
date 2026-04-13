@@ -1,40 +1,38 @@
+import { ElementAdvancedPanel } from "@/app/dev/elements/_shared/ElementAdvancedPanel";
+import { HandoffSnippetPanel } from "@/app/dev/elements/_shared/HandoffSnippetPanel";
 import { InputCustomJsonPanel } from "./InputCustomJsonPanel";
+import { VARIANT_LABELS } from "./constants";
 import type { InputElementDevController } from "./useInputElementDevController";
 
 export function InputSidebar({ controller }: { controller: InputElementDevController }) {
+  const variantLabel = controller.isCustomVariant
+    ? "Create Custom"
+    : VARIANT_LABELS[controller.activeVariant];
   return (
     <div className="space-y-6 md:sticky md:top-8">
       {controller.isCustomVariant ? (
         <InputCustomJsonPanel controller={controller} />
       ) : (
-        <HandoffSnippetPanel controller={controller} />
+        <HandoffSnippetPanel
+          exportJson={controller.exportJson}
+          onCopy={() => void controller.copyExport()}
+          copied={controller.copied}
+          hydrated={controller.hydrated}
+          variantLabel={variantLabel}
+          elementName="input"
+        />
       )}
-    </div>
-  );
-}
-
-function HandoffSnippetPanel({ controller }: { controller: InputElementDevController }) {
-  return (
-    <div className="space-y-3 rounded-lg border border-border bg-card/20 p-4">
-      <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
-        Handoff snippet
-      </p>
-      <p className="text-[10px] leading-snug text-muted-foreground">
-        Share this JSON with engineering to wire these input variants into runtime defaults.
-      </p>
-      <pre className="max-h-96 overflow-x-auto overflow-y-auto whitespace-pre-wrap rounded bg-muted/40 p-3 font-mono text-[11px] leading-relaxed text-foreground">
-        {controller.exportJson}
-      </pre>
-      <button
-        type="button"
-        onClick={() => void controller.copyExport()}
-        className="w-full rounded border border-border px-3 py-2 text-sm font-mono text-foreground transition-colors hover:bg-muted"
-      >
-        {controller.copied ? "Copied!" : "Copy JSON"}
-      </button>
-      {!controller.hydrated ? (
-        <p className="text-[10px] text-muted-foreground">Loading saved input defaults…</p>
-      ) : null}
+      <ElementAdvancedPanel
+        meta={{
+          activeVariant: String(controller.activeVariant),
+          variantLabel,
+          schemaType: "elementInput",
+          hydrated: controller.hydrated,
+          isCustomVariant: controller.isCustomVariant,
+          rawBlockJson: controller.exportJson,
+        }}
+        schemaDocs="element-input-schemas.ts"
+      />
     </div>
   );
 }

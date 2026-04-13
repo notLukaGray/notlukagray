@@ -25,8 +25,8 @@ export function GridDebugOverlay({ items }: { items: GridLayoutItem<ElementBlock
           key={`debug-${item.element.id ?? idx}`}
           style={{
             ...buildGridItemStyle(item),
-            outline: "1px dashed rgba(210,255,122,0.55)",
-            background: "rgba(210,255,122,0.06)",
+            outline: "1px dashed var(--border)",
+            background: "transparent",
             minHeight: "2rem",
             position: "relative",
           }}
@@ -39,9 +39,10 @@ export function GridDebugOverlay({ items }: { items: GridLayoutItem<ElementBlock
               fontSize: "10px",
               lineHeight: 1.1,
               padding: "2px 4px",
-              color: "#d2ff7a",
-              background: "rgba(0,0,0,0.65)",
+              color: "var(--muted-foreground)",
+              background: "var(--card)",
               borderBottomRightRadius: "4px",
+              border: "1px solid var(--border)",
             }}
           >
             {item.element.id ?? `item-${idx}`}

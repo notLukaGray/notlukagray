@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import { buildVideoElementSnippet } from "./build-snippet";
 import {
   normalizeVideoVariant,
@@ -16,7 +16,7 @@ const useBaseVideoController = createSimpleElementDevController<
   VideoVariantDefaults,
   PersistedVideoDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "video",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedVideo,

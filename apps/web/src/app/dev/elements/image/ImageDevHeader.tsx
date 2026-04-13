@@ -5,11 +5,12 @@ export function ImageDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Image defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune layout container, aspect ratio, and motion preset, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementImage</code> variants — layout, traits, motion (preset / hybrid /
-          custom), and runtime metadata. Schema: image fields in{" "}
-          <code>element-content-schemas.ts</code> plus shared layout.
+          <code>elementImage</code> blocks — layout container, aspect ratio, entrance motion, and
+          runtime metadata across all media placements
         </>
       }
       meta={

@@ -18,10 +18,18 @@ export function normalizeBodyVariant(
   incoming?: Partial<BodyVariantDefaults>
 ): BodyVariantDefaults {
   if (!incoming || typeof incoming !== "object") return seed;
+  const color =
+    incoming.color === undefined ? seed.color : pickString(incoming.color, seed.color) || undefined;
+  const fontFamily =
+    incoming.fontFamily === undefined
+      ? seed.fontFamily
+      : pickString(incoming.fontFamily, seed.fontFamily) || undefined;
   return {
     ...seed,
     ...incoming,
     text: pickString(incoming.text, seed.text),
+    color,
+    fontFamily,
     wordWrap: pickBoolean(incoming.wordWrap, seed.wordWrap),
     opacity: pickUnitOpacity(incoming.opacity, seed.opacity),
     zIndex: pickFiniteNumber(incoming.zIndex, seed.zIndex),

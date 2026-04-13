@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { PbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
+import type { WorkbenchPreviewBreakpoint } from "@/app/dev/workbench/workbench-preview-context";
 import type { PageDensity } from "@pb/contracts";
 import { formatDisplayValue, ROW_META } from "./style-dev-config";
 import { GuidelineFieldInput } from "./style-guideline-field-input";
@@ -20,6 +21,7 @@ export function StyleGuidelineSections({
   toggleLock,
   previewVars,
   previewDensity,
+  previewBreakpoint,
 }: {
   visibleSections: Section[];
   locks: Record<keyof PbContentGuidelines, boolean>;
@@ -29,6 +31,7 @@ export function StyleGuidelineSections({
   toggleLock: (key: keyof PbContentGuidelines) => void;
   previewVars: CSSProperties;
   previewDensity: PageDensity;
+  previewBreakpoint: WorkbenchPreviewBreakpoint;
 }) {
   return (
     <>
@@ -109,6 +112,7 @@ export function StyleGuidelineSections({
             guidelines={guidelines}
             previewVars={previewVars}
             previewDensity={previewDensity}
+            previewBreakpoint={previewBreakpoint}
             sectionKeys={section.keys}
           />
         </section>

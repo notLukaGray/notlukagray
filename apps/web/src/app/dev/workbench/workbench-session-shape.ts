@@ -3,6 +3,18 @@ type WorkbenchElementsShape = {
   body: unknown;
   heading: unknown;
   link: unknown;
+  button: unknown;
+  richText: unknown;
+  input: unknown;
+  range: unknown;
+  video: unknown;
+  videoTime: unknown;
+  vector: unknown;
+  svg: unknown;
+  model3d: unknown;
+  rive: unknown;
+  spacer: unknown;
+  scrollProgressBar: unknown;
 };
 
 type WorkbenchShape = {
@@ -17,6 +29,25 @@ type WorkbenchInFlight = Partial<Omit<WorkbenchShape, "elements">> & {
   v?: 2;
   elements?: Partial<WorkbenchShape["elements"]>;
 };
+
+const WORKBENCH_ELEMENT_KEYS = [
+  "image",
+  "body",
+  "heading",
+  "link",
+  "button",
+  "richText",
+  "input",
+  "range",
+  "video",
+  "videoTime",
+  "vector",
+  "svg",
+  "model3d",
+  "rive",
+  "spacer",
+  "scrollProgressBar",
+] as const;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object";
@@ -38,10 +69,9 @@ function mergeElements(
 ): WorkbenchShape["elements"] {
   const merged = { ...defaults };
   if (!elements) return merged;
-  if (elements.image != null) merged.image = elements.image;
-  if (elements.body != null) merged.body = elements.body;
-  if (elements.heading != null) merged.heading = elements.heading;
-  if (elements.link != null) merged.link = elements.link;
+  for (const key of WORKBENCH_ELEMENT_KEYS) {
+    if (elements[key] != null) merged[key] = elements[key];
+  }
   return merged;
 }
 
@@ -60,12 +90,7 @@ export function mergeWorkbenchSessionShape(
 
 function hasRequiredElements(elements: unknown): boolean {
   if (!isRecord(elements)) return false;
-  return (
-    elements.image != null &&
-    elements.body != null &&
-    elements.heading != null &&
-    elements.link != null
-  );
+  return WORKBENCH_ELEMENT_KEYS.every((key) => elements[key] != null);
 }
 
 export function hasCompleteWorkbenchStorageShape(raw: string | null): boolean {

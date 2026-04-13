@@ -5,10 +5,12 @@ export function SvgDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="SVG defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, configure raw SVG markup and layout, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementSVG</code> variants, preview with raw markup rendering, then copy JSON.
-          Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementSVG</code> blocks — raw SVG markup injection, sizing, and layout within
+          content and media sections
         </>
       }
     />

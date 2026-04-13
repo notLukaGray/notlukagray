@@ -1,6 +1,11 @@
 import type { CSSProperties } from "react";
 import type { PbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
 import { buildPageDensityCssVars, type PageDensity } from "@pb/contracts";
+import { WorkbenchElementPreviewSurface } from "@/app/dev/workbench/workbench-element-preview-surface";
+import {
+  WorkbenchPreviewProvider,
+  type WorkbenchPreviewBreakpoint,
+} from "@/app/dev/workbench/workbench-preview-context";
 import {
   FramePreviewAlignItems,
   FramePreviewGapWrapDirection,
@@ -130,39 +135,45 @@ export function SectionPreview({
   guidelines,
   previewVars,
   previewDensity,
+  previewBreakpoint,
   sectionKeys,
 }: {
   title: string;
   guidelines: PbContentGuidelines;
   previewVars: CSSProperties;
   previewDensity: PageDensity;
+  previewBreakpoint: WorkbenchPreviewBreakpoint;
   sectionKeys: (keyof PbContentGuidelines)[];
 }) {
   const flags = getSectionFlags(sectionKeys);
+  const appliedPreviewStyle = previewRootStyle({
+    previewDensity,
+    previewVars,
+    showCopy: flags.showCopy,
+    guidelines,
+  });
   return (
     <div className="rounded-lg border border-dashed border-border/80 bg-muted/15 p-3">
       <p className="mb-2 font-mono text-[10px] uppercase text-muted-foreground">
         Preview · {title}
       </p>
       <PreviewIntro showFrame={flags.showFrame} />
-      <div
+      <WorkbenchPreviewProvider
+        breakpoint={previewBreakpoint}
         className="rounded-md border border-border/60 bg-background/40 p-3"
-        style={previewRootStyle({
-          previewDensity,
-          previewVars,
-          showCopy: flags.showCopy,
-          guidelines,
-        })}
+        style={appliedPreviewStyle}
       >
-        <FramePreviewStack showFrame={flags.showFrame} guidelines={guidelines} />
-        <CopyBlockPreview showCopy={flags.showCopy} showFrame={flags.showFrame} />
-        <RichTextPreview showRich={flags.showRich} showFrame={flags.showFrame} />
-        <ButtonPreview
-          showButton={flags.showButton}
-          showFrame={flags.showFrame}
-          showRich={flags.showRich}
-        />
-      </div>
+        <WorkbenchElementPreviewSurface foundationTheme="dark" className="flex flex-col gap-3">
+          <FramePreviewStack showFrame={flags.showFrame} guidelines={guidelines} />
+          <CopyBlockPreview showCopy={flags.showCopy} showFrame={flags.showFrame} />
+          <RichTextPreview showRich={flags.showRich} showFrame={flags.showFrame} />
+          <ButtonPreview
+            showButton={flags.showButton}
+            showFrame={flags.showFrame}
+            showRich={flags.showRich}
+          />
+        </WorkbenchElementPreviewSurface>
+      </WorkbenchPreviewProvider>
     </div>
   );
 }

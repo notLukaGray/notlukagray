@@ -11,6 +11,7 @@ import { resolveEntranceMotion } from "@pb/runtime-react/dev-core";
 import { PREVIEW_FALLBACK_IMAGE_SRC } from "@/app/dev/elements/image/constants";
 import type { ImageRuntimeDraft } from "@/app/dev/elements/image/types";
 import type { PreviewDevice } from "@/app/dev/elements/image/responsive";
+import type { PreviewFidelityMode } from "@/app/dev/workbench/preview-fidelity";
 import { resolveResponsiveValueForDevice } from "@/app/dev/elements/image/responsive";
 import { buildRuntimePreviewState, parseLooseValue } from "./runtime-draft-core";
 
@@ -67,10 +68,12 @@ function buildRuntimeDecorators(draft: ImageRuntimeDraft) {
 
 function buildMotionTiming(
   animation: PbImageAnimationDefaults,
-  runtimeMotion: Record<string, unknown> | undefined
+  runtimeMotion: Record<string, unknown> | undefined,
+  mode: Extract<PreviewFidelityMode, "raw" | "guided">
 ): MotionTiming {
   const rawTiming = buildImageMotionTimingFromAnimationDefaults(animation);
-  const motionTimingRecord: Record<string, unknown> = { ...rawTiming, trigger: "onMount" };
+  const motionTimingRecord: Record<string, unknown> =
+    mode === "guided" ? { ...rawTiming, trigger: "onMount" } : { ...rawTiming };
   const resolvedEntrance = resolveEntranceMotion(motionTimingRecord, runtimeMotion);
   return (
     resolvedEntrance
@@ -116,9 +119,12 @@ function resolvePreviewDimensions(
   };
 }
 
-function resolvePreviewSrc(previewSrc: string | null | undefined): string {
+function resolvePreviewSrc(
+  previewSrc: string | null | undefined,
+  allowFallbackSrc: boolean
+): string {
   if (previewSrc != null && String(previewSrc).trim() !== "") return previewSrc;
-  return PREVIEW_FALLBACK_IMAGE_SRC;
+  return allowFallbackSrc ? PREVIEW_FALLBACK_IMAGE_SRC : "";
 }
 
 function resolvePreviewAlt(previewAlt: string | null | undefined): string {
@@ -138,20 +144,24 @@ export function buildImageDevPreviewElementBlock(
     previewSrc?: string | null;
     previewAlt?: string | null;
     previewLayoutSlot?: { device: PreviewDevice; mediaStyle: CSSProperties };
+    mode?: Extract<PreviewFidelityMode, "raw" | "guided">;
+    allowFallbackSrc?: boolean;
   }
 ): Extract<ElementBlock, { type: "elementImage" }> {
+  const mode = options?.mode ?? "raw";
   const decorators = buildRuntimeDecorators(draft);
 
   const motionTiming = buildMotionTiming(
     variant.animation,
-    decorators.runtime.motion as Record<string, unknown> | undefined
+    decorators.runtime.motion as Record<string, unknown> | undefined,
+    mode
   );
   const { width, height } = resolvePreviewDimensions(variant, options?.previewLayoutSlot);
 
   const element = omitUndefined({
     type: "elementImage" as const,
     variant: variantKey,
-    src: resolvePreviewSrc(options?.previewSrc),
+    src: resolvePreviewSrc(options?.previewSrc, options?.allowFallbackSrc ?? mode === "guided"),
     alt: resolvePreviewAlt(options?.previewAlt),
     objectFit: variant.objectFit,
     objectPosition: variant.objectPosition,

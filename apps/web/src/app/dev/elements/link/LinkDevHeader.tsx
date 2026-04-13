@@ -5,10 +5,12 @@ export function LinkDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Link defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune text decoration, weight, and interaction behavior, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementLink</code> variants (body vs heading copy, link tokens, layout).
-          Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementLink</code> blocks — inline text link decoration, color, and hover
+          interaction across all prose contexts
         </>
       }
     />

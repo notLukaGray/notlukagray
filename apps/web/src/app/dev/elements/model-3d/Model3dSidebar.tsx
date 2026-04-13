@@ -1,40 +1,38 @@
+import { ElementAdvancedPanel } from "@/app/dev/elements/_shared/ElementAdvancedPanel";
+import { HandoffSnippetPanel } from "@/app/dev/elements/_shared/HandoffSnippetPanel";
 import { Model3dCustomJsonPanel } from "./Model3dCustomJsonPanel";
+import { VARIANT_LABELS } from "./constants";
 import type { Model3dElementDevController } from "./useModel3dElementDevController";
 
 export function Model3dSidebar({ controller }: { controller: Model3dElementDevController }) {
+  const variantLabel = controller.isCustomVariant
+    ? "Create Custom"
+    : VARIANT_LABELS[controller.activeVariant];
   return (
     <div className="space-y-6 md:sticky md:top-8">
       {controller.isCustomVariant ? (
         <Model3dCustomJsonPanel controller={controller} />
       ) : (
-        <HandoffSnippetPanel controller={controller} />
+        <HandoffSnippetPanel
+          exportJson={controller.exportJson}
+          onCopy={() => void controller.copyExport()}
+          copied={controller.copied}
+          hydrated={controller.hydrated}
+          variantLabel={variantLabel}
+          elementName="model 3D"
+        />
       )}
-    </div>
-  );
-}
-
-function HandoffSnippetPanel({ controller }: { controller: Model3dElementDevController }) {
-  return (
-    <div className="space-y-3 rounded-lg border border-border bg-card/20 p-4">
-      <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
-        Handoff snippet
-      </p>
-      <p className="text-[10px] leading-snug text-muted-foreground">
-        Share this JSON with engineering to wire these model-3d variants into runtime defaults.
-      </p>
-      <pre className="max-h-96 overflow-x-auto overflow-y-auto whitespace-pre-wrap rounded bg-muted/40 p-3 font-mono text-[11px] leading-relaxed text-foreground">
-        {controller.exportJson}
-      </pre>
-      <button
-        type="button"
-        onClick={() => void controller.copyExport()}
-        className="w-full rounded border border-border px-3 py-2 text-sm font-mono text-foreground transition-colors hover:bg-muted"
-      >
-        {controller.copied ? "Copied!" : "Copy JSON"}
-      </button>
-      {!controller.hydrated ? (
-        <p className="text-[10px] text-muted-foreground">Loading saved model-3d defaults…</p>
-      ) : null}
+      <ElementAdvancedPanel
+        meta={{
+          activeVariant: String(controller.activeVariant),
+          variantLabel,
+          schemaType: "elementModel3D",
+          hydrated: controller.hydrated,
+          isCustomVariant: controller.isCustomVariant,
+          rawBlockJson: controller.exportJson,
+        }}
+        schemaDocs="element-model3d-schemas.ts"
+      />
     </div>
   );
 }

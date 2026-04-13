@@ -4,8 +4,8 @@ import { scaleSpaceForDensity, scaleSpaceShorthandForDensity } from "@pb/contrac
 
 const FRAME_PREVIEW_CHROME: Pick<CSSProperties, "boxSizing" | "border" | "background"> = {
   boxSizing: "border-box",
-  border: "1px solid color-mix(in oklab, var(--foreground) 18%, transparent)",
-  background: "color-mix(in oklab, var(--foreground) 5%, transparent)",
+  border: "1px solid var(--border)",
+  background: "transparent",
 };
 
 function normalizeGapValue(value: string | null): string | undefined {
@@ -77,7 +77,7 @@ export function FramePreviewAlignItems({ guidelines }: { guidelines: PbContentGu
         {[["A"], ["B", "tall", "cell"], ["C"]].map((parts, index) => (
           <span
             key={parts[0]}
-            className={`shrink-0 rounded px-2 py-1 text-center font-mono text-[10px] leading-snug ${index === 0 ? "bg-primary/20" : index === 1 ? "bg-accent/25" : "bg-secondary"}`}
+            className={`shrink-0 rounded border border-border/60 px-2 py-1 text-center font-mono text-[10px] leading-snug text-foreground ${index === 0 ? "bg-muted" : index === 1 ? "bg-card" : "bg-muted"}`}
             style={{ flex: "0 0 auto", width: 52 }}
           >
             {parts.map((part, partIndex) => (
@@ -117,7 +117,7 @@ export function FramePreviewJustifyContent({ guidelines }: { guidelines: PbConte
         {(["J1", "J2", "J3"] as const).map((label, index) => (
           <span
             key={label}
-            className={`shrink-0 rounded px-2 py-2 text-center font-mono text-[10px] ${index === 0 ? "bg-primary/20" : index === 1 ? "bg-accent/25" : "bg-secondary"}`}
+            className={`shrink-0 rounded border border-border/60 px-2 py-2 text-center font-mono text-[10px] text-foreground ${index === 0 ? "bg-muted" : index === 1 ? "bg-card" : "bg-muted"}`}
             style={{ flex: "0 0 auto", width: 52 }}
           >
             {label}
@@ -138,7 +138,7 @@ export function FramePreviewGapWrapDirection({ guidelines }: { guidelines: PbCon
         {FRAME_PREVIEW_CELLS.map((cell, index) => (
           <span
             key={cell}
-            className={`shrink-0 rounded px-2 py-1.5 text-center font-mono text-[10px] ${index % 3 === 0 ? "bg-primary/15" : index % 3 === 1 ? "bg-accent/20" : "bg-secondary"}`}
+            className={`shrink-0 rounded border border-border/60 px-2 py-1.5 text-center font-mono text-[10px] text-foreground ${index % 2 === 0 ? "bg-muted" : "bg-card"}`}
             style={{ flex: "0 0 auto", width: 56 }}
           >
             {cell}
@@ -170,8 +170,8 @@ export function FramePreviewPaddingRadius({ guidelines }: { guidelines: PbConten
           maxWidth: 280,
         }}
       >
-        <span className="block h-8 min-w-14 rounded-sm bg-primary/25" />
-        <span className="block h-8 min-w-14 rounded-sm bg-accent/30" />
+        <span className="block h-8 min-w-14 rounded-sm border border-border/60 bg-muted" />
+        <span className="block h-8 min-w-14 rounded-sm border border-border/60 bg-card" />
       </div>
     </div>
   );

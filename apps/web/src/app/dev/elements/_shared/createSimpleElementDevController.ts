@@ -1,6 +1,5 @@
-"use client";
 /* eslint-disable max-lines */
-
+"use client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   PbImageAnimationCurvePreset,
@@ -19,44 +18,23 @@ import {
   buildRuntimePreviewState,
 } from "@/app/dev/elements/image/runtime-draft";
 import type { ImageRuntimeDraft } from "@/app/dev/elements/image/types";
+import type {
+  SimpleElementControllerOptions,
+  SimplePersistedShape,
+} from "@/app/dev/elements/_shared/simple-element-dev-controller-types";
 import { useTypographyMotionPreview } from "@/app/dev/elements/_shared/useTypographyMotionPreview";
+import {
+  clearWorkbenchElement,
+  patchWorkbenchElement,
+  WORKBENCH_SESSION_CHANGED_EVENT,
+  WORKBENCH_SESSION_STORAGE_KEY,
+} from "@/app/dev/workbench/workbench-session";
 
-/**
- * A persisted shape for simple (non-workbench-session) element dev controllers.
- * Stores directly to a localStorage key — no workbench session integration.
- */
-type SimplePersistedShape<K extends string, V> = {
-  v: 1;
-  defaultVariant: K;
-  variants: Record<K, V>;
-};
-
-type Options<
-  K extends string,
-  V extends { animation: PbImageAnimationDefaults },
-  P extends SimplePersistedShape<K, V>,
-> = {
-  /** localStorage key used for direct persistence (no workbench session). */
-  storageKey: string;
-  defaults: { defaultVariant: K; variants: Record<K, V> };
-  variantOrder: K[];
-  readPersisted: () => P | null;
-  normalizeVariant: (seed: V, incoming?: Partial<V>) => V;
-  buildSnippet: (variantKey: K, variant: V, draft: ImageRuntimeDraft) => Record<string, unknown>;
-  toExportJson: (data: P) => string;
-  toPersisted: (defaultVariant: K, variants: Record<K, V>) => P;
-};
-
-/**
- * Factory for element dev controllers that persist directly to localStorage,
- * independent of the workbench session. Drop-in replacement surface for the
- * typography controller — the returned hook has the same interface.
- */
 export function createSimpleElementDevController<
   K extends string,
   V extends { animation: PbImageAnimationDefaults },
   P extends SimplePersistedShape<K, V>,
->(options: Options<K, V, P>) {
+>(options: SimpleElementControllerOptions<K, V, P>) {
   return function useSimpleElementDevController() {
     const [defaultVariant, setDefaultVariant] = useState<K>(options.defaults.defaultVariant);
     const [variants, setVariants] = useState<Record<K, V>>(options.defaults.variants);
@@ -71,8 +49,6 @@ export function createSimpleElementDevController<
     const [runtimeDraft, setRuntimeDraft] = useState<ImageRuntimeDraft>(
       DEFAULT_IMAGE_RUNTIME_DRAFT
     );
-
-    // Hydrate from localStorage on mount.
     useEffect(() => {
       const saved = options.readPersisted();
       if (saved) {
@@ -82,20 +58,38 @@ export function createSimpleElementDevController<
       }
       setHydrated(true);
     }, []);
-
-    // Persist whenever variants/defaultVariant change (after hydration).
     useEffect(() => {
       if (!hydrated) return;
-      try {
-        localStorage.setItem(
-          options.storageKey,
-          JSON.stringify(options.toPersisted(defaultVariant, variants))
-        );
-      } catch {
-        /* quota / private mode */
-      }
+      patchWorkbenchElement(
+        options.elementKey,
+        options.toPersisted(defaultVariant, variants) as never
+      );
     }, [defaultVariant, hydrated, variants]);
-
+    useEffect(() => {
+      if (typeof window === "undefined" || !hydrated) return;
+      const syncFromSession = () => {
+        const saved = options.readPersisted();
+        if (saved) {
+          setDefaultVariant(saved.defaultVariant);
+          setVariants(saved.variants);
+          setActiveVariant(saved.defaultVariant);
+          return;
+        }
+        setDefaultVariant(options.defaults.defaultVariant);
+        setVariants(options.defaults.variants);
+        setActiveVariant(options.defaults.defaultVariant);
+        setIsCustomVariant(false);
+      };
+      const onStorage = (event: StorageEvent) => {
+        if (event.key === WORKBENCH_SESSION_STORAGE_KEY) syncFromSession();
+      };
+      window.addEventListener("storage", onStorage);
+      window.addEventListener(WORKBENCH_SESSION_CHANGED_EVENT, syncFromSession);
+      return () => {
+        window.removeEventListener("storage", onStorage);
+        window.removeEventListener(WORKBENCH_SESSION_CHANGED_EVENT, syncFromSession);
+      };
+    }, [hydrated]);
     const updateVariant = useCallback(
       (key: K, apply: (v: V) => V) => {
         if (isCustomVariant) {
@@ -109,7 +103,6 @@ export function createSimpleElementDevController<
       },
       [activeVariant, isCustomVariant, variants]
     );
-
     const setVariantPatch = useCallback(
       (key: K, patch: Partial<V>) => updateVariant(key, (variant) => ({ ...variant, ...patch })),
       [updateVariant]
@@ -200,11 +193,9 @@ export function createSimpleElementDevController<
       },
       [activeVariant, customVariant, isCustomVariant, patchExitFineTune, variants]
     );
-
     const setRuntimePatch = useCallback((patch: Partial<ImageRuntimeDraft>) => {
       setRuntimeDraft((prev) => ({ ...prev, ...patch }));
     }, []);
-
     const active = isCustomVariant
       ? (customVariant ?? variants[activeVariant])
       : variants[activeVariant];
@@ -230,13 +221,8 @@ export function createSimpleElementDevController<
         /* ignore */
       }
     }, [exportJson]);
-
     const resetDefaults = useCallback(() => {
-      try {
-        localStorage.removeItem(options.storageKey);
-      } catch {
-        /* ignore */
-      }
+      clearWorkbenchElement(options.elementKey);
       setDefaultVariant(options.defaults.defaultVariant);
       setVariants(options.defaults.variants);
       setActiveVariant(options.defaults.defaultVariant);
@@ -247,7 +233,6 @@ export function createSimpleElementDevController<
       resetMotionPreview();
       setCopied(false);
     }, [resetMotionPreview]);
-
     return {
       active,
       activeVariant,

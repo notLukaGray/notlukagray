@@ -5,10 +5,12 @@ export function ButtonDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Button defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune chrome spacing, icon/label layout, and interactive states, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementButton</code> variants, preview them in-page, then copy JSON. Schema:{" "}
-          <code>element-button-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementButton</code> blocks — padding, icon relationship, and interactive visual
+          states across all CTA placements
         </>
       }
     />

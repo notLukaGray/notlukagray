@@ -1,11 +1,24 @@
+/* eslint-disable max-lines */
 import {
   COLOR_TOOL_LEGACY_STORAGE_KEY,
   type ColorToolPersistedV2,
 } from "@/app/dev/colors/color-tool-persistence";
 import { STORAGE_KEY as BODY_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/body/constants";
+import { STORAGE_KEY as BUTTON_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/button/constants";
 import { STORAGE_KEY as HEADING_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/heading/constants";
 import { STORAGE_KEY as IMAGE_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/image/constants";
+import { STORAGE_KEY as INPUT_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/input/constants";
 import { STORAGE_KEY as LINK_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/link/constants";
+import { STORAGE_KEY as MODEL3D_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/model-3d/constants";
+import { STORAGE_KEY as RANGE_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/range/constants";
+import { STORAGE_KEY as RICH_TEXT_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/rich-text/constants";
+import { STORAGE_KEY as RIVE_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/rive/constants";
+import { STORAGE_KEY as SCROLL_PROGRESS_BAR_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/scroll-progress-bar/constants";
+import { STORAGE_KEY as SPACER_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/spacer/constants";
+import { STORAGE_KEY as SVG_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/svg/constants";
+import { STORAGE_KEY as VECTOR_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/vector/constants";
+import { STORAGE_KEY as VIDEO_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/video/constants";
+import { STORAGE_KEY as VIDEO_TIME_ELEMENT_LEGACY_KEY } from "@/app/dev/elements/video-time/constants";
 import {
   getDefaultWorkbenchSession,
   getProductionWorkbenchSession,
@@ -47,6 +60,18 @@ export const WORKBENCH_LEGACY_LOCAL_STORAGE_KEYS = [
   BODY_ELEMENT_LEGACY_KEY,
   HEADING_ELEMENT_LEGACY_KEY,
   LINK_ELEMENT_LEGACY_KEY,
+  BUTTON_ELEMENT_LEGACY_KEY,
+  RICH_TEXT_ELEMENT_LEGACY_KEY,
+  INPUT_ELEMENT_LEGACY_KEY,
+  RANGE_ELEMENT_LEGACY_KEY,
+  VIDEO_ELEMENT_LEGACY_KEY,
+  VIDEO_TIME_ELEMENT_LEGACY_KEY,
+  VECTOR_ELEMENT_LEGACY_KEY,
+  SVG_ELEMENT_LEGACY_KEY,
+  MODEL3D_ELEMENT_LEGACY_KEY,
+  RIVE_ELEMENT_LEGACY_KEY,
+  SPACER_ELEMENT_LEGACY_KEY,
+  SCROLL_PROGRESS_BAR_ELEMENT_LEGACY_KEY,
 ] as const;
 
 export const ALL_WORKBENCH_DEV_STORAGE_KEYS = [
@@ -234,6 +259,18 @@ const ELEMENT_LEGACY_KEYS: Record<WorkbenchElementKey, string> = {
   body: BODY_ELEMENT_LEGACY_KEY,
   heading: HEADING_ELEMENT_LEGACY_KEY,
   link: LINK_ELEMENT_LEGACY_KEY,
+  button: BUTTON_ELEMENT_LEGACY_KEY,
+  richText: RICH_TEXT_ELEMENT_LEGACY_KEY,
+  input: INPUT_ELEMENT_LEGACY_KEY,
+  range: RANGE_ELEMENT_LEGACY_KEY,
+  video: VIDEO_ELEMENT_LEGACY_KEY,
+  videoTime: VIDEO_TIME_ELEMENT_LEGACY_KEY,
+  vector: VECTOR_ELEMENT_LEGACY_KEY,
+  svg: SVG_ELEMENT_LEGACY_KEY,
+  model3d: MODEL3D_ELEMENT_LEGACY_KEY,
+  rive: RIVE_ELEMENT_LEGACY_KEY,
+  spacer: SPACER_ELEMENT_LEGACY_KEY,
+  scrollProgressBar: SCROLL_PROGRESS_BAR_ELEMENT_LEGACY_KEY,
 };
 
 export function patchWorkbenchElement<K extends WorkbenchElementKey>(

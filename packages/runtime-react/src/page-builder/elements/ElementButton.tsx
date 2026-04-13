@@ -21,6 +21,7 @@ import {
   buildElementButtonWrapperStyles,
   getElementButtonTypographyClass,
 } from "./ElementButton/element-button-styles";
+import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
 import {
   buildElementButtonLinkState,
   resolveElementButtonVectorBlock,
@@ -47,6 +48,7 @@ export function ElementButton({
   label,
   copyType = "body",
   level,
+  fontFamily,
   vectorRef,
   href,
   external = false,
@@ -75,6 +77,16 @@ export function ElementButton({
   wrapperStrokeRef,
   wrapperPadding,
   wrapperBorderRadius,
+  wrapperFillHover,
+  wrapperStrokeHover,
+  wrapperFillActive,
+  wrapperScaleHover,
+  wrapperScaleActive,
+  wrapperScaleDisabled,
+  wrapperOpacityHover,
+  wrapperFillDisabled,
+  wrapperTransition,
+  wrapperInteractionVars,
   pointerDownAction,
   pointerUpAction,
   ...rest
@@ -89,7 +101,7 @@ export function ElementButton({
     copyType,
     level,
   } as Props);
-  const { hasWrapper, useRoundedGradientStroke, wrapperStyle, innerWrapperStyle } =
+  const { hasWrapper, useRoundedGradientStroke, wrapperStyle, innerWrapperStyle, hasStateVars } =
     buildElementButtonWrapperStyles(definitions as Record<string, unknown> | null | undefined, {
       wrapperFill,
       wrapperStroke,
@@ -97,6 +109,16 @@ export function ElementButton({
       wrapperStrokeRef,
       wrapperPadding,
       wrapperBorderRadius,
+      wrapperFillHover,
+      wrapperStrokeHover,
+      wrapperFillActive,
+      wrapperScaleHover,
+      wrapperScaleActive,
+      wrapperScaleDisabled,
+      wrapperOpacityHover,
+      wrapperFillDisabled,
+      wrapperTransition,
+      wrapperInteractionVars,
     });
   const { hasLink, isInternal, linkStyle, linkClassName } = buildElementButtonLinkState(
     pathname,
@@ -124,6 +146,7 @@ export function ElementButton({
     wordWrap,
     ...rest,
   } as Props & { wordWrap: boolean });
+  const resolvedFontFamily = resolveFontFamily(fontFamily);
   const vectorBlock = resolveElementButtonVectorBlock(
     definitions as Record<string, unknown> | null | undefined,
     vectorRef
@@ -188,7 +211,13 @@ export function ElementButton({
       {hasLabel && (
         <span
           className={`m-0 block ${typographyClass}`}
-          style={isDisabled && hasLink ? { opacity: 0.6 } : undefined}
+          style={{
+            ...(resolvedFontFamily ? { fontFamily: resolvedFontFamily } : {}),
+            ...(!hasLink && linkDefault != null && linkDefault !== ""
+              ? { color: linkDefault }
+              : {}),
+            ...(isDisabled && hasLink ? { opacity: 0.6 } : {}),
+          }}
         >
           {resolvedLabel}
         </span>
@@ -273,8 +302,16 @@ export function ElementButton({
     content
   );
 
+  const wrapperClassName = [
+    "inline-flex",
+    hasStateVars ? "element-btn-wrap" : "",
+    isDisabled ? "element-btn-wrap--disabled" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const wrappedInner = hasWrapper ? (
-    <span style={wrapperStyle} className="inline-flex">
+    <span style={wrapperStyle} className={wrapperClassName}>
       {useRoundedGradientStroke ? (
         <span style={innerWrapperStyle} className="inline-flex">
           {inner}
@@ -282,6 +319,11 @@ export function ElementButton({
       ) : (
         inner
       )}
+    </span>
+  ) : hasStateVars ? (
+    // No fill/stroke wrapper, but we still need a span to carry the interactive CSS vars and class.
+    <span style={wrapperStyle} className={wrapperClassName}>
+      {inner}
     </span>
   ) : (
     inner

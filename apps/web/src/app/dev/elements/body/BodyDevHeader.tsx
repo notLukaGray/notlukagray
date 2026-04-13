@@ -5,10 +5,12 @@ export function BodyDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Body defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune level sizing, paragraph spacing, and motion, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune variants for <code>elementBody</code> and copy JSON. Schema:{" "}
-          <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementBody</code> blocks — paragraph text sizing, level scale, and entrance motion
+          across all sections
         </>
       }
     />

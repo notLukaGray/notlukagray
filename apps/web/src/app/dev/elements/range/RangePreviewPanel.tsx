@@ -7,11 +7,27 @@ import type { RangeElementDevController } from "./useRangeElementDevController";
 
 export function RangePreviewPanel({ controller }: { controller: RangeElementDevController }) {
   const { runtimePreview } = controller;
-  const previewBlock = useMemo(() => {
-    const rangeBlock = buildResolvedTypographyWorkbenchBlock(controller.runtimeDraft, {
-      type: "elementRange",
-      ...controller.active,
-    });
+  const rawPreviewBlock = useMemo(
+    () =>
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        {
+          type: "elementRange",
+          ...controller.active,
+        },
+        { mode: "raw" }
+      ),
+    [controller.active, controller.runtimeDraft]
+  );
+  const guidedPreviewBlock = useMemo(() => {
+    const rangeBlock = buildResolvedTypographyWorkbenchBlock(
+      controller.runtimeDraft,
+      {
+        type: "elementRange",
+        ...controller.active,
+      },
+      { mode: "guided" }
+    );
     return {
       type: "elementGroup",
       width: "100%",
@@ -44,6 +60,11 @@ export function RangePreviewPanel({ controller }: { controller: RangeElementDevC
     ? "Create Custom"
     : VARIANT_LABELS[controller.activeVariant];
 
+  // Light scenario only swaps the preview surface foundation; the block stays the raw
+  // `elementRange` so colors from `/dev/colors` (`--pb-*`) resolve on that surface. The
+  // guided stack remains available on Default via fidelity → guided.
+  const scenarioBlocks = useMemo(() => ({ light: rawPreviewBlock }), [rawPreviewBlock]);
+
   return (
     <TypographyLiveMotionPreview
       previewVisible={controller.previewVisible}
@@ -56,7 +77,10 @@ export function RangePreviewPanel({ controller }: { controller: RangeElementDevC
       variantLabel={variantLabel}
       hiddenByVisibleWhen={hiddenByVisibleWhen}
       runtimeDraft={controller.runtimeDraft}
-      previewBlock={previewBlock}
+      previewBlock={rawPreviewBlock}
+      guidedPreviewBlock={guidedPreviewBlock}
+      scenarioBlocks={scenarioBlocks}
+      showFidelityModeToggle
       onPreviewExitComplete={controller.onPreviewExitComplete}
       animationSource={controller.active.animation}
     />

@@ -101,6 +101,16 @@ export function buildElementButtonWrapperStyles(
     | "wrapperStrokeRef"
     | "wrapperPadding"
     | "wrapperBorderRadius"
+    | "wrapperFillHover"
+    | "wrapperStrokeHover"
+    | "wrapperFillActive"
+    | "wrapperScaleHover"
+    | "wrapperScaleActive"
+    | "wrapperScaleDisabled"
+    | "wrapperOpacityHover"
+    | "wrapperFillDisabled"
+    | "wrapperTransition"
+    | "wrapperInteractionVars"
   >
 ) {
   const {
@@ -110,6 +120,16 @@ export function buildElementButtonWrapperStyles(
     wrapperStrokeRef,
     wrapperPadding,
     wrapperBorderRadius,
+    wrapperFillHover,
+    wrapperStrokeHover,
+    wrapperFillActive,
+    wrapperScaleHover,
+    wrapperScaleActive,
+    wrapperScaleDisabled,
+    wrapperOpacityHover,
+    wrapperFillDisabled,
+    wrapperTransition,
+    wrapperInteractionVars,
   } = props;
   const resolvedFill = resolveCssGradientRef(definitions, wrapperFillRef, wrapperFill);
   const resolvedStroke = resolveCssGradientRef(definitions, wrapperStrokeRef, wrapperStroke);
@@ -159,5 +179,80 @@ export function buildElementButtonWrapperStyles(
         }
       : {};
 
-  return { hasWrapper, useRoundedGradientStroke, wrapperStyle, innerWrapperStyle };
+  // Interactive CSS vars — explicit props + defaults so :hover/:active always resolve (globals.css
+  // uses var(--element-btn-fill-hover, var(--element-btn-fill)) and transitions run on the wrapper).
+  const stateVars: CSSProperties = {};
+  if (wrapperFillHover != null)
+    (stateVars as Record<string, string>)["--element-btn-fill-hover"] = wrapperFillHover;
+  if (wrapperStrokeHover != null)
+    (stateVars as Record<string, string>)["--element-btn-stroke-hover"] = wrapperStrokeHover;
+  if (wrapperFillActive != null)
+    (stateVars as Record<string, string>)["--element-btn-fill-active"] = wrapperFillActive;
+  if (wrapperScaleHover != null)
+    (stateVars as Record<string, string>)["--element-btn-scale-hover"] = String(wrapperScaleHover);
+  if (wrapperScaleActive != null)
+    (stateVars as Record<string, string>)["--element-btn-scale-active"] =
+      String(wrapperScaleActive);
+  if (wrapperScaleDisabled != null)
+    (stateVars as Record<string, string>)["--element-btn-scale-disabled"] =
+      String(wrapperScaleDisabled);
+  if (wrapperOpacityHover != null)
+    (stateVars as Record<string, string>)["--element-btn-opacity-hover"] =
+      String(wrapperOpacityHover);
+  if (wrapperFillDisabled != null)
+    (stateVars as Record<string, string>)["--element-btn-fill-disabled"] = wrapperFillDisabled;
+  if (wrapperTransition != null)
+    (stateVars as Record<string, string>)["--element-btn-transition"] = wrapperTransition;
+
+  const fillTracking: CSSProperties = {};
+  const canTrackSolidFill =
+    hasWrapper &&
+    resolvedFill != null &&
+    !useRoundedGradientStroke &&
+    typeof resolvedFill === "string";
+  if (canTrackSolidFill) {
+    (fillTracking as Record<string, string>)["--element-btn-fill"] = resolvedFill;
+    if (wrapperFillHover == null) {
+      (fillTracking as Record<string, string>)["--element-btn-fill-hover"] = resolvedFill;
+    }
+    if (wrapperFillActive == null) {
+      const hoverFallback = wrapperFillHover ?? resolvedFill;
+      (fillTracking as Record<string, string>)["--element-btn-fill-active"] = hoverFallback;
+    }
+  }
+  const canTrackSolidStroke =
+    hasWrapper &&
+    resolvedStroke != null &&
+    !isGradientStroke &&
+    !useRoundedGradientStroke &&
+    typeof resolvedStroke === "string";
+  if (canTrackSolidStroke) {
+    (fillTracking as Record<string, string>)["--element-btn-stroke"] = resolvedStroke;
+    if (wrapperStrokeHover == null) {
+      (fillTracking as Record<string, string>)["--element-btn-stroke-hover"] = resolvedStroke;
+    }
+  }
+
+  const customVars: CSSProperties = {};
+  if (wrapperInteractionVars) {
+    for (const [key, val] of Object.entries(wrapperInteractionVars)) {
+      if (typeof key === "string" && key.startsWith("--") && typeof val === "string") {
+        (customVars as Record<string, string>)[key] = val;
+      }
+    }
+  }
+
+  const interactionLayer: CSSProperties = { ...fillTracking, ...stateVars, ...customVars };
+  const hasInteractionLayer = Object.keys(interactionLayer).length > 0;
+  const needsInteractiveWrapper = hasWrapper || hasInteractionLayer;
+
+  return {
+    hasWrapper,
+    useRoundedGradientStroke,
+    wrapperStyle:
+      hasWrapper || hasInteractionLayer ? { ...wrapperStyle, ...interactionLayer } : wrapperStyle,
+    innerWrapperStyle,
+    /** True when the wrapper should mount `.element-btn-wrap` (fills, strokes, hovers, opacity). */
+    hasStateVars: needsInteractiveWrapper,
+  };
 }

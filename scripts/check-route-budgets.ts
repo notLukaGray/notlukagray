@@ -3,6 +3,7 @@
 import fs from "fs";
 import path from "path";
 import vm from "vm";
+import { discoverAllPages } from "@pb/core";
 
 type RoutePayload = {
   bytes: number;
@@ -27,6 +28,11 @@ type RouteBudgetBaseline = {
       reason: string;
     }
   >;
+};
+
+type CurrentRoutePayload = {
+  payload: RoutePayload;
+  sourceRoute?: string;
 };
 
 function resolveNextDir(): string {
@@ -102,6 +108,31 @@ function isPublicRoute(route: string): boolean {
   if (route === "/favicon.ico") return false;
   if (route === "/sitemap.xml") return false;
   return true;
+}
+
+let discoveredContentRoutes: Set<string> | null = null;
+
+function getDiscoveredContentRoutes(): Set<string> {
+  if (discoveredContentRoutes) return discoveredContentRoutes;
+  discoveredContentRoutes = new Set(
+    discoverAllPages().map(({ slugSegments }) => normalizeRoute(slugSegments.join("/")))
+  );
+  return discoveredContentRoutes;
+}
+
+function getCurrentRoutePayload(
+  route: string,
+  payloads: Record<string, RoutePayload>
+): CurrentRoutePayload | null {
+  const direct = payloads[route];
+  if (direct) return { payload: direct };
+
+  const catchAll = payloads["/[...slug]"];
+  if (catchAll && getDiscoveredContentRoutes().has(route)) {
+    return { payload: catchAll, sourceRoute: "/[...slug]" };
+  }
+
+  return null;
 }
 
 function extractManifestObject(manifestContent: string): Record<string, unknown> | null {
@@ -260,7 +291,8 @@ function compareAgainstBaseline(
   const sortedRoutes = Array.from(allRoutes).sort((a, b) => a.localeCompare(b));
 
   for (const route of sortedRoutes) {
-    const current = payloads[route];
+    const currentRoute = getCurrentRoutePayload(route, payloads);
+    const current = currentRoute?.payload;
     const base = baseline.routes[route];
     const exception = baseline.exceptions?.[route];
 
@@ -282,6 +314,7 @@ function compareAgainstBaseline(
         baselineBytes: base.bytes,
         baselineHuman: formatBytes(base.bytes),
       });
+      failed = true;
       continue;
     }
 
@@ -305,6 +338,7 @@ function compareAgainstBaseline(
       budgetLimitHuman: formatBytes(Math.round(maxBytes)),
       allowPercentOver,
       exceptionReason: exception?.reason,
+      sourceRoute: currentRoute.sourceRoute,
       manifestPath: current.manifestPath,
       chunkCount: current.chunkCount,
     });

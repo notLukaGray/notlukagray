@@ -5,12 +5,12 @@ export function ScrollProgressBarDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Scroll progress bar defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune height, fill color, and track background, then validate the representational preview before copying JSON. Preview shows static fill at 60%."
+      affects={
         <>
-          Tune <code>elementScrollProgressBar</code> variants — height, fill, and track background —
-          then copy JSON. Schema: <code>element-content-schemas.ts</code> +{" "}
-          <code>elementLayoutSchema</code>. In the dev preview the bar tracks scroll of its
-          container; it may show at 0% fill in the workbench.
+          <code>elementScrollProgressBar</code> blocks — page scroll progress indicator styling and
+          placement across all scroll-linked sections
         </>
       }
     />

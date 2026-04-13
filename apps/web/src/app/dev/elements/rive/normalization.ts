@@ -5,6 +5,7 @@ import {
   pickOverflowValue,
   pickString,
   pickUnitOpacity,
+  readElementPersistedPayload,
   resolveTypographyDefaultVariant,
 } from "@/app/dev/elements/_shared/typography-normalization-helpers";
 import { normalizePbImageAnimationDefaults } from "@/app/dev/elements/image/normalization";
@@ -23,9 +24,7 @@ function readRivePersistedPayload(): {
 } | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as unknown;
+    const parsed = readElementPersistedPayload("rive", STORAGE_KEY);
     if (
       !isRecord(parsed) ||
       typeof parsed.defaultVariant !== "string" ||

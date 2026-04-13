@@ -5,11 +5,12 @@ export function RiveDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Rive defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, configure playback and layout behavior, then validate the representational preview before copying JSON. Live preview requires a real .riv file reference."
+      affects={
         <>
-          Tune <code>elementRive</code> variants, configure playback and layout behavior, then copy
-          JSON. Schema: <code>element-rive-schemas.ts</code> + <code>elementLayoutSchema</code>.
-          Live preview requires a real <code>.riv</code> file reference.
+          <code>elementRive</code> blocks — Rive animation canvas layout, playback config, and state
+          machine behavior
         </>
       }
     />

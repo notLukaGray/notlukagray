@@ -5499,6 +5499,9 @@
             "level": {
               "$ref": "#/$defs/Def155"
             },
+            "fontFamily": {
+              "type": "string"
+            },
             "wordWrap": {
               "type": "boolean"
             },

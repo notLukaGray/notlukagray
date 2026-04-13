@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import type { ColorToolPersistedV2 } from "@/app/dev/colors/color-tool-persistence";
 import {
   getDefaultColorToolPersistedV2,
@@ -17,6 +18,30 @@ import type { PersistedBodyDefaults } from "@/app/dev/elements/body/types";
 import type { PersistedHeadingDefaults } from "@/app/dev/elements/heading/types";
 import type { PersistedImageDefaults } from "@/app/dev/elements/image/types";
 import type { PersistedLinkDefaults } from "@/app/dev/elements/link/types";
+import { BASE_DEFAULTS as BUTTON_BASE_DEFAULTS } from "@/app/dev/elements/button/constants";
+import type { PersistedButtonDefaults } from "@/app/dev/elements/button/types";
+import { BASE_DEFAULTS as RICH_TEXT_BASE_DEFAULTS } from "@/app/dev/elements/rich-text/constants";
+import type { PersistedRichTextDefaults } from "@/app/dev/elements/rich-text/types";
+import { BASE_DEFAULTS as INPUT_BASE_DEFAULTS } from "@/app/dev/elements/input/constants";
+import type { PersistedInputDefaults } from "@/app/dev/elements/input/types";
+import { BASE_DEFAULTS as RANGE_BASE_DEFAULTS } from "@/app/dev/elements/range/constants";
+import type { PersistedRangeDefaults } from "@/app/dev/elements/range/types";
+import { BASE_DEFAULTS as VIDEO_BASE_DEFAULTS } from "@/app/dev/elements/video/constants";
+import type { PersistedVideoDefaults } from "@/app/dev/elements/video/types";
+import { BASE_DEFAULTS as VIDEO_TIME_BASE_DEFAULTS } from "@/app/dev/elements/video-time/constants";
+import type { PersistedVideoTimeDefaults } from "@/app/dev/elements/video-time/types";
+import { BASE_DEFAULTS as VECTOR_BASE_DEFAULTS } from "@/app/dev/elements/vector/constants";
+import type { PersistedVectorDefaults } from "@/app/dev/elements/vector/types";
+import { BASE_DEFAULTS as SVG_BASE_DEFAULTS } from "@/app/dev/elements/svg/constants";
+import type { PersistedSvgDefaults } from "@/app/dev/elements/svg/types";
+import { BASE_DEFAULTS as MODEL_3D_BASE_DEFAULTS } from "@/app/dev/elements/model-3d/constants";
+import type { PersistedModel3dDefaults } from "@/app/dev/elements/model-3d/types";
+import { BASE_DEFAULTS as RIVE_BASE_DEFAULTS } from "@/app/dev/elements/rive/constants";
+import type { PersistedRiveDefaults } from "@/app/dev/elements/rive/types";
+import { BASE_DEFAULTS as SPACER_BASE_DEFAULTS } from "@/app/dev/elements/spacer/constants";
+import type { PersistedSpacerDefaults } from "@/app/dev/elements/spacer/types";
+import { BASE_DEFAULTS as SCROLL_PROGRESS_BAR_BASE_DEFAULTS } from "@/app/dev/elements/scroll-progress-bar/constants";
+import type { PersistedScrollProgressBarDefaults } from "@/app/dev/elements/scroll-progress-bar/types";
 import {
   DEV_NEUTRAL_FONT_CONFIGS,
   DEV_NEUTRAL_TYPE_SCALE,
@@ -197,6 +222,150 @@ export function getProductionLinkElementPersisted(): PersistedLinkDefaults {
   };
 }
 
+export function getDefaultButtonElementPersisted(): PersistedButtonDefaults {
+  return {
+    v: 1,
+    defaultVariant: BUTTON_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(BUTTON_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionButtonElementPersisted(): PersistedButtonDefaults {
+  return getDefaultButtonElementPersisted();
+}
+
+export function getDefaultRichTextElementPersisted(): PersistedRichTextDefaults {
+  return {
+    v: 1,
+    defaultVariant: RICH_TEXT_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(RICH_TEXT_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionRichTextElementPersisted(): PersistedRichTextDefaults {
+  return getDefaultRichTextElementPersisted();
+}
+
+export function getDefaultInputElementPersisted(): PersistedInputDefaults {
+  return {
+    v: 1,
+    defaultVariant: INPUT_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(INPUT_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionInputElementPersisted(): PersistedInputDefaults {
+  return getDefaultInputElementPersisted();
+}
+
+export function getDefaultRangeElementPersisted(): PersistedRangeDefaults {
+  return {
+    v: 1,
+    defaultVariant: RANGE_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(RANGE_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionRangeElementPersisted(): PersistedRangeDefaults {
+  return getDefaultRangeElementPersisted();
+}
+
+export function getDefaultVideoElementPersisted(): PersistedVideoDefaults {
+  return {
+    v: 1,
+    defaultVariant: VIDEO_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(VIDEO_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionVideoElementPersisted(): PersistedVideoDefaults {
+  return getDefaultVideoElementPersisted();
+}
+
+export function getDefaultVideoTimeElementPersisted(): PersistedVideoTimeDefaults {
+  return {
+    v: 1,
+    defaultVariant: VIDEO_TIME_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(VIDEO_TIME_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionVideoTimeElementPersisted(): PersistedVideoTimeDefaults {
+  return getDefaultVideoTimeElementPersisted();
+}
+
+export function getDefaultVectorElementPersisted(): PersistedVectorDefaults {
+  return {
+    v: 1,
+    defaultVariant: VECTOR_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(VECTOR_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionVectorElementPersisted(): PersistedVectorDefaults {
+  return getDefaultVectorElementPersisted();
+}
+
+export function getDefaultSvgElementPersisted(): PersistedSvgDefaults {
+  return {
+    v: 1,
+    defaultVariant: SVG_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(SVG_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionSvgElementPersisted(): PersistedSvgDefaults {
+  return getDefaultSvgElementPersisted();
+}
+
+export function getDefaultModel3dElementPersisted(): PersistedModel3dDefaults {
+  return {
+    v: 1,
+    defaultVariant: MODEL_3D_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(MODEL_3D_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionModel3dElementPersisted(): PersistedModel3dDefaults {
+  return getDefaultModel3dElementPersisted();
+}
+
+export function getDefaultRiveElementPersisted(): PersistedRiveDefaults {
+  return {
+    v: 1,
+    defaultVariant: RIVE_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(RIVE_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionRiveElementPersisted(): PersistedRiveDefaults {
+  return getDefaultRiveElementPersisted();
+}
+
+export function getDefaultSpacerElementPersisted(): PersistedSpacerDefaults {
+  return {
+    v: 1,
+    defaultVariant: SPACER_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(SPACER_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionSpacerElementPersisted(): PersistedSpacerDefaults {
+  return getDefaultSpacerElementPersisted();
+}
+
+export function getDefaultScrollProgressBarElementPersisted(): PersistedScrollProgressBarDefaults {
+  return {
+    v: 1,
+    defaultVariant: SCROLL_PROGRESS_BAR_BASE_DEFAULTS.defaultVariant,
+    variants: structuredClone(SCROLL_PROGRESS_BAR_BASE_DEFAULTS.variants),
+  };
+}
+
+export function getProductionScrollProgressBarElementPersisted(): PersistedScrollProgressBarDefaults {
+  return getDefaultScrollProgressBarElementPersisted();
+}
+
 export type WorkbenchSessionV2 = {
   v: 2;
   colors: ColorToolPersistedV2;
@@ -207,8 +376,39 @@ export type WorkbenchSessionV2 = {
     body: PersistedBodyDefaults;
     heading: PersistedHeadingDefaults;
     link: PersistedLinkDefaults;
+    button: PersistedButtonDefaults;
+    richText: PersistedRichTextDefaults;
+    input: PersistedInputDefaults;
+    range: PersistedRangeDefaults;
+    video: PersistedVideoDefaults;
+    videoTime: PersistedVideoTimeDefaults;
+    vector: PersistedVectorDefaults;
+    svg: PersistedSvgDefaults;
+    model3d: PersistedModel3dDefaults;
+    rive: PersistedRiveDefaults;
+    spacer: PersistedSpacerDefaults;
+    scrollProgressBar: PersistedScrollProgressBarDefaults;
   };
 };
+
+export const WORKBENCH_ELEMENT_KEYS = [
+  "image",
+  "body",
+  "heading",
+  "link",
+  "button",
+  "richText",
+  "input",
+  "range",
+  "video",
+  "videoTime",
+  "vector",
+  "svg",
+  "model3d",
+  "rive",
+  "spacer",
+  "scrollProgressBar",
+] as const;
 
 function createWorkbenchSession(
   colors: ColorToolPersistedV2,
@@ -229,6 +429,18 @@ export function getDefaultWorkbenchSession(): WorkbenchSessionV2 {
       body: getDefaultBodyElementPersisted(),
       heading: getDefaultHeadingElementPersisted(),
       link: getDefaultLinkElementPersisted(),
+      button: getDefaultButtonElementPersisted(),
+      richText: getDefaultRichTextElementPersisted(),
+      input: getDefaultInputElementPersisted(),
+      range: getDefaultRangeElementPersisted(),
+      video: getDefaultVideoElementPersisted(),
+      videoTime: getDefaultVideoTimeElementPersisted(),
+      vector: getDefaultVectorElementPersisted(),
+      svg: getDefaultSvgElementPersisted(),
+      model3d: getDefaultModel3dElementPersisted(),
+      rive: getDefaultRiveElementPersisted(),
+      spacer: getDefaultSpacerElementPersisted(),
+      scrollProgressBar: getDefaultScrollProgressBarElementPersisted(),
     }
   );
 }
@@ -243,6 +455,18 @@ export function getProductionWorkbenchSession(): WorkbenchSessionV2 {
       body: getProductionBodyElementPersisted(),
       heading: getProductionHeadingElementPersisted(),
       link: getProductionLinkElementPersisted(),
+      button: getProductionButtonElementPersisted(),
+      richText: getProductionRichTextElementPersisted(),
+      input: getProductionInputElementPersisted(),
+      range: getProductionRangeElementPersisted(),
+      video: getProductionVideoElementPersisted(),
+      videoTime: getProductionVideoTimeElementPersisted(),
+      vector: getProductionVectorElementPersisted(),
+      svg: getProductionSvgElementPersisted(),
+      model3d: getProductionModel3dElementPersisted(),
+      rive: getProductionRiveElementPersisted(),
+      spacer: getProductionSpacerElementPersisted(),
+      scrollProgressBar: getProductionScrollProgressBarElementPersisted(),
     }
   );
 }

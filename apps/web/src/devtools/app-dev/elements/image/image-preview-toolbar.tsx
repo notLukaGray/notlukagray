@@ -41,22 +41,6 @@ export function ImagePreviewToolbar({ controller }: { controller: ImageElementDe
           />
           Auto loop
         </label>
-        <div className="inline-flex rounded border border-border/60 bg-background/60 p-0.5">
-          {(["desktop", "mobile"] as const).map((device) => (
-            <button
-              key={device}
-              type="button"
-              onClick={() => controller.setPreviewDevice(device)}
-              className={`rounded px-2 py-1 text-[10px] font-mono uppercase tracking-wide ${
-                controller.previewDevice === device
-                  ? "bg-foreground/10 text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {device}
-            </button>
-          ))}
-        </div>
       </div>
     </>
   );

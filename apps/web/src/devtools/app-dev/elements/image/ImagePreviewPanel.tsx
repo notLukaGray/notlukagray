@@ -1,8 +1,9 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { buildImageDevPreviewElementBlock } from "@/app/dev/elements/image/runtime-draft";
-import { ServerBreakpointProvider } from "@/core/providers/device-type-provider";
+import { PreviewProvenanceBadge } from "@/app/dev/workbench/PreviewProvenanceBadge";
+import { WorkbenchElementPreviewSurface } from "@/app/dev/workbench/workbench-element-preview-surface";
+import { useWorkbenchPreviewContext } from "@/app/dev/workbench/workbench-preview-context";
 import { ElementRenderer } from "@pb/runtime-react/renderers";
-import { PREVIEW_FALLBACK_IMAGE_SRC } from "@/app/dev/elements/image/constants";
 import {
   getPreviewLayoutSummary,
   getPreviewMediaShell,
@@ -38,11 +39,19 @@ function resolvePreviewAlt(uploadName: string | null): string {
 }
 
 export function ImagePreviewPanel({ controller }: { controller: ImageElementDevController }) {
+  const { breakpoint } = useWorkbenchPreviewContext();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [fidelityMode, setFidelityMode] = useState<"raw" | "guided">("raw");
+  const previewDevice = breakpoint === "mobile" ? "mobile" : "desktop";
+
+  useEffect(() => {
+    if (controller.previewDevice === previewDevice) return;
+    controller.setPreviewDevice(previewDevice);
+  }, [controller, controller.previewDevice, controller.setPreviewDevice, previewDevice]);
 
   const previewVariant = useMemo(
-    () => resolveVariantForPreview(controller.active, controller.previewDevice),
-    [controller.active, controller.previewDevice]
+    () => resolveVariantForPreview(controller.active, previewDevice),
+    [controller.active, previewDevice]
   );
   const previewShell = useMemo(() => getPreviewMediaShell(previewVariant), [previewVariant]);
   const layoutSummary = useMemo(() => getPreviewLayoutSummary(previewVariant), [previewVariant]);
@@ -75,7 +84,7 @@ export function ImagePreviewPanel({ controller }: { controller: ImageElementDevC
     runtimeCursor,
   });
 
-  const previewSrc = controller.previewUploadUrl ?? PREVIEW_FALLBACK_IMAGE_SRC;
+  const previewSrc = controller.previewUploadUrl ?? null;
   const previewAlt = resolvePreviewAlt(controller.previewUploadName);
 
   const previewBlock = useMemo(
@@ -88,15 +97,18 @@ export function ImagePreviewPanel({ controller }: { controller: ImageElementDevC
           previewSrc,
           previewAlt,
           previewLayoutSlot: {
-            device: controller.previewDevice,
+            device: previewDevice,
             mediaStyle: previewShell.mediaStyle,
           },
+          mode: fidelityMode,
+          allowFallbackSrc: fidelityMode === "guided",
         }
       ),
     [
       controller.active,
       controller.activeVariant,
-      controller.previewDevice,
+      fidelityMode,
+      previewDevice,
       controller.runtimeDraft,
       previewAlt,
       previewShell.mediaStyle,
@@ -118,39 +130,63 @@ export function ImagePreviewPanel({ controller }: { controller: ImageElementDevC
       />
 
       <p className="text-[10px] leading-relaxed text-muted-foreground">
-        <span className="font-medium text-foreground">ElementRenderer:</span> image preview is
-        rendered through the page-builder stack with merged runtime metadata.
+        <span className="font-medium text-foreground">ElementRenderer:</span> image preview uses
+        canonical runtime rendering.
       </p>
+
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="inline-flex rounded border border-border/60 bg-background/60 p-0.5">
+          {(["raw", "guided"] as const).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              onClick={() => setFidelityMode(mode)}
+              className={`rounded px-2 py-1 text-[10px] font-mono uppercase tracking-wide ${
+                fidelityMode === mode
+                  ? "bg-foreground/10 text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {mode}
+            </button>
+          ))}
+        </div>
+        <PreviewProvenanceBadge mode={fidelityMode} />
+      </div>
 
       <div className="relative mx-auto w-full max-w-[58rem] rounded-xl border border-border/50 bg-[linear-gradient(135deg,rgba(255,255,255,0.04),rgba(255,255,255,0))] [aspect-ratio:16/9]">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(0deg,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:18px_18px]" />
         <div className="pointer-events-none absolute inset-6 rounded border border-dashed border-foreground/20 md:inset-8" />
 
         <div className={previewShell.className + " min-h-0 min-w-0"} style={previewShell.style}>
-          <div
-            ref={cropSurfaceRef}
-            className={previewShell.slotClassName}
-            style={{ ...previewShell.slotStyle, cursor: cropCursorResolved }}
-            onPointerDown={handleSurfacePointerDown}
-            onContextMenu={handleSurfaceContextMenu}
-            onMouseMove={handleSurfaceMouseMove}
-            onMouseUp={handleSurfaceMouseUp}
-            onMouseLeave={handleSurfaceMouseLeave}
-          >
+          <WorkbenchElementPreviewSurface foundationTheme="dark" className="h-full min-h-0 min-w-0">
             <div
-              className={previewShell.innerClassName}
-              style={{
-                ...(previewShell.innerStyle ?? {}),
-                ...getLetterboxGuideStyle(previewVariant.objectFit),
-                ...(cropInteractionActive ? { pointerEvents: "none" } : {}),
-              }}
+              ref={cropSurfaceRef}
+              className={previewShell.slotClassName}
+              style={{ ...previewShell.slotStyle, cursor: cropCursorResolved }}
+              onPointerDown={handleSurfacePointerDown}
+              onContextMenu={handleSurfaceContextMenu}
+              onMouseMove={handleSurfaceMouseMove}
+              onMouseUp={handleSurfaceMouseUp}
+              onMouseLeave={handleSurfaceMouseLeave}
             >
-              <ServerBreakpointProvider
-                key={controller.previewDevice === "mobile" ? "mobile" : "desktop"}
-                isMobile={controller.previewDevice === "mobile"}
+              <div
+                className={previewShell.innerClassName}
+                style={{
+                  ...(previewShell.innerStyle ?? {}),
+                  ...getLetterboxGuideStyle(previewVariant.objectFit),
+                  ...(cropInteractionActive ? { pointerEvents: "none" } : {}),
+                }}
               >
                 <ElementRenderer
-                  key={"image-preview-renderer-" + controller.previewKey}
+                  key={
+                    "image-preview-renderer-" +
+                    controller.previewKey +
+                    "-" +
+                    previewDevice +
+                    "-" +
+                    fidelityMode
+                  }
                   block={previewBlock}
                   forceEntranceAnimation
                   exitPresenceShow={controller.previewVisible}
@@ -158,9 +194,9 @@ export function ImagePreviewPanel({ controller }: { controller: ImageElementDevC
                   exitPresenceMode="wait"
                   onExitComplete={controller.onPreviewExitComplete}
                 />
-              </ServerBreakpointProvider>
+              </div>
             </div>
-          </div>
+          </WorkbenchElementPreviewSurface>
         </div>
 
         <ImagePreviewOverlays

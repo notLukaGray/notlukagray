@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import { buildSvgElementSnippet } from "./build-snippet";
 import { normalizeSvgVariant, readPersistedSvg, toSvgExportJson } from "./normalization";
 import type { SvgVariantDefaults, SvgVariantKey, PersistedSvgDefaults } from "./types";
@@ -11,7 +11,7 @@ const useBaseSvgController = createSimpleElementDevController<
   SvgVariantDefaults,
   PersistedSvgDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "svg",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedSvg,

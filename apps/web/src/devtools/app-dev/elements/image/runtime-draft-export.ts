@@ -103,18 +103,37 @@ export function mergeTypographyDevRuntime(
     motionTiming?: unknown;
   } & Record<string, unknown>;
 
+  const { wrapperStyle: elementWrapperStyle, ...elementWithoutWrapper } = elementRest as {
+    wrapperStyle?: Record<string, unknown>;
+  } & Record<string, unknown>;
+
   const motionTiming =
     animation != null
       ? buildImageMotionTimingFromAnimationDefaults(animation)
       : (storedTiming as Record<string, unknown> | undefined);
 
+  // Draft `wrapperStyleJson` overlays the block. When it is empty, `runtime.wrapperStyle` is
+  // undefined — we must not wipe author `wrapperStyle` from the incoming element (layout dev
+  // cards, handoff snippets, etc.).
+  const mergedWrapperStyle =
+    runtime.wrapperStyle != null && typeof runtime.wrapperStyle === "object"
+      ? {
+          ...(elementWrapperStyle != null && typeof elementWrapperStyle === "object"
+            ? elementWrapperStyle
+            : {}),
+          ...runtime.wrapperStyle,
+        }
+      : elementWrapperStyle;
+
   return omitUndefined({
-    ...elementRest,
+    ...elementWithoutWrapper,
     motionTiming,
     interactions: runtime.interactions,
     visibleWhen: runtime.visibleWhen,
     aria: runtime.aria,
-    wrapperStyle: runtime.wrapperStyle,
+    ...(mergedWrapperStyle != null && typeof mergedWrapperStyle === "object"
+      ? { wrapperStyle: mergedWrapperStyle }
+      : {}),
     figmaConstraints: runtime.figmaConstraints,
     motion: runtime.motion,
   });

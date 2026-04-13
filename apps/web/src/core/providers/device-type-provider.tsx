@@ -12,7 +12,21 @@ const DeviceTypeContext = createContext<DeviceTypeContextValue | undefined>(unde
 /** When set (e.g. by PageBuilderRenderer with server-resolved tree), useDeviceType returns this and no resize listener runs. */
 const ServerBreakpointContext = createContext<DeviceTypeContextValue | undefined>(undefined);
 
-const MOBILE_BREAKPOINT = 768;
+const DEFAULT_MOBILE_BREAKPOINT = 768;
+const WORKBENCH_SESSION_CHANGED_EVENT = "pb-workbench-session-changed";
+
+function readDesktopBreakpointFromCssVars(): number {
+  if (typeof window === "undefined" || typeof document === "undefined") {
+    return DEFAULT_MOBILE_BREAKPOINT;
+  }
+  const raw = getComputedStyle(document.documentElement)
+    .getPropertyValue("--pb-breakpoint-desktop")
+    .trim();
+  if (!raw) return DEFAULT_MOBILE_BREAKPOINT;
+  const numeric = raw.endsWith("px") ? Number(raw.slice(0, -2)) : Number(raw);
+  if (!Number.isFinite(numeric) || numeric <= 0) return DEFAULT_MOBILE_BREAKPOINT;
+  return numeric;
+}
 
 export function useDeviceType(): DeviceTypeContextValue {
   const serverBreakpoint = useContext(ServerBreakpointContext);
@@ -49,16 +63,21 @@ export function DeviceTypeProvider({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const checkDeviceType = () => {
       const isMobileUserAgent = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      const isMobileWidth = window.innerWidth < MOBILE_BREAKPOINT;
+      const desktopBreakpoint = readDesktopBreakpointFromCssVars();
+      const isMobileWidth = window.innerWidth < desktopBreakpoint;
       const isMobile = isMobileUserAgent || isMobileWidth;
       setIsDesktop(!isMobile);
     };
 
     checkDeviceType();
     window.addEventListener("resize", checkDeviceType);
+    window.addEventListener("storage", checkDeviceType);
+    window.addEventListener(WORKBENCH_SESSION_CHANGED_EVENT, checkDeviceType);
 
     return () => {
       window.removeEventListener("resize", checkDeviceType);
+      window.removeEventListener("storage", checkDeviceType);
+      window.removeEventListener(WORKBENCH_SESSION_CHANGED_EVENT, checkDeviceType);
     };
   }, []);
 

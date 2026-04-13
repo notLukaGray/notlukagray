@@ -4,11 +4,13 @@ export function VideoTimeDevHeader() {
   return (
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
-      title="Video Time defaults"
-      description={
+      title="Video time defaults"
+      showSessionBadge
+      description="Select a variant, tune scrubber layout and timestamp display, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementVideoTime</code> variants, preview layout defaults, then copy JSON.
-          Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementVideoTime</code> blocks — video scrubber and timestamp display within
+          video-linked section layouts
         </>
       }
     />

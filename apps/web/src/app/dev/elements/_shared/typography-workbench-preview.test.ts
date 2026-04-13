@@ -21,11 +21,27 @@ describe("buildResolvedTypographyWorkbenchBlock", () => {
         }
       | undefined;
     expect(mt?.resolvedEntranceMotion).toBeDefined();
-    expect(mt?.trigger).toBe("onMount");
+    expect(mt?.trigger).toBe(variant.animation.trigger);
     expect(mt?.resolvedEntranceMotion).toMatchObject({
       initial: expect.any(Object),
       animate: expect.any(Object),
     });
+  });
+
+  it("uses onMount trigger in guided mode", () => {
+    const variant = HEADING_BASE.variants.display;
+    const block = buildResolvedTypographyWorkbenchBlock(
+      DEFAULT_IMAGE_RUNTIME_DRAFT,
+      {
+        type: "elementHeading",
+        ...variant,
+        text: "Hello",
+        level: 1,
+      },
+      { mode: "guided" }
+    );
+    const mt = block.motionTiming as { trigger?: string } | undefined;
+    expect(mt?.trigger).toBe("onMount");
   });
 
   it("merges visibleWhen from runtime draft when enabled", () => {
