@@ -346,13 +346,48 @@
     letter-spacing: var(--type-body-2xl-ls, 0);
   }
 
+  /* ── Button wrapper interactive states ──────────────────────────── */
+  .element-btn-wrap {
+    transition: var(
+      --element-btn-transition,
+      background 0.15s ease,
+      border-color 0.15s ease,
+      opacity 0.15s ease,
+      transform 0.15s ease
+    );
+  }
+  .element-btn-wrap:hover {
+    background: var(--element-btn-fill-hover, var(--element-btn-fill, transparent));
+    border-color: var(--element-btn-stroke-hover, var(--element-btn-stroke, revert-layer));
+    opacity: var(--element-btn-opacity-hover, 1);
+    transform: scale(var(--element-btn-scale-hover, 1));
+  }
+  .element-btn-wrap:active,
+  .element-btn-wrap:has(button:active),
+  .element-btn-wrap:has(a:active) {
+    background: var(
+      --element-btn-fill-active,
+      var(--element-btn-fill-hover, var(--element-btn-fill, transparent))
+    );
+    transform: scale(var(--element-btn-scale-active, 0.97));
+  }
+  .element-btn-wrap--disabled {
+    background: var(--element-btn-fill-disabled, var(--element-btn-fill, transparent));
+    opacity: 0.6;
+    transform: scale(var(--element-btn-scale-disabled, 1));
+    pointer-events: none;
+  }
+
   .element-link {
     font-weight: 500;
-    color: var(--element-link-color, var(--frame-link));
+    color: var(--element-link-color, var(--pb-link, var(--frame-link)));
     transition: color var(--element-link-transition, 0.15s);
   }
   .element-link:hover {
-    color: var(--element-link-hover, var(--frame-link-hover));
+    color: var(
+      --element-link-hover,
+      var(--element-link-color, var(--pb-link-hover, var(--frame-link-hover)))
+    );
   }
   .element-link:focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.5);
@@ -360,7 +395,7 @@
     border-radius: 0.25rem;
   }
   .element-link--active {
-    color: var(--element-link-active, var(--frame-link-active));
+    color: var(--element-link-active, var(--pb-link-active, var(--frame-link-active)));
   }
   .element-link--disabled {
     color: var(--element-link-disabled, var(--frame-link-disabled));

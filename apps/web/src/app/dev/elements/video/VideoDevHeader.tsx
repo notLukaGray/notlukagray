@@ -5,10 +5,12 @@ export function VideoDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Video defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune player layout, poster fallback, and playback config, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementVideo</code> variants, preview layout and playback config, then copy
-          JSON. Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementVideo</code> blocks — player container layout, autoplay/loop behavior, and
+          poster fallback across all media sections
         </>
       }
     />

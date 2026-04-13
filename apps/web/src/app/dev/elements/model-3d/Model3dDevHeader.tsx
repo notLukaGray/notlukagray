@@ -5,11 +5,12 @@ export function Model3dDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Model 3D defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, configure scene/animation behavior, then validate the representational preview before copying JSON. Deep scene config is best handled via the Custom JSON panel."
+      affects={
         <>
-          Tune <code>elementModel3D</code> variants, configure animation behavior, then copy JSON.
-          Schema: <code>element-model3d-schemas.ts</code> + <code>elementLayoutSchema</code>. Deep
-          scene/model config is best handled via the Custom JSON panel.
+          <code>elementModel3D</code> blocks — Three.js/R3F scene container layout, camera,
+          lighting, and model animation behavior
         </>
       }
     />

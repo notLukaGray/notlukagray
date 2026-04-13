@@ -1,6 +1,4 @@
 "use client";
-/* eslint-disable max-lines */
-
 import type { Dispatch, SetStateAction } from "react";
 import type { FontWeightMap } from "@/app/fonts/config";
 import type { TypeScaleConfig } from "@/app/fonts/type-scale";
@@ -10,6 +8,7 @@ import type { LocalPreviewRuntime } from "@/app/dev/fonts/use-local-font-preview
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageHeader } from "@/app/dev/_components/DevWorkbenchPageHeader";
 import { DevWorkbenchPageShell } from "@/app/dev/_components/DevWorkbenchPageShell";
+import { FontDevSampleTextPanel } from "./font-dev-sample-text-panel";
 import { FontSnippetPanel } from "./font-snippet-panel";
 import { FontSlotPanel } from "./font-slot-panel";
 import { TypeScalePanel } from "./font-type-scale-panel";
@@ -142,22 +141,10 @@ export function FontDevWorkspace({
         }
       />
 
-      <div className="mb-6 rounded-lg border border-border bg-card/20 p-4">
-        <label
-          htmlFor="font-dev-preview-phrase"
-          className="mb-2 block font-mono text-[11px] uppercase tracking-wide text-muted-foreground"
-        >
-          Sample text
-        </label>
-        <textarea
-          id="font-dev-preview-phrase"
-          value={previewSampleText}
-          onChange={(e) => setPreviewSampleText(e.target.value)}
-          rows={2}
-          className="min-h-[3rem] w-full resize-y rounded border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          spellCheck={false}
-        />
-      </div>
+      <FontDevSampleTextPanel
+        previewSampleText={previewSampleText}
+        setPreviewSampleText={setPreviewSampleText}
+      />
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_minmax(17.5rem,26.25rem)] md:items-start">
         <div className="space-y-6">

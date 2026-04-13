@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import { buildInputElementSnippet } from "./build-snippet";
 import { normalizeInputVariant, readPersistedInput, toInputExportJson } from "./normalization";
 import type { InputVariantDefaults, InputVariantKey, PersistedInputDefaults } from "./types";
@@ -11,7 +11,7 @@ const useBaseInputController = createSimpleElementDevController<
   InputVariantDefaults,
   PersistedInputDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "input",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedInput,

@@ -1,4 +1,7 @@
-import { SharedFontSlotField } from "@/app/dev/elements/_shared/dev-controls";
+import {
+  SharedFontSlotField,
+  SharedWorkbenchColorTokenFields,
+} from "@/app/dev/elements/_shared/dev-controls";
 import type { HeadingVariantDefaults } from "../types";
 import type { HeadingElementDevController } from "../useHeadingElementDevController";
 
@@ -18,7 +21,8 @@ export function HeadingContentControls({
           Content
         </p>
         <p className="mt-1 text-[10px] text-muted-foreground">
-          Heading level, semantic outline, and copy. Maps to `elementHeading` content fields.
+          Heading level, semantic outline, copy, and color (from `/dev/colors` tokens). Maps to
+          `elementHeading` content fields.
         </p>
       </div>
 
@@ -82,6 +86,14 @@ export function HeadingContentControls({
         idSuffix={`heading-${activeVariant}`}
         value={active.fontFamily}
         onChange={(value) => setVariantPatch(activeVariant, { fontFamily: value })}
+      />
+
+      <SharedWorkbenchColorTokenFields
+        idSuffix={`heading-${activeVariant}`}
+        label="Color"
+        value={active.color}
+        onChange={(next) => setVariantPatch(activeVariant, { color: next })}
+        helperText="Tokens resolve against the current workbench session from `/dev/colors`."
       />
 
       <label className="inline-flex items-center gap-2 rounded border border-border/60 bg-background/60 px-3 py-2 text-[11px] text-foreground sm:col-span-2">

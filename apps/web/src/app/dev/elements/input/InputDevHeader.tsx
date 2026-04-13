@@ -5,10 +5,12 @@ export function InputDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Input defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune field layout, placeholder behavior, and error states, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementInput</code> variants, preview with real layout, then copy JSON. Schema:{" "}
-          <code>element-input-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementInput</code> blocks — form field layout, validation display, and interactive
+          states within section form layouts
         </>
       }
     />

@@ -1,9 +1,13 @@
-import { TypographyCategoryTabs } from "@/app/dev/elements/_shared/dev-controls";
+import {
+  BUTTON_DEV_SETTINGS_CATEGORY_ORDER,
+  TypographyCategoryTabs,
+} from "@/app/dev/elements/_shared/dev-controls";
 import { VARIANT_LABELS } from "./constants";
 import { ButtonAnimationControls } from "./controls/ButtonAnimationControls";
 import { ButtonContentControls } from "./controls/ButtonContentControls";
 import { ButtonLayoutControls } from "./controls/ButtonLayoutControls";
 import { ButtonRuntimeControls } from "./controls/ButtonRuntimeControls";
+import { ButtonStatesPanel } from "./ButtonStatesPanel";
 import { ButtonTraitsControls } from "./controls/ButtonTraitsControls";
 import type { ButtonElementDevController } from "./useButtonElementDevController";
 
@@ -11,6 +15,7 @@ function getSettingsLabel(controller: ButtonElementDevController): string {
   return controller.isCustomVariant ? "Create Custom" : VARIANT_LABELS[controller.activeVariant];
 }
 
+// eslint-disable-next-line complexity
 export function ButtonSettingsPanel({ controller }: { controller: ButtonElementDevController }) {
   const settingsLabel = getSettingsLabel(controller);
   const hasAnyCategoryVisible = Object.values(controller.visibleCategories).some(Boolean);
@@ -32,6 +37,7 @@ export function ButtonSettingsPanel({ controller }: { controller: ButtonElementD
         ) : null}
       </div>
       <TypographyCategoryTabs
+        categories={BUTTON_DEV_SETTINGS_CATEGORY_ORDER}
         visibleCategories={controller.visibleCategories}
         toggleCategoryVisibility={controller.toggleCategoryVisibility}
       />
@@ -39,6 +45,11 @@ export function ButtonSettingsPanel({ controller }: { controller: ButtonElementD
         <div className="grid gap-4 sm:grid-cols-2">
           {controller.visibleCategories.content ? (
             <ButtonContentControls controller={controller} />
+          ) : null}
+          {controller.visibleCategories.interaction ? (
+            <div className="sm:col-span-2">
+              <ButtonStatesPanel controller={controller} />
+            </div>
           ) : null}
           {controller.visibleCategories.layout ? (
             <ButtonLayoutControls controller={controller} />
@@ -55,8 +66,8 @@ export function ButtonSettingsPanel({ controller }: { controller: ButtonElementD
         </div>
       ) : (
         <div className="rounded border border-border/60 bg-muted/20 px-3 py-2 text-[10px] text-muted-foreground">
-          Content is visible by default. Use the section toggles above to expand layout, traits,
-          animation, or runtime controls.
+          Content is visible by default. Use the section toggles above to expand interaction,
+          layout, traits, animation, or runtime controls.
         </div>
       )}
     </section>

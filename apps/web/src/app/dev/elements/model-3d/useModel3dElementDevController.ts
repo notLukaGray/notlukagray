@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import {
   buildModel3dElementSnippet,
   normalizeModel3dVariant,
@@ -15,7 +15,7 @@ const useBaseController = createSimpleElementDevController<
   Model3dVariantDefaults,
   PersistedModel3dDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "model3d",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedModel3d,

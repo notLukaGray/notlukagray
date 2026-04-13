@@ -26,17 +26,22 @@ function readFromLegacyStorage(storageKey: string): unknown {
   return JSON.parse(raw) as unknown;
 }
 
+export function readElementPersistedPayload(
+  elementKey: WorkbenchElementKey,
+  storageKey: string
+): unknown {
+  const sessionSlice = getWorkbenchSession().elements?.[elementKey];
+  if (sessionSlice != null && isRecord(sessionSlice)) return sessionSlice;
+  return readFromLegacyStorage(storageKey);
+}
+
 export function readTypographyPersistedPayload(
   elementKey: WorkbenchElementKey,
   storageKey: string
 ): PersistedTypographyShape | null {
   if (typeof window === "undefined") return null;
   try {
-    const sessionSlice = getWorkbenchSession().elements?.[elementKey];
-    const raw =
-      sessionSlice != null && isRecord(sessionSlice)
-        ? sessionSlice
-        : readFromLegacyStorage(storageKey);
+    const raw = readElementPersistedPayload(elementKey, storageKey);
     return isPersistedTypographyShape(raw) ? raw : null;
   } catch {
     return null;

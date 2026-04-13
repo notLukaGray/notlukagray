@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import { buildButtonElementSnippet } from "./build-snippet";
 import {
   normalizeButtonVariant,
@@ -16,7 +16,7 @@ const useBaseButtonController = createSimpleElementDevController<
   ButtonVariantDefaults,
   PersistedButtonDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "button",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedButton,

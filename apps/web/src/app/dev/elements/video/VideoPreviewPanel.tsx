@@ -18,16 +18,34 @@ function getVideoMissingHints(active: VideoElementDevController["active"]): stri
 export function VideoPreviewPanel({ controller }: { controller: VideoElementDevController }) {
   const { runtimePreview } = controller;
   const missingHints = useMemo(() => getVideoMissingHints(controller.active), [controller.active]);
-  const previewBlock = useMemo(
+  const rawPreviewBlock = useMemo(
     () =>
-      buildResolvedTypographyWorkbenchBlock(controller.runtimeDraft, {
-        ...controller.active,
-        type: "elementVideo",
-        src: controller.active.src ?? "",
-        poster: controller.active.poster?.trim()
-          ? controller.active.poster
-          : PREVIEW_FALLBACK_POSTER_SRC,
-      }),
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        {
+          ...controller.active,
+          type: "elementVideo",
+          src: controller.active.src ?? "",
+          poster: controller.active.poster ?? "",
+        },
+        { mode: "raw" }
+      ),
+    [controller.active, controller.runtimeDraft]
+  );
+  const guidedPreviewBlock = useMemo(
+    () =>
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        {
+          ...controller.active,
+          type: "elementVideo",
+          src: controller.active.src ?? "",
+          poster: controller.active.poster?.trim()
+            ? controller.active.poster
+            : PREVIEW_FALLBACK_POSTER_SRC,
+        },
+        { mode: "guided" }
+      ),
     [controller.active, controller.runtimeDraft]
   );
   const hiddenByVisibleWhen =
@@ -49,7 +67,8 @@ export function VideoPreviewPanel({ controller }: { controller: VideoElementDevC
         variantLabel={variantLabel}
         hiddenByVisibleWhen={hiddenByVisibleWhen}
         runtimeDraft={controller.runtimeDraft}
-        previewBlock={previewBlock}
+        previewBlock={rawPreviewBlock}
+        guidedPreviewBlock={guidedPreviewBlock}
         onPreviewExitComplete={controller.onPreviewExitComplete}
         animationSource={controller.active.animation}
       />

@@ -52,11 +52,17 @@ export function getBoxStyle(style: ColumnStyleInput | undefined): React.CSSPrope
   };
 }
 
-export function gridTemplateFromFlexStyles(columnFlexStyles: ColumnFlexStyle[]): string {
+export function gridTemplateFromFlexStyles(
+  columnFlexStyles: ColumnFlexStyle[],
+  options?: { forCssGrid?: boolean }
+): string {
   return columnFlexStyles
     .map((style) => {
       if ("width" in style && style.width) return style.width;
-      if (style.flex === "0 0 auto") return "max-content";
+      // Flex "hug" columns map to `max-content` for intrinsic flex-row sizing. For a real CSS Grid
+      // container, `max-content` tracks + `fr` children do not establish a stable multi-column grid
+      // (everything reads like a single column). Grid mode needs `fr` tracks instead.
+      if (style.flex === "0 0 auto") return options?.forCssGrid ? "minmax(0, 1fr)" : "max-content";
       if (style.flex === "1 1 0%") return "minmax(0, 1fr)";
       const m = /^([0-9.]+)\s+/.exec(style.flex);
       if (m) return `minmax(0, ${m[1]}fr)`;

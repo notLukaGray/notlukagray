@@ -1,18 +1,23 @@
 import type { StyleToolSeeds } from "@/app/theme/pb-style-suggest";
+import type { WorkbenchPreviewBreakpoint } from "@/app/dev/workbench/workbench-preview-context";
 import type { PageDensity } from "@pb/contracts";
 
 type Props = {
   seeds: StyleToolSeeds;
   previewDensity: PageDensity;
+  previewBreakpoint: WorkbenchPreviewBreakpoint;
   onSeedsChange: (patch: Partial<StyleToolSeeds>) => void;
   onPreviewDensityChange: (density: PageDensity) => void;
+  onPreviewBreakpointChange: (breakpoint: WorkbenchPreviewBreakpoint) => void;
 };
 
 export function StyleGlobalSeedsPanel({
   seeds,
   previewDensity,
+  previewBreakpoint,
   onSeedsChange,
   onPreviewDensityChange,
+  onPreviewBreakpointChange,
 }: Props) {
   return (
     <section className="space-y-4 rounded-lg border border-border bg-card/20 p-4">
@@ -103,6 +108,24 @@ export function StyleGlobalSeedsPanel({
           </select>
           <p className="text-[10px] text-muted-foreground">
             Density scales layout spacing defaults and radius, not rich-text margins.
+          </p>
+        </label>
+        <label className="space-y-1.5">
+          <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
+            Preview viewport
+          </span>
+          <select
+            className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+            value={previewBreakpoint}
+            onChange={(e) =>
+              onPreviewBreakpointChange(e.target.value as WorkbenchPreviewBreakpoint)
+            }
+          >
+            <option value="desktop">Desktop</option>
+            <option value="mobile">Mobile</option>
+          </select>
+          <p className="text-[10px] text-muted-foreground">
+            Uses workbench breakpoint context for preview rendering.
           </p>
         </label>
       </div>

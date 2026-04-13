@@ -26,9 +26,11 @@ export default function ElementsDevPage() {
     <DevWorkbenchPageShell nav={<DevWorkbenchNav />}>
       <DevWorkbenchPageHeader
         eyebrow="Dev · Elements"
-        title="Elements"
-        description="Element defaults are split by type so this setup mirrors how the page builder renders content."
-        meta="Each element has its own page. Module/group tooling is intentionally deferred to Builder later."
+        title="Elements Workbench"
+        showSessionBadge
+        description="Element defaults split by type. Each surface lets you tune defaults, validate representational previews, and export schema payloads that feed directly into the page builder."
+        affects="every elementBlock variant rendered by the page builder — typography, media, interactive controls, and decorative elements"
+        meta="Module/group tooling is intentionally deferred to Builder later."
       />
 
       <div className="space-y-6">

@@ -1,4 +1,5 @@
 "use client";
+
 /* eslint-disable max-lines */
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -23,13 +24,12 @@ import { useTypographyMotionPreview } from "@/app/dev/elements/_shared/useTypogr
 import {
   clearWorkbenchElement,
   patchWorkbenchElement,
-  WORKBENCH_SESSION_CHANGED_EVENT,
-  WORKBENCH_SESSION_STORAGE_KEY,
 } from "@/app/dev/workbench/workbench-session";
 import type {
   PersistedShape,
   TypographyControllerOptions,
 } from "@/app/dev/elements/_shared/typography-controller-types";
+import { useTypographyControllerSessionSync } from "@/app/dev/elements/_shared/use-typography-controller-session-sync";
 export function createTypographyElementDevController<
   K extends string,
   V extends { animation: PbImageAnimationDefaults },
@@ -65,31 +65,15 @@ export function createTypographyElementDevController<
         options.toPersisted(defaultVariant, variants) as never
       );
     }, [defaultVariant, hydrated, variants]);
-    useEffect(() => {
-      if (typeof window === "undefined" || !hydrated) return;
-      const syncFromSession = () => {
-        const saved = options.readPersisted();
-        if (saved) {
-          setDefaultVariant(saved.defaultVariant);
-          setVariants(saved.variants);
-          setActiveVariant(saved.defaultVariant);
-          return;
-        }
-        setDefaultVariant(options.defaults.defaultVariant);
-        setVariants(options.defaults.variants);
-        setActiveVariant(options.defaults.defaultVariant);
-        setIsCustomVariant(false);
-      };
-      const onStorage = (e: StorageEvent) => {
-        if (e.key === WORKBENCH_SESSION_STORAGE_KEY) syncFromSession();
-      };
-      window.addEventListener("storage", onStorage);
-      window.addEventListener(WORKBENCH_SESSION_CHANGED_EVENT, syncFromSession);
-      return () => {
-        window.removeEventListener("storage", onStorage);
-        window.removeEventListener(WORKBENCH_SESSION_CHANGED_EVENT, syncFromSession);
-      };
-    }, [hydrated]);
+    useTypographyControllerSessionSync({
+      hydrated,
+      readPersisted: options.readPersisted,
+      defaults: options.defaults,
+      setDefaultVariant,
+      setVariants,
+      setActiveVariant,
+      setIsCustomVariant,
+    });
     const updateVariant = useCallback(
       (key: K, apply: (v: V) => V) => {
         if (isCustomVariant) {

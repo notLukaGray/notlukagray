@@ -12,3 +12,6 @@ export * from "./shared-visual-traits-fields";
 export * from "./shared-typography-sizing-fields";
 export * from "./typography-settings-categories";
 export * from "./TypographyCategoryTabs";
+export * from "./workbench-color-token-fields";
+export * from "./workbench-color-token-presets";
+export * from "./workbench-paint-token-fields";

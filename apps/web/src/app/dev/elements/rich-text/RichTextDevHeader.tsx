@@ -5,10 +5,12 @@ export function RichTextDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Rich text defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune prose rendering and layout, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementRichText</code> variants, preview markdown/HTML output, then copy JSON.
-          Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementRichText</code> blocks — markdown and HTML prose output, spacing, and
+          typography within content sections
         </>
       }
     />

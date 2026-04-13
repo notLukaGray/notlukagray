@@ -4,6 +4,7 @@ import {
   pickFiniteNumber,
   pickOverflowValue,
   pickUnitOpacity,
+  readElementPersistedPayload,
   resolveTypographyDefaultVariant,
 } from "@/app/dev/elements/_shared/typography-normalization-helpers";
 import { normalizePbImageAnimationDefaults } from "@/app/dev/elements/image/normalization";
@@ -45,9 +46,7 @@ export function normalizeSpacerVariant(
 export function readPersistedSpacer(): PersistedSpacerDefaults | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const data = JSON.parse(raw) as unknown;
+    const data = readElementPersistedPayload("spacer", STORAGE_KEY);
     if (!data || typeof data !== "object") return null;
     const d = data as Record<string, unknown>;
     if (!d.defaultVariant || !d.variants) return null;

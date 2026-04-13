@@ -2,6 +2,7 @@ import {
   normalizeTypographyVariants,
   pickString,
   pickUnitOpacity,
+  readElementPersistedPayload,
   resolveTypographyDefaultVariant,
 } from "@/app/dev/elements/_shared/typography-normalization-helpers";
 import { normalizePbImageAnimationDefaults } from "@/app/dev/elements/image/normalization";
@@ -25,10 +26,8 @@ export function normalizeSvgVariant(
 export function readPersistedSvg(): PersistedSvgDefaults | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const d = JSON.parse(raw) as Record<string, unknown>;
-    if (!d.defaultVariant || !d.variants) return null;
+    const d = readElementPersistedPayload("svg", STORAGE_KEY) as Record<string, unknown> | null;
+    if (!d || !d.defaultVariant || !d.variants) return null;
     return {
       v: 1 as const,
       defaultVariant: resolveTypographyDefaultVariant(

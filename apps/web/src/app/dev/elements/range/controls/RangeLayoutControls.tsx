@@ -1,20 +1,75 @@
-import { SharedFoundationLayoutFields } from "@/app/dev/elements/_shared/dev-controls";
+import {
+  SharedFoundationLayoutFields,
+  SharedWorkbenchColorTokenFields,
+} from "@/app/dev/elements/_shared/dev-controls";
 import type { RangeVariantDefaults } from "../types";
 import type { RangeElementDevController } from "../useRangeElementDevController";
 
-// eslint-disable-next-line complexity
+type RangeStyleField = keyof NonNullable<RangeVariantDefaults["style"]>;
+
+type RangeStyleFieldConfig = {
+  field: RangeStyleField;
+  label: string;
+  placeholder: string;
+};
+
+const RANGE_GEOMETRY_STYLE_FIELD_CONFIGS: RangeStyleFieldConfig[] = [
+  { field: "trackHeight", label: "Track Height", placeholder: "4px" },
+  { field: "thumbSize", label: "Thumb Size", placeholder: "14px" },
+  { field: "borderRadius", label: "Border Radius", placeholder: "9999px" },
+];
+
+type RangeStyleFieldInputProps = {
+  label: string;
+  placeholder: string;
+  value: string;
+  onChange: (next: string) => void;
+};
+
+function RangeStyleFieldInput({ label, placeholder, value, onChange }: RangeStyleFieldInputProps) {
+  return (
+    <div className="space-y-2">
+      <label className="block font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
+        {label}
+      </label>
+      <input
+        type="text"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="w-full rounded border border-border bg-background px-2 py-1.5 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+        placeholder={placeholder}
+      />
+    </div>
+  );
+}
+
+function buildRangeStylePatch(
+  style: RangeVariantDefaults["style"] | undefined,
+  field: RangeStyleField,
+  value: string
+): RangeVariantDefaults["style"] | undefined {
+  const nextStyle = { ...(style ?? {}) } as Record<string, string | number>;
+  if (value.trim().length === 0) delete nextStyle[field];
+  else nextStyle[field] = value;
+  return Object.keys(nextStyle).length > 0
+    ? (nextStyle as RangeVariantDefaults["style"])
+    : undefined;
+}
+
+function readRangeStyleFieldValue(
+  style: RangeVariantDefaults["style"] | undefined,
+  field: RangeStyleField
+): string {
+  const value = style?.[field];
+  return value === undefined ? "" : String(value);
+}
+
 export function RangeLayoutControls({ controller }: { controller: RangeElementDevController }) {
   const { active, activeVariant, setVariantPatch } = controller;
 
-  const patchStyle = (field: keyof NonNullable<RangeVariantDefaults["style"]>, value: string) => {
-    const next = { ...(active.style ?? {}) } as Record<string, string | number>;
-    if (value.trim().length === 0) {
-      delete next[field];
-    } else {
-      next[field] = value;
-    }
+  const patchStyle = (field: RangeStyleField, value: string | undefined) => {
     setVariantPatch(activeVariant, {
-      style: Object.keys(next).length > 0 ? (next as RangeVariantDefaults["style"]) : undefined,
+      style: buildRangeStylePatch(active.style, field, value ?? ""),
     });
   };
 
@@ -25,75 +80,37 @@ export function RangeLayoutControls({ controller }: { controller: RangeElementDe
           Layout
         </p>
         <p className="mt-1 text-[10px] text-muted-foreground">
-          Range style sub-fields and foundation layout controls.
+          Track/fill use workbench <code className="font-mono">--pb-*</code> tokens so the Light
+          preview scenario matches <code className="font-mono">/dev/colors</code>. Geometry fields
+          accept any CSS length.
         </p>
       </div>
 
-      {/* Style sub-fields */}
-      <div className="space-y-2">
-        <label className="block font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-          Track Color (CSS)
-        </label>
-        <input
-          type="text"
-          value={active.style?.trackColor ?? ""}
-          onChange={(e) => patchStyle("trackColor", e.target.value)}
-          className="w-full rounded border border-border bg-background px-2 py-1.5 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          placeholder="rgba(255,255,255,0.2)"
-        />
-      </div>
+      <SharedWorkbenchColorTokenFields
+        idSuffix={`range-track-${activeVariant}`}
+        label="Track color"
+        value={readRangeStyleFieldValue(active.style, "trackColor") || undefined}
+        onChange={(next) => patchStyle("trackColor", next)}
+        helperText="Default seed is a soft mix of text ink—dark track on a light surface, light track on dark. Override with a token or custom CSS (e.g. color-mix with var(--pb-border))."
+      />
 
-      <div className="space-y-2">
-        <label className="block font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-          Fill Color (CSS)
-        </label>
-        <input
-          type="text"
-          value={active.style?.fillColor ?? ""}
-          onChange={(e) => patchStyle("fillColor", e.target.value)}
-          className="w-full rounded border border-border bg-background px-2 py-1.5 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          placeholder="rgba(255,255,255,0.9)"
-        />
-      </div>
+      <SharedWorkbenchColorTokenFields
+        idSuffix={`range-fill-${activeVariant}`}
+        label="Fill color"
+        value={readRangeStyleFieldValue(active.style, "fillColor") || undefined}
+        onChange={(next) => patchStyle("fillColor", next)}
+        helperText="Thumb fill / progress color. Same token picker as track; use Brand · accent for emphasis variants."
+      />
 
-      <div className="space-y-2">
-        <label className="block font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-          Track Height
-        </label>
-        <input
-          type="text"
-          value={active.style?.trackHeight ?? ""}
-          onChange={(e) => patchStyle("trackHeight", e.target.value)}
-          className="w-full rounded border border-border bg-background px-2 py-1.5 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          placeholder="4px"
+      {RANGE_GEOMETRY_STYLE_FIELD_CONFIGS.map((config) => (
+        <RangeStyleFieldInput
+          key={config.field}
+          label={config.label}
+          placeholder={config.placeholder}
+          value={readRangeStyleFieldValue(active.style, config.field)}
+          onChange={(next) => patchStyle(config.field, next)}
         />
-      </div>
-
-      <div className="space-y-2">
-        <label className="block font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-          Thumb Size
-        </label>
-        <input
-          type="text"
-          value={active.style?.thumbSize ?? ""}
-          onChange={(e) => patchStyle("thumbSize", e.target.value)}
-          className="w-full rounded border border-border bg-background px-2 py-1.5 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          placeholder="14px"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <label className="block font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-          Border Radius
-        </label>
-        <input
-          type="text"
-          value={active.style?.borderRadius ?? ""}
-          onChange={(e) => patchStyle("borderRadius", e.target.value)}
-          className="w-full rounded border border-border bg-background px-2 py-1.5 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          placeholder="9999px"
-        />
-      </div>
+      ))}
 
       <SharedFoundationLayoutFields<RangeVariantDefaults>
         variant={active}

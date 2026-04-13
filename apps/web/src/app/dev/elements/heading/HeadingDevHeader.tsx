@@ -5,10 +5,12 @@ export function HeadingDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Heading defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune semantic level, typography, and motion, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementHeading</code> variants, preview with real typography classes, then copy
-          JSON. Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementHeading</code> blocks — semantic level, typography scale, and entrance motion
+          across all sections
         </>
       }
     />

@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import { buildVectorElementSnippet } from "./build-snippet";
 import { normalizeVectorVariant, readPersistedVector, toVectorExportJson } from "./normalization";
 import type { VectorVariantDefaults, VectorVariantKey, PersistedVectorDefaults } from "./types";
@@ -11,7 +11,7 @@ const useBaseVectorController = createSimpleElementDevController<
   VectorVariantDefaults,
   PersistedVectorDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "vector",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedVector,

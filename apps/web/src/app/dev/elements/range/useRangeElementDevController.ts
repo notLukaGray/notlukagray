@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import { buildRangeElementSnippet } from "./build-snippet";
 import { normalizeRangeVariant, readPersistedRange, toRangeExportJson } from "./normalization";
 import type { RangeVariantDefaults, RangeVariantKey, PersistedRangeDefaults } from "./types";
@@ -11,7 +11,7 @@ const useBaseRangeController = createSimpleElementDevController<
   RangeVariantDefaults,
   PersistedRangeDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "range",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedRange,

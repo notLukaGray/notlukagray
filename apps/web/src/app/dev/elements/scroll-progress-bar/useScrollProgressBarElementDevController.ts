@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import { buildScrollProgressBarElementSnippet } from "./build-snippet";
 import {
   normalizeScrollProgressBarVariant,
@@ -20,7 +20,7 @@ const useBaseScrollProgressBarController = createSimpleElementDevController<
   ScrollProgressBarVariantDefaults,
   PersistedScrollProgressBarDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "scrollProgressBar",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedScrollProgressBar,

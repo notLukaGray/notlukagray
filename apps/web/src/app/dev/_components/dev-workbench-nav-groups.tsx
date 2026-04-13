@@ -5,6 +5,7 @@ type NavItem = {
   label: string;
   href?: string;
   disabled?: boolean;
+  disabledReason?: string;
 };
 
 export type NavGroup = {
@@ -27,6 +28,8 @@ export const DEV_WORKBENCH_NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Pages", href: "/dev/layout/pages" },
       { label: "Sections", href: "/dev/layout/sections" },
+      { label: "Columns", href: "/dev/layout/columns" },
+      { label: "Scroll", href: "/dev/layout/scroll" },
       { label: "Frames", href: "/dev/layout/frames" },
     ],
   },
@@ -51,8 +54,17 @@ export const DEV_WORKBENCH_NAV_GROUPS: NavGroup[] = [
     title: "Builder",
     wip: true,
     items: [
-      { label: "Modules (WIP)", disabled: true },
-      { label: "Modals (WIP)", disabled: true },
+      { label: "Custom JSON", href: "/dev/custom" },
+      {
+        label: "Modules (WIP)",
+        disabled: true,
+        disabledReason: "Deferred surface: module builder is planned for a later phase.",
+      },
+      {
+        label: "Modals (WIP)",
+        disabled: true,
+        disabledReason: "Deferred surface: modal builder is planned for a later phase.",
+      },
     ],
   },
 ];
@@ -91,9 +103,14 @@ export function DevWorkbenchNavDropdown({
               return (
                 <span
                   key={item.label}
-                  className="inline-flex items-center rounded border border-border/60 px-2.5 py-1.5 text-[11px] font-mono text-muted-foreground"
+                  className="inline-flex flex-col items-start gap-0.5 rounded border border-border/60 px-2.5 py-1.5 text-[11px] font-mono text-muted-foreground"
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  {item.disabledReason ? (
+                    <span className="max-w-56 font-sans text-[10px] leading-snug text-muted-foreground/80">
+                      {item.disabledReason}
+                    </span>
+                  ) : null}
                 </span>
               );
             }

@@ -68,3 +68,34 @@ export function generateFontCssVars(
 
   return rootBlock + desktopBlock;
 }
+
+/**
+ * Inline style vars for `globals.css` typography utilities (`--type-*-size`, etc.).
+ * The root layout injects these on `:root`; workbench previews must repeat them on
+ * the preview subtree or typography classes keep static fallbacks.
+ */
+export function typeScaleToWorkbenchTypographyStyleVars(options: {
+  typeScale: TypeScaleConfig;
+  primaryWeights: FontWeightMap;
+  useMobileSizes: boolean;
+}): Record<string, string> {
+  const vars: Record<string, string> = {};
+  for (const [name, value] of Object.entries(options.primaryWeights)) {
+    if (value !== undefined && value !== null) {
+      vars[`--font-weight-${name}`] = String(value);
+    }
+  }
+  for (const [key, prefix] of Object.entries(TYPE_SCALE_VAR_PREFIXES) as [
+    keyof TypeScaleConfig,
+    string,
+  ][]) {
+    const entry = options.typeScale[key];
+    const size = options.useMobileSizes ? entry.sizeMobile : entry.sizeDesktop;
+    const lineHeight = options.useMobileSizes ? entry.lineHeightMobile : entry.lineHeightDesktop;
+    vars[`${prefix}-size`] = `${size}px`;
+    vars[`${prefix}-lh`] = `${lineHeight}px`;
+    vars[`${prefix}-ls`] = entry.letterSpacing;
+    vars[`${prefix}-fw`] = `var(--font-weight-${entry.fontWeightRole})`;
+  }
+  return vars;
+}

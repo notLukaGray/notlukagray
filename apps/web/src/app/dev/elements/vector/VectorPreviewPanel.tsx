@@ -20,12 +20,24 @@ export function VectorPreviewPanel({ controller }: { controller: VectorElementDe
   const missingHints = useMemo(() => getVectorMissingHints(controller.active), [controller.active]);
   const previewBlock = useMemo(
     () =>
-      buildResolvedTypographyWorkbenchBlock(controller.runtimeDraft, {
-        type: "elementVector",
-        ...controller.active,
-      }),
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        { type: "elementVector", ...controller.active },
+        { mode: "raw" }
+      ),
     [controller.active, controller.runtimeDraft]
   );
+
+  const guidedPreviewBlock = useMemo(
+    () =>
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        { type: "elementVector", ...controller.active },
+        { mode: "guided" }
+      ),
+    [controller.active, controller.runtimeDraft]
+  );
+
   const hiddenByVisibleWhen =
     controller.runtimeDraft.visibleWhenEnabled && !runtimePreview.visibleWhenMatches;
   const variantLabel = controller.isCustomVariant
@@ -46,6 +58,7 @@ export function VectorPreviewPanel({ controller }: { controller: VectorElementDe
         hiddenByVisibleWhen={hiddenByVisibleWhen}
         runtimeDraft={controller.runtimeDraft}
         previewBlock={previewBlock}
+        guidedPreviewBlock={guidedPreviewBlock}
         onPreviewExitComplete={controller.onPreviewExitComplete}
         animationSource={controller.active.animation}
       />

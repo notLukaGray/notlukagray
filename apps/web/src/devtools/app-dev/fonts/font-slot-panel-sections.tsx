@@ -1,68 +1,21 @@
 "use client";
-/* eslint-disable max-lines */
 
-import type { CSSProperties, RefObject } from "react";
 import type { BunnyFontMeta } from "@/app/dev/fonts/page";
 import type { FontWeightMap } from "@/app/fonts/config";
 import { localRolePreviewFamily } from "@/app/dev/fonts/local-font-preview";
 import type { LocalPreviewRuntime } from "@/app/dev/fonts/use-local-font-previews";
+import type { WeightPickerMode } from "./font-dev-slot-logic";
+import type { SlotName, SlotState } from "./font-dev-persistence";
 import { FontPicker } from "./font-picker";
+import {
+  SLOT_UI_LABEL,
+  weightPickerHelpText,
+  WEIGHT_NAMES,
+  wghtPreviewStyle,
+} from "./font-slot-panel-sections-helpers";
 import { WeightRow } from "./font-weight-row";
 
-export type SlotName = "primary" | "secondary" | "mono";
-
-type SlotState = {
-  family: string;
-  weights: FontWeightMap;
-  italic: boolean;
-  source: "local" | "webfont";
-  localRoleFiles?: Partial<Record<keyof FontWeightMap, string>>;
-};
-
-type WeightPickerMode =
-  | { kind: "variable"; wghtMin: number; wghtMax: number }
-  | { kind: "static"; options: number[] }
-  | { kind: "localFiles"; files: LocalPreviewRuntime["files"] };
-
-const SLOT_UI_LABEL: Record<SlotName, string> = {
-  primary: "Primary",
-  secondary: "Secondary",
-  mono: "Mono",
-};
-
-const WEIGHT_NAMES: (keyof FontWeightMap)[] = ["thin", "light", "regular", "book", "bold", "black"];
-
-function wghtPreviewStyle(fontFamilyCss: string, w: number, variableFace: boolean) {
-  const style: CSSProperties = { fontFamily: fontFamilyCss, fontWeight: w };
-  if (variableFace) style.fontVariationSettings = `"wght" ${w}`;
-  return style;
-}
-
-function localUploadSummaryText(localLibrary: LocalPreviewRuntime): string {
-  if (localLibrary.files.length === 0) return "";
-  const sample = localLibrary.files
-    .slice(0, 2)
-    .map((f) => f.fileName)
-    .join(", ");
-  const suffix = localLibrary.files.length > 2 ? "…" : "";
-  return ` · ${sample}${suffix}`;
-}
-
-function weightPickerHelpText(
-  weightPicker: WeightPickerMode,
-  catalogVariableSnapSteps: number[] | null
-): string {
-  if (weightPicker.kind === "localFiles") {
-    return `${weightPicker.files.length} file${weightPicker.files.length === 1 ? "" : "s"}: choose which file each row uses. The number is the weight (100–900). Italic adds a second sample in faux italic if you don’t have an italic file.`;
-  }
-  if (weightPicker.kind === "variable") {
-    if (catalogVariableSnapSteps) {
-      return `This family loads separate files at: ${catalogVariableSnapSteps.join(", ")}. Typing a value in between rounds to the nearest so the preview matches what really loads (e.g. 150 → 200).`;
-    }
-    return `Variable weight range about ${weightPicker.wghtMin}–${weightPicker.wghtMax}. Enter a whole number in that range.`;
-  }
-  return `${weightPicker.options.length} weights available: ${weightPicker.options.join(", ")}. Turn on the rows you need; you can use the same weight on more than one row.`;
-}
+export { SlotPanelUploads } from "./font-slot-panel-uploads";
 
 export function SlotPanelHeader({
   slot,
@@ -117,75 +70,6 @@ export function SlotPanelHeader({
           {modeBadgeText}
         </span>
       ) : null}
-    </div>
-  );
-}
-
-export function SlotPanelUploads({
-  fileRef,
-  localLibrary,
-  onLocalUploadFiles,
-  onClearLocal,
-}: {
-  fileRef: RefObject<HTMLInputElement | null>;
-  localLibrary?: LocalPreviewRuntime;
-  onLocalUploadFiles: (files: File[]) => void;
-  onClearLocal: () => void;
-}) {
-  const hasLocalFiles = Boolean(localLibrary && localLibrary.files.length > 0);
-  return (
-    <div className="rounded border border-border/60 bg-muted/15 px-3 py-2 space-y-1.5">
-      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wide shrink-0">
-          Your files
-        </span>
-        <input
-          ref={fileRef}
-          type="file"
-          multiple
-          accept=".woff2,.woff,.ttf,.otf,font/woff2,font/woff,application/font-woff"
-          className="sr-only"
-          onChange={(e) => {
-            const list = e.target.files ? Array.from(e.target.files) : [];
-            e.target.value = "";
-            if (!list.length) return;
-            onLocalUploadFiles(list);
-          }}
-        />
-        <button
-          type="button"
-          className="rounded border border-border px-2 py-1 text-[11px] font-mono text-foreground hover:bg-muted/60"
-          onClick={() => fileRef.current?.click()}
-        >
-          Upload files…
-        </button>
-        {hasLocalFiles && localLibrary ? (
-          <>
-            <span
-              className="text-[11px] font-mono text-muted-foreground truncate max-w-[min(100%,18rem)]"
-              title={localLibrary.files.map((f) => f.fileName).join(", ")}
-            >
-              {localLibrary.files.length} file{localLibrary.files.length === 1 ? "" : "s"}
-              {localUploadSummaryText(localLibrary)}
-            </span>
-            <button
-              type="button"
-              className="text-[11px] font-mono text-foreground underline-offset-2 hover:underline"
-              onClick={onClearLocal}
-            >
-              Clear all
-            </button>
-          </>
-        ) : (
-          <span className="text-[11px] text-muted-foreground">
-            Select one or many files · preview stays in this browser only
-          </span>
-        )}
-      </div>
-      <p className="text-[10px] text-muted-foreground leading-snug">
-        Weights are guessed from file names (e.g. Bold, 700). Fix any row in the list below if a
-        file sits on the wrong line.
-      </p>
     </div>
   );
 }

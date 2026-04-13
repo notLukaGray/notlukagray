@@ -5,10 +5,12 @@ export function VectorDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Vector defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, configure viewBox and shape paths, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementVector</code> variants, preview with shape rendering, then copy JSON.
-          Schema: <code>element-content-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementVector</code> blocks — inline SVG shape rendering and fill/stroke styling
+          across all icon and illustration placements
         </>
       }
     />

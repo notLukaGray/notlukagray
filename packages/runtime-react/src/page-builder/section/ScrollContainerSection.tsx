@@ -242,7 +242,9 @@ export function ScrollContainerSection({
         <SectionGlassEffect effects={effects} sectionRef={sectionRef} />
         <div
           ref={scrollContainerRef}
-          className="scroll-container-hide-scrollbar relative z-10 flex shrink-0 flex-col min-h-0"
+          className={`scroll-container-hide-scrollbar relative z-10 flex min-h-0 flex-col ${
+            scrollDirection === "horizontal" ? "shrink-0" : "min-h-0 flex-1"
+          }`}
           style={scrollContainerStyle}
           onWheel={scrollContainerWheelHandler}
         >

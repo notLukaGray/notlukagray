@@ -32,11 +32,19 @@ export function normalizeHeadingVariant(
     incoming.semanticLevel,
     seed.semanticLevel
   ) as HeadingVariantDefaults["semanticLevel"];
+  const color =
+    incoming.color === undefined ? seed.color : pickString(incoming.color, seed.color) || undefined;
+  const fontFamily =
+    incoming.fontFamily === undefined
+      ? seed.fontFamily
+      : pickString(incoming.fontFamily, seed.fontFamily) || undefined;
   return {
     ...seed,
     ...incoming,
     level,
     text: pickString(incoming.text, seed.text),
+    color,
+    fontFamily,
     semanticLevel,
     wordWrap: pickBoolean(incoming.wordWrap, seed.wordWrap),
     opacity: pickUnitOpacity(incoming.opacity, seed.opacity),

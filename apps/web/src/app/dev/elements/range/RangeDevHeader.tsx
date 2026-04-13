@@ -5,10 +5,12 @@ export function RangeDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Range defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune slider layout, label composition, and hint text, then validate the representational preview before copying JSON."
+      affects={
         <>
-          Tune <code>elementRange</code> variants, preview with real layout, then copy JSON. Schema:{" "}
-          <code>element-range-schemas.ts</code> + <code>elementLayoutSchema</code>.
+          <code>elementRange</code> blocks — slider controls, label/hint layout, and value display
+          within section form layouts
         </>
       }
     />

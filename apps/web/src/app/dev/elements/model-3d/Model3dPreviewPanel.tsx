@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { TypographyLiveMotionPreview } from "@/app/dev/elements/_shared/TypographyLiveMotionPreview";
 import { buildResolvedTypographyWorkbenchBlock } from "@/app/dev/elements/_shared/typography-workbench-preview";
 import { isRecord } from "@/app/dev/elements/_shared/asset-input-utils";
+import { PreviewProvenanceBadge } from "@/app/dev/workbench/PreviewProvenanceBadge";
 import { VARIANT_LABELS } from "./constants";
 import type { Model3dElementDevController } from "./useModel3dElementDevController";
 
@@ -82,12 +83,28 @@ function prepareModel3dPreview(active: Model3dElementDevController["active"]) {
 export function Model3dPreviewPanel({ controller }: { controller: Model3dElementDevController }) {
   const { runtimePreview } = controller;
   const prepared = useMemo(() => prepareModel3dPreview(controller.active), [controller.active]);
-  const previewBlock = useMemo(
+  const rawPreviewBlock = useMemo(
     () =>
-      buildResolvedTypographyWorkbenchBlock(controller.runtimeDraft, {
-        ...prepared.block,
-        type: "elementModel3D",
-      }),
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        {
+          ...controller.active,
+          type: "elementModel3D",
+        },
+        { mode: "raw" }
+      ),
+    [controller.runtimeDraft, controller.active]
+  );
+  const guidedPreviewBlock = useMemo(
+    () =>
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        {
+          ...prepared.block,
+          type: "elementModel3D",
+        },
+        { mode: "guided" }
+      ),
     [controller.runtimeDraft, prepared.block]
   );
   const hiddenByVisibleWhen =
@@ -103,7 +120,10 @@ export function Model3dPreviewPanel({ controller }: { controller: Model3dElement
           <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
             Preview
           </p>
-          <span className="font-mono text-[10px] text-muted-foreground">{variantLabel}</span>
+          <div className="flex items-center gap-2">
+            <PreviewProvenanceBadge mode="placeholder" />
+            <span className="font-mono text-[10px] text-muted-foreground">{variantLabel}</span>
+          </div>
         </div>
         <div className="min-h-[10rem] rounded-md border border-dashed border-border/80 bg-muted/10 p-6 flex flex-col items-center justify-center gap-3">
           <p className="font-mono text-[11px] text-muted-foreground text-center">
@@ -145,7 +165,8 @@ export function Model3dPreviewPanel({ controller }: { controller: Model3dElement
         variantLabel={variantLabel}
         hiddenByVisibleWhen={hiddenByVisibleWhen}
         runtimeDraft={controller.runtimeDraft}
-        previewBlock={previewBlock}
+        previewBlock={rawPreviewBlock}
+        guidedPreviewBlock={guidedPreviewBlock}
         onPreviewExitComplete={controller.onPreviewExitComplete}
         animationSource={controller.active.animation}
       />

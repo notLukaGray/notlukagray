@@ -1,7 +1,7 @@
 "use client";
 
 import { createSimpleElementDevController } from "@/app/dev/elements/_shared/createSimpleElementDevController";
-import { BASE_DEFAULTS, STORAGE_KEY, VARIANT_ORDER } from "./constants";
+import { BASE_DEFAULTS, VARIANT_ORDER } from "./constants";
 import { buildSpacerElementSnippet } from "./build-snippet";
 import {
   normalizeSpacerVariant,
@@ -16,7 +16,7 @@ const useBaseSpacerController = createSimpleElementDevController<
   SpacerVariantDefaults,
   PersistedSpacerDefaults
 >({
-  storageKey: STORAGE_KEY,
+  elementKey: "spacer",
   defaults: BASE_DEFAULTS,
   variantOrder: VARIANT_ORDER,
   readPersisted: readPersistedSpacer,

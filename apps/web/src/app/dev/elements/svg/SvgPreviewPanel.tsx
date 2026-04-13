@@ -8,13 +8,30 @@ export function SvgPreviewPanel({ controller }: { controller: SvgElementDevContr
   const { runtimePreview } = controller;
   const hasMarkup =
     typeof controller.active.markup === "string" && controller.active.markup.trim().length > 0;
-  const previewBlock = useMemo(
+  const rawPreviewBlock = useMemo(
     () =>
-      buildResolvedTypographyWorkbenchBlock(controller.runtimeDraft, {
-        type: "elementSVG",
-        ...controller.active,
-        markup: controller.active.markup ?? DEFAULT_MARKUP,
-      }),
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        {
+          type: "elementSVG",
+          ...controller.active,
+          markup: controller.active.markup ?? "",
+        },
+        { mode: "raw" }
+      ),
+    [controller.active, controller.runtimeDraft]
+  );
+  const guidedPreviewBlock = useMemo(
+    () =>
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        {
+          type: "elementSVG",
+          ...controller.active,
+          markup: controller.active.markup ?? DEFAULT_MARKUP,
+        },
+        { mode: "guided" }
+      ),
     [controller.active, controller.runtimeDraft]
   );
   const hiddenByVisibleWhen =
@@ -36,7 +53,8 @@ export function SvgPreviewPanel({ controller }: { controller: SvgElementDevContr
         variantLabel={variantLabel}
         hiddenByVisibleWhen={hiddenByVisibleWhen}
         runtimeDraft={controller.runtimeDraft}
-        previewBlock={previewBlock}
+        previewBlock={rawPreviewBlock}
+        guidedPreviewBlock={guidedPreviewBlock}
         onPreviewExitComplete={controller.onPreviewExitComplete}
         animationSource={controller.active.animation}
       />

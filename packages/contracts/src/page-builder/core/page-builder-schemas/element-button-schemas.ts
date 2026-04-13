@@ -101,6 +101,11 @@ export const elementButtonSchema = z
     level: z
       .union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5), z.literal(6)])
       .optional(),
+    /**
+     * Font family override. Use named slots to follow active foundations:
+     * `"primary"` | `"secondary"` | `"mono"`.
+     */
+    fontFamily: z.string().optional(),
     wordWrap: z.boolean().optional(),
     vectorRef: z.string().optional(),
     href: z.string().optional(),
@@ -121,6 +126,29 @@ export const elementButtonSchema = z
     wrapperStrokeRef: z.string().optional(),
     wrapperPadding: z.string().optional(),
     wrapperBorderRadius: z.string().optional(),
+    /** Fill color on hover. Falls back to a subtle brightness shift if unset. */
+    wrapperFillHover: z.string().optional(),
+    /** Stroke/border color on hover. */
+    wrapperStrokeHover: z.string().optional(),
+    /** Fill color when pressed/active. */
+    wrapperFillActive: z.string().optional(),
+    /** Scale transform on hover (default 1). */
+    wrapperScaleHover: z.number().optional(),
+    /** Scale transform when pressed (e.g. 0.97). */
+    wrapperScaleActive: z.number().optional(),
+    /** Scale transform when disabled (default 1). */
+    wrapperScaleDisabled: z.number().optional(),
+    /** Opacity multiplier on hover (0–1). Stacks on top of hover fill. */
+    wrapperOpacityHover: z.number().optional(),
+    /** Fill color when disabled. */
+    wrapperFillDisabled: z.string().optional(),
+    /** CSS transition override for all wrapper state changes. */
+    wrapperTransition: z.string().optional(),
+    /**
+     * Extra CSS custom properties applied on the interactive wrapper (keys must start with `--`).
+     * Merged after built-in state vars so authors can override or add advanced tokens.
+     */
+    wrapperInteractionVars: z.record(z.string(), z.string()).optional(),
     pointerDownAction: triggerActionSchema.optional(),
     pointerUpAction: triggerActionSchema.optional(),
   })

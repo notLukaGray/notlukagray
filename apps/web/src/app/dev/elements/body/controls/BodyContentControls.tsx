@@ -1,4 +1,7 @@
-import { SharedFontSlotField } from "@/app/dev/elements/_shared/dev-controls";
+import {
+  SharedFontSlotField,
+  SharedWorkbenchColorTokenFields,
+} from "@/app/dev/elements/_shared/dev-controls";
 import type { BodyVariantDefaults } from "../types";
 import type { BodyElementDevController } from "../useBodyElementDevController";
 
@@ -20,7 +23,8 @@ export function BodyContentControls({ controller }: { controller: BodyElementDev
           Content
         </p>
         <p className="mt-1 text-[10px] text-muted-foreground">
-          Body copy, typography level, color, and line height. Maps to `elementBody` content fields.
+          Body copy, typography level, color (from `/dev/colors` tokens), and line height. Maps to
+          `elementBody` content fields.
         </p>
       </div>
 
@@ -58,18 +62,13 @@ export function BodyContentControls({ controller }: { controller: BodyElementDev
         </select>
       </label>
 
-      <label className="space-y-1.5">
-        <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
-          Color
-        </span>
-        <input
-          type="text"
-          className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={active.color ?? ""}
-          onChange={(e) => setVariantPatch(activeVariant, { color: e.target.value || undefined })}
-          placeholder="optional CSS color"
-        />
-      </label>
+      <SharedWorkbenchColorTokenFields
+        idSuffix={`body-${activeVariant}`}
+        label="Color"
+        value={active.color}
+        onChange={(next) => setVariantPatch(activeVariant, { color: next })}
+        helperText="Tokens resolve against the current workbench session from `/dev/colors`. Use custom CSS for literals or other vars."
+      />
 
       <label className="space-y-1.5 sm:col-span-2">
         <span className="font-mono text-[10px] uppercase tracking-wide text-muted-foreground">

@@ -18,6 +18,7 @@ import { pbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
 import { getProductionWorkbenchSession } from "@/app/dev/workbench/workbench-defaults";
 import { serializePbFoundationsCss } from "@/app/theme/pb-foundation-css";
 import { PbFoundationsRuntimeSync } from "@/app/theme/PbFoundationsRuntimeSync";
+import { PbColorsRuntimeSync } from "@/app/theme/PbColorsRuntimeSync";
 import { setCoreConfig } from "@pb/core";
 import { PageBuilderRuntimeEffects } from "@pb/runtime-react/effects";
 
@@ -119,6 +120,7 @@ export default function RootLayout({
                 <DevPageValidationClient />
                 <DevContentReloadClient />
                 <PbFoundationsRuntimeSync />
+                <PbColorsRuntimeSync />
               </>
             )}
             <AppLayout>

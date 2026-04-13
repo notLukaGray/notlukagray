@@ -56,9 +56,11 @@ export function SectionColumnGrid({
     layoutSegments && layoutSegments.length > 0
       ? layoutSegments
       : [{ type: "columns", elementsByColumn }];
-  const templateColumns = gridTemplateFromFlexStyles(
-    columnFlexStyles.slice(0, Math.max(1, resolvedColumnCount))
-  );
+  const flexStylesSlice = columnFlexStyles.slice(0, Math.max(1, resolvedColumnCount));
+  const templateColumns =
+    gridMode === "grid"
+      ? gridTemplateFromFlexStyles(flexStylesSlice, { forCssGrid: true })
+      : gridTemplateFromFlexStyles(flexStylesSlice);
   const primaryGap = getPrimaryGap(resolvedColumnGaps);
   const overlapGap = getOverlapGap(resolvedColumnGaps);
   const outerWrapperStyle: React.CSSProperties = {
@@ -81,8 +83,21 @@ export function SectionColumnGrid({
   if (gridMode === "grid") {
     const gridItems = gridLayoutItems ?? [];
     const gridGap = getPrimaryGap(resolvedColumnGaps);
+    // `contentWidth: hug` maps to `width: fit-content`, which shrink-wraps the grid. That makes
+    // `fr` / percentage column tracks effectively collapse (used inline size is indefinite), so
+    // the layout reads as a broken single column. Grid needs a definite width — the section flex
+    // column already stretches children horizontally.
+    const gridOuterBase: React.CSSProperties =
+      contentWrapperStyle.width === "fit-content"
+        ? {
+            ...outerWrapperStyle,
+            width: "100%",
+            marginLeft: undefined,
+            marginRight: undefined,
+          }
+        : outerWrapperStyle;
     const gridWrapperStyle: React.CSSProperties = {
-      ...outerWrapperStyle,
+      ...gridOuterBase,
       display: "grid",
       gridTemplateColumns: templateColumns,
       ...(gridGap && !overlapGap ? { columnGap: gridGap, rowGap: gridGap } : {}),

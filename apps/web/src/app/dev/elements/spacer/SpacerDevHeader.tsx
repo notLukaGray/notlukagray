@@ -5,12 +5,12 @@ export function SpacerDevHeader() {
     <DevWorkbenchPageHeader
       eyebrow="Dev · Elements"
       title="Spacer defaults"
-      description={
+      showSessionBadge
+      description="Select a variant, tune height tokens and responsive behavior, then validate the representational preview (dashed guides show spacer height) before copying JSON."
+      affects={
         <>
-          Tune <code>elementSpacer</code> variants, preview spacing at different size variants, then
-          copy JSON. Schema: <code>element-content-schemas.ts</code> +{" "}
-          <code>elementLayoutSchema</code>. Spacer renders as an empty div — dashed guides are added
-          in preview to make the height visible.
+          <code>elementSpacer</code> blocks — vertical rhythm spacing between content blocks across
+          all section layouts
         </>
       }
     />

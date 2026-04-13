@@ -1,12 +1,23 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { scanPageFrames } from "./widget-audit";
 
+type TestFigmaApi = {
+  currentPage: {
+    children: readonly SceneNode[];
+  };
+};
+
 function makeFrame(id: string, name: string): SceneNode {
   return {
     id,
     type: "FRAME",
     name,
   } as SceneNode;
+}
+
+function setPageChildren(children: SceneNode[]): void {
+  const figmaApi = (globalThis as unknown as { figma: TestFigmaApi }).figma;
+  figmaApi.currentPage.children = children;
 }
 
 describe("scanPageFrames responsive pairing", () => {
@@ -19,13 +30,12 @@ describe("scanPageFrames responsive pairing", () => {
   });
 
   it("keeps first duplicate key per role and marks duplicate rows with warnings", () => {
-    const figmaApi = (globalThis as { figma: { currentPage: { children: SceneNode[] } } }).figma;
-    figmaApi.currentPage.children = [
+    setPageChildren([
       makeFrame("d1", "Section[Desktop]/Hero"),
       makeFrame("d2", "Section[Desktop]/Hero"),
       makeFrame("m1", "Section[Mobile]/Hero"),
       makeFrame("m2", "Section[Mobile]/Hero"),
-    ];
+    ]);
 
     const rows = scanPageFrames();
     const byId = new Map(rows.map((row) => [row.frameId, row]));
@@ -49,8 +59,7 @@ describe("scanPageFrames responsive pairing", () => {
   });
 
   it("marks unmatched responsive frames as orphan", () => {
-    const figmaApi = (globalThis as { figma: { currentPage: { children: SceneNode[] } } }).figma;
-    figmaApi.currentPage.children = [makeFrame("d1", "Section[Desktop]/Solo")];
+    setPageChildren([makeFrame("d1", "Section[Desktop]/Solo")]);
 
     const rows = scanPageFrames();
     expect(rows).toHaveLength(1);
@@ -64,11 +73,10 @@ describe("scanPageFrames responsive pairing", () => {
   });
 
   it("ignores non-frame nodes entirely", () => {
-    const figmaApi = (globalThis as { figma: { currentPage: { children: SceneNode[] } } }).figma;
-    figmaApi.currentPage.children = [
+    setPageChildren([
       makeFrame("f1", "Section[Desktop]/Hero"),
       { id: "t1", type: "TEXT", name: "Ignored" } as SceneNode,
-    ];
+    ]);
 
     const rows = scanPageFrames();
     expect(rows.map((row) => row.frameId)).toEqual(["f1"]);

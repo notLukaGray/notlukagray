@@ -75,7 +75,24 @@ function applyStyle(
   return { ok: true, session };
 }
 
-const ELEMENT_IMPORT_KEYS = ["image", "body", "heading", "link"] as const;
+const ELEMENT_IMPORT_KEYS = [
+  "image",
+  "body",
+  "heading",
+  "link",
+  "button",
+  "richText",
+  "input",
+  "range",
+  "video",
+  "videoTime",
+  "vector",
+  "svg",
+  "model3d",
+  "rive",
+  "spacer",
+  "scrollProgressBar",
+] as const;
 
 function applyElements(
   session: WorkbenchSessionV2InFlight,

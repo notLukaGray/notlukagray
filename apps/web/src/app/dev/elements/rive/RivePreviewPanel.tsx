@@ -1,5 +1,9 @@
 "use client";
 
+import { useMemo } from "react";
+import { TypographyLiveMotionPreview } from "@/app/dev/elements/_shared/TypographyLiveMotionPreview";
+import { buildResolvedTypographyWorkbenchBlock } from "@/app/dev/elements/_shared/typography-workbench-preview";
+import { PreviewProvenanceBadge } from "@/app/dev/workbench/PreviewProvenanceBadge";
 import { VARIANT_LABELS } from "./constants";
 import type { RiveElementDevController } from "./useRiveElementDevController";
 
@@ -7,6 +11,43 @@ export function RivePreviewPanel({ controller }: { controller: RiveElementDevCon
   const variantLabel = controller.isCustomVariant
     ? "Create Custom"
     : VARIANT_LABELS[controller.activeVariant];
+  const hasAsset =
+    typeof controller.active.src === "string" && controller.active.src.trim().length > 0;
+  const hiddenByVisibleWhen =
+    controller.runtimeDraft.visibleWhenEnabled && !controller.runtimePreview.visibleWhenMatches;
+  const previewBlock = useMemo(
+    () =>
+      buildResolvedTypographyWorkbenchBlock(
+        controller.runtimeDraft,
+        {
+          type: "elementRive",
+          ...controller.active,
+        },
+        { mode: "raw" }
+      ),
+    [controller.active, controller.runtimeDraft]
+  );
+
+  if (hasAsset) {
+    return (
+      <TypographyLiveMotionPreview
+        previewVisible={controller.previewVisible}
+        previewKey={controller.previewKey}
+        autoLoop={controller.autoLoop}
+        setAutoLoop={controller.setAutoLoop}
+        animateInPreview={controller.animateInPreview}
+        animateOutPreview={controller.animateOutPreview}
+        showPreview={controller.showPreview}
+        variantLabel={variantLabel}
+        hiddenByVisibleWhen={hiddenByVisibleWhen}
+        runtimeDraft={controller.runtimeDraft}
+        previewBlock={previewBlock}
+        onPreviewExitComplete={controller.onPreviewExitComplete}
+        animationSource={controller.active.animation}
+        showFidelityModeToggle={false}
+      />
+    );
+  }
 
   return (
     <div className="space-y-3">
@@ -14,7 +55,10 @@ export function RivePreviewPanel({ controller }: { controller: RiveElementDevCon
         <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
           Preview
         </p>
-        <span className="font-mono text-[10px] text-muted-foreground">{variantLabel}</span>
+        <div className="flex items-center gap-2">
+          <PreviewProvenanceBadge mode="placeholder" />
+          <span className="font-mono text-[10px] text-muted-foreground">{variantLabel}</span>
+        </div>
       </div>
       <div className="min-h-[10rem] rounded-md border border-dashed border-border/80 bg-muted/10 p-6 flex flex-col items-center justify-center gap-3">
         <p className="font-mono text-[11px] text-muted-foreground text-center">
