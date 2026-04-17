@@ -60,16 +60,8 @@ export const DEV_WORKBENCH_NAV_GROUPS: NavGroup[] = [
     items: [
       { label: "Custom JSON", href: "/dev/custom" },
       { label: "Backgrounds", href: "/dev/backgrounds" },
-      {
-        label: "Modules (WIP)",
-        disabled: true,
-        disabledReason: "Deferred surface: module builder is planned for a later phase.",
-      },
-      {
-        label: "Modals (WIP)",
-        disabled: true,
-        disabledReason: "Deferred surface: modal builder is planned for a later phase.",
-      },
+      { label: "Modules", href: "/dev/modules" },
+      { label: "Modals", href: "/dev/modals" },
     ],
   },
 ];
