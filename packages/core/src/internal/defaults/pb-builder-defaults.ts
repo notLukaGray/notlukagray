@@ -259,6 +259,24 @@ export type PbSpacerDefaults = {
   variants: Record<PbSpacerVariantKey, PbSpacerVariantDefaults>;
 };
 
+export type PbWorkbenchElementDefaultSet<
+  T extends Record<string, unknown> = Record<string, unknown>,
+> = {
+  v?: number;
+  defaultVariant: string;
+  variants: Record<string, T>;
+};
+
+export type PbWorkbenchElementDefaults = {
+  richText: PbWorkbenchElementDefaultSet;
+  videoTime: PbWorkbenchElementDefaultSet;
+  vector: PbWorkbenchElementDefaultSet;
+  svg: PbWorkbenchElementDefaultSet;
+  model3d: PbWorkbenchElementDefaultSet;
+  rive: PbWorkbenchElementDefaultSet;
+  scrollProgressBar: PbWorkbenchElementDefaultSet;
+};
+
 export type PbVideoVariantKey = "inline" | "compact" | "fullcover" | "hero";
 
 export type PbVideoVariantDefaults = {
@@ -327,6 +345,7 @@ export type PbBuilderDefaults = {
     frame: PbModuleFrameDefaults;
   };
   elements: PbElementDefaults;
+  workbenchElements?: PbWorkbenchElementDefaults;
 };
 
 const MIN_SPACING_REM = 0.125;

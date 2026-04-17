@@ -9,6 +9,8 @@ import {
   type PbRangeVariantKey,
   type PbSpacerVariantKey,
   type PbVideoVariantKey,
+  type PbWorkbenchElementDefaults,
+  type PbWorkbenchElementDefaultSet,
 } from "@pb/core/internal/defaults/pb-builder-defaults";
 import { getPbBuilderDefaults } from "@pb/core/internal/adapters/host-config";
 import type { ElementBlock, SectionBlock } from "@pb/contracts";
@@ -263,6 +265,35 @@ function mergeMissingFromTemplate(
     }
   }
   return changed;
+}
+
+function omitWorkbenchOnlyDefaults(template: Record<string, unknown>): Record<string, unknown> {
+  const { animation: _animation, ...rest } = template;
+  return rest;
+}
+
+function resolveWorkbenchVariantKey(
+  value: unknown,
+  defaults: PbWorkbenchElementDefaultSet
+): string {
+  return resolveVariantKey(value, defaults.variants, defaults.defaultVariant, undefined) as string;
+}
+
+function applyWorkbenchElementDefaults<K extends keyof PbWorkbenchElementDefaults>(
+  el: ElementBlock,
+  type: ElementBlock["type"],
+  key: K
+): ElementBlock {
+  if (el.type !== type) return el;
+  const defaults = getPbBuilderDefaults().workbenchElements?.[key];
+  if (!defaults) return el;
+  const rec = { ...(el as unknown as Record<string, unknown>) };
+  const variantKey = resolveWorkbenchVariantKey(rec.variant, defaults);
+  const template = defaults.variants[variantKey] as Record<string, unknown> | undefined;
+  if (!template) return el;
+  return mergeMissingFromTemplate(rec, omitWorkbenchOnlyDefaults(template))
+    ? (rec as ElementBlock)
+    : el;
 }
 
 function applyHeadingDefaults(el: ElementBlock): ElementBlock {
@@ -693,6 +724,17 @@ function processElement(el: unknown): unknown {
   withDefaults = applyInputDefaults(withDefaults);
   withDefaults = applyRangeDefaults(withDefaults);
   withDefaults = applySpacerDefaults(withDefaults);
+  withDefaults = applyWorkbenchElementDefaults(withDefaults, "elementRichText", "richText");
+  withDefaults = applyWorkbenchElementDefaults(withDefaults, "elementVideoTime", "videoTime");
+  withDefaults = applyWorkbenchElementDefaults(withDefaults, "elementVector", "vector");
+  withDefaults = applyWorkbenchElementDefaults(withDefaults, "elementSVG", "svg");
+  withDefaults = applyWorkbenchElementDefaults(withDefaults, "elementModel3D", "model3d");
+  withDefaults = applyWorkbenchElementDefaults(withDefaults, "elementRive", "rive");
+  withDefaults = applyWorkbenchElementDefaults(
+    withDefaults,
+    "elementScrollProgressBar",
+    "scrollProgressBar"
+  );
   if (withDefaults !== el) changed = true;
   const result = { ...(withDefaults as Record<string, unknown>) };
 

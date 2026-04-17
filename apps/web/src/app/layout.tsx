@@ -76,7 +76,10 @@ const htmlFontClasses = [
   .join(" ");
 
 setCoreConfig({
-  builderDefaults: pbBuilderDefaultsV1,
+  builderDefaults: {
+    ...pbBuilderDefaultsV1,
+    workbenchElements: getProductionWorkbenchSession().elements,
+  },
   contentGuidelines: pbContentGuidelines,
 });
 

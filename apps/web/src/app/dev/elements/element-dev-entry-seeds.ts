@@ -150,6 +150,28 @@ export const ELEMENT_DEV_ENTRY_SEEDS: ElementDevEntrySeed[] = [
     status: "live",
   },
   {
+    slug: "divider",
+    type: "elementDivider",
+    navLabel: "Divider",
+    title: "Elements · Divider",
+    description:
+      "Divider defaults for horizontal and vertical rules, including thickness, color, spacing, and border style.",
+    batch: "batch-5-utility",
+    editor: { kind: "dividerDev" },
+    status: "live",
+  },
+  {
+    slug: "group",
+    type: "elementGroup",
+    navLabel: "Group",
+    title: "Elements · Group",
+    description:
+      "Group layout defaults for nested element stacks, including gap, direction, alignment, justification, and wrapping.",
+    batch: "batch-5-utility",
+    editor: { kind: "groupDev" },
+    status: "live",
+  },
+  {
     slug: "scroll-progress-bar",
     type: "elementScrollProgressBar",
     navLabel: "Scroll Progress",

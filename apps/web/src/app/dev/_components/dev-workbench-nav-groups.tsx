@@ -55,6 +55,7 @@ export const DEV_WORKBENCH_NAV_GROUPS: NavGroup[] = [
     wip: true,
     items: [
       { label: "Custom JSON", href: "/dev/custom" },
+      { label: "Backgrounds", href: "/dev/backgrounds" },
       {
         label: "Modules (WIP)",
         disabled: true,

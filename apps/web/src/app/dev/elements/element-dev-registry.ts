@@ -25,6 +25,8 @@ export type ElementDevEditor =
   | { kind: "inputDev" }
   | { kind: "rangeDev" }
   | { kind: "spacerDev" }
+  | { kind: "dividerDev" }
+  | { kind: "groupDev" }
   | { kind: "scrollProgressBarDev" };
 
 export type ElementDevEntry = {

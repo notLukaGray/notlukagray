@@ -9,6 +9,8 @@ import { ImageElementDevClient } from "@/app/dev/elements/image";
 import { LinkElementDevClient } from "@/app/dev/elements/link";
 import { RichTextElementDevClient } from "@/app/dev/elements/rich-text";
 import { SpacerElementDevClient } from "@/app/dev/elements/spacer";
+import { DividerElementDevClient } from "@/app/dev/elements/divider";
+import { GroupElementDevClient } from "@/app/dev/elements/group";
 import { ScrollProgressBarElementDevClient } from "@/app/dev/elements/scroll-progress-bar";
 import { InputElementDevClient } from "@/app/dev/elements/input";
 import { RangeElementDevClient } from "@/app/dev/elements/range";
@@ -38,6 +40,8 @@ const EDITOR_RENDERERS: Record<
   model3dDev: () => <Model3dElementDevClient />,
   riveDev: () => <RiveElementDevClient />,
   spacerDev: () => <SpacerElementDevClient />,
+  dividerDev: () => <DividerElementDevClient />,
+  groupDev: () => <GroupElementDevClient />,
   scrollProgressBarDev: () => <ScrollProgressBarElementDevClient />,
   inputDev: () => <InputElementDevClient />,
   rangeDev: () => <RangeElementDevClient />,

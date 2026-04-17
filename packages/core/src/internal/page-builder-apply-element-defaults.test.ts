@@ -1,12 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { applyBuilderElementDefaultsToSections } from "@pb/core/internal/page-builder-apply-element-defaults";
+import {
+  getPageBuilderHostConfig,
+  setPageBuilderHostConfig,
+} from "@pb/core/internal/adapters/host-config";
 import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
-function imageSection(element: Record<string, unknown>): SectionBlock {
+function imageSection(...elements: Record<string, unknown>[]): SectionBlock {
   return {
     type: "contentBlock",
     id: "s-1",
-    elements: [element],
+    elements,
   } as unknown as SectionBlock;
 }
 
@@ -295,5 +299,79 @@ describe("page-builder-apply-element-defaults", () => {
     expect(image.objectFit).toBe("crop");
     expect(image.aspectRatio).toBe("16 / 9");
     expect(image.imageCrop).toMatchObject({ x: 0, y: 0, scale: 1 });
+  });
+
+  it("applies workbench element defaults for extended element types", () => {
+    const originalConfig = getPageBuilderHostConfig();
+    setPageBuilderHostConfig({
+      pbBuilderDefaults: {
+        ...originalConfig.pbBuilderDefaults,
+        workbenchElements: {
+          richText: {
+            defaultVariant: "article",
+            variants: { article: { level: 3, wordWrap: true } },
+          },
+          videoTime: {
+            defaultVariant: "default",
+            variants: { default: { format: "mm:ss", style: { color: "#fff" } } },
+          },
+          vector: {
+            defaultVariant: "default",
+            variants: { default: { viewBox: "0 0 24 24", shapes: [] } },
+          },
+          svg: {
+            defaultVariant: "default",
+            variants: { default: { markup: '<svg viewBox="0 0 1 1" />' } },
+          },
+          model3d: {
+            defaultVariant: "default",
+            variants: {
+              default: { aspectRatio: "16/9", scene: { camera: { type: "perspective" } } },
+            },
+          },
+          rive: {
+            defaultVariant: "default",
+            variants: { default: { src: "/demo.riv", fit: "contain", autoplay: false } },
+          },
+          scrollProgressBar: {
+            defaultVariant: "default",
+            variants: {
+              default: {
+                height: "4px",
+                fill: "#fff",
+                trackBackground: "rgba(255,255,255,0.2)",
+                offset: ["start end", "end start"],
+              },
+            },
+          },
+        },
+      },
+    });
+
+    try {
+      const sections = applyBuilderElementDefaultsToSections([
+        imageSection(
+          { type: "elementRichText", content: "Copy" },
+          { type: "elementVideoTime" },
+          { type: "elementVector" },
+          { type: "elementSVG" },
+          { type: "elementModel3D" },
+          { type: "elementRive" },
+          { type: "elementScrollProgressBar" }
+        ),
+      ]);
+
+      const elements = (sections[0] as unknown as { elements: Array<Record<string, unknown>> })
+        .elements;
+      expect(elements[0]?.level).toBe(3);
+      expect(elements[1]?.format).toBe("mm:ss");
+      expect(elements[2]?.viewBox).toBe("0 0 24 24");
+      expect(elements[3]?.markup).toBe('<svg viewBox="0 0 1 1" />');
+      expect(elements[4]?.aspectRatio).toBe("16/9");
+      expect(elements[5]?.src).toBe("/demo.riv");
+      expect(elements[6]?.height).toBe("4px");
+    } finally {
+      setPageBuilderHostConfig(originalConfig);
+    }
   });
 });
