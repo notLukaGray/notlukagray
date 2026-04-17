@@ -31,6 +31,10 @@ export const DEV_WORKBENCH_NAV_GROUPS: NavGroup[] = [
       { label: "Columns", href: "/dev/layout/columns" },
       { label: "Scroll", href: "/dev/layout/scroll" },
       { label: "Frames", href: "/dev/layout/frames" },
+      { label: "Section Trigger", href: "/dev/layout/section-trigger" },
+      { label: "Reveal Section", href: "/dev/layout/reveal-section" },
+      { label: "Form Block", href: "/dev/layout/form-block" },
+      { label: "Divider", href: "/dev/layout/divider" },
     ],
   },
   {

@@ -41,6 +41,34 @@ const LAYOUT_SURFACES = [
       "Content-block (frame) fallback flex defaults, padding tokens, and border-radius. The inner box of every layout block.",
     preview: "Preview: frame block with current flex, spacing, and radius tokens.",
   },
+  {
+    title: "Section Trigger",
+    href: "/dev/layout/section-trigger",
+    description:
+      "Visible, invisible, progress, keyboard, timer, cursor, scroll-direction, idle, and visibleWhen trigger wiring.",
+    preview: "Preview: sentinel section with live trigger event log.",
+  },
+  {
+    title: "Reveal Section",
+    href: "/dev/layout/reveal-section",
+    description:
+      "Expandable section behavior: reveal conditions, motion presets, sizes, and nested revealed content.",
+    preview: "Preview: clickable reveal section rendered through SectionRenderer.",
+  },
+  {
+    title: "Form Block",
+    href: "/dev/layout/form-block",
+    description:
+      "Form section surface with live field rendering, action metadata, method, fill, and content sizing.",
+    preview: "Preview: formBlock section rendered with production form fields.",
+  },
+  {
+    title: "Divider",
+    href: "/dev/layout/divider",
+    description:
+      "Section divider variant for standalone spacing, fill, borders, margins, and section-level triggers.",
+    preview: "Preview: empty section divider rendered through SectionRenderer.",
+  },
 ] as const;
 
 export function LayoutDevIndexClient() {
