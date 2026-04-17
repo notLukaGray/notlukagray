@@ -62,6 +62,7 @@ export const DEV_WORKBENCH_NAV_GROUPS: NavGroup[] = [
       { label: "Backgrounds", href: "/dev/backgrounds" },
       { label: "Modules", href: "/dev/modules" },
       { label: "Modals", href: "/dev/modals" },
+      { label: "Triggers", href: "/dev/triggers" },
     ],
   },
 ];
