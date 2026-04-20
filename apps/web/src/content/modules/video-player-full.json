@@ -42,8 +42,8 @@
       "style": {
         "width": "100px",
         "height": "100px",
-        "marginLeft": "-32.5px",
-        "marginTop": "-32.5px",
+        "marginLeft": "-50px",
+        "marginTop": "-50px",
         "background": "#00000020",
         "borderRadius": "9999px"
       },
@@ -57,7 +57,7 @@
           "blur": 1,
           "scaleRatio": 1,
           "specularOpacity": 0.5,
-          "specularSaturation": 25,
+          "specularSaturation": 5,
           "magnifyingScale": 0.5,
           "dropShadow": true
         }
@@ -80,7 +80,7 @@
     },
     "bottomBar": {
       "position": "absolute",
-      "bottom": "10px",
+      "bottom": "calc(10px + env(safe-area-inset-bottom, 0px))",
       "left": "10px",
       "right": "10px",
       "zIndex": 10,
@@ -118,7 +118,7 @@
           "blur": 1,
           "scaleRatio": 1,
           "specularOpacity": 0.5,
-          "specularSaturation": 25,
+          "specularSaturation": 5,
           "magnifyingScale": 0.5,
           "dropShadow": true
         }
