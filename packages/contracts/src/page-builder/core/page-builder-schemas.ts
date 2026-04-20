@@ -47,10 +47,10 @@ import {
   resolvedPageSchema,
 } from "./page-builder-schemas/page-definition-and-resolution-schemas";
 import {
-  formFieldBlockSchema,
   formFieldOptionSchema,
   formFieldStyleSchema,
   formFieldTypeSchema,
+  type FormFieldBlock as FormFieldBlockFromSchema,
 } from "./page-builder-schemas/form-field-schemas";
 import {
   baseSectionPropsSchema,
@@ -189,7 +189,7 @@ export type SectionBlock = z.infer<typeof sectionBlockSchema>;
 export type FormFieldOption = z.infer<typeof formFieldOptionSchema>;
 export type FormFieldStyle = z.infer<typeof formFieldStyleSchema>;
 export type FormFieldType = z.infer<typeof formFieldTypeSchema>;
-export type FormFieldBlock = z.infer<typeof formFieldBlockSchema>;
+export type FormFieldBlock = FormFieldBlockFromSchema;
 export type ModuleBlock = z.infer<typeof moduleBlockSchema>;
 export type ModuleSlot = z.infer<typeof moduleSlotSchema>;
 export type ModalBuilder = z.infer<typeof modalBuilderSchema>;

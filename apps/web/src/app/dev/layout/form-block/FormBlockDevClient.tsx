@@ -3,103 +3,52 @@
 import { useMemo, useState } from "react";
 import type { SectionBlock } from "@pb/contracts";
 import {
-  BooleanField,
   Field,
   SectionPreview,
   SectionWorkbenchLayout,
   controlClassName,
 } from "@/app/dev/layout/_shared/section-type-workbench";
+import { FormFieldComposer, type AnyField } from "./FormFieldComposer";
+import { getFieldDefaults } from "./form-field-defaults";
 
-type FieldPreset = "contact" | "choice" | "complete";
-
-const FIELD_PRESETS: FieldPreset[] = ["contact", "choice", "complete"];
-
-const CONTACT_FIELDS = [
+const DEFAULT_FIELDS: AnyField[] = [
   {
-    type: "formField",
-    fieldType: "text",
+    ...getFieldDefaults("text"),
     name: "name",
-    label: "Name",
+    label: "Full name",
     placeholder: "Jane Designer",
     required: true,
-    level: 3,
-  },
+  } as unknown as AnyField,
   {
-    type: "formField",
-    fieldType: "email",
+    ...getFieldDefaults("email"),
     name: "email",
-    label: "Email",
-    placeholder: "jane@example.com",
+    label: "Work email",
+    placeholder: "jane@studio.com",
     required: true,
-    level: 3,
-  },
+  } as unknown as AnyField,
   {
-    type: "formField",
-    fieldType: "paragraph",
+    ...getFieldDefaults("paragraph"),
     name: "message",
-    label: "Message",
-    placeholder: "What should we build?",
-    rows: 4,
-    level: 3,
-  },
-  { type: "formField", fieldType: "submit", label: "Send", loadingText: "Sending..." },
-] as const;
-
-const CHOICE_FIELDS = [
+    label: "What should we build?",
+    placeholder: "Tell us about your project…",
+    rows: 5,
+  } as unknown as AnyField,
   {
-    type: "formField",
-    fieldType: "select",
-    name: "scope",
-    label: "Scope",
-    options: [
-      { value: "site", label: "Site" },
-      { value: "system", label: "Design system" },
-      { value: "prototype", label: "Prototype" },
-    ],
-    level: 3,
-  },
-  {
-    type: "formField",
-    fieldType: "radio",
-    name: "timeline",
-    label: "Timeline",
-    options: [
-      { value: "now", label: "Now" },
-      { value: "soon", label: "Soon" },
-    ],
-    level: 3,
-  },
-  { type: "formField", fieldType: "switch", name: "updates", label: "Send updates", level: 3 },
-  { type: "formField", fieldType: "submit", label: "Continue" },
-] as const;
+    ...getFieldDefaults("button"),
+    label: "Send message",
+    loadingText: "Sending…",
+  } as unknown as AnyField,
+];
 
-function buildFields(preset: FieldPreset) {
-  if (preset === "contact") return [...CONTACT_FIELDS];
-  if (preset === "choice") return [...CHOICE_FIELDS];
-  return [
-    ...CONTACT_FIELDS.slice(0, 2),
-    {
-      type: "formField",
-      fieldType: "range",
-      name: "budget",
-      label: "Budget comfort",
-      min: 0,
-      max: 100,
-      step: 5,
-      level: 3,
-    },
-    ...CHOICE_FIELDS.slice(0, 2),
-    { type: "formField", fieldType: "checkbox", name: "agree", label: "I agree", level: 3 },
-    { type: "formField", fieldType: "submit", label: "Submit" },
-  ];
-}
+const CONTENT_WIDTH_OPTIONS = ["28rem", "36rem", "44rem", "full", "hug"] as const;
+type ContentWidthOption = (typeof CONTENT_WIDTH_OPTIONS)[number];
 
 function buildSection(
-  preset: FieldPreset,
+  fields: AnyField[],
   action: string,
   method: "get" | "post",
   fill: string,
-  compact: boolean
+  contentWidth: ContentWidthOption
 ): SectionBlock {
   return {
     type: "formBlock",
@@ -107,85 +56,98 @@ function buildSection(
     ariaLabel: "Form block workbench",
     width: "100%",
     height: "hug",
-    align: "center",
     fill,
-    borderRadius: "0.5rem",
-    border: { color: "rgba(255,255,255,0.18)", width: "1px", style: "solid" },
+    borderRadius: "0.75rem",
+    border: { color: "rgba(255,255,255,0.10)", width: "1px", style: "solid" },
+    paddingTop: "2.5rem",
+    paddingBottom: "2.5rem",
+    paddingLeft: "2rem",
+    paddingRight: "2rem",
     marginTop: "1rem",
     marginBottom: "1rem",
-    contentWidth: compact ? "hug" : "full",
-    action,
+    contentWidth,
+    action: action || undefined,
     method,
-    fields: buildFields(preset),
+    fields,
   } as SectionBlock;
 }
 
 export function FormBlockDevClient() {
-  const [preset, setPreset] = useState<FieldPreset>("contact");
+  const [fields, setFields] = useState<AnyField[]>(DEFAULT_FIELDS);
   const [action, setAction] = useState("");
   const [method, setMethod] = useState<"get" | "post">("post");
-  const [fill, setFill] = useState("rgba(17, 24, 39, 0.82)");
-  const [compact, setCompact] = useState(false);
+  const [fill, setFill] = useState("rgba(30, 38, 54, 1)");
+  const [contentWidth, setContentWidth] = useState<ContentWidthOption>("36rem");
+
   const section = useMemo(
-    () => buildSection(preset, action, method, fill, compact),
-    [preset, action, method, fill, compact]
+    () => buildSection(fields, action, method, fill, contentWidth),
+    [fields, action, method, fill, contentWidth]
   );
 
   return (
     <SectionWorkbenchLayout
       eyebrow="Dev · Layout"
       title="Form Block"
-      description="Render production form fields inside a formBlock section while editing section-level props."
-      affects="formBlock fields, action/method metadata, content sizing, fill, border, and form section layout"
+      description="Compose form fields live — add, reorder, and edit per-field props. The full form renders below using production components."
+      affects="formBlock fields, contentWidth, action/method, fill, border"
       section={section}
       onReset={() => {
-        setPreset("contact");
+        setFields(DEFAULT_FIELDS);
         setAction("");
         setMethod("post");
-        setFill("rgba(17, 24, 39, 0.82)");
-        setCompact(false);
+        setFill("rgba(30, 38, 54, 1)");
+        setContentWidth("36rem");
       }}
       preview={<SectionPreview section={section} />}
       controls={
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Field preset">
-            <select
-              value={preset}
-              onChange={(event) => setPreset(event.target.value as FieldPreset)}
-              className={controlClassName()}
-            >
-              {FIELD_PRESETS.map((entry) => (
-                <option key={entry} value={entry}>
-                  {entry}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field label="Method">
-            <select
-              value={method}
-              onChange={(event) => setMethod(event.target.value as "get" | "post")}
-              className={controlClassName()}
-            >
-              <option value="post">post</option>
-              <option value="get">get</option>
-            </select>
-          </Field>
-          <Field label="Action key">
-            <input
-              value={action}
-              onChange={(event) => setAction(event.target.value)}
-              className={controlClassName()}
-            />
-          </Field>
-          <Field label="Fill">
-            <input
-              value={fill}
-              onChange={(event) => setFill(event.target.value)}
-              className={controlClassName()}
-            />
-          </Field>
-          <BooleanField label="Compact content" checked={compact} onChange={setCompact} />
+        <div className="space-y-5">
+          <div>
+            <p className="mb-3 font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
+              Fields
+            </p>
+            <FormFieldComposer fields={fields} onChange={setFields} />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 border-t border-border pt-5">
+            <Field label="Content width">
+              <select
+                value={contentWidth}
+                onChange={(e) => setContentWidth(e.target.value as ContentWidthOption)}
+                className={controlClassName()}
+              >
+                {CONTENT_WIDTH_OPTIONS.map((w) => (
+                  <option key={w} value={w}>
+                    {w}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Method">
+              <select
+                value={method}
+                onChange={(e) => setMethod(e.target.value as "get" | "post")}
+                className={controlClassName()}
+              >
+                <option value="post">post</option>
+                <option value="get">get</option>
+              </select>
+            </Field>
+            <Field label="Action endpoint">
+              <input
+                value={action}
+                onChange={(e) => setAction(e.target.value)}
+                placeholder="/api/forms/contact"
+                className={controlClassName()}
+              />
+            </Field>
+            <Field label="Fill">
+              <input
+                value={fill}
+                onChange={(e) => setFill(e.target.value)}
+                className={controlClassName()}
+              />
+            </Field>
+          </div>
         </div>
       }
     />

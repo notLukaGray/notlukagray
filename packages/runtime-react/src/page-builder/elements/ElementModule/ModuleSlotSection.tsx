@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import type { CSSProperties } from "react";
 import type {
   ElementBlock,
   MotionPropsFromJson,
+  SectionEffect,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { uiVideoFeedbackDurationMs } from "@pb/runtime-react/core/lib/globals";
 import {
@@ -18,6 +19,7 @@ import { useSlotGestures } from "@/page-builder/hooks/use-slot-gestures";
 import { ModuleSlotFeedback } from "./ModuleSlotFeedback";
 import { ModuleSlotContent } from "./ModuleSlotContent";
 import type { ModuleSlotConfig } from "./types";
+import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 
 export { useSlotDefaultWrapperStyle } from "./ModuleSlotContext";
 
@@ -54,6 +56,7 @@ export function ModuleSlotSection({
   pointerEventsWhenVisible,
   slotStyleOverride,
 }: ModuleSlotSectionProps) {
+  const slotRef = useRef<HTMLElement | null>(null);
   const rawElements = useMemo(() => resolveSlotElements(slot), [slot]);
   const elements = useMemo(
     () =>
@@ -176,6 +179,8 @@ export function ModuleSlotSection({
       }
     : {};
   const isHidden = !isSlotVisible;
+  const slotEffects = slot.effects as SectionEffect[] | undefined;
+  const hasGlassEffect = (slotEffects ?? []).some((effect) => effect.type === "glass");
 
   const defaultWrapperStyle = slot.defaultWrapperStyle ?? {};
   const slotDefinitions = slot.section?.definitions ?? null;
@@ -187,16 +192,20 @@ export function ModuleSlotSection({
       style={{
         ...styleWithCursor,
         ...tapHandlerStyle,
+        ...(hasGlassEffect && styleWithCursor.overflow == null ? { overflow: "hidden" } : {}),
         pointerEvents: isSlotVisible ? (pointerEventsWhenVisible ?? undefined) : "none",
       }}
+      ref={slotRef}
       onPointerDown={hasTapHandler ? handlePointerDown : undefined}
       onPointerUp={hasTapHandler ? handlePointerUp : undefined}
       onPointerCancel={hasTapHandler ? handlePointerUp : undefined}
       role={slotActionHandler ? "button" : undefined}
       aria-label={slotActionHandler ? slot.action : undefined}
-      aria-hidden={isHidden ? "true" : "false"}
       inert={isHidden}
     >
+      {hasGlassEffect && (
+        <SectionGlassEffect effects={slotEffects} sectionRef={slotRef} variant="auto" />
+      )}
       <ModuleSlotContent
         elements={elements}
         getActionHandler={getActionHandler}

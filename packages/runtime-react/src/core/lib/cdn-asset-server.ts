@@ -102,6 +102,12 @@ export const CDN_ASSET_CONTENT_TYPES: Record<string, string> = {
   ".png": "image/png",
   ".glb": "model/gltf-binary",
   ".gltf": "model/gltf+json",
+  ".mpd": "application/dash+xml",
+  ".m3u8": "application/vnd.apple.mpegurl",
+  ".ts": "video/mp2t",
+  ".m4s": "video/iso.segment",
+  ".m4a": "audio/mp4",
+  ".aac": "audio/aac",
   ".webm": "video/webm",
   ".mp4": "video/mp4",
 };

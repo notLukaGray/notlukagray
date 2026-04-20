@@ -156,14 +156,20 @@ const FORM_FIELD_RESPONSIVE_KEYS = [
   "borderRadius",
   "borderWidth",
   "level",
+  "gap",
 ] as const;
 
 function resolveFormFieldBlock(field: FormFieldBlock, isMobile: boolean): FormFieldBlock {
+  const nestedFields =
+    field.fieldType === "row"
+      ? field.fields?.map((f) => resolveFormFieldBlock(f, isMobile))
+      : undefined;
   const needsCopy = FORM_FIELD_RESPONSIVE_KEYS.some(
     (key) => key in field && valueNeedsBreakpointResolution((field as Record<string, unknown>)[key])
   );
-  if (!needsCopy) return field;
+  if (!needsCopy && !nestedFields) return field;
   const out = { ...field } as Record<string, unknown>;
+  if (nestedFields) out.fields = nestedFields;
   for (const key of FORM_FIELD_RESPONSIVE_KEYS) {
     if (key in field && (field as Record<string, unknown>)[key] !== undefined) {
       (out as Record<string, unknown>)[key] = resolveResponsiveValue(

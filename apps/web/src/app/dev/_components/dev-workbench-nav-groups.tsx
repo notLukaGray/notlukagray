@@ -63,7 +63,12 @@ export const DEV_WORKBENCH_NAV_GROUPS: NavGroup[] = [
       { label: "Modules", href: "/dev/modules" },
       { label: "Modals", href: "/dev/modals" },
       { label: "Triggers", href: "/dev/triggers" },
+      { label: "Page", href: "/dev/page" },
     ],
+  },
+  {
+    title: "Tools",
+    items: [{ label: "HLS Converter", href: "/dev/tools/hls" }],
   },
 ];
 

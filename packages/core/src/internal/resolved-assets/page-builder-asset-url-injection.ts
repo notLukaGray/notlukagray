@@ -16,7 +16,8 @@ function resolveAssetRef(
   const proxy = proxyUrlByRef?.get(ref);
   const cdn = urlByRef.get(ref);
   const lower = ref.toLowerCase();
-  const isVideoRef = lower.endsWith(".webm") || lower.endsWith(".mp4");
+  const isRawVideoRef = lower.endsWith(".webm") || lower.endsWith(".mp4");
+  const isHlsPlaylistRef = lower.endsWith(".m3u8");
 
   if (isModel3D) {
     return proxy ?? (cdn !== undefined ? (cdn ?? ref) : ref);
@@ -31,7 +32,12 @@ function resolveAssetRef(
   }
 
   // For videos, prefer direct signed CDN URL over same-origin proxy redirect.
-  if (isVideoRef) {
+  if (isRawVideoRef) {
+    return cdn !== undefined && cdn != null ? cdn : (proxy ?? ref);
+  }
+
+  // HLS should stream directly from Bunny; CORS and playlist child URLs are handled at the CDN.
+  if (isHlsPlaylistRef) {
     return cdn !== undefined && cdn != null ? cdn : (proxy ?? ref);
   }
 

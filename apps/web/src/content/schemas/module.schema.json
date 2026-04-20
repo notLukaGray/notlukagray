@@ -97,6 +97,63 @@
     },
     "Def32": {
       "$ref": "#/$defs/Def32"
+    },
+    "Def33": {
+      "$ref": "#/$defs/Def33"
+    },
+    "Def34": {
+      "$ref": "#/$defs/Def34"
+    },
+    "Def35": {
+      "$ref": "#/$defs/Def35"
+    },
+    "Def36": {
+      "$ref": "#/$defs/Def36"
+    },
+    "Def37": {
+      "$ref": "#/$defs/Def37"
+    },
+    "Def38": {
+      "$ref": "#/$defs/Def38"
+    },
+    "Def39": {
+      "$ref": "#/$defs/Def39"
+    },
+    "Def40": {
+      "$ref": "#/$defs/Def40"
+    },
+    "Def41": {
+      "$ref": "#/$defs/Def41"
+    },
+    "Def42": {
+      "$ref": "#/$defs/Def42"
+    },
+    "Def43": {
+      "$ref": "#/$defs/Def43"
+    },
+    "Def44": {
+      "$ref": "#/$defs/Def44"
+    },
+    "Def45": {
+      "$ref": "#/$defs/Def45"
+    },
+    "Def46": {
+      "$ref": "#/$defs/Def46"
+    },
+    "Def47": {
+      "$ref": "#/$defs/Def47"
+    },
+    "Def48": {
+      "$ref": "#/$defs/Def48"
+    },
+    "Def49": {
+      "$ref": "#/$defs/Def49"
+    },
+    "Def50": {
+      "$ref": "#/$defs/Def50"
+    },
+    "Def51": {
+      "$ref": "#/$defs/Def51"
     }
   },
   "type": "object",
@@ -296,8 +353,14 @@
             "type": "string",
             "enum": ["inherit", "disable", "follow"]
           },
+          "effects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/Def32"
+            }
+          },
           "style": {
-            "$ref": "#/$defs/Def32"
+            "$ref": "#/$defs/Def51"
           }
         },
         "required": ["expandDurationMs", "elementRevealMs", "elementRevealStaggerMs"],
@@ -344,8 +407,14 @@
     "overlayMotion": {
       "$ref": "#/$defs/Def4"
     },
+    "effects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Def32"
+      }
+    },
     "style": {
-      "$ref": "#/$defs/Def32"
+      "$ref": "#/$defs/Def51"
     }
   },
   "required": ["type", "contentSlot", "slots"],

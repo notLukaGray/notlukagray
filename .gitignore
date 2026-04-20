@@ -71,7 +71,6 @@ lerna-debug.log*
 src/content/page-manifest.json
 .dead/
 .husky/
-.claude/
 .vercel
 
 # Generated IDE JSON schemas (run `npm run generate-json-schemas` to rebuild)

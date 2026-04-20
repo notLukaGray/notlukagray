@@ -420,6 +420,11 @@
         "required": true
       },
       {
+        "name": "sources",
+        "type": "array",
+        "required": false
+      },
+      {
         "name": "poster",
         "type": "string",
         "required": true

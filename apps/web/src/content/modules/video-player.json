@@ -28,6 +28,56 @@
       "inset": "0",
       "zIndex": 0
     },
+    "centerPlay": {
+      "position": "absolute",
+      "top": "50%",
+      "left": "50%",
+      "zIndex": 5,
+      "alignItems": "center",
+      "justifyContent": "center",
+      "padding": "0",
+      "transformInherit": "disable",
+      "slotWrapperGestures": false,
+      "visibleWhen": ["assetPaused"],
+      "style": {
+        "width": "65px",
+        "height": "65px",
+        "marginLeft": "-32.5px",
+        "marginTop": "-32.5px",
+        "background": "#00000020",
+        "borderRadius": "9999px"
+      },
+      "effects": [
+        {
+          "type": "glass",
+          "bezelType": "convex_squircle",
+          "bezelWidth": 24,
+          "glassThickness": 20,
+          "refractiveIndex": 1.8,
+          "blur": 1,
+          "scaleRatio": 1,
+          "specularOpacity": 0.5,
+          "specularSaturation": 25,
+          "magnifyingScale": 0.5,
+          "dropShadow": true
+        }
+      ],
+      "section": {
+        "elementOrder": ["play-btn"],
+        "definitions": {
+          "play-btn": {
+            "preset": "video-controls-play",
+            "width": "22px",
+            "height": "25px",
+            "showWhen": "assetPaused",
+            "action": "assetTogglePlay",
+            "wrapperStyle": {
+              "transform": "translateX(2px)"
+            }
+          }
+        }
+      }
+    },
     "bottomBar": {
       "position": "absolute",
       "bottom": "10px",
@@ -55,11 +105,24 @@
         "minHeight": "44px"
       },
       "style": {
-        "background": "linear-gradient(270deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.6) 100%)",
-        "backdropFilter": "blur(8px)",
-        "WebkitBackdropFilter": "blur(8px)",
+        "background": "#00000020",
         "borderRadius": "9999px"
       },
+      "effects": [
+        {
+          "type": "glass",
+          "bezelType": "convex_squircle",
+          "bezelWidth": 24,
+          "glassThickness": 20,
+          "refractiveIndex": 1.8,
+          "blur": 1,
+          "scaleRatio": 1,
+          "specularOpacity": 0.5,
+          "specularSaturation": 25,
+          "magnifyingScale": 0.5,
+          "dropShadow": true
+        }
+      ],
       "section": {
         "elementOrder": ["left-controls", "seek-wrap", "right-controls"],
         "definitions": {
@@ -70,8 +133,12 @@
             "display": "flex",
             "flexDirection": "row",
             "alignItems": "center",
-            "padding": "0",
+            "padding": "0 0 0 4px",
             "gap": "0px",
+            "wrapperStyle": {
+              "position": "relative",
+              "zIndex": 1
+            },
             "section": {
               "elementOrder": ["ui-play", "ui-pause", "mute-btn", "unmute-btn"],
               "definitions": {
@@ -118,7 +185,11 @@
             "flexDirection": "row",
             "alignItems": "center",
             "justifyContent": "center",
-            "padding": "0 20px",
+            "padding": "0 16px 0 8px",
+            "wrapperStyle": {
+              "position": "relative",
+              "zIndex": 1
+            },
             "section": {
               "elementOrder": ["seek"],
               "definitions": {
@@ -148,13 +219,20 @@
             "alignItems": "center",
             "justifyContent": "flex-end",
             "gap": "4px",
+            "wrapperStyle": {
+              "position": "relative",
+              "zIndex": 1
+            },
             "section": {
-              "elementOrder": ["time", "fullscreen", "minimize"],
+              "elementOrder": ["time", "quality-select", "fullscreen", "minimize"],
               "definitions": {
+                "quality-select": {
+                  "preset": "video-controls-quality-select"
+                },
                 "time": {
                   "preset": "video-controls-time",
                   "paddingLeft": "4px",
-                  "paddingRight": "4px"
+                  "paddingRight": "10px"
                 },
                 "fullscreen": {
                   "preset": "video-controls-fullscreen-bar",

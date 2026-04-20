@@ -36,7 +36,7 @@ export type ExpandPageBuilderOptions = {
   viewportWidthPx?: number;
 };
 
-function warnExpandFallbacks(page: PageBuilder, displayOrder: string[]): void {
+function warnExpandFallbacks(page: PageBuilder): void {
   if (process.env.NODE_ENV !== "development") return;
   const defs = page.definitions;
   const slug = page.slug ?? "(unknown)";
@@ -64,32 +64,6 @@ function warnExpandFallbacks(page: PageBuilder, displayOrder: string[]): void {
       );
     }
   }
-
-  // element id synthesis (element lacks an explicit id, so def key is used)
-  for (const key of displayOrder) {
-    const block = defs[key];
-    if (block == null || typeof block !== "object" || !("type" in block)) continue;
-    const type = (block as { type: string }).type;
-    if (!SECTION_TYPE_STRINGS.has(type)) continue;
-    const section = block as { elementOrder?: unknown; elements?: unknown; definitions?: unknown };
-    const order: string[] = Array.isArray(section.elementOrder)
-      ? (section.elementOrder as string[])
-      : [];
-    const sectionDefs =
-      section.definitions && typeof section.definitions === "object"
-        ? { ...defs, ...(section.definitions as Record<string, unknown>) }
-        : defs;
-    for (const elKey of order) {
-      const el = (sectionDefs as Record<string, unknown>)[elKey];
-      if (el == null || typeof el !== "object" || !("type" in el)) continue;
-      const elId = (el as Record<string, unknown>).id;
-      if (typeof elId !== "string" || elId.trim().length === 0) {
-        console.warn(
-          `[page-builder] ${slug}/${key}: element "${elKey}" has no explicit id — synthesizing id from definition key. Add an id field to suppress.`
-        );
-      }
-    }
-  }
 }
 
 /** Expand PageBuilder into bg + sections; section.elements are refs into definitions. */
@@ -111,7 +85,7 @@ export function expandPageBuilder(
   const displayOrder = buildDisplayOrder(page);
   const bgKey = page.bgKey ?? "bg";
 
-  warnExpandFallbacks(page, displayOrder);
+  warnExpandFallbacks(page);
 
   const bg: bgBlock | null =
     defs[bgKey] != null && typeof defs[bgKey] === "object" && "type" in (defs[bgKey] as object)

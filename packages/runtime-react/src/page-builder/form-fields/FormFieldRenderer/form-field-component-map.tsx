@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { ReactNode } from "react";
 import type {
   FormFieldBlock,
   FormFieldType,
@@ -8,10 +9,11 @@ import type { FormFieldValue } from "..";
 import { FormFieldInput } from "./FormFieldInput";
 import { FormFieldParagraph } from "./FormFieldParagraph";
 import { FormFieldChoice } from "./FormFieldChoice";
-import { FormFieldSubmit } from "./FormFieldSubmit";
+import { FormFieldButton } from "./FormFieldButton";
 import { FormFieldHidden } from "./FormFieldHidden";
 import { FormFieldRange } from "./FormFieldRange";
 import { FormFieldFile } from "./FormFieldFile";
+import { FormFieldRow } from "./FormFieldRow";
 
 export type FormFieldRenderProps = {
   field: FormFieldBlock;
@@ -23,6 +25,7 @@ export type FormFieldRenderProps = {
   loadingText?: string;
   style: React.CSSProperties;
   resolvedLevel?: ElementBodyVariant;
+  renderNestedField?: (field: FormFieldBlock, index: number) => ReactNode;
 };
 
 /** Map fieldType → component; same pattern as ELEMENT_COMPONENTS. */
@@ -36,6 +39,10 @@ export const FORM_FIELD_COMPONENTS: Partial<
   url: FormFieldInput as ComponentType<FormFieldRenderProps>,
   number: FormFieldInput as ComponentType<FormFieldRenderProps>,
   date: FormFieldInput as ComponentType<FormFieldRenderProps>,
+  time: FormFieldInput as ComponentType<FormFieldRenderProps>,
+  "datetime-local": FormFieldInput as ComponentType<FormFieldRenderProps>,
+  color: FormFieldInput as ComponentType<FormFieldRenderProps>,
+  search: FormFieldInput as ComponentType<FormFieldRenderProps>,
   paragraph: FormFieldParagraph as ComponentType<FormFieldRenderProps>,
   checkbox: FormFieldChoice as ComponentType<FormFieldRenderProps>,
   checkboxGroup: FormFieldChoice as ComponentType<FormFieldRenderProps>,
@@ -45,5 +52,7 @@ export const FORM_FIELD_COMPONENTS: Partial<
   range: FormFieldRange as ComponentType<FormFieldRenderProps>,
   file: FormFieldFile as ComponentType<FormFieldRenderProps>,
   hidden: FormFieldHidden as ComponentType<FormFieldRenderProps>,
-  submit: FormFieldSubmit as ComponentType<FormFieldRenderProps>,
+  button: FormFieldButton as ComponentType<FormFieldRenderProps>,
+  row: FormFieldRow as ComponentType<FormFieldRenderProps>,
+  submit: FormFieldButton as ComponentType<FormFieldRenderProps>,
 };

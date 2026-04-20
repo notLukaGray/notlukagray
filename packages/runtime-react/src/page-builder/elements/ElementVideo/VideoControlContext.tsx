@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
+import type { ElementVideoQualityLevel } from "./use-element-video-source";
 
 export type FeedbackType = "play" | "pause" | "seekBack" | "seekForward";
 
@@ -13,6 +14,9 @@ export type VideoControlContextValue = {
   duration: number;
   /** Ephemeral touch feedback: type shown + timestamp. Cleared after feedbackDurationMs. */
   feedback: { type: FeedbackType; at: number } | null;
+  qualityLevels: ElementVideoQualityLevel[];
+  selectedQuality: string;
+  setSelectedQuality: (value: string) => void;
   onPlay: () => void;
   onPause: () => void;
   onTogglePlay: () => void;

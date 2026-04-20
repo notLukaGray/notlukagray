@@ -1,7 +1,10 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type {
+  FormFieldBlock,
+  SectionBlock,
+} from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getFormActionUrl } from "@pb/runtime-react/core/lib/forms";
 import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/internal/section-utils";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
@@ -16,7 +19,12 @@ import { useSectionViewportTrigger } from "@/page-builder/triggers/core/use-sect
 import { useSectionCustomTriggers } from "@/page-builder/triggers/core/use-section-custom-triggers";
 import { buildSectionContentWrapperStyle } from "../SectionContentBlock/section-content-block-content-wrapper-style";
 import { FormFieldRenderer, type FormFieldValue } from "@/page-builder/form-fields";
-import { useFormBlockState } from "./use-form-block-state";
+import {
+  collectFormFields,
+  isFormFieldButton,
+  useFormBlockState,
+  type FormFieldPath,
+} from "./use-form-block-state";
 import { SectionMotionWrapper } from "@/page-builder/integrations/framer-motion";
 import { SectionScrollTargetProvider } from "@/page-builder/section/position/SectionScrollTargetContext";
 
@@ -206,9 +214,9 @@ export function SectionFormBlock({
     if (!submitUrl) return;
 
     const payload: Record<string, string | string[] | boolean> = {};
-    fields.forEach((field, i) => {
-      if (field.fieldType === "submit" || field.fieldType === "hidden") return;
-      const key = getFieldKey(field, i);
+    collectFormFields(fields).forEach(({ field, path }) => {
+      if (isFormFieldButton(field) || field.fieldType === "hidden") return;
+      const key = getFieldKey(field, path);
       const v = values[key];
       if (v !== undefined) payload[field.name ?? key] = v;
     });
@@ -252,6 +260,31 @@ export function SectionFormBlock({
     }
   };
 
+  const renderFormField = (field: FormFieldBlock, path: FormFieldPath) => {
+    const key = getFieldKey(field, path);
+    const value = values[key];
+    const error = errors[key];
+    return (
+      <FormFieldRenderer
+        key={key}
+        field={field}
+        value={
+          value ??
+          (field.fieldType === "checkbox" || field.fieldType === "switch"
+            ? false
+            : field.fieldType === "checkboxGroup"
+              ? []
+              : "")
+        }
+        onChange={(v: FormFieldValue) => setValue(key, v)}
+        error={error}
+        disabled={isSubmitting}
+        isSubmitting={isSubmitting}
+        renderNestedField={(child, index) => renderFormField(child, [...path, index])}
+      />
+    );
+  };
+
   return (
     <>
       {!fixed && showPlaceholder && (
@@ -282,35 +315,13 @@ export function SectionFormBlock({
             className="relative z-10 flex min-h-0 flex-col items-start w-full"
             style={contentWrapperStyle}
           >
-            <form onSubmit={handleSubmit} className="w-full space-y-4 max-w-md" noValidate>
+            <form onSubmit={handleSubmit} className="w-full space-y-4" noValidate>
               {submitError && (
                 <p className="text-sm text-destructive" role="alert">
                   {submitError}
                 </p>
               )}
-              {fields.map((field, i) => {
-                const key = getFieldKey(field, i);
-                const value = values[key];
-                const error = errors[key];
-                return (
-                  <FormFieldRenderer
-                    key={key}
-                    field={field}
-                    value={
-                      value ??
-                      (field.fieldType === "checkbox" || field.fieldType === "switch"
-                        ? false
-                        : field.fieldType === "checkboxGroup"
-                          ? []
-                          : "")
-                    }
-                    onChange={(v: FormFieldValue) => setValue(key, v)}
-                    error={error}
-                    disabled={isSubmitting}
-                    isSubmitting={isSubmitting}
-                  />
-                );
-              })}
+              {fields.map((field, i) => renderFormField(field, [i]))}
             </form>
           </div>
         </SectionScrollTargetProvider>

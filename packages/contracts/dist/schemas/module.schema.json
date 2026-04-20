@@ -1575,6 +1575,379 @@
               "follow"
             ]
           },
+          "effects": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "backdropBlur"
+                    },
+                    "amount": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "glass"
+                    },
+                    "lightIntensity": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "lightAngle": {
+                      "type": "number"
+                    },
+                    "refraction": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "depth": {
+                      "type": "number",
+                      "minimum": 1
+                    },
+                    "dispersion": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "frost": {
+                      "type": "string"
+                    },
+                    "splay": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "mode": {
+                      "type": "string",
+                      "enum": [
+                        "standard",
+                        "polar",
+                        "prominent",
+                        "shader"
+                      ]
+                    },
+                    "overLight": {
+                      "type": "boolean"
+                    },
+                    "mouseFollow": {
+                      "type": "boolean"
+                    },
+                    "displacementScale": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "blurAmount": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "saturation": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "aberrationIntensity": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "elasticity": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "reflection": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1
+                    },
+                    "bezelType": {
+                      "type": "string",
+                      "enum": [
+                        "convex_circle",
+                        "convex_squircle",
+                        "concave",
+                        "lip"
+                      ]
+                    },
+                    "bezelWidth": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "glassThickness": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "refractiveIndex": {
+                      "type": "number",
+                      "minimum": 1
+                    },
+                    "blur": {
+                      "anyOf": [
+                        {
+                          "type": "number",
+                          "minimum": 0
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "scaleRatio": {
+                      "type": "number",
+                      "minimum": 0.001
+                    },
+                    "specularOpacity": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 2
+                    },
+                    "specularSaturation": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "magnifyingScale": {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    "dropShadow": {
+                      "type": "boolean"
+                    },
+                    "clipPath": {
+                      "type": "string"
+                    },
+                    "clipRule": {
+                      "type": "string",
+                      "enum": [
+                        "nonzero",
+                        "evenodd"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "dropShadow"
+                    },
+                    "x": {
+                      "type": "string"
+                    },
+                    "y": {
+                      "type": "string"
+                    },
+                    "blur": {
+                      "type": "string"
+                    },
+                    "spread": {
+                      "type": "string"
+                    },
+                    "color": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "innerShadow"
+                    },
+                    "x": {
+                      "type": "string"
+                    },
+                    "y": {
+                      "type": "string"
+                    },
+                    "blur": {
+                      "type": "string"
+                    },
+                    "spread": {
+                      "type": "string"
+                    },
+                    "color": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "glow"
+                    },
+                    "blur": {
+                      "type": "string"
+                    },
+                    "spread": {
+                      "type": "string"
+                    },
+                    "color": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "opacity"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "blur"
+                    },
+                    "amount": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "brightness"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "contrast"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "saturate"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "grayscale"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "sepia"
+                    },
+                    "value": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
           "style": {
             "type": "object",
             "propertyNames": {
@@ -2965,6 +3338,379 @@
         }
       },
       "additionalProperties": false
+    },
+    "effects": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "backdropBlur"
+              },
+              "amount": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "glass"
+              },
+              "lightIntensity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "lightAngle": {
+                "type": "number"
+              },
+              "refraction": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "depth": {
+                "type": "number",
+                "minimum": 1
+              },
+              "dispersion": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "frost": {
+                "type": "string"
+              },
+              "splay": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "standard",
+                  "polar",
+                  "prominent",
+                  "shader"
+                ]
+              },
+              "overLight": {
+                "type": "boolean"
+              },
+              "mouseFollow": {
+                "type": "boolean"
+              },
+              "displacementScale": {
+                "type": "number",
+                "minimum": 0
+              },
+              "blurAmount": {
+                "type": "number",
+                "minimum": 0
+              },
+              "saturation": {
+                "type": "number",
+                "minimum": 0
+              },
+              "aberrationIntensity": {
+                "type": "number",
+                "minimum": 0
+              },
+              "elasticity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "reflection": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "bezelType": {
+                "type": "string",
+                "enum": [
+                  "convex_circle",
+                  "convex_squircle",
+                  "concave",
+                  "lip"
+                ]
+              },
+              "bezelWidth": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "glassThickness": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "refractiveIndex": {
+                "type": "number",
+                "minimum": 1
+              },
+              "blur": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "scaleRatio": {
+                "type": "number",
+                "minimum": 0.001
+              },
+              "specularOpacity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2
+              },
+              "specularSaturation": {
+                "type": "number",
+                "minimum": 0
+              },
+              "magnifyingScale": {
+                "type": "number",
+                "minimum": 0
+              },
+              "dropShadow": {
+                "type": "boolean"
+              },
+              "clipPath": {
+                "type": "string"
+              },
+              "clipRule": {
+                "type": "string",
+                "enum": [
+                  "nonzero",
+                  "evenodd"
+                ]
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "dropShadow"
+              },
+              "x": {
+                "type": "string"
+              },
+              "y": {
+                "type": "string"
+              },
+              "blur": {
+                "type": "string"
+              },
+              "spread": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "innerShadow"
+              },
+              "x": {
+                "type": "string"
+              },
+              "y": {
+                "type": "string"
+              },
+              "blur": {
+                "type": "string"
+              },
+              "spread": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "glow"
+              },
+              "blur": {
+                "type": "string"
+              },
+              "spread": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "opacity"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "blur"
+              },
+              "amount": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "brightness"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "contrast"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "saturate"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "grayscale"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "sepia"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
     },
     "style": {
       "type": "object",

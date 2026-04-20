@@ -8,12 +8,13 @@ const NEUTRAL_ANIMATION = cloneTypographyAnimationFromImageDefaults(DEV_NEUTRAL_
 
 export const STORAGE_KEY = "pb-element-input-dev-v1";
 
-export const VARIANT_ORDER: InputVariantKey[] = ["default", "compact", "minimal"];
+export const VARIANT_ORDER: InputVariantKey[] = ["default", "compact", "minimal", "glass"];
 
 export const VARIANT_LABELS: Record<InputVariantKey, string> = {
   default: "Default",
   compact: "Compact",
   minimal: "Minimal",
+  glass: "Glass",
 };
 
 /** Neutral starting presets for input variants in dev foundation authoring. */
@@ -43,6 +44,23 @@ export const BASE_DEFAULTS: {
       ariaLabel: "Search",
       showIcon: false,
       color: "rgba(255,255,255,0.5)",
+      animation: { ...JSON.parse(JSON.stringify(NEUTRAL_ANIMATION)) },
+    },
+    glass: {
+      placeholder: "Search",
+      ariaLabel: "Search",
+      showIcon: false,
+      color: "rgba(255,255,255,0.9)",
+      effects: [
+        {
+          type: "glass",
+          lightIntensity: 0.6,
+          lightAngle: 135,
+          refraction: 0.3,
+          depth: 60,
+          frost: "8px",
+        },
+      ],
       animation: { ...JSON.parse(JSON.stringify(NEUTRAL_ANIMATION)) },
     },
   },

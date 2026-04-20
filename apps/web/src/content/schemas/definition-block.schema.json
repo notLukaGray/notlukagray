@@ -122,7 +122,7 @@
                             "transition": {
                               "type": "object",
                               "properties": {
-                                "$ref": "#/$defs/Def127"
+                                "$ref": "#/$defs/Def122"
                               },
                               "required": ["duration"],
                               "additionalProperties": false
@@ -158,7 +158,7 @@
                               "const": "scroll"
                             },
                             "properties": {
-                              "$ref": "#/$defs/Def128"
+                              "$ref": "#/$defs/Def123"
                             },
                             "offset": {
                               "type": "array",
@@ -186,10 +186,10 @@
                               "const": "pointer"
                             },
                             "x": {
-                              "$ref": "#/$defs/Def128"
+                              "$ref": "#/$defs/Def123"
                             },
                             "y": {
-                              "$ref": "#/$defs/Def128"
+                              "$ref": "#/$defs/Def123"
                             },
                             "ease": {
                               "$ref": "#/$defs/Def27"
@@ -246,7 +246,7 @@
                             "transition": {
                               "type": "object",
                               "properties": {
-                                "$ref": "#/$defs/Def127"
+                                "$ref": "#/$defs/Def122"
                               },
                               "additionalProperties": false
                             },
@@ -326,7 +326,7 @@
               "minimum": 0
             },
             "position": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "progress": {
               "$ref": "#/$defs/Def27"
@@ -360,7 +360,7 @@
               "const": "contentOverride"
             },
             "payload": {
-              "$ref": "#/$defs/Def129"
+              "$ref": "#/$defs/Def125"
             }
           },
           "required": ["type", "payload"],
@@ -395,7 +395,7 @@
               "const": "startTransition"
             },
             "payload": {
-              "$ref": "#/$defs/Def130"
+              "$ref": "#/$defs/Def126"
             }
           },
           "required": ["type", "payload"],
@@ -409,7 +409,7 @@
               "const": "stopTransition"
             },
             "payload": {
-              "$ref": "#/$defs/Def130"
+              "$ref": "#/$defs/Def126"
             }
           },
           "required": ["type", "payload"],
@@ -516,7 +516,7 @@
               "const": "scrollLock"
             },
             "payload": {
-              "$ref": "#/$defs/Def131"
+              "$ref": "#/$defs/Def127"
             }
           },
           "required": ["type"],
@@ -530,7 +530,7 @@
               "const": "scrollUnlock"
             },
             "payload": {
-              "$ref": "#/$defs/Def131"
+              "$ref": "#/$defs/Def127"
             }
           },
           "required": ["type"],
@@ -544,7 +544,7 @@
               "const": "modalOpen"
             },
             "payload": {
-              "$ref": "#/$defs/Def130"
+              "$ref": "#/$defs/Def126"
             }
           },
           "required": ["type", "payload"],
@@ -558,7 +558,7 @@
               "const": "modalClose"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -572,7 +572,7 @@
               "const": "modalToggle"
             },
             "payload": {
-              "$ref": "#/$defs/Def130"
+              "$ref": "#/$defs/Def126"
             }
           },
           "required": ["type", "payload"],
@@ -586,7 +586,7 @@
               "const": "setVariable"
             },
             "payload": {
-              "$ref": "#/$defs/Def129"
+              "$ref": "#/$defs/Def125"
             }
           },
           "required": ["type", "payload"],
@@ -707,7 +707,7 @@
               "const": "elementShow"
             },
             "payload": {
-              "$ref": "#/$defs/Def130"
+              "$ref": "#/$defs/Def126"
             }
           },
           "required": ["type", "payload"],
@@ -721,7 +721,7 @@
               "const": "elementHide"
             },
             "payload": {
-              "$ref": "#/$defs/Def130"
+              "$ref": "#/$defs/Def126"
             }
           },
           "required": ["type", "payload"],
@@ -735,7 +735,7 @@
               "const": "elementToggle"
             },
             "payload": {
-              "$ref": "#/$defs/Def130"
+              "$ref": "#/$defs/Def126"
             }
           },
           "required": ["type", "payload"],
@@ -922,7 +922,7 @@
                   "type": "string"
                 },
                 "properties": {
-                  "$ref": "#/$defs/Def133"
+                  "$ref": "#/$defs/Def129"
                 }
               },
               "required": ["event"],
@@ -940,7 +940,7 @@
               "const": "setLocalStorage"
             },
             "payload": {
-              "$ref": "#/$defs/Def129"
+              "$ref": "#/$defs/Def125"
             }
           },
           "required": ["type", "payload"],
@@ -954,7 +954,7 @@
               "const": "setSessionStorage"
             },
             "payload": {
-              "$ref": "#/$defs/Def129"
+              "$ref": "#/$defs/Def125"
             }
           },
           "required": ["type", "payload"],
@@ -968,7 +968,7 @@
               "const": "three.load"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -982,7 +982,7 @@
               "const": "three.unload"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -996,7 +996,7 @@
               "const": "three.toggleLoaded"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1033,7 +1033,7 @@
               "const": "three.fadeIn"
             },
             "payload": {
-              "$ref": "#/$defs/Def134"
+              "$ref": "#/$defs/Def130"
             }
           },
           "required": ["type"],
@@ -1047,7 +1047,7 @@
               "const": "three.fadeOut"
             },
             "payload": {
-              "$ref": "#/$defs/Def134"
+              "$ref": "#/$defs/Def130"
             }
           },
           "required": ["type"],
@@ -1061,7 +1061,7 @@
               "const": "three.playAnimation"
             },
             "payload": {
-              "$ref": "#/$defs/Def135"
+              "$ref": "#/$defs/Def131"
             }
           },
           "required": ["type"],
@@ -1075,7 +1075,7 @@
               "const": "three.pauseAnimation"
             },
             "payload": {
-              "$ref": "#/$defs/Def135"
+              "$ref": "#/$defs/Def131"
             }
           },
           "required": ["type"],
@@ -1089,7 +1089,7 @@
               "const": "three.toggleAnimation"
             },
             "payload": {
-              "$ref": "#/$defs/Def135"
+              "$ref": "#/$defs/Def131"
             }
           },
           "required": ["type"],
@@ -1103,7 +1103,7 @@
               "const": "three.setAnimation"
             },
             "payload": {
-              "$ref": "#/$defs/Def135"
+              "$ref": "#/$defs/Def131"
             }
           },
           "required": ["type"],
@@ -1172,7 +1172,7 @@
               "const": "three.setCameraPreset"
             },
             "payload": {
-              "$ref": "#/$defs/Def136"
+              "$ref": "#/$defs/Def132"
             }
           },
           "required": ["type"],
@@ -1186,7 +1186,7 @@
               "const": "three.nextCameraPreset"
             },
             "payload": {
-              "$ref": "#/$defs/Def136"
+              "$ref": "#/$defs/Def132"
             }
           },
           "required": ["type"],
@@ -1200,7 +1200,7 @@
               "const": "three.resetCamera"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1214,7 +1214,7 @@
               "const": "three.playVideoTexture"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1228,7 +1228,7 @@
               "const": "three.pauseVideoTexture"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1242,7 +1242,7 @@
               "const": "three.toggleVideoTexture"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1256,7 +1256,7 @@
               "const": "three.setCameraEffectsPreset"
             },
             "payload": {
-              "$ref": "#/$defs/Def136"
+              "$ref": "#/$defs/Def132"
             }
           },
           "required": ["type"],
@@ -1429,7 +1429,7 @@
                   "type": "string"
                 },
                 "scale": {
-                  "$ref": "#/$defs/Def137"
+                  "$ref": "#/$defs/Def133"
                 },
                 "durationMs": {
                   "type": "number"
@@ -1472,7 +1472,7 @@
               "const": "three.resetTransform"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1520,7 +1520,7 @@
                   ]
                 },
                 "scale": {
-                  "$ref": "#/$defs/Def137"
+                  "$ref": "#/$defs/Def133"
                 },
                 "durationMs": {
                   "type": "number"
@@ -1567,7 +1567,7 @@
               "const": "three.stopContinuousRotate"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1607,7 +1607,7 @@
               "const": "three.stopContinuousFloat"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1650,7 +1650,7 @@
               "const": "three.stopContinuousScale"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -1744,7 +1744,7 @@
               "const": "three.orbitDisable"
             },
             "payload": {
-              "$ref": "#/$defs/Def132"
+              "$ref": "#/$defs/Def128"
             }
           },
           "required": ["type"],
@@ -2163,7 +2163,7 @@
           }
         },
         {
-          "$ref": "#/$defs/Def133"
+          "$ref": "#/$defs/Def129"
         }
       ]
     },
@@ -2181,10 +2181,10 @@
               "enum": ["display", "section", "label"]
             },
             "level": {
-              "$ref": "#/$defs/Def119"
+              "$ref": "#/$defs/Def134"
             },
             "semanticLevel": {
-              "$ref": "#/$defs/Def119"
+              "$ref": "#/$defs/Def134"
             },
             "text": {
               "type": "string"
@@ -2205,7 +2205,7 @@
               "type": "string"
             },
             "textFill": {
-              "$ref": "#/$defs/Def138"
+              "$ref": "#/$defs/Def135"
             },
             "variableKey": {
               "type": "string"
@@ -2235,7 +2235,7 @@
               "$ref": "#/$defs/Def6"
             },
             "maxLines": {
-              "$ref": "#/$defs/Def141"
+              "$ref": "#/$defs/Def138"
             },
             "id": {
               "type": "string"
@@ -2244,37 +2244,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -2303,16 +2303,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -2339,7 +2339,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -2369,11 +2369,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -2416,7 +2416,7 @@
               "type": "string"
             },
             "level": {
-              "$ref": "#/$defs/Def118"
+              "$ref": "#/$defs/Def152"
             },
             "wordWrap": {
               "type": "boolean"
@@ -2446,7 +2446,7 @@
               "type": "string"
             },
             "textFill": {
-              "$ref": "#/$defs/Def138"
+              "$ref": "#/$defs/Def135"
             },
             "fontFeatureSettings": {
               "type": "string"
@@ -2464,7 +2464,7 @@
               "$ref": "#/$defs/Def6"
             },
             "maxLines": {
-              "$ref": "#/$defs/Def141"
+              "$ref": "#/$defs/Def138"
             },
             "id": {
               "type": "string"
@@ -2473,37 +2473,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -2532,16 +2532,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -2568,7 +2568,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -2598,11 +2598,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -2662,7 +2662,7 @@
               "enum": ["heading", "body"]
             },
             "level": {
-              "$ref": "#/$defs/Def118"
+              "$ref": "#/$defs/Def152"
             },
             "wordWrap": {
               "type": "boolean"
@@ -2716,37 +2716,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -2775,16 +2775,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -2811,7 +2811,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -2841,11 +2841,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -2915,7 +2915,7 @@
               "type": "string"
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -2927,7 +2927,7 @@
               "$ref": "#/$defs/Def153"
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "imageRotation": {
               "type": "number"
@@ -2993,37 +2993,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -3052,16 +3052,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -3088,7 +3088,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -3118,7 +3118,7 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "textDecoration": {
@@ -3154,6 +3154,25 @@
             },
             "src": {
               "type": "string"
+            },
+            "sources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "src": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "label": {
+                    "type": "string"
+                  }
+                },
+                "required": ["src"],
+                "additionalProperties": false
+              }
             },
             "poster": {
               "type": "string"
@@ -3199,7 +3218,7 @@
               "type": "string"
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -3214,7 +3233,7 @@
               "$ref": "#/$defs/Def153"
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "module": {
               "type": "string"
@@ -3228,6 +3247,31 @@
             "onVideoEnd": {
               "$ref": "#/$defs/__schema1"
             },
+            "streamingConfig": {
+              "type": "object",
+              "properties": {
+                "autoStartLoad": {
+                  "type": "boolean"
+                },
+                "maxBufferLength": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "maxBufferSize": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "bufferTimeDefault": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "bufferTimeAtTopQuality": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "additionalProperties": false
+            },
             "id": {
               "type": "string"
             },
@@ -3235,37 +3279,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -3294,16 +3338,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -3330,7 +3374,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -3360,7 +3404,7 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "textDecoration": {
@@ -3384,606 +3428,7 @@
           "additionalProperties": false
         },
         {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "const": "elementVector"
-            },
-            "viewBox": {
-              "type": "string"
-            },
-            "ariaLabel": {
-              "type": "string"
-            },
-            "preserveAspectRatio": {
-              "type": "string"
-            },
-            "shapes": {
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "rect"
-                      },
-                      "x": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "y": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "width": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "height": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "rx": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "ry": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "fill": {
-                        "type": "string"
-                      },
-                      "stroke": {
-                        "type": "string"
-                      },
-                      "strokeWidth": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "strokeLinecap": {
-                        "type": "string",
-                        "enum": ["butt", "round", "square"]
-                      },
-                      "strokeLinejoin": {
-                        "type": "string",
-                        "enum": ["miter", "round", "bevel"]
-                      },
-                      "opacity": {
-                        "type": "number"
-                      },
-                      "transform": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["type", "width", "height"],
-                    "additionalProperties": false
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "circle"
-                      },
-                      "cx": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "cy": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "r": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "fill": {
-                        "type": "string"
-                      },
-                      "stroke": {
-                        "type": "string"
-                      },
-                      "strokeWidth": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "strokeLinecap": {
-                        "type": "string",
-                        "enum": ["butt", "round", "square"]
-                      },
-                      "strokeLinejoin": {
-                        "type": "string",
-                        "enum": ["miter", "round", "bevel"]
-                      },
-                      "opacity": {
-                        "type": "number"
-                      },
-                      "transform": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["type", "cx", "cy", "r"],
-                    "additionalProperties": false
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "ellipse"
-                      },
-                      "cx": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "cy": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "rx": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "ry": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "fill": {
-                        "type": "string"
-                      },
-                      "stroke": {
-                        "type": "string"
-                      },
-                      "strokeWidth": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "strokeLinecap": {
-                        "type": "string",
-                        "enum": ["butt", "round", "square"]
-                      },
-                      "strokeLinejoin": {
-                        "type": "string",
-                        "enum": ["miter", "round", "bevel"]
-                      },
-                      "opacity": {
-                        "type": "number"
-                      },
-                      "transform": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["type", "cx", "cy", "rx", "ry"],
-                    "additionalProperties": false
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "line"
-                      },
-                      "x1": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "y1": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "x2": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "y2": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "fill": {
-                        "type": "string"
-                      },
-                      "stroke": {
-                        "type": "string"
-                      },
-                      "strokeWidth": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "strokeLinecap": {
-                        "type": "string",
-                        "enum": ["butt", "round", "square"]
-                      },
-                      "strokeLinejoin": {
-                        "type": "string",
-                        "enum": ["miter", "round", "bevel"]
-                      },
-                      "opacity": {
-                        "type": "number"
-                      },
-                      "transform": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["type", "x1", "y1", "x2", "y2"],
-                    "additionalProperties": false
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "polygon"
-                      },
-                      "points": {
-                        "type": "string"
-                      },
-                      "fill": {
-                        "type": "string"
-                      },
-                      "stroke": {
-                        "type": "string"
-                      },
-                      "strokeWidth": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "strokeLinecap": {
-                        "type": "string",
-                        "enum": ["butt", "round", "square"]
-                      },
-                      "strokeLinejoin": {
-                        "type": "string",
-                        "enum": ["miter", "round", "bevel"]
-                      },
-                      "opacity": {
-                        "type": "number"
-                      },
-                      "transform": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["type", "points"],
-                    "additionalProperties": false
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "polyline"
-                      },
-                      "points": {
-                        "type": "string"
-                      },
-                      "fill": {
-                        "type": "string"
-                      },
-                      "stroke": {
-                        "type": "string"
-                      },
-                      "strokeWidth": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "strokeLinecap": {
-                        "type": "string",
-                        "enum": ["butt", "round", "square"]
-                      },
-                      "strokeLinejoin": {
-                        "type": "string",
-                        "enum": ["miter", "round", "bevel"]
-                      },
-                      "opacity": {
-                        "type": "number"
-                      },
-                      "transform": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["type", "points"],
-                    "additionalProperties": false
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "path"
-                      },
-                      "d": {
-                        "type": "string"
-                      },
-                      "fill": {
-                        "type": "string"
-                      },
-                      "stroke": {
-                        "type": "string"
-                      },
-                      "strokeWidth": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "strokeLinecap": {
-                        "type": "string",
-                        "enum": ["butt", "round", "square"]
-                      },
-                      "strokeLinejoin": {
-                        "type": "string",
-                        "enum": ["miter", "round", "bevel"]
-                      },
-                      "opacity": {
-                        "type": "number"
-                      },
-                      "transform": {
-                        "type": "string"
-                      }
-                    },
-                    "required": ["type", "d"],
-                    "additionalProperties": false
-                  }
-                ]
-              }
-            },
-            "colors": {
-              "$ref": "#/$defs/Def155"
-            },
-            "gradients": {
-              "type": "array",
-              "items": {
-                "oneOf": [
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "linearGradient"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "x1": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "y1": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "x2": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "y2": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "gradientUnits": {
-                        "type": "string",
-                        "enum": ["userSpaceOnUse", "objectBoundingBox"]
-                      },
-                      "gradientTransform": {
-                        "type": "string"
-                      },
-                      "stops": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/$defs/Def156"
-                        }
-                      }
-                    },
-                    "required": ["type", "id", "stops"],
-                    "additionalProperties": false
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "type": {
-                        "type": "string",
-                        "const": "radialGradient"
-                      },
-                      "id": {
-                        "type": "string"
-                      },
-                      "cx": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "cy": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "r": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "fx": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "fy": {
-                        "$ref": "#/$defs/Def120"
-                      },
-                      "gradientUnits": {
-                        "type": "string",
-                        "enum": ["userSpaceOnUse", "objectBoundingBox"]
-                      },
-                      "stops": {
-                        "type": "array",
-                        "items": {
-                          "$ref": "#/$defs/Def156"
-                        }
-                      }
-                    },
-                    "required": ["type", "id", "stops"],
-                    "additionalProperties": false
-                  }
-                ]
-              }
-            },
-            "strokeGroup": {
-              "type": "object",
-              "properties": {
-                "stroke": {
-                  "type": "string"
-                },
-                "strokeWidth": {
-                  "type": "number"
-                },
-                "strokeLinejoin": {
-                  "type": "string",
-                  "enum": ["miter", "round", "bevel"]
-                },
-                "strokeMiterlimit": {
-                  "type": "number"
-                },
-                "opacity": {
-                  "type": "number"
-                },
-                "blendMode": {
-                  "type": "string"
-                }
-              },
-              "required": ["stroke"],
-              "additionalProperties": false
-            },
-            "rotate": {
-              "$ref": "#/$defs/Def120"
-            },
-            "flipHorizontal": {
-              "type": "boolean"
-            },
-            "flipVertical": {
-              "type": "boolean"
-            },
-            "link": {
-              "$ref": "#/$defs/Def158"
-            },
-            "id": {
-              "type": "string"
-            },
-            "meta": {
-              "$ref": "#/$defs/Def1"
-            },
-            "width": {
-              "$ref": "#/$defs/Def38"
-            },
-            "height": {
-              "$ref": "#/$defs/Def38"
-            },
-            "borderRadius": {
-              "$ref": "#/$defs/Def38"
-            },
-            "constraints": {
-              "$ref": "#/$defs/Def142"
-            },
-            "align": {
-              "$ref": "#/$defs/Def121"
-            },
-            "alignY": {
-              "$ref": "#/$defs/Def145"
-            },
-            "textAlign": {
-              "$ref": "#/$defs/Def122"
-            },
-            "marginTop": {
-              "$ref": "#/$defs/Def38"
-            },
-            "marginBottom": {
-              "$ref": "#/$defs/Def38"
-            },
-            "marginLeft": {
-              "$ref": "#/$defs/Def38"
-            },
-            "marginRight": {
-              "$ref": "#/$defs/Def38"
-            },
-            "zIndex": {
-              "type": "number"
-            },
-            "priority": {
-              "type": "boolean"
-            },
-            "fixed": {
-              "type": "boolean"
-            },
-            "action": {
-              "type": "string"
-            },
-            "actionPayload": {
-              "$ref": "#/$defs/__schema2"
-            },
-            "showWhen": {
-              "type": "string",
-              "enum": [
-                "assetPlaying",
-                "assetPaused",
-                "assetMuted",
-                "assetUnmuted",
-                "videoFullscreen",
-                "videoContained"
-              ]
-            },
-            "borderGradient": {
-              "$ref": "#/$defs/Def146"
-            },
-            "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
-            },
-            "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
-            },
-            "aria": {
-              "$ref": "#/$defs/Def149"
-            },
-            "motion": {
-              "$ref": "#/$defs/Def9"
-            },
-            "reduceMotion": {
-              "type": "boolean"
-            },
-            "exitPreset": {
-              "type": "string"
-            },
-            "motionTiming": {
-              "$ref": "#/$defs/Def22"
-            },
-            "dragUnit": {
-              "type": "string",
-              "enum": ["frame", "content"]
-            },
-            "dragBehavior": {
-              "type": "string",
-              "enum": ["elasticSnap", "free", "none"]
-            },
-            "dragAxis": {
-              "type": "string",
-              "enum": ["x", "y", "both"]
-            },
-            "interactions": {
-              "$ref": "#/$defs/Def151"
-            },
-            "visibleWhen": {
-              "$ref": "#/$defs/Def72"
-            },
-            "opacity": {
-              "$ref": "#/$defs/Def27"
-            },
-            "blendMode": {
-              "type": "string"
-            },
-            "hidden": {
-              "type": "boolean"
-            },
-            "overflow": {
-              "type": "string",
-              "enum": ["hidden", "visible", "auto", "scroll"]
-            },
-            "boxShadow": {
-              "type": "string"
-            },
-            "filter": {
-              "type": "string"
-            },
-            "backdropFilter": {
-              "type": "string"
-            },
-            "effects": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/Def39"
-              }
-            },
-            "textDecoration": {
-              "type": "string"
-            },
-            "textTransform": {
-              "type": "string"
-            },
-            "textShadow": {
-              "type": "string"
-            },
-            "whiteSpace": {
-              "type": "string",
-              "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
-            },
-            "clipPath": {
-              "type": "string"
-            }
-          },
-          "required": ["type", "viewBox", "shapes"],
-          "additionalProperties": false
+          "$ref": "#/$defs/Def155"
         },
         {
           "type": "object",
@@ -3999,7 +3444,7 @@
               "type": "string"
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -4008,7 +3453,7 @@
               "type": "boolean"
             },
             "link": {
-              "$ref": "#/$defs/Def158"
+              "$ref": "#/$defs/Def182"
             },
             "id": {
               "type": "string"
@@ -4017,37 +3462,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -4076,16 +3521,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -4112,7 +3557,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -4142,7 +3587,7 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "textDecoration": {
@@ -4179,7 +3624,7 @@
               "type": "string"
             },
             "level": {
-              "$ref": "#/$defs/Def118"
+              "$ref": "#/$defs/Def152"
             },
             "wordWrap": {
               "type": "boolean"
@@ -4191,37 +3636,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -4250,16 +3695,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -4286,7 +3731,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -4316,11 +3761,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -4416,37 +3861,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -4469,16 +3914,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -4505,7 +3950,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -4535,11 +3980,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -4597,37 +4042,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -4656,16 +4101,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -4692,7 +4137,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -4722,11 +4167,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -4765,13 +4210,13 @@
               "type": "string"
             },
             "level": {
-              "$ref": "#/$defs/Def118"
+              "$ref": "#/$defs/Def152"
             },
             "wordWrap": {
               "type": "boolean"
             },
             "style": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "id": {
               "type": "string"
@@ -4780,37 +4225,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -4839,16 +4284,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -4875,7 +4320,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -4905,11 +4350,188 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
+            },
+            "flipHorizontal": {
+              "type": "boolean"
+            },
+            "flipVertical": {
+              "type": "boolean"
+            },
+            "textDecoration": {
+              "type": "string"
+            },
+            "textTransform": {
+              "type": "string"
+            },
+            "textShadow": {
+              "type": "string"
+            },
+            "whiteSpace": {
+              "type": "string",
+              "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
+            },
+            "clipPath": {
+              "type": "string"
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "elementVideoQualitySelect"
+            },
+            "icon": {
+              "$ref": "#/$defs/Def155"
+            },
+            "style": {
+              "$ref": "#/$defs/Def56"
+            },
+            "id": {
+              "type": "string"
+            },
+            "meta": {
+              "$ref": "#/$defs/Def1"
+            },
+            "width": {
+              "$ref": "#/$defs/Def57"
+            },
+            "height": {
+              "$ref": "#/$defs/Def57"
+            },
+            "borderRadius": {
+              "$ref": "#/$defs/Def57"
+            },
+            "constraints": {
+              "$ref": "#/$defs/Def139"
+            },
+            "align": {
+              "$ref": "#/$defs/Def142"
+            },
+            "alignY": {
+              "$ref": "#/$defs/Def143"
+            },
+            "textAlign": {
+              "$ref": "#/$defs/Def144"
+            },
+            "marginTop": {
+              "$ref": "#/$defs/Def57"
+            },
+            "marginBottom": {
+              "$ref": "#/$defs/Def57"
+            },
+            "marginLeft": {
+              "$ref": "#/$defs/Def57"
+            },
+            "marginRight": {
+              "$ref": "#/$defs/Def57"
+            },
+            "zIndex": {
+              "type": "number"
+            },
+            "priority": {
+              "type": "boolean"
+            },
+            "fixed": {
+              "type": "boolean"
+            },
+            "action": {
+              "type": "string"
+            },
+            "actionPayload": {
+              "$ref": "#/$defs/__schema2"
+            },
+            "showWhen": {
+              "type": "string",
+              "enum": [
+                "assetPlaying",
+                "assetPaused",
+                "assetMuted",
+                "assetUnmuted",
+                "videoFullscreen",
+                "videoContained"
+              ]
+            },
+            "borderGradient": {
+              "$ref": "#/$defs/Def145"
+            },
+            "figmaConstraints": {
+              "$ref": "#/$defs/Def146"
+            },
+            "wrapperStyle": {
+              "$ref": "#/$defs/Def56"
+            },
+            "aria": {
+              "$ref": "#/$defs/Def148"
+            },
+            "motion": {
+              "$ref": "#/$defs/Def9"
+            },
+            "reduceMotion": {
+              "type": "boolean"
+            },
+            "exitPreset": {
+              "type": "string"
+            },
+            "motionTiming": {
+              "$ref": "#/$defs/Def22"
+            },
+            "dragUnit": {
+              "type": "string",
+              "enum": ["frame", "content"]
+            },
+            "dragBehavior": {
+              "type": "string",
+              "enum": ["elasticSnap", "free", "none"]
+            },
+            "dragAxis": {
+              "type": "string",
+              "enum": ["x", "y", "both"]
+            },
+            "interactions": {
+              "$ref": "#/$defs/Def150"
+            },
+            "visibleWhen": {
+              "$ref": "#/$defs/Def72"
+            },
+            "opacity": {
+              "$ref": "#/$defs/Def27"
+            },
+            "blendMode": {
+              "type": "string"
+            },
+            "hidden": {
+              "type": "boolean"
+            },
+            "overflow": {
+              "type": "string",
+              "enum": ["hidden", "visible", "auto", "scroll"]
+            },
+            "boxShadow": {
+              "type": "string"
+            },
+            "filter": {
+              "type": "string"
+            },
+            "backdropFilter": {
+              "type": "string"
+            },
+            "effects": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Def37"
+              }
+            },
+            "rotate": {
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -4955,37 +4577,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -5014,16 +4636,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -5050,7 +4672,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -5080,11 +4702,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -5134,7 +4756,7 @@
               "enum": ["solid", "dashed", "dotted"]
             },
             "length": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "id": {
               "type": "string"
@@ -5143,37 +4765,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -5202,16 +4824,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -5238,7 +4860,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -5268,11 +4890,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -5308,7 +4930,7 @@
               "const": "elementScrollProgressBar"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "fill": {
               "type": "string"
@@ -5334,34 +4956,34 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -5390,16 +5012,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -5426,7 +5048,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -5456,11 +5078,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -5507,7 +5129,7 @@
               "enum": ["heading", "body"]
             },
             "level": {
-              "$ref": "#/$defs/Def119"
+              "$ref": "#/$defs/Def134"
             },
             "fontFamily": {
               "type": "string"
@@ -5653,22 +5275,22 @@
               "maximum": 48
             },
             "wrapperPadding": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "wrapperBorderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "wrapperWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "wrapperHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "wrapperMinWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "wrapperMinHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "wrapperFillHover": {
               "type": "string"
@@ -5698,7 +5320,7 @@
               "type": "string"
             },
             "wrapperInteractionVars": {
-              "$ref": "#/$defs/Def155"
+              "$ref": "#/$defs/Def172"
             },
             "pointerDownAction": {
               "$ref": "#/$defs/__schema1"
@@ -5713,37 +5335,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -5766,16 +5388,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -5802,7 +5424,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -5832,11 +5454,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -5972,7 +5594,7 @@
                     "type": "string"
                   },
                   "materialBindings": {
-                    "$ref": "#/$defs/Def155"
+                    "$ref": "#/$defs/Def172"
                   }
                 },
                 "required": ["geometry"],
@@ -6283,7 +5905,7 @@
                             ]
                           },
                           "scale": {
-                            "$ref": "#/$defs/Def137"
+                            "$ref": "#/$defs/Def133"
                           },
                           "animation": {
                             "type": "object",
@@ -6495,37 +6117,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -6554,16 +6176,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -6590,7 +6212,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -6620,11 +6242,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -6684,37 +6306,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -6743,16 +6365,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -6779,7 +6401,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -6809,11 +6431,11 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -6911,7 +6533,7 @@
               "type": "string"
             },
             "columnCount": {
-              "$ref": "#/$defs/Def141"
+              "$ref": "#/$defs/Def138"
             },
             "columnGap": {
               "$ref": "#/$defs/Def6"
@@ -6919,7 +6541,7 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "id": {
@@ -6929,37 +6551,37 @@
               "$ref": "#/$defs/Def1"
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "constraints": {
-              "$ref": "#/$defs/Def142"
+              "$ref": "#/$defs/Def139"
             },
             "align": {
-              "$ref": "#/$defs/Def121"
+              "$ref": "#/$defs/Def142"
             },
             "alignY": {
-              "$ref": "#/$defs/Def145"
+              "$ref": "#/$defs/Def143"
             },
             "textAlign": {
-              "$ref": "#/$defs/Def122"
+              "$ref": "#/$defs/Def144"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -6988,16 +6610,16 @@
               ]
             },
             "borderGradient": {
-              "$ref": "#/$defs/Def146"
+              "$ref": "#/$defs/Def145"
             },
             "figmaConstraints": {
-              "$ref": "#/$defs/Def147"
+              "$ref": "#/$defs/Def146"
             },
             "wrapperStyle": {
-              "$ref": "#/$defs/Def37"
+              "$ref": "#/$defs/Def56"
             },
             "aria": {
-              "$ref": "#/$defs/Def149"
+              "$ref": "#/$defs/Def148"
             },
             "motion": {
               "$ref": "#/$defs/Def9"
@@ -7024,7 +6646,7 @@
               "enum": ["x", "y", "both"]
             },
             "interactions": {
-              "$ref": "#/$defs/Def151"
+              "$ref": "#/$defs/Def150"
             },
             "visibleWhen": {
               "$ref": "#/$defs/Def72"
@@ -7052,7 +6674,7 @@
               "type": "string"
             },
             "rotate": {
-              "$ref": "#/$defs/Def120"
+              "$ref": "#/$defs/Def124"
             },
             "flipHorizontal": {
               "type": "boolean"
@@ -7081,6 +6703,211 @@
           "additionalProperties": {}
         }
       ]
+    },
+    "__schema4": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "formField"
+        },
+        "fieldType": {
+          "type": "string",
+          "enum": [
+            "text",
+            "email",
+            "password",
+            "tel",
+            "url",
+            "number",
+            "date",
+            "time",
+            "datetime-local",
+            "color",
+            "search",
+            "paragraph",
+            "checkbox",
+            "checkboxGroup",
+            "radio",
+            "select",
+            "switch",
+            "range",
+            "file",
+            "hidden",
+            "button",
+            "row",
+            "submit"
+          ]
+        },
+        "level": {
+          "$ref": "#/$defs/Def152"
+        },
+        "name": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "placeholder": {
+          "type": "string"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "disabled": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "autocomplete": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "minLength": {
+          "type": "number"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "rows": {
+          "type": "number"
+        },
+        "min": {
+          "$ref": "#/$defs/Def124"
+        },
+        "max": {
+          "$ref": "#/$defs/Def124"
+        },
+        "step": {
+          "$ref": "#/$defs/Def124"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            },
+            "required": ["value", "label"],
+            "additionalProperties": false
+          }
+        },
+        "accept": {
+          "type": "string"
+        },
+        "multiple": {
+          "type": "boolean"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "suffix": {
+          "type": "string"
+        },
+        "showCharacterCount": {
+          "type": "boolean"
+        },
+        "buttonType": {
+          "type": "string",
+          "enum": ["submit", "reset", "button"]
+        },
+        "loadingText": {
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/$defs/__schema1"
+        },
+        "href": {
+          "type": "string"
+        },
+        "gap": {
+          "$ref": "#/$defs/Def57"
+        },
+        "columns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema4"
+          }
+        },
+        "width": {
+          "$ref": "#/$defs/Def57"
+        },
+        "align": {
+          "$ref": "#/$defs/Def142"
+        },
+        "marginTop": {
+          "$ref": "#/$defs/Def57"
+        },
+        "marginBottom": {
+          "$ref": "#/$defs/Def57"
+        },
+        "marginLeft": {
+          "$ref": "#/$defs/Def57"
+        },
+        "marginRight": {
+          "$ref": "#/$defs/Def57"
+        },
+        "textAlign": {
+          "$ref": "#/$defs/Def144"
+        },
+        "padding": {
+          "$ref": "#/$defs/Def57"
+        },
+        "fill": {
+          "$ref": "#/$defs/Def57"
+        },
+        "stroke": {
+          "$ref": "#/$defs/Def57"
+        },
+        "borderRadius": {
+          "$ref": "#/$defs/Def57"
+        },
+        "borderWidth": {
+          "$ref": "#/$defs/Def57"
+        },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Def37"
+          }
+        },
+        "wrapperStyle": {
+          "$ref": "#/$defs/Def56"
+        },
+        "labelClassName": {
+          "type": "string"
+        },
+        "inputClassName": {
+          "type": "string"
+        },
+        "inputStyle": {
+          "$ref": "#/$defs/Def56"
+        },
+        "errorClassName": {
+          "type": "string"
+        }
+      },
+      "required": ["type", "fieldType"],
+      "additionalProperties": false
     },
     "Def1": {
       "$ref": "#/$defs/Def1"
@@ -7558,6 +7385,78 @@
     },
     "Def159": {
       "$ref": "#/$defs/Def159"
+    },
+    "Def160": {
+      "$ref": "#/$defs/Def160"
+    },
+    "Def161": {
+      "$ref": "#/$defs/Def161"
+    },
+    "Def162": {
+      "$ref": "#/$defs/Def162"
+    },
+    "Def163": {
+      "$ref": "#/$defs/Def163"
+    },
+    "Def164": {
+      "$ref": "#/$defs/Def164"
+    },
+    "Def165": {
+      "$ref": "#/$defs/Def165"
+    },
+    "Def166": {
+      "$ref": "#/$defs/Def166"
+    },
+    "Def167": {
+      "$ref": "#/$defs/Def167"
+    },
+    "Def168": {
+      "$ref": "#/$defs/Def168"
+    },
+    "Def169": {
+      "$ref": "#/$defs/Def169"
+    },
+    "Def170": {
+      "$ref": "#/$defs/Def170"
+    },
+    "Def171": {
+      "$ref": "#/$defs/Def171"
+    },
+    "Def172": {
+      "$ref": "#/$defs/Def172"
+    },
+    "Def173": {
+      "$ref": "#/$defs/Def173"
+    },
+    "Def174": {
+      "$ref": "#/$defs/Def174"
+    },
+    "Def175": {
+      "$ref": "#/$defs/Def175"
+    },
+    "Def176": {
+      "$ref": "#/$defs/Def176"
+    },
+    "Def177": {
+      "$ref": "#/$defs/Def177"
+    },
+    "Def178": {
+      "$ref": "#/$defs/Def178"
+    },
+    "Def179": {
+      "$ref": "#/$defs/Def179"
+    },
+    "Def180": {
+      "$ref": "#/$defs/Def180"
+    },
+    "Def181": {
+      "$ref": "#/$defs/Def181"
+    },
+    "Def182": {
+      "$ref": "#/$defs/Def182"
+    },
+    "Def183": {
+      "$ref": "#/$defs/Def183"
     }
   },
   "anyOf": [
@@ -7723,8 +7622,14 @@
                 "type": "string",
                 "enum": ["inherit", "disable", "follow"]
               },
+              "effects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/Def37"
+                }
+              },
               "style": {
-                "$ref": "#/$defs/Def37"
+                "$ref": "#/$defs/Def56"
               }
             },
             "required": ["expandDurationMs", "elementRevealMs", "elementRevealStaggerMs"],
@@ -7771,8 +7676,14 @@
         "overlayMotion": {
           "$ref": "#/$defs/Def9"
         },
+        "effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Def37"
+          }
+        },
         "style": {
-          "$ref": "#/$defs/Def37"
+          "$ref": "#/$defs/Def56"
         }
       },
       "required": ["type", "contentSlot", "slots"],
@@ -7793,10 +7704,10 @@
               "$ref": "#/$defs/Def1"
             },
             "ariaLabel": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "fill": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "layers": {
               "type": "array",
@@ -7807,44 +7718,44 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "align": {
               "$ref": "#/$defs/Def58"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "border": {
               "$ref": "#/$defs/Def59"
@@ -7895,16 +7806,16 @@
               ]
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "scrollSpeed": {
               "type": "number"
             },
             "initialX": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "initialY": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -7949,7 +7860,7 @@
               "type": "boolean"
             },
             "stickyOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "stickyPosition": {
               "type": "string",
@@ -7963,7 +7874,7 @@
               "enum": ["top", "bottom", "left", "right"]
             },
             "fixedOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "keyboardTriggers": {
               "type": "array",
@@ -8016,10 +7927,10 @@
               "$ref": "#/$defs/Def1"
             },
             "ariaLabel": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "fill": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "layers": {
               "type": "array",
@@ -8030,44 +7941,44 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "align": {
               "$ref": "#/$defs/Def58"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "border": {
               "$ref": "#/$defs/Def59"
@@ -8118,16 +8029,16 @@
               ]
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "scrollSpeed": {
               "type": "number"
             },
             "initialX": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "initialY": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -8172,7 +8083,7 @@
               "type": "boolean"
             },
             "stickyOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "stickyPosition": {
               "type": "string",
@@ -8186,7 +8097,7 @@
               "enum": ["top", "bottom", "left", "right"]
             },
             "fixedOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "keyboardTriggers": {
               "type": "array",
@@ -8253,10 +8164,10 @@
               ]
             },
             "alignItems": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "justifyContent": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "flexWrap": {
               "anyOf": [
@@ -8280,13 +8191,13 @@
               ]
             },
             "gap": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "rowGap": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "columnGap": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "reorderable": {
               "type": "boolean"
@@ -8323,10 +8234,10 @@
               "$ref": "#/$defs/Def1"
             },
             "ariaLabel": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "fill": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "layers": {
               "type": "array",
@@ -8337,44 +8248,44 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "align": {
               "$ref": "#/$defs/Def58"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "border": {
               "$ref": "#/$defs/Def59"
@@ -8425,16 +8336,16 @@
               ]
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "scrollSpeed": {
               "type": "number"
             },
             "initialX": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "initialY": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -8479,7 +8390,7 @@
               "type": "boolean"
             },
             "stickyOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "stickyPosition": {
               "type": "string",
@@ -8493,7 +8404,7 @@
               "enum": ["top", "bottom", "left", "right"]
             },
             "fixedOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "keyboardTriggers": {
               "type": "array",
@@ -8583,10 +8494,10 @@
               "$ref": "#/$defs/Def1"
             },
             "ariaLabel": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "fill": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "layers": {
               "type": "array",
@@ -8597,44 +8508,44 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "align": {
               "$ref": "#/$defs/Def58"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "border": {
               "$ref": "#/$defs/Def59"
@@ -8685,16 +8596,16 @@
               ]
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "scrollSpeed": {
               "type": "number"
             },
             "initialX": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "initialY": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -8739,7 +8650,7 @@
               "type": "boolean"
             },
             "stickyOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "stickyPosition": {
               "type": "string",
@@ -8753,7 +8664,7 @@
               "enum": ["top", "bottom", "left", "right"]
             },
             "fixedOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "keyboardTriggers": {
               "type": "array",
@@ -8823,7 +8734,7 @@
               "$ref": "#/$defs/Def102"
             },
             "gridAutoRows": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "elementOrder": {
               "$ref": "#/$defs/Def104"
@@ -8854,10 +8765,10 @@
               "$ref": "#/$defs/Def1"
             },
             "ariaLabel": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "fill": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "layers": {
               "type": "array",
@@ -8868,44 +8779,44 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "align": {
               "$ref": "#/$defs/Def58"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "border": {
               "$ref": "#/$defs/Def59"
@@ -8956,16 +8867,16 @@
               ]
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "scrollSpeed": {
               "type": "number"
             },
             "initialX": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "initialY": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -9010,7 +8921,7 @@
               "type": "boolean"
             },
             "stickyOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "stickyPosition": {
               "type": "string",
@@ -9024,7 +8935,7 @@
               "enum": ["top", "bottom", "left", "right"]
             },
             "fixedOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "keyboardTriggers": {
               "type": "array",
@@ -9077,10 +8988,10 @@
               "$ref": "#/$defs/Def1"
             },
             "ariaLabel": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "fill": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "layers": {
               "type": "array",
@@ -9091,44 +9002,44 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "align": {
               "$ref": "#/$defs/Def58"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "border": {
               "$ref": "#/$defs/Def59"
@@ -9179,16 +9090,16 @@
               ]
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "scrollSpeed": {
               "type": "number"
             },
             "initialX": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "initialY": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -9233,7 +9144,7 @@
               "type": "boolean"
             },
             "stickyOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "stickyPosition": {
               "type": "string",
@@ -9247,7 +9158,7 @@
               "enum": ["top", "bottom", "left", "right"]
             },
             "fixedOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "keyboardTriggers": {
               "type": "array",
@@ -9289,161 +9200,7 @@
             "fields": {
               "type": "array",
               "items": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "const": "formField"
-                  },
-                  "fieldType": {
-                    "type": "string",
-                    "enum": [
-                      "text",
-                      "email",
-                      "password",
-                      "tel",
-                      "url",
-                      "number",
-                      "date",
-                      "paragraph",
-                      "checkbox",
-                      "checkboxGroup",
-                      "radio",
-                      "select",
-                      "switch",
-                      "range",
-                      "file",
-                      "hidden",
-                      "submit"
-                    ]
-                  },
-                  "level": {
-                    "$ref": "#/$defs/Def118"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "label": {
-                    "type": "string"
-                  },
-                  "placeholder": {
-                    "type": "string"
-                  },
-                  "required": {
-                    "type": "boolean"
-                  },
-                  "disabled": {
-                    "type": "boolean"
-                  },
-                  "readOnly": {
-                    "type": "boolean"
-                  },
-                  "autocomplete": {
-                    "type": "string"
-                  },
-                  "value": {
-                    "type": "string"
-                  },
-                  "minLength": {
-                    "type": "number"
-                  },
-                  "maxLength": {
-                    "type": "number"
-                  },
-                  "pattern": {
-                    "type": "string"
-                  },
-                  "rows": {
-                    "type": "number"
-                  },
-                  "min": {
-                    "$ref": "#/$defs/Def120"
-                  },
-                  "max": {
-                    "$ref": "#/$defs/Def120"
-                  },
-                  "step": {
-                    "$ref": "#/$defs/Def120"
-                  },
-                  "options": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "value": {
-                          "type": "string"
-                        },
-                        "label": {
-                          "type": "string"
-                        }
-                      },
-                      "required": ["value", "label"],
-                      "additionalProperties": false
-                    }
-                  },
-                  "accept": {
-                    "type": "string"
-                  },
-                  "multiple": {
-                    "type": "boolean"
-                  },
-                  "loadingText": {
-                    "type": "string"
-                  },
-                  "width": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "align": {
-                    "$ref": "#/$defs/Def121"
-                  },
-                  "marginTop": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "marginBottom": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "marginLeft": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "marginRight": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "textAlign": {
-                    "$ref": "#/$defs/Def122"
-                  },
-                  "padding": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "fill": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "stroke": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "borderRadius": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "borderWidth": {
-                    "$ref": "#/$defs/Def38"
-                  },
-                  "wrapperStyle": {
-                    "$ref": "#/$defs/Def37"
-                  },
-                  "labelClassName": {
-                    "type": "string"
-                  },
-                  "inputClassName": {
-                    "type": "string"
-                  },
-                  "inputStyle": {
-                    "$ref": "#/$defs/Def37"
-                  },
-                  "errorClassName": {
-                    "type": "string"
-                  }
-                },
-                "required": ["type", "fieldType"],
-                "additionalProperties": false
+                "$ref": "#/$defs/__schema4"
               }
             },
             "action": {
@@ -9492,10 +9249,10 @@
               "$ref": "#/$defs/Def1"
             },
             "ariaLabel": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "fill": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "layers": {
               "type": "array",
@@ -9506,44 +9263,44 @@
             "effects": {
               "type": "array",
               "items": {
-                "$ref": "#/$defs/Def39"
+                "$ref": "#/$defs/Def37"
               }
             },
             "width": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "height": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxWidth": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "minHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "maxHeight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "align": {
               "$ref": "#/$defs/Def58"
             },
             "marginLeft": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginRight": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginTop": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "marginBottom": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "borderRadius": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "border": {
               "$ref": "#/$defs/Def59"
@@ -9594,16 +9351,16 @@
               ]
             },
             "aspectRatio": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "scrollSpeed": {
               "type": "number"
             },
             "initialX": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "initialY": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "zIndex": {
               "type": "number"
@@ -9648,7 +9405,7 @@
               "type": "boolean"
             },
             "stickyOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "stickyPosition": {
               "type": "string",
@@ -9662,7 +9419,7 @@
               "enum": ["top", "bottom", "left", "right"]
             },
             "fixedOffset": {
-              "$ref": "#/$defs/Def38"
+              "$ref": "#/$defs/Def57"
             },
             "keyboardTriggers": {
               "type": "array",
@@ -9729,10 +9486,10 @@
               "enum": ["vertical", "horizontal", "both"]
             },
             "collapsedSize": {
-              "$ref": "#/$defs/Def123"
+              "$ref": "#/$defs/Def118"
             },
             "expandedSize": {
-              "$ref": "#/$defs/Def123"
+              "$ref": "#/$defs/Def118"
             },
             "expandDurationMs": {
               "type": "number"
@@ -9795,10 +9552,10 @@
           "$ref": "#/$defs/Def1"
         },
         "ariaLabel": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "fill": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "layers": {
           "type": "array",
@@ -9809,44 +9566,44 @@
         "effects": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/Def39"
+            "$ref": "#/$defs/Def37"
           }
         },
         "width": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "height": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "minWidth": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "maxWidth": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "minHeight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "maxHeight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "align": {
           "$ref": "#/$defs/Def58"
         },
         "marginLeft": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginRight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginTop": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginBottom": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "borderRadius": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "border": {
           "$ref": "#/$defs/Def59"
@@ -9897,16 +9654,16 @@
           ]
         },
         "aspectRatio": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "scrollSpeed": {
           "type": "number"
         },
         "initialX": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "initialY": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "zIndex": {
           "type": "number"
@@ -9951,7 +9708,7 @@
           "type": "boolean"
         },
         "stickyOffset": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "stickyPosition": {
           "type": "string",
@@ -9965,7 +9722,7 @@
           "enum": ["top", "bottom", "left", "right"]
         },
         "fixedOffset": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "keyboardTriggers": {
           "type": "array",
@@ -10005,19 +9762,19 @@
           "const": "contentBlock"
         },
         "gap": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "rowGap": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "columnGap": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "alignItems": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "justifyContent": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "contentWidth": {
           "$ref": "#/$defs/Def76"
@@ -10032,7 +9789,7 @@
           }
         },
         "definitions": {
-          "$ref": "#/$defs/Def124"
+          "$ref": "#/$defs/Def119"
         },
         "reorderable": {
           "type": "boolean"
@@ -10063,10 +9820,10 @@
           "$ref": "#/$defs/Def1"
         },
         "ariaLabel": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "fill": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "layers": {
           "type": "array",
@@ -10077,44 +9834,44 @@
         "effects": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/Def39"
+            "$ref": "#/$defs/Def37"
           }
         },
         "width": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "height": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "minWidth": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "maxWidth": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "minHeight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "maxHeight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "align": {
           "$ref": "#/$defs/Def58"
         },
         "marginLeft": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginRight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginTop": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginBottom": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "borderRadius": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "border": {
           "$ref": "#/$defs/Def59"
@@ -10165,16 +9922,16 @@
           ]
         },
         "aspectRatio": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "scrollSpeed": {
           "type": "number"
         },
         "initialX": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "initialY": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "zIndex": {
           "type": "number"
@@ -10219,7 +9976,7 @@
           "type": "boolean"
         },
         "stickyOffset": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "stickyPosition": {
           "type": "string",
@@ -10233,7 +9990,7 @@
           "enum": ["top", "bottom", "left", "right"]
         },
         "fixedOffset": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "keyboardTriggers": {
           "type": "array",
@@ -10285,7 +10042,7 @@
           }
         },
         "definitions": {
-          "$ref": "#/$defs/Def124"
+          "$ref": "#/$defs/Def119"
         }
       },
       "required": ["type", "elementOrder"],
@@ -10301,10 +10058,10 @@
           "$ref": "#/$defs/Def1"
         },
         "ariaLabel": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "fill": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "layers": {
           "type": "array",
@@ -10315,44 +10072,44 @@
         "effects": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/Def39"
+            "$ref": "#/$defs/Def37"
           }
         },
         "width": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "height": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "minWidth": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "maxWidth": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "minHeight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "maxHeight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "align": {
           "$ref": "#/$defs/Def58"
         },
         "marginLeft": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginRight": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginTop": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "marginBottom": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "borderRadius": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "border": {
           "$ref": "#/$defs/Def59"
@@ -10403,16 +10160,16 @@
           ]
         },
         "aspectRatio": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "scrollSpeed": {
           "type": "number"
         },
         "initialX": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "initialY": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "zIndex": {
           "type": "number"
@@ -10457,7 +10214,7 @@
           "type": "boolean"
         },
         "stickyOffset": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "stickyPosition": {
           "type": "string",
@@ -10471,7 +10228,7 @@
           "enum": ["top", "bottom", "left", "right"]
         },
         "fixedOffset": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "keyboardTriggers": {
           "type": "array",
@@ -10538,7 +10295,7 @@
           "$ref": "#/$defs/Def102"
         },
         "gridAutoRows": {
-          "$ref": "#/$defs/Def38"
+          "$ref": "#/$defs/Def57"
         },
         "columnSpan": {
           "$ref": "#/$defs/Def106"
@@ -10553,7 +10310,7 @@
           "$ref": "#/$defs/Def76"
         },
         "definitions": {
-          "$ref": "#/$defs/Def124"
+          "$ref": "#/$defs/Def119"
         }
       },
       "required": ["type", "columns", "columnAssignments"],

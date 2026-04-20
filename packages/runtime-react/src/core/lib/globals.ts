@@ -96,7 +96,24 @@ export const cdnAllowedExtensions: string[] =
   Array.isArray(cdnConfig?.allowedExtensions) &&
   cdnConfig.allowedExtensions.every((ext: unknown) => typeof ext === "string")
     ? (cdnConfig.allowedExtensions as string[])
-    : [".webm", ".mp4", ".webp", ".jpg", ".jpeg", ".png", ".glb", ".gltf", ".exr", ".hdr"];
+    : [
+        ".webm",
+        ".mp4",
+        ".mpd",
+        ".m3u8",
+        ".ts",
+        ".m4s",
+        ".m4a",
+        ".aac",
+        ".webp",
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".glb",
+        ".gltf",
+        ".exr",
+        ".hdr",
+      ];
 
 const cdnImagesConfig = (cdnConfig as { images?: Record<string, unknown> } | undefined)?.images;
 export const imageDefaultWidth: number =

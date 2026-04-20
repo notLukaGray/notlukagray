@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { isSafePathSegment, resolvePathUnder } from "@pb/core/internal/page-builder-paths";
 import type { ModalBuilderFromSchema, PageBuilderDefinitionBlock } from "@pb/contracts";
-import { modalBuilderSchema, MOTION_DEFAULTS } from "@pb/contracts";
+import { modalBuilderSchema, MOTION_DEFAULTS, sectionEffectSchema } from "@pb/contracts";
 import type { ModalTransitionConfig } from "@pb/core/internal/modal-types";
 import { motionPropsSchema } from "@pb/contracts";
 import { CONTENT_DIR } from "@pb/core/internal/load/page-builder-load-io";
@@ -141,6 +141,11 @@ export function loadModal(id: string): ModalBuilder | null {
 
   const motionResult = motionPropsSchema.safeParse(withId.motion);
   const motion = motionResult.success ? motionResult.data : undefined;
+  const rawEffects = Array.isArray(withId.effects) ? withId.effects : undefined;
+  const effects = rawEffects
+    ?.map((effect) => sectionEffectSchema.safeParse(effect))
+    .filter((result) => result.success)
+    .map((result) => result.data);
 
   const modalCandidate: ModalBuilder = {
     id,
@@ -149,6 +154,7 @@ export function loadModal(id: string): ModalBuilder | null {
     definitions,
     transition,
     ...(motion !== undefined ? { motion } : {}),
+    ...(effects && effects.length > 0 ? { effects } : {}),
   };
   const modalParse = modalBuilderSchema.safeParse(modalCandidate);
   if (!modalParse.success) return null;

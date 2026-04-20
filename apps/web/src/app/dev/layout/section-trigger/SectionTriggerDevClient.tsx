@@ -151,7 +151,7 @@ export function SectionTriggerDevClient() {
             <p className="font-mono uppercase tracking-wide">Scroll this panel or press K</p>
             <div className="mt-2 min-h-20 space-y-1 font-mono">
               {events.length ? (
-                events.map((entry) => <p key={entry}>{entry}</p>)
+                events.map((entry, i) => <p key={`${i}-${entry}`}>{entry}</p>)
               ) : (
                 <p>No events yet</p>
               )}

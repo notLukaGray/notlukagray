@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { motionPropsSchema } from "./motion-props-schema";
 import { pageBuilderDefinitionBlockSchema } from "./page-definition-and-resolution-schemas";
+import { sectionEffectSchema } from "./section-effect-schemas";
 
 /** Optional modal enter/exit animation config from JSON. */
 export const modalTransitionConfigSchema = z
@@ -20,6 +21,8 @@ export const modalBuilderSchema = z
     definitions: z.record(z.string(), pageBuilderDefinitionBlockSchema),
     transition: modalTransitionConfigSchema,
     motion: motionPropsSchema,
+    /** Generic visual effects for the modal dialog surface, including glass. */
+    effects: z.array(sectionEffectSchema).optional(),
   })
   .passthrough();
 

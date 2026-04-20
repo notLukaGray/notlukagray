@@ -1,11 +1,64 @@
 "use client";
 
 import * as React from "react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+
+type ThemeProviderProps = {
+  children: React.ReactNode;
+  attribute?: "class" | "data-theme";
+  defaultTheme?: string;
+  forcedTheme?: string;
+  enableSystem?: boolean;
+  disableTransitionOnChange?: boolean;
+  storageKey?: string;
+};
+
+const STORAGE_KEY = "theme";
+
+function normalizeTheme(theme: string): "light" | "dark" {
+  return theme === "light" ? "light" : "dark";
+}
+
+function resolveTheme(
+  defaultTheme: string,
+  enableSystem: boolean,
+  storageKey: string
+): "light" | "dark" {
+  const stored = window.localStorage.getItem(storageKey);
+  if (stored === "light" || stored === "dark") {
+    return stored;
+  }
+  if (enableSystem) {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  return normalizeTheme(defaultTheme);
+}
+
+function applyTheme(attribute: "class" | "data-theme", theme: "light" | "dark"): void {
+  if (attribute === "class") {
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
+    return;
+  }
+  document.documentElement.setAttribute(attribute, theme);
+}
 
 export function ThemeProvider({
   children,
-  ...props
-}: React.ComponentProps<typeof NextThemesProvider>) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+  attribute = "class",
+  defaultTheme = "dark",
+  forcedTheme,
+  enableSystem = true,
+  disableTransitionOnChange: _disableTransitionOnChange,
+  storageKey = STORAGE_KEY,
+}: ThemeProviderProps) {
+  React.useEffect(() => {
+    applyTheme(
+      attribute,
+      typeof forcedTheme === "string"
+        ? normalizeTheme(forcedTheme)
+        : resolveTheme(defaultTheme, enableSystem, storageKey)
+    );
+  }, [attribute, defaultTheme, enableSystem, forcedTheme, storageKey]);
+
+  return <>{children}</>;
 }

@@ -104,6 +104,14 @@ export function walkElement(element: ElementBlock, visitor: AssetKeyVisitor): vo
   // Standard asset keys on the element itself (including elementModel3D).
   visitStandardAssetKeys(el, "element", visitor);
 
+  if (el.type === "elementVideo" && Array.isArray(el.sources)) {
+    for (const source of el.sources) {
+      if (source && typeof source === "object") {
+        visitStandardAssetKeys(source as Record<string, unknown>, "element", visitor);
+      }
+    }
+  }
+
   // 3D subtree for elementModel3D.
   if (el.type === "elementModel3D") {
     walkModel3DNode(el, visitor);

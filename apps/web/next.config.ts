@@ -13,6 +13,7 @@ function getCdnHostname(url: string): string | null {
 const cdnHostname = getCdnHostname(cdnBase);
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["192.168.1.*"],
   reactCompiler: true,
   async redirects() {
     return [{ source: "/pb-dev/playground", destination: "/playground", permanent: false }];

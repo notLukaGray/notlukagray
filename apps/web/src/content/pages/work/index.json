@@ -37,7 +37,8 @@
         "project-photography",
         "project-process",
         "project-product",
-        "project-systems"
+        "project-systems",
+        "clean-it-up"
       ],
       "definitions": {
         "heading": {
@@ -208,6 +209,19 @@
           "type": "elementLink",
           "href": "/work/project-systems",
           "label": "Atlas DS — Design System",
+          "copyType": "body",
+          "level": 2,
+          "width": "hug",
+          "align": "center",
+          "linkDefault": "#a8a8a8",
+          "linkHover": "#f000b8",
+          "linkActive": "#ffffff",
+          "linkTransition": ".3s"
+        },
+        "clean-it-up": {
+          "type": "elementLink",
+          "href": "/work/clean-it-up",
+          "label": "Clean It Up",
           "copyType": "body",
           "level": 2,
           "width": "hug",

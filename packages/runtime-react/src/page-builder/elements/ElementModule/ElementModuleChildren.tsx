@@ -130,7 +130,7 @@ export function ElementModuleChildren({
             event.stopPropagation();
             handler();
           }}
-          className="shrink-0 min-w-0 text-white rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          className="flex shrink-0 min-w-0 items-center justify-center text-white rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
           style={{ cursor: "pointer", ...cellStyle }}
           aria-label={action ?? "Control"}
         >

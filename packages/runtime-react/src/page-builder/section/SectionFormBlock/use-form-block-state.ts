@@ -3,9 +3,33 @@ import type { FormFieldBlock } from "@pb/contracts/page-builder/core/page-builde
 import type { FormFieldValue } from "@/page-builder/form-fields";
 import { validateFormField } from "@/page-builder/form-fields/FormFieldRenderer/form-field-validation";
 
-function getFieldKey(field: FormFieldBlock, index: number): string {
-  if (field.name && field.fieldType !== "submit") return field.name;
-  return `field_${index}`;
+export type FormFieldPath = number[];
+
+export function isFormFieldButton(field: FormFieldBlock): boolean {
+  return field.fieldType === "button" || field.fieldType === "submit";
+}
+
+export function isFormFieldLayout(field: FormFieldBlock): boolean {
+  return field.fieldType === "row";
+}
+
+export function getFieldKey(field: FormFieldBlock, path: FormFieldPath | number): string {
+  if (field.name && !isFormFieldButton(field) && !isFormFieldLayout(field)) return field.name;
+  const pathLabel = Array.isArray(path) ? path.join("_") : String(path);
+  return `field_${pathLabel}`;
+}
+
+export function collectFormFields(
+  fields: FormFieldBlock[],
+  basePath: FormFieldPath = []
+): Array<{ field: FormFieldBlock; path: FormFieldPath }> {
+  return fields.flatMap((field, index) => {
+    const path = [...basePath, index];
+    if (field.fieldType === "row") {
+      return collectFormFields(field.fields ?? [], path);
+    }
+    return [{ field, path }];
+  });
 }
 
 function getInitialValue(field: FormFieldBlock): FormFieldValue {
@@ -18,9 +42,9 @@ function getInitialValue(field: FormFieldBlock): FormFieldValue {
 export function useFormBlockState(fields: FormFieldBlock[]) {
   const [values, setValues] = useState<Record<string, FormFieldValue>>(() => {
     const init: Record<string, FormFieldValue> = {};
-    fields.forEach((field, i) => {
-      const key = getFieldKey(field, i);
-      if (field.fieldType !== "submit") init[key] = getInitialValue(field);
+    collectFormFields(fields).forEach(({ field, path }) => {
+      const key = getFieldKey(field, path);
+      if (!isFormFieldButton(field)) init[key] = getInitialValue(field);
     });
     return init;
   });
@@ -39,9 +63,9 @@ export function useFormBlockState(fields: FormFieldBlock[]) {
 
   const validateAll = useCallback((): boolean => {
     const nextErrors: Record<string, string> = {};
-    fields.forEach((field, i) => {
-      const key = getFieldKey(field, i);
-      if (field.fieldType === "submit" || field.fieldType === "hidden") return;
+    collectFormFields(fields).forEach(({ field, path }) => {
+      const key = getFieldKey(field, path);
+      if (isFormFieldButton(field) || field.fieldType === "hidden") return;
       const value =
         values[key] ??
         (field.fieldType === "checkbox" || field.fieldType === "switch"

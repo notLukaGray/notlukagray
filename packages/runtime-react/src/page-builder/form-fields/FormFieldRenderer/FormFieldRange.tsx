@@ -3,6 +3,8 @@
 import type { FormFieldBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ElementBodyVariant } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { FormFieldValue } from "..";
+import { FormFieldDescription, getFieldDescribedBy, getFieldErrorId } from "./FormFieldFeedback";
+import { FormFieldShell } from "./FormFieldShell";
 import {
   getFormFieldLabelClass,
   getFormFieldErrorClass,
@@ -37,9 +39,10 @@ export function FormFieldRange({
   const hasError = Boolean(error);
   const labelClass = getFormFieldLabelClass(resolvedLevel, field.labelClassName);
   const errorClass = getFormFieldErrorClass(field.errorClassName);
+  const describedBy = getFieldDescribedBy(field, hasError);
 
   return (
-    <div style={style}>
+    <FormFieldShell field={field} style={style}>
       {field.label && (
         <label htmlFor={id} className={labelClass}>
           {field.label}
@@ -61,14 +64,15 @@ export function FormFieldRange({
         step={field.step as number | string | undefined}
         disabled={fieldDisabled}
         aria-invalid={hasError}
-        aria-describedby={hasError && id ? `${id}-error` : undefined}
+        aria-describedby={describedBy}
         className={field.inputClassName ?? "w-full"}
       />
+      <FormFieldDescription field={field} />
       {hasError && error && (
-        <p id={id ? `${id}-error` : undefined} className={errorClass} role="alert">
+        <p id={getFieldErrorId(field, hasError)} className={errorClass} role="alert">
           {error}
         </p>
       )}
-    </div>
+    </FormFieldShell>
   );
 }

@@ -620,6 +620,7 @@ export function getModalProps(id: string, options?: GetModalPropsOptions): Modal
     resolvedSections,
     transition: modal.transition,
     ...(modal.motion !== undefined ? { motion: modal.motion } : {}),
+    ...(modal.effects !== undefined ? { effects: modal.effects } : {}),
   };
 }
 

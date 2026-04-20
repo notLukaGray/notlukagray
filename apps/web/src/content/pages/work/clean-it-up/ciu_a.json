@@ -1,0 +1,323 @@
+{
+  "type": "contentBlock",
+  "flexDirection": "column",
+  "id": "ciu_a",
+  "width": ["100%", "88%"],
+  "maxWidth": "1200px",
+  "height": "hug",
+  "align": ["full", "center"],
+  "paddingTop": "8rem",
+  "paddingBottom": "4rem",
+  "elementOrder": [
+    "ciu-video",
+    "moi-video",
+    "mlw-video",
+    "pow-video",
+    "echo-len-video",
+    "cope-wfh-video",
+    "ms-olo-video",
+    "ms-brit-video",
+    "ms-dwoj-video",
+    "cope-200-video",
+    "ms-ovr-video",
+    "cope-rothh-video",
+    "sm-dtb-video",
+    "fh-tiro-video"
+  ],
+  "definitions": {
+    "ciu-video": {
+      "type": "elementVideo",
+      "src": "work/TM_CIU_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/TM_CIU_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/TM_CIU_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/TM_CIU_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "moi-video": {
+      "type": "elementVideo",
+      "src": "work/BM_MOI_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/BM_MOI_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/BM_MOI_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/BM_MOI_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "mlw-video": {
+      "type": "elementVideo",
+      "src": "work/TM_MLW_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/TM_MLW_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/TM_MLW_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/TM_MLW_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "pow-video": {
+      "type": "elementVideo",
+      "src": "work/TM_POW_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/TM_POW_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/TM_POW_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/TM_POW_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "echo-len-video": {
+      "type": "elementVideo",
+      "src": "work/ECHO_LEN_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/ECHO_LEN_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/ECHO_LEN_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/ECHO_LEN_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "cope-wfh-video": {
+      "type": "elementVideo",
+      "src": "work/COPE_WFH_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/COPE_WFH_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/COPE_WFH_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/COPE_WFH_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "ms-olo-video": {
+      "type": "elementVideo",
+      "src": "work/MS_OLO_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/MS_OLO_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/MS_OLO_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/MS_OLO_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "ms-brit-video": {
+      "type": "elementVideo",
+      "src": "work/MS_BRIT_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/MS_BRIT_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/MS_BRIT_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/MS_BRIT_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "ms-dwoj-video": {
+      "type": "elementVideo",
+      "src": "work/MS_DWOJ_041926_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/MS_DWOJ_041926_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/MS_DWOJ_041926_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/MS_DWOJ_041926_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "cope-200-video": {
+      "type": "elementVideo",
+      "src": "work/COPE_200_042026_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/COPE_200_042026_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/COPE_200_042026_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/COPE_200_042026_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "ms-ovr-video": {
+      "type": "elementVideo",
+      "src": "work/MS_OVR_042026_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/MS_OVR_042026_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/MS_OVR_042026_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/MS_OVR_042026_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "cope-rothh-video": {
+      "type": "elementVideo",
+      "src": "work/COPE_ROTHH_042026_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/COPE_ROTHH_042026_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/COPE_ROTHH_042026_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/COPE_ROTHH_042026_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "sm-dtb-video": {
+      "type": "elementVideo",
+      "src": "work/SM_DTB_042026_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/SM_DTB_042026_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/SM_DTB_042026_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/SM_DTB_042026_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    },
+    "fh-tiro-video": {
+      "type": "elementVideo",
+      "src": "work/FH_TIRO_042026_LG/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/FH_TIRO_042026_LG/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/FH_TIRO_042026_LG/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/FH_TIRO_042026_LG/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": "16/9"
+    }
+  }
+}

@@ -1,0 +1,537 @@
+import { spawn } from "child_process";
+import fs from "fs/promises";
+import path from "path";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+type HlsConvertRequest = {
+  inputPath?: unknown;
+  outputDir?: unknown;
+  heights?: unknown;
+  codecs?: unknown;
+  segmentSeconds?: unknown;
+  preset?: unknown;
+  qualityPreset?: unknown;
+  tune?: unknown;
+};
+
+type HlsCodec = "vp9" | "x265" | "x264";
+
+type Variant = {
+  height: number;
+  bitrate: string;
+  maxrate: string;
+  bufsize: string;
+  audioBitrate: string;
+};
+
+const VARIANTS: Variant[] = [
+  { height: 2160, bitrate: "16000k", maxrate: "17120k", bufsize: "24000k", audioBitrate: "192k" },
+  { height: 1080, bitrate: "5000k", maxrate: "5350k", bufsize: "7500k", audioBitrate: "128k" },
+  { height: 720, bitrate: "2800k", maxrate: "2996k", bufsize: "4200k", audioBitrate: "128k" },
+  { height: 480, bitrate: "1400k", maxrate: "1498k", bufsize: "2100k", audioBitrate: "96k" },
+  { height: 360, bitrate: "800k", maxrate: "856k", bufsize: "1200k", audioBitrate: "96k" },
+];
+
+const PRESETS = new Set(["ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow"]);
+const QUALITY_MULTIPLIERS = {
+  small: 0.62,
+  balanced: 1,
+  high: 1.4,
+} as const;
+
+const CODEC_ORDER: HlsCodec[] = ["vp9", "x265", "x264"];
+const CODEC_LABELS: Record<HlsCodec, string> = {
+  vp9: "VP9 WebM DASH",
+  x265: "x265 fMP4 HLS",
+  x264: "x264 TS HLS",
+};
+const CODEC_RATE_MULTIPLIERS: Record<HlsCodec, number> = {
+  vp9: 0.62,
+  x265: 0.58,
+  x264: 1,
+};
+
+// x264 supports: film, animation, grain, stillimage
+// x265 supports: grain, animation (no "film" — default is already optimised for live action)
+const X264_TUNES = new Set(["film", "animation", "grain", "stillimage"]);
+const X265_TUNES = new Set(["animation", "grain"]);
+
+type QualityPreset = keyof typeof QUALITY_MULTIPLIERS;
+
+function asTrimmedString(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function resolveLocalPath(value: string): string {
+  return path.isAbsolute(value) ? path.normalize(value) : path.resolve(process.cwd(), value);
+}
+
+function scaledRate(rate: string, multiplier: number): string {
+  const kbps = Number(rate.replace(/k$/i, ""));
+  if (!Number.isFinite(kbps)) return rate;
+  return `${Math.max(96, Math.round(kbps * multiplier))}k`;
+}
+
+function parseCodecs(value: unknown): HlsCodec[] {
+  const requested = Array.isArray(value)
+    ? value.filter((entry): entry is HlsCodec => CODEC_ORDER.includes(entry as HlsCodec))
+    : [];
+  const deduped = new Set(requested);
+  return CODEC_ORDER.filter((codec) => deduped.has(codec));
+}
+
+function enqueue(controller: ReadableStreamDefaultController<Uint8Array>, text: string) {
+  controller.enqueue(new TextEncoder().encode(text));
+}
+
+function runCapture(command: string, args: string[]): Promise<{ stdout: string; stderr: string }> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, { stdio: ["ignore", "pipe", "pipe"] });
+    let stdout = "";
+    let stderr = "";
+
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk.toString();
+      if (stdout.length > 1_000_000) stdout = stdout.slice(-1_000_000);
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk.toString();
+      if (stderr.length > 1_000_000) stderr = stderr.slice(-1_000_000);
+    });
+    child.on("error", reject);
+    child.on("close", (code) => {
+      if (code === 0) resolve({ stdout, stderr });
+      else reject(new Error(stderr || `${command} exited with code ${code}`));
+    });
+  });
+}
+
+function parseFrameRate(rFrameRate: string | undefined): number {
+  if (!rFrameRate) return 30;
+  const [num, den] = rFrameRate.split("/").map(Number);
+  if (!num || !den || den === 0) return 30;
+  return num / den;
+}
+
+async function probeVideo(inputPath: string): Promise<{
+  width: number | null;
+  height: number | null;
+  hasAudio: boolean;
+  audioChannels: number;
+  fps: number;
+}> {
+  const { stdout } = await runCapture("ffprobe", [
+    "-v",
+    "error",
+    "-show_entries",
+    "stream=codec_type,width,height,r_frame_rate,channels",
+    "-of",
+    "json",
+    inputPath,
+  ]);
+  const parsed = JSON.parse(stdout) as {
+    streams?: Array<{
+      codec_type?: string;
+      width?: number;
+      height?: number;
+      r_frame_rate?: string;
+      channels?: number;
+    }>;
+  };
+  const streams = parsed.streams ?? [];
+  const video = streams.find((stream) => stream.codec_type === "video");
+  const audio = streams.find((stream) => stream.codec_type === "audio");
+  const rawChannels = audio?.channels ?? 0;
+  return {
+    width: typeof video?.width === "number" ? video.width : null,
+    height: typeof video?.height === "number" ? video.height : null,
+    hasAudio: rawChannels > 0,
+    audioChannels: Math.min(rawChannels > 0 ? rawChannels : 2, 2),
+    fps: parseFrameRate(video?.r_frame_rate),
+  };
+}
+
+function buildVp9DashArgs({
+  inputPath,
+  outputDir,
+  variants,
+  hasAudio,
+  audioChannels,
+  segmentSeconds,
+  qualityPreset,
+  fps,
+  sourceWidth,
+  sourceHeight,
+}: {
+  inputPath: string;
+  outputDir: string;
+  variants: Variant[];
+  hasAudio: boolean;
+  audioChannels: number;
+  segmentSeconds: number;
+  qualityPreset: QualityPreset;
+  fps: number;
+  sourceWidth: number | null;
+  sourceHeight: number | null;
+}): string[] {
+  const args = ["-hide_banner", "-y", "-i", inputPath];
+  const qualityMultiplier = QUALITY_MULTIPLIERS[qualityPreset] * CODEC_RATE_MULTIPLIERS.vp9;
+
+  variants.forEach(() => {
+    args.push("-map", "0:v:0");
+  });
+  if (hasAudio) args.push("-map", "0:a:0");
+
+  variants.forEach((variant, index) => {
+    args.push(
+      `-filter:v:${index}`,
+      sourceWidth != null && sourceHeight != null
+        ? `scale=-2:${variant.height},setdar=${sourceWidth}/${sourceHeight}`
+        : `scale=-2:${variant.height}`,
+      `-c:v:${index}`,
+      "libvpx-vp9",
+      `-b:v:${index}`,
+      scaledRate(variant.bitrate, qualityMultiplier),
+      `-maxrate:v:${index}`,
+      scaledRate(variant.maxrate, qualityMultiplier),
+      `-bufsize:v:${index}`,
+      scaledRate(variant.bufsize, qualityMultiplier),
+      `-pix_fmt:v:${index}`,
+      "yuv420p"
+    );
+  });
+
+  // deadline and cpu-used are libvpx-vp9 AVOptions — must be set globally, not per-stream
+  args.push("-deadline", "good", "-cpu-used", "4");
+
+  if (hasAudio) {
+    const audioBitrate = variants[0]?.audioBitrate ?? "128k";
+    args.push(
+      "-c:a:0",
+      "libopus",
+      "-b:a:0",
+      scaledRate(audioBitrate, qualityPreset === "small" ? 0.75 : 1),
+      "-ac:a:0",
+      String(audioChannels)
+    );
+  }
+
+  const videoStreams = variants.map((_variant, index) => String(index)).join(",");
+  const adaptationSets = hasAudio
+    ? `id=0,streams=${videoStreams} id=1,streams=${variants.length}`
+    : `id=0,streams=${videoStreams}`;
+
+  // VP9 keyframe interval via -g; -force_key_frames expressions are for x264/x265 only
+  args.push(
+    "-g",
+    String(Math.round(segmentSeconds * fps)),
+    "-f",
+    "dash",
+    "-seg_duration",
+    String(segmentSeconds),
+    "-use_template",
+    "1",
+    "-use_timeline",
+    "1",
+    "-dash_segment_type",
+    "webm",
+    "-adaptation_sets",
+    adaptationSets,
+    "-init_seg_name",
+    "init-$RepresentationID$.webm",
+    "-media_seg_name",
+    "chunk-$RepresentationID$-$Number%05d$.webm",
+    path.join(outputDir, "manifest.mpd")
+  );
+
+  return args;
+}
+
+function buildHlsArgs({
+  inputPath,
+  outputDir,
+  codec,
+  variants,
+  hasAudio,
+  audioChannels,
+  segmentSeconds,
+  preset,
+  qualityPreset,
+  tune,
+}: {
+  inputPath: string;
+  outputDir: string;
+  codec: Exclude<HlsCodec, "vp9">;
+  variants: Variant[];
+  hasAudio: boolean;
+  audioChannels: number;
+  segmentSeconds: number;
+  preset: string;
+  qualityPreset: QualityPreset;
+  tune: string | null;
+}): string[] {
+  const args = ["-hide_banner", "-y", "-i", inputPath];
+  const qualityMultiplier = QUALITY_MULTIPLIERS[qualityPreset] * CODEC_RATE_MULTIPLIERS[codec];
+
+  for (let index = 0; index < variants.length; index += 1) {
+    args.push("-map", "0:v:0");
+    if (hasAudio) args.push("-map", "0:a:0");
+  }
+
+  variants.forEach((variant, index) => {
+    args.push(
+      `-filter:v:${index}`,
+      `scale=-2:${variant.height}`,
+      `-c:v:${index}`,
+      codec === "x265" ? "libx265" : "libx264",
+      `-b:v:${index}`,
+      scaledRate(variant.bitrate, qualityMultiplier),
+      `-maxrate:v:${index}`,
+      scaledRate(variant.maxrate, qualityMultiplier),
+      `-bufsize:v:${index}`,
+      scaledRate(variant.bufsize, qualityMultiplier),
+      `-pix_fmt:v:${index}`,
+      "yuv420p"
+    );
+    args.push(`-preset:v:${index}`, preset, `-profile:v:${index}`, "main");
+    if (tune && codec === "x264" && X264_TUNES.has(tune)) args.push(`-tune:v:${index}`, tune);
+    if (tune && codec === "x265" && X265_TUNES.has(tune)) args.push(`-tune:v:${index}`, tune);
+    if (codec === "x265") args.push(`-tag:v:${index}`, "hvc1");
+    if (hasAudio) {
+      args.push(
+        `-c:a:${index}`,
+        "aac",
+        `-b:a:${index}`,
+        scaledRate(variant.audioBitrate, qualityPreset === "small" ? 0.75 : 1),
+        `-ac:a:${index}`,
+        String(audioChannels)
+      );
+    }
+  });
+
+  const streamMap = variants
+    .map((variant, index) =>
+      hasAudio
+        ? `v:${index},a:${index},name:${variant.height}p`
+        : `v:${index},name:${variant.height}p`
+    )
+    .join(" ");
+
+  args.push(
+    "-f",
+    "hls",
+    "-hls_time",
+    String(segmentSeconds),
+    "-hls_playlist_type",
+    "vod",
+    "-hls_flags",
+    "independent_segments",
+    "-force_key_frames",
+    `expr:gte(t,n_forced*${segmentSeconds})`,
+    "-master_pl_name",
+    "master.m3u8",
+    "-var_stream_map",
+    streamMap
+  );
+
+  if (codec === "x264") {
+    args.push("-hls_segment_filename", path.join(outputDir, "%v", "seg_%05d.ts"));
+  } else {
+    args.push(
+      "-hls_segment_type",
+      "fmp4",
+      "-hls_fmp4_init_filename",
+      "init.mp4",
+      "-hls_segment_filename",
+      path.join(outputDir, "%v", "seg_%05d.m4s")
+    );
+  }
+
+  args.push(path.join(outputDir, "%v", "index.m3u8"));
+
+  return args;
+}
+
+export async function POST(request: Request) {
+  if (process.env.NODE_ENV !== "development") {
+    return new Response("Not found", { status: 404 });
+  }
+
+  let body: HlsConvertRequest;
+  try {
+    body = (await request.json()) as HlsConvertRequest;
+  } catch {
+    return Response.json({ error: "Invalid JSON body." }, { status: 400 });
+  }
+
+  const inputPathRaw = asTrimmedString(body.inputPath);
+  const outputDirRaw = asTrimmedString(body.outputDir);
+  const requestedHeights = Array.isArray(body.heights)
+    ? body.heights.filter((height): height is number => typeof height === "number")
+    : [];
+  const selectedCodecs = parseCodecs(body.codecs);
+  const segmentSeconds =
+    typeof body.segmentSeconds === "number" && Number.isFinite(body.segmentSeconds)
+      ? Math.max(2, Math.min(12, Math.round(body.segmentSeconds)))
+      : 4;
+  const presetRaw = asTrimmedString(body.preset);
+  const preset = PRESETS.has(presetRaw) ? presetRaw : "veryfast";
+  const qualityPreset =
+    body.qualityPreset === "small" || body.qualityPreset === "high"
+      ? body.qualityPreset
+      : "balanced";
+  const tuneRaw = asTrimmedString(body.tune);
+  const tune = X264_TUNES.has(tuneRaw) ? tuneRaw : null;
+
+  if (!inputPathRaw || !outputDirRaw) {
+    return Response.json({ error: "Input path and output folder are required." }, { status: 400 });
+  }
+
+  if (selectedCodecs.length === 0) {
+    return Response.json({ error: "At least one codec output is required." }, { status: 400 });
+  }
+
+  const inputPath = resolveLocalPath(inputPathRaw);
+  const outputDir = resolveLocalPath(outputDirRaw);
+
+  const stream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      try {
+        enqueue(controller, `Input: ${inputPath}\n`);
+        enqueue(controller, `Output: ${outputDir}\n\n`);
+
+        const inputStat = await fs.stat(inputPath).catch(() => null);
+        if (!inputStat || !inputStat.isFile()) {
+          enqueue(controller, "Input path does not point to a readable file.\n");
+          controller.close();
+          return;
+        }
+
+        await fs.mkdir(outputDir, { recursive: true });
+
+        enqueue(controller, "Probing source video...\n");
+        const probe = await probeVideo(inputPath);
+        enqueue(
+          controller,
+          `Source height: ${probe.height ?? "unknown"}; fps: ${probe.fps.toFixed(3)}; audio: ${probe.hasAudio ? `yes (${probe.audioChannels}ch)` : "no"}\n`
+        );
+
+        const selectedVariants = VARIANTS.filter((variant) => {
+          const requested =
+            requestedHeights.length === 0 || requestedHeights.includes(variant.height);
+          const notUpscaled = probe.height == null || variant.height <= probe.height;
+          return requested && notUpscaled;
+        });
+
+        if (selectedVariants.length === 0) {
+          enqueue(controller, "No renditions selected at or below the source height.\n");
+          controller.close();
+          return;
+        }
+
+        enqueue(
+          controller,
+          `Renditions: ${selectedVariants.map((variant) => `${variant.height}p`).join(", ")}\n`
+        );
+        enqueue(
+          controller,
+          `Codec outputs: ${selectedCodecs.map((codec) => CODEC_LABELS[codec]).join(", ")}\n`
+        );
+        enqueue(controller, `Quality preset: ${qualityPreset}${tune ? `; tune: ${tune}` : ""}\n`);
+        enqueue(controller, `Segment length: ${segmentSeconds}s\n\n`);
+
+        const completed: string[] = [];
+        for (const codec of selectedCodecs) {
+          const codecOutputDir = path.join(outputDir, codec);
+          await fs.mkdir(codecOutputDir, { recursive: true });
+          const args =
+            codec === "vp9"
+              ? buildVp9DashArgs({
+                  inputPath,
+                  outputDir: codecOutputDir,
+                  variants: selectedVariants,
+                  hasAudio: probe.hasAudio,
+                  audioChannels: probe.audioChannels,
+                  segmentSeconds,
+                  qualityPreset,
+                  fps: probe.fps,
+                  sourceWidth: probe.width,
+                  sourceHeight: probe.height,
+                })
+              : buildHlsArgs({
+                  inputPath,
+                  outputDir: codecOutputDir,
+                  codec,
+                  variants: selectedVariants,
+                  hasAudio: probe.hasAudio,
+                  audioChannels: probe.audioChannels,
+                  segmentSeconds,
+                  preset,
+                  qualityPreset,
+                  tune,
+                });
+
+          enqueue(controller, `\n[${CODEC_LABELS[codec]}]\n`);
+          enqueue(
+            controller,
+            `Running: ffmpeg ${args.map((arg) => JSON.stringify(arg)).join(" ")}\n\n`
+          );
+
+          const code = await new Promise<number | null>((resolve) => {
+            const child = spawn("ffmpeg", args, { stdio: ["ignore", "pipe", "pipe"] });
+            const abort = () => {
+              enqueue(controller, "\nCancellation requested. Stopping ffmpeg...\n");
+              child.kill("SIGTERM");
+            };
+            request.signal.addEventListener("abort", abort, { once: true });
+
+            child.stdout.on("data", (chunk) => enqueue(controller, chunk.toString()));
+            child.stderr.on("data", (chunk) => enqueue(controller, chunk.toString()));
+            child.on("error", (error) => {
+              enqueue(controller, `\nFailed to start ffmpeg: ${error.message}\n`);
+              resolve(null);
+            });
+            child.on("close", (nextCode) => {
+              request.signal.removeEventListener("abort", abort);
+              resolve(nextCode);
+            });
+          });
+
+          if (code !== 0) {
+            enqueue(
+              controller,
+              `\n${CODEC_LABELS[codec]} exited with code ${code ?? "unknown"}.\n`
+            );
+            controller.close();
+            return;
+          }
+
+          completed.push(
+            `${CODEC_LABELS[codec]}: ${
+              codec === "vp9"
+                ? path.join(codecOutputDir, "manifest.mpd")
+                : path.join(codecOutputDir, "master.m3u8")
+            }`
+          );
+        }
+
+        enqueue(controller, "\nDone. Outputs:\n");
+        for (const output of completed) enqueue(controller, `- ${output}\n`);
+
+        controller.close();
+      } catch (error) {
+        enqueue(controller, `\n${(error as Error).message || "Conversion failed."}\n`);
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Cache-Control": "no-store",
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });
+}

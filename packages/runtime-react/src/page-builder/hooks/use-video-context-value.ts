@@ -7,12 +7,14 @@ import type { UseVideoPlayerStateResult } from "./use-video-player-state";
 import type { VideoControlContextValue } from "@/page-builder/elements/ElementVideo/VideoControlContext";
 import type { UseVideoControlsResult } from "./use-video-controls";
 import type { UseVideoFullscreenResult } from "./use-video-fullscreen";
+import type { ElementVideoSourceState } from "@/page-builder/elements/ElementVideo/use-element-video-source";
 
 export type UseVideoContextValueParams = {
   moduleConfig: ModuleBlock | undefined;
   state: UseVideoPlayerStateResult;
   controls: UseVideoControlsResult;
   fullscreen: UseVideoFullscreenResult;
+  sourceState: ElementVideoSourceState;
 };
 
 export function useVideoContextValue({
@@ -20,6 +22,7 @@ export function useVideoContextValue({
   state,
   controls,
   fullscreen,
+  sourceState,
 }: UseVideoContextValueParams): VideoControlContextValue | null {
   return useMemo(() => {
     if (!moduleConfig) return null;
@@ -45,6 +48,9 @@ export function useVideoContextValue({
       currentTime: state.currentTime,
       duration: state.duration,
       feedback: state.feedback,
+      qualityLevels: sourceState.qualityLevels,
+      selectedQuality: sourceState.selectedQuality,
+      setSelectedQuality: sourceState.setSelectedQuality,
       onPlay: controls.handlePlay,
       onPause: controls.handlePause,
       onTogglePlay: controls.handleTogglePlay,
@@ -77,5 +83,8 @@ export function useVideoContextValue({
     controls.handleVolumeSet,
     controls.toggleMute,
     fullscreen.toggleFullscreen,
+    sourceState.qualityLevels,
+    sourceState.selectedQuality,
+    sourceState.setSelectedQuality,
   ]);
 }

@@ -1,5 +1,6 @@
 import type {
   CssInlineStyle,
+  SectionEffect,
   SectionDefinitionBlock,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
@@ -73,5 +74,6 @@ export type ModuleSlotConfig = {
     definitions?: Record<string, SectionDefinitionBlock>;
   };
   defaultWrapperStyle?: CssInlineStyle;
+  effects?: SectionEffect[];
   style?: CssInlineStyle;
 };

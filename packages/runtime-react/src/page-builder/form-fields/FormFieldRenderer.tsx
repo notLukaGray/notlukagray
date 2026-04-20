@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import type { FormFieldBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
@@ -17,6 +17,7 @@ type FormFieldRendererProps = {
   disabled?: boolean;
   isSubmitting?: boolean;
   loadingText?: string;
+  renderNestedField?: (field: FormFieldBlock, index: number) => ReactNode;
 };
 
 export function FormFieldRenderer({
@@ -27,6 +28,7 @@ export function FormFieldRenderer({
   disabled,
   isSubmitting,
   loadingText,
+  renderNestedField,
 }: FormFieldRendererProps) {
   const { isMobile } = useDeviceType();
   const style = useMemo(() => formFieldStyleFromConfig(field, isMobile), [field, isMobile]);
@@ -49,6 +51,7 @@ export function FormFieldRenderer({
       loadingText={loadingText}
       style={style}
       resolvedLevel={resolvedLevel}
+      renderNestedField={renderNestedField}
     />
   );
 }

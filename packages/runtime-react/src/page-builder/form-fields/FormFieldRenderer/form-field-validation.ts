@@ -69,7 +69,12 @@ export function validateFormField(
   field: FormFieldBlock,
   value: FormFieldValue
 ): string | undefined {
-  if (field.fieldType === "hidden" || field.fieldType === "submit") {
+  if (
+    field.fieldType === "hidden" ||
+    field.fieldType === "button" ||
+    field.fieldType === "submit" ||
+    field.fieldType === "row"
+  ) {
     return undefined;
   }
 

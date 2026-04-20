@@ -5,7 +5,7 @@ export type InputVariantDefaults = Omit<Extract<ElementBlock, { type: "elementIn
   animation: PbImageAnimationDefaults;
 };
 
-export type InputVariantKey = "default" | "compact" | "minimal";
+export type InputVariantKey = "default" | "compact" | "minimal" | "glass";
 
 export type PersistedInputDefaults = {
   v: 1;

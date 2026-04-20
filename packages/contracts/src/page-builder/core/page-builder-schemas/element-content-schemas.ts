@@ -194,6 +194,16 @@ const elementVideoSchema = z
     /** Preset key for `pbBuilderDefaultsV1.elements.video` variant templates. */
     variant: z.enum(["inline", "compact", "fullcover", "hero"]).optional(),
     src: z.string(),
+    /** Ordered playback sources. Runtime tries the first supported source and falls back downward. */
+    sources: z
+      .array(
+        z.object({
+          src: z.string(),
+          type: z.string().optional(),
+          label: z.string().optional(),
+        })
+      )
+      .optional(),
     /** Poster (Bunny asset key or resolved URL). Required. */
     poster: z.string(),
     ariaLabel: z.string().optional(),
@@ -216,6 +226,31 @@ const elementVideoSchema = z
     onVideoPause: triggerActionSchema.optional(),
     /** Action to fire when video ends. */
     onVideoEnd: triggerActionSchema.optional(),
+    /**
+     * Fine-grained control over adaptive streaming behaviour (HLS / DASH).
+     * All fields are optional — omitting them applies sensible defaults that
+     * defer segment loading until the user first presses play.
+     */
+    streamingConfig: z
+      .object({
+        /**
+         * Whether to start fetching video segments immediately on mount.
+         * Default: false — segments are deferred until the user presses play,
+         * saving bandwidth for above-the-fold videos that may never be watched.
+         * Set to true only when instant-play latency matters more than network cost
+         * (e.g. autoplay heroes, background loops).
+         */
+        autoStartLoad: z.boolean().optional(),
+        /** Maximum seconds of video to buffer ahead once playback starts (HLS). Default: 20. */
+        maxBufferLength: z.number().positive().optional(),
+        /** Maximum buffer size in bytes once playback starts (HLS). Default: 10 MB. */
+        maxBufferSize: z.number().positive().optional(),
+        /** Default buffer target in seconds (DASH). Default: 12. */
+        bufferTimeDefault: z.number().positive().optional(),
+        /** Buffer target at top quality in seconds (DASH). Default: 20. */
+        bufferTimeAtTopQuality: z.number().positive().optional(),
+      })
+      .optional(),
   })
   .merge(elementLayoutSchema);
 
@@ -277,6 +312,14 @@ const elementVideoTimeSchema = z
   })
   .merge(elementLayoutSchema);
 
+const elementVideoQualitySelectSchema = z
+  .object({
+    type: z.literal("elementVideoQualitySelect"),
+    icon: elementVectorSchema.optional(),
+    style: cssInlineStyleSchema.optional(),
+  })
+  .merge(elementLayoutSchema);
+
 const elementSpacerSchema = z
   .object({
     type: z.literal("elementSpacer"),
@@ -330,4 +373,5 @@ export {
   elementVectorSchema,
   elementVideoSchema,
   elementVideoTimeSchema,
+  elementVideoQualitySelectSchema,
 };

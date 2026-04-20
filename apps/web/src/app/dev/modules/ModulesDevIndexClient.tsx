@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { ElementBlock, ModuleBlock } from "@pb/contracts";
 import { moduleSchema } from "@pb/contracts";
+import { DeviceTypeProvider } from "@pb/runtime-react/core/providers/device-type-provider";
 import { ElementRenderer } from "@pb/runtime-react/renderers";
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageHeader } from "@/app/dev/_components/DevWorkbenchPageHeader";
@@ -176,7 +177,9 @@ export function ModulesDevIndexClient() {
         <section className="space-y-5">
           <div className="rounded-lg border border-border bg-card/20 p-4">
             <div className="rounded border border-dashed border-border/70 bg-background/60 p-5">
-              <ElementRenderer block={previewBlock} />
+              <DeviceTypeProvider>
+                <ElementRenderer block={previewBlock} />
+              </DeviceTypeProvider>
             </div>
           </div>
           <section className="rounded-lg border border-border bg-card/20 p-4">

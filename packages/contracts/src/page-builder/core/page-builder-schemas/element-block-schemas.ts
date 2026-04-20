@@ -16,6 +16,7 @@ import {
   elementVectorSchema,
   elementVideoSchema,
   elementVideoTimeSchema,
+  elementVideoQualitySelectSchema,
 } from "./element-content-schemas";
 import { elementModel3DSchema } from "./element-model3d-schemas";
 import { elementRiveSchema } from "./element-rive-schemas";
@@ -74,6 +75,7 @@ export const elementBlockSchema = z
     elementRangeSchema,
     elementInputSchema,
     elementVideoTimeSchema,
+    elementVideoQualitySelectSchema,
     elementSpacerSchema,
     elementDividerSchema,
     elementScrollProgressBarSchema,

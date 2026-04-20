@@ -249,9 +249,6 @@ export const responsiveVideoObjectFitSchema = z
   ])
   .optional();
 
-/** @deprecated Prefer `responsiveImageObjectFitSchema` (name is clearer for image-only crop). */
-export const responsiveObjectFitSchema = responsiveImageObjectFitSchema;
-
 const elementBodyVariantNumericSchema = z.union([
   z.literal(1),
   z.literal(2),

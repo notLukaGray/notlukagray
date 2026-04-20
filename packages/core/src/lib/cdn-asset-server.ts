@@ -25,6 +25,20 @@ function getSigningPathPrefixFromCdnBase(cdnBase: string): string {
   }
 }
 
+function getDirectoryPath(pathForSigning: string): string {
+  const slashIndex = pathForSigning.lastIndexOf("/");
+  if (slashIndex === -1) return "/";
+  return `${pathForSigning.slice(0, slashIndex + 1)}`;
+}
+
+function getCdnOrigin(cdnBase: string): string {
+  try {
+    return new URL(cdnBase).origin;
+  } catch {
+    return cdnBase.replace(/\/+$/, "");
+  }
+}
+
 export function validateAssetKey(key: string): string | null {
   if (!key || typeof key !== "string") return null;
 
@@ -99,6 +113,12 @@ export const CDN_ASSET_CONTENT_TYPES: Record<string, string> = {
   ".png": "image/png",
   ".glb": "model/gltf-binary",
   ".gltf": "model/gltf+json",
+  ".mpd": "application/dash+xml",
+  ".m3u8": "application/vnd.apple.mpegurl",
+  ".ts": "video/mp2t",
+  ".m4s": "video/iso.segment",
+  ".m4a": "audio/mp4",
+  ".aac": "audio/aac",
   ".webm": "video/webm",
   ".mp4": "video/mp4",
 };
@@ -138,6 +158,15 @@ export function getSignedCdnUrl(assetKey: string, extraParams?: Record<string, s
 
   const base = cdnBase.replace(/\/+$/, "");
   if (!token) return `${base}/${encodedKey}`;
+
+  if (assetKey.toLowerCase().endsWith(".m3u8") || assetKey.toLowerCase().endsWith(".mpd")) {
+    const tokenPath = getDirectoryPath(pathForSigning);
+    const hlsParams = { ...(extraParams ?? {}), token_path: tokenPath };
+    const hlsParameterData = buildSortedParamString(hlsParams);
+    const hlsToken = generateBunnyToken(tokenPath, expiresAt, hlsParameterData);
+    const tokenPathParam = encodeURIComponent(tokenPath);
+    return `${getCdnOrigin(cdnBase)}/bcdn_token=${hlsToken}&expires=${expiresAt}&token_path=${tokenPathParam}${pathForSigning}`;
+  }
 
   const search = new URLSearchParams({ token, expires: String(expiresAt) });
   if (extraParams) {

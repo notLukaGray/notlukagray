@@ -3,6 +3,7 @@ import { MOTION_DEFAULTS } from "../page-builder-motion-defaults";
 import { motionPropsSchema } from "./motion-props-schema";
 import { cssInlineStyleSchema } from "./schema-primitives";
 import { pageBuilderMetaSchema } from "./figma-exporter-meta-schema";
+import { sectionEffectSchema } from "./section-effect-schemas";
 
 const moduleSlotSectionSchema = z
   .object({
@@ -75,6 +76,8 @@ export const moduleSlotSchema = z
       .optional(),
     /** How slot inherits parent motion transform: "inherit" | "disable" | "follow". Default "inherit". */
     transformInherit: z.enum(["inherit", "disable", "follow"]).optional(),
+    /** Generic visual effects for the slot surface, including glass. */
+    effects: z.array(sectionEffectSchema).optional(),
     style: cssInlineStyleSchema.optional(),
   })
   .passthrough();
@@ -97,6 +100,8 @@ export const moduleBlockSchema = z
     behavior: z.record(z.string(), z.union([z.number(), z.string(), z.boolean()])).optional(),
     /** Optional Framer Motion config for the overlay container (e.g. controls fade). When omitted, built from behavior (controlsTransitionMs, etc.). */
     overlayMotion: motionPropsSchema,
+    /** Generic visual effects for the module surface, including glass. */
+    effects: z.array(sectionEffectSchema).optional(),
     style: cssInlineStyleSchema.optional(),
   })
   .passthrough();

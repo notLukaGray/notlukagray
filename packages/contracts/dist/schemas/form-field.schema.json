@@ -17,6 +17,10 @@
         "url",
         "number",
         "date",
+        "time",
+        "datetime-local",
+        "color",
+        "search",
         "paragraph",
         "checkbox",
         "checkboxGroup",
@@ -26,6 +30,8 @@
         "range",
         "file",
         "hidden",
+        "button",
+        "row",
         "submit"
       ]
     },
@@ -128,6 +134,9 @@
     "label": {
       "type": "string"
     },
+    "description": {
+      "type": "string"
+    },
     "placeholder": {
       "type": "string"
     },
@@ -213,8 +222,60 @@
     "multiple": {
       "type": "boolean"
     },
+    "prefix": {
+      "type": "string"
+    },
+    "suffix": {
+      "type": "string"
+    },
+    "showCharacterCount": {
+      "type": "boolean"
+    },
+    "buttonType": {
+      "type": "string",
+      "enum": [
+        "submit",
+        "reset",
+        "button"
+      ]
+    },
     "loadingText": {
       "type": "string"
+    },
+    "action": {
+      "$ref": "#/$defs/__schema0"
+    },
+    "href": {
+      "type": "string"
+    },
+    "gap": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    "columns": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "$ref": "#"
+      }
     },
     "width": {
       "anyOf": [
@@ -465,6 +526,379 @@
         }
       ]
     },
+    "effects": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "backdropBlur"
+              },
+              "amount": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "glass"
+              },
+              "lightIntensity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "lightAngle": {
+                "type": "number"
+              },
+              "refraction": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "depth": {
+                "type": "number",
+                "minimum": 1
+              },
+              "dispersion": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "frost": {
+                "type": "string"
+              },
+              "splay": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "standard",
+                  "polar",
+                  "prominent",
+                  "shader"
+                ]
+              },
+              "overLight": {
+                "type": "boolean"
+              },
+              "mouseFollow": {
+                "type": "boolean"
+              },
+              "displacementScale": {
+                "type": "number",
+                "minimum": 0
+              },
+              "blurAmount": {
+                "type": "number",
+                "minimum": 0
+              },
+              "saturation": {
+                "type": "number",
+                "minimum": 0
+              },
+              "aberrationIntensity": {
+                "type": "number",
+                "minimum": 0
+              },
+              "elasticity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "reflection": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "bezelType": {
+                "type": "string",
+                "enum": [
+                  "convex_circle",
+                  "convex_squircle",
+                  "concave",
+                  "lip"
+                ]
+              },
+              "bezelWidth": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "glassThickness": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "refractiveIndex": {
+                "type": "number",
+                "minimum": 1
+              },
+              "blur": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "scaleRatio": {
+                "type": "number",
+                "minimum": 0.001
+              },
+              "specularOpacity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 2
+              },
+              "specularSaturation": {
+                "type": "number",
+                "minimum": 0
+              },
+              "magnifyingScale": {
+                "type": "number",
+                "minimum": 0
+              },
+              "dropShadow": {
+                "type": "boolean"
+              },
+              "clipPath": {
+                "type": "string"
+              },
+              "clipRule": {
+                "type": "string",
+                "enum": [
+                  "nonzero",
+                  "evenodd"
+                ]
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "dropShadow"
+              },
+              "x": {
+                "type": "string"
+              },
+              "y": {
+                "type": "string"
+              },
+              "blur": {
+                "type": "string"
+              },
+              "spread": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "innerShadow"
+              },
+              "x": {
+                "type": "string"
+              },
+              "y": {
+                "type": "string"
+              },
+              "blur": {
+                "type": "string"
+              },
+              "spread": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "glow"
+              },
+              "blur": {
+                "type": "string"
+              },
+              "spread": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "opacity"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "blur"
+              },
+              "amount": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "brightness"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "contrast"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "saturate"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "grayscale"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "sepia"
+              },
+              "value": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "type"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
     "wrapperStyle": {
       "type": "object",
       "propertyNames": {
@@ -511,5 +945,2485 @@
     "type",
     "fieldType"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "__schema0": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "contentOverride"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "required": [
+                "key",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "backgroundSwitch"
+            },
+            "payload": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                }
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "startTransition"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "stopTransition"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "updateTransitionProgress"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "progress": {
+                  "type": "number"
+                },
+                "invert": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "back"
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "navigate"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "href": {
+                  "type": "string"
+                },
+                "replace": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "href"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "scrollTo"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "offset": {
+                  "type": "number"
+                },
+                "behavior": {
+                  "type": "string",
+                  "enum": [
+                    "smooth",
+                    "instant"
+                  ]
+                },
+                "block": {
+                  "type": "string",
+                  "enum": [
+                    "start",
+                    "center",
+                    "end",
+                    "nearest"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "scrollLock"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "scrollUnlock"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "modalOpen"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "modalClose"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "modalToggle"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setVariable"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "required": [
+                "key",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "fireMultiple"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "actions": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/__schema0"
+                  }
+                },
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "parallel",
+                    "sequence"
+                  ]
+                },
+                "delayBetween": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "actions"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "conditionalAction"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "variable": {
+                  "type": "string"
+                },
+                "operator": {
+                  "type": "string",
+                  "enum": [
+                    "equals",
+                    "notEquals",
+                    "gt",
+                    "gte",
+                    "lt",
+                    "lte",
+                    "contains",
+                    "startsWith"
+                  ]
+                },
+                "value": {
+                  "$ref": "#/$defs/__schema1"
+                },
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "variable": {
+                        "type": "string"
+                      },
+                      "operator": {
+                        "type": "string",
+                        "enum": [
+                          "equals",
+                          "notEquals",
+                          "gt",
+                          "gte",
+                          "lt",
+                          "lte",
+                          "contains",
+                          "startsWith"
+                        ]
+                      },
+                      "value": {
+                        "$ref": "#/$defs/__schema1"
+                      }
+                    },
+                    "required": [
+                      "variable",
+                      "operator",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "logic": {
+                  "type": "string",
+                  "enum": [
+                    "and",
+                    "or"
+                  ]
+                },
+                "then": {
+                  "$ref": "#/$defs/__schema0"
+                },
+                "elseIf": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "conditions": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "variable": {
+                              "type": "string"
+                            },
+                            "operator": {
+                              "type": "string",
+                              "enum": [
+                                "equals",
+                                "notEquals",
+                                "gt",
+                                "gte",
+                                "lt",
+                                "lte",
+                                "contains",
+                                "startsWith"
+                              ]
+                            },
+                            "value": {
+                              "$ref": "#/$defs/__schema1"
+                            }
+                          },
+                          "required": [
+                            "variable",
+                            "operator",
+                            "value"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "logic": {
+                        "type": "string",
+                        "enum": [
+                          "and",
+                          "or"
+                        ]
+                      },
+                      "then": {
+                        "$ref": "#/$defs/__schema0"
+                      }
+                    },
+                    "required": [
+                      "conditions",
+                      "then"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "else": {
+                  "$ref": "#/$defs/__schema0"
+                }
+              },
+              "required": [
+                "then"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "elementShow"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "elementHide"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "elementToggle"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "playSound"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "src": {
+                  "type": "string"
+                },
+                "volume": {
+                  "type": "number"
+                },
+                "loop": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "src"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "stopSound"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "src": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setVolume"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "volume": {
+                  "type": "number"
+                },
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "volume"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "copyToClipboard"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "text"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "vibrate"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "pattern": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "number"
+                      }
+                    }
+                  ]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setDocumentTitle"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "openExternalUrl"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string"
+                },
+                "target": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "trackEvent"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "event": {
+                  "type": "string"
+                },
+                "properties": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {
+                    "$ref": "#/$defs/__schema1"
+                  }
+                }
+              },
+              "required": [
+                "event"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setLocalStorage"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "required": [
+                "key",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setSessionStorage"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "value": {
+                  "$ref": "#/$defs/__schema1"
+                }
+              },
+              "required": [
+                "key",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.load"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.unload"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.toggleLoaded"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setVisibility"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "visible": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.fadeIn"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.fadeOut"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.playAnimation"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.pauseAnimation"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.toggleAnimation"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setAnimation"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.crossFadeAnimation"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "durationMs": {
+                  "type": "number"
+                },
+                "warp": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.scrubAnimation"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "clip": {
+                  "type": "string"
+                },
+                "progress": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setCameraPreset"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "preset": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.nextCameraPreset"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "preset": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.resetCamera"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.playVideoTexture"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.pauseVideoTexture"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.toggleVideoTexture"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setCameraEffectsPreset"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "preset": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setPosition"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "position": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.translateBy"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setRotation"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "rotation": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.rotateBy"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "x": {
+                  "type": "number"
+                },
+                "y": {
+                  "type": "number"
+                },
+                "z": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setScale"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "scale": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.scaleBy"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "factor": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.resetTransform"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.animateTo"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "position": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "rotation": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "scale": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "array",
+                      "prefixItems": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.startContinuousRotate"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "axis": {
+                  "type": "string",
+                  "enum": [
+                    "x",
+                    "y",
+                    "z"
+                  ]
+                },
+                "speed": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.stopContinuousRotate"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.startContinuousFloat"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "number"
+                },
+                "speed": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.stopContinuousFloat"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.startContinuousScale"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "min": {
+                  "type": "number"
+                },
+                "max": {
+                  "type": "number"
+                },
+                "speed": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.stopContinuousScale"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.animateCamera"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "position": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "lookAt": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "fov": {
+                  "type": "number"
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.orbitEnable"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "autoRotate": {
+                  "type": "boolean"
+                },
+                "autoRotateSpeed": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.orbitDisable"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setMaterialColor"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "meshName": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setMaterialOpacity"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "opacity": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "meshName": {
+                  "type": "string"
+                },
+                "durationMs": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setEmissiveIntensity"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "intensity": {
+                  "type": "number"
+                },
+                "meshName": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setLightIntensity"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "intensity": {
+                  "type": "number"
+                },
+                "index": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setLightColor"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "index": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.setPostProcessingParam"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "effect": {
+                  "type": "string"
+                },
+                "param": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "three.togglePostEffect"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "effect": {
+                  "type": "string"
+                },
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetPlay"
+            },
+            "payload": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetPause"
+            },
+            "payload": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetTogglePlay"
+            },
+            "payload": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetSeek"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "time": {
+                  "type": "number"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "assetMute"
+            },
+            "payload": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "videoFullscreen"
+            },
+            "payload": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.setInput"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "input": {
+                  "type": "string"
+                },
+                "value": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "input",
+                "value"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.fireTrigger"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "input": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "input"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.play"
+            },
+            "payload": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.pause"
+            },
+            "payload": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "rive.reset"
+            },
+            "payload": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string"
+              },
+              "additionalProperties": {}
+            }
+          },
+          "required": [
+            "type"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "__schema1": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/__schema1"
+          }
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/__schema1"
+          }
+        }
+      ]
+    }
+  }
 }

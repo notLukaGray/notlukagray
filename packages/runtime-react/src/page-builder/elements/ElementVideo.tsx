@@ -22,12 +22,20 @@ import { ElementVideoCore } from "./ElementVideo/ElementVideoCore";
 import { ElementVideoInteractiveContainer } from "./ElementVideo/ElementVideoInteractiveContainer";
 import { ElementVideoSlotsOverlay } from "./ElementVideo/ElementVideoSlotsOverlay";
 import { ElementVideoLinkWrap } from "./ElementVideo/ElementVideoLinkWrap";
+import { useElementVideoSource } from "./ElementVideo/use-element-video-source";
+import { ElementVideoErrorOverlay } from "./ElementVideo/ElementVideoErrorOverlay";
 import { useVideoLazyLoad } from "./ElementVideo/use-video-lazy-load";
 import { resolveElementVideoSlots } from "./ElementVideo/element-video-slots";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 
 type Props = Extract<ElementBlock, { type: "elementVideo" }> & {
   moduleConfig?: ModuleBlock;
+};
+
+type VideoSourceCandidate = {
+  src: string;
+  type?: string;
+  label?: string;
 };
 
 function resolveAspectRatioValue(aspectRatio: Props["aspectRatio"]): string {
@@ -86,6 +94,48 @@ function NoVideoSource({ poster, aspectRatio }: { poster?: string; aspectRatio?:
   );
 }
 
+function PrePlayPosterOverlay({
+  poster,
+  ariaLabel,
+  objectFit,
+  objectPosition,
+  visible,
+}: {
+  poster?: string;
+  ariaLabel: string;
+  objectFit: Props["objectFit"];
+  objectPosition?: string;
+  visible: boolean;
+}) {
+  if (!poster || poster.trim().length === 0 || !visible) return null;
+
+  const resolvedObjectFit = Array.isArray(objectFit) ? objectFit[0] : objectFit;
+  const backgroundSize =
+    resolvedObjectFit === "contain"
+      ? "contain"
+      : resolvedObjectFit === "fillWidth"
+        ? "100% auto"
+        : resolvedObjectFit === "fillHeight"
+          ? "auto 100%"
+          : "cover";
+
+  return (
+    <span
+      className="pointer-events-none absolute inset-0 block"
+      style={{
+        zIndex: 1,
+        backgroundImage: `url("${poster}")`,
+        backgroundPosition: objectPosition ?? "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize,
+        borderRadius: "inherit",
+      }}
+      role="img"
+      aria-label={`${ariaLabel} poster`}
+    />
+  );
+}
+
 function coerceSectionEffects(value: unknown): SectionEffect[] | undefined {
   if (!Array.isArray(value)) return undefined;
   const entries = value.filter(
@@ -98,8 +148,53 @@ function coerceSectionEffects(value: unknown): SectionEffect[] | undefined {
   return entries.length > 0 ? entries : undefined;
 }
 
+function isSupportedByMediaSource(type: string | undefined): boolean {
+  if (!type || typeof window === "undefined" || !("MediaSource" in window)) return true;
+  return window.MediaSource.isTypeSupported(
+    type.replace("application/vnd.apple.mpegurl", "video/mp4")
+  );
+}
+
+function canUseVideoSource(source: VideoSourceCandidate): boolean {
+  if (typeof document === "undefined") return true;
+
+  const video = document.createElement("video");
+  const src = source.src.toLowerCase().split(/[?#]/, 1)[0] ?? "";
+  const type = source.type;
+  const isHls = src.endsWith(".m3u8") || type?.includes("application/vnd.apple.mpegurl");
+  const isDash = src.endsWith(".mpd");
+
+  if (isDash) return isSupportedByMediaSource(type);
+  if (!isHls) return !type || video.canPlayType(type) !== "";
+  if (type && video.canPlayType(type) !== "") return true;
+  if (video.canPlayType("application/vnd.apple.mpegurl") !== "" && !type?.includes("vp09")) {
+    return true;
+  }
+  return isSupportedByMediaSource(type);
+}
+
+function orderedVideoSources(src: string | undefined, sources: VideoSourceCandidate[] | undefined) {
+  const explicit = Array.isArray(sources)
+    ? sources.filter((source) => source.src.trim().length > 0)
+    : [];
+  if (explicit.length > 0) return explicit;
+  return src && src.trim().length > 0 ? [{ src }] : [];
+}
+
+function usePreferredVideoSource(
+  src: string | undefined,
+  sources: VideoSourceCandidate[] | undefined
+): string {
+  const candidates = useMemo(() => orderedVideoSources(src, sources), [src, sources]);
+  return useMemo(
+    () => candidates.find(canUseVideoSource)?.src ?? candidates[0]?.src ?? "",
+    [candidates]
+  );
+}
+
 export function ElementVideo({
   src,
+  sources,
   poster,
   ariaLabel,
   autoplay = false,
@@ -140,6 +235,7 @@ export function ElementVideo({
   onVideoPlay,
   onVideoPause,
   onVideoEnd,
+  streamingConfig,
 }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const figureRef = useRef<HTMLElement | null>(null);
@@ -149,6 +245,17 @@ export function ElementVideo({
     (videoRef as React.MutableRefObject<HTMLVideoElement | null>).current = el;
     setVideoEl(el);
   }, []);
+  const preferredSrc = usePreferredVideoSource(src, sources);
+  const hasSource = preferredSrc.trim() !== "";
+  const [playbackStartState, setPlaybackStartState] = useState({
+    src: preferredSrc,
+    autoplay,
+    hasStarted: autoplay,
+  });
+  const hasStartedPlayback =
+    playbackStartState.src === preferredSrc && playbackStartState.autoplay === autoplay
+      ? playbackStartState.hasStarted
+      : autoplay;
   const sleepAfterMs =
     (moduleConfig?.behavior as { sleepAfterMs?: number } | undefined)?.sleepAfterMs ??
     uiVideoPauseButtonHideDelayMs;
@@ -175,10 +282,10 @@ export function ElementVideo({
   });
 
   const controls = useMemo(() => {
-    if (!onVideoPlay && !onVideoPause && !onVideoEnd) return baseControls;
     return {
       ...baseControls,
       handlePlay: () => {
+        setPlaybackStartState({ src: preferredSrc, autoplay, hasStarted: true });
         baseControls.handlePlay();
         if (onVideoPlay) firePageBuilderAction(onVideoPlay, "trigger");
       },
@@ -191,7 +298,7 @@ export function ElementVideo({
         if (onVideoEnd) firePageBuilderAction(onVideoEnd, "trigger");
       },
     };
-  }, [baseControls, onVideoPlay, onVideoPause, onVideoEnd]);
+  }, [autoplay, baseControls, onVideoPlay, onVideoPause, onVideoEnd, preferredSrc]);
 
   const fullscreen = useVideoFullscreen({
     videoRef,
@@ -232,29 +339,42 @@ export function ElementVideo({
   const videoEffects = useMemo(() => coerceSectionEffects(effects), [effects]);
   const hasGlassEffect = (videoEffects ?? []).some((effect) => effect.type === "glass");
 
-  const videoContextValue = useVideoContextValue({
-    moduleConfig,
-    state,
-    controls,
-    fullscreen,
-  });
-
   const { isLinkable, resolvedHref, isInternal, target, rel } = useMemo(
     () => resolveVideoLink(link, showPlayButton),
     [link, showPlayButton]
   );
 
-  const hasSource = src != null && String(src).trim() !== "";
   const { shouldLoadVideo, armVideoLoad } = useVideoLazyLoad({
     autoplay,
     hasSource,
     priority,
     containerRef,
   });
+  const videoSourceState = useElementVideoSource({
+    videoEl,
+    src: preferredSrc,
+    shouldLoad: shouldLoadVideo,
+    autoplay,
+    streamingConfig,
+  });
+  const moduleEffects = useMemo(
+    () => coerceSectionEffects((moduleConfig as { effects?: unknown } | undefined)?.effects),
+    [moduleConfig]
+  );
+  const hasModuleGlassEffect = (moduleEffects ?? []).some((effect) => effect.type === "glass");
+
+  const videoContextValue = useVideoContextValue({
+    moduleConfig,
+    state,
+    controls,
+    fullscreen,
+    sourceState: videoSourceState,
+  });
   const showVideo = hasSource;
   const resolvedPoster = poster;
   const resolvedAspectRatio = resolveAspectRatioValue(aspectRatio);
   const resolvedAriaLabel = (ariaLabel?.trim() || "Video").trim();
+  const showPrePlayPoster = showVideo && !hasStartedPlayback;
 
   const { contentSlotKey, slotsObj, useSectionSlots } = useMemo(
     () => resolveElementVideoSlots(moduleConfig),
@@ -264,7 +384,7 @@ export function ElementVideo({
   const videoCore = (
     <ElementVideoCore
       setVideoRef={setVideoRef}
-      src={src ?? ""}
+      src={preferredSrc}
       shouldLoad={shouldLoadVideo}
       poster={resolvedPoster ?? undefined}
       ariaLabel={resolvedAriaLabel}
@@ -275,6 +395,7 @@ export function ElementVideo({
       loop={loop}
       muted={muted}
       playbackRate={playbackRate}
+      isManagedSource={videoSourceState.isHls || videoSourceState.isDash}
     />
   );
 
@@ -298,12 +419,27 @@ export function ElementVideo({
         onClick={undefined}
       >
         <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-          {showVideo && src ? (
-            videoCore
+          {showVideo && preferredSrc ? (
+            <>
+              {videoCore}
+              <PrePlayPosterOverlay
+                poster={resolvedPoster ?? undefined}
+                ariaLabel={resolvedAriaLabel}
+                objectFit={objectFit}
+                objectPosition={objectPosition}
+                visible={showPrePlayPoster}
+              />
+              {videoSourceState.errorKind && (
+                <ElementVideoErrorOverlay errorKind={videoSourceState.errorKind} />
+              )}
+            </>
           ) : (
             <NoVideoSource poster={resolvedPoster} aspectRatio={resolvedAspectRatio} />
           )}
         </div>
+        {hasModuleGlassEffect && (
+          <SectionGlassEffect effects={moduleEffects} sectionRef={containerRef} variant="auto" />
+        )}
         {useSectionSlots && showPlayButton && (
           <ElementVideoSlotsOverlay
             slotsObj={slotsObj as Record<string, unknown>}
@@ -324,7 +460,7 @@ export function ElementVideo({
   ) : (
     <>
       {!hasSource && <NoVideoSource poster={resolvedPoster} aspectRatio={resolvedAspectRatio} />}
-      {showVideo && src && (
+      {showVideo && preferredSrc && (
         <span
           ref={containerRef}
           className="relative block w-full h-full"
@@ -333,6 +469,16 @@ export function ElementVideo({
           onFocusCapture={armVideoLoad}
         >
           {videoCore}
+          <PrePlayPosterOverlay
+            poster={resolvedPoster ?? undefined}
+            ariaLabel={resolvedAriaLabel}
+            objectFit={objectFit}
+            objectPosition={objectPosition}
+            visible={showPrePlayPoster}
+          />
+          {videoSourceState.errorKind && (
+            <ElementVideoErrorOverlay errorKind={videoSourceState.errorKind} />
+          )}
         </span>
       )}
     </>

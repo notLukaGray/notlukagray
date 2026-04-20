@@ -9,8 +9,8 @@
     "typecheck": "node ../../node_modules/typescript/bin/tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "@figma/plugin-typings": "1.123.0",
-    "typescript": "latest",
-    "esbuild": "latest"
+    "@figma/plugin-typings": "1.124.0",
+    "esbuild": "^0.28.0",
+    "typescript": "latest"
   }
 }

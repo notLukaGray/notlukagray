@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { PageBuilderAction, SectionBlock } from "@pb/contracts";
+import { DeviceTypeProvider } from "@pb/runtime-react/core/providers/device-type-provider";
 import {
   PageTrigger,
   firePageBuilderAction,
@@ -70,26 +71,28 @@ export function TriggerPreviewSandbox({ trigger, actions }: Props) {
         </p>
       </div>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
-        <div className="h-80 overflow-y-auto rounded border border-border bg-background p-4">
-          <div className="grid h-48 place-items-center rounded border border-dashed border-border/70 text-xs text-muted-foreground">
-            Scroll down through this panel
+        <DeviceTypeProvider>
+          <div className="h-80 overflow-y-auto rounded border border-border bg-background p-4">
+            <div className="grid h-48 place-items-center rounded border border-dashed border-border/70 text-xs text-muted-foreground">
+              Scroll down through this panel
+            </div>
+            <PageTrigger {...section} />
+            <div
+              id="trigger-demo-element"
+              className="grid h-32 place-items-center rounded border border-foreground/30 bg-foreground/10 text-sm text-foreground"
+            >
+              Demo element target
+            </div>
+            <video
+              id="trigger-demo-video"
+              className="mt-4 h-16 w-full rounded border border-border"
+              muted
+            />
+            <div className="mt-4 grid h-48 place-items-center rounded border border-dashed border-border/70 text-xs text-muted-foreground">
+              Keep scrolling for visible, invisible, and progress events
+            </div>
           </div>
-          <PageTrigger {...section} />
-          <div
-            id="trigger-demo-element"
-            className="grid h-32 place-items-center rounded border border-foreground/30 bg-foreground/10 text-sm text-foreground"
-          >
-            Demo element target
-          </div>
-          <video
-            id="trigger-demo-video"
-            className="mt-4 h-16 w-full rounded border border-border"
-            muted
-          />
-          <div className="mt-4 grid h-48 place-items-center rounded border border-dashed border-border/70 text-xs text-muted-foreground">
-            Keep scrolling for visible, invisible, and progress events
-          </div>
-        </div>
+        </DeviceTypeProvider>
         <div className="space-y-3 rounded border border-border bg-background p-3">
           <label className="grid gap-2 text-[11px] text-muted-foreground">
             <span className="font-mono uppercase tracking-wide">Progress</span>

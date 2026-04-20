@@ -11,6 +11,7 @@ import { ElementSVG } from "./ElementSVG";
 import { ElementRange } from "./ElementRange";
 import { ElementInput } from "./ElementInput";
 import { ElementVideoTime } from "./ElementVideoTime";
+import { ElementVideoQualitySelect } from "./ElementVideo/ElementVideoQualitySelect";
 import { ElementSpacer } from "./ElementSpacer";
 import { ElementDivider } from "./ElementDivider";
 import { ElementButton } from "./ElementButton";
@@ -60,6 +61,7 @@ export const ELEMENT_COMPONENTS: Record<string, ComponentType<ElementBlock>> = {
   elementRange: ElementRange as ComponentType<ElementBlock>,
   elementInput: ElementInput as ComponentType<ElementBlock>,
   elementVideoTime: ElementVideoTime as ComponentType<ElementBlock>,
+  elementVideoQualitySelect: ElementVideoQualitySelect as ComponentType<ElementBlock>,
   elementSpacer: ElementSpacer as ComponentType<ElementBlock>,
   elementDivider: ElementDivider as ComponentType<ElementBlock>,
   elementScrollProgressBar: ElementScrollProgressBar as ComponentType<ElementBlock>,

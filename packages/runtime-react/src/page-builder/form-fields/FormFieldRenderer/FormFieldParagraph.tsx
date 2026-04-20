@@ -3,6 +3,13 @@ import type { ElementBodyVariant } from "@pb/contracts/page-builder/core/page-bu
 import type { FormFieldValue } from "..";
 import { formFieldStructuralClasses } from "./form-field-classes";
 import {
+  FormFieldCharacterCount,
+  FormFieldDescription,
+  getFieldDescribedBy,
+  getFieldErrorId,
+} from "./FormFieldFeedback";
+import { FormFieldShell } from "./FormFieldShell";
+import {
   getFormFieldLabelClass,
   getFormFieldInputClass,
   getFormFieldErrorClass,
@@ -42,9 +49,10 @@ export function FormFieldParagraph({
     STRUCTURAL_TEXTAREA
   );
   const errorClass = getFormFieldErrorClass(field.errorClassName);
+  const describedBy = getFieldDescribedBy(field, hasError);
 
   return (
-    <div style={style}>
+    <FormFieldShell field={field} style={style}>
       {field.label && (
         <label htmlFor={id} className={labelClass}>
           {field.label}
@@ -68,18 +76,21 @@ export function FormFieldParagraph({
         rows={field.rows ?? 3}
         maxLength={field.maxLength}
         aria-invalid={hasError}
-        aria-describedby={hasError && id ? `${id}-error` : undefined}
+        aria-describedby={describedBy}
         aria-required={field.required}
         className={inputClass}
         style={{
+          ...(field.inputStyle as React.CSSProperties | undefined),
           borderColor: hasError ? formFieldStructuralClasses.inputBorderError : undefined,
         }}
       />
+      <FormFieldDescription field={field} />
+      <FormFieldCharacterCount field={field} value={strValue} />
       {hasError && error && (
-        <p id={id ? `${id}-error` : undefined} className={errorClass} role="alert">
+        <p id={getFieldErrorId(field, hasError)} className={errorClass} role="alert">
           {error}
         </p>
       )}
-    </div>
+    </FormFieldShell>
   );
 }

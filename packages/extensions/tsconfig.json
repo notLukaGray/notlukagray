@@ -10,7 +10,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "types": ["node"],
-    "baseUrl": ".",
     "paths": {
       "@/*": ["../../apps/web/src/*", "../contracts/src/*"]
     }

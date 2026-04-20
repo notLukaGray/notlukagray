@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import type { ModalBuilder, SectionBlock } from "@pb/contracts";
 import { modalBuilderSchema } from "@pb/contracts/page-builder/core/page-builder-schemas/modal-block-schemas";
 import { ModalRenderer } from "@pb/runtime-react/client";
+import { DeviceTypeProvider } from "@pb/runtime-react/core/providers/device-type-provider";
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageHeader } from "@/app/dev/_components/DevWorkbenchPageHeader";
 import { DevWorkbenchPageShell } from "@/app/dev/_components/DevWorkbenchPageShell";
@@ -153,21 +154,23 @@ export function ModalsDevIndexClient() {
       <div className="grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,1fr)_minmax(18rem,26rem)]">
         <section className="space-y-5">
           <div className="relative h-[34rem] overflow-hidden rounded-lg border border-border bg-card/20 p-4">
-            <ModalRenderer
-              id={doc.id}
-              title={doc.title}
-              resolvedSections={resolvedSections}
-              transition={doc.transition}
-              show={show}
-              onOverlayClick={() => setShow(false)}
-              overlayClassName="absolute inset-4 z-20 flex items-center justify-center rounded-lg bg-black/70 p-4 backdrop-blur-sm"
-              dialogClassName="w-full max-w-md max-h-[28rem] overflow-y-auto rounded-lg border border-border bg-background p-5 shadow-xl"
-            />
-            {!show ? (
-              <div className="grid h-full place-items-center rounded border border-dashed border-border/70 text-sm text-muted-foreground">
-                Modal closed
-              </div>
-            ) : null}
+            <DeviceTypeProvider>
+              <ModalRenderer
+                id={doc.id}
+                title={doc.title}
+                resolvedSections={resolvedSections}
+                transition={doc.transition}
+                show={show}
+                onOverlayClick={() => setShow(false)}
+                overlayClassName="absolute inset-4 z-20 flex items-center justify-center rounded-lg bg-black/70 p-4 backdrop-blur-sm"
+                dialogClassName="w-full max-w-md max-h-[28rem] overflow-y-auto rounded-lg border border-border bg-background p-5 shadow-xl"
+              />
+              {!show ? (
+                <div className="grid h-full place-items-center rounded border border-dashed border-border/70 text-sm text-muted-foreground">
+                  Modal closed
+                </div>
+              ) : null}
+            </DeviceTypeProvider>
           </div>
           <section className="rounded-lg border border-border bg-card/20 p-4">
             <ModalsDevControls

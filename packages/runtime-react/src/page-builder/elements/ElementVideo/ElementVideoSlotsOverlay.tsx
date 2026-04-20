@@ -73,6 +73,56 @@ function isDisableSlot(slot: ModuleSlotConfig): boolean {
   return slot.transformInherit === "disable";
 }
 
+/** Persistent slots are visible independent of the controls awake/sleep cycle.
+ *  Any slot with an explicit visibleWhen that contains no "awake" dependency
+ *  should live outside the fading motion wrapper. */
+function isAwakeDependent(slot: ModuleSlotConfig): boolean {
+  const v = slot.visibleWhen;
+  if (!v || v === "always" || !Array.isArray(v) || v.length === 0) return false;
+  return v.some((s) =>
+    s
+      .split(",")
+      .map((p) => p.trim())
+      .includes("awake")
+  );
+}
+
+/** Whether a persistent slot should currently be in the DOM.
+ *  Persistent slots use mount/unmount (not opacity) so backdrop-filter effects
+ *  don't bleed through at opacity:0 — same behaviour as the poster frame. */
+function persistentSlotIsVisible(
+  slot: ModuleSlotConfig,
+  isPlaying: boolean,
+  isMuted: boolean,
+  isFullscreen: boolean
+): boolean {
+  const v = slot.visibleWhen;
+  if (!v || v === "always" || !Array.isArray(v) || v.length === 0) return true;
+  return v.some((s) =>
+    s
+      .split(",")
+      .map((p) => p.trim())
+      .every((p) => {
+        switch (p) {
+          case "assetPlaying":
+            return isPlaying;
+          case "assetPaused":
+            return !isPlaying;
+          case "assetMuted":
+            return isMuted;
+          case "assetUnmuted":
+            return !isMuted;
+          case "videoFullscreen":
+            return isFullscreen;
+          case "videoContained":
+            return !isFullscreen;
+          default:
+            return false;
+        }
+      })
+  );
+}
+
 export function ElementVideoSlotsOverlay({
   slotsObj,
   contentSlotKey,
@@ -98,41 +148,39 @@ export function ElementVideoSlotsOverlay({
     return mergeMotionDefaults(base) as Record<string, unknown>;
   }, [moduleConfig, slotBehavior]);
 
-  const slotsTransitionMs =
-    typeof slotBehavior?.controlsTransitionMs === "number"
-      ? slotBehavior.controlsTransitionMs
-      : typeof slotBehavior?.sleepFadeMs === "number"
-        ? slotBehavior.sleepFadeMs
-        : 500;
-  const slotsTransitionEasing =
-    typeof slotBehavior?.controlsTransitionEasing === "string"
-      ? slotBehavior.controlsTransitionEasing
-      : typeof slotBehavior?.transitionEasing === "string"
-        ? slotBehavior.transitionEasing
-        : "easeOut";
-
-  const { inheritSlots, disableSlots, fullscreenBottomSlotKey, fullscreenBottomSlot } =
-    useMemo(() => {
-      const inherit: [string, ModuleSlotConfig][] = [];
-      const disable: [string, ModuleSlotConfig][] = [];
-      for (const [key, slot] of Object.entries(slotsObj)) {
-        if (key === contentSlotKey || !slotHasSection(slot)) continue;
-        const cfg = slot as ModuleSlotConfig;
-        if (!slotHasLayoutOrStyle(cfg)) continue;
-        if (isDisableSlot(cfg)) disable.push([key, cfg]);
-        else inherit.push([key, cfg]);
+  const {
+    inheritSlots,
+    disableSlots,
+    persistentSlots,
+    fullscreenBottomSlotKey,
+    fullscreenBottomSlot,
+  } = useMemo(() => {
+    const inherit: [string, ModuleSlotConfig][] = [];
+    const disable: [string, ModuleSlotConfig][] = [];
+    const persistent: [string, ModuleSlotConfig][] = [];
+    for (const [key, slot] of Object.entries(slotsObj)) {
+      if (key === contentSlotKey || !slotHasSection(slot)) continue;
+      const cfg = slot as ModuleSlotConfig;
+      if (!slotHasLayoutOrStyle(cfg)) continue;
+      if (isDisableSlot(cfg)) {
+        if (isAwakeDependent(cfg)) disable.push([key, cfg]);
+        else persistent.push([key, cfg]);
+      } else {
+        inherit.push([key, cfg]);
       }
-      const bottomInDisable = disable.find(([k]) => k === "bottomBar");
-      const bottomInInherit = inherit.find(([k]) => k === "bottomBar");
-      const bottomKey = bottomInDisable || bottomInInherit ? "bottomBar" : null;
-      const bottomEntry = bottomInDisable ?? bottomInInherit ?? null;
-      return {
-        inheritSlots: inherit,
-        disableSlots: disable,
-        fullscreenBottomSlotKey: bottomKey,
-        fullscreenBottomSlot: bottomEntry,
-      };
-    }, [slotsObj, contentSlotKey]);
+    }
+    const bottomInDisable = disable.find(([k]) => k === "bottomBar");
+    const bottomInInherit = inherit.find(([k]) => k === "bottomBar");
+    const bottomKey = bottomInDisable || bottomInInherit ? "bottomBar" : null;
+    const bottomEntry = bottomInDisable ?? bottomInInherit ?? null;
+    return {
+      inheritSlots: inherit,
+      disableSlots: disable,
+      persistentSlots: persistent,
+      fullscreenBottomSlotKey: bottomKey,
+      fullscreenBottomSlot: bottomEntry,
+    };
+  }, [slotsObj, contentSlotKey]);
 
   const [overlayReady, setOverlayReady] = useState(false);
 
@@ -182,15 +230,8 @@ export function ElementVideoSlotsOverlay({
     return style;
   }, [isFullscreen]);
 
-  // Single Framer Motion wrapper: one place controls fade (rules: transition from JSON, never instant)
-  const overlayTransition = useMemo<Transition>(
-    () => ({
-      duration: slotsTransitionMs / 1000,
-      // Framer Motion accepts string easings; cast to the library type.
-      ease: slotsTransitionEasing as Transition["ease"],
-    }),
-    [slotsTransitionMs, slotsTransitionEasing]
-  );
+  // Glass effects only look correct at 0 or 100% opacity — use instant switching.
+  const overlayTransition = useMemo<Transition>(() => ({ duration: 0 }), []);
 
   if (!overlayReady) {
     return (
@@ -208,6 +249,26 @@ export function ElementVideoSlotsOverlay({
       style={overlayWrapperStyle}
       aria-hidden="false"
     >
+      {/* Persistent slots: not subject to controls fade (e.g. center play button).
+          Uses mount/unmount rather than opacity so backdrop-filter doesn't bleed
+          through at opacity:0 — same behaviour as the poster frame. */}
+      {persistentSlots.length > 0 && (
+        <div className="absolute inset-0" style={{ zIndex: 1, pointerEvents: "none" }}>
+          {persistentSlots
+            .filter(([, slot]) => persistentSlotIsVisible(slot, isPlaying, isMuted, isFullscreen))
+            .map(([key, slot]) => (
+              <VideoSlotSection
+                key={key}
+                slot={slot}
+                slotKey={key}
+                {...slotProps}
+                defaultTransitionMs={0}
+                pointerEventsWhenVisible="auto"
+                debugSlotKey={key}
+              />
+            ))}
+        </div>
+      )}
       <motion.div
         className="absolute inset-0"
         style={{
@@ -253,11 +314,7 @@ export function ElementVideoSlotsOverlay({
           (() => {
             const [key, slot] = fullscreenBottomSlot;
             return (
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{ zIndex: 5 }}
-                aria-hidden="true"
-              >
+              <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 5 }}>
                 <div
                   style={{
                     position: "fixed",

@@ -5,6 +5,13 @@ import type { ElementBodyVariant } from "@pb/contracts/page-builder/core/page-bu
 import type { FormFieldValue } from "..";
 import { formFieldStructuralClasses } from "./form-field-classes";
 import {
+  FormFieldCharacterCount,
+  FormFieldDescription,
+  getFieldDescribedBy,
+  getFieldErrorId,
+} from "./FormFieldFeedback";
+import { FormFieldShell } from "./FormFieldShell";
+import {
   getFormFieldLabelClass,
   getFormFieldInputClass,
   getFormFieldErrorClass,
@@ -12,7 +19,19 @@ import {
   STRUCTURAL_INPUT_BASE,
 } from "./form-field-typography";
 
-const INPUT_FIELD_TYPES = ["text", "email", "password", "tel", "url", "number", "date"] as const;
+const INPUT_FIELD_TYPES = [
+  "text",
+  "email",
+  "password",
+  "tel",
+  "url",
+  "number",
+  "date",
+  "time",
+  "datetime-local",
+  "color",
+  "search",
+] as const;
 
 function isInputFieldType(t: string): t is (typeof INPUT_FIELD_TYPES)[number] {
   return (INPUT_FIELD_TYPES as readonly string[]).includes(t);
@@ -50,9 +69,39 @@ export function FormFieldInput({
     STRUCTURAL_INPUT_BASE
   );
   const errorClass = getFormFieldErrorClass(field.errorClassName);
+  const hasAffix = Boolean(field.prefix || field.suffix);
+  const describedBy = getFieldDescribedBy(field, hasError);
+  const inputElement = (
+    <input
+      id={id}
+      name={field.name}
+      type={field.fieldType}
+      value={strValue}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={field.placeholder}
+      required={field.required}
+      disabled={fieldDisabled}
+      readOnly={field.readOnly}
+      autoComplete={field.autocomplete}
+      min={field.min as string | number | undefined}
+      max={field.max as string | number | undefined}
+      step={field.step as string | number | undefined}
+      minLength={field.minLength}
+      maxLength={field.maxLength}
+      pattern={field.pattern}
+      aria-invalid={hasError}
+      aria-describedby={describedBy}
+      aria-required={field.required}
+      className={hasAffix ? `${inputClass} min-w-0 flex-1` : inputClass}
+      style={{
+        ...(field.inputStyle as React.CSSProperties | undefined),
+        borderColor: hasError ? formFieldStructuralClasses.inputBorderError : undefined,
+      }}
+    />
+  );
 
   return (
-    <div style={style}>
+    <FormFieldShell field={field} style={style}>
       {field.label && (
         <label htmlFor={id} className={labelClass}>
           {field.label}
@@ -63,37 +112,22 @@ export function FormFieldInput({
           )}
         </label>
       )}
-      <input
-        id={id}
-        name={field.name}
-        type={field.fieldType}
-        value={strValue}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={field.placeholder}
-        required={field.required}
-        disabled={fieldDisabled}
-        readOnly={field.readOnly}
-        autoComplete={field.autocomplete}
-        min={field.min as string | number | undefined}
-        max={field.max as string | number | undefined}
-        step={field.step as string | number | undefined}
-        minLength={field.minLength}
-        maxLength={field.maxLength}
-        pattern={field.pattern}
-        aria-invalid={hasError}
-        aria-describedby={hasError && id ? `${id}-error` : undefined}
-        aria-required={field.required}
-        className={inputClass}
-        style={{
-          ...(field.inputStyle as React.CSSProperties | undefined),
-          borderColor: hasError ? formFieldStructuralClasses.inputBorderError : undefined,
-        }}
-      />
+      {hasAffix ? (
+        <div className="flex items-center gap-2">
+          {field.prefix && <span className="text-sm text-muted-foreground">{field.prefix}</span>}
+          {inputElement}
+          {field.suffix && <span className="text-sm text-muted-foreground">{field.suffix}</span>}
+        </div>
+      ) : (
+        inputElement
+      )}
+      <FormFieldDescription field={field} />
+      <FormFieldCharacterCount field={field} value={strValue} />
       {hasError && error && (
-        <p id={id ? `${id}-error` : undefined} className={errorClass} role="alert">
+        <p id={getFieldErrorId(field, hasError)} className={errorClass} role="alert">
           {error}
         </p>
       )}
-    </div>
+    </FormFieldShell>
   );
 }

@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ModalProps } from "@pb/core/internal/modal-types";
 import { SECTION_COMPONENTS } from "@/page-builder/section";
 import { generateSectionKey } from "@pb/core/internal/section-keys";
 import { SectionErrorBoundary } from "./SectionErrorBoundary";
 import { ModalAnimationWrapper } from "@/page-builder/integrations/framer-motion/modal-wrapper";
+import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 
 /**
  * Listens to `page-builder-modal` events and manages local open state for a modal by id.
@@ -48,11 +49,20 @@ type ModalRendererProps = ModalProps & {
 function ModalContent({
   id,
   title,
+  effects,
   resolvedSections,
   onOverlayClick,
   overlayClassName,
   dialogClassName,
 }: Omit<ModalRendererProps, "show">) {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+  const hasGlassEffect = (effects ?? []).some((effect) => effect.type === "glass");
+  const resolvedDialogClassName =
+    dialogClassName ??
+    (hasGlassEffect
+      ? "relative w-full max-w-[min(theme(maxWidth.sm),calc(100vw-2rem))] md:max-w-md max-h-[90vh] overflow-y-auto rounded-xl bg-transparent shadow-xl border border-white/15 p-6"
+      : "w-full max-w-[min(theme(maxWidth.sm),calc(100vw-2rem))] md:max-w-md max-h-[90vh] overflow-y-auto rounded-xl bg-background shadow-xl border border-border p-6");
+
   return (
     <div
       className={
@@ -65,19 +75,22 @@ function ModalContent({
       onClick={onOverlayClick}
     >
       <div
-        className={
-          dialogClassName ??
-          "w-full max-w-[min(theme(maxWidth.sm),calc(100vw-2rem))] md:max-w-md max-h-[90vh] overflow-y-auto rounded-xl bg-background shadow-xl border border-border p-6"
-        }
+        ref={dialogRef}
+        className={resolvedDialogClassName}
         role="document"
         onClick={(e) => e.stopPropagation()}
       >
+        {hasGlassEffect && (
+          <SectionGlassEffect effects={effects} sectionRef={dialogRef} variant="auto" />
+        )}
         {title && (
           <h2 id={`${id}-title`} className="sr-only">
             {title}
           </h2>
         )}
-        <div className="flex flex-col gap-4">
+        <div
+          className={hasGlassEffect ? "relative z-[1] flex flex-col gap-4" : "flex flex-col gap-4"}
+        >
           {resolvedSections.map((section, i) => {
             const SectionComponent = SECTION_COMPONENTS[section.type];
             const key = generateSectionKey(section, i);
@@ -108,6 +121,7 @@ function ModalContent({
 function ModalRendererEventDriven({
   id,
   title,
+  effects,
   resolvedSections,
   transition,
   motion,
@@ -121,6 +135,7 @@ function ModalRendererEventDriven({
     <ModalContent
       id={id}
       title={title}
+      effects={effects}
       resolvedSections={resolvedSections}
       onOverlayClick={onOverlayClick}
       overlayClassName={overlayClassName}
@@ -147,6 +162,7 @@ function ModalRendererEventDriven({
 export function ModalRenderer({
   id,
   title,
+  effects,
   resolvedSections,
   transition,
   motion,
@@ -160,6 +176,7 @@ export function ModalRenderer({
     <ModalContent
       id={id}
       title={title}
+      effects={effects}
       resolvedSections={resolvedSections}
       onOverlayClick={onOverlayClick}
       overlayClassName={overlayClassName}
@@ -180,6 +197,7 @@ export function ModalRenderer({
       <ModalRendererEventDriven
         id={id}
         title={title}
+        effects={effects}
         resolvedSections={resolvedSections}
         transition={transition}
         motion={motion}

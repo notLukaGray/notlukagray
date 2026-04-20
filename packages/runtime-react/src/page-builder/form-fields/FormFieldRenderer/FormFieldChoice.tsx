@@ -7,6 +7,8 @@ import type {
 import type { ElementBodyVariant } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { FormFieldValue } from "..";
 import { formFieldStructuralClasses } from "./form-field-classes";
+import { FormFieldDescription, getFieldDescribedBy, getFieldErrorId } from "./FormFieldFeedback";
+import { FormFieldShell } from "./FormFieldShell";
 import {
   getFormFieldLabelClass,
   getFormFieldLabelInlineClass,
@@ -49,11 +51,12 @@ export function FormFieldChoice({
   const labelClass = getFormFieldLabelClass(resolvedLevel, field.labelClassName);
   const labelInlineClass = getFormFieldLabelInlineClass(resolvedLevel, field.labelClassName);
   const errorClass = getFormFieldErrorClass(field.errorClassName);
+  const describedBy = getFieldDescribedBy(field, hasError);
 
   if (field.fieldType === "checkbox" || field.fieldType === "switch") {
     const checked = Boolean(value);
     return (
-      <div style={style}>
+      <FormFieldShell field={field} style={style}>
         <label className={formFieldStructuralClasses.choiceLabel}>
           <input
             id={id}
@@ -64,7 +67,7 @@ export function FormFieldChoice({
             required={field.required}
             disabled={fieldDisabled}
             aria-invalid={hasError}
-            aria-describedby={hasError && id ? `${id}-error` : undefined}
+            aria-describedby={describedBy}
             className={field.inputClassName ?? formFieldStructuralClasses.checkbox}
           />
           {field.label && (
@@ -78,12 +81,13 @@ export function FormFieldChoice({
             </span>
           )}
         </label>
+        <FormFieldDescription field={field} />
         {hasError && error && (
-          <p id={id ? `${id}-error` : undefined} className={errorClass} role="alert">
+          <p id={getFieldErrorId(field, hasError)} className={errorClass} role="alert">
             {error}
           </p>
         )}
-      </div>
+      </FormFieldShell>
     );
   }
 
@@ -94,7 +98,7 @@ export function FormFieldChoice({
   if (field.fieldType === "select") {
     const strVal = typeof value === "string" ? value : "";
     return (
-      <div style={style}>
+      <FormFieldShell field={field} style={style}>
         {field.label && (
           <label htmlFor={id} className={labelClass}>
             {field.label}
@@ -114,7 +118,7 @@ export function FormFieldChoice({
           disabled={fieldDisabled}
           autoComplete={field.autocomplete}
           aria-invalid={hasError}
-          aria-describedby={hasError && id ? `${id}-error` : undefined}
+          aria-describedby={describedBy}
           className={getFormFieldInputClass(
             resolvedLevel,
             field.inputClassName,
@@ -128,19 +132,20 @@ export function FormFieldChoice({
             </option>
           ))}
         </select>
+        <FormFieldDescription field={field} />
         {hasError && error && (
-          <p id={id ? `${id}-error` : undefined} className={errorClass} role="alert">
+          <p id={getFieldErrorId(field, hasError)} className={errorClass} role="alert">
             {error}
           </p>
         )}
-      </div>
+      </FormFieldShell>
     );
   }
 
   if (field.fieldType === "radio") {
     const strVal = typeof value === "string" ? value : "";
     return (
-      <div style={style}>
+      <FormFieldShell field={field} style={style}>
         {field.label && (
           <span className={labelClass}>
             {field.label}
@@ -157,6 +162,7 @@ export function FormFieldChoice({
           aria-label={field.label}
           aria-required={field.required}
           aria-invalid={hasError}
+          aria-describedby={describedBy}
         >
           {options.map((opt) => (
             <label key={opt.value} className={formFieldStructuralClasses.choiceLabel}>
@@ -173,12 +179,13 @@ export function FormFieldChoice({
             </label>
           ))}
         </div>
+        <FormFieldDescription field={field} />
         {hasError && error && (
-          <p id={id ? `${id}-error` : undefined} className={errorClass} role="alert">
+          <p id={getFieldErrorId(field, hasError)} className={errorClass} role="alert">
             {error}
           </p>
         )}
-      </div>
+      </FormFieldShell>
     );
   }
 
@@ -189,7 +196,7 @@ export function FormFieldChoice({
       onChange(next);
     };
     return (
-      <div style={style}>
+      <FormFieldShell field={field} style={style}>
         {field.label && (
           <span className={labelClass}>
             {field.label}
@@ -204,6 +211,7 @@ export function FormFieldChoice({
           className={formFieldStructuralClasses.choiceGroup}
           role="group"
           aria-label={field.label}
+          aria-describedby={describedBy}
         >
           {options.map((opt) => (
             <label key={opt.value} className={formFieldStructuralClasses.choiceLabel}>
@@ -221,12 +229,13 @@ export function FormFieldChoice({
             </label>
           ))}
         </div>
+        <FormFieldDescription field={field} />
         {hasError && error && (
-          <p id={id ? `${id}-error` : undefined} className={errorClass} role="alert">
+          <p id={getFieldErrorId(field, hasError)} className={errorClass} role="alert">
             {error}
           </p>
         )}
-      </div>
+      </FormFieldShell>
     );
   }
 

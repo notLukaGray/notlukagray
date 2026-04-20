@@ -17,6 +17,7 @@ export type ElementVideoCoreProps = {
   loop: boolean;
   muted: boolean;
   playbackRate?: number;
+  isManagedSource: boolean;
 };
 
 export function ElementVideoCore({
@@ -32,6 +33,7 @@ export function ElementVideoCore({
   loop,
   muted,
   playbackRate,
+  isManagedSource,
 }: ElementVideoCoreProps) {
   const videoElRef = useRef<HTMLVideoElement | null>(null);
 
@@ -45,6 +47,7 @@ export function ElementVideoCore({
 
   useEffect(() => {
     const video = videoElRef.current;
+    if (isManagedSource) return;
     if (!video || !shouldLoad || !src) return;
 
     // Start buffering once the container is visible / interacted with.
@@ -57,7 +60,7 @@ export function ElementVideoCore({
     if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) return;
 
     video.load();
-  }, [shouldLoad, src]);
+  }, [isManagedSource, shouldLoad, src]);
 
   useEffect(() => {
     if (!videoElRef.current || playbackRate == null) return;
@@ -67,7 +70,7 @@ export function ElementVideoCore({
   return (
     <video
       ref={handleVideoRef}
-      src={shouldLoad ? src : undefined}
+      src={!isManagedSource && shouldLoad ? src : undefined}
       poster={shouldLoad ? (poster ?? undefined) : undefined}
       autoPlay={autoplay}
       loop={loop}

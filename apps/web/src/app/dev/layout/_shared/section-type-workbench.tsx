@@ -1,9 +1,11 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import type { SectionBlock } from "@pb/contracts";
 import { sectionSchema } from "@pb/contracts";
 import { SectionRenderer } from "@pb/runtime-react/renderers";
+import { ScrollContainerProvider } from "@pb/runtime-react/scroll";
+import { DeviceTypeProvider } from "@pb/runtime-react/core/providers/device-type-provider";
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageHeader } from "@/app/dev/_components/DevWorkbenchPageHeader";
 import { DevWorkbenchPageShell } from "@/app/dev/_components/DevWorkbenchPageShell";
@@ -64,11 +66,19 @@ export function SectionPreview({
   section: SectionBlock;
   children?: ReactNode;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   return (
     <div className="rounded-lg border border-border bg-card/20 p-4">
-      <div className="relative min-h-64 overflow-hidden rounded border border-dashed border-border/70 bg-background/60 p-5">
+      <div
+        ref={containerRef}
+        className="relative min-h-64 overflow-hidden rounded border border-dashed border-border/70 bg-background/60 p-5"
+      >
         {children}
-        <SectionRenderer section={section} isFirstSection />
+        <ScrollContainerProvider containerRef={containerRef}>
+          <DeviceTypeProvider>
+            <SectionRenderer section={section} isFirstSection />
+          </DeviceTypeProvider>
+        </ScrollContainerProvider>
       </div>
     </div>
   );

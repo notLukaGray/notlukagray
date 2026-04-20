@@ -5,10 +5,9 @@ import type {
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { OVERRIDE_KEY_BG } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
-/** @deprecated Use StartTransitionAction | StopTransitionAction directly. Kept for callers that guard type before calling. */
-export type ActionWithId = StartTransitionAction | StopTransitionAction;
-
-export function getTransitionId(action: ActionWithId): string | undefined {
+export function getTransitionId(
+  action: StartTransitionAction | StopTransitionAction
+): string | undefined {
   const payload = action.payload;
   if (
     payload != null &&
