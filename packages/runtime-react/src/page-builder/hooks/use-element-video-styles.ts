@@ -192,7 +192,14 @@ export function useElementVideoStyles({
     (): CSSProperties => ({
       ...layoutStyle,
       aspectRatio: resolvedAspectRatio,
-      ...(moduleConfig ? { height: "auto", minHeight: 0 } : {}),
+      ...(moduleConfig
+        ? {
+            height: "auto",
+            minHeight: 0,
+            boxSizing: "border-box",
+            ...(layoutStyle.position == null ? { position: "relative" } : {}),
+          }
+        : {}),
       ...(containerStyle?.padding ? { padding: containerStyle.padding } : {}),
       ...(containerStyle?.borderRadius ? { borderRadius: containerStyle.borderRadius } : {}),
     }),
@@ -204,9 +211,11 @@ export function useElementVideoStyles({
       moduleConfig
         ? {
             ...innerStyle,
-            width: "100%",
-            height: "100%",
-            position: "relative",
+            position: "absolute",
+            inset: containerStyle?.padding ?? 0,
+            width: "auto",
+            height: "auto",
+            minWidth: 0,
             minHeight: 0,
             ...(containerStyle?.borderRadius ? { borderRadius: containerStyle.borderRadius } : {}),
             overflow: "hidden",

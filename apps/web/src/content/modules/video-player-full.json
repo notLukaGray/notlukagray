@@ -40,10 +40,10 @@
       "slotWrapperGestures": false,
       "visibleWhen": ["assetPaused"],
       "style": {
-        "width": "100px",
-        "height": "100px",
-        "marginLeft": "-50px",
-        "marginTop": "-50px",
+        "width": "80px",
+        "height": "80px",
+        "marginLeft": "-40px",
+        "marginTop": "-40px",
         "background": "#00000020",
         "borderRadius": "9999px"
       },
@@ -67,8 +67,8 @@
         "definitions": {
           "play-btn": {
             "preset": "video-controls-play",
-            "width": "35px",
-            "height": "40px",
+            "width": "28px",
+            "height": "32px",
             "showWhen": "assetPaused",
             "action": "assetTogglePlay",
             "wrapperStyle": {
