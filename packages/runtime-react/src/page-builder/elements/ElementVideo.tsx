@@ -7,7 +7,12 @@ import type {
   SectionEffect,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { firePageBuilderAction } from "@/page-builder/triggers";
-import { resolveVideoLink } from "@pb/core/internal/element-video-utils";
+import {
+  choosePreferredVideoSource,
+  resolveVideoLink,
+  type VideoSourceCandidate,
+  type VideoSourceSupportProbe,
+} from "@pb/core/internal/element-video-utils";
 import {
   uiVideoPauseButtonHideDelayMs,
   uiVideoFeedbackDurationMs,
@@ -30,12 +35,6 @@ import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEff
 
 type Props = Extract<ElementBlock, { type: "elementVideo" }> & {
   moduleConfig?: ModuleBlock;
-};
-
-type VideoSourceCandidate = {
-  src: string;
-  type?: string;
-  label?: string;
 };
 
 function resolveAspectRatioValue(aspectRatio: Props["aspectRatio"]): string {
@@ -148,47 +147,28 @@ function coerceSectionEffects(value: unknown): SectionEffect[] | undefined {
   return entries.length > 0 ? entries : undefined;
 }
 
-function isSupportedByMediaSource(type: string | undefined): boolean {
-  if (!type || typeof window === "undefined" || !("MediaSource" in window)) return true;
-  return window.MediaSource.isTypeSupported(
-    type.replace("application/vnd.apple.mpegurl", "video/mp4")
-  );
-}
-
-function canUseVideoSource(source: VideoSourceCandidate): boolean {
-  if (typeof document === "undefined") return true;
+function createVideoSourceSupportProbe(): VideoSourceSupportProbe | undefined {
+  if (typeof document === "undefined") return undefined;
 
   const video = document.createElement("video");
-  const src = source.src.toLowerCase().split(/[?#]/, 1)[0] ?? "";
-  const type = source.type;
-  const isHls = src.endsWith(".m3u8") || type?.includes("application/vnd.apple.mpegurl");
-  const isDash = src.endsWith(".mpd");
-
-  if (isDash) return isSupportedByMediaSource(type);
-  if (!isHls) return !type || video.canPlayType(type) !== "";
-  if (type && video.canPlayType(type) !== "") return true;
-  if (video.canPlayType("application/vnd.apple.mpegurl") !== "" && !type?.includes("vp09")) {
-    return true;
-  }
-  return isSupportedByMediaSource(type);
-}
-
-function orderedVideoSources(src: string | undefined, sources: VideoSourceCandidate[] | undefined) {
-  const explicit = Array.isArray(sources)
-    ? sources.filter((source) => source.src.trim().length > 0)
-    : [];
-  if (explicit.length > 0) return explicit;
-  return src && src.trim().length > 0 ? [{ src }] : [];
+  const mediaSource =
+    typeof window === "undefined"
+      ? undefined
+      : (window.MediaSource as typeof MediaSource | undefined);
+  return {
+    canPlayType: (type) => video.canPlayType(type),
+    hasMediaSource: !!mediaSource,
+    isMediaSourceTypeSupported: (type) => mediaSource?.isTypeSupported(type) === true,
+  };
 }
 
 function usePreferredVideoSource(
   src: string | undefined,
   sources: VideoSourceCandidate[] | undefined
 ): string {
-  const candidates = useMemo(() => orderedVideoSources(src, sources), [src, sources]);
   return useMemo(
-    () => candidates.find(canUseVideoSource)?.src ?? candidates[0]?.src ?? "",
-    [candidates]
+    () => choosePreferredVideoSource(src, sources, createVideoSourceSupportProbe()),
+    [src, sources]
   );
 }
 

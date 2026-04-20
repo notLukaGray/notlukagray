@@ -3,10 +3,12 @@ import {
   resolveVideoShowWhen,
   getVideoActionHandler,
   resolveVideoLink,
+  choosePreferredVideoSource,
   getElementVideoVideoStyle,
   getElementVideoInnerStyle,
   type VideoShowWhenState,
   type VideoActionHandlers,
+  type VideoSourceSupportProbe,
 } from "./element-video-utils";
 
 describe("element-video-utils", () => {
@@ -129,6 +131,87 @@ describe("element-video-utils", () => {
         target: "_self",
         rel: "nofollow",
       });
+    });
+  });
+
+  describe("choosePreferredVideoSource", () => {
+    const vp9Dash = {
+      src: "work/demo/vp9/manifest.mpd",
+      type: 'video/webm; codecs="vp09.00.51.08"',
+    };
+    const hevcHls = {
+      src: "work/demo/x265/master.m3u8",
+      type: 'application/vnd.apple.mpegurl; codecs="hvc1.1.6.L123.B0,mp4a.40.2"',
+    };
+    const avcHls = {
+      src: "work/demo/x264/master.m3u8",
+      type: 'application/vnd.apple.mpegurl; codecs="avc1.64001f,mp4a.40.2"',
+    };
+
+    function probe({
+      nativeHls = false,
+      mse = false,
+      mseTypes = [],
+      playableTypes = [],
+    }: {
+      nativeHls?: boolean;
+      mse?: boolean;
+      mseTypes?: string[];
+      playableTypes?: string[];
+    }): VideoSourceSupportProbe {
+      return {
+        canPlayType: (type) =>
+          (nativeHls && type === "application/vnd.apple.mpegurl") || playableTypes.includes(type)
+            ? "probably"
+            : "",
+        hasMediaSource: mse,
+        isMediaSourceTypeSupported: (type) => mseTypes.includes(type),
+      };
+    }
+
+    it("prefers native HLS over VP9 DASH on iPhone-style browsers", () => {
+      expect(
+        choosePreferredVideoSource(undefined, [vp9Dash, avcHls], probe({ nativeHls: true }))
+      ).toBe(avcHls.src);
+    });
+
+    it("skips DASH when MediaSource is not available", () => {
+      expect(
+        choosePreferredVideoSource(
+          undefined,
+          [vp9Dash, avcHls],
+          probe({ nativeHls: true, mse: false })
+        )
+      ).toBe(avcHls.src);
+    });
+
+    it("falls through from unsupported HEVC HLS to x264 HLS", () => {
+      expect(
+        choosePreferredVideoSource(
+          undefined,
+          [vp9Dash, hevcHls, avcHls],
+          probe({ nativeHls: true })
+        )
+      ).toBe(avcHls.src);
+    });
+
+    it("keeps DASH first on browsers with MSE support and no native HLS", () => {
+      expect(
+        choosePreferredVideoSource(
+          undefined,
+          [vp9Dash, avcHls],
+          probe({
+            mse: true,
+            mseTypes: ['video/webm; codecs="vp09.00.51.08"'],
+          })
+        )
+      ).toBe(vp9Dash.src);
+    });
+
+    it("uses src when no sources array is provided", () => {
+      expect(choosePreferredVideoSource("work/demo/video.mp4", undefined)).toBe(
+        "work/demo/video.mp4"
+      );
     });
   });
 

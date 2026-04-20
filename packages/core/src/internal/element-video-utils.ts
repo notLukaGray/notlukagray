@@ -112,6 +112,105 @@ export function resolveVideoLink(link: VideoLinkInput, showPlayButton: boolean):
 
 export type ElementVideoObjectFit = "cover" | "contain" | "fillWidth" | "fillHeight" | undefined;
 
+export type VideoSourceCandidate = {
+  src: string;
+  type?: string;
+  label?: string;
+};
+
+export type VideoSourceSupportProbe = {
+  canPlayType: (type: string) => string;
+  hasMediaSource: boolean;
+  isMediaSourceTypeSupported: (type: string) => boolean;
+};
+
+function srcPathname(src: string): string {
+  try {
+    return new URL(src, "https://local.invalid").pathname.toLowerCase();
+  } catch {
+    return src.split(/[?#]/, 1)[0]?.toLowerCase() ?? "";
+  }
+}
+
+function isHlsVideoSource(src: string, type?: string): boolean {
+  return (
+    srcPathname(src).endsWith(".m3u8") || type?.includes("application/vnd.apple.mpegurl") === true
+  );
+}
+
+function isDashVideoSource(src: string): boolean {
+  return srcPathname(src).endsWith(".mpd");
+}
+
+function hasVp9Codec(type: string | undefined): boolean {
+  return /vp09|vp9/i.test(type ?? "");
+}
+
+function hasHevcCodec(type: string | undefined): boolean {
+  return /hvc1|hev1/i.test(type ?? "");
+}
+
+function mediaSourceMime(type: string | undefined): string | undefined {
+  return type?.replace("application/vnd.apple.mpegurl", "video/mp4");
+}
+
+function isSupportedByMediaSource(
+  type: string | undefined,
+  probe: VideoSourceSupportProbe
+): boolean {
+  if (!probe.hasMediaSource) return false;
+  const mseType = mediaSourceMime(type);
+  return !mseType || probe.isMediaSourceTypeSupported(mseType);
+}
+
+function canUseVideoSource(source: VideoSourceCandidate, probe: VideoSourceSupportProbe): boolean {
+  const type = source.type;
+  const isHls = isHlsVideoSource(source.src, type);
+  const isDash = isDashVideoSource(source.src);
+
+  if (isDash) return isSupportedByMediaSource(type, probe);
+
+  if (!isHls) return !type || probe.canPlayType(type) !== "";
+
+  if (type && probe.canPlayType(type) !== "") return true;
+
+  const supportsNativeHls = probe.canPlayType("application/vnd.apple.mpegurl") !== "";
+  if (supportsNativeHls && !hasVp9Codec(type) && !hasHevcCodec(type)) return true;
+
+  return isSupportedByMediaSource(type, probe);
+}
+
+function orderedVideoSources(
+  src: string | undefined,
+  sources: VideoSourceCandidate[] | undefined
+): VideoSourceCandidate[] {
+  const explicit = Array.isArray(sources)
+    ? sources.filter((source) => source.src.trim().length > 0)
+    : [];
+  if (explicit.length > 0) return explicit;
+  return src && src.trim().length > 0 ? [{ src }] : [];
+}
+
+export function choosePreferredVideoSource(
+  src: string | undefined,
+  sources: VideoSourceCandidate[] | undefined,
+  probe?: VideoSourceSupportProbe
+): string {
+  const candidates = orderedVideoSources(src, sources);
+  if (!probe) return candidates[0]?.src ?? "";
+
+  const supported = candidates.filter((source) => canUseVideoSource(source, probe));
+  const playable = supported.length > 0 ? supported : candidates;
+  const supportsNativeHls = probe.canPlayType("application/vnd.apple.mpegurl") !== "";
+
+  if (supportsNativeHls) {
+    const nativeHls = playable.find((source) => isHlsVideoSource(source.src, source.type));
+    if (nativeHls) return nativeHls.src;
+  }
+
+  return playable[0]?.src ?? "";
+}
+
 /** Resolve objectFit when it may be a responsive tuple; returns single value. */
 function resolveObjectFit(
   objectFit: ElementVideoObjectFit | [ElementVideoObjectFit, ElementVideoObjectFit]
