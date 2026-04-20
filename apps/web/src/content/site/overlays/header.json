@@ -12,9 +12,23 @@
   "height": "hug",
   "align": "center",
 
-  "fill": "#00000080",
+  "fill": "#00000020",
   "borderRadius": "0 0 30px 30px",
-  "effects": [{ "type": "backdropBlur", "amount": "64px" }],
+  "effects": [
+    {
+      "type": "glass",
+      "bezelType": "convex_squircle",
+      "bezelWidth": 24,
+      "glassThickness": 20,
+      "refractiveIndex": 1.8,
+      "blur": 1,
+      "scaleRatio": 1,
+      "specularOpacity": 0.5,
+      "specularSaturation": 5,
+      "magnifyingScale": 0.5,
+      "dropShadow": true
+    }
+  ],
 
   "marginTop": ".5rem",
   "marginRight": "1rem",
