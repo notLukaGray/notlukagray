@@ -197,10 +197,13 @@
     @apply border-border outline-ring/50;
   }
   html {
-    background: var(--background);
+    background: #000000 !important;
+    overscroll-behavior-y: none;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: #000000 !important;
+    overscroll-behavior-y: none;
   }
 }
 

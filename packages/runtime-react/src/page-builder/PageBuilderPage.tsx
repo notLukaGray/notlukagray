@@ -10,19 +10,13 @@ import { FigmaExportDiagnosticsBridge } from "@/page-builder/dev/FigmaExportDiag
 import { PageScrollProvider } from "@/page-builder/section/position/page-scroll-provider";
 
 export type PageBuilderPageWrapperProps = PageBuilderPageProps & {
-  /** Optional className for the outer <main>. */
   mainClassName?: string;
-  /** Optional style for the outer <main>. */
+
   mainStyle?: React.CSSProperties;
-  /** Optional className for the <article> wrapper. */
+
   articleClassName?: string;
 };
 
-/**
- * Strip the fixed-positioning fields from a section before passing it to the renderer.
- * The CSS fixed wrapper is applied externally by PageBuilderPage; the section itself
- * must not call useFixedTrait so that server and client agree on position: "relative".
- */
 function stripFixedFields(section: SectionBlock): SectionBlock {
   const {
     fixed: _fixed,
@@ -37,20 +31,6 @@ function stripFixedFields(section: SectionBlock): SectionBlock {
   return rest as SectionBlock;
 }
 
-/**
- * Renders a page builder page: main > article > h1 (sr-only) + PageBuilderRenderer.
- * Use with props from getPageBuilderProps(slug, options).
- *
- * Overlay sections (header/footer) are rendered outside the scroll container in plain
- * CSS `position: fixed` wrappers so that `useFixedTrait` is never called on them.
- * This eliminates the SSR/client hydration mismatch where the hook returns
- * `position: "fixed"` on the server (no scroll container) but `position: "absolute"`
- * on the client (scroll container found).
- *
- * When `page.scroll` is set, wraps content in PageScrollProvider which applies
- * smooth scroll, body scroll-lock, and overflow classes, and provides
- * ScrollContainerProvider for section motion effects.
- */
 export function PageBuilderPage({
   page,
   resolvedBg,
@@ -58,10 +38,13 @@ export function PageBuilderPage({
   bgDefinitions,
   serverIsMobile,
   overlaySections,
-  mainClassName = "relative w-full min-h-screen bg-black",
+  mainClassName = "relative w-full min-h-screen",
   mainStyle = {
-    paddingTop: "var(--nav-height, 64px)",
-    paddingBottom: "var(--footer-height, 48px)",
+    paddingTop: "calc(var(--nav-height, 64px) + env(safe-area-inset-top, 0px))",
+    paddingBottom: "48px",
+    paddingLeft: "env(safe-area-inset-left, 0px)",
+    paddingRight: "env(safe-area-inset-right, 0px)",
+    backgroundColor: "#000000",
   },
   articleClassName = "w-full",
 }: PageBuilderPageWrapperProps) {

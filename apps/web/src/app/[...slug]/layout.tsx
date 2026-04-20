@@ -22,7 +22,12 @@ export default function UniversalPageBuilderLayout({ children }: { children: Rea
       <ScrollContainerProvider containerRef={scrollRef}>
         <div
           ref={scrollRef}
-          className="work-scroll relative h-dvh w-full min-w-0 overflow-y-auto overflow-x-hidden bg-black"
+          className="work-scroll fixed inset-0 w-full min-w-0 overflow-y-auto overflow-x-hidden"
+          style={{
+            backgroundColor: "#000000",
+            paddingLeft: "env(safe-area-inset-left, 0px)",
+            paddingRight: "env(safe-area-inset-right, 0px)",
+          }}
         >
           {children}
         </div>
