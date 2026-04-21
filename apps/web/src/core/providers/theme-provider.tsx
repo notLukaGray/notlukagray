@@ -18,6 +18,11 @@ function normalizeTheme(theme: string): "light" | "dark" {
   return theme === "light" ? "light" : "dark";
 }
 
+function readForcedPageTheme(): "light" | "dark" | null {
+  const forcedTheme = document.documentElement.dataset.pbForcedTheme;
+  return forcedTheme === "light" || forcedTheme === "dark" ? forcedTheme : null;
+}
+
 function resolveTheme(
   defaultTheme: string,
   enableSystem: boolean,
@@ -52,11 +57,14 @@ export function ThemeProvider({
   storageKey = STORAGE_KEY,
 }: ThemeProviderProps) {
   React.useEffect(() => {
+    const forcedPageTheme = readForcedPageTheme();
     applyTheme(
       attribute,
       typeof forcedTheme === "string"
         ? normalizeTheme(forcedTheme)
-        : resolveTheme(defaultTheme, enableSystem, storageKey)
+        : forcedPageTheme
+          ? forcedPageTheme
+          : resolveTheme(defaultTheme, enableSystem, storageKey)
     );
   }, [attribute, defaultTheme, enableSystem, forcedTheme, storageKey]);
 

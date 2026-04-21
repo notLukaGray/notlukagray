@@ -6,6 +6,8 @@ import type {
   SectionEffect,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 type Props = {
   field: FormFieldBlock;
@@ -26,8 +28,12 @@ function coerceSectionEffects(value: unknown): SectionEffect[] | undefined {
 }
 
 export function FormFieldShell({ field, style, children }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   const surfaceRef = useRef<HTMLDivElement | null>(null);
-  const effects = useMemo(() => coerceSectionEffects(field.effects), [field.effects]);
+  const effects = useMemo(
+    () => coerceSectionEffects(resolveThemeValueDeep(field.effects, themeMode)),
+    [field.effects, themeMode]
+  );
   const hasGlassEffect = (effects ?? []).some((effect) => effect.type === "glass");
   const wrapperStyle: CSSProperties = {
     ...style,

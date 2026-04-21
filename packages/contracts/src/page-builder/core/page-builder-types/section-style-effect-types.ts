@@ -1,5 +1,7 @@
+import type { ThemeString } from "../page-builder-schemas";
+
 export type dividerLayer = {
-  fill?: string;
+  fill?: ThemeString;
   blendMode?: string;
   opacity?: number;
 };
@@ -7,7 +9,7 @@ export type dividerLayer = {
 export type SectionBorder = {
   width?: string;
   style?: string;
-  color?: string;
+  color?: ThemeString;
 };
 
 export type BackdropBlurEffect = { type: "backdropBlur"; amount?: string };
@@ -42,7 +44,7 @@ export type DropShadowEffect = {
   y?: string;
   blur?: string;
   spread?: string;
-  color?: string;
+  color?: ThemeString;
 };
 export type InnerShadowEffect = {
   type: "innerShadow";
@@ -50,9 +52,9 @@ export type InnerShadowEffect = {
   y?: string;
   blur?: string;
   spread?: string;
-  color?: string;
+  color?: ThemeString;
 };
-export type GlowEffect = { type: "glow"; blur?: string; spread?: string; color?: string };
+export type GlowEffect = { type: "glow"; blur?: string; spread?: string; color?: ThemeString };
 export type OpacityEffect = { type: "opacity"; value?: number };
 export type BlurEffect = { type: "blur"; amount?: string };
 export type BrightnessEffect = { type: "brightness"; value?: number };

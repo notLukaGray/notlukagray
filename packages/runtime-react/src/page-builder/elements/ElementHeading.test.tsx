@@ -29,4 +29,26 @@ describe("ElementHeading semantic contract", () => {
     expect(markup).toContain("color:transparent");
     expect(markup).not.toContain("color:#111111");
   });
+
+  it("resolves theme-aware color and textFill values before rendering styles", () => {
+    const markup = renderToStaticMarkup(
+      <ElementHeading
+        type="elementHeading"
+        level={2}
+        text="Theme"
+        color={{ light: "#111111", dark: "#eeeeee" }}
+        textFill={{
+          type: "gradient",
+          value: {
+            light: "linear-gradient(90deg,#111,#666)",
+            dark: "linear-gradient(90deg,#fff,#8fdcff)",
+          },
+        }}
+      />
+    );
+
+    expect(markup).toContain("background-image:linear-gradient(90deg,#fff,#8fdcff)");
+    expect(markup).toContain("color:transparent");
+    expect(markup).not.toContain("[object Object]");
+  });
 });

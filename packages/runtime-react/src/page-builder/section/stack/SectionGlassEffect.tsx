@@ -30,6 +30,8 @@ import {
   getSupportsBackdropFilterUrlClientSnapshot,
   type ClientPlatform,
 } from "@pb/runtime-react/core/lib/platform-runtime";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 type GlassEffect = Extract<SectionEffect, { type: "glass" }>;
 type GlassRuntimeSnapshot = {
@@ -121,7 +123,12 @@ export function SectionGlassEffect({
   variant: _variant = "rich",
   syncBorderRadius,
 }: SectionGlassEffectProps) {
-  const glass = useMemo(() => resolveGlassEffect(effects), [effects]);
+  const themeMode = usePageBuilderThemeMode();
+  const resolvedEffects = useMemo(
+    () => resolveThemeValueDeep(effects, themeMode) as SectionEffect[] | undefined,
+    [effects, themeMode]
+  );
+  const glass = useMemo(() => resolveGlassEffect(resolvedEffects), [resolvedEffects]);
   const runtimeSnapshot = useGlassRuntimeSnapshot();
   const runtimeReady = runtimeSnapshot.ready;
   const fallbackPlatform = runtimeSnapshot.fallbackPlatform;
@@ -422,6 +429,7 @@ export function SectionGlassEffect({
           width={dims.width}
           height={dims.height}
           radius={dims.radius}
+          cornerRadii={dims.cornerRadii}
           bezelWidth={bezelWidth}
           bezelType={bezelType}
           glassThickness={glassThickness}

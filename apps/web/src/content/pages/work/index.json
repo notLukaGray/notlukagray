@@ -9,7 +9,7 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#080808"
+          "fill": "var(--pb-secondary)"
         }
       ]
     },
@@ -57,9 +57,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-brand": {
@@ -70,9 +70,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-campaign": {
@@ -83,9 +83,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-cinematic": {
@@ -96,9 +96,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-documentary": {
@@ -109,9 +109,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-editorial": {
@@ -122,9 +122,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-exhibition": {
@@ -135,9 +135,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-immersive": {
@@ -148,9 +148,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-motion": {
@@ -161,9 +161,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-photography": {
@@ -174,9 +174,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-process": {
@@ -187,9 +187,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-product": {
@@ -200,9 +200,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "project-systems": {
@@ -213,9 +213,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "clean-it-up": {
@@ -226,9 +226,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         }
       },

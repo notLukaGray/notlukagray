@@ -1,3 +1,9 @@
+import {
+  normalizeRoundedRectRadii,
+  sampleRoundedRectBezel,
+  type RoundedRectRadius,
+} from "./rounded-rect-bezel";
+
 /**
  * Generates a specular-highlight ImageData for a rounded-rectangle glass element.
  * The specular ring simulates ambient light catching the inner rim of the bevel.
@@ -8,7 +14,7 @@
 export function calculateRefractionSpecular(
   objectWidth: number,
   objectHeight: number,
-  radius: number,
+  radius: RoundedRectRadius,
   bezelWidth: number,
   specularAngle = Math.PI / 3,
   dpr?: number
@@ -20,7 +26,13 @@ export function calculateRefractionSpecular(
   const bufferHeight = Math.round(objectHeight * devicePixelRatio);
   const imageData = new ImageData(bufferWidth, bufferHeight);
 
-  const radius_ = radius * devicePixelRatio;
+  const radii = normalizeRoundedRectRadii(radius);
+  const radii_ = {
+    topLeft: radii.topLeft * devicePixelRatio,
+    topRight: radii.topRight * devicePixelRatio,
+    bottomRight: radii.bottomRight * devicePixelRatio,
+    bottomLeft: radii.bottomLeft * devicePixelRatio,
+  };
   const bezel_ = bezelWidth * devicePixelRatio;
 
   const specular_vector: [number, number] = [Math.cos(specularAngle), Math.sin(specularAngle)];
@@ -28,61 +40,33 @@ export function calculateRefractionSpecular(
   // Fill fully transparent
   new Uint32Array(imageData.data.buffer).fill(0x00000000);
 
-  const radiusSquared = radius_ ** 2;
-  const radiusPlusOneSquared = (radius_ + devicePixelRatio) ** 2;
-  const radiusMinusBezelSquared = (radius_ - bezel_) ** 2;
-
-  const widthBetweenRadiuses = bufferWidth - radius_ * 2;
-  const heightBetweenRadiuses = bufferHeight - radius_ * 2;
-
   for (let y1 = 0; y1 < bufferHeight; y1++) {
     for (let x1 = 0; x1 < bufferWidth; x1++) {
       const idx = (y1 * bufferWidth + x1) * 4;
 
-      const isOnLeftSide = x1 < radius_;
-      const isOnRightSide = x1 >= bufferWidth - radius_;
-      const isOnTopSide = y1 < radius_;
-      const isOnBottomSide = y1 >= bufferHeight - radius_;
+      const sample = sampleRoundedRectBezel(
+        x1,
+        y1,
+        bufferWidth,
+        bufferHeight,
+        radii_,
+        bezel_,
+        devicePixelRatio
+      );
 
-      const x = isOnLeftSide
-        ? x1 - radius_
-        : isOnRightSide
-          ? x1 - radius_ - widthBetweenRadiuses
-          : 0;
-
-      const y = isOnTopSide
-        ? y1 - radius_
-        : isOnBottomSide
-          ? y1 - radius_ - heightBetweenRadiuses
-          : 0;
-
-      const distanceToCenterSquared = x * x + y * y;
-
-      const isInBezel =
-        distanceToCenterSquared <= radiusPlusOneSquared &&
-        distanceToCenterSquared >= radiusMinusBezelSquared;
-
-      if (isInBezel) {
-        const distanceFromCenter = Math.sqrt(distanceToCenterSquared);
-        const distanceFromSide = radius_ - distanceFromCenter;
-
-        const opacity =
-          distanceToCenterSquared < radiusSquared
-            ? 1
-            : 1 -
-              (distanceFromCenter - Math.sqrt(radiusSquared)) /
-                (Math.sqrt(radiusPlusOneSquared) - Math.sqrt(radiusSquared));
-
-        const cos = x / distanceFromCenter;
-        const sin = -y / distanceFromCenter;
-
+      if (sample) {
+        const cos = sample.normalX;
+        const sin = -sample.normalY;
         const dotProduct = Math.abs(cos * specular_vector[0] + sin * specular_vector[1]);
+        const edgeCoefficient = Math.max(
+          0,
+          1 - (1 - sample.distanceFromSide / (1 * devicePixelRatio)) ** 2
+        );
 
-        const coefficient =
-          dotProduct * Math.sqrt(1 - (1 - distanceFromSide / (1 * devicePixelRatio)) ** 2);
+        const coefficient = dotProduct * Math.sqrt(edgeCoefficient);
 
         const color = 255 * coefficient;
-        const finalOpacity = color * coefficient * opacity;
+        const finalOpacity = color * coefficient * sample.opacity;
 
         imageData.data[idx] = color;
         imageData.data[idx + 1] = color;

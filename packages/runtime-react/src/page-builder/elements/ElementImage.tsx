@@ -12,6 +12,8 @@ import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-prov
 import { computeElementImagePresentation } from "./ElementImage/element-image-presentation";
 import { firePageBuilderAction } from "@/page-builder/triggers";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject, resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 type Props = Extract<ElementBlock, { type: "elementImage" }>;
 
@@ -65,9 +67,18 @@ export function ElementImage({
   priority,
   interactions,
 }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   const [hasError, setHasError] = useState(false);
   const figureRef = useRef<HTMLElement | null>(null);
-  const imageEffects = useMemo(() => coerceSectionEffects(effects), [effects]);
+  const resolvedEffects = useMemo(
+    () => resolveThemeValueDeep(effects, themeMode) as typeof effects,
+    [effects, themeMode]
+  );
+  const resolvedWrapperStyle = resolveThemeStyleObject(
+    wrapperStyle as Record<string, unknown> | undefined,
+    themeMode
+  ) as typeof wrapperStyle;
+  const imageEffects = useMemo(() => coerceSectionEffects(resolvedEffects), [resolvedEffects]);
   const hasGlassEffect = (imageEffects ?? []).some((effect) => effect.type === "glass");
   const { isMobile } = useDeviceType();
   const resolvedAspectRatio = resolveResponsiveValue(aspectRatio, isMobile);
@@ -119,8 +130,8 @@ export function ElementImage({
     link,
     aspectRatio: resolvedAspectRatio,
     figmaConstraints,
-    effects,
-    wrapperStyle,
+    effects: resolvedEffects,
+    wrapperStyle: resolvedWrapperStyle,
     opacity,
     blendMode,
     boxShadow,

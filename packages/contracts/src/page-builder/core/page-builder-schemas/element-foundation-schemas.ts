@@ -7,13 +7,14 @@ import {
   responsiveElementAlignYSchema,
   responsiveStringSchema,
   responsiveTextAlignSchema,
+  themeStringSchema,
   triggerActionSchema,
 } from "./schema-primitives";
 import { sectionEffectSchema } from "./section-effect-schemas";
 import { pageBuilderMetaSchema } from "./figma-exporter-meta-schema";
 
 export const borderGradientSchema = z.object({
-  stroke: z.string().min(1),
+  stroke: themeStringSchema,
   width: z.union([z.string(), z.number()]),
 });
 
@@ -278,12 +279,12 @@ export const elementGraphicLinkSchema = z
     target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
     rel: z.string().optional(),
     hoverScale: z.number().optional(),
-    hoverFill: z.string().optional(),
-    activeFill: z.string().optional(),
-    disabledFill: z.string().optional(),
-    hoverStroke: z.string().optional(),
-    activeStroke: z.string().optional(),
-    disabledStroke: z.string().optional(),
+    hoverFill: themeStringSchema.optional(),
+    activeFill: themeStringSchema.optional(),
+    disabledFill: themeStringSchema.optional(),
+    hoverStroke: themeStringSchema.optional(),
+    activeStroke: themeStringSchema.optional(),
+    disabledStroke: themeStringSchema.optional(),
     vectorTransition: z.union([z.string(), z.number()]).optional(),
     disabled: z.boolean().optional(),
   })
@@ -291,11 +292,11 @@ export const elementGraphicLinkSchema = z
     message: "external is required when ref is set",
   });
 
-export const vectorColorsSchema = z.record(z.string(), z.string()).optional();
+export const vectorColorsSchema = z.record(z.string(), themeStringSchema).optional();
 
 export const vectorShapeStyleSchema = z.object({
-  fill: z.string().optional(),
-  stroke: z.string().optional(),
+  fill: themeStringSchema.optional(),
+  stroke: themeStringSchema.optional(),
   strokeWidth: z.union([z.number(), z.string()]).optional(),
   strokeLinecap: z.enum(["butt", "round", "square"]).optional(),
   strokeLinejoin: z.enum(["miter", "round", "bevel"]).optional(),
@@ -305,7 +306,7 @@ export const vectorShapeStyleSchema = z.object({
 
 export const vectorGradientStopSchema = z.object({
   offset: z.string(),
-  color: z.string(),
+  color: themeStringSchema,
   opacity: z.number().optional(),
 });
 

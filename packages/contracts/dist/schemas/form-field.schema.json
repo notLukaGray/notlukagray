@@ -457,16 +457,85 @@
     "fill": {
       "anyOf": [
         {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "light": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "dark": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
         },
         {
           "type": "array",
           "prefixItems": [
             {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "light": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "dark": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
             },
             {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "light": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "dark": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
             }
           ]
         }
@@ -475,16 +544,85 @@
     "stroke": {
       "anyOf": [
         {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "light": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "dark": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
         },
         {
           "type": "array",
           "prefixItems": [
             {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "light": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "dark": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
             },
             {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "value": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "light": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "dark": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
             }
           ]
         }
@@ -726,7 +864,30 @@
                 "type": "string"
               },
               "color": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "light": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "dark": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
               }
             },
             "required": [
@@ -754,7 +915,30 @@
                 "type": "string"
               },
               "color": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "light": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "dark": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
               }
             },
             "required": [
@@ -776,7 +960,30 @@
                 "type": "string"
               },
               "color": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "light": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "dark": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
               }
             },
             "required": [
@@ -907,7 +1114,30 @@
       "additionalProperties": {
         "anyOf": [
           {
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "light": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dark": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
           },
           {
             "type": "number"
@@ -929,7 +1159,30 @@
       "additionalProperties": {
         "anyOf": [
           {
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "light": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dark": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
           },
           {
             "type": "number"
@@ -1856,6 +2109,37 @@
               "required": [
                 "key",
                 "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "type",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "setTheme"
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "mode": {
+                  "type": "string",
+                  "enum": [
+                    "light",
+                    "dark",
+                    "toggle"
+                  ]
+                }
+              },
+              "required": [
+                "mode"
               ],
               "additionalProperties": false
             }

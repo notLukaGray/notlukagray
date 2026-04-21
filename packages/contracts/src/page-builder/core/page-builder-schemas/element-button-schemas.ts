@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { elementLayoutSchema } from "./element-foundation-schemas";
-import { responsiveStringSchema, triggerActionSchema } from "./schema-primitives";
+import {
+  responsiveStringSchema,
+  themeStringSchema,
+  triggerActionSchema,
+} from "./schema-primitives";
 
 export const buttonActionSchema = z.enum([
   "assetPlay",
@@ -77,6 +81,7 @@ export const buttonActionSchema = z.enum([
   "trackEvent",
   "setLocalStorage",
   "setSessionStorage",
+  "setTheme",
   "rive.setInput",
   "rive.fireTrigger",
   "rive.play",
@@ -112,16 +117,16 @@ export const elementButtonSchema = z
     external: z.boolean().optional(),
     action: buttonActionSchema.optional(),
     actionPayload: z.unknown().optional(),
-    linkDefault: z.string().optional(),
-    linkHover: z.string().optional(),
-    linkActive: z.string().optional(),
-    linkDisabled: z.string().optional(),
+    linkDefault: themeStringSchema.optional(),
+    linkHover: themeStringSchema.optional(),
+    linkActive: themeStringSchema.optional(),
+    linkDisabled: themeStringSchema.optional(),
     linkTransition: z.union([z.string(), z.number()]).optional(),
     disabled: z.boolean().optional(),
     loading: z.boolean().optional(),
     loadingLabel: z.string().optional(),
-    wrapperFill: z.string().optional(),
-    wrapperStroke: z.string().optional(),
+    wrapperFill: themeStringSchema.optional(),
+    wrapperStroke: themeStringSchema.optional(),
     wrapperFillRef: z.string().optional(),
     wrapperStrokeRef: z.string().optional(),
     /** Border width in px when `wrapperStroke` draws a border (default 2 at runtime). */
@@ -137,11 +142,11 @@ export const elementButtonSchema = z
     /** Minimum height for the padded wrapper pill — sets a minimum tap target without fixed height. */
     wrapperMinHeight: responsiveStringSchema.optional(),
     /** Fill color on hover. Falls back to a subtle brightness shift if unset. */
-    wrapperFillHover: z.string().optional(),
+    wrapperFillHover: themeStringSchema.optional(),
     /** Stroke/border color on hover. */
-    wrapperStrokeHover: z.string().optional(),
+    wrapperStrokeHover: themeStringSchema.optional(),
     /** Fill color when pressed/active. */
-    wrapperFillActive: z.string().optional(),
+    wrapperFillActive: themeStringSchema.optional(),
     /** Scale transform on hover (default 1). */
     wrapperScaleHover: z.number().optional(),
     /** Scale transform when pressed (e.g. 0.97). */
@@ -151,14 +156,14 @@ export const elementButtonSchema = z
     /** Opacity multiplier on hover (0–1). Stacks on top of hover fill. */
     wrapperOpacityHover: z.number().optional(),
     /** Fill color when disabled. */
-    wrapperFillDisabled: z.string().optional(),
+    wrapperFillDisabled: themeStringSchema.optional(),
     /** CSS transition override for all wrapper state changes. */
     wrapperTransition: z.string().optional(),
     /**
      * Extra CSS custom properties applied on the interactive wrapper (keys must start with `--`).
      * Merged after built-in state vars so authors can override or add advanced tokens.
      */
-    wrapperInteractionVars: z.record(z.string(), z.string()).optional(),
+    wrapperInteractionVars: z.record(z.string(), themeStringSchema).optional(),
     pointerDownAction: triggerActionSchema.optional(),
     pointerUpAction: triggerActionSchema.optional(),
   })

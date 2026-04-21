@@ -34,17 +34,16 @@
       "type": "backgroundVideo",
       "video": "EL_LENERO_PREVIEW.webm",
       "poster": "EL_LENERO_PREVIEW.webp",
-      "overlay": "#00000080"
+      "overlay": "oklch(from var(--pb-secondary) l c h / 0.4)"
     },
     "bg-black": {
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#060608"
+          "fill": "var(--pb-secondary)"
         },
         {
-          "fill": "radial-gradient(ellipse 100% 60% at 50% 0%, #0d0d14 0%, transparent 70%)",
-          "blendMode": "screen"
+          "fill": "radial-gradient(ellipse 100% 60% at 50% 0%, transparent 0%, oklch(from var(--pb-primary) l c h / 0.45) 70%)"
         }
       ]
     }

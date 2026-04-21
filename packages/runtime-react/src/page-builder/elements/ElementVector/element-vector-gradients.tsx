@@ -4,10 +4,20 @@ import type {
   VectorGradient,
   VectorGradientStop,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { type PageBuilderThemeMode, resolveThemeString } from "@/page-builder/theme/theme-string";
 
-export function renderGradientStop(stop: VectorGradientStop, index: number): ReactNode {
+export function renderGradientStop(
+  stop: VectorGradientStop,
+  index: number,
+  themeMode: PageBuilderThemeMode
+): ReactNode {
   return (
-    <stop key={index} offset={stop.offset} stopColor={stop.color} stopOpacity={stop.opacity} />
+    <stop
+      key={index}
+      offset={stop.offset}
+      stopColor={resolveThemeString(stop.color, themeMode)}
+      stopOpacity={stop.opacity}
+    />
   );
 }
 
@@ -59,9 +69,12 @@ const GRADIENT_RENDERERS: Record<string, (g: VectorGradient, stops: ReactNode[])
     renderRadialGradient(g as VectorGradient & { type: "radialGradient" }, stops),
 };
 
-export function renderGradient(gradient: VectorGradient): ReactNode {
+export function renderGradient(
+  gradient: VectorGradient,
+  themeMode: PageBuilderThemeMode
+): ReactNode {
   const rawStops = gradient.stops?.filter((s): s is NonNullable<typeof s> => s != null) ?? [];
-  const stops = rawStops.map((s, i) => renderGradientStop(s, i));
+  const stops = rawStops.map((s, i) => renderGradientStop(s, i, themeMode));
   if (!stops.length) return null;
   const renderer = GRADIENT_RENDERERS[gradient.type];
   return renderer ? renderer(gradient, stops) : null;

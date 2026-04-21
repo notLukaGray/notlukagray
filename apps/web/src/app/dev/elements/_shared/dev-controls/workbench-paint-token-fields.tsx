@@ -2,6 +2,10 @@
  * Token presets aligned with `color-tool-preview-helpers` (`/dev/colors` bottom preview column).
  * Values are CSS `background` / `border-color` strings (usually `var(--pb-*)`).
  */
+import {
+  themeStringToInputValue,
+  type ThemeStringLike,
+} from "@/app/dev/elements/_shared/theme-string";
 
 export type WorkbenchPaintTokenOption = { value: string; label: string };
 
@@ -49,12 +53,13 @@ export function SharedWorkbenchPaintTokenFields({
   idSuffix: string;
   label: string;
   options: readonly WorkbenchPaintTokenOption[];
-  value: string | undefined;
+  value: ThemeStringLike | undefined;
   onChange: (next: string | undefined) => void;
   helperText?: string;
   customPlaceholder?: string;
 }) {
-  const selectValue = selectValueForToken(value, options);
+  const cssValue = themeStringToInputValue(value);
+  const selectValue = selectValueForToken(cssValue || undefined, options);
 
   return (
     <>
@@ -87,7 +92,7 @@ export function SharedWorkbenchPaintTokenFields({
           type="text"
           id={`wb-paint-custom-${idSuffix}`}
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={value ?? ""}
+          value={cssValue}
           onChange={(e) => onChange(e.target.value.trim() ? e.target.value : undefined)}
           placeholder={
             customPlaceholder ?? "e.g. color-mix(in oklab, var(--pb-primary) 90%, white)"

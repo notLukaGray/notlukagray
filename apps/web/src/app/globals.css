@@ -143,9 +143,10 @@
   --sidebar-border: var(--pb-sidebar-border);
   --sidebar-ring: var(--pb-sidebar-ring);
 
-  --frame-link: var(--pb-link);
-  --frame-link-hover: var(--pb-link-hover);
-  --frame-link-active: var(--pb-link-active);
+  --frame-link: var(--pb-text-secondary);
+  --frame-link-hover: var(--pb-text-primary);
+  --frame-link-active: var(--pb-text-primary);
+  --frame-link-disabled: var(--pb-text-muted);
 }
 
 .dark {
@@ -405,13 +406,13 @@
 
   .element-link {
     font-weight: 500;
-    color: var(--element-link-color, var(--pb-link, var(--frame-link)));
+    color: var(--element-link-color, var(--frame-link, var(--pb-link)));
     transition: color var(--element-link-transition, 0.15s);
   }
   .element-link:hover {
     color: var(
       --element-link-hover,
-      var(--element-link-color, var(--pb-link-hover, var(--frame-link-hover)))
+      var(--element-link-color, var(--frame-link-hover, var(--pb-link-hover)))
     );
   }
   .element-link:focus-visible {
@@ -420,10 +421,10 @@
     border-radius: 0.25rem;
   }
   .element-link--active {
-    color: var(--element-link-active, var(--pb-link-active, var(--frame-link-active)));
+    color: var(--element-link-active, var(--frame-link-active, var(--pb-link-active)));
   }
   .element-link--disabled {
-    color: var(--element-link-disabled, var(--frame-link-disabled));
+    color: var(--element-link-disabled, var(--frame-link-disabled, var(--pb-text-muted)));
     pointer-events: none;
     cursor: default;
   }

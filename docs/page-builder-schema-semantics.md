@@ -203,6 +203,9 @@ Optional:
 - `scroll`
 - `figmaExportDiagnostics`
 - `density` (`comfortable | balanced | compact`)
+- `forcedTheme` (`light | dark`) — pins the page to that theme, ignoring saved user
+  preference and system color scheme while the page is mounted. Page-level force also takes
+  precedence over module/button `setTheme` actions.
 
 ### Page scroll config
 
@@ -257,6 +260,19 @@ Optional:
 
 Root is `.passthrough()` for forward-compatible tooling fields.
 
+## Theme-Aware Paint Strings
+
+Paint-like content strings may either be a plain CSS string or a theme-aware object:
+
+- `string`
+- `{ value?: string, light?: string, dark?: string }`
+
+Resolution order is active theme (`light` or `dark`), then `value`, then the opposite theme. At
+least one non-empty string is required. This shape is additive: existing plain strings remain the
+default path. It is intended for authored colors, gradients, SVG paints, CSS vars/style paint
+values, and effect colors; raw SVG markup, hardcoded runtime fallbacks, media pixels, 3D material
+colors, pattern internals, and non-paint strings stay as-is.
+
 ## Background Blocks (`bgBlockSchema`)
 
 Supported `type` values:
@@ -271,7 +287,7 @@ Supported `type` values:
 
 - `video: string` (required)
 - `poster?: string`
-- `overlay?: #RRGGBBAA`
+- `overlay?: ThemeString` — CSS color overlay (for example `#RRGGBBAA`, `oklch(...)`, `color-mix(...)`, or `var(...)`)
 
 ### backgroundImage
 
@@ -283,7 +299,7 @@ Supported `type` values:
 
 `bgVarLayer` fields:
 
-- `fill: string` (required)
+- `fill: ThemeString` (required)
 - `blendMode?: string`
 - `opacity?: number`
 - `backgroundSize?: string`

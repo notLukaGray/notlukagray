@@ -9,6 +9,8 @@ import { uiVideoFeedbackDurationMs } from "@pb/runtime-react/core/lib/globals";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
 import { getFeedbackJustifyContent, getFeedbackPadding } from "@pb/core/internal/module-slot-utils";
 import type { ModuleSlotConfig } from "./types";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
 
 export type ModuleSlotFeedbackProps = {
   slot: ModuleSlotConfig;
@@ -23,6 +25,7 @@ export function ModuleSlotFeedback({
   feedbackMap,
   feedbackDurationMs = uiVideoFeedbackDurationMs,
 }: ModuleSlotFeedbackProps) {
+  const themeMode = usePageBuilderThemeMode();
   const elementKey = feedbackMap[feedback.type];
   if (!elementKey) return null;
   const section = slot.section;
@@ -32,8 +35,8 @@ export function ModuleSlotFeedback({
   const wrapperStyle = (block as ElementBlock & { wrapperStyle?: CssInlineStyle }).wrapperStyle;
   const feedbackChrome = slot.feedbackChromeStyle;
   const mergedStyle: CSSProperties = {
-    ...(feedbackChrome as CSSProperties),
-    ...(wrapperStyle as CSSProperties),
+    ...(resolveThemeStyleObject(feedbackChrome, themeMode) as CSSProperties),
+    ...(resolveThemeStyleObject(wrapperStyle, themeMode) as CSSProperties),
   };
   const justifyContent = getFeedbackJustifyContent(feedback.type);
   const padding = getFeedbackPadding(feedback.type);
@@ -55,7 +58,7 @@ export function ModuleSlotFeedback({
         padding,
         pointerEvents: "none",
         animation: `touch-feedback-flash ${feedbackDurationMs}ms ease forwards`,
-        ...(slot.style as CSSProperties),
+        ...(resolveThemeStyleObject(slot.style, themeMode) as CSSProperties),
       }}
       aria-hidden="false"
     >

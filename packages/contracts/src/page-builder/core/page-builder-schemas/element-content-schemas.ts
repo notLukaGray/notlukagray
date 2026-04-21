@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   cssInlineStyleSchema,
   responsiveStringSchema,
+  themeStringSchema,
   triggerActionSchema,
 } from "./schema-primitives";
 import {
@@ -34,8 +35,8 @@ const headingLevelSchema = z.union([
 ]);
 
 const textFillSchema = z.union([
-  z.object({ type: z.literal("color"), value: z.string() }),
-  z.object({ type: z.literal("gradient"), value: z.string() }),
+  z.object({ type: z.literal("color"), value: themeStringSchema }),
+  z.object({ type: z.literal("gradient"), value: themeStringSchema }),
 ]);
 
 const elementHeadingSchema = z
@@ -51,7 +52,7 @@ const elementHeadingSchema = z
     letterSpacing: z.union([z.string(), z.number()]).optional(),
     lineSpacing: z.union([z.string(), z.number()]).optional(),
     lineHeight: z.union([z.string(), z.number()]).optional(),
-    color: z.string().optional(),
+    color: themeStringSchema.optional(),
     textFill: textFillSchema.optional(),
     /** When set, renders the variable value from the store instead of static `text`. */
     variableKey: z.string().optional(),
@@ -94,7 +95,7 @@ const elementBodySchema = z
     fontWeight: z.union([z.string(), z.number()]).optional(),
     lineHeight: z.union([z.string(), z.number()]).optional(),
     /** Direct text color override. Takes precedence over typography class color. */
-    color: z.string().optional(),
+    color: themeStringSchema.optional(),
     textFill: textFillSchema.optional(),
     fontFeatureSettings: z.string().optional(),
     textOverflow: z.string().optional(),
@@ -118,10 +119,10 @@ const elementLinkSchema = z
     copyType: z.enum(["heading", "body"]),
     level: responsiveElementBodyVariantSchema.optional(),
     wordWrap: z.boolean().optional(),
-    linkDefault: z.string().optional(),
-    linkHover: z.string().optional(),
-    linkActive: z.string().optional(),
-    linkDisabled: z.string().optional(),
+    linkDefault: themeStringSchema.optional(),
+    linkHover: themeStringSchema.optional(),
+    linkActive: themeStringSchema.optional(),
+    linkDisabled: themeStringSchema.optional(),
     linkTransition: z.union([z.string(), z.number()]).optional(),
     disabled: z.boolean().optional(),
     /**
@@ -265,7 +266,7 @@ const elementVectorSchema = z
     gradients: z.array(vectorGradientSchema).optional(),
     strokeGroup: z
       .object({
-        stroke: z.string(),
+        stroke: themeStringSchema,
         strokeWidth: z.number().optional(),
         strokeLinejoin: z.enum(["miter", "round", "bevel"]).optional(),
         strokeMiterlimit: z.number().optional(),
@@ -333,7 +334,7 @@ const elementDividerSchema = z
     type: z.literal("elementDivider"),
     orientation: z.enum(["horizontal", "vertical"]).optional(),
     thickness: z.string().optional(),
-    color: z.string().optional(),
+    color: themeStringSchema.optional(),
     style: z.enum(["solid", "dashed", "dotted"]).optional(),
     length: responsiveStringSchema.optional(),
   })
@@ -346,9 +347,9 @@ const elementScrollProgressBarSchema = z
     /** Bar height in CSS; when omitted uses motion-defaults progressBar. */
     height: z.string().optional(),
     /** Bar fill color; when omitted uses motion-defaults progressBar. */
-    fill: z.string().optional(),
+    fill: themeStringSchema.optional(),
     /** Track background; when omitted uses motion-defaults progressBar. */
-    trackBackground: z.string().optional(),
+    trackBackground: themeStringSchema.optional(),
     /** useScroll offset; e.g. ["start end", "end start"]. */
     offset: z.tuple([z.string(), z.string()]).optional(),
   })

@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { triggerActionSchema } from "./schema-primitives";
+import { themeStringSchema, triggerActionSchema } from "./schema-primitives";
 import { bgLayerMotionSchema } from "../../background/motion/bg-layer-motion-schema";
 
 export { bgLayerMotionSchema };
 export type { BgLayerMotion } from "../../background/motion/bg-layer-motion-types";
 
 export const bgVarLayerSchema = z.object({
-  fill: z.string(),
+  fill: themeStringSchema,
   blendMode: z.string().optional(),
   opacity: z.number().optional(),
   /**
@@ -36,11 +36,8 @@ export const bgBlockSchema = z.discriminatedUnion("type", [
     type: z.literal("backgroundVideo"),
     video: z.string(),
     poster: z.string().optional(),
-    /** 8-digit hex overlay on top of the video (e.g. #00000080 = 50% black). */
-    overlay: z
-      .string()
-      .regex(/^#[0-9A-Fa-f]{8}$/)
-      .optional(),
+    /** CSS color overlay on top of the video (e.g. #00000080, oklch(), color-mix()). */
+    overlay: themeStringSchema.optional(),
   }),
   z.object({
     type: z.literal("backgroundImage"),

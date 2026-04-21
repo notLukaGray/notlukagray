@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { themeStringSchema } from "./schema-primitives";
 
 const booleanishSchema = z.preprocess((value) => {
   if (typeof value === "string") {
@@ -10,7 +11,7 @@ const booleanishSchema = z.preprocess((value) => {
 }, z.boolean());
 
 export const dividerLayerSchema = z.object({
-  fill: z.string().optional(),
+  fill: themeStringSchema.optional(),
   blendMode: z.string().optional(),
   opacity: z.number().optional(),
 });
@@ -18,7 +19,7 @@ export const dividerLayerSchema = z.object({
 export const sectionBorderSchema = z.object({
   width: z.string().optional(),
   style: z.string().optional(),
-  color: z.string().optional(),
+  color: themeStringSchema.optional(),
 });
 
 export const backdropBlurEffectSchema = z.object({
@@ -72,7 +73,7 @@ export const dropShadowEffectSchema = z.object({
   y: z.string().optional(),
   blur: z.string().optional(),
   spread: z.string().optional(),
-  color: z.string().optional(),
+  color: themeStringSchema.optional(),
 });
 export const innerShadowEffectSchema = z.object({
   type: z.literal("innerShadow"),
@@ -80,13 +81,13 @@ export const innerShadowEffectSchema = z.object({
   y: z.string().optional(),
   blur: z.string().optional(),
   spread: z.string().optional(),
-  color: z.string().optional(),
+  color: themeStringSchema.optional(),
 });
 export const glowEffectSchema = z.object({
   type: z.literal("glow"),
   blur: z.string().optional(),
   spread: z.string().optional(),
-  color: z.string().optional(),
+  color: themeStringSchema.optional(),
 });
 export const opacityEffectSchema = z.object({
   type: z.literal("opacity"),

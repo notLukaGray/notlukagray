@@ -12,6 +12,8 @@ import type {
   SectionEffect,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject, resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 type LayoutProps = Pick<
   ElementLayoutTransformOptions,
@@ -77,8 +79,23 @@ export function ElementLayoutWrapper({
   figureProps,
   interactions,
 }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   const surfaceRef = useRef<HTMLElement | null>(null);
-  const surfaceEffects = useMemo(() => coerceSectionEffects(layout.effects), [layout.effects]);
+  const resolvedLayout = useMemo(
+    () => ({
+      ...layout,
+      wrapperStyle: resolveThemeStyleObject(
+        layout.wrapperStyle as Record<string, unknown> | undefined,
+        themeMode
+      ),
+      effects: resolveThemeValueDeep(layout.effects, themeMode),
+    }),
+    [layout, themeMode]
+  );
+  const surfaceEffects = useMemo(
+    () => coerceSectionEffects(resolvedLayout.effects),
+    [resolvedLayout.effects]
+  );
   const hasGlassEffect = (surfaceEffects ?? []).some((effect) => effect.type === "glass");
   // When a glass effect has a clip-path (non-rectangular shape), skip overflow:hidden —
   // the SVG clipPath on the <figure> handles shape clipping instead.
@@ -86,9 +103,9 @@ export function ElementLayoutWrapper({
     (effect) => effect.type === "glass" && !!(effect as { clipPath?: string }).clipPath
   );
   const glassInForeground = hasGlassEffect && glassLayer === "foreground";
-  const layoutStyle = getElementLayoutStyle(layout as Partial<ElementLayout>);
+  const layoutStyle = getElementLayoutStyle(resolvedLayout as Partial<ElementLayout>);
   const transformStyle = getElementTransformStyle(
-    transform ? { ...layout, ...transform } : undefined
+    transform ? { ...resolvedLayout, ...transform } : undefined
   );
   const innerStyle: CSSProperties = {
     width: "100%",

@@ -28,7 +28,30 @@
                 "type": "object",
                 "properties": {
                   "fill": {
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "value": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "light": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "dark": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    ]
                   },
                   "blendMode": {
                     "type": "string"
@@ -1775,7 +1798,30 @@
                       "type": "string"
                     },
                     "color": {
-                      "type": "string"
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "light": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "dark": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -1803,7 +1849,30 @@
                       "type": "string"
                     },
                     "color": {
-                      "type": "string"
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "light": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "dark": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -1825,7 +1894,30 @@
                       "type": "string"
                     },
                     "color": {
-                      "type": "string"
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "value": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "light": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "dark": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        }
+                      ]
                     }
                   },
                   "required": [
@@ -1956,7 +2048,30 @@
             "additionalProperties": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "light": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "dark": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  ]
                 },
                 {
                   "type": "number"
@@ -3539,7 +3654,30 @@
                 "type": "string"
               },
               "color": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "light": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "dark": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
               }
             },
             "required": [
@@ -3567,7 +3705,30 @@
                 "type": "string"
               },
               "color": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "light": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "dark": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
               }
             },
             "required": [
@@ -3589,7 +3750,30 @@
                 "type": "string"
               },
               "color": {
-                "type": "string"
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "light": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "dark": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
               }
             },
             "required": [
@@ -3720,7 +3904,30 @@
       "additionalProperties": {
         "anyOf": [
           {
-            "type": "string"
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "value": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "light": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dark": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
           },
           {
             "type": "number"

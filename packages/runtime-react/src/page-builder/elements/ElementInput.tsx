@@ -8,6 +8,8 @@ import type {
   SectionEffect,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 type Props = Extract<ElementBlock, { type: "elementInput" }>;
 
@@ -46,6 +48,7 @@ export function ElementInput({
   showIcon = true,
   color,
 }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const layout = {
@@ -69,7 +72,7 @@ export function ElementInput({
     borderRadius,
   } as LayoutProps;
 
-  const textColor = color ?? "rgba(255, 255, 255, 0.85)";
+  const textColor = resolveThemeString(color, themeMode) ?? "rgba(255, 255, 255, 0.85)";
 
   return (
     <ElementLayoutWrapper layout={layout} glassLayer="background" interactions={interactions}>

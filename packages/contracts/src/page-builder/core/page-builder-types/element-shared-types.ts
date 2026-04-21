@@ -1,4 +1,5 @@
 import type { SectionEffect } from "./section-style-effect-types";
+import type { ThemeString } from "../page-builder-schemas";
 
 export type ElementTextAlign = "left" | "right" | "center" | "justify";
 
@@ -23,8 +24,8 @@ export type ElementLayout = {
 export type ElementImageObjectFit = "cover" | "contain" | "fillWidth" | "fillHeight" | "crop";
 
 export type VectorShapeStyle = {
-  fill?: string;
-  stroke?: string;
+  fill?: ThemeString;
+  stroke?: ThemeString;
   strokeWidth?: number | string;
   strokeLinecap?: "butt" | "round" | "square";
   strokeLinejoin?: "miter" | "round" | "bevel";
@@ -34,7 +35,7 @@ export type VectorShapeStyle = {
 
 export type VectorGradientStop = {
   offset: string;
-  color: string;
+  color: ThemeString;
   opacity?: number;
 };
 
@@ -99,10 +100,10 @@ export type VectorShape =
   | ({ type: "path"; d: string } & VectorShapeStyle);
 
 export type ElementLinkStateStyle = {
-  linkDefault?: string;
-  linkHover?: string;
-  linkActive?: string;
-  linkDisabled?: string;
+  linkDefault?: ThemeString;
+  linkHover?: ThemeString;
+  linkActive?: ThemeString;
+  linkDisabled?: ThemeString;
   linkTransition?: string | number;
   disabled?: boolean;
 };
@@ -120,12 +121,12 @@ export type ElementGraphicLink = {
   target?: "_self" | "_blank" | "_parent" | "_top";
   rel?: string;
   hoverScale?: number;
-  hoverFill?: string;
-  activeFill?: string;
-  disabledFill?: string;
-  hoverStroke?: string;
-  activeStroke?: string;
-  disabledStroke?: string;
+  hoverFill?: ThemeString;
+  activeFill?: ThemeString;
+  disabledFill?: ThemeString;
+  hoverStroke?: ThemeString;
+  activeStroke?: ThemeString;
+  disabledStroke?: ThemeString;
   vectorTransition?: string | number;
   disabled?: boolean;
 };

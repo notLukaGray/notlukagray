@@ -20,6 +20,8 @@ import { ModuleSlotFeedback } from "./ModuleSlotFeedback";
 import { ModuleSlotContent } from "./ModuleSlotContent";
 import type { ModuleSlotConfig } from "./types";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject, resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 export { useSlotDefaultWrapperStyle } from "./ModuleSlotContext";
 
@@ -56,6 +58,7 @@ export function ModuleSlotSection({
   pointerEventsWhenVisible,
   slotStyleOverride,
 }: ModuleSlotSectionProps) {
+  const themeMode = usePageBuilderThemeMode();
   const slotRef = useRef<HTMLElement | null>(null);
   const rawElements = useMemo(() => resolveSlotElements(slot), [slot]);
   const elements = useMemo(
@@ -103,11 +106,19 @@ export function ModuleSlotSection({
       expandDurationMs,
       hasLayoutTransition: useHugLayout || !!slot.layoutMode,
     });
-    return slotStyleOverride ? { ...base, ...slotStyleOverride } : base;
-  }, [slot, useHugLayout, durationMs, easing, expandDurationMs, slotStyleOverride]);
+    const themedBase = resolveThemeStyleObject(
+      base as Record<string, unknown>,
+      themeMode
+    ) as CSSProperties;
+    const themedOverride = resolveThemeStyleObject(
+      slotStyleOverride as Record<string, unknown> | undefined,
+      themeMode
+    ) as CSSProperties | undefined;
+    return themedOverride ? { ...themedBase, ...themedOverride } : themedBase;
+  }, [slot, useHugLayout, durationMs, easing, expandDurationMs, slotStyleOverride, themeMode]);
 
   const slotMotion = useMemo((): MotionPropsFromJson => {
-    const slotMotionFromJson = slot.motion;
+    const slotMotionFromJson = resolveThemeValueDeep(slot.motion, themeMode) as typeof slot.motion;
     const visibilityPreset = slot.visibilityPreset;
     let out: MotionPropsFromJson;
     if (
@@ -147,13 +158,15 @@ export function ModuleSlotSection({
     if (wm != null && typeof wm === "object") {
       out = { ...out };
       const o = out as Record<string, unknown>;
-      if (wm.whileHover !== undefined) o.whileHover = wm.whileHover;
-      if (wm.whileTap !== undefined) o.whileTap = wm.whileTap;
-      if (wm.whileFocus !== undefined) o.whileFocus = wm.whileFocus;
+      if (wm.whileHover !== undefined)
+        o.whileHover = resolveThemeValueDeep(wm.whileHover, themeMode);
+      if (wm.whileTap !== undefined) o.whileTap = resolveThemeValueDeep(wm.whileTap, themeMode);
+      if (wm.whileFocus !== undefined)
+        o.whileFocus = resolveThemeValueDeep(wm.whileFocus, themeMode);
     }
 
     return out;
-  }, [slot, durationMs, easing]);
+  }, [slot, durationMs, easing, themeMode]);
 
   if (feedbackSlot) {
     if (!feedback || !feedbackMap) return null;
@@ -179,10 +192,10 @@ export function ModuleSlotSection({
       }
     : {};
   const isHidden = !isSlotVisible;
-  const slotEffects = slot.effects as SectionEffect[] | undefined;
+  const slotEffects = resolveThemeValueDeep(slot.effects, themeMode) as SectionEffect[] | undefined;
   const hasGlassEffect = (slotEffects ?? []).some((effect) => effect.type === "glass");
 
-  const defaultWrapperStyle = slot.defaultWrapperStyle ?? {};
+  const defaultWrapperStyle = resolveThemeStyleObject(slot.defaultWrapperStyle ?? {}, themeMode);
   const slotDefinitions = slot.section?.definitions ?? null;
 
   return (

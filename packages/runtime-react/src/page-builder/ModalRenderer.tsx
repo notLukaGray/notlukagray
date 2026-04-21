@@ -7,6 +7,8 @@ import { generateSectionKey } from "@pb/core/internal/section-keys";
 import { SectionErrorBoundary } from "./SectionErrorBoundary";
 import { ModalAnimationWrapper } from "@/page-builder/integrations/framer-motion/modal-wrapper";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 /**
  * Listens to `page-builder-modal` events and manages local open state for a modal by id.
@@ -55,8 +57,10 @@ function ModalContent({
   overlayClassName,
   dialogClassName,
 }: Omit<ModalRendererProps, "show">) {
+  const themeMode = usePageBuilderThemeMode();
   const dialogRef = useRef<HTMLDivElement | null>(null);
-  const hasGlassEffect = (effects ?? []).some((effect) => effect.type === "glass");
+  const resolvedEffects = resolveThemeValueDeep(effects, themeMode) as typeof effects;
+  const hasGlassEffect = (resolvedEffects ?? []).some((effect) => effect.type === "glass");
   const resolvedDialogClassName =
     dialogClassName ??
     (hasGlassEffect
@@ -81,7 +85,7 @@ function ModalContent({
         onClick={(e) => e.stopPropagation()}
       >
         {hasGlassEffect && (
-          <SectionGlassEffect effects={effects} sectionRef={dialogRef} variant="auto" />
+          <SectionGlassEffect effects={resolvedEffects} sectionRef={dialogRef} variant="auto" />
         )}
         {title && (
           <h2 id={`${id}-title`} className="sr-only">

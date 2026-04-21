@@ -14,57 +14,96 @@
   "fixed": true,
   "fixedPosition": "bottom",
   "fixedOffset": "0px",
-  "fill": "#00000080",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.5)",
   "columnGaps": "auto",
   "contentWidth": "min(90%,500px)",
   "marginLeft": "1rem",
   "marginRight": "1rem",
   "width": "100%",
   "align": "center",
-  "effects": [{ "type": "backdropBlur", "amount": "16px" }],
+  "effects": [
+    {
+      "type": "glass",
+      "bezelType": "lip",
+      "bezelWidth": 6,
+      "glassThickness": 20,
+      "refractiveIndex": 1.5,
+      "blur": 5,
+      "scaleRatio": 1,
+      "specularOpacity": 1,
+      "specularSaturation": 50,
+      "magnifyingScale": 0.5,
+      "dropShadow": true
+    }
+  ],
   "marginTop": "10px",
   "borderRadius": "30px 30px 0 0",
   "marginBottom": "10px",
   "definitions": {
     "linkedin": {
-      "preset": "footer-link-default",
       "type": "elementLink",
       "id": "linkedin",
       "label": "LinkedIn",
       "href": "https://linkedin.com",
-      "external": true
+      "external": true,
+      "copyType": "body",
+      "variant": "legal-light",
+      "level": "6",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     },
     "instagram": {
-      "preset": "footer-link-default",
       "type": "elementLink",
       "id": "instagram",
       "label": "Instagram",
       "href": "https://instagram.com",
-      "external": true
+      "external": true,
+      "copyType": "body",
+      "variant": "legal-light",
+      "level": "6",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     },
     "dribbble": {
-      "preset": "footer-link-default",
       "type": "elementLink",
       "id": "dribbble",
       "label": "Dribbble",
       "href": "https://dribbble.com",
-      "external": true
+      "external": true,
+      "copyType": "body",
+      "variant": "legal-light",
+      "level": "6",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     },
     "artstation": {
-      "preset": "footer-link-default",
       "type": "elementLink",
       "id": "artstation",
       "label": "ArtStation",
       "href": "https://artstation.com",
-      "external": true
+      "external": true,
+      "copyType": "body",
+      "variant": "legal-light",
+      "level": "6",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     },
     "copyright": {
-      "preset": "footer-link-default",
       "type": "elementLink",
       "id": "copyright",
       "label": "© 2026, Luka Gray",
       "href": "/profile",
-      "external": false
+      "external": false,
+      "copyType": "body",
+      "variant": "legal-light",
+      "level": "6",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     }
   }
 }

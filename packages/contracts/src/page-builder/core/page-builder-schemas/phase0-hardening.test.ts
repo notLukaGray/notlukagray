@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { bgBlockSchema } from "./background-block-schemas";
 import { elementButtonSchema } from "./element-button-schemas";
 import { formFieldBlockSchema } from "./form-field-schemas";
 import {
@@ -6,6 +7,7 @@ import {
   pageScrollConfigSchema,
 } from "./page-definition-and-resolution-schemas";
 import { sectionContentBlockSchema, sectionRevealSchema } from "./section-block-base-schemas";
+import { themeStringSchema } from "./schema-primitives";
 
 describe("phase 0 schema hardening", () => {
   describe("elementButton.action", () => {
@@ -158,6 +160,100 @@ describe("phase 0 schema hardening", () => {
         ],
       });
       expect(result.success).toBe(true);
+    });
+  });
+
+  describe("page forced theme", () => {
+    const basePage = {
+      slug: "theme-page",
+      title: "Theme Page",
+      definitions: {},
+      sectionOrder: [],
+    };
+
+    it("accepts light and dark forced themes", () => {
+      expect(pageBuilderSchema.safeParse({ ...basePage, forcedTheme: "light" }).success).toBe(true);
+      expect(pageBuilderSchema.safeParse({ ...basePage, forcedTheme: "dark" }).success).toBe(true);
+    });
+
+    it("rejects theme values that are not force modes", () => {
+      expect(pageBuilderSchema.safeParse({ ...basePage, forcedTheme: "system" }).success).toBe(
+        false
+      );
+      expect(pageBuilderSchema.safeParse({ ...basePage, forcedTheme: "toggle" }).success).toBe(
+        false
+      );
+    });
+  });
+
+  describe("background video overlay colors", () => {
+    it("accepts CSS color functions and token mixes", () => {
+      expect(
+        bgBlockSchema.safeParse({
+          type: "backgroundVideo",
+          video: "work/video.webm",
+          overlay: "oklch(from var(--pb-secondary) l c h / 0.5)",
+        }).success
+      ).toBe(true);
+
+      expect(
+        bgBlockSchema.safeParse({
+          type: "backgroundVideo",
+          video: "work/video.webm",
+          overlay: "color-mix(in oklab, var(--pb-secondary) 50%, transparent)",
+        }).success
+      ).toBe(true);
+    });
+
+    it("keeps empty overlay strings invalid", () => {
+      expect(
+        bgBlockSchema.safeParse({
+          type: "backgroundVideo",
+          video: "work/video.webm",
+          overlay: "",
+        }).success
+      ).toBe(false);
+    });
+  });
+
+  describe("theme-aware paint strings", () => {
+    it("accepts strings and non-empty theme objects", () => {
+      expect(themeStringSchema.safeParse("#111111").success).toBe(true);
+      expect(themeStringSchema.safeParse({ value: "#222222" }).success).toBe(true);
+      expect(themeStringSchema.safeParse({ light: "#ffffff" }).success).toBe(true);
+      expect(themeStringSchema.safeParse({ dark: "#000000" }).success).toBe(true);
+      expect(themeStringSchema.safeParse({ light: "#ffffff", dark: "#000000" }).success).toBe(true);
+    });
+
+    it("rejects empty theme objects and empty strings", () => {
+      expect(themeStringSchema.safeParse("").success).toBe(false);
+      expect(themeStringSchema.safeParse({}).success).toBe(false);
+      expect(themeStringSchema.safeParse({ value: "" }).success).toBe(false);
+      expect(themeStringSchema.safeParse({ light: "", dark: "" }).success).toBe(false);
+    });
+
+    it("allows themed background overlays and variable fills", () => {
+      expect(
+        bgBlockSchema.safeParse({
+          type: "backgroundVideo",
+          video: "work/video.webm",
+          overlay: { light: "rgba(255,255,255,0.3)", dark: "rgba(0,0,0,0.4)" },
+        }).success
+      ).toBe(true);
+
+      expect(
+        bgBlockSchema.safeParse({
+          type: "backgroundVariable",
+          layers: [
+            {
+              fill: {
+                value: "linear-gradient(180deg, var(--pb-surface-root), var(--pb-secondary))",
+                dark: "linear-gradient(180deg, #05070c, #172033)",
+              },
+            },
+          ],
+        }).success
+      ).toBe(true);
     });
   });
 

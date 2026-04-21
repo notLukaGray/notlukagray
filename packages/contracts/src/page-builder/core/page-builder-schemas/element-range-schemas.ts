@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { elementLayoutSchema } from "./element-foundation-schemas";
+import { themeStringSchema } from "./schema-primitives";
 
 /**
  * Inline style sub-keys understood by ElementRange.
@@ -13,11 +14,11 @@ import { elementLayoutSchema } from "./element-foundation-schemas";
 const elementRangeStyleSchema = z
   .object({
     /** Background color of the empty portion of the track. */
-    trackColor: z.string().optional(),
+    trackColor: themeStringSchema.optional(),
     /** Fill color of the filled portion of the track and the thumb. */
-    fillColor: z.string().optional(),
+    fillColor: themeStringSchema.optional(),
     /** CSS `accent-color` applied to the native input when the custom renderer is inactive. */
-    accentColor: z.string().optional(),
+    accentColor: themeStringSchema.optional(),
     /** Height of the custom track (e.g. "4px"). Required to activate the custom renderer. */
     trackHeight: z.string().optional(),
     /** Width and height of the custom circular thumb (e.g. "12px"). Required to activate the custom renderer. */

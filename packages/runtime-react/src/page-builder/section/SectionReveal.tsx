@@ -24,6 +24,8 @@ import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer"
 import { generateElementKey } from "@pb/core/internal/element-keys";
 import { useRevealExternalTrigger } from "@/page-builder/triggers/core/use-reveal-external-trigger";
 import { useSectionCustomTriggers } from "@/page-builder/triggers/core/use-section-custom-triggers";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
 
 type Props = Extract<SectionBlock, { type: "revealSection" }> & {
   _isFirstSection?: boolean;
@@ -87,10 +89,11 @@ export function SectionReveal({
 }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
   const [isRevealed, setRevealed] = useState(initialRevealed);
 
   const resolvedAriaLabel = resolveResponsiveValue(ariaLabel, isMobile) ?? id ?? "Reveal section";
-  const resolvedFill = resolveResponsiveValue(fill, isMobile);
+  const resolvedFill = resolveThemeString(resolveResponsiveValue(fill, isMobile), themeMode);
 
   useRevealExternalTrigger(externalTriggerKey, externalTriggerMode, setRevealed);
 

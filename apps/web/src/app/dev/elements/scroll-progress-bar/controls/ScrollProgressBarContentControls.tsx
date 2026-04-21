@@ -1,4 +1,5 @@
 import type { ScrollProgressBarElementDevController } from "../useScrollProgressBarElementDevController";
+import { themeStringToInputValue } from "@/app/dev/elements/_shared/theme-string";
 
 function offsetStart(offset: [string, string] | undefined): string {
   return Array.isArray(offset) ? offset[0] : "";
@@ -46,15 +47,18 @@ export function ScrollProgressBarContentControls({
         </label>
         <input
           type="text"
-          value={active.fill ?? ""}
+          value={themeStringToInputValue(active.fill)}
           onChange={(e) => setVariantPatch(activeVariant, { fill: e.target.value || undefined })}
           placeholder="e.g. rgba(255,255,255,0.9)"
           className="w-full rounded border border-border bg-background px-2 py-1.5 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
         />
-        {active.fill ? (
+        {themeStringToInputValue(active.fill) ? (
           <div
             className="mt-1 h-3 w-full rounded"
-            style={{ backgroundColor: active.fill, outline: "1px solid rgba(255,255,255,0.1)" }}
+            style={{
+              backgroundColor: themeStringToInputValue(active.fill),
+              outline: "1px solid rgba(255,255,255,0.1)",
+            }}
           />
         ) : null}
       </div>
@@ -65,18 +69,19 @@ export function ScrollProgressBarContentControls({
         </label>
         <input
           type="text"
-          value={active.trackBackground ?? ""}
+          value={themeStringToInputValue(active.trackBackground)}
           onChange={(e) =>
             setVariantPatch(activeVariant, { trackBackground: e.target.value || undefined })
           }
           placeholder="e.g. rgba(255,255,255,0.15)"
           className="w-full rounded border border-border bg-background px-2 py-1.5 font-mono text-[11px] text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
         />
-        {active.trackBackground && active.trackBackground !== "transparent" ? (
+        {themeStringToInputValue(active.trackBackground) &&
+        themeStringToInputValue(active.trackBackground) !== "transparent" ? (
           <div
             className="mt-1 h-3 w-full rounded"
             style={{
-              backgroundColor: active.trackBackground,
+              backgroundColor: themeStringToInputValue(active.trackBackground),
               outline: "1px solid rgba(255,255,255,0.1)",
             }}
           />

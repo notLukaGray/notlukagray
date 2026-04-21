@@ -16,6 +16,8 @@ import {
   REQUIRED_INDICATOR,
   STRUCTURAL_TEXTAREA,
 } from "./form-field-typography";
+import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 type Props = {
   field: FormFieldBlock;
@@ -36,6 +38,7 @@ export function FormFieldParagraph({
   style,
   resolvedLevel,
 }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   if (field.fieldType !== "paragraph") return null;
 
   const fieldDisabled = disabled || field.disabled === true;
@@ -80,7 +83,9 @@ export function FormFieldParagraph({
         aria-required={field.required}
         className={inputClass}
         style={{
-          ...(field.inputStyle as React.CSSProperties | undefined),
+          ...(resolveThemeStyleObject(field.inputStyle, themeMode) as
+            | React.CSSProperties
+            | undefined),
           borderColor: hasError ? formFieldStructuralClasses.inputBorderError : undefined,
         }}
       />

@@ -16,6 +16,8 @@ import { SectionMotionWrapper } from "@/page-builder/integrations/framer-motion"
 import { SectionScrollTargetProvider } from "@/page-builder/section/position/SectionScrollTargetContext";
 import { useSectionViewportTrigger } from "@/page-builder/triggers/core/use-section-viewport-trigger";
 import { useSectionCustomTriggers } from "@/page-builder/triggers/core/use-section-custom-triggers";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
 
 type Props = Extract<SectionBlock, { type: "scrollContainer" }> & {};
 
@@ -153,9 +155,10 @@ export function ScrollContainerSection({
     };
   }, [resolvedTriggerId, triggerInvert, inputRange, scrollDirection]);
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
   const resolvedAriaLabel =
     resolveResponsiveValue(ariaLabel, isMobile) ?? id ?? "Scroll container section";
-  const resolvedFill = resolveResponsiveValue(fill, isMobile);
+  const resolvedFill = resolveThemeString(resolveResponsiveValue(fill, isMobile), themeMode);
   const { baseStyle } = useSectionBaseStyles({
     fill,
     width,

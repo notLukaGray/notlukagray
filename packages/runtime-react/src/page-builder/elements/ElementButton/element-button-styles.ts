@@ -3,8 +3,10 @@ import { applyPbDefaultTextAlign } from "@pb/core/internal/adapters/host-config"
 import type {
   ElementBlock,
   ElementBodyVariant,
+  ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getElementLayoutStyle } from "@pb/core/internal/element-layout-utils";
+import { type PageBuilderThemeMode, resolveThemeString } from "@/page-builder/theme/theme-string";
 import {
   getBodyTypographyClass,
   getHeadingTypographyClass,
@@ -72,21 +74,22 @@ export function buildElementButtonBlockStyle(
 function resolveCssGradientRef(
   definitions: Record<string, unknown> | null | undefined,
   ref: string | undefined,
-  literal: string | undefined
+  literal: ThemeString | undefined,
+  themeMode: PageBuilderThemeMode
 ): string | undefined {
-  if (ref == null || ref === "" || definitions == null) return literal;
+  const resolvedLiteral = resolveThemeString(literal, themeMode);
+  if (ref == null || ref === "" || definitions == null) return resolvedLiteral;
   const def = definitions[ref];
   if (
     def != null &&
     typeof def === "object" &&
     "type" in def &&
     (def as { type?: unknown }).type === "cssGradient" &&
-    "value" in def &&
-    typeof (def as { value?: unknown }).value === "string"
+    "value" in def
   ) {
-    return (def as { value: string }).value;
+    return resolveThemeString((def as { value?: ThemeString }).value, themeMode);
   }
-  return literal;
+  return resolvedLiteral;
 }
 
 const DEFAULT_WRAPPER_STROKE_WIDTH_PX = 2;
@@ -98,6 +101,7 @@ function clampWrapperStrokeWidthPx(raw: number | undefined): number {
 
 export function buildElementButtonWrapperStyles(
   definitions: Record<string, unknown> | null | undefined,
+  themeMode: PageBuilderThemeMode,
   props: Pick<
     ElementButtonProps,
     | "wrapperFill"
@@ -146,8 +150,17 @@ export function buildElementButtonWrapperStyles(
     wrapperTransition,
     wrapperInteractionVars,
   } = props;
-  const resolvedFill = resolveCssGradientRef(definitions, wrapperFillRef, wrapperFill);
-  const resolvedStroke = resolveCssGradientRef(definitions, wrapperStrokeRef, wrapperStroke);
+  const resolvedFill = resolveCssGradientRef(definitions, wrapperFillRef, wrapperFill, themeMode);
+  const resolvedStroke = resolveCssGradientRef(
+    definitions,
+    wrapperStrokeRef,
+    wrapperStroke,
+    themeMode
+  );
+  const resolvedWrapperFillHover = resolveThemeString(wrapperFillHover, themeMode);
+  const resolvedWrapperStrokeHover = resolveThemeString(wrapperStrokeHover, themeMode);
+  const resolvedWrapperFillActive = resolveThemeString(wrapperFillActive, themeMode);
+  const resolvedWrapperFillDisabled = resolveThemeString(wrapperFillDisabled, themeMode);
 
   const strokeWidth = clampWrapperStrokeWidthPx(wrapperStrokeWidth);
   const isGradientStroke = resolvedStroke != null && String(resolvedStroke).includes("gradient");
@@ -205,12 +218,13 @@ export function buildElementButtonWrapperStyles(
   // Interactive CSS vars — explicit props + defaults so :hover/:active always resolve (globals.css
   // uses var(--element-btn-fill-hover, var(--element-btn-fill)) and transitions run on the wrapper).
   const stateVars: CSSProperties = {};
-  if (wrapperFillHover != null)
-    (stateVars as Record<string, string>)["--element-btn-fill-hover"] = wrapperFillHover;
-  if (wrapperStrokeHover != null)
-    (stateVars as Record<string, string>)["--element-btn-stroke-hover"] = wrapperStrokeHover;
-  if (wrapperFillActive != null)
-    (stateVars as Record<string, string>)["--element-btn-fill-active"] = wrapperFillActive;
+  if (resolvedWrapperFillHover != null)
+    (stateVars as Record<string, string>)["--element-btn-fill-hover"] = resolvedWrapperFillHover;
+  if (resolvedWrapperStrokeHover != null)
+    (stateVars as Record<string, string>)["--element-btn-stroke-hover"] =
+      resolvedWrapperStrokeHover;
+  if (resolvedWrapperFillActive != null)
+    (stateVars as Record<string, string>)["--element-btn-fill-active"] = resolvedWrapperFillActive;
   if (wrapperScaleHover != null)
     (stateVars as Record<string, string>)["--element-btn-scale-hover"] = String(wrapperScaleHover);
   if (wrapperScaleActive != null)
@@ -222,8 +236,9 @@ export function buildElementButtonWrapperStyles(
   if (wrapperOpacityHover != null)
     (stateVars as Record<string, string>)["--element-btn-opacity-hover"] =
       String(wrapperOpacityHover);
-  if (wrapperFillDisabled != null)
-    (stateVars as Record<string, string>)["--element-btn-fill-disabled"] = wrapperFillDisabled;
+  if (resolvedWrapperFillDisabled != null)
+    (stateVars as Record<string, string>)["--element-btn-fill-disabled"] =
+      resolvedWrapperFillDisabled;
   if (wrapperTransition != null)
     (stateVars as Record<string, string>)["--element-btn-transition"] = wrapperTransition;
 
@@ -235,11 +250,11 @@ export function buildElementButtonWrapperStyles(
     typeof resolvedFill === "string";
   if (canTrackSolidFill) {
     (fillTracking as Record<string, string>)["--element-btn-fill"] = resolvedFill;
-    if (wrapperFillHover == null) {
+    if (resolvedWrapperFillHover == null) {
       (fillTracking as Record<string, string>)["--element-btn-fill-hover"] = resolvedFill;
     }
-    if (wrapperFillActive == null) {
-      const hoverFallback = wrapperFillHover ?? resolvedFill;
+    if (resolvedWrapperFillActive == null) {
+      const hoverFallback = resolvedWrapperFillHover ?? resolvedFill;
       (fillTracking as Record<string, string>)["--element-btn-fill-active"] = hoverFallback;
     }
   }
@@ -251,7 +266,7 @@ export function buildElementButtonWrapperStyles(
     typeof resolvedStroke === "string";
   if (canTrackSolidStroke) {
     (fillTracking as Record<string, string>)["--element-btn-stroke"] = resolvedStroke;
-    if (wrapperStrokeHover == null) {
+    if (resolvedWrapperStrokeHover == null) {
       (fillTracking as Record<string, string>)["--element-btn-stroke-hover"] = resolvedStroke;
     }
   }
@@ -259,8 +274,9 @@ export function buildElementButtonWrapperStyles(
   const customVars: CSSProperties = {};
   if (wrapperInteractionVars) {
     for (const [key, val] of Object.entries(wrapperInteractionVars)) {
-      if (typeof key === "string" && key.startsWith("--") && typeof val === "string") {
-        (customVars as Record<string, string>)[key] = val;
+      const resolvedValue = resolveThemeString(val as ThemeString, themeMode);
+      if (typeof key === "string" && key.startsWith("--") && resolvedValue != null) {
+        (customVars as Record<string, string>)[key] = resolvedValue;
       }
     }
   }

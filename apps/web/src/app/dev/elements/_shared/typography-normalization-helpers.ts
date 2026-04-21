@@ -4,6 +4,7 @@ import {
 } from "@/app/dev/workbench/workbench-session";
 import { OVERFLOW_OPTIONS } from "@/app/dev/elements/_shared/dev-controls/foundation-constants";
 import { clampNumber } from "@/app/dev/elements/image/utils";
+import { isThemeStringObject, type ThemeStringLike } from "@/app/dev/elements/_shared/theme-string";
 
 type PersistedTypographyShape = {
   defaultVariant: string;
@@ -69,8 +70,14 @@ export function resolveTypographyDefaultVariant<K extends string>(
   return variantOrder.includes(incomingDefault as K) ? (incomingDefault as K) : fallback;
 }
 
-export function pickString<T extends string | undefined>(incoming: unknown, fallback: T): T {
-  return (typeof incoming === "string" ? incoming : fallback) as T;
+export function pickString<T extends ThemeStringLike | undefined>(
+  incoming: unknown,
+  fallback: T
+): T {
+  if (typeof incoming === "string" || isThemeStringObject(incoming)) {
+    return incoming as T;
+  }
+  return fallback;
 }
 
 export function pickBoolean<T extends boolean | undefined>(incoming: unknown, fallback: T): T {

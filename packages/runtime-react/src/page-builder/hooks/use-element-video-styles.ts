@@ -15,6 +15,8 @@ import {
   type ElementVideoObjectFit,
 } from "@pb/core/internal/element-video-utils";
 import { uiVideoDefaultAspectRatio } from "@pb/runtime-react/core/lib/globals";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
 
 /** Layout props may be responsive (tuple). Hook passes through to lib which resolves. */
 export type UseElementVideoStylesParams = {
@@ -90,6 +92,11 @@ export function useElementVideoStyles({
   moduleConfig,
 }: UseElementVideoStylesParams): UseElementVideoStylesResult {
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
+  const resolvedLayoutWrapperStyle = resolveThemeStyleObject(
+    layoutWrapperStyle as Record<string, unknown> | undefined,
+    themeMode
+  ) as CSSProperties | undefined;
   const resolvedAspectRatioRaw =
     aspectRatio ??
     (moduleConfig
@@ -115,7 +122,7 @@ export function useElementVideoStyles({
         marginRight,
         zIndex,
         fixed,
-        wrapperStyle: layoutWrapperStyle,
+        wrapperStyle: resolvedLayoutWrapperStyle,
         opacity,
         blendMode,
         boxShadow,
@@ -137,7 +144,7 @@ export function useElementVideoStyles({
       marginRight,
       zIndex,
       fixed,
-      layoutWrapperStyle,
+      resolvedLayoutWrapperStyle,
       opacity,
       blendMode,
       boxShadow,

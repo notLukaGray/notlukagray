@@ -5,6 +5,7 @@ import {
   cssInlineStyleSchema,
   responsiveElementAlignSchema,
   responsiveStringSchema,
+  responsiveThemeStringSchema,
   responsiveTextAlignSchema,
   triggerActionSchema,
 } from "./schema-primitives";
@@ -25,8 +26,8 @@ export const formFieldStyleSchema = z.object({
   marginRight: responsiveStringSchema.optional(),
   textAlign: responsiveTextAlignSchema.optional(),
   padding: responsiveStringSchema.optional(),
-  fill: responsiveStringSchema.optional(),
-  stroke: responsiveStringSchema.optional(),
+  fill: responsiveThemeStringSchema.optional(),
+  stroke: responsiveThemeStringSchema.optional(),
   borderRadius: responsiveStringSchema.optional(),
   borderWidth: responsiveStringSchema.optional(),
   effects: z.array(sectionEffectSchema).optional(),

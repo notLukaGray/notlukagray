@@ -1,7 +1,7 @@
 {
   "type": "sectionColumn",
   "id": "nav",
-  "ariaLabel": "FPO: Main navigation",
+  "ariaLabel": "Main navigation",
   "fixed": true,
   "fixedPosition": "top",
   "fixedOffset": "0px",
@@ -12,19 +12,19 @@
   "height": "hug",
   "align": "center",
 
-  "fill": "#00000020",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.5)",
   "borderRadius": "0 0 30px 30px",
   "effects": [
     {
       "type": "glass",
       "bezelType": "convex_squircle",
-      "bezelWidth": 24,
+      "bezelWidth": 6,
       "glassThickness": 20,
       "refractiveIndex": 1.8,
-      "blur": 1,
+      "blur": 5,
       "scaleRatio": 1,
-      "specularOpacity": 0.5,
-      "specularSaturation": 5,
+      "specularOpacity": 1,
+      "specularSaturation": 50,
       "magnifyingScale": 0.5,
       "dropShadow": true
     }
@@ -48,35 +48,128 @@
 
   "definitions": {
     "work": {
-      "preset": "nav-link-default",
       "type": "elementLink",
       "id": "work",
       "label": "Work",
-      "href": "/work"
+      "href": "/work",
+      "copyType": "body",
+      "variant": "legal-light",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     },
     "teaching": {
-      "preset": "nav-link-default",
       "type": "elementLink",
       "id": "teaching",
       "label": "Teaching",
-      "href": "/teaching"
+      "href": "/teaching",
+      "copyType": "body",
+      "variant": "legal-light",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     },
     "logo": {
-      "preset": "logo-default"
+      "type": "elementVector",
+      "id": "logo",
+      "viewBox": "0 0 30 30",
+      "preserveAspectRatio": "xMidYMid meet",
+      "width": "30px",
+      "height": "30px",
+      "align": "center",
+      "link": {
+        "ref": "/",
+        "external": false,
+        "hoverFill": "nav-logo-fill-hover",
+        "hoverStroke": "nav-logo-stroke-hover",
+        "vectorTransition": ".5s"
+      },
+      "colors": {
+        "nav-logo-stroke": "oklch(from var(--pb-on-secondary) l c h / 0.5)",
+        "nav-logo-stroke-hover": "var(--pb-link-hover)"
+      },
+      "gradients": [
+        {
+          "type": "linearGradient",
+          "id": "nav-logo-fill",
+          "x1": "0",
+          "y1": "1",
+          "x2": "1",
+          "y2": "0",
+          "gradientUnits": "objectBoundingBox",
+          "gradientTransform": "rotate(167 0.5 0.5)",
+          "stops": [
+            { "offset": "0", "color": "var(--pb-on-secondary)", "opacity": 0.1 },
+            { "offset": "1", "color": "var(--pb-on-secondary)", "opacity": 0.6 }
+          ]
+        },
+        {
+          "type": "linearGradient",
+          "id": "nav-logo-fill-hover",
+          "x1": "0",
+          "y1": "1",
+          "x2": "1",
+          "y2": "0",
+          "gradientUnits": "objectBoundingBox",
+          "gradientTransform": "rotate(167 0.5 0.5)",
+          "stops": [
+            { "offset": "0", "color": "var(--pb-link-hover)", "opacity": 0.2 },
+            { "offset": "1", "color": "var(--pb-link-hover)", "opacity": 0.9 }
+          ]
+        }
+      ],
+      "strokeGroup": {
+        "stroke": "nav-logo-stroke",
+        "strokeWidth": 1,
+        "strokeLinejoin": "round",
+        "strokeMiterlimit": 10,
+        "opacity": 0.5,
+        "blendMode": "overlay"
+      },
+      "shapes": [
+        {
+          "type": "path",
+          "d": "M19.0192 30L0.00116246 19.0172L20.366 13.0263L19.0192 30Z",
+          "fill": "nav-logo-fill"
+        },
+        {
+          "type": "path",
+          "d": "M-4.87566e-05 19.0192L10.9817 0.000574477L20.3665 13.0266L-4.87566e-05 19.0192Z",
+          "fill": "nav-logo-fill"
+        },
+        {
+          "type": "path",
+          "d": "M10.9807 0L29.9997 10.9812L20.366 13.0263L10.9807 0Z",
+          "fill": "nav-logo-fill"
+        },
+        {
+          "type": "path",
+          "d": "M29.9995 10.9805L19.0191 30L20.3659 13.0263L29.9995 10.9805Z",
+          "fill": "nav-logo-fill"
+        }
+      ]
     },
     "research": {
-      "preset": "nav-link-default",
       "type": "elementLink",
       "id": "research",
       "label": "Research",
-      "href": "/research"
+      "href": "/research",
+      "copyType": "body",
+      "variant": "legal-light",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     },
     "profile": {
-      "preset": "nav-link-default",
       "type": "elementLink",
       "id": "profile",
       "label": "Profile",
-      "href": "/profile"
+      "href": "/profile",
+      "copyType": "body",
+      "variant": "legal-light",
+      "linkDefault": "var(--pb-on-secondary)",
+      "linkHover": "var(--pb-link-hover)",
+      "linkActive": "var(--pb-link-active)"
     }
   }
 }

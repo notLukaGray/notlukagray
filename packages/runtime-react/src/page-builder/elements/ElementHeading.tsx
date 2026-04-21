@@ -8,6 +8,8 @@ import {
 import { getHeadingTypographyClass } from "@pb/core/internal/element-body-typography";
 import { useVariable } from "@/page-builder/runtime/page-builder-variable-store";
 import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 type Props = Extract<ElementBlock, { type: "elementHeading" }>;
 
@@ -53,6 +55,7 @@ export function ElementHeading({
   flipVertical,
   ...rest
 }: Props & { variableKey?: string }) {
+  const themeMode = usePageBuilderThemeMode();
   // Always call hook unconditionally; use its value only when variableKey is set
   const variableValue = useVariable(variableKey ?? "");
   const resolvedText = variableKey !== undefined ? String(variableValue ?? "") : text;
@@ -92,16 +95,18 @@ export function ElementHeading({
     wordBreak: wordWrap ? "break-word" : "normal",
     ...(!wordWrap && whiteSpace == null ? { overflow: "hidden", textOverflow: "ellipsis" } : {}),
   };
-  if (textFill?.type === "gradient" && textFill.value) {
-    textStyle.backgroundImage = textFill.value;
+  const resolvedTextFill = resolveThemeString(textFill?.value, themeMode);
+  const resolvedColor = resolveThemeString(color, themeMode);
+  if (textFill?.type === "gradient" && resolvedTextFill) {
+    textStyle.backgroundImage = resolvedTextFill;
     textStyle.backgroundClip = "text";
     textStyle.WebkitBackgroundClip = "text";
     textStyle.color = "transparent";
     (textStyle as Record<string, unknown>).WebkitTextFillColor = "transparent";
-  } else if (textFill?.type === "color" && textFill.value) {
-    textStyle.color = textFill.value;
-  } else if (color !== undefined) {
-    textStyle.color = color;
+  } else if (textFill?.type === "color" && resolvedTextFill) {
+    textStyle.color = resolvedTextFill;
+  } else if (resolvedColor !== undefined) {
+    textStyle.color = resolvedColor;
   }
 
   return (

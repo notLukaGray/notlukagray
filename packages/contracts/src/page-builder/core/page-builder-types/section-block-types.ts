@@ -12,10 +12,13 @@ import type {
 } from "./section-column-layout-types";
 import type { dividerLayer, SectionBorder, SectionEffect } from "./section-style-effect-types";
 import type { TriggerAction } from "./trigger-action-types";
+import type { ThemeString } from "../page-builder-schemas";
+
+type ResponsiveThemeString = ThemeString | [ThemeString, ThemeString];
 
 export type BaseSectionProps = {
   id?: string;
-  fill?: string;
+  fill?: ResponsiveThemeString;
   layers?: dividerLayer[];
   effects?: SectionEffect[];
   width?: string;

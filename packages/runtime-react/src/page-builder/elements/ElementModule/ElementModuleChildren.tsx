@@ -14,6 +14,8 @@ import {
   getContainerWrapperStyle,
   shouldRenderChildWrapper,
 } from "./element-module-style-utils";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
 
 type ElementModuleChildrenProps = {
   blocks: ElementBlock[];
@@ -47,6 +49,7 @@ export function ElementModuleChildren({
   slotDefaultWrapper,
   getActionHandler,
 }: ElementModuleChildrenProps) {
+  const themeMode = usePageBuilderThemeMode();
   const resolvedParentAlignItems =
     parentAlignItems ?? getPbContentGuidelines().frameAlignItemsDefault;
   return blocks.map((block, index) => {
@@ -58,10 +61,13 @@ export function ElementModuleChildren({
     const hasMotion = !!(block as ElementBlock & { motion?: unknown }).motion;
     const baseWrapperStyle = (
       handler
-        ? { ...slotDefaultWrapper, ...(elWrapperStyle ?? {}) }
+        ? {
+            ...resolveThemeStyleObject(slotDefaultWrapper, themeMode),
+            ...resolveThemeStyleObject(elWrapperStyle, themeMode),
+          }
         : hasMotion
           ? {}
-          : (elWrapperStyle ?? {})
+          : (resolveThemeStyleObject(elWrapperStyle, themeMode) ?? {})
     ) as CSSProperties;
     const wrapperStyle = getContainerWrapperStyle(baseWrapperStyle);
     const blockWidth = (block as ElementBlock & { width?: unknown }).width;

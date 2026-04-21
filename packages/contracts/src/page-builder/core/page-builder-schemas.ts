@@ -40,6 +40,7 @@ import {
 } from "./page-builder-schemas/modal-block-schemas";
 import {
   backgroundTransitionEffectSchema,
+  forcedThemeSchema,
   pageBuilderDefinitionBlockSchema,
   pageDensitySchema,
   pageBuilderSchema,
@@ -200,6 +201,7 @@ export type ResolvedPage = z.infer<typeof resolvedPageSchema>;
 export type BackgroundTransitionEffect = z.infer<typeof backgroundTransitionEffectSchema>;
 export type PageScrollConfig = z.infer<typeof pageScrollConfigSchema>;
 export type PageDensity = z.infer<typeof pageDensitySchema>;
+export type ForcedTheme = z.infer<typeof forcedThemeSchema>;
 
 export type BaseSectionProps = z.infer<typeof baseSectionPropsSchema>;
 

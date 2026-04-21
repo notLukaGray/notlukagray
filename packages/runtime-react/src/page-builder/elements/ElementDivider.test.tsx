@@ -37,4 +37,20 @@ describe("ElementDivider", () => {
     expect(markup).toContain("height:40px");
     expect(markup).toContain("border-left:3px dotted #00ff00");
   });
+
+  it("resolves theme-aware divider color", () => {
+    const markup = renderToStaticMarkup(
+      <ServerBreakpointProvider isMobile={false}>
+        <ElementDivider
+          type="elementDivider"
+          orientation="horizontal"
+          thickness="2px"
+          color={{ light: "#111111", dark: "#eeeeee" }}
+          length="80%"
+        />
+      </ServerBreakpointProvider>
+    );
+    expect(markup).toContain("background-color:#eeeeee");
+    expect(markup).not.toContain("[object Object]");
+  });
 });

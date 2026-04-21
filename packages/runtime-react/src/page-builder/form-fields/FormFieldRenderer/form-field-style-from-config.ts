@@ -1,12 +1,21 @@
 import type { CSSProperties } from "react";
 import type { FormFieldBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
+import {
+  type PageBuilderThemeMode,
+  resolveThemeString,
+  resolveThemeStyleObject,
+} from "@/page-builder/theme/theme-string";
 
 /**
  * Builds CSS style object from form field block Style modifiers.
  * Used by FormFieldRenderer to apply width, padding, fill, stroke, margins, etc.
  */
-export function formFieldStyleFromConfig(field: FormFieldBlock, isMobile: boolean): CSSProperties {
+export function formFieldStyleFromConfig(
+  field: FormFieldBlock,
+  isMobile: boolean,
+  themeMode: PageBuilderThemeMode
+): CSSProperties {
   const width = resolveResponsiveValue(field.width, isMobile);
   const marginTop = resolveResponsiveValue(field.marginTop, isMobile);
   const marginBottom = resolveResponsiveValue(field.marginBottom, isMobile);
@@ -26,14 +35,16 @@ export function formFieldStyleFromConfig(field: FormFieldBlock, isMobile: boolea
   if (marginLeft !== undefined) style.marginLeft = marginLeft;
   if (marginRight !== undefined) style.marginRight = marginRight;
   if (padding !== undefined) style.padding = padding;
-  if (fill !== undefined) style.background = fill;
-  if (stroke !== undefined) style.borderColor = stroke;
+  const resolvedFill = resolveThemeString(fill, themeMode);
+  const resolvedStroke = resolveThemeString(stroke, themeMode);
+  if (resolvedFill !== undefined) style.background = resolvedFill;
+  if (resolvedStroke !== undefined) style.borderColor = resolvedStroke;
   if (borderRadius !== undefined) style.borderRadius = borderRadius;
   if (borderWidth !== undefined) style.borderWidth = borderWidth;
   if (textAlign !== undefined) style.textAlign = textAlign as CSSProperties["textAlign"];
 
   if (field.wrapperStyle && typeof field.wrapperStyle === "object") {
-    Object.assign(style, field.wrapperStyle);
+    Object.assign(style, resolveThemeStyleObject(field.wrapperStyle, themeMode));
   }
   return style;
 }

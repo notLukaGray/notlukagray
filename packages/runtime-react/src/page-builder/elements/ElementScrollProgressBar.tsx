@@ -1,15 +1,20 @@
 "use client";
 
 import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { ThemeString } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { useSectionScrollTarget } from "@/page-builder/section/position/SectionScrollTargetContext";
 import { SectionScrollProgressBar } from "@/page-builder/integrations/framer-motion";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { type PageBuilderThemeMode, resolveThemeString } from "@/page-builder/theme/theme-string";
 
 type Props = Extract<ElementBlock, { type: "elementScrollProgressBar" }>;
 
 /** Coerce responsive or tuple value to a single string for bar style props. */
-function asString(v: unknown): string | undefined {
-  if (typeof v === "string") return v;
-  if (Array.isArray(v) && typeof v[0] === "string") return v[0];
+function asString(v: unknown, themeMode: PageBuilderThemeMode): string | undefined {
+  if (typeof v === "string" || (v != null && typeof v === "object" && !Array.isArray(v))) {
+    return resolveThemeString(v as ThemeString, themeMode);
+  }
+  if (Array.isArray(v)) return asString(v[0], themeMode);
   return undefined;
 }
 
@@ -19,12 +24,13 @@ function asString(v: unknown): string | undefined {
  * Style from element props or motion-defaults progressBar.
  */
 export function ElementScrollProgressBar(props: Props) {
+  const themeMode = usePageBuilderThemeMode();
   const sectionRef = useSectionScrollTarget();
   if (!sectionRef) return null;
 
-  const height = asString(props.height);
-  const fill = asString(props.fill);
-  const trackBackground = asString(props.trackBackground);
+  const height = asString(props.height, themeMode);
+  const fill = asString(props.fill, themeMode);
+  const trackBackground = asString(props.trackBackground, themeMode);
   const offset =
     Array.isArray(props.offset) && props.offset.length === 2
       ? (props.offset as [string, string])

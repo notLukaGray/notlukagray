@@ -6,6 +6,7 @@ import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-prov
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { formFieldStyleFromConfig } from "./FormFieldRenderer/form-field-style-from-config";
 import { FORM_FIELD_COMPONENTS } from "./FormFieldRenderer/form-field-component-map";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 export type FormFieldValue = string | string[] | boolean;
 
@@ -31,7 +32,11 @@ export function FormFieldRenderer({
   renderNestedField,
 }: FormFieldRendererProps) {
   const { isMobile } = useDeviceType();
-  const style = useMemo(() => formFieldStyleFromConfig(field, isMobile), [field, isMobile]);
+  const themeMode = usePageBuilderThemeMode();
+  const style = useMemo(
+    () => formFieldStyleFromConfig(field, isMobile, themeMode),
+    [field, isMobile, themeMode]
+  );
   const resolvedLevel = useMemo(
     () => resolveResponsiveValue(field.level, isMobile),
     [field.level, isMobile]

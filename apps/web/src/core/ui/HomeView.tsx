@@ -75,6 +75,8 @@ export function HomeView({ heroProjects }: HomeViewProps) {
               playsInline
               preload="metadata"
               poster={posterUrl}
+              disableRemotePlayback
+              controlsList="nodownload nofullscreen noremoteplayback"
               className="w-full h-full object-cover transition-opacity duration-1000"
               onError={() =>
                 setVideoFailedByProject((prev) => ({

@@ -21,6 +21,7 @@ import {
 import { elementModel3DSchema } from "./element-model3d-schemas";
 import { elementRiveSchema } from "./element-rive-schemas";
 import { sectionEffectSchema } from "./section-effect-schemas";
+import { themeStringSchema } from "./schema-primitives";
 
 // z.lazy breaks the circular init (TS7022) by deferring evaluation until parse time.
 // z.ZodType<unknown> annotation prevents TypeScript from trying to infer the recursive type.
@@ -117,7 +118,7 @@ export const elementBlockSchema = z
 
 export const cssGradientDefinitionSchema = z.object({
   type: z.literal("cssGradient"),
-  value: z.string(),
+  value: themeStringSchema,
 });
 
 export const sectionDefinitionBlockSchema = z.union([

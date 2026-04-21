@@ -2,6 +2,10 @@ import {
   WORKBENCH_COLOR_TOKEN_SELECT_OPTIONS,
   workbenchColorTokenSelectValue,
 } from "./workbench-color-token-presets";
+import {
+  themeStringToInputValue,
+  type ThemeStringLike,
+} from "@/app/dev/elements/_shared/theme-string";
 
 export function SharedWorkbenchColorTokenFields({
   idSuffix,
@@ -12,11 +16,12 @@ export function SharedWorkbenchColorTokenFields({
 }: {
   idSuffix: string;
   label: string;
-  value: string | undefined;
+  value: ThemeStringLike | undefined;
   onChange: (next: string | undefined) => void;
   helperText?: string;
 }) {
-  const selectValue = workbenchColorTokenSelectValue(value);
+  const cssValue = themeStringToInputValue(value);
+  const selectValue = workbenchColorTokenSelectValue(cssValue || undefined);
 
   return (
     <>
@@ -49,7 +54,7 @@ export function SharedWorkbenchColorTokenFields({
           type="text"
           id={`wb-color-custom-${idSuffix}`}
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={value ?? ""}
+          value={cssValue}
           onChange={(e) => onChange(e.target.value.trim() ? e.target.value : undefined)}
           placeholder="e.g. #0f172a or var(--pb-text-primary)"
         />

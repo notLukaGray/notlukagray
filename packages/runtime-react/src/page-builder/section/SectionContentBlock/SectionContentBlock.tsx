@@ -40,6 +40,8 @@ import {
   type VisibleWhenConfig,
 } from "@pb/contracts/page-builder/core/page-builder-condition-evaluator";
 import type { JsonValue } from "@pb/contracts/page-builder/core/page-builder-types/json-value";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
 
 type ContentBlockBase = Extract<SectionBlock, { type: "contentBlock" }>;
 type Props = ContentBlockBase & {
@@ -134,7 +136,8 @@ export function SectionContentBlock({
     [elementsProp, elementOrder, sectionDefinitions]
   );
 
-  const resolvedFill = resolveResponsiveValue(fill, isMobile);
+  const themeMode = usePageBuilderThemeMode();
+  const resolvedFill = resolveThemeString(resolveResponsiveValue(fill, isMobile), themeMode);
   const resolvedStickyOffset = resolveResponsiveValue(stickyOffset, isMobile) ?? "0px";
   const resolvedFixedOffset = resolveResponsiveValue(fixedOffset, isMobile) ?? "0px";
   const pbContentGuidelines = getPbContentGuidelines();

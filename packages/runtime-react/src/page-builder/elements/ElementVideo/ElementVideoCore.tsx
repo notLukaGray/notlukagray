@@ -78,6 +78,8 @@ export function ElementVideoCore({
       playsInline
       preload={shouldLoad ? "auto" : "none"}
       controls={!withModule}
+      disableRemotePlayback
+      controlsList="nodownload nofullscreen noremoteplayback"
       style={{
         ...videoStyle,
         ...(withModule ? { width: "100%", height: "100%" } : {}),

@@ -414,6 +414,11 @@ export const triggerActionSchema: z.ZodType<PageBuilderAction> = z.discriminated
     type: z.literal("setSessionStorage"),
     payload: z.object({ key: z.string(), value: jsonValueSchema }),
   }),
+  // Theme
+  z.object({
+    type: z.literal("setTheme"),
+    payload: z.object({ mode: z.enum(["light", "dark", "toggle"]) }),
+  }),
   // 3D element actions
   z.object({ type: z.literal("three.load"), payload: threeBasePayload }),
   z.object({ type: z.literal("three.unload"), payload: threeBasePayload }),
@@ -494,7 +499,28 @@ export const triggerActionSchema: z.ZodType<PageBuilderAction> = z.discriminated
 /** Inferred type from triggerActionSchema. Used for section JSON. */
 export type CoreTriggerAction = z.infer<typeof triggerActionSchema>;
 
-export const cssInlineStyleValueSchema = z.union([z.string(), z.number()]);
+const nonEmptyThemeStringValueSchema = z.string().min(1);
+
+export const themeStringObjectSchema = z
+  .object({
+    value: nonEmptyThemeStringValueSchema.optional(),
+    light: nonEmptyThemeStringValueSchema.optional(),
+    dark: nonEmptyThemeStringValueSchema.optional(),
+  })
+  .refine((value) => value.value != null || value.light != null || value.dark != null, {
+    message: "Theme string object must include at least one of value, light, or dark",
+  });
+
+export const themeStringSchema = z.union([nonEmptyThemeStringValueSchema, themeStringObjectSchema]);
+
+export type ThemeString = z.infer<typeof themeStringSchema>;
+
+export const responsiveThemeStringSchema = z.union([
+  themeStringSchema,
+  z.tuple([themeStringSchema, themeStringSchema]),
+]);
+
+export const cssInlineStyleValueSchema = z.union([themeStringSchema, z.number()]);
 export const cssInlineStyleSchema = z.record(z.string(), cssInlineStyleValueSchema);
 
 export const responsiveStringSchema = z.union([z.string(), z.tuple([z.string(), z.string()])]);

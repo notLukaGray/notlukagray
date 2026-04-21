@@ -178,6 +178,7 @@ export type PageBuilderPageClientPage = {
   transitions?: BackgroundTransitionEffect | BackgroundTransitionEffect[];
   scroll?: PageScrollConfig;
   density?: PageDensity;
+  forcedTheme?: "light" | "dark";
   figmaExportDiagnostics?: FigmaExportDiagnosticsPageField;
 };
 
@@ -313,6 +314,9 @@ function stripPageForClient(page: ResolvedPageWithDefinitions): PageBuilderPageC
   }
   if (page.scroll != null) stripped.scroll = page.scroll as PageScrollConfig;
   if (page.density != null) stripped.density = page.density as PageDensity;
+  if (page.forcedTheme === "light" || page.forcedTheme === "dark") {
+    stripped.forcedTheme = page.forcedTheme;
+  }
   if (
     (page as { figmaExportDiagnostics?: FigmaExportDiagnosticsPageField }).figmaExportDiagnostics !=
     null

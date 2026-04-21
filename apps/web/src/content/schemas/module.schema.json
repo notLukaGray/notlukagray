@@ -154,6 +154,18 @@
     },
     "Def51": {
       "$ref": "#/$defs/Def51"
+    },
+    "Def52": {
+      "$ref": "#/$defs/Def52"
+    },
+    "Def53": {
+      "$ref": "#/$defs/Def53"
+    },
+    "Def54": {
+      "$ref": "#/$defs/Def54"
+    },
+    "Def55": {
+      "$ref": "#/$defs/Def55"
     }
   },
   "type": "object",
@@ -183,7 +195,7 @@
                 "type": "object",
                 "properties": {
                   "fill": {
-                    "type": "string"
+                    "$ref": "#/$defs/Def1"
                   },
                   "blendMode": {
                     "type": "string"
@@ -257,10 +269,10 @@
             "enum": ["nowrap", "wrap", "wrap-reverse"]
           },
           "rowGap": {
-            "$ref": "#/$defs/Def1"
+            "$ref": "#/$defs/Def4"
           },
           "columnGap": {
-            "$ref": "#/$defs/Def1"
+            "$ref": "#/$defs/Def4"
           },
           "padding": {
             "type": "string"
@@ -275,7 +287,7 @@
                 }
               },
               "definitions": {
-                "$ref": "#/$defs/Def2"
+                "$ref": "#/$defs/Def5"
               }
             },
             "additionalProperties": {}
@@ -301,7 +313,7 @@
             "type": "object",
             "properties": {
               "durationMs": {
-                "$ref": "#/$defs/Def3"
+                "$ref": "#/$defs/Def6"
               },
               "easing": {
                 "default": "easeOut",
@@ -312,10 +324,10 @@
             "additionalProperties": false
           },
           "expandDurationMs": {
-            "$ref": "#/$defs/Def3"
+            "$ref": "#/$defs/Def6"
           },
           "elementRevealMs": {
-            "$ref": "#/$defs/Def3"
+            "$ref": "#/$defs/Def6"
           },
           "elementRevealStaggerMs": {
             "default": 50,
@@ -323,7 +335,7 @@
             "minimum": 0
           },
           "motion": {
-            "$ref": "#/$defs/Def4"
+            "$ref": "#/$defs/Def7"
           },
           "visibilityPreset": {
             "type": "string"
@@ -338,13 +350,13 @@
             "type": "object",
             "properties": {
               "whileHover": {
-                "$ref": "#/$defs/Def2"
+                "$ref": "#/$defs/Def5"
               },
               "whileTap": {
-                "$ref": "#/$defs/Def2"
+                "$ref": "#/$defs/Def5"
               },
               "whileFocus": {
-                "$ref": "#/$defs/Def2"
+                "$ref": "#/$defs/Def5"
               }
             },
             "additionalProperties": {}
@@ -356,11 +368,11 @@
           "effects": {
             "type": "array",
             "items": {
-              "$ref": "#/$defs/Def32"
+              "$ref": "#/$defs/Def35"
             }
           },
           "style": {
-            "$ref": "#/$defs/Def51"
+            "$ref": "#/$defs/Def54"
           }
         },
         "required": ["expandDurationMs", "elementRevealMs", "elementRevealStaggerMs"],
@@ -405,16 +417,16 @@
       }
     },
     "overlayMotion": {
-      "$ref": "#/$defs/Def4"
+      "$ref": "#/$defs/Def7"
     },
     "effects": {
       "type": "array",
       "items": {
-        "$ref": "#/$defs/Def32"
+        "$ref": "#/$defs/Def35"
       }
     },
     "style": {
-      "$ref": "#/$defs/Def51"
+      "$ref": "#/$defs/Def54"
     }
   },
   "required": ["type", "contentSlot", "slots"],

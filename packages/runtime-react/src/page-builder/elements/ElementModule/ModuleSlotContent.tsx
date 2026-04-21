@@ -13,6 +13,8 @@ import { motion } from "@/page-builder/integrations/framer-motion";
 import type { Easing } from "@/page-builder/integrations/framer-motion";
 import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 import { SlotDefaultWrapperStyleContext, SlotDefinitionsContext } from "./ModuleSlotContext";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
 
 export type ModuleSlotContentProps = {
   elements: ElementBlock[];
@@ -40,6 +42,7 @@ function SlotElement({
   defaultWrapperStyle: CssInlineStyle;
   isModuleGroup: boolean;
 }) {
+  const themeMode = usePageBuilderThemeMode();
   const action = (block as ElementBlock & { action?: string }).action;
   const actionPayload = (block as ElementBlock & { actionPayload?: number }).actionPayload;
   const handler = getActionHandler(action, actionPayload);
@@ -48,13 +51,15 @@ function SlotElement({
   const groupLayout = isModuleGroup
     ? (block as ElementBlock & { flex?: string; width?: string })
     : null;
+  const resolvedElementWrapperStyle = resolveThemeStyleObject(elWrapperStyle, themeMode);
+  const resolvedDefaultWrapperStyle = resolveThemeStyleObject(defaultWrapperStyle, themeMode);
   const wrapperStyle: CSSProperties = isModuleGroup
     ? {
-        ...(elWrapperStyle as CSSProperties),
+        ...(resolvedElementWrapperStyle as CSSProperties),
         ...(groupLayout?.flex ? { flex: groupLayout.flex } : {}),
         ...(groupLayout?.width ? { width: groupLayout.width } : {}),
       }
-    : { ...defaultWrapperStyle, ...(elWrapperStyle ?? {}) };
+    : { ...resolvedDefaultWrapperStyle, ...(resolvedElementWrapperStyle ?? {}) };
 
   if (handler) {
     return (

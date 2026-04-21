@@ -2,6 +2,8 @@
 
 import type { bgBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { AnimatedBgVariableLayer } from "./AnimatedBgVariableLayer";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 type Props = Extract<bgBlock, { type: "backgroundVariable" }>;
 
@@ -13,6 +15,7 @@ type Props = Extract<bgBlock, { type: "backgroundVariable" }>;
  * scroll, pointer, parallax, trigger — composable in any combination).
  */
 export function BackgroundVariable({ layers }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   if (!layers?.length) return null;
 
   return (
@@ -20,7 +23,7 @@ export function BackgroundVariable({ layers }: Props) {
       {layers.map((layer, i) => (
         <AnimatedBgVariableLayer
           key={i}
-          fill={layer.fill}
+          fill={resolveThemeString(layer.fill, themeMode)}
           blendMode={layer.blendMode}
           opacity={layer.opacity}
           backgroundSize={layer.backgroundSize}

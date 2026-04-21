@@ -19,6 +19,7 @@ import {
   buildGridItemStyle,
   GridDebugOverlay,
 } from "./SectionColumnGrid/section-column-grid-debug-overlay";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 export type SectionColumnGridProps = {
   elementsByColumn: ElementBlock[][];
@@ -52,6 +53,7 @@ export function SectionColumnGrid({
   layoutSegments,
   contentWrapperStyle,
 }: SectionColumnGridProps) {
+  const themeMode = usePageBuilderThemeMode();
   const effectiveSegments: ColumnLayoutSegment<ElementBlock>[] =
     layoutSegments && layoutSegments.length > 0
       ? layoutSegments
@@ -112,6 +114,7 @@ export function SectionColumnGrid({
             <ItemCell
               block={item.element}
               style={item.element.id ? itemStyles?.[item.element.id] : undefined}
+              themeMode={themeMode}
             />
           </div>
         ))}
@@ -147,6 +150,7 @@ export function SectionColumnGrid({
             resolvedColumnGaps,
             columnStyles,
             itemStyles,
+            themeMode,
           });
           return segmentSpacingStyle ? (
             <div key={`${segmentKey}:spacing`} style={segmentSpacingStyle}>
@@ -184,6 +188,7 @@ export function SectionColumnGrid({
               <ItemCell
                 block={segment.element}
                 style={segment.element.id ? itemStyles?.[segment.element.id] : undefined}
+                themeMode={themeMode}
               />
             </div>
           </div>

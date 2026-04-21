@@ -8,23 +8,25 @@ export function buildShapeProps(
   options?: {
     fillOnly?: boolean;
     fillOverride?: string;
+    strokeOverride?: string;
     transitionStyle?: React.CSSProperties;
   }
 ): VectorShapeCommonProps {
   const fillOnly = options?.fillOnly ?? false;
   const fill = options?.fillOverride ?? shape.fill;
+  const stroke = options?.strokeOverride ?? shape.stroke;
   const transitionStyle = options?.transitionStyle;
   const style =
-    transitionStyle && (fill != null || (!fillOnly && shape.stroke != null))
+    transitionStyle && (fill != null || (!fillOnly && stroke != null))
       ? {
           ...transitionStyle,
           ...(fill != null && { fill }),
-          ...(!fillOnly && shape.stroke != null && { stroke: shape.stroke }),
+          ...(!fillOnly && stroke != null && { stroke }),
         }
       : transitionStyle;
   const shapeProps = {
     ...(style == null && fill != null && { fill }),
-    ...(style == null && !fillOnly && shape.stroke != null && { stroke: shape.stroke }),
+    ...(style == null && !fillOnly && stroke != null && { stroke }),
     strokeWidth: fillOnly ? undefined : shape.strokeWidth,
     strokeLinecap: fillOnly ? undefined : shape.strokeLinecap,
     strokeLinejoin: fillOnly ? undefined : shape.strokeLinejoin,
@@ -120,6 +122,7 @@ export function renderVectorShape(
   options?: {
     fillOnly?: boolean;
     fillOverride?: string;
+    strokeOverride?: string;
     transitionStyle?: React.CSSProperties;
   }
 ): ReactNode {

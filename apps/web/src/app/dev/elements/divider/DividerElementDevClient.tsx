@@ -5,6 +5,7 @@ import type { ElementBlock } from "@pb/contracts";
 import { ElementRenderer } from "@pb/runtime-react/client";
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageShell } from "@/app/dev/_components/DevWorkbenchPageShell";
+import { themeStringToInputValue } from "@/app/dev/elements/_shared/theme-string";
 
 type DividerBlock = Extract<ElementBlock, { type: "elementDivider" }>;
 type DividerStyle = NonNullable<DividerBlock["style"]>;
@@ -136,7 +137,7 @@ export function DividerElementDevClient() {
               </Field>
               <Field label="Color">
                 <input
-                  value={block.color}
+                  value={themeStringToInputValue(block.color)}
                   onChange={(event) => patchBlock({ color: event.target.value })}
                   className={controlClassName()}
                 />
@@ -161,7 +162,7 @@ export function DividerElementDevClient() {
           <p className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
             Export
           </p>
-          <pre className="max-h-[34rem] overflow-auto rounded border border-border bg-background p-3 text-[11px] leading-5 text-muted-foreground">
+          <pre className="max-h-136 overflow-auto rounded border border-border bg-background p-3 text-[11px] leading-5 text-muted-foreground">
             {exportJson}
           </pre>
         </aside>

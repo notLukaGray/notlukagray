@@ -1,12 +1,17 @@
 import type { ReactNode } from "react";
 import type { VectorGradient } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import type { PageBuilderThemeMode } from "@/page-builder/theme/theme-string";
 import { renderGradient } from "./element-vector-gradients";
 import { renderVectorShape } from "./element-vector-shapes";
 import type { SvgRenderContext } from "./element-vector-types";
 
-export function renderVectorDefs(hasDefs: boolean, gradients: VectorGradient[]): ReactNode {
+export function renderVectorDefs(
+  hasDefs: boolean,
+  gradients: VectorGradient[],
+  themeMode: PageBuilderThemeMode
+): ReactNode {
   if (!hasDefs) return null;
-  return <defs>{gradients.map((g) => renderGradient(g))}</defs>;
+  return <defs>{gradients.map((g) => renderGradient(g, themeMode))}</defs>;
 }
 
 const fillOnlyOpts = { fillOnly: true as const };
@@ -73,19 +78,23 @@ export function renderVectorStrokeGroupLayers(ctx: SvgRenderContext): ReactNode 
 }
 
 export function renderVectorFillOnlyLayers(ctx: SvgRenderContext): ReactNode {
-  const { state, shapes, resolve, resolveFill, resolveHoverFill } = ctx;
+  const { state, shapes, resolve, resolveFill, resolveStroke, resolveHoverFill } = ctx;
   if (ctx.needsOpacityTransition) {
     return (
       <>
         <g style={{ ...ctx.opacityTransitionStyle, opacity: state.hover ? 0 : 1 }}>
           {shapes.map((shape, i) =>
-            renderVectorShape(shape, i, { fillOverride: resolve(shape.fill) })
+            renderVectorShape(shape, i, {
+              fillOverride: resolve(shape.fill),
+              strokeOverride: resolve(shape.stroke),
+            })
           )}
         </g>
         <g style={{ ...ctx.opacityTransitionStyle, opacity: state.hover ? 1 : 0 }}>
           {shapes.map((shape, i) =>
             renderVectorShape(shape, i, {
               fillOverride: resolveHoverFill(shape.fill),
+              strokeOverride: resolveStroke(shape.stroke),
             })
           )}
         </g>
@@ -95,7 +104,10 @@ export function renderVectorFillOnlyLayers(ctx: SvgRenderContext): ReactNode {
   return (
     <>
       {shapes.map((shape, i) =>
-        renderVectorShape(shape, i, { fillOverride: resolveFill(shape.fill) })
+        renderVectorShape(shape, i, {
+          fillOverride: resolveFill(shape.fill),
+          strokeOverride: resolveStroke(shape.stroke),
+        })
       )}
     </>
   );

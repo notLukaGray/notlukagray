@@ -27,6 +27,8 @@ import {
 } from "./use-form-block-state";
 import { SectionMotionWrapper } from "@/page-builder/integrations/framer-motion";
 import { SectionScrollTargetProvider } from "@/page-builder/section/position/SectionScrollTargetContext";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
 
 type FormBlockSection = Extract<SectionBlock, { type: "formBlock" }>;
 type Props = FormBlockSection;
@@ -92,6 +94,7 @@ export function SectionFormBlock({
   const sectionRef = useRef<HTMLElement>(null);
   const placeholderRef = useRef<HTMLDivElement>(null);
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
   const resolvedAriaLabel = resolveResponsiveValue(ariaLabel, isMobile) ?? id ?? "Form";
 
   const {
@@ -106,7 +109,7 @@ export function SectionFormBlock({
     getFieldKey,
   } = useFormBlockState(fields);
 
-  const resolvedFill = resolveResponsiveValue(fill, isMobile);
+  const resolvedFill = resolveThemeString(resolveResponsiveValue(fill, isMobile), themeMode);
   const resolvedStickyOffset = resolveResponsiveValue(stickyOffset, isMobile) ?? "0px";
   const resolvedFixedOffset = resolveResponsiveValue(fixedOffset, isMobile) ?? "0px";
 

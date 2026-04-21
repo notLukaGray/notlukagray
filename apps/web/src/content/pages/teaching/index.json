@@ -9,7 +9,7 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#080808"
+          "fill": "var(--pb-secondary)"
         }
       ]
     },
@@ -41,9 +41,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "teaching-typography": {
@@ -54,9 +54,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         }
       },

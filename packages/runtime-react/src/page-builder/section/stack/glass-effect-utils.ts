@@ -7,6 +7,14 @@ export type GlassDimensions = {
   width: number;
   height: number;
   radius: number;
+  cornerRadii: GlassCornerRadii;
+};
+
+export type GlassCornerRadii = {
+  topLeft: number;
+  topRight: number;
+  bottomRight: number;
+  bottomLeft: number;
 };
 
 /** Keeps bezel / displacement math inside the drawable frame (short fixed-height + huge rem). */
@@ -31,10 +39,62 @@ export function clampGlassPhysicsRadiusPx(
   return Math.min(radiusPx, cap);
 }
 
+export function uniformGlassCornerRadii(radius: number): GlassCornerRadii {
+  return {
+    topLeft: radius,
+    topRight: radius,
+    bottomRight: radius,
+    bottomLeft: radius,
+  };
+}
+
+export function maxGlassCornerRadiusPx(radii: GlassCornerRadii): number {
+  return Math.max(radii.topLeft, radii.topRight, radii.bottomRight, radii.bottomLeft);
+}
+
+export function clampGlassPhysicsCornerRadiiPx(
+  width: number,
+  height: number,
+  radii: GlassCornerRadii,
+  epsilonPx = GLASS_PHYSICS_RADIUS_EPSILON_PX
+): GlassCornerRadii {
+  const safeW = Math.max(width - epsilonPx * 2, 1);
+  const safeH = Math.max(height - epsilonPx * 2, 1);
+  const positive = {
+    topLeft: Math.max(radii.topLeft, 0),
+    topRight: Math.max(radii.topRight, 0),
+    bottomRight: Math.max(radii.bottomRight, 0),
+    bottomLeft: Math.max(radii.bottomLeft, 0),
+  };
+  const top = positive.topLeft + positive.topRight;
+  const right = positive.topRight + positive.bottomRight;
+  const bottom = positive.bottomLeft + positive.bottomRight;
+  const left = positive.topLeft + positive.bottomLeft;
+  const scale = Math.min(
+    1,
+    top > 0 ? safeW / top : 1,
+    right > 0 ? safeH / right : 1,
+    bottom > 0 ? safeW / bottom : 1,
+    left > 0 ? safeH / left : 1
+  );
+  const cap = Math.min(Math.max(width, 2), Math.max(height, 2)) / 2 - epsilonPx;
+  const clampCorner = (radius: number) =>
+    clampGlassPhysicsRadiusPx(width, height, radius * scale, epsilonPx);
+  if (!Number.isFinite(cap) || cap <= 0) return positive;
+  return {
+    topLeft: clampCorner(positive.topLeft),
+    topRight: clampCorner(positive.topRight),
+    bottomRight: clampCorner(positive.bottomRight),
+    bottomLeft: clampCorner(positive.bottomLeft),
+  };
+}
+
 export function withGlassPhysicsClamped(d: GlassDimensions): GlassDimensions {
+  const cornerRadii = clampGlassPhysicsCornerRadiiPx(d.width, d.height, d.cornerRadii);
   return {
     ...d,
-    radius: clampGlassPhysicsRadiusPx(d.width, d.height, d.radius),
+    cornerRadii,
+    radius: maxGlassCornerRadiusPx(cornerRadii),
   };
 }
 
@@ -133,11 +193,37 @@ export function normalizeBezelType(
   return "convex_squircle";
 }
 
+function parseComputedCornerRadiusPx(value: string | undefined, fallback = 0): number {
+  if (!value) return fallback;
+  const tokens = value.split(/\s+/).filter(Boolean);
+  if (tokens.length >= 2) {
+    const a = parsePx(tokens[0], 0);
+    const b = parsePx(tokens[1], 0);
+    return a > 0 && b > 0 ? Math.min(a, b) : Math.max(a, b, fallback);
+  }
+  return parsePx(value, fallback);
+}
+
+function readComputedCornerRadii(style: CSSStyleDeclaration, fallback?: GlassCornerRadii) {
+  return {
+    topLeft: parseComputedCornerRadiusPx(style.borderTopLeftRadius, fallback?.topLeft ?? 0),
+    topRight: parseComputedCornerRadiusPx(style.borderTopRightRadius, fallback?.topRight ?? 0),
+    bottomRight: parseComputedCornerRadiusPx(
+      style.borderBottomRightRadius,
+      fallback?.bottomRight ?? 0
+    ),
+    bottomLeft: parseComputedCornerRadiusPx(
+      style.borderBottomLeftRadius,
+      fallback?.bottomLeft ?? 0
+    ),
+  };
+}
+
 /**
  * Read size + corner radius from an element that already has the intended `border-radius`
  * applied (e.g. glass overlay synced to a host's authored radius). Uses the overlay's used
- * `border-top-left-radius`; when the engine returns two lengths (elliptical corner), uses
- * `min` so single-radius filter code stays consistent with the tighter curve.
+ * corner radii. When the engine returns two lengths for an elliptical corner, uses `min`
+ * so the scalar filter math stays consistent with the tighter curve.
  */
 export function readGlassOverlaySyncedDimensions(
   host: HTMLElement,
@@ -147,28 +233,26 @@ export function readGlassOverlaySyncedDimensions(
   const w = overlay.clientWidth;
   const h = overlay.clientHeight;
   const style = window.getComputedStyle(overlay);
-  const radiusStr = style.borderTopLeftRadius ?? "0";
-  const tokens = radiusStr.split(/\s+/).filter(Boolean);
-  let radius: number;
-  if (tokens.length >= 2) {
-    const a = parsePx(tokens[0], 0);
-    const b = parsePx(tokens[1], 0);
-    radius = a > 0 && b > 0 ? Math.min(a, b) : Math.max(a, b);
-  } else {
-    radius = parsePx(radiusStr, hostDims.radius);
-  }
+  const cornerRadii = readComputedCornerRadii(style, hostDims.cornerRadii);
+  const radius = maxGlassCornerRadiusPx(cornerRadii);
   return {
     width: Math.max(Math.round(w > 0 ? w : hostDims.width), 2),
     height: Math.max(Math.round(h > 0 ? h : hostDims.height), 2),
     radius: radius > 0 ? radius : hostDims.radius,
+    cornerRadii:
+      radius > 0
+        ? cornerRadii
+        : {
+            ...hostDims.cornerRadii,
+          },
   };
 }
 
 export function readElementDimensions(el: HTMLElement): GlassDimensions {
   const rect = el.getBoundingClientRect();
   const style = window.getComputedStyle(el);
-  const radiusStr = style.borderTopLeftRadius ?? "0";
-  const radius = parsePx(radiusStr);
+  const cornerRadii = readComputedCornerRadii(style);
+  const radius = maxGlassCornerRadiusPx(cornerRadii);
   // Use layout-space dimensions (client/offset/computed) so parent transforms
   // (e.g. Motion scale) don't inflate filter sizes and cause glass misalignment.
   const computedWidth = parsePx(style.width);
@@ -187,5 +271,6 @@ export function readElementDimensions(el: HTMLElement): GlassDimensions {
     width: Math.round(widthSource),
     height: Math.round(heightSource),
     radius,
+    cornerRadii,
   };
 }

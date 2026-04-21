@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import type {
   ElementBlock,
   ElementLayout,
+  ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
 import type { LinkState } from "../Shared/GraphicLinkWrapper";
@@ -25,10 +26,10 @@ export type SvgRenderContext = {
   shapes: VectorShape[];
   pathShapes: (VectorShape & { type: "path"; d: string })[];
   strokeGroup: VectorStrokeGroup | null;
-  resolve: (ref: string | undefined) => string | undefined;
-  resolveFill: (defaultFillRef: string | undefined) => string | undefined;
-  resolveStroke: (defaultStrokeRef: string | undefined) => string | undefined;
-  resolveHoverFill: (defaultFillRef: string | undefined) => string | undefined;
+  resolve: (ref: ThemeString | undefined) => string | undefined;
+  resolveFill: (defaultFillRef: ThemeString | undefined) => string | undefined;
+  resolveStroke: (defaultStrokeRef: ThemeString | undefined) => string | undefined;
+  resolveHoverFill: (defaultFillRef: ThemeString | undefined) => string | undefined;
   resolvedStroke: string | undefined;
   strokeTransitionStyle: CSSProperties | undefined;
   needsOpacityTransition: boolean;

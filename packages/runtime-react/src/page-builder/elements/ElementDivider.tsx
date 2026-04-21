@@ -5,6 +5,8 @@ import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 type Props = Extract<ElementBlock, { type: "elementDivider" }>;
 
@@ -21,31 +23,33 @@ export function ElementDivider({
   ...layout
 }: Props) {
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
   const isHorizontal = orientation !== "vertical";
   const resolvedLength = resolveResponsiveValue(length, isMobile) ?? "100%";
+  const resolvedColor = resolveThemeString(color, themeMode) ?? "currentColor";
 
   const lineStyle: CSSProperties = isHorizontal
     ? style === "solid"
       ? {
           width: resolvedLength,
           height: thickness,
-          backgroundColor: color,
+          backgroundColor: resolvedColor,
         }
       : {
           width: resolvedLength,
           height: 0,
-          borderTop: `${thickness} ${style} ${color}`,
+          borderTop: `${thickness} ${style} ${resolvedColor}`,
         }
     : style === "solid"
       ? {
           width: thickness,
           height: resolvedLength,
-          backgroundColor: color,
+          backgroundColor: resolvedColor,
         }
       : {
           width: 0,
           height: resolvedLength,
-          borderLeft: `${thickness} ${style} ${color}`,
+          borderLeft: `${thickness} ${style} ${resolvedColor}`,
         };
 
   return (

@@ -22,6 +22,7 @@ import {
   responsiveBooleanSchema,
   responsiveSectionAlignSchema,
   responsiveStringSchema,
+  responsiveThemeStringSchema,
   triggerActionSchema,
 } from "./schema-primitives";
 import {
@@ -81,7 +82,7 @@ export const baseSectionPropsSchema = z.object({
   meta: pageBuilderMetaSchema.optional(),
 
   ariaLabel: responsiveStringSchema.optional(),
-  fill: responsiveStringSchema.optional(),
+  fill: responsiveThemeStringSchema.optional(),
   layers: z.array(dividerLayerSchema).optional(),
   effects: z.array(sectionEffectSchema).optional(),
   width: responsiveStringSchema.optional(),

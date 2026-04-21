@@ -6,6 +6,11 @@ import { borderToCss } from "@pb/core/internal/section-utils";
 import { generateElementKey } from "@pb/core/internal/element-keys";
 import type { ColumnFlexStyle, ColumnStyleInput } from "@pb/core/internal/section-column-layout";
 import { ElementRenderer } from "../../elements/Shared/ElementRenderer";
+import {
+  type PageBuilderThemeMode,
+  resolveThemeString,
+  resolveThemeValueDeep,
+} from "@/page-builder/theme/theme-string";
 
 function mapColumnAlignX(
   value: ColumnStyleInput["alignX"]
@@ -25,14 +30,18 @@ function mapColumnAlignY(
   return value;
 }
 
-export function getBoxStyle(style: ColumnStyleInput | undefined): React.CSSProperties | undefined {
+export function getBoxStyle(
+  style: ColumnStyleInput | undefined,
+  themeMode: PageBuilderThemeMode
+): React.CSSProperties | undefined {
   if (!style) return undefined;
+  const resolvedBorder = resolveThemeValueDeep(style.border, themeMode) as typeof style.border;
   const justifyContent = style.justifyContent ?? mapColumnAlignY(style.alignY);
   const alignItems = style.alignItems ?? mapColumnAlignX(style.alignX);
   return {
     borderRadius: style.borderRadius,
-    border: borderToCss(style.border),
-    backgroundColor: style.fill,
+    border: borderToCss(resolvedBorder as { width?: string; style?: string; color?: string }),
+    background: resolveThemeString(style.fill, themeMode),
     padding: style.padding,
     gap: pageBuilderFlexGapToCss(style.gap),
     justifyContent,
@@ -108,6 +117,7 @@ export function renderColumnStackSegment({
   resolvedColumnGaps,
   columnStyles,
   itemStyles,
+  themeMode,
 }: {
   segmentColumns: ElementBlock[][];
   segmentKey: string;
@@ -116,6 +126,7 @@ export function renderColumnStackSegment({
   resolvedColumnGaps: string | string[] | undefined;
   columnStyles?: ColumnStyleInput[];
   itemStyles?: Record<string, ColumnStyleInput>;
+  themeMode: PageBuilderThemeMode;
 }) {
   const rowStyle = getSegmentRowStyle(resolvedColumnCount, resolvedColumnGaps);
   const overlapGap = getOverlapGap(resolvedColumnGaps);
@@ -130,7 +141,7 @@ export function renderColumnStackSegment({
           return g != null ? { gap: g } : {};
         })();
         const columnStyle = columnStyles?.[columnIndex];
-        const style = { ...colStyle, ...(getBoxStyle(columnStyle) ?? {}) };
+        const style = { ...colStyle, ...(getBoxStyle(columnStyle, themeMode) ?? {}) };
         const flexStyle = columnFlexStyles[columnIndex] ?? { flex: "0 0 auto" };
         const isHug = flexStyle.flex === "0 0 auto";
         const needsMinWidth = !isHug || resolvedColumnCount === 1;
@@ -153,6 +164,7 @@ export function renderColumnStackSegment({
                 }
                 block={block}
                 style={block.id ? itemStyles?.[block.id] : undefined}
+                themeMode={themeMode}
               />
             ))}
           </div>
@@ -162,8 +174,16 @@ export function renderColumnStackSegment({
   );
 }
 
-export function ItemCell({ block, style }: { block: ElementBlock; style?: ColumnStyleInput }) {
-  const cellStyle = getBoxStyle(style);
+export function ItemCell({
+  block,
+  style,
+  themeMode,
+}: {
+  block: ElementBlock;
+  style?: ColumnStyleInput;
+  themeMode: PageBuilderThemeMode;
+}) {
+  const cellStyle = getBoxStyle(style, themeMode);
   if (!cellStyle) return <ElementRenderer block={block} />;
   return (
     <div className="min-w-0" style={cellStyle}>

@@ -138,6 +138,7 @@ export const pageScrollConfigSchema = z.object({
 });
 
 export const pageDensitySchema = z.enum(PAGE_DENSITY_LEVELS);
+export const forcedThemeSchema = z.enum(["light", "dark"]);
 
 /** Optional parity / diagnostics blob appended by the Figma plugin “Copy page JSON” flow. */
 export const figmaExportDiagnosticsPageFieldSchema = z.object({
@@ -173,6 +174,7 @@ export const pageBuilderSchema = z
     scroll: pageScrollConfigSchema.optional(),
     figmaExportDiagnostics: figmaExportDiagnosticsPageFieldSchema.optional(),
     density: pageDensitySchema.optional(),
+    forcedTheme: forcedThemeSchema.optional(),
   })
   .passthrough();
 
@@ -188,5 +190,6 @@ export const resolvedPageSchema = z
     assetBaseUrl: z.string().optional(),
     scroll: pageScrollConfigSchema.optional(),
     density: pageDensitySchema.optional(),
+    forcedTheme: forcedThemeSchema.optional(),
   })
   .passthrough();

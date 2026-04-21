@@ -152,6 +152,13 @@ export type SetSessionStorageAction = {
   payload: { key: string; value: JsonValue };
 };
 
+// --- Theme ---
+/** payload.mode: "light" | "dark" | "toggle" — updates document theme and persists to localStorage("theme"). */
+export type SetThemeAction = {
+  type: "setTheme";
+  payload: { mode: "light" | "dark" | "toggle" };
+};
+
 // 3D element actions — discriminated union by type.
 // All payload fields are optional. id targets a specific element; omit to broadcast.
 // Zod validates field types at parse time; TypeScript enforces them at author time.
@@ -463,6 +470,8 @@ export type PageBuilderAction =
   // Storage
   | SetLocalStorageAction
   | SetSessionStorageAction
+  // Theme
+  | SetThemeAction
   | Model3DAction
   | RiveAction;
 

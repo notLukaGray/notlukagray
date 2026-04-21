@@ -18,6 +18,8 @@ import {
   REQUIRED_INDICATOR,
   STRUCTURAL_INPUT_BASE,
 } from "./form-field-typography";
+import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 const INPUT_FIELD_TYPES = [
   "text",
@@ -56,6 +58,7 @@ export function FormFieldInput({
   style,
   resolvedLevel,
 }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   if (!isInputFieldType(field.fieldType)) return null;
 
   const fieldDisabled = disabled || field.disabled === true;
@@ -94,7 +97,9 @@ export function FormFieldInput({
       aria-required={field.required}
       className={hasAffix ? `${inputClass} min-w-0 flex-1` : inputClass}
       style={{
-        ...(field.inputStyle as React.CSSProperties | undefined),
+        ...(resolveThemeStyleObject(field.inputStyle, themeMode) as
+          | React.CSSProperties
+          | undefined),
         borderColor: hasError ? formFieldStructuralClasses.inputBorderError : undefined,
       }}
     />

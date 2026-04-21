@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { sectionBorderSchema } from "./section-effect-schemas";
+import { themeStringSchema } from "./schema-primitives";
 
 const cssWidthPattern = /^(?:\d+(?:\.\d+)?(?:fr|%|px|rem|em|vw|vh)|[a-zA-Z][a-zA-Z0-9_-]*)$/;
 const cssWidthSchema = z.string().refine((val) => cssWidthPattern.test(val.trim()), {
@@ -87,7 +88,7 @@ export const responsiveGridModeSchema = z
 export const columnStyleSchema = z.object({
   borderRadius: z.string().optional(),
   border: sectionBorderSchema.optional(),
-  fill: z.string().optional(),
+  fill: themeStringSchema.optional(),
   padding: z.string().optional(),
   gap: z.string().optional(),
   justifyContent: z

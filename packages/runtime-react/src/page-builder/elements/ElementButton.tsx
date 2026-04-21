@@ -30,6 +30,8 @@ import {
 import { useModel3DReadyButtonExit } from "./ElementButton/use-model3d-ready-button-exit";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 import { useDeviceType } from "@/core/hooks/use-device-type";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeString, resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 type Props = Extract<ElementBlock, { type: "elementButton" }>;
 
@@ -100,6 +102,7 @@ export function ElementButton({
 }: Props) {
   const pathname = usePathname();
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
   const shellRef = useRef<HTMLDivElement | null>(null);
   // Ref for the wrapper span when glass is active — overlay anchors and measures from here,
   // so scale/transform on the wrapper carries the glass along with the content.
@@ -119,29 +122,33 @@ export function ElementButton({
     wrapperStyle: rawWrapperStyle,
     innerWrapperStyle,
     hasStateVars,
-  } = buildElementButtonWrapperStyles(definitions as Record<string, unknown> | null | undefined, {
-    wrapperFill,
-    wrapperStroke,
-    wrapperFillRef,
-    wrapperStrokeRef,
-    wrapperStrokeWidth,
-    wrapperPadding: resolveResponsiveValue(wrapperPadding, isMobile),
-    wrapperBorderRadius: resolvedWrapperBorderRadius,
-    wrapperWidth: resolveResponsiveValue(wrapperWidth, isMobile),
-    wrapperHeight: resolveResponsiveValue(wrapperHeight, isMobile),
-    wrapperMinWidth: resolveResponsiveValue(wrapperMinWidth, isMobile),
-    wrapperMinHeight: resolveResponsiveValue(wrapperMinHeight, isMobile),
-    wrapperFillHover,
-    wrapperStrokeHover,
-    wrapperFillActive,
-    wrapperScaleHover,
-    wrapperScaleActive,
-    wrapperScaleDisabled,
-    wrapperOpacityHover,
-    wrapperFillDisabled,
-    wrapperTransition,
-    wrapperInteractionVars,
-  });
+  } = buildElementButtonWrapperStyles(
+    definitions as Record<string, unknown> | null | undefined,
+    themeMode,
+    {
+      wrapperFill,
+      wrapperStroke,
+      wrapperFillRef,
+      wrapperStrokeRef,
+      wrapperStrokeWidth,
+      wrapperPadding: resolveResponsiveValue(wrapperPadding, isMobile),
+      wrapperBorderRadius: resolvedWrapperBorderRadius,
+      wrapperWidth: resolveResponsiveValue(wrapperWidth, isMobile),
+      wrapperHeight: resolveResponsiveValue(wrapperHeight, isMobile),
+      wrapperMinWidth: resolveResponsiveValue(wrapperMinWidth, isMobile),
+      wrapperMinHeight: resolveResponsiveValue(wrapperMinHeight, isMobile),
+      wrapperFillHover,
+      wrapperStrokeHover,
+      wrapperFillActive,
+      wrapperScaleHover,
+      wrapperScaleActive,
+      wrapperScaleDisabled,
+      wrapperOpacityHover,
+      wrapperFillDisabled,
+      wrapperTransition,
+      wrapperInteractionVars,
+    }
+  );
   const { hasLink, isInternal, linkStyle, linkClassName } = buildElementButtonLinkState(
     pathname,
     {
@@ -154,7 +161,8 @@ export function ElementButton({
       linkTransition,
       disabled: isDisabled,
     },
-    typographyClass
+    typographyClass,
+    themeMode
   );
   const blockStyle = buildElementButtonBlockStyle({
     width,
@@ -174,7 +182,12 @@ export function ElementButton({
     vectorRef
   );
   const model3DExit = useModel3DReadyButtonExit(action, actionPayload);
-  const buttonEffects = useMemo(() => coerceSectionEffects(rest.effects), [rest.effects]);
+  const motionConfig = rest.motion;
+  const exitPreset = rest.exitPreset;
+  const buttonEffects = useMemo(
+    () => coerceSectionEffects(resolveThemeValueDeep(rest.effects, themeMode)),
+    [rest.effects, themeMode]
+  );
   const hasGlassEffect = (buttonEffects ?? []).some((effect) => effect.type === "glass");
   const glassSyncBorderRadius =
     hasGlassEffect && resolvedWrapperBorderRadius != null && resolvedWrapperBorderRadius !== ""
@@ -194,10 +207,11 @@ export function ElementButton({
   }, [hasGlassEffect, rawWrapperStyle]);
 
   const exitMotion = useMemo(() => {
-    const base = mergeMotionDefaults(rest.motion ?? {}) ?? {};
+    const resolvedMotion = resolveThemeValueDeep(motionConfig, themeMode) as typeof motionConfig;
+    const base = mergeMotionDefaults(resolvedMotion ?? {}) ?? {};
     const exitFromPreset =
-      rest.exitPreset && typeof rest.exitPreset === "string"
-        ? getExitMotionFromPreset(rest.exitPreset, {
+      exitPreset && typeof exitPreset === "string"
+        ? getExitMotionFromPreset(exitPreset, {
             duration: model3DExit.exitDurationMs / 1000,
             ease: model3DExit.exitEasing,
           }).exit
@@ -215,12 +229,13 @@ export function ElementButton({
         ease: model3DExit.exitEasing,
       },
     };
-  }, [rest.motion, rest.exitPreset, model3DExit.exitDurationMs, model3DExit.exitEasing]);
+  }, [motionConfig, exitPreset, model3DExit.exitDurationMs, model3DExit.exitEasing, themeMode]);
 
   const resolvedLabel = loading && loadingLabel != null ? loadingLabel : label;
   const hasLabel = resolvedLabel != null && resolvedLabel !== "";
   const hasVector = vectorBlock != null;
   const hasAction = !!action && !href;
+  const resolvedLinkDefault = resolveThemeString(linkDefault, themeMode);
   const contentWrapStyle: CSSProperties =
     hasLabel && hasVector
       ? {
@@ -251,8 +266,8 @@ export function ElementButton({
           className={`m-0 block ${typographyClass}`}
           style={{
             ...(resolvedFontFamily ? { fontFamily: resolvedFontFamily } : {}),
-            ...(!hasLink && linkDefault != null && linkDefault !== ""
-              ? { color: linkDefault }
+            ...(!hasLink && resolvedLinkDefault != null && resolvedLinkDefault !== ""
+              ? { color: resolvedLinkDefault }
               : {}),
             ...(isDisabled && hasLink ? { opacity: 0.6 } : {}),
           }}

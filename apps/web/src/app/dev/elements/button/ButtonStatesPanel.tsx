@@ -5,6 +5,11 @@
 import { useState } from "react";
 import { parseButtonAction } from "@pb/contracts";
 import { SharedWorkbenchColorTokenFields } from "@/app/dev/elements/_shared/dev-controls";
+import {
+  isThemeStringObject,
+  themeStringToInputValue,
+  type ThemeStringLike,
+} from "@/app/dev/elements/_shared/theme-string";
 import type { ButtonElementDevController } from "./useButtonElementDevController";
 
 type WrapperTextKey =
@@ -97,8 +102,12 @@ const LINK_FIELDS: LinkField[] = [
   { key: "linkTransition", label: "Link transition", placeholder: "0.15s or 0.15" },
 ];
 
-function stringifyVars(vars: Record<string, string> | undefined): string {
-  return JSON.stringify(vars && Object.keys(vars).length > 0 ? vars : {}, null, 2);
+function stringifyVars(vars: Record<string, ThemeStringLike> | undefined): string {
+  if (!vars || Object.keys(vars).length === 0) return "{}";
+  const normalized = Object.fromEntries(
+    Object.entries(vars).map(([key, value]) => [key, themeStringToInputValue(value)])
+  );
+  return JSON.stringify(normalized, null, 2);
 }
 
 function sanitizeInteractionVars(parsed: unknown): Record<string, string> | undefined {
@@ -110,8 +119,8 @@ function sanitizeInteractionVars(parsed: unknown): Record<string, string> | unde
   return Object.keys(out).length > 0 ? out : undefined;
 }
 
-function fieldValue(value: string | undefined): string {
-  return value ?? "";
+function fieldValue(value: ThemeStringLike | undefined): string {
+  return themeStringToInputValue(value);
 }
 
 function normalizeOptionalText(value: string): string | undefined {
@@ -229,7 +238,9 @@ export function ButtonStatesPanel({ controller }: { controller: ButtonElementDev
   const getLink = (key: LinkKey): string => {
     const v = (active as Record<string, unknown>)[key];
     if (v == null) return "";
-    return typeof v === "number" ? String(v) : String(v);
+    if (typeof v === "number") return String(v);
+    if (typeof v === "string" || isThemeStringObject(v)) return themeStringToInputValue(v);
+    return String(v);
   };
 
   const inputClass =

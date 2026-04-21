@@ -4,9 +4,12 @@ import { forwardRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ElementGraphicLink } from "@pb/contracts/page-builder/core/page-builder-types";
+import type { ThemeString } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { type PageBuilderThemeMode, resolveThemeString } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import { GraphicLinkHoverContext } from "./GraphicLinkHoverContext";
 
-type GradientForResolve = { id?: string; stops?: Array<{ color?: string } | null> };
+type GradientForResolve = { id?: string; stops?: Array<{ color?: ThemeString } | null> };
 
 export type LinkState = {
   hover: boolean;
@@ -31,14 +34,16 @@ function toDuration(value: string | number | undefined): string | undefined {
 }
 
 function resolveStateRefToColor(
-  ref: string | undefined,
-  elementGradients?: GradientForResolve[]
+  ref: ThemeString | undefined,
+  elementGradients: GradientForResolve[] | undefined,
+  themeMode: PageBuilderThemeMode
 ): string | undefined {
-  if (ref == null || ref === "") return undefined;
-  if (ref.startsWith("#")) return ref;
-  const gradient = elementGradients?.find((g) => g?.id === ref);
+  const resolvedRef = resolveThemeString(ref, themeMode);
+  if (resolvedRef == null || resolvedRef === "") return undefined;
+  if (resolvedRef.startsWith("#")) return resolvedRef;
+  const gradient = elementGradients?.find((g) => g?.id === resolvedRef);
   const firstStop = gradient?.stops?.find((s): s is NonNullable<typeof s> => s != null);
-  return firstStop?.color;
+  return resolveThemeString(firstStop?.color, themeMode) ?? resolvedRef;
 }
 
 const hoverHandlers = (
@@ -50,6 +55,7 @@ const hoverHandlers = (
 
 export const GraphicLinkWrapper = forwardRef<HTMLAnchorElement | HTMLDivElement, Props>(
   ({ link, gradients: elementGradients, children, className, style }, ref) => {
+    const themeMode = usePageBuilderThemeMode();
     const [isHover, setIsHover] = useState(false);
     const pathname = usePathname();
     const duration = toDuration(link?.vectorTransition);
@@ -105,11 +111,13 @@ export const GraphicLinkWrapper = forwardRef<HTMLAnchorElement | HTMLDivElement,
     const disabledFillRef = link.disabledFill;
     // Resolve to CSS colors (for CSS variables). Only use flat CSS hover when the ref is NOT a gradient
     // (when it's a gradient id, elementVector already switches fill/stroke via React; CSS would override with solid color).
-    const hoverColor = resolveStateRefToColor(hoverFillRef, elementGradients);
-    const activeColor = resolveStateRefToColor(activeFillRef, elementGradients);
-    const disabledColor = resolveStateRefToColor(disabledFillRef, elementGradients);
-    const isGradientRef = (ref: string | undefined) =>
-      ref != null && elementGradients?.some((g) => g?.id === ref);
+    const hoverColor = resolveStateRefToColor(hoverFillRef, elementGradients, themeMode);
+    const activeColor = resolveStateRefToColor(activeFillRef, elementGradients, themeMode);
+    const disabledColor = resolveStateRefToColor(disabledFillRef, elementGradients, themeMode);
+    const isGradientRef = (ref: ThemeString | undefined) => {
+      const resolvedRef = resolveThemeString(ref, themeMode);
+      return resolvedRef != null && elementGradients?.some((g) => g?.id === resolvedRef);
+    };
     const useFlatHoverFill = hoverColor != null && !isGradientRef(hoverFillRef);
     const dataAttrs = {
       "data-hover-scale": hoverScale != null ? String(hoverScale) : undefined,

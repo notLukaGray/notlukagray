@@ -1,8 +1,9 @@
 import type { TriggerAction } from "./trigger-action-types";
 import type { BgLayerMotion } from "../../background/motion/bg-layer-motion-types";
+import type { ThemeString } from "../page-builder-schemas";
 
 export type bgVarLayer = {
-  fill: string;
+  fill: ThemeString;
   blendMode?: string;
   opacity?: number;
   /** CSS background-size value. Use e.g. "400% 400%" to give moving gradients room to pan. */
@@ -16,7 +17,7 @@ export type bgVarLayer = {
 export type bgPatternRepeat = "repeat" | "repeat-x" | "repeat-y" | "no-repeat";
 
 export type bgBlock =
-  | { type: "backgroundVideo"; video: string; poster?: string; overlay?: string }
+  | { type: "backgroundVideo"; video: string; poster?: string; overlay?: ThemeString }
   | { type: "backgroundImage"; image: string }
   | { type: "backgroundVariable"; layers: bgVarLayer[] }
   | { type: "backgroundPattern"; image: string; repeat?: bgPatternRepeat }

@@ -9,7 +9,7 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#080808"
+          "fill": "var(--pb-secondary)"
         }
       ]
     },
@@ -55,9 +55,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-dark-patterns": {
@@ -68,9 +68,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-environmental": {
@@ -81,9 +81,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-generative": {
@@ -94,9 +94,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-grid-systems": {
@@ -107,9 +107,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-interaction-latency": {
@@ -120,9 +120,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-material-texture": {
@@ -133,9 +133,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-motion-cognition": {
@@ -146,9 +146,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-print-history": {
@@ -159,9 +159,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-semiotics": {
@@ -172,9 +172,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-spatial-wayfinding": {
@@ -185,9 +185,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         },
         "research-type-legibility": {
@@ -198,9 +198,9 @@
           "level": 2,
           "width": "hug",
           "align": "center",
-          "linkDefault": "#a8a8a8",
-          "linkHover": "#f000b8",
-          "linkActive": "#ffffff",
+          "linkDefault": "var(--pb-on-secondary)",
+          "linkHover": "var(--pb-link-hover)",
+          "linkActive": "var(--pb-link-active)",
           "linkTransition": ".3s"
         }
       },

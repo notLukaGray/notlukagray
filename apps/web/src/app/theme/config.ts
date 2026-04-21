@@ -2,72 +2,51 @@ import type { M1TokenId } from "@/app/theme/pb-color-tokens";
 import { M1_TOKEN_IDS } from "@/app/theme/pb-color-tokens";
 import { derivePbThemeTokens, PB_DERIVED_TOKEN_IDS } from "@/app/theme/pb-color-derived-tokens";
 
-const PB_A11Y_CONSTANT_TOKENS: Record<string, string> = {
-  "--pb-ring-color": "var(--pb-primary)",
-  "--pb-ring-width": "2px",
-  "--pb-ring-offset": "2px",
-  "--pb-ring-style": "solid",
-  "--pb-selection-bg": "var(--pb-primary)",
-  "--pb-selection-color": "var(--pb-on-primary)",
-};
-
-/**
- * Brand + link seeds for light UI. Edit via `/dev/colors` → copy replaces this file.
- * Extended surfaces/status/chart/sidebar tokens derive from these seeds at runtime.
- */
 export const pbBrandLight = {
-  "--pb-primary": "oklch(0.205 0 0)",
-  "--pb-on-primary": "oklch(0.985 0 0)",
-  "--pb-secondary": "oklch(0.97 0 0)",
-  "--pb-on-secondary": "oklch(0.205 0 0)",
-  "--pb-accent": "oklch(0.97 0 0)",
-  "--pb-on-accent": "oklch(0.205 0 0)",
-  "--pb-link": "#a8a8a8",
-  "--pb-link-hover": "#f000b8",
-  "--pb-link-active": "#ffffff",
+  "--pb-primary": "#002c4b",
+  "--pb-on-primary": "#dedede",
+  "--pb-secondary": "#f6f2f3",
+  "--pb-on-secondary": "#14121c",
+  "--pb-accent": "#ff5c8d",
+  "--pb-on-accent": "#000000",
+  "--pb-link": "#005485",
+  "--pb-link-hover": "#940056",
+  "--pb-link-active": "#004070",
 } as const satisfies Record<M1TokenId, string>;
 
 export const pbBrandDark = {
-  "--pb-primary": "oklch(0.922 0 0)",
-  "--pb-on-primary": "oklch(0.205 0 0)",
-  "--pb-secondary": "oklch(0.269 0 0)",
-  "--pb-on-secondary": "oklch(0.985 0 0)",
-  "--pb-accent": "oklch(0.269 0 0)",
-  "--pb-on-accent": "oklch(0.985 0 0)",
-  "--pb-link": "#a8a8a8",
-  "--pb-link-hover": "#f000b8",
-  "--pb-link-active": "#ffffff",
+  "--pb-primary": "#00b3d6",
+  "--pb-on-primary": "#000000",
+  "--pb-secondary": "#0e0b0c",
+  "--pb-on-secondary": "#bdbdbd",
+  "--pb-accent": "#ff5c8d",
+  "--pb-on-accent": "#000000",
+  "--pb-link": "#80e1ff",
+  "--pb-link-hover": "#ff8fd0",
+  "--pb-link-active": "#d1f4ff",
 } as const satisfies Record<M1TokenId, string>;
 
-/** Emits `:root` / `.dark` blocks; injected at start of `<body>` so it overrides `globals.css`. */
 export function pbBrandCssInline(): string {
   const lightDerived = derivePbThemeTokens(pbBrandLight, "light");
   const darkDerived = derivePbThemeTokens(pbBrandDark, "dark");
   const rootLines = [
     ...M1_TOKEN_IDS.map((id) => `  ${id}: ${pbBrandLight[id]};`),
     ...PB_DERIVED_TOKEN_IDS.map((id) => `  ${id}: ${lightDerived[id]};`),
-    ...Object.entries(PB_A11Y_CONSTANT_TOKENS).map(([id, value]) => `  ${id}: ${value};`),
   ].join("\n");
   const darkLines = [
     ...M1_TOKEN_IDS.map((id) => `  ${id}: ${pbBrandDark[id]};`),
     ...PB_DERIVED_TOKEN_IDS.map((id) => `  ${id}: ${darkDerived[id]};`),
-    ...Object.entries(PB_A11Y_CONSTANT_TOKENS).map(([id, value]) => `  ${id}: ${value};`),
   ].join("\n");
   return `:root {\n${rootLines}\n}\n\n.dark {\n${darkLines}\n}`;
 }
 
 export type PbPreviewColorScheme = "light" | "dark";
 
-/**
- * Inline `--pb-*` variables for a subtree (e.g. PB playground preview) so light/dark match
- * `pbBrandCssInline()` without depending on document `:root` / `.dark`.
- */
 export function getPbPreviewScopeCssVars(mode: PbPreviewColorScheme): Record<string, string> {
   const brand = mode === "light" ? pbBrandLight : pbBrandDark;
   const derived = derivePbThemeTokens(brand, mode);
   const out: Record<string, string> = {};
   for (const id of M1_TOKEN_IDS) out[id] = brand[id];
   for (const id of PB_DERIVED_TOKEN_IDS) out[id] = derived[id];
-  for (const [k, v] of Object.entries(PB_A11Y_CONSTANT_TOKENS)) out[k] = v;
   return out;
 }

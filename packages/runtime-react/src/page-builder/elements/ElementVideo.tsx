@@ -32,6 +32,8 @@ import { ElementVideoErrorOverlay } from "./ElementVideo/ElementVideoErrorOverla
 import { useVideoLazyLoad } from "./ElementVideo/use-video-lazy-load";
 import { resolveElementVideoSlots } from "./ElementVideo/element-video-slots";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 type Props = Extract<ElementBlock, { type: "elementVideo" }> & {
   moduleConfig?: ModuleBlock;
@@ -217,6 +219,7 @@ export function ElementVideo({
   onVideoEnd,
   streamingConfig,
 }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   const videoRef = useRef<HTMLVideoElement>(null);
   const figureRef = useRef<HTMLElement | null>(null);
   const containerRef = useRef<HTMLSpanElement>(null);
@@ -316,7 +319,10 @@ export function ElementVideo({
     aspectRatio,
     moduleConfig,
   });
-  const videoEffects = useMemo(() => coerceSectionEffects(effects), [effects]);
+  const videoEffects = useMemo(
+    () => coerceSectionEffects(resolveThemeValueDeep(effects, themeMode)),
+    [effects, themeMode]
+  );
   const hasGlassEffect = (videoEffects ?? []).some((effect) => effect.type === "glass");
 
   const { isLinkable, resolvedHref, isInternal, target, rel } = useMemo(
@@ -338,8 +344,14 @@ export function ElementVideo({
     streamingConfig,
   });
   const moduleEffects = useMemo(
-    () => coerceSectionEffects((moduleConfig as { effects?: unknown } | undefined)?.effects),
-    [moduleConfig]
+    () =>
+      coerceSectionEffects(
+        resolveThemeValueDeep(
+          (moduleConfig as { effects?: unknown } | undefined)?.effects,
+          themeMode
+        )
+      ),
+    [moduleConfig, themeMode]
   );
   const hasModuleGlassEffect = (moduleEffects ?? []).some((effect) => effect.type === "glass");
 

@@ -8,6 +8,7 @@ import { buildPageDensityCssVars } from "@pb/contracts/page-builder/core/page-de
 import { PageBuilderRenderer } from "@/page-builder/hooks";
 import { FigmaExportDiagnosticsBridge } from "@/page-builder/dev/FigmaExportDiagnosticsBridge";
 import { PageScrollProvider } from "@/page-builder/section/position/page-scroll-provider";
+import { PageForcedTheme, pageForcedThemeInlineScript } from "./PageForcedTheme";
 
 export type PageBuilderPageWrapperProps = PageBuilderPageProps & {
   mainClassName?: string;
@@ -49,6 +50,8 @@ export function PageBuilderPage({
   articleClassName = "w-full",
 }: PageBuilderPageWrapperProps) {
   const density = page.density ?? "balanced";
+  const forcedTheme =
+    page.forcedTheme === "light" || page.forcedTheme === "dark" ? page.forcedTheme : undefined;
   const densityVars = buildPageDensityCssVars(density) as React.CSSProperties;
   const mergedMainStyle: React.CSSProperties = {
     ...mainStyle,
@@ -96,6 +99,14 @@ export function PageBuilderPage({
   if (sortedOverlays.length === 0) {
     return (
       <>
+        {forcedTheme ? (
+          <>
+            <script
+              dangerouslySetInnerHTML={{ __html: pageForcedThemeInlineScript(forcedTheme) }}
+            />
+            <PageForcedTheme theme={forcedTheme} />
+          </>
+        ) : null}
         <FigmaExportDiagnosticsBridge diagnostics={page.figmaExportDiagnostics} />
         {pageContent}
       </>
@@ -104,6 +115,12 @@ export function PageBuilderPage({
 
   return (
     <>
+      {forcedTheme ? (
+        <>
+          <script dangerouslySetInnerHTML={{ __html: pageForcedThemeInlineScript(forcedTheme) }} />
+          <PageForcedTheme theme={forcedTheme} />
+        </>
+      ) : null}
       <FigmaExportDiagnosticsBridge diagnostics={page.figmaExportDiagnostics} />
       {sortedOverlays.map((section, i) => {
         const s = section as SectionBlock & {

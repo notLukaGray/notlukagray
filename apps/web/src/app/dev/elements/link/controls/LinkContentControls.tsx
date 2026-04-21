@@ -1,4 +1,5 @@
 import { SharedFontSlotField } from "@/app/dev/elements/_shared/dev-controls";
+import { themeStringToInputValue } from "@/app/dev/elements/_shared/theme-string";
 import type { LinkVariantDefaults } from "../types";
 import type { LinkElementDevController } from "../useLinkElementDevController";
 
@@ -159,7 +160,7 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
         <input
           type="text"
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={active.linkDefault ?? ""}
+          value={themeStringToInputValue(active.linkDefault)}
           onChange={(e) =>
             setVariantPatch(activeVariant, { linkDefault: e.target.value || undefined })
           }
@@ -172,7 +173,7 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
         <input
           type="text"
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={active.linkHover ?? ""}
+          value={themeStringToInputValue(active.linkHover)}
           onChange={(e) =>
             setVariantPatch(activeVariant, { linkHover: e.target.value || undefined })
           }
@@ -185,7 +186,7 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
         <input
           type="text"
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={active.linkActive ?? ""}
+          value={themeStringToInputValue(active.linkActive)}
           onChange={(e) =>
             setVariantPatch(activeVariant, { linkActive: e.target.value || undefined })
           }
@@ -198,7 +199,7 @@ export function LinkContentControls({ controller }: { controller: LinkElementDev
         <input
           type="text"
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={active.linkDisabled ?? ""}
+          value={themeStringToInputValue(active.linkDisabled)}
           onChange={(e) =>
             setVariantPatch(activeVariant, { linkDisabled: e.target.value || undefined })
           }

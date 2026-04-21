@@ -3,6 +3,8 @@ import type { ElementBlock } from "./element-block-types";
 import type { SectionBlock } from "./section-block-types";
 import type { TriggerAction } from "./trigger-action-types";
 
+export type ForcedTheme = "light" | "dark";
+
 export type BackgroundTransitionEffect =
   | {
       type: "TIME";
@@ -41,6 +43,7 @@ export type ResolvedPage = {
   assetBaseUrl?: string;
   onPageProgress?: TriggerAction;
   transitions?: BackgroundTransitionEffect | BackgroundTransitionEffect[];
+  forcedTheme?: ForcedTheme;
 };
 
 export type SectionBlockWithElementOrder = Omit<
@@ -69,4 +72,5 @@ export type PageBuilder = {
   description?: string;
   ogImage?: string;
   transitions?: BackgroundTransitionEffect | BackgroundTransitionEffect[];
+  forcedTheme?: ForcedTheme;
 };

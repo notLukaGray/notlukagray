@@ -31,6 +31,8 @@ import {
   type BorderGradient,
 } from "./ElementModule/element-module-style-utils";
 import { reconcileElementOrderWithDefinitions } from "@pb/core/internal/module-slot-utils";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject, resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 type Props = Extract<ElementBlock, { type: "elementGroup" }>;
 
@@ -88,10 +90,21 @@ export function ElementModuleGroup({
 }) {
   const pbContentGuidelines = getPbContentGuidelines();
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
   const videoCtx = useVideoControlContext();
   const slotDefaultWrapper = useSlotDefaultWrapperStyle();
   const groupRef = useRef<HTMLDivElement>(null);
-  const groupEffects = useMemo(() => coerceSectionEffects(effects), [effects]);
+  const resolvedGroupWrapperStyle = resolveThemeStyleObject(
+    groupWrapperStyle as Record<string, unknown> | undefined,
+    themeMode
+  ) as CSSProperties | undefined;
+  const resolvedBorderGradient = resolveThemeValueDeep(borderGradient, themeMode) as
+    | BorderGradient
+    | undefined;
+  const groupEffects = useMemo(
+    () => coerceSectionEffects(resolveThemeValueDeep(effects, themeMode)),
+    [effects, themeMode]
+  );
   const hasGlassEffect = (groupEffects ?? []).some((effect) => effect.type === "glass");
   // When inside a dimension gesture, all nested elementGroups fill their parent
   // so the visual layer grows with the animated container.
@@ -164,11 +177,11 @@ export function ElementModuleGroup({
       : scaleRadiusForDensity(pbContentGuidelines.frameBorderRadiusDefault);
 
   const hasBorderGradient =
-    borderGradient != null &&
-    typeof borderGradient === "object" &&
-    typeof (borderGradient as BorderGradient).stroke === "string" &&
-    (typeof (borderGradient as BorderGradient).width === "string" ||
-      typeof (borderGradient as BorderGradient).width === "number");
+    resolvedBorderGradient != null &&
+    typeof resolvedBorderGradient === "object" &&
+    typeof resolvedBorderGradient.stroke === "string" &&
+    (typeof resolvedBorderGradient.width === "string" ||
+      typeof resolvedBorderGradient.width === "number");
 
   const resolvedFlexGap = resolveFrameGapCss(gap);
   const resolvedRowGap = resolveFrameRowGapCss(
@@ -216,7 +229,7 @@ export function ElementModuleGroup({
     flexWrap: resolvedFlexWrap,
     ...(flex ? { flex } : {}),
     overflow: (overflow ?? (layoutChildren ? "visible" : "hidden")) as CSSProperties["overflow"],
-    ...(groupWrapperStyle as CSSProperties),
+    ...(resolvedGroupWrapperStyle as CSSProperties),
   };
   const groupStyle: CSSProperties =
     (hasBorderGradient || hasGlassEffect) && groupStyleBase.position == null
@@ -277,7 +290,7 @@ export function ElementModuleGroup({
         <div
           aria-hidden
           style={buildBorderGradientOverlayStyle(
-            borderGradient as BorderGradient,
+            resolvedBorderGradient as BorderGradient,
             groupStyle.borderRadius
           )}
         />

@@ -5,6 +5,7 @@ import type {
   ElementBlock,
   PageBuilderAction,
   SectionEffect,
+  ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
 import type { ElementLayout } from "@pb/contracts/page-builder/core/page-builder-schemas";
@@ -20,6 +21,8 @@ import {
   detectClientPlatformSnapshot,
   getSupportsBackdropFilterUrlClientSnapshot,
 } from "@pb/runtime-react/core/lib/platform-runtime";
+import { resolveThemeString, resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 type Props = Extract<ElementBlock, { type: "elementRange" }>;
 
@@ -112,6 +115,7 @@ export function ElementRange({
   style,
   interactions,
 }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   const videoCtx = useVideoControlContext();
   const runtimeSnapshot = useRangeRuntimeSnapshot();
   const runtimeReady = runtimeSnapshot.ready;
@@ -180,7 +184,11 @@ export function ElementRange({
     ...restStyle
   } = styleObj;
 
-  const use2Tone = typeof trackColor === "string" && typeof fillColor === "string";
+  const resolvedTrackColor = resolveThemeString(trackColor as ThemeString | undefined, themeMode);
+  const resolvedFillColor = resolveThemeString(fillColor as ThemeString | undefined, themeMode);
+  const resolvedAccentColor = resolveThemeString(accentColor as ThemeString | undefined, themeMode);
+  const resolvedRestStyle = resolveThemeStyleObject(restStyle, themeMode);
+  const use2Tone = typeof resolvedTrackColor === "string" && typeof resolvedFillColor === "string";
   const trackH = trackHeight as string | undefined;
   const thumbS = thumbSize as string | undefined;
   const thumbW = (thumbWidth as string | undefined) ?? thumbS;
@@ -263,7 +271,7 @@ export function ElementRange({
     height: "100%",
     minHeight: thumbH ?? trackH ?? "2rem",
     minWidth: 0,
-    ...(restStyle as React.CSSProperties),
+    ...(resolvedRestStyle as React.CSSProperties),
   };
 
   const inputStyle: React.CSSProperties = {
@@ -289,7 +297,7 @@ export function ElementRange({
         top: "50%",
         transform: "translateY(-50%)",
         height: trackH,
-        background: trackColor as string,
+        background: resolvedTrackColor,
         borderRadius: radius,
         pointerEvents: "none",
       }
@@ -303,7 +311,7 @@ export function ElementRange({
         transform: "translateY(-50%)",
         width: `${valueRatio * 100}%`,
         height: trackH,
-        background: fillColor as string,
+        background: resolvedFillColor,
         borderRadius: radius,
         pointerEvents: "none",
       }
@@ -468,7 +476,7 @@ export function ElementRange({
     );
   }
 
-  const fallbackAccent = (accentColor as string) ?? (use2Tone ? (fillColor as string) : undefined);
+  const fallbackAccent = resolvedAccentColor ?? (use2Tone ? resolvedFillColor : undefined);
 
   return (
     <ElementLayoutWrapper layout={layout} overflow="visible" interactions={interactions}>
@@ -483,7 +491,7 @@ export function ElementRange({
         style={{
           width: "100%",
           minWidth: 0,
-          ...(restStyle as React.CSSProperties),
+          ...(resolvedRestStyle as React.CSSProperties),
           ...(fallbackAccent ? { accentColor: fallbackAccent } : {}),
         }}
         className="w-full min-w-0"

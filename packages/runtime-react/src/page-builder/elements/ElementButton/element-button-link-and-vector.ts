@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { type PageBuilderThemeMode, resolveThemeString } from "@/page-builder/theme/theme-string";
 
 type ElementButtonProps = Extract<ElementBlock, { type: "elementButton" }>;
 
@@ -21,7 +22,8 @@ export function buildElementButtonLinkState(
     | "linkTransition"
     | "disabled"
   >,
-  typographyClass: string
+  typographyClass: string,
+  themeMode: PageBuilderThemeMode
 ) {
   const {
     href,
@@ -42,13 +44,18 @@ export function buildElementButtonLinkState(
     (pathname === href || (href !== "/" && pathname.startsWith(href)));
 
   const linkStyle: CSSProperties = {};
-  if (linkDefault != null)
-    (linkStyle as Record<string, string>)["--element-link-color"] = linkDefault;
-  if (linkHover != null) (linkStyle as Record<string, string>)["--element-link-hover"] = linkHover;
-  if (linkActive != null)
-    (linkStyle as Record<string, string>)["--element-link-active"] = linkActive;
-  if (linkDisabled != null)
-    (linkStyle as Record<string, string>)["--element-link-disabled"] = linkDisabled;
+  const resolvedLinkDefault = resolveThemeString(linkDefault, themeMode);
+  const resolvedLinkHover = resolveThemeString(linkHover, themeMode);
+  const resolvedLinkActive = resolveThemeString(linkActive, themeMode);
+  const resolvedLinkDisabled = resolveThemeString(linkDisabled, themeMode);
+  if (resolvedLinkDefault != null)
+    (linkStyle as Record<string, string>)["--element-link-color"] = resolvedLinkDefault;
+  if (resolvedLinkHover != null)
+    (linkStyle as Record<string, string>)["--element-link-hover"] = resolvedLinkHover;
+  if (resolvedLinkActive != null)
+    (linkStyle as Record<string, string>)["--element-link-active"] = resolvedLinkActive;
+  if (resolvedLinkDisabled != null)
+    (linkStyle as Record<string, string>)["--element-link-disabled"] = resolvedLinkDisabled;
   const transition = toTransitionValue(linkTransition);
   if (transition != null)
     (linkStyle as Record<string, string>)["--element-link-transition"] = transition;

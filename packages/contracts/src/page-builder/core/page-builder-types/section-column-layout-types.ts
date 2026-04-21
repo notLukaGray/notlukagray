@@ -1,9 +1,10 @@
 import type { SectionBorder } from "./section-style-effect-types";
+import type { ThemeString } from "../page-builder-schemas";
 
 export type SectionColumnStyle = {
   borderRadius?: string;
   border?: SectionBorder;
-  fill?: string;
+  fill?: ThemeString;
   padding?: string;
   gap?: string;
   justifyContent?:

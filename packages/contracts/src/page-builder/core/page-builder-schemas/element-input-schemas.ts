@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { elementLayoutSchema } from "./element-foundation-schemas";
+import { themeStringSchema } from "./schema-primitives";
 
 /**
  * Glass search/text input element.
@@ -19,6 +20,6 @@ export const elementInputSchema = z
     /** Show a search icon on the left. Defaults to true. */
     showIcon: z.boolean().optional(),
     /** CSS color string for text and icon. Defaults to rgba(255,255,255,0.85). */
-    color: z.string().optional(),
+    color: themeStringSchema.optional(),
   })
   .merge(elementLayoutSchema);

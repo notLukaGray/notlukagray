@@ -6,6 +6,7 @@ import type {
   ElementBlock,
   MotionPropsFromJson,
   MotionTiming,
+  ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveElementBlockForBreakpoint } from "@pb/core/internal/element-layout-utils";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
@@ -22,14 +23,17 @@ import type { JsonValue } from "@pb/contracts/page-builder/core/page-builder-typ
 import { ELEMENT_COMPONENTS } from "..";
 import { ElementEntranceWrapper } from "./ElementEntranceWrapper";
 import { DimensionGestureContext } from "./DimensionGestureContext";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { resolveThemeStyleObject, resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 
 /** Keys that, when present in a gesture target, mean the motion wrapper should own the element dimensions. */
 const GESTURE_DIMENSION_KEYS = new Set(["width", "height"]);
 
-type BorderGradient = { stroke: string; width: string | number };
+type BorderGradient = { stroke: ThemeString; width: string | number };
+type ResolvedBorderGradient = { stroke: string; width: string | number };
 
 function buildMotionBorderGradientOverlayStyle(
-  borderGradient: BorderGradient
+  borderGradient: ResolvedBorderGradient
 ): React.CSSProperties {
   return {
     position: "absolute",
@@ -159,6 +163,7 @@ export function ElementRenderer({
   forceEntranceAnimation,
 }: Props) {
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
   const resolvedBlock = useMemo(
     () => resolveElementBlockForBreakpoint(block, isMobile),
     [block, isMobile]
@@ -234,12 +239,24 @@ export function ElementRenderer({
   };
 
   const useEntranceWrapper = hasEntranceTiming;
-  const rewrittenMotionFromJson = rewriteMotionBackgroundTargets(motionFromJson, wrapperStyle);
+  const resolvedWrapperStyle = resolveThemeStyleObject(wrapperStyle, themeMode) as
+    | React.CSSProperties
+    | undefined;
+  const resolvedBorderGradient = resolveThemeValueDeep(extractedBorderGradient, themeMode) as
+    | ResolvedBorderGradient
+    | undefined;
+  const resolvedMotionFromJson = resolveThemeValueDeep(motionFromJson, themeMode) as
+    | MotionPropsFromJson
+    | undefined;
+  const rewrittenMotionFromJson = rewriteMotionBackgroundTargets(
+    resolvedMotionFromJson,
+    resolvedWrapperStyle
+  );
   const foundationMotionControls = resolveFoundationMotionControls(reduceMotion);
 
   // When a gesture target animates width or height, the motion wrapper owns those dimensions.
   // Strip them from the inner component (replace with "100%") so they don't fight the animation.
-  const hasDimensionGesture = gestureAnimatesDimensions(motionFromJson);
+  const hasDimensionGesture = gestureAnimatesDimensions(resolvedMotionFromJson);
   const {
     width: blockWidth,
     height: blockHeight,
@@ -261,19 +278,21 @@ export function ElementRenderer({
   // borderGradient is similarly stripped: when a motion wrapper is active, the overlay div must
   // live inside the MotionFromJson wrapper (which owns borderRadius + background) so that it
   // follows rounding, tweens, and is correctly layered. ElementRenderer renders it there instead.
-  const motionGestureWrapperActive = Boolean(motionFromJson && !hasEntranceTiming);
+  const motionGestureWrapperActive = Boolean(resolvedMotionFromJson && !hasEntranceTiming);
   const hasBorderGradientWithMotion =
     motionGestureWrapperActive &&
-    extractedBorderGradient != null &&
-    typeof extractedBorderGradient.stroke === "string";
+    resolvedBorderGradient != null &&
+    typeof resolvedBorderGradient.stroke === "string";
 
   const content = (
     <Component
       {...({
         ...(contentBlockProps as typeof resolvedBlock),
-        ...(!motionGestureWrapperActive && wrapperStyle !== undefined ? { wrapperStyle } : {}),
-        ...(!hasBorderGradientWithMotion && extractedBorderGradient !== undefined
-          ? { borderGradient: extractedBorderGradient }
+        ...(!motionGestureWrapperActive && resolvedWrapperStyle !== undefined
+          ? { wrapperStyle: resolvedWrapperStyle }
+          : {}),
+        ...(!hasBorderGradientWithMotion && resolvedBorderGradient !== undefined
+          ? { borderGradient: resolvedBorderGradient }
           : {}),
       } as typeof resolvedBlock)}
     />
@@ -308,7 +327,7 @@ export function ElementRenderer({
     // entrance wrappers only. An outer group with layout:true must size to its
     // content, not stretch full-width.
     const baseWrapperStyle: React.CSSProperties =
-      (wrapperStyle as React.CSSProperties | undefined) ?? {};
+      (resolvedWrapperStyle as React.CSSProperties | undefined) ?? {};
     // When gesture animates dimensions, the motion wrapper owns width/height as its
     // starting size so Framer Motion can tween them. The inner component fills 100%.
     // layout:true is added automatically so Framer Motion uses FLIP — this keeps the
@@ -332,7 +351,7 @@ export function ElementRenderer({
     // inherits borderRadius, follows padding/dimension tweens, and sits on the correct
     // visual layer (same element as backdropFilter/background).
     const borderGradientOverlay = hasBorderGradientWithMotion ? (
-      <div aria-hidden style={buildMotionBorderGradientOverlayStyle(extractedBorderGradient!)} />
+      <div aria-hidden style={buildMotionBorderGradientOverlayStyle(resolvedBorderGradient!)} />
     ) : null;
     // When gesture animates dimensions, provide context so all nested elementGroups
     // use width/height:"100%" instead of their Figma-exported fixed px values.
@@ -364,7 +383,7 @@ export function ElementRenderer({
         exitKey={exitPresenceKey}
         exitPreset={exitPreset ?? motionTiming?.exitPreset}
         motionTiming={motionTiming}
-        motion={motionFromJson}
+        motion={resolvedMotionFromJson}
         reduceMotion={reduceMotion}
         onExitComplete={onExitComplete}
         presenceMode={exitPresenceMode}

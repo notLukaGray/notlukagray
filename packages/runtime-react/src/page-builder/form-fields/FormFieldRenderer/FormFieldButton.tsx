@@ -5,6 +5,8 @@ import type { ElementBodyVariant } from "@pb/contracts/page-builder/core/page-bu
 import { firePageBuilderAction } from "@/page-builder/triggers";
 import { FormFieldShell } from "./FormFieldShell";
 import { getFormFieldInputClass, STRUCTURAL_SUBMIT_BUTTON } from "./form-field-typography";
+import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 type Props = {
   field: FormFieldBlock;
@@ -24,6 +26,7 @@ export function FormFieldButton({
   style,
   resolvedLevel,
 }: Props) {
+  const themeMode = usePageBuilderThemeMode();
   if (field.fieldType !== "button" && field.fieldType !== "submit") return null;
 
   const label = field.label ?? "Submit";
@@ -53,7 +56,9 @@ export function FormFieldButton({
         disabled={fieldDisabled}
         onClick={handleClick}
         className={buttonClass}
-        style={field.inputStyle as React.CSSProperties | undefined}
+        style={
+          resolveThemeStyleObject(field.inputStyle, themeMode) as React.CSSProperties | undefined
+        }
       >
         {displayLabel}
       </button>

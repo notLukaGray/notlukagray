@@ -4,6 +4,7 @@ import { forwardRef } from "react";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { GraphicLinkWrapper } from "./Shared/GraphicLinkWrapper";
 import type { ElementVectorProps, VectorLayoutProps } from "./ElementVector/element-vector-types";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import type { VectorShape } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolvePaint } from "./ElementVector/element-vector-paint";
 import { toVectorTransitionDuration } from "./ElementVector/element-vector-paint";
@@ -57,6 +58,7 @@ export const ElementVector = forwardRef<HTMLAnchorElement | HTMLDivElement, Elem
     },
     ref
   ) => {
+    const themeMode = usePageBuilderThemeMode();
     const layout = {
       width,
       height,
@@ -80,7 +82,8 @@ export const ElementVector = forwardRef<HTMLAnchorElement | HTMLDivElement, Elem
     const transform = { rotate, flipHorizontal, flipVertical };
 
     const allGradients = Array.isArray(gradients) ? gradients : [];
-    const resolve = (ref: string | undefined) => resolvePaint(ref, colors, allGradients);
+    const resolve = (ref: Parameters<typeof resolvePaint>[0]) =>
+      resolvePaint(ref, colors, allGradients, themeMode);
 
     const vectorTransitionDuration = toVectorTransitionDuration(link?.vectorTransition);
     const fillStrokeTransitionStyle = vectorTransitionDuration
@@ -168,7 +171,7 @@ export const ElementVector = forwardRef<HTMLAnchorElement | HTMLDivElement, Elem
           role="img"
           aria-label={ariaLabel?.trim() || "Vector graphic"}
         >
-          {renderVectorDefs(hasDefs, allGradients)}
+          {renderVectorDefs(hasDefs, allGradients, themeMode)}
           {strokeGroup ? renderVectorStrokeGroupLayers(ctx) : renderVectorFillOnlyLayers(ctx)}
         </svg>
       );

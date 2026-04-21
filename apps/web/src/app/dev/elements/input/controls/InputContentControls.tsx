@@ -1,4 +1,5 @@
 import type { InputElementDevController } from "../useInputElementDevController";
+import { themeStringToInputValue } from "@/app/dev/elements/_shared/theme-string";
 
 export function InputContentControls({ controller }: { controller: InputElementDevController }) {
   const { active, activeVariant, setVariantPatch } = controller;
@@ -52,7 +53,7 @@ export function InputContentControls({ controller }: { controller: InputElementD
         <input
           type="text"
           className="w-full rounded border border-border bg-background px-3 py-2 font-mono text-[11px] text-foreground"
-          value={active.color ?? ""}
+          value={themeStringToInputValue(active.color)}
           onChange={(e) => setVariantPatch(activeVariant, { color: e.target.value || undefined })}
           placeholder="rgba(255,255,255,0.85)"
         />

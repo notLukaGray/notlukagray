@@ -1,3 +1,9 @@
+import {
+  normalizeRoundedRectRadii,
+  sampleRoundedRectBezel,
+  type RoundedRectRadius,
+} from "./rounded-rect-bezel";
+
 /**
  * Computes a 1-D array of lateral displacement values (in CSS px) for each
  * sample along the bezel width, using Snell's law for a vertical incident ray.
@@ -52,7 +58,7 @@ export function calculateDisplacementMap2(
   canvasHeight: number,
   objectWidth: number,
   objectHeight: number,
-  radius: number,
+  radius: RoundedRectRadius,
   bezelWidth: number,
   maximumDisplacement: number,
   precomputedDisplacementMap: number[] = [],
@@ -70,17 +76,17 @@ export function calculateDisplacementMap2(
   // little-endian layout: [R, G, B, A] stored as 0xAABBGGRR
   buf32.fill(0xff008080);
 
-  const radius_ = radius * devicePixelRatio;
+  const radii = normalizeRoundedRectRadii(radius);
+  const radii_ = {
+    topLeft: radii.topLeft * devicePixelRatio,
+    topRight: radii.topRight * devicePixelRatio,
+    bottomRight: radii.bottomRight * devicePixelRatio,
+    bottomLeft: radii.bottomLeft * devicePixelRatio,
+  };
   const bezel = bezelWidth * devicePixelRatio;
-
-  const radiusSquared = radius_ ** 2;
-  const radiusPlusOneSquared = (radius_ + 1) ** 2;
-  const radiusMinusBezelSquared = (radius_ - bezel) ** 2;
 
   const objectWidth_ = objectWidth * devicePixelRatio;
   const objectHeight_ = objectHeight * devicePixelRatio;
-  const widthBetweenRadiuses = objectWidth_ - radius_ * 2;
-  const heightBetweenRadiuses = objectHeight_ - radius_ * 2;
 
   const objectX = (bufferWidth - objectWidth_) / 2;
   const objectY = (bufferHeight - objectHeight_) / 2;
@@ -89,51 +95,21 @@ export function calculateDisplacementMap2(
     for (let x1 = 0; x1 < objectWidth_; x1++) {
       const idx = Math.round((objectY + y1) * bufferWidth + objectX + x1) * 4;
 
-      const isOnLeftSide = x1 < radius_;
-      const isOnRightSide = x1 >= objectWidth_ - radius_;
-      const isOnTopSide = y1 < radius_;
-      const isOnBottomSide = y1 >= objectHeight_ - radius_;
+      const sample = sampleRoundedRectBezel(x1, y1, objectWidth_, objectHeight_, radii_, bezel, 1);
 
-      const x = isOnLeftSide
-        ? x1 - radius_
-        : isOnRightSide
-          ? x1 - radius_ - widthBetweenRadiuses
-          : 0;
-
-      const y = isOnTopSide
-        ? y1 - radius_
-        : isOnBottomSide
-          ? y1 - radius_ - heightBetweenRadiuses
-          : 0;
-
-      const distanceToCenterSquared = x * x + y * y;
-
-      const isInBezel =
-        distanceToCenterSquared <= radiusPlusOneSquared &&
-        distanceToCenterSquared >= radiusMinusBezelSquared;
-
-      if (isInBezel) {
-        const opacity =
-          distanceToCenterSquared < radiusSquared
-            ? 1
-            : 1 -
-              (Math.sqrt(distanceToCenterSquared) - Math.sqrt(radiusSquared)) /
-                (Math.sqrt(radiusPlusOneSquared) - Math.sqrt(radiusSquared));
-
-        const distanceFromCenter = Math.sqrt(distanceToCenterSquared);
-        const distanceFromSide = radius_ - distanceFromCenter;
-
-        const cos = x / distanceFromCenter;
-        const sin = y / distanceFromCenter;
-
-        const bezelIndex = ((distanceFromSide / bezel) * precomputedDisplacementMap.length) | 0;
+      if (sample) {
+        const distanceFromSide = Math.max(sample.distanceFromSide, 0);
+        const bezelIndex = Math.min(
+          precomputedDisplacementMap.length - 1,
+          Math.max(0, ((distanceFromSide / bezel) * precomputedDisplacementMap.length) | 0)
+        );
         const distance = precomputedDisplacementMap[bezelIndex] ?? 0;
 
-        const dX = (-cos * distance) / maximumDisplacement;
-        const dY = (-sin * distance) / maximumDisplacement;
+        const dX = (-sample.normalX * distance) / maximumDisplacement;
+        const dY = (-sample.normalY * distance) / maximumDisplacement;
 
-        imageData.data[idx] = 128 + dX * 127 * opacity; // R
-        imageData.data[idx + 1] = 128 + dY * 127 * opacity; // G
+        imageData.data[idx] = 128 + dX * 127 * sample.opacity; // R
+        imageData.data[idx + 1] = 128 + dY * 127 * sample.opacity; // G
         imageData.data[idx + 2] = 0; // B
         imageData.data[idx + 3] = 255; // A
       }

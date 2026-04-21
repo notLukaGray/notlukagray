@@ -265,6 +265,25 @@ export function usePageBuilderActionRunner(): void {
           } catch {}
           return;
         }
+        case "setTheme": {
+          const mode = action.payload?.mode;
+          const root = document.documentElement;
+          const forcedTheme = root.dataset.pbForcedTheme;
+          if (forcedTheme === "light" || forcedTheme === "dark") {
+            root.classList.remove("light", "dark");
+            root.classList.add(forcedTheme);
+            return;
+          }
+          const current = root.classList.contains("dark") ? "dark" : "light";
+          const next = mode === "toggle" ? (current === "dark" ? "light" : "dark") : mode;
+          if (next !== "light" && next !== "dark") return;
+          root.classList.remove("light", "dark");
+          root.classList.add(next);
+          try {
+            localStorage.setItem("theme", next);
+          } catch {}
+          return;
+        }
 
         default:
           return;

@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useState, useCallback } from "react";
 import type { BackgroundVideoProps } from "./BackgroundVideo/background-video-types";
+import { resolveThemeString } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 const sectionProps = {
   className: "pointer-events-none fixed inset-0 z-0 min-h-[100dvh] h-[100dvh]",
@@ -14,13 +16,15 @@ export function BackgroundVideo({
   poster,
   overlay,
 }: BackgroundVideoProps & { priority?: boolean }) {
+  const themeMode = usePageBuilderThemeMode();
   const [usePosterFallback, setUsePosterFallback] = useState(false);
 
   const handleError = useCallback(() => {
     setUsePosterFallback(true);
   }, []);
 
-  const overlayStyle = overlay ? { backgroundColor: overlay } : undefined;
+  const resolvedOverlay = resolveThemeString(overlay, themeMode);
+  const overlayStyle = resolvedOverlay ? { backgroundColor: resolvedOverlay } : undefined;
   const overlayEl = overlayStyle ? (
     <div
       className="absolute inset-0 h-full w-full pointer-events-none"

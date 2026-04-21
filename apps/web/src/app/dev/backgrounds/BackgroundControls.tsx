@@ -6,6 +6,7 @@ import type {
   BackgroundPatternBlock,
   BackgroundType,
 } from "./BackgroundsDevIndexClient";
+import { themeStringToInputValue } from "@/app/dev/elements/_shared/theme-string";
 
 type ControlsProps = {
   activeType: BackgroundType;
@@ -46,7 +47,7 @@ function VideoControls({ drafts, patchDraft }: ControlsProps) {
       </Field>
       <Field label="Overlay">
         <input
-          value={draft.overlay ?? ""}
+          value={themeStringToInputValue(draft.overlay)}
           onChange={(event) => patchDraft("backgroundVideo", { overlay: event.target.value })}
           className={fieldClassName()}
         />
@@ -75,7 +76,7 @@ function VariableControls({ drafts, patchDraft }: ControlsProps) {
     <div className="grid gap-4 sm:grid-cols-2">
       <Field label="Layer 1 Fill">
         <input
-          value={firstLayer.fill}
+          value={themeStringToInputValue(firstLayer.fill)}
           onChange={(event) =>
             patchDraft("backgroundVariable", {
               layers: [{ ...firstLayer, fill: event.target.value }, secondLayer],
@@ -86,7 +87,7 @@ function VariableControls({ drafts, patchDraft }: ControlsProps) {
       </Field>
       <Field label="Layer 2 Fill">
         <input
-          value={secondLayer.fill}
+          value={themeStringToInputValue(secondLayer.fill)}
           onChange={(event) =>
             patchDraft("backgroundVariable", {
               layers: [firstLayer, { ...secondLayer, fill: event.target.value }],

@@ -6,6 +6,7 @@ import { calculateRefractionSpecular } from "./lib/specular";
 import { calculateMagnifyingDisplacementMap } from "./lib/magnifying-displacement-map";
 import { CONCAVE, CONVEX, CONVEX_CIRCLE, LIP } from "./lib/surface-equations";
 import { imageDataToUrl } from "./lib/image-data-to-url";
+import type { GlassCornerRadii } from "./glass-effect-utils";
 
 type GlassBezelType = "convex_circle" | "convex_squircle" | "concave" | "lip";
 
@@ -14,6 +15,7 @@ type Props = {
   width: number;
   height: number;
   radius: number;
+  cornerRadii?: GlassCornerRadii;
   bezelWidth: number;
   bezelType?: GlassBezelType;
   glassThickness: number;
@@ -49,6 +51,7 @@ export function GlassFilter({
   width,
   height,
   radius,
+  cornerRadii,
   bezelWidth,
   bezelType = "convex_squircle",
   glassThickness,
@@ -84,7 +87,7 @@ export function GlassFilter({
       height,
       width,
       height,
-      radius,
+      cornerRadii ?? radius,
       bezelWidth,
       maximumDisplacement,
       map
@@ -93,7 +96,7 @@ export function GlassFilter({
     const specularData = calculateRefractionSpecular(
       width,
       height,
-      radius,
+      cornerRadii ?? radius,
       bezelWidth,
       specularAngle
     );
@@ -113,6 +116,7 @@ export function GlassFilter({
     width,
     height,
     radius,
+    cornerRadii,
     bezelWidth,
     bezelType,
     glassThickness,

@@ -12,6 +12,8 @@ import {
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { useSectionParallax } from "./use-section-parallax";
 import { useSectionPositioning } from "./use-section-positioning";
+import { resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
+import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 
 type UseSectionBaseStylesProps = Pick<
   BaseSectionProps,
@@ -97,6 +99,7 @@ export function useSectionBaseStyles({
   reduceMotion,
 }: UseSectionBaseStylesProps) {
   const { isMobile } = useDeviceType();
+  const themeMode = usePageBuilderThemeMode();
 
   const resolvedLayout = useMemo<ResolvedSectionLayout>(
     () => ({
@@ -146,9 +149,17 @@ export function useSectionBaseStyles({
   const resolvedBorderRadius = resolveResponsiveValue(borderRadius, isMobile);
   const resolvedAspectRatio = resolveResponsiveValue(aspectRatio, isMobile);
   const resolvedOverflow = resolveResponsiveValue(overflow, isMobile);
+  const resolvedBorder = useMemo(
+    () => resolveThemeValueDeep(border, themeMode) as typeof border,
+    [border, themeMode]
+  );
+  const resolvedEffects = useMemo(
+    () => resolveThemeValueDeep(effects, themeMode) as typeof effects,
+    [effects, themeMode]
+  );
 
   const baseStyle = useMemo<CSSProperties>(() => {
-    const effectStyle = sectionEffectsToStyle(effects);
+    const effectStyle = sectionEffectsToStyle(resolvedEffects);
     const mergedBoxShadow = [effectStyle.boxShadow, boxShadow]
       .filter((value): value is string => typeof value === "string" && value.length > 0)
       .join(", ");
@@ -177,7 +188,7 @@ export function useSectionBaseStyles({
       ...(resolvedLayout.minHeight != null ? { minHeight: resolvedLayout.minHeight } : {}),
       ...(resolvedLayout.maxHeight != null ? { maxHeight: resolvedLayout.maxHeight } : {}),
       borderRadius: resolvedBorderRadius,
-      border: borderToCss(border),
+      border: borderToCss(resolvedBorder as { width?: string; style?: string; color?: string }),
       ...overflowPair,
       scrollBehavior: "smooth",
       ...(zIndex != null ? { zIndex } : {}),
@@ -223,13 +234,13 @@ export function useSectionBaseStyles({
   }, [
     resolvedLayout,
     resolvedBorderRadius,
-    border,
+    resolvedBorder,
     zIndex,
     transformY,
     alignStyle,
     positioningStyle,
     shouldApplyAlignStyle,
-    effects,
+    resolvedEffects,
     boxShadow,
     filter,
     backdropFilter,
