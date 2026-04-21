@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#ffffff06",
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
   "borderRadius": ["1.25rem", "2rem"],
   "marginBottom": ["1.5rem", "2.5rem"],
   "columns": { "mobile": 1, "desktop": 2 },
@@ -19,7 +19,7 @@
   },
   "itemStyles": {
     "desktop": {
-      "c-code": { "borderRadius": "1rem", "fill": "#000000", "padding": "1.1rem" }
+      "c-code": { "borderRadius": "1rem", "fill": "var(--pb-secondary)", "padding": "1.1rem" }
     }
   },
   "columnAssignments": {

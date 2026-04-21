@@ -2417,6 +2417,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type", "level", "text"],
@@ -2646,6 +2652,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type", "text"],
@@ -2677,6 +2689,28 @@
             },
             "rel": {
               "type": "string"
+            },
+            "download": {
+              "$ref": "#/$defs/Def158"
+            },
+            "hreflang": {
+              "type": "string"
+            },
+            "ping": {
+              "type": "string"
+            },
+            "referrerPolicy": {
+              "type": "string",
+              "enum": [
+                "no-referrer",
+                "no-referrer-when-downgrade",
+                "origin",
+                "origin-when-cross-origin",
+                "same-origin",
+                "strict-origin",
+                "strict-origin-when-cross-origin",
+                "unsafe-url"
+              ]
             },
             "copyType": {
               "type": "string",
@@ -2889,6 +2923,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type", "label", "href", "copyType"],
@@ -2945,7 +2985,7 @@
               "type": "boolean"
             },
             "link": {
-              "$ref": "#/$defs/Def158"
+              "$ref": "#/$defs/Def159"
             },
             "aspectRatio": {
               "$ref": "#/$defs/Def61"
@@ -3006,6 +3046,20 @@
             },
             "fillOpacity": {
               "$ref": "#/$defs/Def30"
+            },
+            "loading": {
+              "type": "string",
+              "enum": ["lazy", "eager"]
+            },
+            "decoding": {
+              "type": "string",
+              "enum": ["async", "sync", "auto"]
+            },
+            "srcSet": {
+              "type": "string"
+            },
+            "sizes": {
+              "type": "string"
             },
             "id": {
               "type": "string"
@@ -3157,6 +3211,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type", "src", "alt"],
@@ -3251,7 +3311,7 @@
               "type": "boolean"
             },
             "link": {
-              "$ref": "#/$defs/Def158"
+              "$ref": "#/$defs/Def159"
             },
             "aspectRatio": {
               "$ref": "#/$defs/Def61"
@@ -3443,13 +3503,19 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type", "src", "poster"],
           "additionalProperties": false
         },
         {
-          "$ref": "#/$defs/Def160"
+          "$ref": "#/$defs/Def161"
         },
         {
           "type": "object",
@@ -3474,7 +3540,7 @@
               "type": "boolean"
             },
             "link": {
-              "$ref": "#/$defs/Def187"
+              "$ref": "#/$defs/Def188"
             },
             "id": {
               "type": "string"
@@ -3625,6 +3691,12 @@
               "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
             },
             "clipPath": {
+              "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
               "type": "string"
             }
           },
@@ -3808,6 +3880,12 @@
               "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
             },
             "clipPath": {
+              "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
               "type": "string"
             }
           },
@@ -4028,6 +4106,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type"],
@@ -4215,6 +4299,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type"],
@@ -4398,6 +4488,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type"],
@@ -4411,7 +4507,7 @@
               "const": "elementVideoQualitySelect"
             },
             "icon": {
-              "$ref": "#/$defs/Def160"
+              "$ref": "#/$defs/Def161"
             },
             "style": {
               "$ref": "#/$defs/Def59"
@@ -4574,6 +4670,12 @@
               "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
             },
             "clipPath": {
+              "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
               "type": "string"
             }
           },
@@ -4749,6 +4851,12 @@
               "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
             },
             "clipPath": {
+              "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
               "type": "string"
             }
           },
@@ -4938,6 +5046,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type"],
@@ -5125,6 +5239,12 @@
               "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
             },
             "clipPath": {
+              "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
               "type": "string"
             }
           },
@@ -5342,7 +5462,7 @@
               "type": "string"
             },
             "wrapperInteractionVars": {
-              "$ref": "#/$defs/Def177"
+              "$ref": "#/$defs/Def178"
             },
             "pointerDownAction": {
               "$ref": "#/$defs/__schema1"
@@ -5502,6 +5622,12 @@
               "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
             },
             "clipPath": {
+              "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
               "type": "string"
             }
           },
@@ -6297,6 +6423,12 @@
             },
             "clipPath": {
               "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
+              "type": "string"
             }
           },
           "required": ["type", "scene"],
@@ -6485,6 +6617,12 @@
               "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
             },
             "clipPath": {
+              "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
               "type": "string"
             }
           },
@@ -6724,6 +6862,12 @@
               "enum": ["normal", "nowrap", "pre", "pre-wrap", "pre-line"]
             },
             "clipPath": {
+              "type": "string"
+            },
+            "tabIndex": {
+              "$ref": "#/$defs/Def121"
+            },
+            "role": {
               "type": "string"
             }
           },
@@ -7500,6 +7644,9 @@
     },
     "Def188": {
       "$ref": "#/$defs/Def188"
+    },
+    "Def189": {
+      "$ref": "#/$defs/Def189"
     }
   },
   "type": "object",

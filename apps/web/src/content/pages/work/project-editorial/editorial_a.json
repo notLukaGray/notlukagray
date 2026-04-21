@@ -5,7 +5,7 @@
   "width": ["100%", "88%"],
   "height": ["80vh", "90vh"],
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "elementOrder": ["a-kicker", "a-title", "a-subtitle", "a-tags"],
   "definitions": {
     "a-kicker": {

@@ -6,7 +6,7 @@
   "width": ["100%", "92%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#111",
+  "fill": "var(--pb-secondary)",
   "borderRadius": ["0 0 1.5rem 1.5rem", "0 0 2rem 2rem"],
   "elementOrder": ["unlock_help", "unlock_lock_link"],
   "definitions": {

@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#000000",
+  "fill": "var(--pb-secondary)",
   "borderRadius": ["1.5rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "16px" }],
   "scrollSpeed": 1.1,

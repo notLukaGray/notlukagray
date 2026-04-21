@@ -21,10 +21,13 @@
               "type": "backgroundVariable",
               "layers": [
                 {
-                  "fill": "#000000"
+                  "fill": "var(--pb-secondary)"
                 },
                 {
-                  "fill": "conic-gradient(from var(--a1, 0deg) at 50% 50%, hsl(258,75%,18%) 0%, hsl(208,85%,22%) 20%, hsl(178,80%,18%) 38%, hsl(228,80%,20%) 60%, hsl(268,72%,16%) 80%, hsl(258,75%,18%) 100%)",
+                  "fill": {
+                    "light": "conic-gradient(from var(--a1, 0deg) at 50% 50%, #d4eef8 0%, #e8f4fa 20%, #d4f5ee 38%, #d4eef8 60%, #ffe0eb 80%, #d4eef8 100%)",
+                    "dark": "conic-gradient(from var(--a1, 0deg) at 50% 50%, hsl(258,75%,18%) 0%, hsl(208,85%,22%) 20%, hsl(178,80%,18%) 38%, hsl(228,80%,20%) 60%, hsl(268,72%,16%) 80%, hsl(258,75%,18%) 100%)"
+                  },
                   "backgroundSize": "180% 180%",
                   "motion": [
                     {
@@ -47,10 +50,16 @@
                   ]
                 },
                 {
-                  "fill": "radial-gradient(circle at 50% 50%, transparent 35%, rgba(0,0,0,0.88) 75%)"
+                  "fill": {
+                    "light": "radial-gradient(circle at 50% 50%, transparent 35%, oklch(from #f6f2f3 l c h / 0.88) 75%)",
+                    "dark": "radial-gradient(circle at 50% 50%, transparent 35%, oklch(from #0e0b0c l c h / 0.88) 75%)"
+                  }
                 },
                 {
-                  "fill": "radial-gradient(ellipse 55% 38% at 50% 50%, hsl(215,90%,28%) 0%, transparent 58%)",
+                  "fill": {
+                    "light": "radial-gradient(ellipse 55% 38% at 50% 50%, #d4eef8 0%, transparent 58%)",
+                    "dark": "radial-gradient(ellipse 55% 38% at 50% 50%, hsl(215,90%,28%) 0%, transparent 58%)"
+                  },
                   "blendMode": "screen",
                   "opacity": 0.65,
                   "backgroundSize": "320% 320%",
@@ -69,7 +78,10 @@
                   ]
                 },
                 {
-                  "fill": "radial-gradient(ellipse 70% 50% at 50% 100%, hsl(240,80%,22%) 0%, transparent 55%)",
+                  "fill": {
+                    "light": "radial-gradient(ellipse 70% 50% at 50% 100%, #e8f4fa 0%, transparent 55%)",
+                    "dark": "radial-gradient(ellipse 70% 50% at 50% 100%, hsl(240,80%,22%) 0%, transparent 55%)"
+                  },
                   "blendMode": "screen",
                   "opacity": 0.4,
                   "backgroundSize": "200% 200%",
@@ -93,10 +105,13 @@
               "type": "backgroundVariable",
               "layers": [
                 {
-                  "fill": "#000510"
+                  "fill": "var(--pb-secondary)"
                 },
                 {
-                  "fill": "radial-gradient(circle 42vmin at var(--nx, 50%) var(--ny, 50%), hsl(48,96%,58%) 0%, hsl(212,90%,42%) 28%, hsl(248,85%,22%) 52%, transparent 72%)",
+                  "fill": {
+                    "light": "radial-gradient(circle 42vmin at var(--nx, 50%) var(--ny, 50%), #ffe0eb 0%, #d4eef8 28%, #e8f4fa 52%, transparent 72%)",
+                    "dark": "radial-gradient(circle 42vmin at var(--nx, 50%) var(--ny, 50%), hsl(48,96%,58%) 0%, hsl(212,90%,42%) 28%, hsl(248,85%,22%) 52%, transparent 72%)"
+                  },
                   "backgroundSize": "100% 100%",
                   "motion": [
                     {
@@ -112,7 +127,10 @@
                   ]
                 },
                 {
-                  "fill": "radial-gradient(ellipse 85% 65% at 72% 34%, hsl(182,88%,20%) 0%, transparent 62%)",
+                  "fill": {
+                    "light": "radial-gradient(ellipse 85% 65% at 72% 34%, #d4f5ee 0%, transparent 62%)",
+                    "dark": "radial-gradient(ellipse 85% 65% at 72% 34%, hsl(182,88%,20%) 0%, transparent 62%)"
+                  },
                   "blendMode": "screen",
                   "opacity": 0.6,
                   "backgroundSize": "320% 320%",
@@ -131,7 +149,10 @@
                   ]
                 },
                 {
-                  "fill": "radial-gradient(ellipse 70% 55% at 28% 68%, hsl(197,92%,25%) 0%, transparent 55%)",
+                  "fill": {
+                    "light": "radial-gradient(ellipse 70% 55% at 28% 68%, #d4eef8 0%, transparent 55%)",
+                    "dark": "radial-gradient(ellipse 70% 55% at 28% 68%, hsl(197,92%,25%) 0%, transparent 55%)"
+                  },
                   "blendMode": "screen",
                   "opacity": 0.5,
                   "backgroundSize": "280% 280%",
@@ -150,7 +171,10 @@
                   ]
                 },
                 {
-                  "fill": "radial-gradient(ellipse 90% 55% at 50% 108%, hsl(195,80%,14%) 0%, transparent 55%)",
+                  "fill": {
+                    "light": "radial-gradient(ellipse 90% 55% at 50% 108%, #e8f4fa 0%, transparent 55%)",
+                    "dark": "radial-gradient(ellipse 90% 55% at 50% 108%, hsl(195,80%,14%) 0%, transparent 55%)"
+                  },
                   "blendMode": "screen",
                   "opacity": 0.45,
                   "backgroundSize": "240% 240%",
@@ -179,10 +203,13 @@
             "type": "backgroundVariable",
             "layers": [
               {
-                "fill": "#000c04"
+                "fill": "var(--pb-secondary)"
               },
               {
-                "fill": "linear-gradient(162deg, transparent 0%, hsl(152,72%,11%) 18%, transparent 35%, hsl(138,78%,10%) 52%, transparent 68%, hsl(152,68%,10%) 85%, transparent 100%)",
+                "fill": {
+                  "light": "linear-gradient(162deg, transparent 0%, #d4f5ee 18%, transparent 35%, #e8f8f2 52%, transparent 68%, #d4f5ee 85%, transparent 100%)",
+                  "dark": "linear-gradient(162deg, transparent 0%, hsl(152,72%,11%) 18%, transparent 35%, hsl(138,78%,10%) 52%, transparent 68%, hsl(152,68%,10%) 85%, transparent 100%)"
+                },
                 "backgroundSize": "200% 650%",
                 "motion": [
                   {
@@ -199,7 +226,10 @@
                 ]
               },
               {
-                "fill": "linear-gradient(68deg, transparent 0%, hsl(48,82%,13%) 14%, transparent 28%, hsl(56,78%,11%) 48%, transparent 62%, hsl(48,74%,12%) 78%, transparent 100%)",
+                "fill": {
+                  "light": "linear-gradient(68deg, transparent 0%, #ffe0eb 14%, transparent 28%, #f6f2f3 48%, transparent 62%, #ffe0eb 78%, transparent 100%)",
+                  "dark": "linear-gradient(68deg, transparent 0%, hsl(48,82%,13%) 14%, transparent 28%, hsl(56,78%,11%) 48%, transparent 62%, hsl(48,74%,12%) 78%, transparent 100%)"
+                },
                 "blendMode": "screen",
                 "backgroundSize": "420% 200%",
                 "motion": [
@@ -217,7 +247,10 @@
                 ]
               },
               {
-                "fill": "radial-gradient(ellipse 130% 55% at 50% -8%, hsl(142,82%,16%) 0%, transparent 52%)",
+                "fill": {
+                  "light": "radial-gradient(ellipse 130% 55% at 50% -8%, #d4f5ee 0%, transparent 52%)",
+                  "dark": "radial-gradient(ellipse 130% 55% at 50% -8%, hsl(142,82%,16%) 0%, transparent 52%)"
+                },
                 "blendMode": "screen",
                 "opacity": 0.55,
                 "backgroundSize": "320% 320%",
@@ -236,7 +269,10 @@
                 ]
               },
               {
-                "fill": "radial-gradient(ellipse 100% 45% at 50% 108%, hsl(156,75%,14%) 0%, transparent 55%)",
+                "fill": {
+                  "light": "radial-gradient(ellipse 100% 45% at 50% 108%, #d4f5ee 0%, transparent 55%)",
+                  "dark": "radial-gradient(ellipse 100% 45% at 50% 108%, hsl(156,75%,14%) 0%, transparent 55%)"
+                },
                 "blendMode": "screen",
                 "opacity": 0.4,
                 "backgroundSize": "260% 260%",
@@ -265,10 +301,13 @@
           "type": "backgroundVariable",
           "layers": [
             {
-              "fill": "#080200"
+              "fill": "var(--pb-secondary)"
             },
             {
-              "fill": "radial-gradient(ellipse 140% 95% at 50% 58%, hsl(28,82%,13%) 0%, transparent 65%)",
+              "fill": {
+                "light": "radial-gradient(ellipse 140% 95% at 50% 58%, #ffe0eb 0%, transparent 65%)",
+                "dark": "radial-gradient(ellipse 140% 95% at 50% 58%, hsl(28,82%,13%) 0%, transparent 65%)"
+              },
               "backgroundSize": "300% 300%",
               "motion": [
                 {
@@ -285,7 +324,10 @@
               ]
             },
             {
-              "fill": "conic-gradient(from var(--a4, 42deg) at 50% 58%, hsl(38,88%,20%) 0%, hsl(8,92%,17%) 28%, hsl(352,84%,18%) 52%, hsl(22,88%,19%) 76%, hsl(38,88%,20%) 100%)",
+              "fill": {
+                "light": "conic-gradient(from var(--a4, 42deg) at 50% 58%, #ffe0eb 0%, #f6f2f3 28%, #ffe0eb 52%, #e8f4fa 76%, #ffe0eb 100%)",
+                "dark": "conic-gradient(from var(--a4, 42deg) at 50% 58%, hsl(38,88%,20%) 0%, hsl(8,92%,17%) 28%, hsl(352,84%,18%) 52%, hsl(22,88%,19%) 76%, hsl(38,88%,20%) 100%)"
+              },
               "blendMode": "screen",
               "opacity": 0.6,
               "motion": [
@@ -309,7 +351,10 @@
               ]
             },
             {
-              "fill": "linear-gradient(198deg, transparent 0%, hsl(14,92%,18%) 22%, transparent 44%, hsl(34,88%,16%) 66%, transparent 100%)",
+              "fill": {
+                "light": "linear-gradient(198deg, transparent 0%, #ffe0eb 22%, transparent 44%, #f6f2f3 66%, transparent 100%)",
+                "dark": "linear-gradient(198deg, transparent 0%, hsl(14,92%,18%) 22%, transparent 44%, hsl(34,88%,16%) 66%, transparent 100%)"
+              },
               "blendMode": "screen",
               "opacity": 0.6,
               "backgroundSize": "320% 320%",
@@ -328,7 +373,10 @@
               ]
             },
             {
-              "fill": "radial-gradient(ellipse 75% 52% at 50% 102%, hsl(22,92%,20%) 0%, transparent 60%)",
+              "fill": {
+                "light": "radial-gradient(ellipse 75% 52% at 50% 102%, #ffe0eb 0%, transparent 60%)",
+                "dark": "radial-gradient(ellipse 75% 52% at 50% 102%, hsl(22,92%,20%) 0%, transparent 60%)"
+              },
               "blendMode": "screen",
               "opacity": 0.55,
               "backgroundSize": "220% 220%",
@@ -347,7 +395,10 @@
               ]
             },
             {
-              "fill": "radial-gradient(ellipse 100% 60% at 50% 50%, hsl(42,80%,12%) 0%, transparent 55%)",
+              "fill": {
+                "light": "radial-gradient(ellipse 100% 60% at 50% 50%, #f6f2f3 0%, transparent 55%)",
+                "dark": "radial-gradient(ellipse 100% 60% at 50% 50%, hsl(42,80%,12%) 0%, transparent 55%)"
+              },
               "blendMode": "screen",
               "opacity": 0.4,
               "backgroundSize": "240% 240%",
@@ -376,10 +427,13 @@
         "type": "backgroundVariable",
         "layers": [
           {
-            "fill": "#050008"
+            "fill": "var(--pb-secondary)"
           },
           {
-            "fill": "radial-gradient(ellipse 150% 100% at 50% 0%, hsl(268,80%,12%) 0%, transparent 60%)",
+            "fill": {
+              "light": "radial-gradient(ellipse 150% 100% at 50% 0%, #d4eef8 0%, transparent 60%)",
+              "dark": "radial-gradient(ellipse 150% 100% at 50% 0%, hsl(268,80%,12%) 0%, transparent 60%)"
+            },
             "backgroundSize": "300% 300%",
             "motion": [
               {
@@ -396,7 +450,10 @@
             ]
           },
           {
-            "fill": "radial-gradient(ellipse 80% 60% at 22% 78%, hsl(280,85%,18%) 0%, transparent 55%)",
+            "fill": {
+              "light": "radial-gradient(ellipse 80% 60% at 22% 78%, #ffe0eb 0%, transparent 55%)",
+              "dark": "radial-gradient(ellipse 80% 60% at 22% 78%, hsl(280,85%,18%) 0%, transparent 55%)"
+            },
             "blendMode": "screen",
             "opacity": 0.55,
             "backgroundSize": "280% 280%",
@@ -415,7 +472,10 @@
             ]
           },
           {
-            "fill": "radial-gradient(ellipse 100% 55% at 78% 22%, hsl(248,78%,22%) 0%, transparent 58%)",
+            "fill": {
+              "light": "radial-gradient(ellipse 100% 55% at 78% 22%, #d4eef8 0%, transparent 58%)",
+              "dark": "radial-gradient(ellipse 100% 55% at 78% 22%, hsl(248,78%,22%) 0%, transparent 58%)"
+            },
             "blendMode": "screen",
             "opacity": 0.45,
             "backgroundSize": "320% 320%",
@@ -434,7 +494,10 @@
             ]
           },
           {
-            "fill": "conic-gradient(from 0deg at 50% 100%, hsl(270,70%,8%) 0%, hsl(290,75%,14%) 25%, hsl(250,80%,10%) 50%, hsl(280,72%,12%) 75%, hsl(270,70%,8%) 100%)",
+            "fill": {
+              "light": "conic-gradient(from 0deg at 50% 100%, #f6f2f3 0%, #ffe0eb 25%, #d4eef8 50%, #e8f4fa 75%, #f6f2f3 100%)",
+              "dark": "conic-gradient(from 0deg at 50% 100%, hsl(270,70%,8%) 0%, hsl(290,75%,14%) 25%, hsl(250,80%,10%) 50%, hsl(280,72%,12%) 75%, hsl(270,70%,8%) 100%)"
+            },
             "blendMode": "screen",
             "opacity": 0.5,
             "motion": [
@@ -452,7 +515,10 @@
             ]
           },
           {
-            "fill": "radial-gradient(ellipse 60% 40% at 50% 50%, hsl(290,72%,14%) 0%, transparent 60%)",
+            "fill": {
+              "light": "radial-gradient(ellipse 60% 40% at 50% 50%, #ffe0eb 0%, transparent 60%)",
+              "dark": "radial-gradient(ellipse 60% 40% at 50% 50%, hsl(290,72%,14%) 0%, transparent 60%)"
+            },
             "blendMode": "screen",
             "opacity": 0.35,
             "backgroundSize": "200% 200%",

@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["1.5rem", "2.5rem"],
   "columns": {
     "mobile": 1,
@@ -44,84 +44,84 @@
     "mobile": {
       "b-g1": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-g2": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-g3": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-g4": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-g5": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-g6": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-g7": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-g8": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       }
     },
     "desktop": {
       "b-g1": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.4rem"
       },
       "b-g2": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.4rem"
       },
       "b-g3": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.4rem"
       },
       "b-g4": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.4rem"
       },
       "b-g5": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.4rem"
       },
       "b-g6": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.4rem"
       },
       "b-g7": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.4rem"
       },
       "b-g8": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.4rem"
       }
     }

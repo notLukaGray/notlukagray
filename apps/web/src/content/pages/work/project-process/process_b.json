@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#ffffff07",
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
   "borderRadius": ["1.5rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "16px" }],
   "marginBottom": ["2rem", "3rem"],
@@ -15,7 +15,11 @@
     "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
     "desktop": [
       { "padding": "2rem", "gap": "1rem" },
-      { "padding": "2rem", "gap": "1rem", "fill": "#ffffff04" },
+      {
+        "padding": "2rem",
+        "gap": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.016)"
+      },
       { "padding": "2rem", "gap": "1rem" }
     ]
   },

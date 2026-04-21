@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   cssInlineStyleSchema,
+  referrerPolicySchema,
   responsiveStringSchema,
   themeStringSchema,
   triggerActionSchema,
@@ -116,6 +117,10 @@ const elementLinkSchema = z
     external: z.boolean().optional(),
     target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
     rel: z.string().optional(),
+    download: z.union([z.boolean(), z.string()]).optional(),
+    hreflang: z.string().optional(),
+    ping: z.string().optional(),
+    referrerPolicy: referrerPolicySchema.optional(),
     copyType: z.enum(["heading", "body"]),
     level: responsiveElementBodyVariantSchema.optional(),
     wordWrap: z.boolean().optional(),
@@ -186,6 +191,14 @@ const elementImageSchema = z
       })
       .optional(),
     fillOpacity: z.number().min(0).max(1).optional(),
+    /** Hint browser when to load the image. "lazy" defers off-screen images; "eager" loads immediately. */
+    loading: z.enum(["lazy", "eager"]).optional(),
+    /** Browser image decode hint. "async" avoids blocking the main thread. */
+    decoding: z.enum(["async", "sync", "auto"]).optional(),
+    /** Raw srcset string for responsive images (e.g. "img-480.jpg 480w, img-800.jpg 800w"). */
+    srcSet: z.string().optional(),
+    /** Sizes attribute paired with srcSet (e.g. "(max-width: 600px) 480px, 800px"). */
+    sizes: z.string().optional(),
   })
   .merge(elementLayoutSchema);
 
@@ -252,6 +265,12 @@ const elementVideoSchema = z
         bufferTimeAtTopQuality: z.number().positive().optional(),
       })
       .optional(),
+    /** HTML preload hint for non-streaming sources. "none" saves bandwidth; "metadata" fetches duration/dimensions only. */
+    preload: z.enum(["none", "metadata", "auto"]).optional(),
+    /** CORS mode for the video element. Required when fetching from a different origin. */
+    crossOrigin: z.enum(["anonymous", "use-credentials"]).optional(),
+    /** Space-separated list of controls to disable (e.g. "nodownload nofullscreen noremoteplayback"). */
+    controlsList: z.string().optional(),
   })
   .merge(elementLayoutSchema);
 

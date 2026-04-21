@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "scrollSpeed": 0.85,
   "marginBottom": ["1.5rem", "2.5rem"],
   "columns": { "mobile": 1, "desktop": 1 },

@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["2rem", "3rem"],
   "columns": {
     "mobile": 1,
@@ -43,44 +43,44 @@
     "mobile": {
       "c-spacing": {
         "borderRadius": "1rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1rem"
       },
       "c-color": {
         "borderRadius": "1rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1rem"
       },
       "c-type": {
         "borderRadius": "1rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1rem"
       },
       "c-motion": {
         "borderRadius": "1rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1rem"
       }
     },
     "desktop": {
       "c-spacing": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1.25rem"
       },
       "c-color": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1.25rem"
       },
       "c-type": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1.25rem"
       },
       "c-motion": {
         "borderRadius": "1.25rem",
-        "fill": "#d2ff7a08",
+        "fill": "oklch(from var(--pb-primary) l c h / 0.031)",
         "padding": "1.25rem"
       }
     }

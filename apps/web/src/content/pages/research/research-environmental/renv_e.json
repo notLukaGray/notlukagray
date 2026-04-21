@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["3rem", "6rem"],
   "columns": {
     "mobile": 1,
@@ -40,34 +40,34 @@
     "desktop": {
       "e-now": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1.25rem"
       },
       "e-checklist": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1.25rem"
       },
       "e-reading": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff05",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
         "padding": "1.1rem"
       }
     },
     "mobile": {
       "e-now": {
         "borderRadius": "1rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1rem"
       },
       "e-checklist": {
         "borderRadius": "1rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "1rem"
       },
       "e-reading": {
         "borderRadius": "1rem",
-        "fill": "#ffffff05",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
         "padding": "0.9rem"
       }
     }

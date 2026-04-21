@@ -18,6 +18,10 @@ export type ElementVideoCoreProps = {
   muted: boolean;
   playbackRate?: number;
   isManagedSource: boolean;
+  priority?: boolean;
+  preload?: "none" | "metadata" | "auto";
+  crossOrigin?: "anonymous" | "use-credentials";
+  controlsList?: string;
 };
 
 export function ElementVideoCore({
@@ -34,6 +38,10 @@ export function ElementVideoCore({
   muted,
   playbackRate,
   isManagedSource,
+  priority,
+  preload,
+  crossOrigin,
+  controlsList,
 }: ElementVideoCoreProps) {
   const videoElRef = useRef<HTMLVideoElement | null>(null);
 
@@ -67,31 +75,40 @@ export function ElementVideoCore({
     videoElRef.current.playbackRate = playbackRate;
   }, [playbackRate]);
 
+  const resolvedPoster = shouldLoad ? (poster ?? undefined) : undefined;
+
   return (
-    <video
-      ref={handleVideoRef}
-      src={!isManagedSource && shouldLoad ? src : undefined}
-      poster={shouldLoad ? (poster ?? undefined) : undefined}
-      autoPlay={autoplay}
-      loop={loop}
-      muted={muted}
-      playsInline
-      preload={shouldLoad ? "auto" : "none"}
-      controls={!withModule}
-      disableRemotePlayback
-      controlsList="nodownload nofullscreen noremoteplayback"
-      style={{
-        ...videoStyle,
-        ...(withModule ? { width: "100%", height: "100%" } : {}),
-      }}
-      onPlay={controls.handlePlay}
-      onPause={controls.handlePause}
-      onEnded={controls.handleEnded}
-      onVolumeChange={controls.handleVolumeChange}
-      onLoadedData={controls.handleVolumeChange}
-      onTimeUpdate={controls.onTimeUpdate}
-      onLoadedMetadata={controls.onLoadedMetadata}
-      aria-label={ariaLabel || "Video"}
-    />
+    <>
+      {priority && resolvedPoster && (
+        // React 19 hoists this to <head> during SSR so the poster is discovered before JS runs.
+        <link rel="preload" as="image" href={resolvedPoster} fetchPriority="high" />
+      )}
+      <video
+        ref={handleVideoRef}
+        src={!isManagedSource && shouldLoad ? src : undefined}
+        poster={resolvedPoster}
+        autoPlay={autoplay}
+        loop={loop}
+        muted={muted}
+        playsInline
+        preload={shouldLoad ? (preload ?? "auto") : "none"}
+        crossOrigin={crossOrigin}
+        controls={!withModule}
+        disableRemotePlayback
+        controlsList={controlsList ?? "nodownload nofullscreen noremoteplayback"}
+        style={{
+          ...videoStyle,
+          ...(withModule ? { width: "100%", height: "100%" } : {}),
+        }}
+        onPlay={controls.handlePlay}
+        onPause={controls.handlePause}
+        onEnded={controls.handleEnded}
+        onVolumeChange={controls.handleVolumeChange}
+        onLoadedData={controls.handleVolumeChange}
+        onTimeUpdate={controls.onTimeUpdate}
+        onLoadedMetadata={controls.onLoadedMetadata}
+        aria-label={ariaLabel || "Video"}
+      />
+    </>
   );
 }

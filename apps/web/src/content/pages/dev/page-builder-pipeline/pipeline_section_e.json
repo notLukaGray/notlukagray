@@ -7,7 +7,7 @@
   "marginTop": ["1.5rem", "3rem"],
   "marginBottom": ["1.5rem", "3rem"],
   "align": "center",
-  "fill": "#00000088",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.53)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "20px" }],
   "columns": { "mobile": 1, "desktop": 2 },
@@ -22,12 +22,16 @@
   },
   "itemStyles": {
     "mobile": {
-      "boundary-quote": { "padding": "1rem", "fill": "#ffffff0c", "borderRadius": "1rem" }
+      "boundary-quote": {
+        "padding": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.047)",
+        "borderRadius": "1rem"
+      }
     },
     "desktop": {
       "boundary-quote": {
         "padding": "1.25rem 1.5rem",
-        "fill": "#ffffff0c",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.047)",
         "borderRadius": "1rem",
         "alignY": "center"
       }

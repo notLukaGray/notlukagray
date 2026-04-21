@@ -7,7 +7,7 @@
   "marginTop": ["1.5rem", "3rem"],
   "marginBottom": ["1.5rem", "3rem"],
   "align": "center",
-  "fill": "#00000088",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.53)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "20px" }],
   "columns": { "mobile": 1, "desktop": 2 },
@@ -22,19 +22,27 @@
   },
   "itemStyles": {
     "mobile": {
-      "pipeline-code": { "padding": "1rem", "fill": "#0d1117", "borderRadius": "0.75rem" },
-      "pipeline-diagram": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "0.75rem" }
+      "pipeline-code": {
+        "padding": "1rem",
+        "fill": "var(--pb-secondary)",
+        "borderRadius": "0.75rem"
+      },
+      "pipeline-diagram": {
+        "padding": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "0.75rem"
+      }
     },
     "desktop": {
       "pipeline-code": {
         "padding": "1.25rem 1.5rem",
-        "fill": "#0d1117",
+        "fill": "var(--pb-secondary)",
         "borderRadius": "0.75rem",
         "alignY": "top"
       },
       "pipeline-diagram": {
         "padding": "1.25rem 1.5rem",
-        "fill": "#ffffff08",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "0.75rem",
         "alignY": "top"
       }

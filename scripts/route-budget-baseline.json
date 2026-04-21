@@ -23,5 +23,26 @@
       "chunkCount": 13
     }
   },
-  "exceptions": {}
+  "exceptions": {
+    "/": {
+      "allowBytesOver": 40960,
+      "reason": "Shared light/dark theme runtime adds a small client chunk across public routes."
+    },
+    "/[...slug]": {
+      "allowBytesOver": 40960,
+      "reason": "Shared light/dark theme runtime adds a small client chunk across public routes."
+    },
+    "/playground": {
+      "allowBytesOver": 40960,
+      "reason": "Shared light/dark theme runtime adds a small client chunk across public routes."
+    },
+    "/style-guide": {
+      "allowBytesOver": 40960,
+      "reason": "Shared light/dark theme runtime adds a small client chunk across public routes."
+    },
+    "/unlock": {
+      "allowBytesOver": 40960,
+      "reason": "Shared light/dark theme runtime adds a small client chunk across public routes."
+    }
+  }
 }

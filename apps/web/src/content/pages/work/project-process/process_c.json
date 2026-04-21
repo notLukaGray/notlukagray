@@ -5,7 +5,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["2rem", "3rem"],
   "elementOrder": ["c-image"],
   "definitions": {

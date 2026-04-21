@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#ffffff06",
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "12px" }],
   "marginBottom": ["3rem", "5rem"],
@@ -15,7 +15,7 @@
     "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
     "desktop": [
       { "padding": "2rem", "gap": "1rem" },
-      { "padding": "2rem", "gap": "1rem", "fill": "#d2ff7a06" }
+      { "padding": "2rem", "gap": "1rem", "fill": "oklch(from var(--pb-primary) l c h / 0.024)" }
     ]
   },
   "elementOrder": ["e-impact-label", "e-impact", "e-metrics-label", "e-metrics"],

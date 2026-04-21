@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#ffffff06",
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
   "borderRadius": ["1.25rem", "1.75rem"],
   "effects": [{ "type": "backdropBlur", "amount": "14px" }],
   "scrollSpeed": 0.95,
@@ -19,7 +19,12 @@
     "desktop": [
       { "padding": "2rem 2.25rem", "gap": "0.5rem", "alignY": "top" },
       { "padding": "2rem 2.25rem", "gap": "0.5rem", "alignY": "top" },
-      { "padding": "2rem 2.25rem", "gap": "0.5rem", "fill": "#d2ff7a0d", "alignY": "top" }
+      {
+        "padding": "2rem 2.25rem",
+        "gap": "0.5rem",
+        "fill": "oklch(from var(--pb-primary) l c h / 0.051)",
+        "alignY": "top"
+      }
     ]
   },
   "columnSpan": {

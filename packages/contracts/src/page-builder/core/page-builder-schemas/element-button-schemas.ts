@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { elementLayoutSchema } from "./element-foundation-schemas";
 import {
+  referrerPolicySchema,
   responsiveStringSchema,
   themeStringSchema,
   triggerActionSchema,
@@ -115,6 +116,12 @@ export const elementButtonSchema = z
     vectorRef: z.string().optional(),
     href: z.string().optional(),
     external: z.boolean().optional(),
+    target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
+    rel: z.string().optional(),
+    download: z.union([z.boolean(), z.string()]).optional(),
+    hreflang: z.string().optional(),
+    ping: z.string().optional(),
+    referrerPolicy: referrerPolicySchema.optional(),
     action: buttonActionSchema.optional(),
     actionPayload: z.unknown().optional(),
     linkDefault: themeStringSchema.optional(),

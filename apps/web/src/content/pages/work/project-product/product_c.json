@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["2rem", "3rem"],
   "columns": {
     "mobile": 1,
@@ -40,34 +40,34 @@
     "mobile": {
       "c-f1": {
         "padding": "1.25rem",
-        "fill": "#ffffff08",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.25rem"
       },
       "c-f2": {
         "padding": "1.25rem",
-        "fill": "#ffffff08",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.25rem"
       },
       "c-f3": {
         "padding": "1.25rem",
-        "fill": "#ffffff08",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.25rem"
       }
     },
     "desktop": {
       "c-f1": {
         "padding": "1.75rem",
-        "fill": "#ffffff08",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.5rem"
       },
       "c-f2": {
         "padding": "1.75rem",
-        "fill": "#ffffff08",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.5rem"
       },
       "c-f3": {
         "padding": "1.75rem",
-        "fill": "#ffffff08",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.5rem"
       }
     }

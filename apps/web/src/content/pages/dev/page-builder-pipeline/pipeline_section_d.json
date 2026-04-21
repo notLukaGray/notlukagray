@@ -7,7 +7,7 @@
   "marginTop": ["1.5rem", "3rem"],
   "marginBottom": ["1.5rem", "3rem"],
   "align": "center",
-  "fill": "#00000088",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.53)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "20px" }],
   "columns": { "mobile": 1, "desktop": 2 },
@@ -22,16 +22,48 @@
   },
   "itemStyles": {
     "mobile": {
-      "stages-1": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "1rem" },
-      "stages-2": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "1rem" },
-      "stages-3": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "1rem" },
-      "stages-4": { "padding": "1rem", "fill": "#ffffff08", "borderRadius": "1rem" }
+      "stages-1": {
+        "padding": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "1rem"
+      },
+      "stages-2": {
+        "padding": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "1rem"
+      },
+      "stages-3": {
+        "padding": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "1rem"
+      },
+      "stages-4": {
+        "padding": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "1rem"
+      }
     },
     "desktop": {
-      "stages-1": { "padding": "1.25rem", "fill": "#ffffff08", "borderRadius": "1rem" },
-      "stages-2": { "padding": "1.25rem", "fill": "#ffffff08", "borderRadius": "1rem" },
-      "stages-3": { "padding": "1.25rem", "fill": "#ffffff08", "borderRadius": "1rem" },
-      "stages-4": { "padding": "1.25rem", "fill": "#ffffff08", "borderRadius": "1rem" }
+      "stages-1": {
+        "padding": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "1rem"
+      },
+      "stages-2": {
+        "padding": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "1rem"
+      },
+      "stages-3": {
+        "padding": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "1rem"
+      },
+      "stages-4": {
+        "padding": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "borderRadius": "1rem"
+      }
     }
   },
   "columnAssignments": {

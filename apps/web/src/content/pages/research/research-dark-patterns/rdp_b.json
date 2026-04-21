@@ -4,7 +4,7 @@
   "width": ["100%", "92%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["1.5rem", "2.5rem"],
   "columns": {
     "mobile": 1,
@@ -53,94 +53,94 @@
       },
       "b-confirm": {
         "borderRadius": "1rem",
-        "fill": "#ff000010",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.063)",
         "padding": "1rem"
       },
       "b-roach": {
         "borderRadius": "1rem",
-        "fill": "#ff000010",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.063)",
         "padding": "1rem"
       },
       "b-trick": {
         "borderRadius": "1rem",
-        "fill": "#ff000010",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.063)",
         "padding": "1rem"
       },
       "b-misdirect": {
         "borderRadius": "1rem",
-        "fill": "#ff000014",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.078)",
         "padding": "1rem"
       },
       "b-hidden": {
         "borderRadius": "1rem",
-        "fill": "#ff000014",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.078)",
         "padding": "1rem"
       },
       "b-scarcity": {
         "borderRadius": "1rem",
-        "fill": "#ff000014",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.078)",
         "padding": "1rem"
       },
       "b-disgust": {
         "borderRadius": "1rem",
-        "fill": "#ff000018",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.094)",
         "padding": "1rem"
       },
       "b-social": {
         "borderRadius": "1rem",
-        "fill": "#ff000018",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.094)",
         "padding": "1rem"
       },
       "b-forced": {
         "borderRadius": "1rem",
-        "fill": "#ff000018",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.094)",
         "padding": "1rem"
       }
     },
     "mobile": {
       "b-confirm": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000010",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.063)",
         "padding": "0.9rem"
       },
       "b-roach": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000010",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.063)",
         "padding": "0.9rem"
       },
       "b-trick": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000010",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.063)",
         "padding": "0.9rem"
       },
       "b-misdirect": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000014",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.078)",
         "padding": "0.9rem"
       },
       "b-hidden": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000014",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.078)",
         "padding": "0.9rem"
       },
       "b-scarcity": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000014",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.078)",
         "padding": "0.9rem"
       },
       "b-disgust": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000018",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.094)",
         "padding": "0.9rem"
       },
       "b-social": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000018",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.094)",
         "padding": "0.9rem"
       },
       "b-forced": {
         "borderRadius": "0.9rem",
-        "fill": "#ff000018",
+        "fill": "oklch(from var(--pb-accent) l c h / 0.094)",
         "padding": "0.9rem"
       }
     }

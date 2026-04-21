@@ -5,7 +5,7 @@
   "width": "100%",
   "height": "hug",
   "align": "full",
-  "fill": "#00000000",
+  "fill": "transparent",
   "gap": "0",
   "scrollSpeed": 0.9,
   "zIndex": 1,

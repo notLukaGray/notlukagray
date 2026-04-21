@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#0000000a",
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.039)",
   "borderRadius": ["1.25rem", "2rem"],
   "marginBottom": ["1.5rem", "2.5rem"],
   "columns": {
@@ -45,34 +45,34 @@
     "desktop": {
       "b-card-1": {
         "borderRadius": "1rem",
-        "fill": "#0000000a",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.039)",
         "padding": "1rem"
       },
       "b-card-2": {
         "borderRadius": "1rem",
-        "fill": "#0000000a",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.039)",
         "padding": "1rem"
       },
       "b-card-3": {
         "borderRadius": "1rem",
-        "fill": "#0000000a",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.039)",
         "padding": "1rem"
       }
     },
     "mobile": {
       "b-card-1": {
         "borderRadius": "0.75rem",
-        "fill": "#0000000a",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.039)",
         "padding": "0.9rem"
       },
       "b-card-2": {
         "borderRadius": "0.75rem",
-        "fill": "#0000000a",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.039)",
         "padding": "0.9rem"
       },
       "b-card-3": {
         "borderRadius": "0.75rem",
-        "fill": "#0000000a",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.039)",
         "padding": "0.9rem"
       }
     }

@@ -6,7 +6,10 @@
   "width": ["100%", "92%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "linear-gradient(rgba(138,180,255,0.08) 1px, transparent 1px) 0 0/36px 36px, linear-gradient(90deg, rgba(138,180,255,0.08) 1px, transparent 1px) 0 0/36px 36px, radial-gradient(130% 120% at 0% 0%, #1f2d43 0%, #111827 45%, #07090f 100%)",
+  "fill": {
+    "light": "linear-gradient(oklch(from var(--pb-primary) l c h / 0.08) 1px, transparent 1px) 0 0/36px 36px, linear-gradient(90deg, oklch(from var(--pb-primary) l c h / 0.08) 1px, transparent 1px) 0 0/36px 36px, radial-gradient(130% 120% at 0% 0%, #d4eef8 0%, #e8f4fa 45%, #f6f2f3 100%)",
+    "dark": "linear-gradient(rgba(138,180,255,0.08) 1px, transparent 1px) 0 0/36px 36px, linear-gradient(90deg, rgba(138,180,255,0.08) 1px, transparent 1px) 0 0/36px 36px, radial-gradient(130% 120% at 0% 0%, #001c2a 0%, #001420 45%, #0e0b0c 100%)"
+  },
   "borderRadius": "1.5rem",
   "marginTop": "1rem",
   "marginBottom": "2rem",

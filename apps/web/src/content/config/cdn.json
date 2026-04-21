@@ -5,6 +5,7 @@
     "clientCacheExpiryHours": 168,
     "apiCacheMaxAge": 2592000,
     "apiCacheStaleWhileRevalidate": 86400,
+    "allowedHosts": [".b-cdn.net"],
     "allowedExtensions": [
       ".webm",
       ".mp4",

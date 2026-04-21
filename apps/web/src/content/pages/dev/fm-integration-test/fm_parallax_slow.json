@@ -8,10 +8,10 @@
   "align": ["full", "left"],
   "layers": [
     {
-      "fill": "#1a1a24"
+      "fill": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
     }
   ],
-  "fill": "#252530",
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.12)",
   "borderRadius": "1rem",
   "marginTop": ["1.5rem", "1rem"],
   "marginBottom": ["1.5rem", "1rem"],

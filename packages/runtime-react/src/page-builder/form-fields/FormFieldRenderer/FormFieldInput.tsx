@@ -92,6 +92,8 @@ export function FormFieldInput({
       minLength={field.minLength}
       maxLength={field.maxLength}
       pattern={field.pattern}
+      inputMode={field.inputMode as React.HTMLAttributes<HTMLInputElement>["inputMode"]}
+      spellCheck={field.spellCheck}
       aria-invalid={hasError}
       aria-describedby={describedBy}
       aria-required={field.required}

@@ -6,7 +6,7 @@
   "width": ["100%", "92%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#0d0d0d",
+  "fill": "var(--pb-secondary)",
   "borderRadius": "0",
   "marginTop": "0",
   "marginBottom": "0",

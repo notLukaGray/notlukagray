@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000055",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.33)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [
     {

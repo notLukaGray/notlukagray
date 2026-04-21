@@ -99,6 +99,11 @@ const formFieldContentSchema = z.object({
   prefix: z.string().optional(),
   suffix: z.string().optional(),
   showCharacterCount: z.boolean().optional(),
+  /** Mobile keyboard type hint (e.g. "numeric" shows a number pad without type="number" constraints). */
+  inputMode: z
+    .enum(["none", "text", "decimal", "numeric", "tel", "search", "email", "url"])
+    .optional(),
+  spellCheck: z.boolean().optional(),
   buttonType: formButtonTypeSchema.optional(),
   loadingText: z.string().optional(),
   action: triggerActionSchema.optional(),

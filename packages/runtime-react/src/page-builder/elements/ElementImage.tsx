@@ -65,6 +65,13 @@ export function ElementImage({
   overflow,
   hidden,
   priority,
+  loading,
+  decoding,
+  srcSet,
+  sizes,
+  aria,
+  tabIndex,
+  role,
   interactions,
 }: Props) {
   const themeMode = usePageBuilderThemeMode();
@@ -205,7 +212,9 @@ export function ElementImage({
               src={src}
               alt={alt ?? ""}
               style={fillHeight ? fillImgStyle : imgStyle}
-              loading={priority ? "eager" : "lazy"}
+              loading={loading ?? (priority ? "eager" : "lazy")}
+              decoding={decoding}
+              srcSet={srcSet}
               fetchPriority={priority ? "high" : undefined}
               onError={handleImgError}
               onLoad={handleImgLoad}
@@ -218,9 +227,9 @@ export function ElementImage({
               unoptimized={isBlobSrc}
               priority={!!priority}
               fetchPriority={priority ? "high" : "auto"}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+              sizes={sizes ?? "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"}
               style={nextImageFillStyle}
-              loading={priority ? "eager" : "lazy"}
+              loading={loading ?? (priority ? "eager" : "lazy")}
               onError={handleImgError}
               onLoad={handleImgLoad}
             />
@@ -230,10 +239,15 @@ export function ElementImage({
     </div>
   );
 
+  const ariaProps = aria as Record<string, string | boolean> | undefined;
+
   const figure = (
     <figure
       ref={figureRef}
       className={figureClassName}
+      tabIndex={tabIndex}
+      role={role}
+      {...(ariaProps ? ariaProps : {})}
       style={
         hasInteractions
           ? {

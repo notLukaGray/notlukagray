@@ -5,7 +5,7 @@
   "width": ["100%", "88%"],
   "height": ["80vh", "88vh"],
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "elementOrder": ["a-phase", "a-title", "a-brief", "a-timeline"],
   "definitions": {
     "a-phase": {

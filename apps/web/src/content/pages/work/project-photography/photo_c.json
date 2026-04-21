@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": ["22rem", "32rem"],
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["2rem", "3rem"],
   "scrollDirection": "horizontal",
   "elementOrder": ["c-img-1", "c-img-2", "c-img-3", "c-img-4", "c-img-5", "c-img-6"],

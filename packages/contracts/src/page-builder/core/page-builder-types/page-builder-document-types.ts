@@ -37,6 +37,11 @@ export type ResolvedPage = {
   title: string;
   description?: string;
   ogImage?: string;
+  canonicalUrl?: string;
+  robots?: string;
+  keywords?: string;
+  lang?: string;
+  structuredData?: unknown;
   bg?: bgBlock;
   sections?: SectionBlock[];
   passwordProtected?: boolean;
@@ -71,6 +76,11 @@ export type PageBuilder = {
   onPageProgress?: TriggerAction;
   description?: string;
   ogImage?: string;
+  canonicalUrl?: string;
+  robots?: string;
+  keywords?: string;
+  lang?: string;
+  structuredData?: unknown;
   transitions?: BackgroundTransitionEffect | BackgroundTransitionEffect[];
   forcedTheme?: ForcedTheme;
 };

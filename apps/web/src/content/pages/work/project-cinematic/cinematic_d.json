@@ -4,7 +4,7 @@
   "width": ["100%", "80%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000075",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.46)",
   "borderRadius": ["1.5rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "20px" }],
   "marginBottom": ["2rem", "3rem"],

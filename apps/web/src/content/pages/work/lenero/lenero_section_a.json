@@ -5,7 +5,7 @@
   "width": ["100%", "88%"],
   "height": ["100vh", "100vh"],
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "zIndex": 0,
   "fixed": true,
   "alignY": "center",

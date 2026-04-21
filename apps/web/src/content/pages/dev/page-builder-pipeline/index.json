@@ -19,7 +19,7 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#000000"
+          "fill": "var(--pb-secondary)"
         }
       ]
     }

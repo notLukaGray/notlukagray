@@ -218,6 +218,9 @@ export function ElementVideo({
   onVideoPause,
   onVideoEnd,
   streamingConfig,
+  preload,
+  crossOrigin,
+  controlsList,
 }: Props) {
   const themeMode = usePageBuilderThemeMode();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -388,6 +391,10 @@ export function ElementVideo({
       muted={muted}
       playbackRate={playbackRate}
       isManagedSource={videoSourceState.isHls || videoSourceState.isDash}
+      priority={priority}
+      preload={preload}
+      crossOrigin={crossOrigin}
+      controlsList={controlsList}
     />
   );
 

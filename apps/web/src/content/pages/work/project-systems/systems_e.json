@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["3rem", "6rem"],
   "columns": { "mobile": 1, "desktop": 2 },
   "columnWidths": { "mobile": [1], "desktop": [1, 1.3] },
@@ -15,16 +15,48 @@
   },
   "itemStyles": {
     "mobile": {
-      "e-case-1": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
-      "e-case-2": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
-      "e-case-3": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "1rem" },
-      "e-preview": { "borderRadius": "1rem", "fill": "#ffffff05", "padding": "0.35rem" }
+      "e-case-1": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "1rem"
+      },
+      "e-case-2": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "1rem"
+      },
+      "e-case-3": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "1rem"
+      },
+      "e-preview": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
+        "padding": "0.35rem"
+      }
     },
     "desktop": {
-      "e-case-1": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
-      "e-case-2": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
-      "e-case-3": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "1.25rem" },
-      "e-preview": { "borderRadius": "1.25rem", "fill": "#ffffff05", "padding": "0.5rem" }
+      "e-case-1": {
+        "borderRadius": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "1.25rem"
+      },
+      "e-case-2": {
+        "borderRadius": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "1.25rem"
+      },
+      "e-case-3": {
+        "borderRadius": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "1.25rem"
+      },
+      "e-preview": {
+        "borderRadius": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
+        "padding": "0.5rem"
+      }
     }
   },
   "columnAssignments": {

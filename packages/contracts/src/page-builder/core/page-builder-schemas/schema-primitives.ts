@@ -562,3 +562,14 @@ export const responsiveBooleanSchema = z
       }),
   ])
   .optional();
+
+export const referrerPolicySchema = z.enum([
+  "no-referrer",
+  "no-referrer-when-downgrade",
+  "origin",
+  "origin-when-cross-origin",
+  "same-origin",
+  "strict-origin",
+  "strict-origin-when-cross-origin",
+  "unsafe-url",
+]);

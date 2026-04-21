@@ -9,10 +9,13 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#080810"
+          "fill": "var(--pb-secondary)"
         },
         {
-          "fill": "radial-gradient(ellipse 80% 50% at 50% 0%, #0d1030 0%, transparent 60%)",
+          "fill": {
+            "light": "radial-gradient(ellipse 80% 50% at 50% 0%, #d4eef8 0%, transparent 60%)",
+            "dark": "radial-gradient(ellipse 80% 50% at 50% 0%, #001c2a 0%, transparent 60%)"
+          },
           "blendMode": "screen"
         }
       ]

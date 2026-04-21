@@ -3,6 +3,7 @@ import { motionPropsSchema, motionTimingSchema } from "./motion-props-schema";
 import {
   cssInlineStyleSchema,
   jsonValueSchema,
+  referrerPolicySchema,
   responsiveElementAlignSchema,
   responsiveElementAlignYSchema,
   responsiveStringSchema,
@@ -212,6 +213,10 @@ export const elementLayoutSchema = z
     whiteSpace: z.enum(["normal", "nowrap", "pre", "pre-wrap", "pre-line"]).optional(),
     /** CSS clip-path e.g. "circle(50%)". */
     clipPath: z.string().optional(),
+    /** HTML tabindex — controls keyboard focus order. -1 removes from tab sequence. */
+    tabIndex: z.number().int().optional(),
+    /** ARIA/semantic role e.g. "region", "banner", "complementary". */
+    role: z.string().optional(),
   })
   .superRefine((value, ctx) => {
     if (!value.borderGradient || !value.wrapperStyle) return;
@@ -270,6 +275,10 @@ export const elementSimpleLinkSchema = z.object({
   external: z.boolean(),
   target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
   rel: z.string().optional(),
+  download: z.union([z.boolean(), z.string()]).optional(),
+  hreflang: z.string().optional(),
+  ping: z.string().optional(),
+  referrerPolicy: referrerPolicySchema.optional(),
 });
 
 export const elementGraphicLinkSchema = z
@@ -278,6 +287,10 @@ export const elementGraphicLinkSchema = z
     external: z.boolean().optional(),
     target: z.enum(["_self", "_blank", "_parent", "_top"]).optional(),
     rel: z.string().optional(),
+    download: z.union([z.boolean(), z.string()]).optional(),
+    hreflang: z.string().optional(),
+    ping: z.string().optional(),
+    referrerPolicy: referrerPolicySchema.optional(),
     hoverScale: z.number().optional(),
     hoverFill: themeStringSchema.optional(),
     activeFill: themeStringSchema.optional(),

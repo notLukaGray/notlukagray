@@ -5,7 +5,7 @@ import { primaryFontConfig, secondaryFontConfig, monoFontConfig } from "@/app/fo
 import { getActiveWebfontUrls } from "@/app/fonts/webfont";
 import { generateFontCssVars } from "@/app/fonts/css-vars";
 import { typeScaleConfig } from "@/app/fonts/type-scale";
-import { siteUrl, cdnBase } from "@/core/lib/globals";
+import { getTwitterCardForOgImage, siteUrl, cdnBase, siteMetadata } from "@/core/lib/globals";
 import { ThemeProvider } from "@/core/providers/theme-provider";
 import { AppLayout } from "@/core/ui/app-layout";
 import { DeviceTypeProvider } from "@/core/providers/device-type-provider";
@@ -15,37 +15,52 @@ import { pbBrandCssInline } from "@/app/theme/config";
 import { pbBuilderDefaultsV1 } from "@/app/theme/pb-builder-defaults";
 import { pbContentGuidelinesCssInline } from "@/app/theme/pb-content-guidelines-config";
 import { pbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
+import { getProductionColorToolPersistedV2 } from "@/app/dev/colors/color-tool-persistence";
 import { getProductionWorkbenchSession } from "@/app/dev/workbench/workbench-defaults";
+import { buildWorkbenchThemeColorVarMap } from "@/app/theme/pb-workbench-color-var-map";
 import { serializePbFoundationsCss } from "@/app/theme/pb-foundation-css";
 import { PbFoundationsRuntimeSync } from "@/app/theme/PbFoundationsRuntimeSync";
 import { PbColorsRuntimeSync } from "@/app/theme/PbColorsRuntimeSync";
 import { setCoreConfig } from "@pb/core";
 import { PageBuilderRuntimeEffects } from "@pb/runtime-react/effects";
 
-const title = "Portfolio";
-const description = "Modern portfolio website";
+function getOrigin(value: string): string | null {
+  try {
+    return new URL(value).origin;
+  } catch {
+    return null;
+  }
+}
 
-const cdnOrigin =
-  typeof cdnBase === "string" ? new URL(cdnBase).origin : "https://media.notlukagray.com";
+const cdnOrigin = getOrigin(cdnBase);
+const productionColorConfig = getProductionColorToolPersistedV2();
+const lightThemeColor =
+  buildWorkbenchThemeColorVarMap(productionColorConfig, "light")["--pb-secondary"] ?? "#ffffff";
+const darkThemeColor =
+  buildWorkbenchThemeColorVarMap(productionColorConfig, "dark")["--pb-secondary"] ?? "#000000";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl ? new URL(siteUrl) : undefined,
-  title,
-  description,
+  title: siteMetadata.title,
+  description: siteMetadata.description,
   alternates: { canonical: "./" },
-  robots: { index: true, follow: true },
-  openGraph: { title, description },
+  openGraph: {
+    title: siteMetadata.title,
+    description: siteMetadata.description,
+  },
   twitter: {
-    card: "summary_large_image",
-    title,
-    description,
+    card: getTwitterCardForOgImage(undefined),
+    title: siteMetadata.title,
+    description: siteMetadata.description,
   },
-  icons: {
-    other: [
-      { rel: "preconnect", url: cdnOrigin },
-      { rel: "dns-prefetch", url: cdnOrigin },
-    ],
-  },
+  ...(cdnOrigin && {
+    icons: {
+      other: [
+        { rel: "preconnect", url: cdnOrigin },
+        { rel: "dns-prefetch", url: cdnOrigin },
+      ],
+    },
+  }),
 };
 
 export const viewport: Viewport = {
@@ -53,8 +68,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#000000" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+    { media: "(prefers-color-scheme: light)", color: lightThemeColor },
+    { media: "(prefers-color-scheme: dark)", color: darkThemeColor },
   ],
 };
 
@@ -115,12 +130,7 @@ export default function RootLayout({
           suppressHydrationWarning
         />
         <DeviceTypeProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
+          <ThemeProvider attribute="class" disableTransitionOnChange>
             {process.env.NODE_ENV === "development" && (
               <>
                 <DevPageValidationClient />

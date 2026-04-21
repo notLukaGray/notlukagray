@@ -6,7 +6,7 @@
   "width": ["100%", "92%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000080",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.5)",
   "borderRadius": ["2rem 2rem 0 0", "4rem 4rem 0 0"],
   "elementOrder": ["hero-heading", "hero-subtitle", "hero-body"],
   "effects": [

@@ -2,6 +2,7 @@
   "title": "Echo — Short Documentary",
   "description": "A short documentary about presence, stillness, and the landscape of the inner Hardangervidda.",
   "passwordProtected": true,
+  "robots": "noindex, follow",
   "assetBaseUrl": "/work",
   "sectionOrder": [
     "lenero_section_0",
@@ -43,7 +44,10 @@
           "fill": "var(--pb-secondary)"
         },
         {
-          "fill": "radial-gradient(ellipse 100% 60% at 50% 0%, transparent 0%, oklch(from var(--pb-primary) l c h / 0.45) 70%)"
+          "fill": {
+            "light": "radial-gradient(ellipse 100% 60% at 50% 0%, transparent 0%, #d4eef8 70%)",
+            "dark": "radial-gradient(ellipse 100% 60% at 50% 0%, transparent 0%, #001c2a 70%)"
+          }
         }
       ]
     }

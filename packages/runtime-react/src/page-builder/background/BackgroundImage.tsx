@@ -75,18 +75,6 @@ export function BackgroundImage({ image, priority }: Props) {
 
   const imageUrl = image;
 
-  useEffect(() => {
-    if (!priority || !imageUrl) return;
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = "image";
-    link.href = imageUrl;
-    document.head.appendChild(link);
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, [priority, imageUrl]);
-
   const getCanvasCssSize = useCallback(
     (canvas: HTMLCanvasElement): { width: number; height: number } => {
       const rect = canvas.getBoundingClientRect();
@@ -180,6 +168,10 @@ export function BackgroundImage({ image, priority }: Props) {
 
   return (
     <section {...sectionProps}>
+      {priority && imageUrl && (
+        // React 19 hoists this to <head> during SSR so the browser discovers it before JS runs.
+        <link rel="preload" as="image" href={imageUrl} fetchPriority="high" />
+      )}
       <canvas ref={canvasRef} className="block h-full w-full" />
       {error.type !== "none" && (
         <div

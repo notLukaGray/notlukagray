@@ -24,7 +24,8 @@ type RouteBudgetBaseline = {
   exceptions?: Record<
     string,
     {
-      allowPercentOver: number;
+      allowPercentOver?: number;
+      allowBytesOver?: number;
       reason: string;
     }
   >;
@@ -322,7 +323,8 @@ function compareAgainstBaseline(
     const deltaPercent =
       base.bytes === 0 ? (current.bytes === 0 ? 0 : 100) : (deltaBytes / base.bytes) * 100;
     const allowPercentOver = exception?.allowPercentOver ?? 5;
-    const maxBytes = base.bytes * (1 + allowPercentOver / 100);
+    const allowBytesOver = exception?.allowBytesOver ?? 0;
+    const maxBytes = base.bytes * (1 + allowPercentOver / 100) + allowBytesOver;
     const withinBudget = current.bytes <= maxBytes;
 
     comparisons.push({
@@ -337,6 +339,8 @@ function compareAgainstBaseline(
       budgetLimitBytes: Math.round(maxBytes),
       budgetLimitHuman: formatBytes(Math.round(maxBytes)),
       allowPercentOver,
+      allowBytesOver,
+      allowBytesOverHuman: formatBytes(allowBytesOver),
       exceptionReason: exception?.reason,
       sourceRoute: currentRoute.sourceRoute,
       manifestPath: current.manifestPath,

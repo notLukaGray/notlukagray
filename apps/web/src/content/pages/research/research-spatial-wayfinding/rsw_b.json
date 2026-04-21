@@ -5,7 +5,7 @@
   "width": ["100%", "92%"],
   "height": "hug",
   "align": "center",
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["1.5rem", "2.5rem"],
   "elementOrder": ["b-label", "b-plan"],
   "definitions": {

@@ -9,14 +9,20 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#07060f"
+          "fill": "var(--pb-secondary)"
         },
         {
-          "fill": "radial-gradient(ellipse 80% 60% at 50% 0%, #1a1040 0%, #07060f 70%)",
+          "fill": {
+            "light": "radial-gradient(ellipse 80% 60% at 50% 0%, #d4eef8 0%, #f6f2f3 70%)",
+            "dark": "radial-gradient(ellipse 80% 60% at 50% 0%, #001c2a 0%, #0e0b0c 70%)"
+          },
           "blendMode": "screen"
         },
         {
-          "fill": "radial-gradient(ellipse 40% 40% at 80% 80%, #0d0824 0%, transparent 70%)",
+          "fill": {
+            "light": "radial-gradient(ellipse 40% 40% at 80% 80%, #d4eef8 0%, transparent 70%)",
+            "dark": "radial-gradient(ellipse 40% 40% at 80% 80%, #001428 0%, transparent 70%)"
+          },
           "blendMode": "screen"
         }
       ]

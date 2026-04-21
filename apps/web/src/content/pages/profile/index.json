@@ -21,7 +21,7 @@
       "width": ["100%", "72%"],
       "height": "hug",
       "align": "center",
-      "fill": "#00000000",
+      "fill": "transparent",
       "padding": ["2rem 1rem", "4rem 2rem"],
       "elementOrder": ["heading", "body"],
       "definitions": {
@@ -53,7 +53,7 @@
       "width": "100%",
       "height": "hug",
       "align": "center",
-      "fill": "#00000000",
+      "fill": "transparent",
       "padding": "1rem",
       "elementOrder": ["note"],
       "definitions": {

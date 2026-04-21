@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#ffffff06",
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "12px" }],
   "marginBottom": ["1.5rem", "2.5rem"],
@@ -20,7 +20,11 @@
   },
   "itemStyles": {
     "desktop": {
-      "b-demo": { "borderRadius": "1.25rem", "fill": "#ffffff05", "padding": "0.4rem" }
+      "b-demo": {
+        "borderRadius": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
+        "padding": "0.4rem"
+      }
     }
   },
   "columnAssignments": {

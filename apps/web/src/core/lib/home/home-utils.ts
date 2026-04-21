@@ -1,4 +1,9 @@
-import type { HeroProject } from "@/core/lib/globals";
+import {
+  cdnAllowedHosts,
+  uiHeroCarouselOpacityCurve,
+  uiHeroCarouselPlaceholderBackgrounds,
+  type HeroProject,
+} from "@/core/lib/globals";
 import { buildProxyUrl, needsProxyUrl } from "@/core/lib/proxy-url";
 
 /** Wrap index into [0, length). */
@@ -15,17 +20,22 @@ export function wrapIndex(index: number, length: number): number {
 
 /** Opacity for carousel position 0-6 (center=3). */
 export function getHeroCarouselOpacity(position: number): number {
-  const opacities = [0, 0.2, 0.4, 0.8, 0.4, 0.2, 0];
-  return opacities[position] ?? 0;
+  return uiHeroCarouselOpacityCurve[position] ?? 0;
 }
 
 export function getProjectUrl(project: HeroProject): string {
-  return `/work/${project.slug}`;
+  if (typeof project.href === "string" && project.href.trim()) return project.href;
+  const slug = project.slug.replace(/^\/+/, "");
+  return `/${slug}`;
 }
 
-/** Background color for carousel placeholder (hue shifts by index). */
+/** Background color for carousel placeholder. */
 export function getCarouselPlaceholderBg(activeIndex: number): string {
-  return `hsl(${(activeIndex * 45) % 360}, 20%, 10%)`;
+  return (
+    uiHeroCarouselPlaceholderBackgrounds[
+      wrapIndex(activeIndex, uiHeroCarouselPlaceholderBackgrounds.length)
+    ] ?? "#000000"
+  );
 }
 
 function normalizeAssetKeyCandidate(value: string): string {
@@ -44,7 +54,10 @@ function extractAssetKeyFromAllowedCdnUrl(value: string): string | null {
   try {
     const parsed = new URL(value);
     const host = parsed.hostname.toLowerCase();
-    const isAllowedHost = host === "media.notlukagray.com" || host.endsWith(".b-cdn.net");
+    const isAllowedHost = cdnAllowedHosts.some((allowedHost) => {
+      const normalized = allowedHost.toLowerCase();
+      return normalized.startsWith(".") ? host.endsWith(normalized) : host === normalized;
+    });
     if (!isAllowedHost) return null;
 
     let key = decodeURIComponent(parsed.pathname).replace(/^\/+/, "");

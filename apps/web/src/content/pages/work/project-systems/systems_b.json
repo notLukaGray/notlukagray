@@ -4,7 +4,7 @@
   "width": ["100%", "88%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["2rem", "3rem"],
   "columns": {
     "mobile": 1,
@@ -44,84 +44,84 @@
     "mobile": {
       "b-comp-1": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-comp-2": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-comp-3": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-comp-4": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-comp-5": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-comp-6": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-comp-7": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       },
       "b-comp-8": {
         "borderRadius": "1rem",
-        "fill": "#ffffff06",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
         "padding": "0.35rem"
       }
     },
     "desktop": {
       "b-comp-1": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.5rem"
       },
       "b-comp-2": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.5rem"
       },
       "b-comp-3": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.5rem"
       },
       "b-comp-4": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.5rem"
       },
       "b-comp-5": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.5rem"
       },
       "b-comp-6": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.5rem"
       },
       "b-comp-7": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.5rem"
       },
       "b-comp-8": {
         "borderRadius": "1.25rem",
-        "fill": "#ffffff07",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
         "padding": "0.5rem"
       }
     }

@@ -45,7 +45,7 @@ export function PageBuilderPage({
     paddingBottom: "48px",
     paddingLeft: "env(safe-area-inset-left, 0px)",
     paddingRight: "env(safe-area-inset-right, 0px)",
-    backgroundColor: "#000000",
+    backgroundColor: "var(--pb-secondary)",
   },
   articleClassName = "w-full",
 }: PageBuilderPageWrapperProps) {

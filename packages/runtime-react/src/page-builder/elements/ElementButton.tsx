@@ -56,6 +56,12 @@ export function ElementButton({
   vectorRef,
   href,
   external = false,
+  target,
+  rel,
+  download,
+  hreflang,
+  ping,
+  referrerPolicy,
   action,
   actionPayload,
   align,
@@ -98,6 +104,9 @@ export function ElementButton({
   wrapperInteractionVars,
   pointerDownAction,
   pointerUpAction,
+  aria,
+  tabIndex,
+  role,
   ...rest
 }: Props) {
   const pathname = usePathname();
@@ -164,6 +173,10 @@ export function ElementButton({
     typographyClass,
     themeMode
   );
+  const ariaProps = aria as Record<string, string | boolean> | undefined;
+  const resolvedTarget = target ?? (external ? "_blank" : undefined);
+  const resolvedRel =
+    rel ?? (resolvedTarget === "_blank" || external ? "noopener noreferrer" : undefined);
   const blockStyle = buildElementButtonBlockStyle({
     width,
     height,
@@ -287,7 +300,12 @@ export function ElementButton({
         style={{ ...linkStyle, ...nakedSurfacePadding }}
         aria-disabled={isDisabled || undefined}
         aria-busy={loading || undefined}
-        tabIndex={isDisabled ? -1 : undefined}
+        tabIndex={isDisabled ? -1 : tabIndex}
+        download={download as string | undefined}
+        hrefLang={hreflang}
+        ping={ping}
+        referrerPolicy={referrerPolicy}
+        {...(ariaProps ? ariaProps : {})}
         onClick={isDisabled ? (event) => event.preventDefault() : undefined}
       >
         {content}
@@ -297,10 +315,16 @@ export function ElementButton({
         href={href!}
         className={linkClassName}
         style={{ ...linkStyle, ...nakedSurfacePadding }}
-        {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+        target={resolvedTarget}
+        rel={resolvedRel}
+        download={download as string | boolean | undefined}
+        hrefLang={hreflang}
+        ping={ping}
+        referrerPolicy={referrerPolicy}
         aria-disabled={isDisabled || undefined}
         aria-busy={loading || undefined}
-        tabIndex={isDisabled ? -1 : undefined}
+        tabIndex={isDisabled ? -1 : tabIndex}
+        {...(ariaProps ? ariaProps : {})}
         onClick={isDisabled ? (event) => event.preventDefault() : undefined}
       >
         {content}
@@ -428,7 +452,13 @@ export function ElementButton({
   };
 
   const renderButtonShell = (child: ReactNode) => (
-    <div ref={shellRef} className="shrink-0" style={shellStyle}>
+    <div
+      ref={shellRef}
+      className="shrink-0"
+      style={shellStyle}
+      role={role}
+      tabIndex={!hasLink && !hasAction ? tabIndex : undefined}
+    >
       {/* Naked glass only — when there's a wrapper span the overlay renders inside it above. */}
       {hasGlassEffect && !hasWrapper && !hasStateVars && (
         <SectionGlassEffect

@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000060",
+  "fill": "oklch(from var(--pb-secondary) l c h / 0.38)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "20px" }],
   "marginBottom": ["1.5rem", "3rem"],
@@ -20,10 +20,18 @@
   },
   "itemStyles": {
     "desktop": {
-      "b-image": { "borderRadius": "1.25rem", "fill": "#ffffff08", "padding": "0.4rem" }
+      "b-image": {
+        "borderRadius": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "padding": "0.4rem"
+      }
     },
     "mobile": {
-      "b-image": { "borderRadius": "1rem", "fill": "#ffffff08", "padding": "0.35rem" }
+      "b-image": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "padding": "0.35rem"
+      }
     }
   },
   "columnAssignments": {

@@ -5,7 +5,7 @@
   "width": ["100%", "88%"],
   "height": ["85vh", "92vh"],
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "elementOrder": ["a-venue", "a-title", "a-dates"],
   "definitions": {
     "a-venue": {

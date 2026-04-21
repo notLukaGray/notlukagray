@@ -158,6 +158,16 @@ export const pageBuilderSchema = z
     title: z.string(),
     description: z.string().optional(),
     ogImage: z.string().optional(),
+    /** Canonical URL override. Useful when the same content is reachable at multiple slugs. */
+    canonicalUrl: z.string().optional(),
+    /** Robots meta directive e.g. "noindex, nofollow". Defaults to indexable when omitted. */
+    robots: z.string().optional(),
+    /** Comma-separated keyword hints for SEO. */
+    keywords: z.string().optional(),
+    /** BCP 47 language tag for the page (e.g. "en", "en-US", "fr"). Rendered as the html lang attribute. */
+    lang: z.string().optional(),
+    /** JSON-LD structured data blob. Rendered as a <script type="application/ld+json"> tag. */
+    structuredData: z.unknown().optional(),
     definitions: z.record(z.string(), pageBuilderDefinitionBlockSchema),
     sectionOrder: z.array(z.string()),
     preset: z.record(z.string(), pageBuilderDefinitionBlockSchema).optional(),
@@ -184,6 +194,11 @@ export const resolvedPageSchema = z
     title: z.string(),
     description: z.string().optional(),
     ogImage: z.string().optional(),
+    canonicalUrl: z.string().optional(),
+    robots: z.string().optional(),
+    keywords: z.string().optional(),
+    lang: z.string().optional(),
+    structuredData: z.unknown().optional(),
     bg: bgBlockSchema.optional(),
     sections: z.array(sectionBlockSchema).optional(),
     passwordProtected: z.boolean().optional(),

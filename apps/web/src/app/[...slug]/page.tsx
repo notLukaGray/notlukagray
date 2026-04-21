@@ -11,6 +11,7 @@ import {
   isMobileFromUserAgent,
 } from "@pb/core";
 import { PageBuilderPage } from "@pb/runtime-react/server";
+import { getTwitterCardForOgImage } from "@/core/lib/globals";
 import { HomeWithUnlockModal } from "../HomeWithUnlockModal";
 
 type Props = {
@@ -42,24 +43,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const page = await getPageAsync(segments.join("/"));
   if (!page) return {};
 
-  const { title, description, ogImage, passwordProtected } = page as {
+  const { title, description, ogImage, canonicalUrl, robots, keywords } = page as {
     title: string;
     description?: string;
     ogImage?: string;
-    passwordProtected?: boolean;
+    canonicalUrl?: string;
+    robots?: string;
+    keywords?: string;
   };
 
   return {
     title,
     ...(description && { description }),
-    ...(passwordProtected && { robots: { index: false, follow: true } }),
+    ...(keywords && { keywords }),
+    ...(robots && { robots }),
+    ...(canonicalUrl && { alternates: { canonical: canonicalUrl } }),
     openGraph: {
       title,
       ...(description && { description }),
       ...(ogImage && { images: [ogImage] }),
     },
     twitter: {
-      card: "summary_large_image",
+      card: getTwitterCardForOgImage(ogImage),
       title,
       ...(description && { description }),
       ...(ogImage && { images: [ogImage] }),
@@ -73,10 +78,12 @@ export default async function UniversalSlugPage({ params, searchParams }: Props)
 
   if (!resolvePagePath(segments)) notFound();
 
-  const headersList = await headers();
+  const [headersList, page] = await Promise.all([headers(), getPageAsync(segments.join("/"))]);
   const isMobile = isMobileFromUserAgent(headersList.get("user-agent") ?? "");
   const props = await getPageBuilderPropsAsync(segments.join("/"), { isMobile });
   if (!props) notFound();
+
+  const structuredData = (page as { structuredData?: unknown } | null)?.structuredData ?? null;
 
   const query = await searchParams;
   const showUnlockModal =
@@ -96,6 +103,12 @@ export default async function UniversalSlugPage({ params, searchParams }: Props)
       unlockModalProps={unlockModalProps}
       hideChildrenWhenModalOpen={showUnlockModal}
     >
+      {structuredData != null && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      )}
       <PageBuilderPage {...props} />
     </HomeWithUnlockModal>
   );

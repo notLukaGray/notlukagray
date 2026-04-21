@@ -4,7 +4,7 @@
   "width": "100%",
   "height": "hug",
   "align": "full",
-  "fill": "#00000000",
+  "fill": "transparent",
   "scrollSpeed": 0.88,
   "marginBottom": ["2rem", "3rem"],
   "scrollDirection": "horizontal",

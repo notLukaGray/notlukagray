@@ -6,7 +6,7 @@
   "width": ["100%", "92%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#1a1a1a",
+  "fill": "var(--pb-secondary)",
   "borderRadius": ["1.5rem 1.5rem 0 0", "2rem 2rem 0 0"],
   "elementOrder": ["intro-heading", "intro-sub", "intro-body"],
   "effects": [

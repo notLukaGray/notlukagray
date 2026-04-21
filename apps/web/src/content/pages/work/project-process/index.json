@@ -11,10 +11,13 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#0c0c0c"
+          "fill": "var(--pb-secondary)"
         },
         {
-          "fill": "linear-gradient(180deg, #141414 0%, #0c0c0c 40%)"
+          "fill": {
+            "light": "linear-gradient(180deg, #ece7e8 0%, #f6f2f3 40%)",
+            "dark": "linear-gradient(180deg, #1a1619 0%, #0e0b0c 40%)"
+          }
         }
       ]
     }

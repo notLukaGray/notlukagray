@@ -8,5 +8,5 @@
     "type": "updateTransitionProgress",
     "payload": { "id": "divider-visibility-fade", "invert": true }
   },
-  "layers": [{ "fill": "#00000000" }]
+  "layers": [{ "fill": "transparent" }]
 }

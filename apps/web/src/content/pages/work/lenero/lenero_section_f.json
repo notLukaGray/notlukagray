@@ -4,7 +4,7 @@
   "width": ["100%", "74%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#ffffff07",
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
   "borderRadius": ["1.25rem", "1.75rem"],
   "effects": [{ "type": "backdropBlur", "amount": "14px" }],
   "scrollSpeed": 0.93,

@@ -9,10 +9,13 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#000000"
+          "fill": "var(--pb-secondary)"
         },
         {
-          "fill": "radial-gradient(ellipse 160% 110% at 35% 55%, hsl(var(--h1, 268), 65%, 13%) 0%, transparent 72%)",
+          "fill": {
+            "light": "radial-gradient(ellipse 160% 110% at 35% 55%, hsl(var(--h1, 268), 70%, 88%) 0%, transparent 72%)",
+            "dark": "radial-gradient(ellipse 160% 110% at 35% 55%, hsl(var(--h1, 268), 65%, 13%) 0%, transparent 72%)"
+          },
           "backgroundSize": "320% 320%",
           "motion": [
             {
@@ -35,7 +38,10 @@
           ]
         },
         {
-          "fill": "radial-gradient(ellipse 130% 90% at 65% 35%, hsl(var(--h2, 218), 85%, 28%) 0%, transparent 68%)",
+          "fill": {
+            "light": "radial-gradient(ellipse 130% 90% at 65% 35%, hsl(var(--h2, 218), 85%, 82%) 0%, transparent 68%)",
+            "dark": "radial-gradient(ellipse 130% 90% at 65% 35%, hsl(var(--h2, 218), 85%, 28%) 0%, transparent 68%)"
+          },
           "blendMode": "screen",
           "backgroundSize": "360% 360%",
           "motion": [
@@ -59,7 +65,10 @@
           ]
         },
         {
-          "fill": "radial-gradient(ellipse 110% 80% at 50% 85%, hsl(var(--h3, 176), 72%, 22%) 0%, transparent 62%)",
+          "fill": {
+            "light": "radial-gradient(ellipse 110% 80% at 50% 85%, hsl(var(--h3, 176), 72%, 84%) 0%, transparent 62%)",
+            "dark": "radial-gradient(ellipse 110% 80% at 50% 85%, hsl(var(--h3, 176), 72%, 22%) 0%, transparent 62%)"
+          },
           "blendMode": "screen",
           "opacity": 0.75,
           "backgroundSize": "280% 280%",
@@ -89,7 +98,10 @@
           ]
         },
         {
-          "fill": "radial-gradient(circle at 55% 45%, hsl(var(--h4, 248), 90%, 32%) 0%, transparent 52%)",
+          "fill": {
+            "light": "radial-gradient(circle at 55% 45%, hsl(var(--h4, 248), 90%, 82%) 0%, transparent 52%)",
+            "dark": "radial-gradient(circle at 55% 45%, hsl(var(--h4, 248), 90%, 32%) 0%, transparent 52%)"
+          },
           "blendMode": "screen",
           "opacity": 0.55,
           "backgroundSize": "240% 240%",
@@ -114,7 +126,10 @@
           ]
         },
         {
-          "fill": "radial-gradient(ellipse 90% 60% at 20% 70%, hsl(var(--h5, 290), 55%, 18%) 0%, transparent 58%)",
+          "fill": {
+            "light": "radial-gradient(ellipse 90% 60% at 20% 70%, hsl(var(--h5, 290), 65%, 86%) 0%, transparent 58%)",
+            "dark": "radial-gradient(ellipse 90% 60% at 20% 70%, hsl(var(--h5, 290), 55%, 18%) 0%, transparent 58%)"
+          },
           "blendMode": "screen",
           "opacity": 0.45,
           "backgroundSize": "300% 300%",

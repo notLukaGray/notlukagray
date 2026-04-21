@@ -44,6 +44,10 @@ export function ElementLink({
   external = false,
   target,
   rel,
+  download,
+  hreflang,
+  ping,
+  referrerPolicy,
   copyType,
   level,
   fontFamily,
@@ -71,6 +75,9 @@ export function ElementLink({
   rotate,
   flipHorizontal,
   flipVertical,
+  aria,
+  tabIndex,
+  role,
   ...rest
 }: Props) {
   const themeMode = usePageBuilderThemeMode();
@@ -145,8 +152,13 @@ export function ElementLink({
     .filter(Boolean)
     .join(" ");
 
+  const ariaProps = aria as Record<string, string | boolean> | undefined;
+  const resolvedTarget = target ?? (external ? "_blank" : undefined);
+  const resolvedRel =
+    rel ?? (resolvedTarget === "_blank" || external ? "noopener noreferrer" : undefined);
+
   return (
-    <div className="shrink-0 max-w-full" style={blockStyle}>
+    <div className="shrink-0 max-w-full" style={blockStyle} role={role}>
       {isInternal ? (
         <Link
           href={href}
@@ -154,6 +166,12 @@ export function ElementLink({
           style={{ ...linkStyle, ...textStyle }}
           target={target}
           rel={rel}
+          download={download as string | undefined}
+          hrefLang={hreflang}
+          ping={ping}
+          referrerPolicy={referrerPolicy}
+          tabIndex={tabIndex}
+          {...(ariaProps ? ariaProps : {})}
         >
           {label}
         </Link>
@@ -162,8 +180,14 @@ export function ElementLink({
           href={href}
           className={linkClassName}
           style={{ ...linkStyle, ...textStyle }}
-          target={target ?? (external ? "_blank" : undefined)}
-          rel={rel ?? (external ? "noopener noreferrer" : undefined)}
+          target={resolvedTarget}
+          rel={resolvedRel}
+          download={download as string | boolean | undefined}
+          hrefLang={hreflang}
+          ping={ping}
+          referrerPolicy={referrerPolicy}
+          tabIndex={tabIndex}
+          {...(ariaProps ? ariaProps : {})}
         >
           {label}
         </a>

@@ -12,6 +12,7 @@ export type HeroProject = {
   title: string;
   description?: string;
   slug: string;
+  href?: string;
   brand?: { name: string; slug: string };
   video?: { url?: string; poster?: string; duration?: number };
   isHero?: boolean;
@@ -26,6 +27,20 @@ export type PersonSchema = {
   url: string;
   sameAs: string[];
 };
+
+export type TwitterCardType = "summary" | "summary_large_image";
+
+export function getTwitterCardForOgImage(ogImage: unknown): TwitterCardType {
+  return typeof ogImage === "string" && ogImage.trim() ? "summary_large_image" : "summary";
+}
+
+function getHostname(value: string): string | null {
+  try {
+    return new URL(value).hostname.toLowerCase();
+  } catch {
+    return null;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Site / person
@@ -55,6 +70,11 @@ export const person: PersonSchema | null =
         sameAs: (rawPerson.sameAs as string[]).filter((u): u is string => typeof u === "string"),
       }
     : null;
+
+export const siteMetadata = {
+  title: person?.name ?? "Portfolio",
+  description: person ? `${person.jobTitle} portfolio by ${person.name}` : "Portfolio",
+};
 
 /**
  * Pages that render their own nav/footer from page-builder JSON; the app Header/Footer is hidden for these.
@@ -92,6 +112,15 @@ export const cdnApiCacheStaleWhileRevalidate: number =
   typeof cdnConfig?.apiCacheStaleWhileRevalidate === "number"
     ? cdnConfig.apiCacheStaleWhileRevalidate
     : 300;
+const cdnBaseHost = getHostname(cdnBase);
+const cdnAllowedHostAliases =
+  Array.isArray(cdnConfig?.allowedHosts) &&
+  cdnConfig.allowedHosts.every((host: unknown) => typeof host === "string")
+    ? (cdnConfig.allowedHosts as string[])
+    : [];
+export const cdnAllowedHosts: string[] = [
+  ...new Set([...(cdnBaseHost ? [cdnBaseHost] : []), ...cdnAllowedHostAliases]),
+];
 export const cdnAllowedExtensions: string[] =
   Array.isArray(cdnConfig?.allowedExtensions) &&
   cdnConfig.allowedExtensions.every((ext: unknown) => typeof ext === "string")
@@ -195,6 +224,21 @@ export const uiVideoPauseButtonHideDelayMs: number =
   typeof uiConfig?.videoPauseButtonHideDelayMs === "number"
     ? uiConfig.videoPauseButtonHideDelayMs
     : 3000;
+
+const uiHomeConfig = uiConfig?.home as Record<string, unknown> | undefined;
+const uiHeroCarouselConfig = uiHomeConfig?.heroCarousel as Record<string, unknown> | undefined;
+export const uiHeroCarouselOpacityCurve: number[] =
+  Array.isArray(uiHeroCarouselConfig?.opacityCurve) &&
+  uiHeroCarouselConfig.opacityCurve.length > 0 &&
+  uiHeroCarouselConfig.opacityCurve.every((value: unknown) => typeof value === "number")
+    ? (uiHeroCarouselConfig.opacityCurve as number[])
+    : [0];
+export const uiHeroCarouselPlaceholderBackgrounds: string[] =
+  Array.isArray(uiHeroCarouselConfig?.placeholderBackgrounds) &&
+  uiHeroCarouselConfig.placeholderBackgrounds.length > 0 &&
+  uiHeroCarouselConfig.placeholderBackgrounds.every((value: unknown) => typeof value === "string")
+    ? (uiHeroCarouselConfig.placeholderBackgrounds as string[])
+    : ["#000000"];
 
 const uiVideoConfig = uiConfig?.video as Record<string, unknown> | undefined;
 export const uiVideoDoubleTapThresholdMs: number =

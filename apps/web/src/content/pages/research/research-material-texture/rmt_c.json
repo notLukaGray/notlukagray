@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#00000000",
+  "fill": "transparent",
   "marginBottom": ["1.5rem", "2.5rem"],
   "columns": { "mobile": 1, "desktop": 2 },
   "columnWidths": { "mobile": [1], "desktop": [1, 1] },
@@ -15,16 +15,48 @@
   },
   "itemStyles": {
     "desktop": {
-      "c-physical": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "0.4rem" },
-      "c-digital": { "borderRadius": "1.25rem", "fill": "#ffffff07", "padding": "0.4rem" },
-      "c-analysis-phys": { "borderRadius": "1rem", "fill": "#ffffff05", "padding": "1rem" },
-      "c-analysis-dig": { "borderRadius": "1rem", "fill": "#ffffff05", "padding": "1rem" }
+      "c-physical": {
+        "borderRadius": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "0.4rem"
+      },
+      "c-digital": {
+        "borderRadius": "1.25rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "0.4rem"
+      },
+      "c-analysis-phys": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
+        "padding": "1rem"
+      },
+      "c-analysis-dig": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
+        "padding": "1rem"
+      }
     },
     "mobile": {
-      "c-physical": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "0.35rem" },
-      "c-digital": { "borderRadius": "1rem", "fill": "#ffffff07", "padding": "0.35rem" },
-      "c-analysis-phys": { "borderRadius": "0.9rem", "fill": "#ffffff05", "padding": "0.9rem" },
-      "c-analysis-dig": { "borderRadius": "0.9rem", "fill": "#ffffff05", "padding": "0.9rem" }
+      "c-physical": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "0.35rem"
+      },
+      "c-digital": {
+        "borderRadius": "1rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.027)",
+        "padding": "0.35rem"
+      },
+      "c-analysis-phys": {
+        "borderRadius": "0.9rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
+        "padding": "0.9rem"
+      },
+      "c-analysis-dig": {
+        "borderRadius": "0.9rem",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.020)",
+        "padding": "0.9rem"
+      }
     }
   },
   "columnAssignments": {

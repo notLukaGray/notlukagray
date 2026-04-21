@@ -11,10 +11,13 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#080808"
+          "fill": "var(--pb-secondary)"
         },
         {
-          "fill": "linear-gradient(135deg, #1a1a2e 0%, transparent 50%)",
+          "fill": {
+            "light": "linear-gradient(135deg, #d4eef8 0%, transparent 50%)",
+            "dark": "linear-gradient(135deg, #001c2a 0%, transparent 50%)"
+          },
           "blendMode": "screen"
         }
       ]
@@ -23,10 +26,13 @@
       "type": "backgroundVariable",
       "layers": [
         {
-          "fill": "#080808"
+          "fill": "var(--pb-secondary)"
         },
         {
-          "fill": "radial-gradient(ellipse 100% 80% at 50% 50%, #2a1a00 0%, transparent 70%)",
+          "fill": {
+            "light": "radial-gradient(ellipse 100% 80% at 50% 50%, #ffe0eb 0%, transparent 70%)",
+            "dark": "radial-gradient(ellipse 100% 80% at 50% 50%, #2a0015 0%, transparent 70%)"
+          },
           "blendMode": "screen"
         }
       ]

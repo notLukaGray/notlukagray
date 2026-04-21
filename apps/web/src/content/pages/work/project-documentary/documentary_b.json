@@ -4,7 +4,7 @@
   "width": ["100%", "90%"],
   "height": "hug",
   "align": ["full", "center"],
-  "fill": "#0b0d0f",
+  "fill": "var(--pb-secondary)",
   "marginBottom": ["1rem", "2rem"],
   "columns": { "mobile": 1, "desktop": 2 },
   "columnWidths": { "mobile": [1], "desktop": [1.3, 1] },
@@ -18,10 +18,10 @@
   },
   "itemStyles": {
     "desktop": {
-      "b-player": { "borderRadius": "1.25rem", "fill": "#000000", "padding": "0.4rem" }
+      "b-player": { "borderRadius": "1.25rem", "fill": "var(--pb-secondary)", "padding": "0.4rem" }
     },
     "mobile": {
-      "b-player": { "borderRadius": "1rem", "fill": "#000000", "padding": "0.35rem" }
+      "b-player": { "borderRadius": "1rem", "fill": "var(--pb-secondary)", "padding": "0.35rem" }
     }
   },
   "columnAssignments": {
