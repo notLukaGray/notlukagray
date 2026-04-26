@@ -24,7 +24,8 @@ export function BodyContentControls({ controller }: { controller: BodyElementDev
         </p>
         <p className="mt-1 text-[10px] text-muted-foreground">
           Body copy, typography level, color (from `/dev/colors` tokens), and line height. Maps to
-          `elementBody` content fields.
+          `elementBody` content fields. Supports inline formatting with `**bold**`, `*italic*`,
+          `~~strike~~`, inline code, links, and line breaks via Enter or `\n`.
         </p>
       </div>
 

@@ -13,6 +13,7 @@ import { useVariable } from "@/page-builder/runtime/page-builder-variable-store"
 import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
 import { resolveThemeString } from "@/page-builder/theme/theme-string";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { InlineFormattedText } from "./Shared/InlineFormattedText";
 
 type Props = Extract<ElementBlock, { type: "elementBody" }>;
 
@@ -95,7 +96,7 @@ export function ElementBody({
     ...(textShadow !== undefined ? { textShadow } : {}),
     ...(textDecoration !== undefined ? { textDecoration } : {}),
     ...(textTransform !== undefined ? { textTransform } : {}),
-    whiteSpace: whiteSpace ?? (wordWrap ? "normal" : "nowrap"),
+    whiteSpace: whiteSpace ?? (wordWrap ? "pre-line" : "nowrap"),
     overflowWrap: wordWrap ? "break-word" : "normal",
     wordBreak: wordWrap ? "break-word" : "normal",
     ...(!wordWrap && whiteSpace == null ? { overflow: "hidden", textOverflow: "ellipsis" } : {}),
@@ -117,7 +118,7 @@ export function ElementBody({
   return (
     <div className="shrink-0 max-w-full" style={blockStyle}>
       <p className={`m-0 block${typographyClass ? ` ${typographyClass}` : ""}`} style={textStyle}>
-        {resolvedText}
+        <InlineFormattedText text={resolvedText} />
       </p>
     </div>
   );

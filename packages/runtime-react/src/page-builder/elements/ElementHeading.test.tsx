@@ -51,4 +51,20 @@ describe("ElementHeading semantic contract", () => {
     expect(markup).toContain("color:transparent");
     expect(markup).not.toContain("[object Object]");
   });
+
+  it("supports inline formatting and preserves newline rendering defaults", () => {
+    const markup = renderToStaticMarkup(
+      <ElementHeading
+        type="elementHeading"
+        level={2}
+        text={"Line 1\\nLine 2 with **bold**, *italic*, and ~~strike~~"}
+      />
+    );
+
+    expect(markup).toContain("white-space:pre-line");
+    expect(markup).toContain("<strong");
+    expect(markup).toContain("<em");
+    expect(markup).toContain("<del");
+    expect(markup).toContain("Line 1\nLine 2");
+  });
 });

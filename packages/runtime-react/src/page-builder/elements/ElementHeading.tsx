@@ -10,6 +10,7 @@ import { useVariable } from "@/page-builder/runtime/page-builder-variable-store"
 import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
 import { resolveThemeString } from "@/page-builder/theme/theme-string";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { InlineFormattedText } from "./Shared/InlineFormattedText";
 
 type Props = Extract<ElementBlock, { type: "elementHeading" }>;
 
@@ -90,7 +91,7 @@ export function ElementHeading({
     ...(textDecoration !== undefined ? { textDecoration } : {}),
     ...(textTransform !== undefined ? { textTransform } : {}),
     // word wrap / overflow — must be on the text element, not the wrapper, for text-overflow to work
-    whiteSpace: whiteSpace ?? (wordWrap ? "normal" : "nowrap"),
+    whiteSpace: whiteSpace ?? (wordWrap ? "pre-line" : "nowrap"),
     overflowWrap: wordWrap ? "break-word" : "normal",
     wordBreak: wordWrap ? "break-word" : "normal",
     ...(!wordWrap && whiteSpace == null ? { overflow: "hidden", textOverflow: "ellipsis" } : {}),
@@ -117,7 +118,7 @@ export function ElementHeading({
           className: `m-0 block ${typographyClass}`,
           style: textStyle,
         },
-        resolvedText
+        <InlineFormattedText text={resolvedText} />
       )}
     </div>
   );

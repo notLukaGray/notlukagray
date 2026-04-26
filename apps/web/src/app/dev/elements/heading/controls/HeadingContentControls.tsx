@@ -22,7 +22,8 @@ export function HeadingContentControls({
         </p>
         <p className="mt-1 text-[10px] text-muted-foreground">
           Heading level, semantic outline, copy, and color (from `/dev/colors` tokens). Maps to
-          `elementHeading` content fields.
+          `elementHeading` content fields. Supports inline formatting with `**bold**`, `*italic*`,
+          `~~strike~~`, inline code, links, and line breaks via Enter or `\n`.
         </p>
       </div>
 
