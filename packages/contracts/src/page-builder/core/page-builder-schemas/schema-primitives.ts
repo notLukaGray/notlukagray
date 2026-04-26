@@ -531,7 +531,7 @@ export const responsiveSectionAlignSchema = z.union([
   z.tuple([sectionAlignEnum, sectionAlignEnum]),
 ]);
 
-const elementAlignEnum = z.enum(["left", "center", "right"]);
+const elementAlignEnum = z.enum(["left", "center", "right", "full"]);
 export const responsiveElementAlignSchema = z.union([
   elementAlignEnum,
   z.tuple([elementAlignEnum, elementAlignEnum]),

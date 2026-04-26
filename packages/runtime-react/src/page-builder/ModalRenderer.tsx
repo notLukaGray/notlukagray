@@ -44,6 +44,10 @@ type ModalRendererProps = ModalProps & {
   onOverlayClick?: () => void;
   /** Optional className for the overlay (backdrop). */
   overlayClassName?: string;
+  /** Optional inline style for the overlay (e.g. animated backdropFilter). */
+  overlayStyle?: React.CSSProperties;
+  /** Optional ref to the overlay element (for imperative animation control). */
+  overlayRef?: React.Ref<HTMLDivElement>;
   /** Optional className for the dialog container. */
   dialogClassName?: string;
 };
@@ -55,6 +59,8 @@ function ModalContent({
   resolvedSections,
   onOverlayClick,
   overlayClassName,
+  overlayStyle,
+  overlayRef,
   dialogClassName,
 }: Omit<ModalRendererProps, "show">) {
   const themeMode = usePageBuilderThemeMode();
@@ -69,10 +75,12 @@ function ModalContent({
 
   return (
     <div
+      ref={overlayRef}
       className={
         overlayClassName ??
         "fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
       }
+      style={overlayStyle}
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? `${id}-title` : undefined}
@@ -131,6 +139,8 @@ function ModalRendererEventDriven({
   motion,
   onOverlayClick,
   overlayClassName,
+  overlayStyle,
+  overlayRef,
   dialogClassName,
 }: Omit<ModalRendererProps, "show">) {
   const open = useModalEventListener(id, false);
@@ -143,6 +153,8 @@ function ModalRendererEventDriven({
       resolvedSections={resolvedSections}
       onOverlayClick={onOverlayClick}
       overlayClassName={overlayClassName}
+      overlayStyle={overlayStyle}
+      overlayRef={overlayRef}
       dialogClassName={dialogClassName}
     />
   );
@@ -174,6 +186,8 @@ export function ModalRenderer({
   eventDriven,
   onOverlayClick,
   overlayClassName,
+  overlayStyle,
+  overlayRef,
   dialogClassName,
 }: ModalRendererProps) {
   const content = (
@@ -184,6 +198,8 @@ export function ModalRenderer({
       resolvedSections={resolvedSections}
       onOverlayClick={onOverlayClick}
       overlayClassName={overlayClassName}
+      overlayStyle={overlayStyle}
+      overlayRef={overlayRef}
       dialogClassName={dialogClassName}
     />
   );
@@ -207,6 +223,8 @@ export function ModalRenderer({
         motion={motion}
         onOverlayClick={onOverlayClick}
         overlayClassName={overlayClassName}
+        overlayStyle={overlayStyle}
+        overlayRef={overlayRef}
         dialogClassName={dialogClassName}
       />
     );

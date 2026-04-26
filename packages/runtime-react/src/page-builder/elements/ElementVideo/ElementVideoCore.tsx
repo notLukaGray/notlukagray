@@ -6,7 +6,6 @@ import type { UseVideoControlsResult } from "@/page-builder/hooks/use-video-cont
 
 export type ElementVideoCoreProps = {
   setVideoRef: (el: HTMLVideoElement | null) => void;
-  src: string;
   shouldLoad: boolean;
   poster?: string;
   ariaLabel?: string;
@@ -17,16 +16,19 @@ export type ElementVideoCoreProps = {
   loop: boolean;
   muted: boolean;
   playbackRate?: number;
-  isManagedSource: boolean;
   priority?: boolean;
   preload?: "none" | "metadata" | "auto";
   crossOrigin?: "anonymous" | "use-credentials";
   controlsList?: string;
 };
 
+function isIosLikeDevice(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent);
+}
+
 export function ElementVideoCore({
   setVideoRef,
-  src,
   shouldLoad,
   poster,
   ariaLabel,
@@ -37,7 +39,6 @@ export function ElementVideoCore({
   loop,
   muted,
   playbackRate,
-  isManagedSource,
   priority,
   preload,
   crossOrigin,
@@ -54,28 +55,14 @@ export function ElementVideoCore({
   );
 
   useEffect(() => {
-    const video = videoElRef.current;
-    if (isManagedSource) return;
-    if (!video || !shouldLoad || !src) return;
-
-    // Start buffering once the container is visible / interacted with.
-    if (video.preload !== "auto") {
-      video.preload = "auto";
-    }
-
-    if (!video.currentSrc && !video.src) return;
-    if (video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) return;
-    if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) return;
-
-    video.load();
-  }, [isManagedSource, shouldLoad, src]);
-
-  useEffect(() => {
     if (!videoElRef.current || playbackRate == null) return;
     videoElRef.current.playbackRate = playbackRate;
   }, [playbackRate]);
 
   const resolvedPoster = shouldLoad ? (poster ?? undefined) : undefined;
+  const resolvedControlsList =
+    controlsList ?? (isIosLikeDevice() ? "nodownload" : "nodownload nofullscreen");
+  const disableRemotePlayback = controlsList?.split(/\s+/).includes("noremoteplayback");
 
   return (
     <>
@@ -85,7 +72,6 @@ export function ElementVideoCore({
       )}
       <video
         ref={handleVideoRef}
-        src={!isManagedSource && shouldLoad ? src : undefined}
         poster={resolvedPoster}
         autoPlay={autoplay}
         loop={loop}
@@ -94,8 +80,8 @@ export function ElementVideoCore({
         preload={shouldLoad ? (preload ?? "auto") : "none"}
         crossOrigin={crossOrigin}
         controls={!withModule}
-        disableRemotePlayback
-        controlsList={controlsList ?? "nodownload nofullscreen noremoteplayback"}
+        disableRemotePlayback={disableRemotePlayback || undefined}
+        controlsList={resolvedControlsList}
         style={{
           ...videoStyle,
           ...(withModule ? { width: "100%", height: "100%" } : {}),

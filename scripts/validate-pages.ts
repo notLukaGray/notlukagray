@@ -13,6 +13,14 @@ import fs from "fs";
 import path from "path";
 import { discoverAllPages } from "@pb/core";
 import { parseJsonSafe } from "@pb/core/internal/load/page-builder-load-io";
+import {
+  filterConfigSchema,
+  knownPageTagsConfigSchema,
+  pageTagsSchema,
+  validateKnownFilterCategories,
+  validateKnownPageTags,
+  type KnownPageTagsConfig,
+} from "@pb/contracts";
 
 interface ValidateConfig {
   slugs: string[];
@@ -28,27 +36,47 @@ type SectionWaiverConfig = {
   pages?: Record<string, string[]>;
 };
 
+type TagValidationFailure = {
+  slug: string;
+  path: string;
+  message: string;
+};
+
 const APP_ROOT = fs.existsSync(path.join(process.cwd(), "src/content"))
   ? process.cwd()
   : path.join(process.cwd(), "apps/web");
 
 const SECTION_WAIVER_PATH = path.join(APP_ROOT, "src/content/config/section-file-waivers.json");
+const TAGS_CONFIG_PATH = path.join(APP_ROOT, "src/content/config/tags.json");
 
 function parseArgs(argv: string[]): ValidateConfig {
   const slugs = argv.length > 0 ? argv : [];
   return { slugs };
 }
 
-function formatReport(resultsReturn: ReturnType<typeof runPageBuilderValidation>): string {
+function formatReport(
+  resultsReturn: ReturnType<typeof runPageBuilderValidation>,
+  toolingErrorCount = 0
+): string {
   const { validCount, invalidCount } = summarizeValidation(resultsReturn);
+  const toolingSummary =
+    toolingErrorCount > 0
+      ? `, ${toolingErrorCount} tooling error${toolingErrorCount === 1 ? "" : "s"}`
+      : "";
   const summary = `Summary: ${validCount} page${validCount === 1 ? "" : "s"} valid, ${invalidCount} page${
     invalidCount === 1 ? "" : "s"
-  } invalid.`;
-  const hasErrors = invalidCount > 0;
+  } invalid${toolingSummary}.`;
+  const hasErrors = invalidCount > 0 || toolingErrorCount > 0;
   const message = hasErrors
     ? "\nValidation failed.\nFix the errors above (check the JSON path after 'Location:' and the page shown in 'Source:') before deploying."
     : "\nAll pages validated successfully. 🎉";
   return summary + message;
+}
+
+function formatZodIssues(error: {
+  issues: Array<{ path: Array<string | number>; message: string }>;
+}): string[] {
+  return error.issues.map((issue) => `${issue.path.join(".") || "(root)"}: ${issue.message}`);
 }
 
 function loadSectionWaivers(): SectionWaiverConfig {
@@ -72,6 +100,23 @@ function isSectionWaived(waivers: SectionWaiverConfig, slug: string, sectionKey:
   const pageWaivers = waivers.pages?.[slug];
   if (!pageWaivers || pageWaivers.length === 0) return false;
   return pageWaivers.includes("*") || pageWaivers.includes(sectionKey);
+}
+
+function loadKnownTagsConfig(): { config?: KnownPageTagsConfig; errors: string[] } {
+  if (!fs.existsSync(TAGS_CONFIG_PATH)) return { errors: [] };
+
+  const raw = fs.readFileSync(TAGS_CONFIG_PATH, "utf-8");
+  const parsed = parseJsonSafe<unknown>(raw);
+  if (!parsed.ok) {
+    return { errors: [`Invalid JSON: ${parsed.error}`] };
+  }
+
+  const result = knownPageTagsConfigSchema.safeParse(parsed.data);
+  if (!result.success) {
+    return { errors: formatZodIssues(result.error) };
+  }
+
+  return { config: result.data, errors: [] };
 }
 
 function validateSectionFiles(slugs: string[]): SectionFileFailure[] {
@@ -111,18 +156,71 @@ function validateSectionFiles(slugs: string[]): SectionFileFailure[] {
   return failures;
 }
 
+function validateKnownTags(
+  slugs: string[],
+  config: KnownPageTagsConfig | undefined
+): TagValidationFailure[] {
+  if (!config) return [];
+
+  const slugFilter = new Set(slugs);
+  const applySlugFilter = slugFilter.size > 0;
+  const failures: TagValidationFailure[] = [];
+  const pages = discoverAllPages();
+
+  for (const page of pages) {
+    const slug = page.slugSegments.join("/");
+    if (applySlugFilter && !slugFilter.has(slug)) continue;
+
+    const raw = fs.readFileSync(page.contentPath, "utf-8");
+    const parsed = parseJsonSafe<Record<string, unknown>>(raw);
+    if (!parsed.ok || parsed.data == null || typeof parsed.data !== "object") continue;
+
+    const tagsResult =
+      parsed.data.tags === undefined ? null : pageTagsSchema.safeParse(parsed.data.tags);
+    const filterConfigResult =
+      parsed.data.filterConfig === undefined
+        ? null
+        : filterConfigSchema.safeParse(parsed.data.filterConfig);
+
+    const issues = [
+      ...(tagsResult?.success ? validateKnownPageTags(tagsResult.data, config) : []),
+      ...(filterConfigResult?.success
+        ? validateKnownFilterCategories(filterConfigResult.data, config)
+        : []),
+    ];
+
+    failures.push(
+      ...issues.map((issue) => ({
+        slug,
+        path: issue.path.join("."),
+        message: issue.message,
+      }))
+    );
+  }
+
+  return failures;
+}
+
 function exitWithStatus(
   resultsReturn: ReturnType<typeof runPageBuilderValidation>,
-  sectionFailures: SectionFileFailure[]
+  sectionFailures: SectionFileFailure[],
+  tagFailures: TagValidationFailure[],
+  tagsConfigErrors: string[]
 ): void {
   const hasErrors = resultsReturn.some((r) => !r.valid);
-  process.exit(hasErrors || sectionFailures.length > 0 ? 1 : 0);
+  process.exit(
+    hasErrors || sectionFailures.length > 0 || tagFailures.length > 0 || tagsConfigErrors.length > 0
+      ? 1
+      : 0
+  );
 }
 
 function main(): void {
   const config = parseArgs(process.argv.slice(2));
+  const knownTags = loadKnownTagsConfig();
   const results = runPageBuilderValidation({ slugs: config.slugs });
   const sectionFailures = validateSectionFiles(config.slugs);
+  const tagFailures = validateKnownTags(config.slugs, knownTags.config);
 
   for (const { slug, valid, errors } of results) {
     if (!valid) {
@@ -173,8 +271,33 @@ function main(): void {
     );
   }
 
-  console.error(formatReport(results));
-  exitWithStatus(results, sectionFailures);
+  if (knownTags.errors.length > 0) {
+    console.error("\n❌ Known tag config validation errors:");
+    console.error(`  ${path.relative(process.cwd(), TAGS_CONFIG_PATH)}`);
+    for (const error of knownTags.errors) {
+      console.error(`    - ${error}`);
+    }
+  }
+
+  if (tagFailures.length > 0) {
+    console.error("\n❌ Known tag validation errors:");
+    let currentSlug = "";
+    for (const failure of tagFailures) {
+      if (failure.slug !== currentSlug) {
+        currentSlug = failure.slug;
+        console.error(`  ${currentSlug}`);
+      }
+      console.error(`    - ${failure.path}: ${failure.message}`);
+    }
+    console.error(
+      `\nAdd missing categories or tags in ${path.relative(process.cwd(), TAGS_CONFIG_PATH)}.`
+    );
+  }
+
+  console.error(
+    formatReport(results, sectionFailures.length + tagFailures.length + knownTags.errors.length)
+  );
+  exitWithStatus(results, sectionFailures, tagFailures, knownTags.errors);
 }
 
 main();

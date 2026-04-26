@@ -1,6 +1,5 @@
 {
   "title": "Framer Motion integration test",
-  "slug": "fm-integration-test",
   "description": "Single research page exercising all FM features: entrances, motion from JSON, section motion, parallax, scroll progress, drag, reorder, stagger, video slots, and reduced-motion behavior.",
   "assetBaseUrl": "/research",
   "sectionOrder": [

@@ -303,7 +303,7 @@ function parseSlugSegments(slug: string): string[] | null {
 
 function stripPageForClient(page: ResolvedPageWithDefinitions): PageBuilderPageClientPage {
   const stripped: PageBuilderPageClientPage = {
-    slug: page.slug,
+    slug: page.slug ?? "",
     title: page.title,
   };
   if (page.onPageProgress != null) stripped.onPageProgress = page.onPageProgress as TriggerAction;

@@ -4,6 +4,7 @@ import { useMemo, useRef, type CSSProperties } from "react";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
+import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import {
   scaleRadiusForDensity,
   scaleSpaceShorthandForDensity,
@@ -159,12 +160,19 @@ export function ElementModuleGroup({
     },
     isMobile
   );
+  const resolvedFlexDirectionValue = resolveResponsiveValue(flexDirection, isMobile);
+  const resolvedAlignItemsValue = resolveResponsiveValue(alignItems, isMobile);
+  const resolvedJustifyContentValue = resolveResponsiveValue(justifyContent, isMobile);
+  const resolvedGapValue = resolveResponsiveValue(gap, isMobile);
+  const resolvedPaddingValue = resolveResponsiveValue(padding, isMobile);
+  const resolvedFlexValue = resolveResponsiveValue(flex, isMobile);
 
   const resolvedFlexDirection =
-    (coalesceEmptyString(flexDirection) as CSSProperties["flexDirection"] | undefined) ??
-    pbContentGuidelines.frameFlexDirectionDefault;
+    (coalesceEmptyString(resolvedFlexDirectionValue) as
+      | CSSProperties["flexDirection"]
+      | undefined) ?? pbContentGuidelines.frameFlexDirectionDefault;
   const resolvedAlignItems = normalizeFlexAlignItemsValue(
-    coalesceEmptyString(alignItems) ?? pbContentGuidelines.frameAlignItemsDefault
+    coalesceEmptyString(resolvedAlignItemsValue) ?? pbContentGuidelines.frameAlignItemsDefault
   );
   const resolvedFlexWrap =
     (coalesceEmptyString(flexWrap) as CSSProperties["flexWrap"] | undefined) ??
@@ -183,19 +191,20 @@ export function ElementModuleGroup({
     (typeof resolvedBorderGradient.width === "string" ||
       typeof resolvedBorderGradient.width === "number");
 
-  const resolvedFlexGap = resolveFrameGapCss(gap);
+  const resolvedFlexGap = resolveFrameGapCss(resolvedGapValue);
   const resolvedRowGap = resolveFrameRowGapCss(
     rowGap === undefined || rowGap === null ? rowGap : String(rowGap)
   );
   const resolvedColGap = resolveFrameColumnGapCss(
     columnGap === undefined || columnGap === null ? columnGap : String(columnGap)
   );
-  const overlapGap = pageBuilderOverlapGapToCss(gap);
+  const overlapGap = pageBuilderOverlapGapToCss(resolvedGapValue);
   const resolvedJustifyContent = pageBuilderJustifyContentForGap(
     normalizeFlexJustifyContentValue(
-      coalesceEmptyString(justifyContent) ?? pbContentGuidelines.frameJustifyContentDefault
+      coalesceEmptyString(resolvedJustifyContentValue) ??
+        pbContentGuidelines.frameJustifyContentDefault
     ) as CSSProperties["justifyContent"] | undefined,
-    gap
+    resolvedGapValue
   );
   const hasExplicitPadding =
     padding != null ||
@@ -220,14 +229,14 @@ export function ElementModuleGroup({
     ...(resolvedFlexGap != null ? { gap: resolvedFlexGap } : {}),
     ...(resolvedRowGap != null ? { rowGap: resolvedRowGap } : {}),
     ...(resolvedColGap != null ? { columnGap: resolvedColGap } : {}),
-    ...(padding != null ? { padding } : {}),
+    ...(resolvedPaddingValue != null ? { padding: resolvedPaddingValue } : {}),
     ...(paddingTop != null ? { paddingTop } : {}),
     ...(paddingRight != null ? { paddingRight } : {}),
     ...(paddingBottom != null ? { paddingBottom } : {}),
     ...(paddingLeft != null ? { paddingLeft } : {}),
     ...framePaddingFallback,
     flexWrap: resolvedFlexWrap,
-    ...(flex ? { flex } : {}),
+    ...(resolvedFlexValue ? { flex: resolvedFlexValue } : {}),
     overflow: (overflow ?? (layoutChildren ? "visible" : "hidden")) as CSSProperties["overflow"],
     ...(resolvedGroupWrapperStyle as CSSProperties),
   };
@@ -252,7 +261,7 @@ export function ElementModuleGroup({
         ...groupStyle,
         ...(interactions?.cursor ? { cursor: interactions.cursor } : {}),
       }}
-      className={flex ? undefined : "shrink-0"}
+      className={resolvedFlexValue ? undefined : "shrink-0"}
       onClick={
         interactions?.onClick
           ? () => firePageBuilderAction(interactions.onClick as never, "trigger")

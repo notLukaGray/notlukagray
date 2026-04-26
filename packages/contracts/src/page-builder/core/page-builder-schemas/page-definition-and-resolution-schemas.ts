@@ -31,6 +31,8 @@ import {
 
 const contentBlockWithElementOrderSchema = baseSectionPropsSchema.extend({
   type: z.literal("contentBlock"),
+  flexDirection: responsiveStringSchema.optional(),
+  flexWrap: responsiveStringSchema.optional(),
   gap: responsiveStringSchema.optional(),
   rowGap: responsiveStringSchema.optional(),
   columnGap: responsiveStringSchema.optional(),
@@ -152,9 +154,98 @@ export const figmaExportDiagnosticsPageFieldSchema = z.object({
 });
 export type FigmaExportDiagnosticsPageField = z.infer<typeof figmaExportDiagnosticsPageFieldSchema>;
 
+/** Generic taxonomy tags: record of category key → value list. Used for filtering on listing pages. */
+export const pageTagsSchema = z.record(z.string(), z.array(z.string()));
+export const knownPageTagsConfigSchema = z
+  .object({
+    knownTags: z.record(z.string(), z.array(z.string())),
+  })
+  .strict();
+
+/** Filter dimension definition for listing pages (work index, shop index, etc.). */
+export const filterCategorySchema = z.object({
+  key: z.string(),
+  label: z.string(),
+  multiSelect: z.boolean().optional(),
+});
+
+export const filterConfigSchema = z.object({
+  categories: z.array(filterCategorySchema),
+});
+
+export type PageTags = z.infer<typeof pageTagsSchema>;
+export type KnownPageTagsConfig = z.infer<typeof knownPageTagsConfigSchema>;
+export type FilterCategory = z.infer<typeof filterCategorySchema>;
+export type FilterConfig = z.infer<typeof filterConfigSchema>;
+
+export type PageTagValidationIssue = {
+  path: Array<string | number>;
+  message: string;
+};
+
+function listAllowedValues(values: readonly string[]): string {
+  return values.length > 0 ? values.join(", ") : "none configured";
+}
+
+function hasKnownTagCategory(config: KnownPageTagsConfig, category: string): boolean {
+  return Object.prototype.hasOwnProperty.call(config.knownTags, category);
+}
+
+export function validateKnownPageTags(
+  tags: PageTags | undefined,
+  config: KnownPageTagsConfig
+): PageTagValidationIssue[] {
+  if (!tags) return [];
+
+  const issues: PageTagValidationIssue[] = [];
+  const knownCategoryKeys = Object.keys(config.knownTags);
+
+  for (const [category, values] of Object.entries(tags)) {
+    if (!hasKnownTagCategory(config, category)) {
+      issues.push({
+        path: ["tags", category],
+        message: `Unknown tag category "${category}". Known categories: ${listAllowedValues(knownCategoryKeys)}.`,
+      });
+      continue;
+    }
+
+    const knownValues = config.knownTags[category] ?? [];
+    const knownValueSet = new Set(knownValues);
+    values.forEach((value, index) => {
+      if (knownValueSet.has(value)) return;
+      issues.push({
+        path: ["tags", category, index],
+        message: `Unknown tag "${value}" for category "${category}". Known tags: ${listAllowedValues(knownValues)}.`,
+      });
+    });
+  }
+
+  return issues;
+}
+
+export function validateKnownFilterCategories(
+  filterConfig: FilterConfig | undefined,
+  config: KnownPageTagsConfig
+): PageTagValidationIssue[] {
+  if (!filterConfig) return [];
+
+  const knownCategoryKeys = Object.keys(config.knownTags);
+  return filterConfig.categories
+    .map((category, index) => ({
+      category,
+      index,
+    }))
+    .filter(({ category }) => !hasKnownTagCategory(config, category.key))
+    .map(({ category, index }) => ({
+      path: ["filterConfig", "categories", index, "key"],
+      message: `Unknown filter category "${category.key}". Known categories: ${listAllowedValues(knownCategoryKeys)}.`,
+    }));
+}
+
 export const pageBuilderSchema = z
   .object({
-    slug: z.string(),
+    /** Injected at load time from the folder path — omit from JSON files. */
+    slug: z.string().optional(),
     title: z.string(),
     description: z.string().optional(),
     ogImage: z.string().optional(),
@@ -185,12 +276,16 @@ export const pageBuilderSchema = z
     figmaExportDiagnostics: figmaExportDiagnosticsPageFieldSchema.optional(),
     density: pageDensitySchema.optional(),
     forcedTheme: forcedThemeSchema.optional(),
+    /** Taxonomy tags for this page. Record of category key → value list (e.g. { brand: ["Echo"], ability: ["Colorist"] }). */
+    tags: pageTagsSchema.optional(),
+    /** Filter configuration — only meaningful on listing pages (work index, shop index, etc.). */
+    filterConfig: filterConfigSchema.optional(),
   })
   .passthrough();
 
 export const resolvedPageSchema = z
   .object({
-    slug: z.string(),
+    slug: z.string().optional(),
     title: z.string(),
     description: z.string().optional(),
     ogImage: z.string().optional(),
@@ -206,5 +301,7 @@ export const resolvedPageSchema = z
     scroll: pageScrollConfigSchema.optional(),
     density: pageDensitySchema.optional(),
     forcedTheme: forcedThemeSchema.optional(),
+    tags: pageTagsSchema.optional(),
+    filterConfig: filterConfigSchema.optional(),
   })
   .passthrough();

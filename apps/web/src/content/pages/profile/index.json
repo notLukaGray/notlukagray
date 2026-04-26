@@ -1,6 +1,5 @@
 {
   "title": "Profile",
-  "slug": "profile",
   "description": "About and contact — placeholder.",
   "sectionOrder": ["profile_intro", "profile_footer"],
   "bgKey": "bg",

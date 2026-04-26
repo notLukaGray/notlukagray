@@ -17,7 +17,6 @@
       "type": "formField",
       "fieldType": "password",
       "name": "password",
-      "label": "Password",
       "placeholder": "Password",
       "required": true,
       "level": 3

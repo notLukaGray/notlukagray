@@ -117,14 +117,14 @@ export function walkElement(element: ElementBlock, visitor: AssetKeyVisitor): vo
     walkModel3DNode(el, visitor);
   }
 
-  // Element group: recurse into section.definitions[*].
+  // Element group / infinite scroll: recurse into section.definitions[*].
   const groupSection = (
     el as {
       section?: { definitions?: Record<string, unknown> };
     }
   ).section;
   if (
-    el.type === "elementGroup" &&
+    (el.type === "elementGroup" || el.type === "elementInfiniteScroll") &&
     groupSection?.definitions &&
     typeof groupSection.definitions === "object"
   ) {

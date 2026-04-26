@@ -21,31 +21,38 @@ import {
 import { elementModel3DSchema } from "./element-model3d-schemas";
 import { elementRiveSchema } from "./element-rive-schemas";
 import { sectionEffectSchema } from "./section-effect-schemas";
-import { themeStringSchema } from "./schema-primitives";
+import {
+  cssInlineStyleSchema,
+  jsonValueSchema,
+  responsiveStringSchema,
+  themeStringSchema,
+} from "./schema-primitives";
 
 // z.lazy breaks the circular init (TS7022) by deferring evaluation until parse time.
 // z.ZodType<unknown> annotation prevents TypeScript from trying to infer the recursive type.
 const lazyElementBlock: z.ZodType<unknown> = z.lazy(() => elementBlockSchema);
+const responsiveNumberSchema = z.union([z.number(), z.tuple([z.number(), z.number()])]).optional();
+const nestedElementSectionSchema = z
+  .object({
+    elementOrder: z.array(z.string()).optional(),
+    definitions: z.record(z.string(), lazyElementBlock),
+  })
+  .passthrough();
 
 const elementGroupSchema = z
   .object({
     type: z.literal("elementGroup"),
-    section: z
-      .object({
-        elementOrder: z.array(z.string()).optional(),
-        definitions: z.record(z.string(), lazyElementBlock),
-      })
-      .passthrough(),
+    section: nestedElementSectionSchema,
     display: z.string().optional(),
-    flexDirection: z.string().optional(),
-    alignItems: z.string().optional(),
-    justifyContent: z.string().optional(),
+    flexDirection: responsiveStringSchema.optional(),
+    alignItems: responsiveStringSchema.optional(),
+    justifyContent: responsiveStringSchema.optional(),
     /** Spacing between items; theme fallback when unset — `pbContentGuidelines.frameGapWhenUnset`. */
-    gap: z.string().optional(),
+    gap: responsiveStringSchema.optional(),
     flexWrap: z.enum(["nowrap", "wrap", "wrap-reverse"]).optional(),
     /** Theme fallback when unset — `pbContentGuidelines.frameRowGapWhenUnset`. */
     rowGap: z.union([z.string(), z.number()]).optional(),
-    padding: z.string().optional(),
+    padding: responsiveStringSchema.optional(),
     /** Per-side padding. Overrides the shorthand `padding` field if set. */
     paddingTop: z.union([z.string(), z.number()]).optional(),
     /** Per-side padding. Overrides the shorthand `padding` field if set. */
@@ -54,10 +61,46 @@ const elementGroupSchema = z
     paddingBottom: z.union([z.string(), z.number()]).optional(),
     /** Per-side padding. Overrides the shorthand `padding` field if set. */
     paddingLeft: z.union([z.string(), z.number()]).optional(),
-    flex: z.string().optional(),
+    flex: responsiveStringSchema.optional(),
     columnCount: z.number().int().positive().optional(),
     /** Theme fallback when unset — `pbContentGuidelines.frameColumnGapWhenUnset`. */
     columnGap: z.union([z.string(), z.number()]).optional(),
+    effects: z.array(sectionEffectSchema).optional(),
+  })
+  .merge(elementLayoutSchema)
+  .passthrough();
+
+const elementInfiniteScrollSchema = z
+  .object({
+    type: z.literal("elementInfiniteScroll"),
+    section: nestedElementSectionSchema,
+    scrollDirection: z.enum(["horizontal", "vertical"]).optional(),
+    loop: z.boolean().optional(),
+    initialIndex: z.number().int().optional(),
+    selectedIndexVariable: z.string().optional(),
+    selectedIdVariable: z.string().optional(),
+    selectedValueVariable: z.string().optional(),
+    selectedValues: z.record(z.string(), jsonValueSchema).optional(),
+    snapAlign: z.enum(["start", "center", "end"]).optional(),
+    centerOnClick: z.boolean().optional(),
+    wheelLockMs: z.number().nonnegative().optional(),
+    snapDurationMs: z.number().nonnegative().optional(),
+    activeScale: responsiveNumberSchema,
+    inactiveScale: responsiveNumberSchema,
+    activeOpacity: responsiveNumberSchema,
+    inactiveOpacity: responsiveNumberSchema,
+    activeItemStyle: cssInlineStyleSchema.optional(),
+    inactiveItemStyle: cssInlineStyleSchema.optional(),
+    alignItems: responsiveStringSchema.optional(),
+    justifyContent: responsiveStringSchema.optional(),
+    gap: responsiveStringSchema.optional(),
+    rowGap: z.union([z.string(), z.number()]).optional(),
+    columnGap: z.union([z.string(), z.number()]).optional(),
+    padding: responsiveStringSchema.optional(),
+    paddingTop: z.union([z.string(), z.number()]).optional(),
+    paddingRight: z.union([z.string(), z.number()]).optional(),
+    paddingBottom: z.union([z.string(), z.number()]).optional(),
+    paddingLeft: z.union([z.string(), z.number()]).optional(),
     effects: z.array(sectionEffectSchema).optional(),
   })
   .merge(elementLayoutSchema)
@@ -84,6 +127,7 @@ export const elementBlockSchema = z
     elementModel3DSchema,
     elementRiveSchema,
     elementGroupSchema,
+    elementInfiniteScrollSchema,
   ])
   .superRefine((value, ctx) => {
     if (!("borderGradient" in value) || !("wrapperStyle" in value)) return;

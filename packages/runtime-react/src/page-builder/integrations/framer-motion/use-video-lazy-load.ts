@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { flushSync } from "react-dom";
 import { useInView } from "@/page-builder/integrations/framer-motion/viewport";
 import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
 
@@ -30,5 +31,11 @@ export function useVideoLazyLoad({
     setUserArmed(true);
   }, []);
 
-  return { shouldLoadVideo, armVideoLoad };
+  const armVideoLoadImmediately = useCallback(() => {
+    flushSync(() => {
+      setUserArmed(true);
+    });
+  }, []);
+
+  return { shouldLoadVideo, armVideoLoad, armVideoLoadImmediately };
 }

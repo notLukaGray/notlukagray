@@ -1,5 +1,4 @@
 {
-  "slug": "dev/bg-motion-demo",
   "title": "BG Motion Demo",
   "description": "Background motion demo — loop drives position, scroll drives hue via CSS custom properties",
   "sectionOrder": ["scroll-stage"],

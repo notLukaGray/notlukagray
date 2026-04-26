@@ -88,7 +88,10 @@ describe("module-slot-utils", () => {
           elementOrder: ["a", "b", "c"],
           definitions: {
             a: elImage(),
-            b: cssGradientDefinitionSchema.parse({ type: "cssGradient", value: "" }),
+            b: cssGradientDefinitionSchema.parse({
+              type: "cssGradient",
+              value: "linear-gradient(180deg, #000 0%, #fff 100%)",
+            }),
             c: null,
           },
         },

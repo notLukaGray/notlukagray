@@ -45,7 +45,7 @@ const elementHeadingSchema = z
     type: z.literal("elementHeading"),
     /** Preset key for `pbBuilderDefaultsV1.elements.heading` variant templates. */
     variant: z.enum(["display", "section", "label"]).optional(),
-    level: headingLevelSchema,
+    level: headingLevelSchema.optional(),
     /** Optional semantic heading level (h1–h6) for document outline. When set, used for the element tag; `level` still drives typography style. Use to fix heading order (e.g. level 4 style with semanticLevel 2 for correct outline). */
     semanticLevel: headingLevelSchema.optional(),
     text: z.string(),

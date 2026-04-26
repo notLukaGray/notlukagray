@@ -17,10 +17,10 @@ const TAG_MAP = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 
 /** Resolve the tag from semanticLevel (outline) or level (style). */
 function headingTag(
-  level: 1 | 2 | 3 | 4 | 5 | 6,
+  level: 1 | 2 | 3 | 4 | 5 | 6 | undefined,
   semanticLevel?: 1 | 2 | 3 | 4 | 5 | 6
 ): (typeof TAG_MAP)[number] {
-  const tagLevel = semanticLevel ?? level;
+  const tagLevel = semanticLevel ?? level ?? 1;
   return TAG_MAP[tagLevel - 1] ?? "h1";
 }
 

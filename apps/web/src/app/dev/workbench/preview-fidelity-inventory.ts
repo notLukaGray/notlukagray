@@ -146,6 +146,22 @@ export const PREVIEW_FIDELITY_INVENTORY: PreviewSurfaceMetadata[] = [
     supportsViewport: true,
   },
   {
+    surfaceId: "elements/divider",
+    status: "live",
+    owner: "dev-workbench",
+    rendererPath: "ElementRenderer",
+    fidelityModeDefault: "raw",
+    supportsViewport: true,
+  },
+  {
+    surfaceId: "elements/group",
+    status: "live",
+    owner: "dev-workbench",
+    rendererPath: "ElementRenderer",
+    fidelityModeDefault: "raw",
+    supportsViewport: true,
+  },
+  {
     surfaceId: "elements/scroll-progress-bar",
     status: "live",
     owner: "dev-workbench",

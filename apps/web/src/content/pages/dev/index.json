@@ -1,5 +1,4 @@
 {
-  "slug": "dev",
   "title": "Dev",
   "description": "Development pages for page-builder and integration testing",
   "sectionOrder": ["hero"],

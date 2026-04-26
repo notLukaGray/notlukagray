@@ -30,6 +30,8 @@ import { ElementVideoLinkWrap } from "./ElementVideo/ElementVideoLinkWrap";
 import { useElementVideoSource } from "./ElementVideo/use-element-video-source";
 import { ElementVideoErrorOverlay } from "./ElementVideo/ElementVideoErrorOverlay";
 import { useVideoLazyLoad } from "./ElementVideo/use-video-lazy-load";
+import { useVideoAudioSession } from "./ElementVideo/engine/audio-session";
+import { useMediaSession } from "./ElementVideo/engine/use-media-session";
 import { resolveElementVideoSlots } from "./ElementVideo/element-video-slots";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
@@ -254,45 +256,6 @@ export function ElementVideo({
     feedbackDurationMs,
   });
 
-  const baseControls = useVideoControls({
-    videoRef,
-    state,
-    setPlaying: state.setPlaying,
-    setShowControls: state.setShowControls,
-    setVolume: state.setVolume,
-    setMuted: state.setMuted,
-    setCurrentTime: state.setCurrentTime,
-    setDuration: state.setDuration,
-    sleepAfterMs,
-    loop,
-  });
-
-  const controls = useMemo(() => {
-    return {
-      ...baseControls,
-      handlePlay: () => {
-        setPlaybackStartState({ src: preferredSrc, autoplay, hasStarted: true });
-        baseControls.handlePlay();
-        if (onVideoPlay) firePageBuilderAction(onVideoPlay, "trigger");
-      },
-      handlePause: () => {
-        baseControls.handlePause();
-        if (onVideoPause) firePageBuilderAction(onVideoPause, "trigger");
-      },
-      handleEnded: () => {
-        baseControls.handleEnded();
-        if (onVideoEnd) firePageBuilderAction(onVideoEnd, "trigger");
-      },
-    };
-  }, [autoplay, baseControls, onVideoPlay, onVideoPause, onVideoEnd, preferredSrc]);
-
-  const fullscreen = useVideoFullscreen({
-    videoRef,
-    containerRef,
-    videoEl,
-    setFullscreen: state.setFullscreen,
-  });
-
   const styles = useElementVideoStyles({
     width,
     height,
@@ -333,7 +296,7 @@ export function ElementVideo({
     [link, showPlayButton]
   );
 
-  const { shouldLoadVideo, armVideoLoad } = useVideoLazyLoad({
+  const { shouldLoadVideo, armVideoLoad, armVideoLoadImmediately } = useVideoLazyLoad({
     autoplay,
     hasSource,
     priority,
@@ -345,6 +308,48 @@ export function ElementVideo({
     shouldLoad: shouldLoadVideo,
     autoplay,
     streamingConfig,
+  });
+  const baseControls = useVideoControls({
+    videoRef,
+    state,
+    setPlaying: state.setPlaying,
+    setShowControls: state.setShowControls,
+    setVolume: state.setVolume,
+    setMuted: state.setMuted,
+    setCurrentTime: state.setCurrentTime,
+    setDuration: state.setDuration,
+    sleepAfterMs,
+    loop,
+    startLoad: videoSourceState.startLoad,
+  });
+
+  const controls = useMemo(() => {
+    return {
+      ...baseControls,
+      handlePlay: () => {
+        setPlaybackStartState({ src: preferredSrc, autoplay, hasStarted: true });
+        baseControls.handlePlay();
+        if (onVideoPlay) firePageBuilderAction(onVideoPlay, "trigger");
+      },
+      handlePause: () => {
+        baseControls.handlePause();
+        if (onVideoPause) firePageBuilderAction(onVideoPause, "trigger");
+      },
+      handleEnded: () => {
+        baseControls.handleEnded();
+        if (onVideoEnd) firePageBuilderAction(onVideoEnd, "trigger");
+      },
+    };
+  }, [autoplay, baseControls, onVideoPlay, onVideoPause, onVideoEnd, preferredSrc]);
+
+  const fullscreen = useVideoFullscreen({
+    videoRef,
+    containerRef,
+    videoEl,
+    setFullscreen: state.setFullscreen,
+    shouldLoadVideo,
+    armVideoLoadImmediately,
+    startLoad: videoSourceState.startLoad,
   });
   const moduleEffects = useMemo(
     () =>
@@ -370,6 +375,20 @@ export function ElementVideo({
   const resolvedAspectRatio = resolveAspectRatioValue(aspectRatio);
   const resolvedAriaLabel = (ariaLabel?.trim() || "Video").trim();
   const showPrePlayPoster = showVideo && !hasStartedPlayback;
+  const audioSession = useVideoAudioSession({
+    videoEl,
+    play: baseControls.play,
+    startLoad: videoSourceState.startLoad,
+  });
+
+  useMediaSession({
+    enabled: audioSession.isAudioOwner,
+    title: resolvedAriaLabel,
+    poster: resolvedPoster ?? undefined,
+    play: baseControls.play,
+    pause: baseControls.pause,
+    seek: baseControls.handleSeek,
+  });
 
   const { contentSlotKey, slotsObj, useSectionSlots } = useMemo(
     () => resolveElementVideoSlots(moduleConfig),
@@ -379,7 +398,6 @@ export function ElementVideo({
   const videoCore = (
     <ElementVideoCore
       setVideoRef={setVideoRef}
-      src={preferredSrc}
       shouldLoad={shouldLoadVideo}
       poster={resolvedPoster ?? undefined}
       ariaLabel={resolvedAriaLabel}
@@ -388,9 +406,8 @@ export function ElementVideo({
       controls={controls}
       autoplay={autoplay}
       loop={loop}
-      muted={muted}
+      muted={state.isMuted}
       playbackRate={playbackRate}
-      isManagedSource={videoSourceState.isHls || videoSourceState.isDash}
       priority={priority}
       preload={preload}
       crossOrigin={crossOrigin}

@@ -23,6 +23,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { z } from "zod";
 import {
+  knownPageTagsConfigSchema,
+  type KnownPageTagsConfig,
   pageBuilderSchema,
   pageBuilderDefinitionBlockSchema,
   moduleBlockSchema,
@@ -38,6 +40,7 @@ const APP_ROOT = fs.existsSync(path.join(process.cwd(), "src/content"))
   : path.join(process.cwd(), "apps/web");
 
 const SCHEMAS_DIR = path.join(APP_ROOT, "src/content/schemas");
+const TAGS_CONFIG_PATH = path.join(APP_ROOT, "src/content/config/tags.json");
 
 const toJSONSchemaOptions = {
   target: "draft-2020-12" as const,
@@ -55,6 +58,81 @@ const ENTRANCE_REQUIRED_KEYS = new Set([
   "entranceDistance",
   "entranceEase",
 ]);
+
+type JsonSchemaObject = Record<string, unknown>;
+
+function formatZodIssues(error: z.ZodError): string {
+  return error.issues
+    .map((issue) => `${issue.path.join(".") || "(root)"}: ${issue.message}`)
+    .join("\n");
+}
+
+function loadKnownPageTagsConfig(): KnownPageTagsConfig | null {
+  if (!fs.existsSync(TAGS_CONFIG_PATH)) return null;
+
+  const raw = fs.readFileSync(TAGS_CONFIG_PATH, "utf-8");
+  const parsed = JSON.parse(raw) as unknown;
+  const result = knownPageTagsConfigSchema.safeParse(parsed);
+  if (!result.success) {
+    throw new Error(
+      `Invalid known tags config at ${path.relative(process.cwd(), TAGS_CONFIG_PATH)}:\n${formatZodIssues(result.error)}`
+    );
+  }
+  return result.data;
+}
+
+function getObject(value: unknown): JsonSchemaObject | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  return value as JsonSchemaObject;
+}
+
+function buildKnownTagsJsonSchema(config: KnownPageTagsConfig): JsonSchemaObject {
+  const properties: Record<string, unknown> = {};
+  const defaultTags: Record<string, string[]> = {};
+  for (const [category, values] of Object.entries(config.knownTags)) {
+    properties[category] = {
+      type: "array",
+      items: values.length > 0 ? { type: "string", enum: values } : false,
+      uniqueItems: true,
+      default: [],
+    };
+    defaultTags[category] = [];
+  }
+
+  return {
+    type: "object",
+    description:
+      "Taxonomy tags. Categories and values are sourced from src/content/config/tags.json.",
+    properties,
+    default: defaultTags,
+    additionalProperties: false,
+  };
+}
+
+function applyKnownTagsToPageSchema(
+  schema: JsonSchemaObject,
+  config: KnownPageTagsConfig | null
+): void {
+  if (!config) return;
+
+  const properties = getObject(schema.properties);
+  if (!properties) return;
+
+  properties.tags = buildKnownTagsJsonSchema(config);
+
+  const filterConfig = getObject(properties.filterConfig);
+  const filterProperties = getObject(filterConfig?.properties);
+  const categories = getObject(filterProperties?.categories);
+  const categoryItems = getObject(categories?.items);
+  const categoryItemProperties = getObject(categoryItems?.properties);
+  if (categoryItemProperties?.key) {
+    categoryItemProperties.key = {
+      type: "string",
+      enum: Object.keys(config.knownTags),
+      description: "Known tag category from src/content/config/tags.json.",
+    };
+  }
+}
 
 /** Recursively walk a JSON Schema object and strip entrance* keys from any "required" arrays. */
 function stripEntranceFromRequired(schema: unknown): unknown {
@@ -261,11 +339,13 @@ function writeSchemaFile(filename: string, schema: object): void {
 
 function main(): void {
   process.stdout.write("Generating JSON schemas...\n");
+  const knownTagsConfig = loadKnownPageTagsConfig();
 
   // Page: full page JSON (work/slug.json, work/foo.json)
   process.stdout.write("  → page-builder.schema.json\n");
   const pageSchema = z.toJSONSchema(pageBuilderSchema, toJSONSchemaOptions);
   if (pageSchema && typeof pageSchema === "object") {
+    applyKnownTagsToPageSchema(pageSchema as JsonSchemaObject, knownTagsConfig);
     writeSchemaFile("page-builder.schema.json", pageSchema as object);
   }
 

@@ -3,18 +3,27 @@
   "flexDirection": "column",
   "id": "product_a",
   "width": ["100%", "88%"],
-  "height": ["80vh", "88vh"],
+  "height": ["100vh", "100vh"],
   "align": ["full", "center"],
   "fill": "transparent",
+  "zIndex": 0,
+  "fixed": true,
+  "alignItems": "center",
+  "justifyContent": "center",
+  "contentHeight": "full",
+  "gap": "0.35rem",
+  "scrollOpacityRange": {
+    "input": [0.6, 0.8],
+    "output": [1, 0]
+  },
   "elementOrder": ["a-platform", "a-title", "a-logline", "a-stack"],
   "definitions": {
     "a-platform": {
       "type": "elementHeading",
-      "level": 6,
+      "variant": "label",
       "text": "iOS / ANDROID / WEB · PRODUCT DESIGN",
       "align": "center",
       "width": "hug",
-      "marginTop": ["26vh", "30vh"],
       "marginBottom": "1rem",
       "motionTiming": {
         "entrancePreset": "fade",
@@ -31,7 +40,7 @@
     "a-title": {
       "type": "elementHeading",
       "level": 1,
-      "text": "Product Name",
+      "text": "Spinach x TIFF",
       "align": "center",
       "width": ["92%", "68%"],
       "wordWrap": true,
@@ -52,7 +61,7 @@
     "a-logline": {
       "type": "elementBody",
       "level": 2,
-      "text": "One sentence that describes what the product does and who it's for. Specific enough to be useful, short enough to fit on a landing page hero.",
+      "text": "A cinematic parody trailer created for Spinach and shown in association with TIFF. Inspired by the iconic Walt Disney opening, the piece reimagined the familiar castle silhouette as a towering landscape of giant cannabis nugs, complete with sweeping background scenery and fireworks bursting overhead. The result was playful, unexpected, and deliberately tongue-in-cheek, using a universally recognizable film intro to give the brand a bold, theatrical moment on screen.",
       "align": "center",
       "textAlign": "center",
       "width": ["88%", "52%"],
@@ -79,6 +88,5 @@
       "textAlign": "center",
       "width": "hug"
     }
-  },
-  "gap": "1rem"
+  }
 }

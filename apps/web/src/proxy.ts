@@ -3,11 +3,34 @@ import { PROTECTED_PAGE_PATHS } from "@/core/lib/protected-slugs.generated";
 import { accessCookieName } from "@/core/lib/auth-constants";
 import { verifyAccessTokenEdge } from "@/core/lib/access-cookie-edge";
 
+const UNLOCK_PREVIEW_BY_PATH: Record<string, string> = {
+  "work/project-spinach-tiff":
+    "https://media.notlukagray.com/website/work/project-spinach-tiff/og.webp",
+};
+
+function buildRequestedPathWithQuery(request: NextRequest): string {
+  const params = new URLSearchParams(request.nextUrl.searchParams);
+  params.delete("unlock");
+  const query = params.toString();
+  return query.length > 0 ? `${request.nextUrl.pathname}?${query}` : request.nextUrl.pathname;
+}
+
+function buildUnlockRedirectUrl(request: NextRequest, normalizedPath: string): URL {
+  const url = request.nextUrl.clone();
+  url.pathname = "/unlock";
+  url.search = "";
+  url.searchParams.set("unlock_redirect", buildRequestedPathWithQuery(request));
+  const preview = UNLOCK_PREVIEW_BY_PATH[normalizedPath];
+  if (preview) url.searchParams.set("unlock_preview", preview);
+  return url;
+}
+
 /**
  * Proxy for protected page paths:
  * When path is protected and SITE_PASSWORD is set:
- * - redirect to the same path with `?unlock=1` if the access cookie is missing/invalid
- * - allow the request through when `unlock=1` is present so the page can render under unlock modal
+ * - modal flow: requests already carrying `?unlock=1` are allowed through (used by internal links)
+ * - direct/external/plain URL: redirect to `/unlock` with redirect target
+ * - allow through when access cookie is valid
  *
  * NOTE: Do not rewrite to /mobile or /desktop variants. The app now uses
  * a universal catch-all route and resolves breakpoint from request headers.
@@ -29,10 +52,7 @@ export async function proxy(request: NextRequest) {
 
   if (!valid) {
     if (wantsUnlock) return NextResponse.next();
-
-    const url = request.nextUrl.clone();
-    url.searchParams.set("unlock", "1");
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(buildUnlockRedirectUrl(request, normalizedPath));
   }
 
   if (wantsUnlock) {

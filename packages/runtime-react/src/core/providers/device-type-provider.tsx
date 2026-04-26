@@ -48,9 +48,31 @@ export function ServerBreakpointProvider({
   isMobile: boolean;
   children: React.ReactNode;
 }) {
+  const [resolvedIsMobile, setResolvedIsMobile] = useState(isMobile);
+
+  useEffect(() => {
+    const checkDeviceType = () => {
+      const isMobileUserAgent = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const desktopBreakpoint = readDesktopBreakpointFromCssVars();
+      const isMobileWidth = window.innerWidth < desktopBreakpoint;
+      setResolvedIsMobile(isMobileUserAgent || isMobileWidth);
+    };
+
+    checkDeviceType();
+    window.addEventListener("resize", checkDeviceType);
+    window.addEventListener("storage", checkDeviceType);
+    window.addEventListener(WORKBENCH_SESSION_CHANGED_EVENT, checkDeviceType);
+
+    return () => {
+      window.removeEventListener("resize", checkDeviceType);
+      window.removeEventListener("storage", checkDeviceType);
+      window.removeEventListener(WORKBENCH_SESSION_CHANGED_EVENT, checkDeviceType);
+    };
+  }, []);
+
   const value: DeviceTypeContextValue = {
-    isMobile,
-    isDesktop: !isMobile,
+    isMobile: resolvedIsMobile,
+    isDesktop: !resolvedIsMobile,
   };
   return (
     <ServerBreakpointContext.Provider value={value}>{children}</ServerBreakpointContext.Provider>

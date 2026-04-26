@@ -105,8 +105,8 @@ function processElement(el: unknown): unknown {
     }
   }
 
-  // elementGroup: recurse into section.definitions
-  if (element.type === "elementGroup") {
+  // elementGroup / elementInfiniteScroll: recurse into section.definitions
+  if (element.type === "elementGroup" || element.type === "elementInfiniteScroll") {
     const section = element.section as { definitions?: Record<string, unknown> } | undefined;
     if (section?.definitions) {
       const newDefs: Record<string, unknown> = {};

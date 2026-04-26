@@ -25,6 +25,13 @@ const ElementModuleGroup = dynamic(
   }
 ) as unknown as ComponentType<ElementBlock>;
 
+const ElementInfiniteScroll = dynamic(
+  () => import("./ElementInfiniteScroll").then((mod) => mod.ElementInfiniteScroll),
+  {
+    loading: () => null,
+  }
+) as unknown as ComponentType<ElementBlock>;
+
 const ElementModel3D = dynamic(() => import("./Element3D").then((mod) => mod.ElementModel3D), {
   loading: () => null,
 }) as unknown as ComponentType<ElementBlock>;
@@ -69,4 +76,5 @@ export const ELEMENT_COMPONENTS: Record<string, ComponentType<ElementBlock>> = {
   elementModel3D: ElementModel3D as ComponentType<ElementBlock>,
   elementRive: ElementRive as ComponentType<ElementBlock>,
   elementGroup: ElementModuleGroup as ComponentType<ElementBlock>,
+  elementInfiniteScroll: ElementInfiniteScroll as ComponentType<ElementBlock>,
 };

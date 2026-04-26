@@ -1,5 +1,4 @@
 {
-  "slug": "dev/gradient-max",
   "title": "Gradient Max",
   "description": "Five distinct gradient worlds — hard-cut on scroll at 20 / 40 / 60 / 80 %. Each scene has its own loop animations; scene 2 reacts to pointer.",
   "sectionOrder": ["scroll-stage"],

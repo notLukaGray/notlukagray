@@ -231,6 +231,22 @@
     "showCharacterCount": {
       "type": "boolean"
     },
+    "inputMode": {
+      "type": "string",
+      "enum": [
+        "none",
+        "text",
+        "decimal",
+        "numeric",
+        "tel",
+        "search",
+        "email",
+        "url"
+      ]
+    },
+    "spellCheck": {
+      "type": "boolean"
+    },
     "buttonType": {
       "type": "string",
       "enum": [
@@ -302,7 +318,8 @@
           "enum": [
             "left",
             "center",
-            "right"
+            "right",
+            "full"
           ]
         },
         {
@@ -313,7 +330,8 @@
               "enum": [
                 "left",
                 "center",
-                "right"
+                "right",
+                "full"
               ]
             },
             {
@@ -321,7 +339,8 @@
               "enum": [
                 "left",
                 "center",
-                "right"
+                "right",
+                "full"
               ]
             }
           ]

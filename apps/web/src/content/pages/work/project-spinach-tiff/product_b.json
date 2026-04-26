@@ -1,0 +1,45 @@
+{
+  "type": "contentBlock",
+  "id": "product_b",
+  "width": ["100%", "88%"],
+  "maxWidth": "1200px",
+  "height": "hug",
+  "align": ["full", "center"],
+  "scrollSpeed": 0.72,
+  "zIndex": 1,
+  "marginTop": ["-5vh", "-8vh"],
+  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
+  "borderRadius": ["1.25rem", "2rem"],
+  "effects": [
+    {
+      "type": "dropShadow",
+      "y": "12px",
+      "blur": "48px",
+      "color": "rgba(0,0,0,0.4)"
+    }
+  ],
+  "elementOrder": ["spin-tiff-video"],
+  "definitions": {
+    "spin-tiff-video": {
+      "type": "elementVideo",
+      "src": "work/SP_TIFF_042226/vp9/manifest.mpd",
+      "sources": [
+        {
+          "src": "work/SP_TIFF_042226/vp9/manifest.mpd",
+          "type": "video/webm; codecs=\"vp09.00.51.08\"",
+          "label": "VP9 DASH"
+        },
+        {
+          "src": "work/SP_TIFF_042226/x264/master.m3u8",
+          "type": "application/vnd.apple.mpegurl; codecs=\"avc1.64001f,mp4a.40.2\"",
+          "label": "x264 HLS fallback"
+        }
+      ],
+      "poster": "work/SP_TIFF_042226/poster.webp",
+      "module": "video-player-full",
+      "width": "100%",
+      "height": "hug",
+      "aspectRatio": ["4/3", "16/9"]
+    }
+  }
+}

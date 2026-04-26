@@ -1,26 +1,21 @@
 import fs from "node:fs";
+import { cookies } from "next/headers";
 import { person } from "@/core/lib/globals";
 import { HomeView } from "@/core/ui//HomeView";
 import { PersonJsonLd } from "@/core/ui/PersonJsonLd";
 import type { HeroProject } from "@/core/lib/globals";
-import type { SectionBlock } from "@pb/contracts";
-import { discoverAllPages, getModalProps } from "@pb/core";
-import { HomeWithUnlockModal } from "./HomeWithUnlockModal";
+import { discoverAllPages } from "@pb/core";
+import { accessCookieName } from "@/core/lib/auth-constants";
+import { verifyAccessToken } from "@/core/lib/access-cookie";
+import {
+  buildUnlockModalProps,
+  isProtectedHref,
+  isUnlockEnabled,
+  safeRedirectPath,
+} from "@/core/lib/unlock-linking";
+import { UnlockPageShell } from "@/core/ui/UnlockPageShell";
 // Temporary: load hero data from archived file until homepage is rebuilt as a page-builder page
 import deadHome from "@/content/_dead/home.json";
-
-function safeRedirect(value: unknown): string | null {
-  if (typeof value !== "string" || !value.trim()) return null;
-  const r = value.trim();
-  return r.startsWith("/") && !r.startsWith("//") ? r : null;
-}
-
-function injectUnlockRedirect(sections: SectionBlock[], redirect: string): SectionBlock[] {
-  return sections.map((block) => {
-    if (block.type !== "formBlock" || block.action !== "unlock") return block;
-    return { ...block, actionPayload: { ...block.actionPayload, redirect } };
-  });
-}
 
 function parseJsonFile(filePath: string): Record<string, unknown> | null {
   try {
@@ -46,11 +41,33 @@ function buildContentPageHrefMap(): Map<string, string> {
   return map;
 }
 
-function attachProjectHrefs(projects: HeroProject[]): HeroProject[] {
+function buildContentPageOgImageMap(): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const page of discoverAllPages()) {
+    if (page.slugSegments[0] === "dev") continue;
+    const data = parseJsonFile(page.contentPath);
+    const href = `/${page.slugSegments.join("/")}`;
+    const ogImage = typeof data?.ogImage === "string" ? data.ogImage : null;
+    if (ogImage) map.set(href, ogImage);
+  }
+  return map;
+}
+
+function attachProjectHrefs(projects: HeroProject[], hasAccess: boolean): HeroProject[] {
   const hrefBySlug = buildContentPageHrefMap();
+  const ogImageByHref = buildContentPageOgImageMap();
+  const shouldUseModalUnlockLinks = !hasAccess && isUnlockEnabled();
+
   return projects.map((project) => {
     const href = hrefBySlug.get(project.slug);
-    return href ? { ...project, href } : project;
+    if (!href) return project;
+    if (!shouldUseModalUnlockLinks) return { ...project, href };
+    if (!isProtectedHref(href)) return { ...project, href };
+    const unlockParams = new URLSearchParams();
+    unlockParams.set("unlock_redirect", href);
+    const preview = ogImageByHref.get(href);
+    if (preview) unlockParams.set("unlock_preview", preview);
+    return { ...project, href: `/?${unlockParams.toString()}` };
   });
 }
 
@@ -59,20 +76,17 @@ type Props = {
 };
 
 export default async function Home({ searchParams }: Props) {
+  const cookieStore = await cookies();
+  const hasAccess = verifyAccessToken(cookieStore.get(accessCookieName)?.value);
   const params = await searchParams;
-  const redirectUrl = safeRedirect(params.unlock_redirect);
-  const unlockModalProps =
-    redirectUrl && typeof process.env.SITE_PASSWORD === "string"
-      ? getModalProps("unlock", {
-          transformSections: (sections) => injectUnlockRedirect(sections, redirectUrl),
-        })
-      : null;
-  const heroProjects = attachProjectHrefs(deadHome.heroProjects as HeroProject[]);
+  const redirectUrl = safeRedirectPath(params.unlock_redirect);
+  const unlockModalProps = buildUnlockModalProps(redirectUrl, !hasAccess && isUnlockEnabled());
+  const heroProjects = attachProjectHrefs(deadHome.heroProjects as HeroProject[], hasAccess);
 
   return (
-    <HomeWithUnlockModal unlockModalProps={unlockModalProps}>
+    <UnlockPageShell unlockModalProps={unlockModalProps}>
       {person && <PersonJsonLd person={person} />}
       <HomeView heroProjects={heroProjects} />
-    </HomeWithUnlockModal>
+    </UnlockPageShell>
   );
 }

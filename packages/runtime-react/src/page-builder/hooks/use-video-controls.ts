@@ -23,12 +23,15 @@ export type UseVideoControlsParams = {
   /** Inactivity hide delay in ms (from module behavior.sleepAfterMs). */
   sleepAfterMs: number;
   loop: boolean;
+  startLoad?: (currentTime?: number) => void;
 };
 
 export type UseVideoControlsResult = {
   scheduleHideControls: () => void;
   cancelHideControls: () => void;
   showControlsTemporarily: () => void;
+  play: () => Promise<boolean>;
+  pause: () => void;
   handlePlay: () => void;
   handlePause: () => void;
   handleEnded: () => void;
@@ -53,6 +56,7 @@ export function useVideoControls({
   setDuration,
   sleepAfterMs,
   loop,
+  startLoad,
 }: UseVideoControlsParams): UseVideoControlsResult {
   const hideControlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevFullscreenRef = useRef(state.isFullscreen);
@@ -165,17 +169,33 @@ export function useVideoControls({
     [videoRef, setCurrentTime]
   );
 
+  const play = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video) return false;
+    startLoad?.(video.currentTime);
+    try {
+      await video.play();
+      return true;
+    } catch {
+      return false;
+    }
+  }, [startLoad, videoRef]);
+
+  const pause = useCallback(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.pause();
+  }, [videoRef]);
+
   const handleTogglePlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
-      video.play().catch(() => {});
-      handlePlay();
+      void play();
     } else {
-      video.pause();
-      handlePause();
+      pause();
     }
-  }, [videoRef, handlePlay, handlePause]);
+  }, [pause, play, videoRef]);
 
   const onTimeUpdate = useCallback(() => {
     const v = videoRef.current;
@@ -217,6 +237,8 @@ export function useVideoControls({
     scheduleHideControls,
     cancelHideControls,
     showControlsTemporarily,
+    play,
+    pause,
     handlePlay,
     handlePause,
     handleEnded,

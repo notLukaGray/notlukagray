@@ -3,8 +3,11 @@ import { bgBlockSchema } from "./background-block-schemas";
 import { elementButtonSchema } from "./element-button-schemas";
 import { formFieldBlockSchema } from "./form-field-schemas";
 import {
+  knownPageTagsConfigSchema,
   pageBuilderSchema,
   pageScrollConfigSchema,
+  validateKnownFilterCategories,
+  validateKnownPageTags,
 } from "./page-definition-and-resolution-schemas";
 import { sectionContentBlockSchema, sectionRevealSchema } from "./section-block-base-schemas";
 import { themeStringSchema } from "./schema-primitives";
@@ -183,6 +186,64 @@ describe("phase 0 schema hardening", () => {
       expect(pageBuilderSchema.safeParse({ ...basePage, forcedTheme: "toggle" }).success).toBe(
         false
       );
+    });
+  });
+
+  describe("known page tags", () => {
+    const config = knownPageTagsConfigSchema.parse({
+      knownTags: {
+        brand: ["Echo"],
+        ability: ["Short Documentary"],
+      },
+    });
+
+    it("accepts tags included in the known tags config", () => {
+      expect(
+        validateKnownPageTags(
+          {
+            brand: ["Echo"],
+            ability: ["Short Documentary"],
+          },
+          config
+        )
+      ).toEqual([]);
+    });
+
+    it("reports unknown tag categories and values", () => {
+      expect(
+        validateKnownPageTags(
+          {
+            brand: ["Unknown Brand"],
+            topic: ["Color"],
+          },
+          config
+        )
+      ).toEqual([
+        {
+          path: ["tags", "brand", 0],
+          message: 'Unknown tag "Unknown Brand" for category "brand". Known tags: Echo.',
+        },
+        {
+          path: ["tags", "topic"],
+          message: 'Unknown tag category "topic". Known categories: brand, ability.',
+        },
+      ]);
+    });
+
+    it("reports listing filter categories that are not configured", () => {
+      expect(
+        validateKnownFilterCategories(
+          {
+            categories: [{ key: "topic", label: "Topic" }],
+          },
+          config
+        )
+      ).toEqual([
+        {
+          path: ["filterConfig", "categories", 0, "key"],
+          message: 'Unknown filter category "topic". Known categories: brand, ability.',
+        },
+      ]);
     });
   });
 

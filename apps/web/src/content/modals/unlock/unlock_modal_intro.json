@@ -12,7 +12,7 @@
     "unlock_modal_heading": {
       "type": "elementHeading",
       "level": 2,
-      "text": "This page is password protected",
+      "text": "You Shall Not Pass",
       "align": "center",
       "width": "hug",
       "wordWrap": true,

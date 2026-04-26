@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
+import { useFullscreenReadiness } from "@/page-builder/elements/ElementVideo/engine/use-fullscreen-readiness";
 
 /** iOS Safari: video-only fullscreen. Not on HTMLVideoElement in TS; we use at runtime. */
 type VideoWithWebkit = HTMLVideoElement & {
@@ -15,6 +16,9 @@ export type UseVideoFullscreenParams = {
   /** Video element when mounted (for iOS webkit listeners). */
   videoEl: HTMLVideoElement | null;
   setFullscreen: (v: boolean) => void;
+  shouldLoadVideo: boolean;
+  armVideoLoadImmediately: () => void;
+  startLoad: (currentTime?: number) => void;
 };
 
 export type UseVideoFullscreenResult = {
@@ -31,26 +35,17 @@ export function useVideoFullscreen({
   containerRef,
   videoEl,
   setFullscreen,
+  shouldLoadVideo,
+  armVideoLoadImmediately,
+  startLoad,
 }: UseVideoFullscreenParams): UseVideoFullscreenResult {
-  const toggleFullscreen = useCallback(() => {
-    const video = videoRef.current as VideoWithWebkit | null;
-    const container = containerRef.current;
-
-    if (video?.webkitEnterFullscreen) {
-      if (video.webkitDisplayingFullscreen) {
-        video.webkitExitFullscreen?.();
-      } else {
-        video.webkitEnterFullscreen();
-      }
-      return;
-    }
-
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else if (container) {
-      container.requestFullscreen().catch(() => {});
-    }
-  }, [videoRef, containerRef]);
+  const toggleFullscreen = useFullscreenReadiness({
+    videoRef,
+    containerRef,
+    shouldLoadVideo,
+    armVideoLoadImmediately,
+    startLoad,
+  });
 
   useEffect(() => {
     const onFullscreenChange = () => setFullscreen(!!document.fullscreenElement);

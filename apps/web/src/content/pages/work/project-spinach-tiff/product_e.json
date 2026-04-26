@@ -3,19 +3,26 @@
   "id": "product_e",
   "width": ["100%", "88%"],
   "height": "hug",
+  "minHeight": ["42vh", "46vh"],
   "align": ["full", "center"],
+  "scrollSpeed": 0.9,
   "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "12px" }],
-  "marginBottom": ["3rem", "5rem"],
+  "marginTop": ["0", "1rem"],
+  "marginBottom": ["5rem", "8rem"],
   "columns": { "mobile": 1, "desktop": 2 },
   "columnWidths": { "mobile": [1], "desktop": [1, 1] },
   "columnGaps": { "mobile": "0", "desktop": "0" },
   "columnStyles": {
-    "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
+    "mobile": [{ "padding": "1.5rem 1.25rem", "gap": "1rem" }],
     "desktop": [
-      { "padding": "2rem", "gap": "1rem" },
-      { "padding": "2rem", "gap": "1rem", "fill": "oklch(from var(--pb-primary) l c h / 0.024)" }
+      { "padding": "2.5rem", "gap": "1.125rem" },
+      {
+        "padding": "2.5rem",
+        "gap": "1.125rem",
+        "fill": "oklch(from var(--pb-primary) l c h / 0.024)"
+      }
     ]
   },
   "elementOrder": ["e-impact-label", "e-impact", "e-metrics-label", "e-metrics"],

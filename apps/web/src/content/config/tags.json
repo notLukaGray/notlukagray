@@ -1,0 +1,53 @@
+{
+  "knownTags": {
+    "brand": [
+      "Aperture",
+      "Atlas DS",
+      "Clean It Up",
+      "Echo",
+      "Golden Hour",
+      "Koto",
+      "Last Light",
+      "Meridian",
+      "NOMA",
+      "Parallax",
+      "Shifting Ground",
+      "Still Water",
+      "Threshold",
+      "Vessel"
+    ],
+    "ability": [
+      "Art Direction",
+      "Brand Campaign",
+      "CGI",
+      "Editorial",
+      "Color Grading",
+      "Brand Identity",
+      "Creative Direction",
+      "Design System",
+      "Documentary Film",
+      "Exhibition Design",
+      "Immersive Installation",
+      "Motion Design",
+      "Photography",
+      "Product Design",
+      "Short Documentary",
+      "Short Film",
+      "UX Research"
+    ],
+    "topic": [
+      "Algorithmic Aesthetics",
+      "Color Perception",
+      "Design Ethics",
+      "Environmental Design",
+      "Grid Systems",
+      "Interaction Latency",
+      "Material Texture",
+      "Motion Cognition",
+      "Print History",
+      "Semiotics",
+      "Spatial Wayfinding",
+      "Type Legibility"
+    ]
+  }
+}

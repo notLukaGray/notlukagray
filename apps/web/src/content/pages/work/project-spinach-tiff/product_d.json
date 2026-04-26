@@ -3,19 +3,22 @@
   "id": "product_d",
   "width": ["100%", "88%"],
   "height": "hug",
+  "minHeight": ["70vh", "68vh"],
   "align": ["full", "center"],
+  "scrollSpeed": 0.86,
   "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
   "borderRadius": ["1.25rem", "2rem"],
   "effects": [{ "type": "backdropBlur", "amount": "14px" }],
-  "marginBottom": ["2rem", "3rem"],
+  "marginTop": ["0", "1rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
   "columns": { "mobile": 1, "desktop": 2 },
   "columnWidths": { "mobile": [1], "desktop": [1.2, 1] },
   "columnGaps": { "mobile": "0", "desktop": "0" },
   "columnStyles": {
-    "mobile": [{ "padding": "1.5rem", "gap": "1rem" }],
+    "mobile": [{ "padding": "1.25rem", "gap": "0.875rem" }],
     "desktop": [
-      { "padding": "2rem", "gap": "1.25rem" },
-      { "padding": "2rem", "gap": "1.25rem" }
+      { "padding": "2.25rem", "gap": "1.25rem" },
+      { "padding": "2.25rem", "gap": "1.25rem" }
     ]
   },
   "elementOrder": [
@@ -60,7 +63,8 @@
       "alt": "Before redesign",
       "objectFit": "cover",
       "width": "100%",
-      "height": ["18rem", "26rem"],
+      "height": ["18rem", "52vh"],
+      "constraints": [{ "maxHeight": "24rem" }, { "maxHeight": "36rem" }],
       "borderRadius": "1rem",
       "align": "center"
     },
@@ -89,7 +93,8 @@
       "alt": "After redesign",
       "objectFit": "cover",
       "width": "100%",
-      "height": ["18rem", "26rem"],
+      "height": ["18rem", "52vh"],
+      "constraints": [{ "maxHeight": "24rem" }, { "maxHeight": "36rem" }],
       "borderRadius": "1rem",
       "align": "center"
     },

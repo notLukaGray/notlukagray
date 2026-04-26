@@ -738,8 +738,8 @@ function processElement(el: unknown): unknown {
   if (withDefaults !== el) changed = true;
   const result = { ...(withDefaults as Record<string, unknown>) };
 
-  // elementGroup: recurse into section.definitions
-  if (result.type === "elementGroup") {
+  // elementGroup / elementInfiniteScroll: recurse into section.definitions
+  if (result.type === "elementGroup" || result.type === "elementInfiniteScroll") {
     const section = asRecord(result.section);
     const definitions = asRecord(section?.definitions);
     if (section && definitions) {

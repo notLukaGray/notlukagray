@@ -1,24 +1,36 @@
 {
   "type": "contentBlock",
   "id": "unlock_modal_subline",
-  "ariaLabel": "Unlock subline",
   "width": "100%",
   "height": "hug",
   "align": "center",
   "fill": "transparent",
   "gap": "0",
-  "elementOrder": ["unlock_modal_description"],
+  "flexDirection": "column",
+  "elementOrder": ["unlock_modal_description", "email_link"],
   "definitions": {
     "unlock_modal_description": {
       "type": "elementBody",
       "id": "unlock_modal_description",
       "level": 3,
-      "text": "Enter the password you received to view the content.",
+      "text": "I am not a fan of passwords. Lawyers are.",
+      "align": "center",
+      "textAlign": "center",
+      "width": "100%",
+      "wordWrap": true
+    },
+    "email_link": {
+      "type": "elementLink",
+      "id": "email_link",
+      "label": "Email me if you need access",
+      "copyType": "body",
+      "level": 3,
       "align": "center",
       "textAlign": "center",
       "width": "100%",
       "wordWrap": true,
-      "marginBottom": "1rem"
+      "marginBottom": "1rem",
+      "href": "mailto:hello@notlukagray.com"
     }
   }
 }

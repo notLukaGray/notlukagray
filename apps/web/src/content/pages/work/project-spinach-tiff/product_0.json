@@ -1,0 +1,8 @@
+{
+  "type": "divider",
+  "id": "product_intro_spacer",
+  "width": ["100%", "88%"],
+  "height": ["92vh", "100vh"],
+  "align": "full",
+  "layers": [{ "fill": "transparent" }]
+}

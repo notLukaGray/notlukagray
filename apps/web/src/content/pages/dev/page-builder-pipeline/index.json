@@ -1,6 +1,5 @@
 {
   "title": "The page builder pipeline: make it all data",
-  "slug": "page-builder-pipeline",
   "description": "Why I built a page builder as a pipeline—Load, Expand, Resolve, Render—and how it stays simple, testable, and data-driven.",
   "assetBaseUrl": "/research",
   "sectionOrder": [

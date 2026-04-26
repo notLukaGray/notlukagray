@@ -14,6 +14,7 @@
   "fixed": true,
   "fixedPosition": "bottom",
   "fixedOffset": "0px",
+  "zIndex": 200,
   "fill": "oklch(from var(--pb-secondary) l c h / 0.5)",
   "columnGaps": "auto",
   "contentWidth": "min(90%,500px)",
@@ -24,15 +25,15 @@
   "effects": [
     {
       "type": "glass",
-      "bezelType": "lip",
-      "bezelWidth": 6,
-      "glassThickness": 20,
+      "bezelType": "convex_squircle",
+      "bezelWidth": 60,
+      "glassThickness": 2,
       "refractiveIndex": 1.5,
       "blur": 5,
-      "scaleRatio": 1,
-      "specularOpacity": 1,
-      "specularSaturation": 50,
-      "magnifyingScale": 0.5,
+      "scaleRatio": 0.1,
+      "specularOpacity": 0,
+      "specularSaturation": 5,
+      "magnifyingScale": 1,
       "dropShadow": true
     }
   ],

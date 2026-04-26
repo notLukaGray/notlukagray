@@ -1,9 +1,26 @@
 {
-  "slug": "work",
   "title": "Work",
   "description": "Work by Luka Gray",
+  "filterConfig": {
+    "categories": [
+      {
+        "key": "brand",
+        "label": "Brand"
+      },
+      {
+        "key": "ability",
+        "label": "Ability"
+      }
+    ]
+  },
   "sectionOrder": ["hero"],
   "bgKey": "bg",
+  "presets": ["work-index.json"],
+  "scroll": {
+    "lockBody": true,
+    "overflowX": "hidden",
+    "overflowY": "hidden"
+  },
   "definitions": {
     "bg": {
       "type": "backgroundVariable",
@@ -15,224 +32,242 @@
     },
     "hero": {
       "type": "contentBlock",
-      "flexDirection": "column",
       "ariaLabel": "Work index",
       "width": "100%",
-      "height": "hug",
+      "height": [
+        "calc(100dvh - var(--nav-height, 64px) - 2.75rem)",
+        "calc(100dvh - var(--nav-height, 64px) - 6rem)"
+      ],
+      "contentHeight": "full",
       "align": "center",
       "fill": "transparent",
-      "paddingTop": "8rem",
-      "paddingBottom": "4rem",
+      "overflow": "hidden",
+      "paddingTop": ["0.35rem", "0.75rem"],
+      "paddingBottom": ["0", "0.75rem"],
+      "flexDirection": "column",
+      "justifyContent": "flex-start",
+      "alignItems": "stretch",
+      "gap": ["0.25rem", "1.25rem"],
       "elementOrder": [
-        "heading",
-        "lenero",
-        "project-brand",
-        "project-campaign",
-        "project-cinematic",
-        "project-documentary",
-        "project-editorial",
-        "project-exhibition",
-        "project-immersive",
-        "project-motion",
-        "project-photography",
-        "project-process",
-        "project-product",
-        "project-systems",
-        "clean-it-up"
+        "bg-spinach-tiff",
+        "bg-brand",
+        "bg-campaign",
+        "bg-cinematic",
+        "bg-documentary",
+        "bg-editorial",
+        "bg-exhibition",
+        "bg-immersive",
+        "bg-motion",
+        "bg-photography",
+        "bg-process",
+        "bg-systems",
+        "bg-clean-it-up",
+        "bg-lenero",
+        "page-heading",
+        "layout"
       ],
       "definitions": {
-        "heading": {
-          "type": "elementHeading",
-          "level": 1,
-          "text": "Work",
-          "align": "center",
-          "width": "hug",
-          "marginBottom": "3rem"
+        "bg-spinach-tiff": {
+          "preset": "preset-bg-spinach-tiff"
         },
-        "lenero": {
-          "type": "elementLink",
-          "href": "/work/lenero",
-          "label": "Echo — Short Documentary",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-brand": {
+          "preset": "preset-bg-brand"
         },
-        "project-brand": {
-          "type": "elementLink",
-          "href": "/work/project-brand",
-          "label": "NOMA — Brand Identity",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-campaign": {
+          "preset": "preset-bg-campaign"
         },
-        "project-campaign": {
-          "type": "elementLink",
-          "href": "/work/project-campaign",
-          "label": "Meridian — Your Future, Designed",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-cinematic": {
+          "preset": "preset-bg-cinematic"
         },
-        "project-cinematic": {
-          "type": "elementLink",
-          "href": "/work/project-cinematic",
-          "label": "Golden Hour — Short Film",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-documentary": {
+          "preset": "preset-bg-documentary"
         },
-        "project-documentary": {
-          "type": "elementLink",
-          "href": "/work/project-documentary",
-          "label": "Still Water — Documentary Film",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-editorial": {
+          "preset": "preset-bg-editorial"
         },
-        "project-editorial": {
-          "type": "elementLink",
-          "href": "/work/project-editorial",
-          "label": "Aperture Annual — Art Direction",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-exhibition": {
+          "preset": "preset-bg-exhibition"
         },
-        "project-exhibition": {
-          "type": "elementLink",
-          "href": "/work/project-exhibition",
-          "label": "Shifting Ground — Exhibition Design",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-immersive": {
+          "preset": "preset-bg-immersive"
         },
-        "project-immersive": {
-          "type": "elementLink",
-          "href": "/work/project-immersive",
-          "label": "Threshold — Immersive Installation",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-motion": {
+          "preset": "preset-bg-motion"
         },
-        "project-motion": {
-          "type": "elementLink",
-          "href": "/work/project-motion",
-          "label": "Parallax — Title Sequence",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-photography": {
+          "preset": "preset-bg-photography"
         },
-        "project-photography": {
-          "type": "elementLink",
-          "href": "/work/project-photography",
-          "label": "Last Light — Photography Series",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-process": {
+          "preset": "preset-bg-process"
         },
-        "project-process": {
-          "type": "elementLink",
-          "href": "/work/project-process",
-          "label": "Vessel — Product Design Process",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-systems": {
+          "preset": "preset-bg-systems"
         },
-        "project-product": {
-          "type": "elementLink",
-          "href": "/work/project-product",
-          "label": "Koto — Product Design",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-clean-it-up": {
+          "preset": "preset-bg-clean-it-up"
         },
-        "project-systems": {
-          "type": "elementLink",
-          "href": "/work/project-systems",
-          "label": "Atlas DS — Design System",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "bg-lenero": {
+          "preset": "preset-bg-lenero"
         },
-        "clean-it-up": {
-          "type": "elementLink",
-          "href": "/work/clean-it-up",
-          "label": "Clean It Up",
-          "copyType": "body",
-          "level": 2,
-          "width": "hug",
-          "align": "center",
-          "linkDefault": "var(--pb-on-secondary)",
-          "linkHover": "var(--pb-link-hover)",
-          "linkActive": "var(--pb-link-active)",
-          "linkTransition": ".3s"
+        "layout": {
+          "preset": "work-layout-shell",
+          "section": {
+            "elementOrder": ["list-col", "preview-col"],
+            "definitions": {
+              "list-col": {
+                "preset": "work-list-col-shell",
+                "section": {
+                  "elementOrder": ["list-scroller"],
+                  "definitions": {
+                    "list-scroller": {
+                      "preset": "work-list-scroller-shell",
+                      "section": {
+                        "elementOrder": ["project-list"],
+                        "definitions": {
+                          "project-list": {
+                            "preset": "work-project-list-shell",
+                            "section": {
+                              "elementOrder": [
+                                "list-top-spacer",
+                                "spinach-tiff-item",
+                                "brand-item",
+                                "campaign-item",
+                                "cinematic-item",
+                                "documentary-item",
+                                "editorial-item",
+                                "exhibition-item",
+                                "immersive-item",
+                                "motion-item",
+                                "photography-item",
+                                "process-item",
+                                "systems-item",
+                                "clean-it-up-item",
+                                "lenero-item"
+                              ],
+                              "definitions": {
+                                "list-top-spacer": {
+                                  "preset": "work-list-top-spacer"
+                                },
+                                "spinach-tiff-item": {
+                                  "preset": "preset-spinach-tiff-item"
+                                },
+                                "brand-item": {
+                                  "preset": "preset-brand-item"
+                                },
+                                "campaign-item": {
+                                  "preset": "preset-campaign-item"
+                                },
+                                "cinematic-item": {
+                                  "preset": "preset-cinematic-item"
+                                },
+                                "documentary-item": {
+                                  "preset": "preset-documentary-item"
+                                },
+                                "editorial-item": {
+                                  "preset": "preset-editorial-item"
+                                },
+                                "exhibition-item": {
+                                  "preset": "preset-exhibition-item"
+                                },
+                                "immersive-item": {
+                                  "preset": "preset-immersive-item"
+                                },
+                                "motion-item": {
+                                  "preset": "preset-motion-item"
+                                },
+                                "photography-item": {
+                                  "preset": "preset-photography-item"
+                                },
+                                "process-item": {
+                                  "preset": "preset-process-item"
+                                },
+                                "systems-item": {
+                                  "preset": "preset-systems-item"
+                                },
+                                "clean-it-up-item": {
+                                  "preset": "preset-clean-it-up-item"
+                                },
+                                "lenero-item": {
+                                  "preset": "preset-lenero-item"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "preview-col": {
+                "preset": "work-preview-col-shell",
+                "section": {
+                  "elementOrder": [
+                    "spinach-tiff-preview",
+                    "brand-preview",
+                    "campaign-preview",
+                    "cinematic-preview",
+                    "documentary-preview",
+                    "editorial-preview",
+                    "exhibition-preview",
+                    "immersive-preview",
+                    "motion-preview",
+                    "photography-preview",
+                    "process-preview",
+                    "systems-preview",
+                    "clean-it-up-preview",
+                    "lenero-preview"
+                  ],
+                  "definitions": {
+                    "spinach-tiff-preview": {
+                      "preset": "preset-spinach-tiff-preview"
+                    },
+                    "brand-preview": {
+                      "preset": "preset-brand-preview"
+                    },
+                    "campaign-preview": {
+                      "preset": "preset-campaign-preview"
+                    },
+                    "cinematic-preview": {
+                      "preset": "preset-cinematic-preview"
+                    },
+                    "documentary-preview": {
+                      "preset": "preset-documentary-preview"
+                    },
+                    "editorial-preview": {
+                      "preset": "preset-editorial-preview"
+                    },
+                    "exhibition-preview": {
+                      "preset": "preset-exhibition-preview"
+                    },
+                    "immersive-preview": {
+                      "preset": "preset-immersive-preview"
+                    },
+                    "motion-preview": {
+                      "preset": "preset-motion-preview"
+                    },
+                    "photography-preview": {
+                      "preset": "preset-photography-preview"
+                    },
+                    "process-preview": {
+                      "preset": "preset-process-preview"
+                    },
+                    "systems-preview": {
+                      "preset": "preset-systems-preview"
+                    },
+                    "clean-it-up-preview": {
+                      "preset": "preset-clean-it-up-preview"
+                    },
+                    "lenero-preview": {
+                      "preset": "preset-lenero-preview"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
-      },
-      "gap": "1rem"
+      }
     }
   }
 }

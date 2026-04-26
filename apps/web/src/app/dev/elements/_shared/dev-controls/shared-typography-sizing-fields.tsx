@@ -12,7 +12,7 @@ import { ResponsiveSelectField, ResponsiveTextField } from "./field-primitives";
 export type TypographySizingShape = {
   width?: PbResponsiveValue<string>;
   height?: PbResponsiveValue<string>;
-  align?: PbResponsiveValue<"left" | "center" | "right">;
+  align?: PbResponsiveValue<"left" | "center" | "right" | "full">;
   alignY?: PbResponsiveValue<"top" | "center" | "bottom">;
   textAlign?: PbResponsiveValue<"left" | "center" | "right" | "justify">;
   zIndex?: number;

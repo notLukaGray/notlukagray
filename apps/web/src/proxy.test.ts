@@ -3,7 +3,11 @@ import { NextRequest } from "next/server";
 import { accessCookieName } from "@/core/lib/auth-constants";
 
 vi.mock("@/core/lib/protected-slugs.generated", () => ({
-  PROTECTED_PAGE_PATHS: new Set<string>(["work/lenero", "research/secret-case"]),
+  PROTECTED_PAGE_PATHS: new Set<string>([
+    "work/lenero",
+    "research/secret-case",
+    "work/project-spinach-tiff",
+  ]),
 }));
 
 const verifyAccessTokenEdge = vi.fn<() => Promise<boolean>>();
@@ -22,14 +26,16 @@ describe("proxy", () => {
     expect(verifyAccessTokenEdge).not.toHaveBeenCalled();
   });
 
-  it("redirects for protected non-work path when cookie invalid", async () => {
+  it("redirects protected path to unlock route when cookie invalid", async () => {
     process.env.SITE_PASSWORD = "secret";
     verifyAccessTokenEdge.mockResolvedValue(false);
     const { proxy } = await import("./proxy");
     const req = new NextRequest("https://example.com/research/secret-case");
     const res = await proxy(req);
     expect(res.status).toBe(307);
-    expect(res.headers.get("location")).toContain("/research/secret-case?unlock=1");
+    expect(res.headers.get("location")).toContain(
+      "/unlock?unlock_redirect=%2Fresearch%2Fsecret-case"
+    );
   });
 
   it("passes through protected path when cookie is valid", async () => {
@@ -72,7 +78,18 @@ describe("proxy", () => {
     const req = new NextRequest("https://example.com/research/secret-case/");
     const res = await proxy(req);
     expect(res.status).toBe(307);
-    expect(res.headers.get("location")).toContain("/research/secret-case/?unlock=1");
+    expect(res.headers.get("location")).toContain(
+      "/unlock/?unlock_redirect=%2Fresearch%2Fsecret-case%2F"
+    );
+  });
+
+  it("uses modal flow when unlock=1 and cookie invalid", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockResolvedValue(false);
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/research/secret-case?unlock=1");
+    const res = await proxy(req);
+    expect(res.status).toBe(200);
   });
 
   it("passes through protected path when unlock=1 and cookie invalid", async () => {
@@ -94,5 +111,18 @@ describe("proxy", () => {
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toContain("/research/secret-case");
     expect(res.headers.get("location")).not.toContain("unlock=1");
+  });
+
+  it("includes unlock preview for spinach-tiff protected path", async () => {
+    process.env.SITE_PASSWORD = "secret";
+    verifyAccessTokenEdge.mockResolvedValue(false);
+    const { proxy } = await import("./proxy");
+    const req = new NextRequest("https://example.com/work/project-spinach-tiff");
+    const res = await proxy(req);
+    expect(res.status).toBe(307);
+    expect(res.headers.get("location")).toContain(
+      "/unlock?unlock_redirect=%2Fwork%2Fproject-spinach-tiff"
+    );
+    expect(res.headers.get("location")).toContain("unlock_preview=");
   });
 });

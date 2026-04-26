@@ -63,7 +63,7 @@ export function ModalAnimationWrapper({
   return (
     <AnimatePresence>
       {show && (
-        <MotionFromJson key={modalKey} motion={merged}>
+        <MotionFromJson key={modalKey} motion={merged} className="fixed inset-0 z-190">
           {children}
         </MotionFromJson>
       )}

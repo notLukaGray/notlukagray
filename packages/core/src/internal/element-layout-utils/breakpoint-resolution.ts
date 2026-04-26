@@ -2,6 +2,13 @@ import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-
 import { resolveResponsiveValue } from "../../lib/responsive-value";
 
 const LAYOUT_KEYS = [
+  "display",
+  "flexDirection",
+  "alignItems",
+  "justifyContent",
+  "flexWrap",
+  "flex",
+  "overflow",
   "width",
   "height",
   "borderRadius",
@@ -13,9 +20,19 @@ const LAYOUT_KEYS = [
   "marginLeft",
   "marginRight",
   "gap",
+  "rowGap",
+  "columnGap",
   "length",
   "padding",
+  "paddingTop",
+  "paddingRight",
+  "paddingBottom",
+  "paddingLeft",
   "level",
+  "activeScale",
+  "inactiveScale",
+  "activeOpacity",
+  "inactiveOpacity",
 ] as const;
 
 function valueNeedsResolution(value: unknown): boolean {

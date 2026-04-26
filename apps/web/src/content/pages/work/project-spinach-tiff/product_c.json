@@ -3,9 +3,12 @@
   "id": "product_c",
   "width": ["100%", "88%"],
   "height": "hug",
+  "minHeight": ["42vh", "34vh"],
   "align": ["full", "center"],
+  "scrollSpeed": 0.94,
   "fill": "transparent",
-  "marginBottom": ["2rem", "3rem"],
+  "marginTop": ["-2rem", "-4rem"],
+  "marginBottom": ["1.5rem", "2.5rem"],
   "columns": {
     "mobile": 1,
     "desktop": 3
@@ -16,7 +19,7 @@
   },
   "columnGaps": {
     "mobile": "0.75rem",
-    "desktop": "0.75rem"
+    "desktop": "1rem"
   },
   "columnStyles": {
     "mobile": [
@@ -26,13 +29,13 @@
     ],
     "desktop": [
       {
-        "gap": "0.75rem"
+        "gap": "1rem"
       },
       {
-        "gap": "0.75rem"
+        "gap": "1rem"
       },
       {
-        "gap": "0.75rem"
+        "gap": "1rem"
       }
     ]
   },
@@ -56,17 +59,17 @@
     },
     "desktop": {
       "c-f1": {
-        "padding": "1.75rem",
+        "padding": "2rem",
         "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.5rem"
       },
       "c-f2": {
-        "padding": "1.75rem",
+        "padding": "2rem",
         "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.5rem"
       },
       "c-f3": {
-        "padding": "1.75rem",
+        "padding": "2rem",
         "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
         "borderRadius": "1.5rem"
       }

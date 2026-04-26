@@ -22,7 +22,12 @@ import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
 export type UseElementVideoStylesParams = {
   width?: string | [string, string];
   height?: string | [string, string];
-  align?: "left" | "center" | "right" | ["left" | "center" | "right", "left" | "center" | "right"];
+  align?:
+    | "left"
+    | "center"
+    | "right"
+    | "full"
+    | ["left" | "center" | "right" | "full", "left" | "center" | "right" | "full"];
   alignY?: "top" | "center" | "bottom" | ["top" | "center" | "bottom", "top" | "center" | "bottom"];
   borderRadius?: string | [string, string];
   constraints?:
