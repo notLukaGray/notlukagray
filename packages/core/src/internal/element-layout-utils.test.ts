@@ -105,6 +105,20 @@ describe("element-layout-utils", () => {
       expect(style.maxWidth).toBe("600px");
       expect(style.minHeight).toBe("100px");
     });
+
+    it("lets explicit sizing bounds override exported constraints", () => {
+      const resolved: ResolvedElementLayout = {
+        width: "50%",
+        minWidth: "240px",
+        constraints: {
+          minWidth: "200px",
+          maxWidth: "600px",
+        },
+      };
+      const style = computeSizingStyle(resolved);
+      expect(style.minWidth).toBe("240px");
+      expect(style.maxWidth).toBe("600px");
+    });
   });
 
   describe("getElementLayoutStyle", () => {

@@ -7,7 +7,7 @@
     "ability": ["Art Direction", "CGI", "Motion Graphics", "Sound Design"]
   },
   "description": "A playful trailer for Spinach shown in association with TIFF, parodying a familiar fairytale studio opening.",
-  "ogImage": "https://media.notlukagray.com/website/work/project-spinach-tiff/ogimgage.jpg",
+  "ogImage": "https://media.notlukagray.com/website/work/project-spinach-tiff/ogimage.jpg",
   "sectionOrder": ["product_0", "product_a", "product_b", "product_c", "product_d"],
   "bgKey": "bg-product",
   "scroll": {

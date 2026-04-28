@@ -185,25 +185,21 @@ export function computeSizingStyle(resolved: ResolvedElementLayout): CSSProperti
     style.height = height;
     if (resolved.height != null && resolved.height !== "hug") style.minHeight = 0;
   }
-  if (resolved.minWidth != null) style.minWidth = resolved.minWidth;
-  if (resolved.maxWidth != null) style.maxWidth = resolved.maxWidth;
-  if (resolved.minHeight != null) style.minHeight = resolved.minHeight;
-  if (resolved.maxHeight != null) style.maxHeight = resolved.maxHeight;
   const constraints = Array.isArray(resolved.constraints)
     ? undefined
     : (resolved.constraints as
         | { minWidth?: string; maxWidth?: string; minHeight?: string; maxHeight?: string }
         | undefined);
   if (constraints) {
-    if (constraints.minWidth != null && style.minWidth == null)
-      style.minWidth = constraints.minWidth;
-    if (constraints.maxWidth != null && style.maxWidth == null)
-      style.maxWidth = constraints.maxWidth;
-    if (constraints.minHeight != null && style.minHeight == null)
-      style.minHeight = constraints.minHeight;
-    if (constraints.maxHeight != null && style.maxHeight == null)
-      style.maxHeight = constraints.maxHeight;
+    if (constraints.minWidth != null) style.minWidth = constraints.minWidth;
+    if (constraints.maxWidth != null) style.maxWidth = constraints.maxWidth;
+    if (constraints.minHeight != null) style.minHeight = constraints.minHeight;
+    if (constraints.maxHeight != null) style.maxHeight = constraints.maxHeight;
   }
+  if (resolved.minWidth != null) style.minWidth = resolved.minWidth;
+  if (resolved.maxWidth != null) style.maxWidth = resolved.maxWidth;
+  if (resolved.minHeight != null) style.minHeight = resolved.minHeight;
+  if (resolved.maxHeight != null) style.maxHeight = resolved.maxHeight;
   return style;
 }
 

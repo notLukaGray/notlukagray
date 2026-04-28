@@ -91,6 +91,13 @@ function filterElementOrder(
   return undefined;
 }
 
+function idMatchesRemovedKey(id: string | undefined, removedKeys: ReadonlySet<string>): boolean {
+  if (!id) return false;
+  if (removedKeys.has(id)) return true;
+  const namespaceIndex = id.lastIndexOf(":");
+  return namespaceIndex >= 0 && removedKeys.has(id.slice(namespaceIndex + 1));
+}
+
 function stripFromSection(section: SectionBlock, removedKeys: ReadonlySet<string>): SectionBlock {
   const s = section as SectionBlock & {
     elements?: ElementBlock[];
@@ -100,7 +107,7 @@ function stripFromSection(section: SectionBlock, removedKeys: ReadonlySet<string
 
   if (Array.isArray(s.elements)) {
     next.elements = s.elements
-      .filter((el) => !removedKeys.has((el as { id?: string }).id ?? ""))
+      .filter((el) => !idMatchesRemovedKey((el as { id?: string }).id, removedKeys))
       .map((el) => stripFromElement(el, removedKeys));
   }
 

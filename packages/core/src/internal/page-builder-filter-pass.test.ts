@@ -133,6 +133,33 @@ describe("filterPageByActiveTags", () => {
     ]);
   });
 
+  it("drops expanded top-level elements whose ids were namespaced during page expansion", () => {
+    const sections = makeSections() as unknown as Array<{
+      elements: Array<{ id: string; type: string }>;
+      elementOrder: string[];
+    }>;
+    sections[0]!.elements[0]!.id = "contentBlock_0:bg-spinach";
+    sections[0]!.elements[1]!.id = "contentBlock_0:bg-brand";
+
+    const result = filterPageByActiveTags({
+      sections: sections as unknown as SectionBlock[],
+      projectGroups,
+      activeFilters: { brand: ["spinach"] },
+      getProjectTags,
+    });
+
+    const top = result.sections[0] as unknown as {
+      elementOrder: string[];
+      elements: { id: string }[];
+    };
+    expect(top.elementOrder).toEqual(["bg-spinach", "page-heading", "layout"]);
+    expect(top.elements.map((e) => e.id)).toEqual([
+      "contentBlock_0:bg-spinach",
+      "page-heading",
+      "layout",
+    ]);
+  });
+
   it("AND-combines categories: project must match every active category", () => {
     const onlyMatchingBrand = filterPageByActiveTags({
       sections: makeSections(),
