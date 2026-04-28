@@ -13,6 +13,8 @@ export type ElementVideoInteractiveContainerProps = {
   onMouseLeave: () => void;
   onMouseMove?: () => void;
   onClick?: (e: React.MouseEvent<HTMLSpanElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLSpanElement>) => void;
+  tabIndex?: number;
   children: ReactNode;
 };
 
@@ -38,6 +40,8 @@ export function ElementVideoInteractiveContainer({
   onMouseLeave,
   onMouseMove,
   onClick,
+  onKeyDown,
+  tabIndex,
   children,
 }: ElementVideoInteractiveContainerProps) {
   return (
@@ -48,8 +52,10 @@ export function ElementVideoInteractiveContainer({
         WebkitTapHighlightColor: "transparent",
         WebkitTouchCallout: "none",
         touchAction: "manipulation",
+        outline: "none",
         ...(isFullscreen ? fullscreenFillStyle : {}),
       }}
+      tabIndex={tabIndex}
       onContextMenu={onContextMenu}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
@@ -57,6 +63,7 @@ export function ElementVideoInteractiveContainer({
       onMouseLeave={onMouseLeave}
       onMouseMove={onMouseMove}
       onClick={onClick}
+      onKeyDown={onKeyDown}
     >
       {children}
     </span>

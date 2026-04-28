@@ -19,6 +19,7 @@ import {
 } from "@pb/runtime-react/core/lib/globals";
 import { useVideoPlayerState } from "@/page-builder/hooks/use-video-player-state";
 import { useVideoControls } from "@/page-builder/hooks/use-video-controls";
+import { useVideoKeyboard } from "@/page-builder/hooks/use-video-keyboard";
 import { useVideoFullscreen } from "@/page-builder/hooks/use-video-fullscreen";
 import { useElementVideoStyles } from "@/page-builder/hooks/use-element-video-styles";
 import { useVideoContextValue } from "@/page-builder/hooks/use-video-context-value";
@@ -351,6 +352,42 @@ export function ElementVideo({
     armVideoLoadImmediately,
     startLoad: videoSourceState.startLoad,
   });
+  const keyboardHandlers = useMemo(
+    () => ({
+      onPlay: () => void baseControls.play(),
+      onPause: baseControls.pause,
+      onTogglePlay: () => {
+        baseControls.handleTogglePlay();
+        state.showFeedback(state.isPlaying ? "pause" : "play");
+      },
+      onSeek: (delta: number) => {
+        baseControls.handleSeek(delta);
+        state.showFeedback(delta < 0 ? "seekBack" : "seekForward");
+      },
+      onMuteToggle: baseControls.toggleMute,
+      onFullscreenToggle: fullscreen.toggleFullscreen,
+    }),
+    [baseControls, fullscreen.toggleFullscreen, state]
+  );
+
+  useVideoKeyboard({
+    containerRef,
+    keyBindings: moduleConfig?.keyBindings,
+    handlers: keyboardHandlers,
+  });
+
+  const handleContainerClick = useCallback(
+    (e: React.MouseEvent<HTMLSpanElement>) => {
+      const target = e.target as Element;
+      if (target.closest('button, input, select, a, [role="button"], [data-no-click-toggle]'))
+        return;
+      baseControls.handleTogglePlay();
+      state.showFeedback(state.isPlaying ? "pause" : "play");
+      baseControls.showControlsTemporarily();
+    },
+    [baseControls, state]
+  );
+
   const moduleEffects = useMemo(
     () =>
       coerceSectionEffects(
@@ -432,7 +469,8 @@ export function ElementVideo({
         }}
         onMouseLeave={controls.scheduleHideControls}
         onMouseMove={controls.showControlsTemporarily}
-        onClick={undefined}
+        onClick={showPlayButton ? handleContainerClick : undefined}
+        tabIndex={moduleConfig?.keyBindings?.length && showPlayButton ? 0 : undefined}
       >
         <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
           {showVideo && preferredSrc ? (

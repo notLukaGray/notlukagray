@@ -98,6 +98,16 @@ export const moduleBlockSchema = z
       })
       .optional(),
     behavior: z.record(z.string(), z.union([z.number(), z.string(), z.boolean()])).optional(),
+    /** Keyboard shortcuts for the player. key matches KeyboardEvent.code (e.g. "Space", "ArrowLeft"). */
+    keyBindings: z
+      .array(
+        z.object({
+          key: z.string(),
+          action: z.string(),
+          payload: z.number().optional(),
+        })
+      )
+      .optional(),
     /** Optional Framer Motion config for the overlay container (e.g. controls fade). When omitted, built from behavior (controlsTransitionMs, etc.). */
     overlayMotion: motionPropsSchema,
     /** Generic visual effects for the module surface, including glass. */

@@ -14,6 +14,16 @@
     "transitionEasing": "easeOut",
     "feedbackDurationMs": 100
   },
+  "keyBindings": [
+    { "key": "Space", "action": "assetTogglePlay" },
+    { "key": "KeyK", "action": "assetTogglePlay" },
+    { "key": "ArrowLeft", "action": "assetSeek", "payload": -5 },
+    { "key": "KeyJ", "action": "assetSeek", "payload": -5 },
+    { "key": "ArrowRight", "action": "assetSeek", "payload": 5 },
+    { "key": "KeyL", "action": "assetSeek", "payload": 5 },
+    { "key": "KeyM", "action": "assetMute" },
+    { "key": "KeyF", "action": "videoFullscreen" }
+  ],
   "overlayMotion": {
     "initial": {
       "opacity": 0

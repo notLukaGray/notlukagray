@@ -2125,6 +2125,28 @@
         ]
       }
     },
+    "keyBindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "key",
+          "action"
+        ],
+        "additionalProperties": false
+      }
+    },
     "overlayMotion": {
       "type": "object",
       "properties": {
