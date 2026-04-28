@@ -58,7 +58,14 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const { slug: segments } = await params;
   if (!segments?.length) return {};
 
-  const page = await getPageAsync(segments.join("/"));
+  const query = await searchParams;
+  const isUnlockRoute = segments.length === 1 && segments[0] === "unlock";
+  const redirectTarget = isUnlockRoute
+    ? safeRedirectPath(getSingleQueryValue(query.unlock_redirect))
+    : null;
+  const effectiveSlug = redirectTarget ? redirectTarget.replace(/^\/+/, "") : segments.join("/");
+
+  const page = await getPageAsync(effectiveSlug);
   if (!page) return {};
 
   const { title, description, ogImage, canonicalUrl, robots, keywords, filterConfig } = page as {
@@ -71,12 +78,19 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     filterConfig?: FilterConfig;
   };
 
-  const query = await searchParams;
   const activeFilters = parseFiltersFromQuery(query, filterConfig);
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
-  const effectiveRobots = hasActiveFilters ? "noindex, follow" : robots;
-  const effectiveCanonical = hasActiveFilters ? `/${segments.join("/")}` : canonicalUrl;
+  const effectiveRobots = isUnlockRoute
+    ? "noindex, follow"
+    : hasActiveFilters
+      ? "noindex, follow"
+      : robots;
+  const effectiveCanonical = isUnlockRoute
+    ? null
+    : hasActiveFilters
+      ? `/${segments.join("/")}`
+      : canonicalUrl;
 
   return {
     title,
