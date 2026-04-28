@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type { ModalProps } from "@pb/core";
 import { ModalRenderer } from "@pb/runtime-react/modal";
 import { DeviceTypeProvider as RuntimeDeviceTypeProvider } from "@pb/runtime-react/core/providers/device-type-provider";
@@ -25,7 +25,6 @@ export function WithUnlockModal({
 }: Props) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const modalOpen = Boolean(unlockModalProps);
   const hideChildren = modalOpen && hideChildrenWhenModalOpen;
   const [overlayEntered, setOverlayEntered] = useState(false);
@@ -51,13 +50,13 @@ export function WithUnlockModal({
       return;
     }
 
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(window.location.search);
     params.delete("unlock");
     params.delete("unlock_redirect");
     params.delete("unlock_preview");
     const nextUrl = params.toString() ? `${pathname}?${params.toString()}` : pathname;
     router.replace(nextUrl);
-  }, [pathname, router, searchParams]);
+  }, [pathname, router]);
 
   return (
     <>

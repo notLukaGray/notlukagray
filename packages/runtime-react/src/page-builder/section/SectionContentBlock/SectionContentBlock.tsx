@@ -27,7 +27,10 @@ import { useFixedTrait } from "@/page-builder/section/position/use-fixed-trait";
 import { LayerStack } from "@/page-builder/section/stack/LayerStack";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 import { useSectionViewportTrigger } from "@/page-builder/triggers/core/use-section-viewport-trigger";
-import { buildSectionContentWrapperStyle } from "./section-content-block-content-wrapper-style";
+import {
+  buildSectionContentWrapperStyle,
+  sectionHeightCanStretchContent,
+} from "./section-content-block-content-wrapper-style";
 import { resolveSectionContentBlockElements } from "./section-content-block-element-resolution";
 import { ReorderableElementList } from "./ReorderableElementList";
 import { SectionContentBlockElementList } from "./SectionContentBlockElementList";
@@ -294,7 +297,7 @@ export function SectionContentBlock({
       ...buildSectionContentWrapperStyle({
         resolvedContentWidth,
         resolvedContentHeight,
-        sectionHasExplicitHeight: !!resolvedLayout?.height,
+        sectionHasExplicitHeight: sectionHeightCanStretchContent(resolvedLayout?.height),
         elementCount: elements.length,
         contentBackground: contentBackgroundWhenLayers,
       }),

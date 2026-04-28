@@ -144,13 +144,18 @@ export function ElementModuleChildren({
     // nested overflow (e.g. Work index elementInfiniteScroll) cannot scroll.
     const columnChildFillsMainAxis = isColumnLikeParent && resolvedBlockHeight === "100%";
     const rowChildFillsMainAxis = isRowLikeParent && resolvedBlockWidth === "100%";
-    const flexParentAxisFillStyle: CSSProperties =
-      columnChildFillsMainAxis || rowChildFillsMainAxis
+    const flexParentAxisFillStyle: CSSProperties = columnChildFillsMainAxis
+      ? {
+          flex: "1 1 0%",
+          minHeight: 0,
+          minWidth: 0,
+          alignSelf: "stretch",
+        }
+      : rowChildFillsMainAxis
         ? {
             flex: "1 1 0%",
             minHeight: 0,
             minWidth: 0,
-            alignSelf: "stretch",
           }
         : {};
     const cellStyle: CSSProperties = {

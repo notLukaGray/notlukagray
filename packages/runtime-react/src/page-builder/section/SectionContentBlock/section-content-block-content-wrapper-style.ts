@@ -54,3 +54,9 @@ export function buildSectionContentWrapperStyle(args: {
 
   return style;
 }
+
+export function sectionHeightCanStretchContent(height: string | undefined): boolean {
+  if (!height) return false;
+  const normalized = height.trim().toLowerCase();
+  return !["auto", "fit-content", "hug", "max-content", "min-content"].includes(normalized);
+}

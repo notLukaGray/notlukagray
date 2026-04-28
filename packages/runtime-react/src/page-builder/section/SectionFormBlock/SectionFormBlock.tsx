@@ -17,7 +17,10 @@ import { LayerStack } from "@/page-builder/section/stack/LayerStack";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 import { useSectionViewportTrigger } from "@/page-builder/triggers/core/use-section-viewport-trigger";
 import { useSectionCustomTriggers } from "@/page-builder/triggers/core/use-section-custom-triggers";
-import { buildSectionContentWrapperStyle } from "../SectionContentBlock/section-content-block-content-wrapper-style";
+import {
+  buildSectionContentWrapperStyle,
+  sectionHeightCanStretchContent,
+} from "../SectionContentBlock/section-content-block-content-wrapper-style";
 import { FormFieldRenderer, type FormFieldValue } from "@/page-builder/form-fields";
 import {
   collectFormFields,
@@ -202,7 +205,7 @@ export function SectionFormBlock({
       buildSectionContentWrapperStyle({
         resolvedContentWidth,
         resolvedContentHeight,
-        sectionHasExplicitHeight: !!resolvedLayout?.height,
+        sectionHasExplicitHeight: sectionHeightCanStretchContent(resolvedLayout?.height),
         elementCount: fields.length,
       }),
     [resolvedContentWidth, resolvedContentHeight, resolvedLayout?.height, fields.length]
