@@ -221,7 +221,10 @@ export const EXIT_PRESET_NAMES: readonly [string, ...string[]] =
     : (["fade"] as const);
 
 /** Valid reveal preset names for schema validation (same source as entrance presets). */
-export const REVEAL_PRESET_NAMES = ENTRANCE_PRESET_NAMES;
+export const REVEAL_PRESET_NAMES: readonly [string, ...string[]] =
+  Object.keys(entrancePresetsBuilt).length > 0
+    ? (Object.keys(entrancePresetsBuilt) as [string, ...string[]])
+    : (["fade"] as const);
 
 export const MOTION_DEFAULTS: {
   transition: typeof transitionFromJson;

@@ -30,16 +30,23 @@ export function buildContainerStyle({ axis }: InfiniteScrollContainerStyleOption
   return {
     width: "100%",
     height: "100%",
+    // In flex layouts, `min-height: auto` / `min-width: auto` sizes this box to the full track;
+    // the host then grows and `scrollHeight` never exceeds `clientHeight`. Zero mins allow the
+    // parent chain to cap height/width so overflow scrolling can occur.
+    minHeight: 0,
+    minWidth: 0,
     overflowX: isHorizontal ? "auto" : "hidden",
     overflowY: isHorizontal ? "hidden" : "auto",
     scrollbarWidth: "none",
     msOverflowStyle: "none",
     WebkitTapHighlightColor: "transparent",
     scrollBehavior: "auto",
-    scrollSnapType: isHorizontal ? "x mandatory" : "y mandatory",
+    // `proximity` keeps snap assistance without fighting wheel deltas the way `mandatory` can.
+    scrollSnapType: isHorizontal ? "x proximity" : "y proximity",
     cursor: "default",
     userSelect: "none",
     touchAction: isHorizontal ? "pan-x" : "pan-y",
+    overscrollBehavior: "contain",
   };
 }
 

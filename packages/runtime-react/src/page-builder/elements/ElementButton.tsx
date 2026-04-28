@@ -214,8 +214,7 @@ export function ElementButton({
   // competing inline style, so the CSS rules apply correctly.
   const wrapperStyle: CSSProperties = useMemo(() => {
     if (!hasGlassEffect) return rawWrapperStyle;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { background, ...rest } = rawWrapperStyle;
+    const { background: _, ...rest } = rawWrapperStyle;
     return rest;
   }, [hasGlassEffect, rawWrapperStyle]);
 

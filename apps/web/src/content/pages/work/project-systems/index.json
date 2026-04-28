@@ -3,6 +3,10 @@
   "description": "Design system for Atlas, a B2B analytics platform — component library, design tokens, documentation, and contribution model for a team of forty.",
   "ogImage": "https://media.notlukagray.com/website/work/project-systems/og.webp",
   "assetBaseUrl": "/work",
+  "tags": {
+    "brand": ["Atlas DS"],
+    "ability": ["Design System"]
+  },
   "sectionOrder": ["systems_a", "systems_b", "systems_c", "systems_d", "systems_e"],
   "bgKey": "bg-systems",
   "definitions": {

@@ -20,6 +20,7 @@ import {
 import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
 import { resolveThemeString } from "@/page-builder/theme/theme-string";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
+import { InlineFormattedText } from "./Shared/InlineFormattedText";
 
 type Props = Extract<ElementBlock, { type: "elementLink" }>;
 
@@ -78,6 +79,7 @@ export function ElementLink({
   aria,
   tabIndex,
   role,
+  wrapperStyle,
   ...rest
 }: Props) {
   const themeMode = usePageBuilderThemeMode();
@@ -129,6 +131,7 @@ export function ElementLink({
 
   // word wrap / overflow — must be on the text element, not the wrapper, for text-overflow to work
   const textStyle: CSSProperties = {
+    ...((wrapperStyle as CSSProperties | undefined) ?? {}),
     ...(resolveFontFamily(fontFamily) !== undefined
       ? { fontFamily: resolveFontFamily(fontFamily) }
       : {}),
@@ -157,41 +160,47 @@ export function ElementLink({
   const resolvedRel =
     rel ?? (resolvedTarget === "_blank" || external ? "noopener noreferrer" : undefined);
 
+  const linkNode = isInternal ? (
+    <Link
+      href={href}
+      className={linkClassName}
+      style={{ ...linkStyle, ...textStyle }}
+      target={target}
+      rel={rel}
+      download={download as string | undefined}
+      hrefLang={hreflang}
+      ping={ping}
+      referrerPolicy={referrerPolicy}
+      tabIndex={tabIndex}
+      {...(ariaProps ? ariaProps : {})}
+    >
+      <InlineFormattedText text={label} />
+    </Link>
+  ) : (
+    <a
+      href={href}
+      className={linkClassName}
+      style={{ ...linkStyle, ...textStyle }}
+      target={resolvedTarget}
+      rel={resolvedRel}
+      download={download as string | boolean | undefined}
+      hrefLang={hreflang}
+      ping={ping}
+      referrerPolicy={referrerPolicy}
+      tabIndex={tabIndex}
+      {...(ariaProps ? ariaProps : {})}
+    >
+      <InlineFormattedText text={label} />
+    </a>
+  );
+
+  if (Object.keys(blockStyle).length === 0 && role == null) {
+    return linkNode;
+  }
+
   return (
     <div className="shrink-0 max-w-full" style={blockStyle} role={role}>
-      {isInternal ? (
-        <Link
-          href={href}
-          className={linkClassName}
-          style={{ ...linkStyle, ...textStyle }}
-          target={target}
-          rel={rel}
-          download={download as string | undefined}
-          hrefLang={hreflang}
-          ping={ping}
-          referrerPolicy={referrerPolicy}
-          tabIndex={tabIndex}
-          {...(ariaProps ? ariaProps : {})}
-        >
-          {label}
-        </Link>
-      ) : (
-        <a
-          href={href}
-          className={linkClassName}
-          style={{ ...linkStyle, ...textStyle }}
-          target={resolvedTarget}
-          rel={resolvedRel}
-          download={download as string | boolean | undefined}
-          hrefLang={hreflang}
-          ping={ping}
-          referrerPolicy={referrerPolicy}
-          tabIndex={tabIndex}
-          {...(ariaProps ? ariaProps : {})}
-        >
-          {label}
-        </a>
-      )}
+      {linkNode}
     </div>
   );
 }

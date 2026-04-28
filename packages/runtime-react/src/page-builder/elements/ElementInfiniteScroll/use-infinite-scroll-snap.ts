@@ -2,21 +2,31 @@
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
+  FREE_FLOW_VELOCITY_PX_MS,
   LOOP_COPY_COUNT,
   MAX_SNAP_RETRIES,
+  MAX_TICK_COUNT,
+  NORMALIZE_SAFE_VELOCITY_PX_MS,
   PROGRAMMATIC_AUTO_SCROLL_SUPPRESS_MS,
   PROGRAMMATIC_SMOOTH_SCROLL_BUFFER_MS,
   SCROLL_SETTLE_EPSILON_PX,
   SNAP_SETTLE_EPSILON_PX,
   STALL_RECOVERY_IDLE_MS,
+  TICK_BASE_INTERVAL_MS,
+  TICK_DECEL_MULTIPLIER,
+  TICK_PHASE_MIN_PX_MS,
   DEFAULT_SCROLL_SETTLE_FRAMES,
+  VELOCITY_SAMPLE_WINDOW_MS,
+  VELOCITY_TO_TICK_COUNT,
   clampIndex,
+  computeVelocityFromSamples,
   getContainerExtent,
   getItemScrollOffset,
   getItemSize,
   getNowMs,
   getScrollPosition,
   wrapIndex,
+  type VelocitySample,
 } from "./infinite-scroll-math";
 import type { ScrollAxis, SnapAlign } from "./infinite-scroll-types";
 
@@ -71,7 +81,38 @@ export function useInfiniteScrollSnap({
   const retryCountRef = useRef(0);
   const armStallRecoveryRef = useRef<() => void>(() => {});
   const watchForSettleRef = useRef<(restart?: boolean) => void>(() => {});
+  const startTickSequenceRef = useRef<(vel: number, direction: number) => void>(() => {});
 
+  // ─── Velocity tracking ────────────────────────────────────────────────────
+  const velocitySamplesRef = useRef<VelocitySample[]>([]);
+  const tickSequenceIdRef = useRef(0);
+
+  const recordVelocitySample = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    const now = getNowMs();
+    const pos = getScrollPosition(container, axis);
+    const samples = velocitySamplesRef.current;
+    // Prune samples outside the rolling window
+    const cutoff = now - VELOCITY_SAMPLE_WINDOW_MS;
+    let i = 0;
+    while (i < samples.length && (samples[i]?.t ?? 0) < cutoff) i++;
+    velocitySamplesRef.current = [...samples.slice(i), { t: now, pos }];
+  }, [axis, containerRef]);
+
+  const computeCurrentVelocity = useCallback((): number => {
+    return computeVelocityFromSamples(velocitySamplesRef.current);
+  }, []);
+
+  const computeCurrentDirection = useCallback((): number => {
+    const samples = velocitySamplesRef.current;
+    if (samples.length < 2) return 1;
+    const oldest = samples[0]!;
+    const newest = samples[samples.length - 1]!;
+    return Math.sign(newest.pos - oldest.pos) || 1;
+  }, []);
+
+  // ─── Core index / state ───────────────────────────────────────────────────
   const activeBaseIndex = useMemo(
     () =>
       itemCount > 0
@@ -94,6 +135,10 @@ export function useInfiniteScrollSnap({
       window.clearTimeout(stallRecoveryTimeoutRef.current);
       stallRecoveryTimeoutRef.current = null;
     }
+  }, []);
+
+  const clearTickSequence = useCallback(() => {
+    tickSequenceIdRef.current += 1;
   }, []);
 
   const getCanonicalRenderedIndex = useCallback(
@@ -132,9 +177,10 @@ export function useInfiniteScrollSnap({
       let bestRenderedIndex = canonical;
       let bestDistance = Number.POSITIVE_INFINITY;
 
+      const { current: items } = itemRefs;
       for (let copyIndex = 0; copyIndex < LOOP_COPY_COUNT; copyIndex += 1) {
         const candidateRenderedIndex = copyIndex * itemCount + targetBaseIndex;
-        const item = itemRefs.current[candidateRenderedIndex];
+        const item = items[candidateRenderedIndex];
         if (!item) continue;
         const targetPosition = getItemScrollOffset(container, item, axis, snapAlign);
         const distance = Math.abs(targetPosition - currentPosition);
@@ -151,14 +197,16 @@ export function useInfiniteScrollSnap({
 
   const getNearestRenderedIndex = useCallback(() => {
     const container = containerRef.current;
-    if (!container || itemCount === 0) return committedRenderedIndexRef.current;
+    const { current: committedRenderedIndex } = committedRenderedIndexRef;
+    if (!container || itemCount === 0) return committedRenderedIndex;
 
     const currentPosition = getScrollPosition(container, axis);
-    let nearestIndex = committedRenderedIndexRef.current;
+    let nearestIndex = committedRenderedIndex;
     let smallestDistance = Number.POSITIVE_INFINITY;
 
+    const { current: items } = itemRefs;
     for (const index of selectableRenderedIndices) {
-      const item = itemRefs.current[index];
+      const item = items[index];
       if (!item) continue;
       const targetPosition = getItemScrollOffset(container, item, axis, snapAlign);
       const distance = Math.abs(targetPosition - currentPosition);
@@ -179,8 +227,9 @@ export function useInfiniteScrollSnap({
         suppressMs?: number;
       }
     ) => {
-      const container = containerRef.current;
-      const item = itemRefs.current[nextRenderedIndex];
+      const { current: container } = containerRef;
+      const { current: items } = itemRefs;
+      const item = items[nextRenderedIndex];
       if (!container || !item) {
         scheduleNormalizeRetry();
         return false;
@@ -217,12 +266,23 @@ export function useInfiniteScrollSnap({
     ]
   );
 
+  // Gate on velocity — do not teleport the scroll position while the user is
+  // flicking fast. That's what caused the two-layer ghosting artifact.
   const normalizeLoopWhenIdle = useCallback(() => {
     if (isPointerActiveRef.current || requestedRenderedIndexRef.current != null) return true;
+    if (computeCurrentVelocity() > NORMALIZE_SAFE_VELOCITY_PX_MS) return true;
     if (normalizeLoopScrollPosition()) return true;
     scheduleNormalizeRetry();
     return false;
-  }, [normalizeLoopScrollPosition, scheduleNormalizeRetry]);
+  }, [computeCurrentVelocity, normalizeLoopScrollPosition, scheduleNormalizeRetry]);
+
+  const scrollToRenderedIndexRef = useRef(scrollToRenderedIndex);
+  const normalizeLoopWhenIdleRef = useRef(normalizeLoopWhenIdle);
+
+  useEffect(() => {
+    scrollToRenderedIndexRef.current = scrollToRenderedIndex;
+    normalizeLoopWhenIdleRef.current = normalizeLoopWhenIdle;
+  }, [scrollToRenderedIndex, normalizeLoopWhenIdle]);
 
   const clearPendingSnapTarget = useCallback(() => {
     requestedRenderedIndexRef.current = null;
@@ -243,6 +303,8 @@ export function useInfiniteScrollSnap({
       committedRenderedIndexRef.current = canonicalRenderedIndex;
       setCommittedRenderedIndex(canonicalRenderedIndex);
       clearPendingSnapTarget();
+      clearTickSequence();
+      velocitySamplesRef.current = [];
 
       normalizeLoopWhenIdle();
       scrollToRenderedIndex(canonicalRenderedIndex, "auto");
@@ -256,6 +318,7 @@ export function useInfiniteScrollSnap({
     [
       clearStallRecoveryTimeout,
       clearPendingSnapTarget,
+      clearTickSequence,
       itemCount,
       resolveCanonicalRenderedIndex,
       normalizeLoopWhenIdle,
@@ -344,14 +407,13 @@ export function useInfiniteScrollSnap({
         settleLastPositionRef.current = null;
       }
 
+      const { current: items } = itemRefs;
       const tick = (_timestamp: number) => {
         const container = containerRef.current;
         if (!container) {
           settleFrameRef.current = null;
           return;
         }
-
-        normalizeLoopWhenIdle();
 
         const currentPosition = getScrollPosition(container, axis);
 
@@ -381,8 +443,11 @@ export function useInfiniteScrollSnap({
 
         settleFrameRef.current = null;
 
+        normalizeLoopWhenIdle();
+        const settledPosition = getScrollPosition(container, axis);
+
         const targetRenderedIndex = getSettleTargetRenderedIndex();
-        const targetItem = itemRefs.current[targetRenderedIndex];
+        const targetItem = items[targetRenderedIndex];
         if (!targetItem) {
           finalizeSelection(targetRenderedIndex);
           return;
@@ -390,7 +455,7 @@ export function useInfiniteScrollSnap({
 
         const snappedPosition = getItemScrollOffset(container, targetItem, axis, snapAlign);
         const shouldRetrySnap =
-          Math.abs(snappedPosition - currentPosition) > SNAP_SETTLE_EPSILON_PX &&
+          Math.abs(snappedPosition - settledPosition) > SNAP_SETTLE_EPSILON_PX &&
           pendingSnapIndexRef.current !== targetRenderedIndex &&
           retryCountRef.current < MAX_SNAP_RETRIES;
 
@@ -434,13 +499,24 @@ export function useInfiniteScrollSnap({
     const now = getNowMs();
     lastScrollActivityAtRef.current = now;
     if (now < suppressAutoScrollUntilRef.current && !isPointerActiveRef.current) return;
-    if (!isPointerActiveRef.current) {
-      normalizeLoopWhenIdle();
-    } else {
+
+    if (isPointerActiveRef.current) {
       clearPendingSnapTarget();
     }
+
+    // Native wheel / trackpad never sets pointer capture; without samples the velocity gate
+    // reads 0 and loop normalisation can fight every scroll delta (teleport / "stuck" scroll).
+    if (now >= suppressAutoScrollUntilRef.current) {
+      recordVelocitySample();
+    }
+
+    // Do not normalise the loop here — `onScroll` fires for every wheel delta; running
+    // `normalizeLoopScrollPosition` in the same turn as the browser's scroll update makes
+    // the list feel "stuck" or dead. Loop correction runs when scroll settles (watchForSettle)
+    // and on pointer-up / programmatic commits.
+
     markMoving();
-  }, [clearPendingSnapTarget, itemCount, markMoving, normalizeLoopWhenIdle]);
+  }, [clearPendingSnapTarget, itemCount, markMoving, recordVelocitySample]);
 
   const goToRenderedIndex = useCallback(
     (nextRenderedIndex: number) => {
@@ -470,7 +546,7 @@ export function useInfiniteScrollSnap({
   );
 
   const stepBy = useCallback(
-    (delta: number) => {
+    (delta: number, animate = true) => {
       if (itemCount === 0 || delta === 0 || selectableRenderedIndices.length === 0) return;
 
       const currentSelectableIndex = selectableRenderedIndices.indexOf(
@@ -484,14 +560,71 @@ export function useInfiniteScrollSnap({
       const nextRenderedIndex = selectableRenderedIndices[nextSelectableIndex];
       if (nextRenderedIndex == null) return;
 
-      goToRenderedIndex(nextRenderedIndex);
+      if (animate) {
+        goToRenderedIndex(nextRenderedIndex);
+      } else {
+        // Instant positional jump — used by tick sequence for intermediate steps
+        const { canonicalRenderedIndex } = resolveCanonicalRenderedIndex(nextRenderedIndex);
+        committedRenderedIndexRef.current = canonicalRenderedIndex;
+        setCommittedRenderedIndex(canonicalRenderedIndex);
+        scrollToRenderedIndex(canonicalRenderedIndex, "auto", { suppressMs: 0 });
+      }
     },
-    [goToRenderedIndex, itemCount, loop, selectableRenderedIndices]
+    [
+      goToRenderedIndex,
+      itemCount,
+      loop,
+      resolveCanonicalRenderedIndex,
+      scrollToRenderedIndex,
+      selectableRenderedIndices,
+    ]
+  );
+
+  // ─── Slot-machine ratchet sequence ───────────────────────────────────────
+  // Triggered on pointer release when velocity is in the "tick range" (low
+  // enough that we want to take over from the browser, high enough that a
+  // plain snap would feel abrupt). Each step jumps instantly to the next item
+  // with an exponentially-growing delay — wheel-of-fortune deceleration. The
+  // last step does a smooth animate to finalize the landing.
+  const startTickSequence = useCallback(
+    (vel: number, direction: number) => {
+      if (itemCount === 0 || selectableRenderedIndices.length === 0) return;
+
+      const tickCount = Math.min(Math.round(vel * VELOCITY_TO_TICK_COUNT), MAX_TICK_COUNT);
+      if (tickCount <= 0) return;
+
+      const seqId = tickSequenceIdRef.current;
+
+      let cumulative = 0;
+      for (let i = 0; i < tickCount; i++) {
+        const delay = TICK_BASE_INTERVAL_MS * Math.pow(TICK_DECEL_MULTIPLIER, i);
+        cumulative += delay;
+        const stepIndex = i;
+        const isFinal = stepIndex === tickCount - 1;
+
+        window.setTimeout(() => {
+          // Sequence was cancelled (new gesture started)
+          if (tickSequenceIdRef.current !== seqId) return;
+          if (isPointerActiveRef.current) return;
+
+          if (isFinal) {
+            // Final step: pick nearest and do a proper animated commit so the
+            // settle loop takes over and we re-canonicalise the loop position.
+            const targetRenderedIndex = getNearestRenderedIndex();
+            commitToRenderedIndex(targetRenderedIndex, { animate: true });
+          } else {
+            stepBy(direction, false);
+          }
+        }, cumulative);
+      }
+    },
+    [commitToRenderedIndex, getNearestRenderedIndex, itemCount, selectableRenderedIndices, stepBy]
   );
 
   const getPageStep = useCallback(() => {
     const container = containerRef.current;
-    const currentItem = itemRefs.current[committedRenderedIndexRef.current];
+    const { current: items } = itemRefs;
+    const currentItem = items[committedRenderedIndexRef.current];
     if (!container || !currentItem) return 1;
 
     const containerExtent = getContainerExtent(container, axis);
@@ -519,25 +652,57 @@ export function useInfiniteScrollSnap({
     (nextIsPointerActive: boolean) => {
       isPointerActiveRef.current = nextIsPointerActive;
       if (nextIsPointerActive) {
+        // Pointer down: cancel any in-flight tick sequence and start fresh samples
+        clearTickSequence();
+        velocitySamplesRef.current = [];
         clearPendingSnapTarget();
         clearStallRecoveryTimeout();
         return;
       }
+
+      // Pointer up: capture release velocity — keep samples alive so the
+      // velocity gate in normalizeLoopWhenIdle stays active during browser
+      // deceleration. Samples are cleared in finalizeSelection / pointer-down.
+      const releaseVel = computeCurrentVelocity();
+      const releaseDir = computeCurrentDirection();
+
       normalizeLoopWhenIdle();
-      if (isMovingRef.current) {
-        lastScrollActivityAtRef.current = getNowMs();
-        watchForSettle(true);
-        armStallRecovery();
+
+      if (releaseVel > FREE_FLOW_VELOCITY_PX_MS) {
+        // Fast flick — let the browser decelerate freely, settle loop handles it
+        if (isMovingRef.current) {
+          lastScrollActivityAtRef.current = getNowMs();
+          watchForSettle(true);
+          armStallRecovery();
+        }
+      } else if (releaseVel > TICK_PHASE_MIN_PX_MS) {
+        // Mid-range — ratchet tick sequence
+        clearSettleLoop();
+        clearStallRecoveryTimeout();
+        startTickSequenceRef.current(releaseVel, releaseDir);
+      } else {
+        // Slow/stationary — normal snap settle
+        if (isMovingRef.current) {
+          lastScrollActivityAtRef.current = getNowMs();
+          watchForSettle(true);
+          armStallRecovery();
+        }
       }
     },
     [
       armStallRecovery,
       clearPendingSnapTarget,
+      clearSettleLoop,
       clearStallRecoveryTimeout,
+      clearTickSequence,
+      computeCurrentDirection,
+      computeCurrentVelocity,
       normalizeLoopWhenIdle,
       watchForSettle,
     ]
   );
+
+  // ─── Effects ──────────────────────────────────────────────────────────────
 
   useEffect(() => {
     committedRenderedIndexRef.current = committedRenderedIndex;
@@ -550,15 +715,17 @@ export function useInfiniteScrollSnap({
   useEffect(() => {
     armStallRecoveryRef.current = armStallRecovery;
     watchForSettleRef.current = watchForSettle;
-  }, [armStallRecovery, watchForSettle]);
+    startTickSequenceRef.current = startTickSequence;
+  }, [armStallRecovery, startTickSequence, watchForSettle]);
 
   useLayoutEffect(() => {
     if (itemCount === 0) {
       committedRenderedIndexRef.current = 0;
       isMovingRef.current = false;
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- reset internal selection when source items/config change
-      setCommittedRenderedIndex(0);
-      setIsMoving(false);
+      queueMicrotask(() => {
+        setCommittedRenderedIndex(0);
+        setIsMoving(false);
+      });
       return;
     }
 
@@ -566,34 +733,40 @@ export function useInfiniteScrollSnap({
       loop && itemCount > 0 ? itemCount + normalizedInitialIndex : normalizedInitialIndex;
     committedRenderedIndexRef.current = nextRenderedIndex;
     isMovingRef.current = false;
-    setCommittedRenderedIndex(nextRenderedIndex);
-    setIsMoving(false);
+    queueMicrotask(() => {
+      setCommittedRenderedIndex(nextRenderedIndex);
+      setIsMoving(false);
+    });
     clearPendingSnapTarget();
+    clearTickSequence();
+    velocitySamplesRef.current = [];
     suppressAutoScrollUntilRef.current = 0;
     settleStableFramesRef.current = 0;
     settleLastPositionRef.current = null;
 
     const frame = requestAnimationFrame(() => {
-      normalizeLoopWhenIdle();
-      scrollToRenderedIndex(nextRenderedIndex, "auto", { suppressMs: 0 });
+      normalizeLoopWhenIdleRef.current();
+      scrollToRenderedIndexRef.current(nextRenderedIndex, "auto", { suppressMs: 0 });
     });
 
     return () => cancelAnimationFrame(frame);
   }, [
     itemCount,
     loop,
-    clearPendingSnapTarget,
-    normalizeLoopWhenIdle,
     normalizedInitialIndex,
-    scrollToRenderedIndex,
+    scrollToRenderedIndexRef,
+    normalizeLoopWhenIdleRef,
+    clearPendingSnapTarget,
+    clearTickSequence,
   ]);
 
   useEffect(
     () => () => {
       clearSettleLoop();
       clearStallRecoveryTimeout();
+      clearTickSequence();
     },
-    [clearSettleLoop, clearStallRecoveryTimeout]
+    [clearSettleLoop, clearStallRecoveryTimeout, clearTickSequence]
   );
 
   return {

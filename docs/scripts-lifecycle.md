@@ -11,7 +11,6 @@ This file documents root `scripts/` ownership and intent.
 - `scripts/validate-pages.ts`: content validation
 - `scripts/generate-protected-slugs.ts`: build-time protected slug map generation
 - `scripts/list-page-builder-assets.ts`: asset inventory utility used by app/root command
-- `scripts/patch-eslint-plugin-react-eslint10.mjs`: postinstall compatibility patch
 - `scripts/prepare-commit.sh`: convenience wrapper used by `prepare:commit`
 
 ## Removed

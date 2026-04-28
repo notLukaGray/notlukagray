@@ -3,6 +3,10 @@
   "description": "Art direction and typography for the Aperture Annual — a 240-page photography annual combining long-form criticism, portfolios, and conversation.",
   "ogImage": "https://media.notlukagray.com/website/work/project-editorial/og.webp",
   "assetBaseUrl": "/work",
+  "tags": {
+    "brand": ["Aperture"],
+    "ability": ["Art Direction", "Editorial"]
+  },
   "sectionOrder": ["editorial_a", "editorial_b", "editorial_c", "editorial_d", "editorial_e"],
   "bgKey": "bg-editorial",
   "definitions": {

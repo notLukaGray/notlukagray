@@ -8,7 +8,7 @@ import type {
 import type { JsonValue } from "@pb/contracts/page-builder/core/page-builder-types/json-value";
 import { reconcileElementOrderWithDefinitions } from "@pb/core/internal/module-slot-utils";
 import { generateElementKey } from "@pb/core/internal/element-keys";
-import { LOOP_COPY_COUNT, clampIndex } from "./infinite-scroll-math";
+import { LOOP_COPY_COUNT, clampIndex, shouldLoopInfiniteScroll } from "./infinite-scroll-math";
 import type {
   InfiniteScrollBlocksResult,
   InfiniteScrollProps,
@@ -78,20 +78,6 @@ export function useInfiniteScrollBlocks(
   );
 
   const itemCount = blocks.length;
-  const renderCopies = loop && itemCount > 0 ? LOOP_COPY_COUNT : 1;
-
-  const renderedItems = useMemo<InfiniteScrollRenderedItem[]>(
-    () =>
-      Array.from({ length: renderCopies }, (_, copyIndex) =>
-        blocks.map((block, baseIndex) => ({
-          baseIndex,
-          renderedIndex: copyIndex * itemCount + baseIndex,
-          block,
-          renderKey: `${copyIndex}-${generateElementKey(block, baseIndex)}`,
-        }))
-      ).flat(),
-    [blocks, itemCount, renderCopies]
-  );
 
   const selectableBaseIndices = useMemo(() => {
     if (itemCount === 0) return [];
@@ -120,8 +106,30 @@ export function useInfiniteScrollBlocks(
         ? initialIndex
         : fallbackSelectableBaseIndex
       : 0;
+
+  /** Must match `effectiveLoop` in `ElementInfiniteScroll` — raw `loop` alone is not enough. */
+  const eligibleForLooping =
+    itemCount > 0 && shouldLoopInfiniteScroll(loop, selectableBaseIndices.length);
+
+  const renderCopies = eligibleForLooping ? LOOP_COPY_COUNT : 1;
+
+  const renderedItems = useMemo<InfiniteScrollRenderedItem[]>(
+    () =>
+      Array.from({ length: renderCopies }, (_, copyIndex) =>
+        blocks.map((block, baseIndex) => ({
+          baseIndex,
+          renderedIndex: copyIndex * itemCount + baseIndex,
+          block,
+          renderKey: `${copyIndex}-${generateElementKey(block, baseIndex)}`,
+        }))
+      ).flat(),
+    [blocks, itemCount, renderCopies]
+  );
+
   const initialRenderedIndex =
-    itemCount > 0 && loop ? itemCount + normalizedInitialIndex : normalizedInitialIndex;
+    itemCount > 0 && eligibleForLooping
+      ? itemCount + normalizedInitialIndex
+      : normalizedInitialIndex;
 
   const selectableRenderedIndices = useMemo(
     () =>

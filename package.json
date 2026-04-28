@@ -20,7 +20,6 @@
     "lint:fix": "eslint . --fix --max-warnings 0",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
-    "postinstall": "echo \"Skipping ESLint 10 compatibility patch\"",
     "prepare": "command -v husky >/dev/null 2>&1 && husky || true",
     "prepare:commit": "bash scripts/prepare-commit.sh",
     "pb-cli": "tsx tools/pb-cli/src/index.ts",
@@ -39,7 +38,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "eslint --fix --max-warnings 0",
+      "eslint --fix --max-warnings 0 --no-warn-ignored",
       "prettier --write"
     ],
     "*.{json,css,md}": [
@@ -49,26 +48,8 @@
   "dependencies": {
     "@pb/contracts": "1.0.0",
     "@pb/core": "1.0.0",
-    "@pb/extensions": "1.0.0",
-    "@pb/runtime-react": "1.0.0",
-    "@pb/sdk": "1.0.0",
-    "@react-three/drei": "^10.7.7",
-    "@react-three/fiber": "^9.6.0",
-    "@react-three/postprocessing": "^3.0.4",
-    "@rive-app/react-canvas": "^4.28.0",
-    "culori": "^4.0.2",
-    "framer-motion": "^12.38.0",
-    "highlight.js": "^11.11.1",
     "next": "^16.2.4",
-    "next-themes": "^0.4.6",
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
-    "react-markdown": "^10.1.0",
-    "rehype-highlight": "^7.0.2",
-    "remark-gfm": "^4.0.1",
-    "three": "^0.184.0",
-    "zod": "^4.3.6",
-    "zustand": "^5.0.12"
+    "zod": "^4.3.6"
   },
   "browserslist": [
     "defaults",
@@ -81,7 +62,6 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
-    "chokidar": "^5.0.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "16.2.4",
     "eslint-config-prettier": "^10.1.8",

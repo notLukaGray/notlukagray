@@ -42,6 +42,7 @@ export function ElementHeading({
   textAlign,
   width,
   height,
+  constraints,
   marginTop,
   marginBottom,
   marginLeft,
@@ -67,6 +68,7 @@ export function ElementHeading({
     ...getElementLayoutStyle({
       width,
       height,
+      constraints,
       align,
       textAlign,
       marginTop,

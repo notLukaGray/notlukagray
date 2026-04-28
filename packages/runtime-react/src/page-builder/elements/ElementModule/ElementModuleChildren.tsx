@@ -14,6 +14,7 @@ import {
   getContainerWrapperStyle,
   shouldRenderChildWrapper,
 } from "./element-module-style-utils";
+import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";
 
@@ -118,13 +119,51 @@ export function ElementModuleChildren({
               "stretch",
           }
         : {};
+    // In a column flex parent, a width:100% child needs the cell wrapper to
+    // stretch across the cross axis or WebKit can resolve the percentage width
+    // against a content-sized wrapper during client navigation.
+    const childRequestsFullWidth = blockWidth === "100%" && !isConstrainedFullWidthChild;
+    const fullWidthColumnStretchStyle: CSSProperties =
+      isColumnLikeParent && childRequestsFullWidth
+        ? {
+            alignSelf: "stretch",
+            minWidth: 0,
+            maxWidth: "100%",
+          }
+        : {};
+    const resolvedBlockWidth = resolveResponsiveValue(
+      blockWidth as string | [string, string] | undefined,
+      isMobile
+    );
+    const resolvedBlockHeight = resolveResponsiveValue(
+      blockHeight as string | [string, string] | undefined,
+      isMobile
+    );
+    // Column + height:100% (or row + width:100%): the inner element needs a bounded flex item.
+    // A wrapper with only shrink-0 sizes to content, so percentage height never resolves and
+    // nested overflow (e.g. Work index elementInfiniteScroll) cannot scroll.
+    const columnChildFillsMainAxis = isColumnLikeParent && resolvedBlockHeight === "100%";
+    const rowChildFillsMainAxis = isRowLikeParent && resolvedBlockWidth === "100%";
+    const flexParentAxisFillStyle: CSSProperties =
+      columnChildFillsMainAxis || rowChildFillsMainAxis
+        ? {
+            flex: "1 1 0%",
+            minHeight: 0,
+            minWidth: 0,
+            alignSelf: "stretch",
+          }
+        : {};
     const cellStyle: CSSProperties = {
       ...cellLayoutStyle,
       ...cellStyleBase,
       ...overlapOffsetStyle,
       ...constrainedStretchPlacementStyle,
       ...clippedFlexContainStyle,
+      ...fullWidthColumnStretchStyle,
+      ...flexParentAxisFillStyle,
     };
+    const flexFillWrapperClass =
+      columnChildFillsMainAxis || rowChildFillsMainAxis ? "min-h-0 min-w-0" : "shrink-0 min-w-0";
     const content = <ElementRenderer key={key} block={block} />;
 
     if (handler) {
@@ -147,7 +186,7 @@ export function ElementModuleChildren({
 
     if (layoutChildren) {
       return (
-        <LayoutMotionDiv key={key} className="shrink-0 min-w-0" style={cellStyle}>
+        <LayoutMotionDiv key={key} className={flexFillWrapperClass} style={cellStyle}>
           {content}
         </LayoutMotionDiv>
       );
@@ -166,7 +205,7 @@ export function ElementModuleChildren({
     }
 
     return (
-      <div key={key} className="shrink-0 min-w-0" style={cellStyle}>
+      <div key={key} className={flexFillWrapperClass} style={cellStyle}>
         {content}
       </div>
     );

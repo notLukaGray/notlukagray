@@ -3,6 +3,10 @@
   "description": "Full brand identity for NOMA, a small-batch Norwegian aquavit distillery — mark, type, colour, and guidelines from first principles.",
   "ogImage": "https://media.notlukagray.com/website/work/project-brand/og.webp",
   "assetBaseUrl": "/work",
+  "tags": {
+    "brand": ["NOMA"],
+    "ability": ["Brand Identity"]
+  },
   "sectionOrder": ["brand_a", "brand_b", "brand_c", "brand_d", "brand_e"],
   "bgKey": "bg-brand",
   "definitions": {

@@ -173,10 +173,24 @@ export const filterConfigSchema = z.object({
   categories: z.array(filterCategorySchema),
 });
 
+/**
+ * Project groups link a set of element keys to a project page. Used by the filter pass
+ * to drop all elements belonging to a project whose tags don't match active filters.
+ * Keyed by an arbitrary group identifier (typically the project shortname).
+ */
+export const projectGroupSchema = z.object({
+  projectSlug: z.string().min(1),
+  elements: z.array(z.string().min(1)).min(1),
+});
+
+export const projectGroupsSchema = z.record(z.string(), projectGroupSchema);
+
 export type PageTags = z.infer<typeof pageTagsSchema>;
 export type KnownPageTagsConfig = z.infer<typeof knownPageTagsConfigSchema>;
 export type FilterCategory = z.infer<typeof filterCategorySchema>;
 export type FilterConfig = z.infer<typeof filterConfigSchema>;
+export type ProjectGroup = z.infer<typeof projectGroupSchema>;
+export type ProjectGroupsMap = z.infer<typeof projectGroupsSchema>;
 
 export type PageTagValidationIssue = {
   path: Array<string | number>;
@@ -242,6 +256,34 @@ export function validateKnownFilterCategories(
     }));
 }
 
+export function validateProjectGroups(
+  groups: ProjectGroupsMap | undefined,
+  knownPageSlugs: ReadonlySet<string>
+): PageTagValidationIssue[] {
+  if (!groups) return [];
+
+  const issues: PageTagValidationIssue[] = [];
+  for (const [groupKey, group] of Object.entries(groups)) {
+    if (!knownPageSlugs.has(group.projectSlug)) {
+      issues.push({
+        path: ["projectGroups", groupKey, "projectSlug"],
+        message: `projectSlug "${group.projectSlug}" does not match any known page.`,
+      });
+    }
+    const seen = new Set<string>();
+    group.elements.forEach((element, index) => {
+      if (seen.has(element)) {
+        issues.push({
+          path: ["projectGroups", groupKey, "elements", index],
+          message: `Duplicate element key "${element}" in project group "${groupKey}".`,
+        });
+      }
+      seen.add(element);
+    });
+  }
+  return issues;
+}
+
 export const pageBuilderSchema = z
   .object({
     /** Injected at load time from the folder path — omit from JSON files. */
@@ -280,6 +322,8 @@ export const pageBuilderSchema = z
     tags: pageTagsSchema.optional(),
     /** Filter configuration — only meaningful on listing pages (work index, shop index, etc.). */
     filterConfig: filterConfigSchema.optional(),
+    /** Maps element keys to a source project. Used by the filter pass on listing pages. */
+    projectGroups: projectGroupsSchema.optional(),
   })
   .passthrough();
 
@@ -303,5 +347,6 @@ export const resolvedPageSchema = z
     forcedTheme: forcedThemeSchema.optional(),
     tags: pageTagsSchema.optional(),
     filterConfig: filterConfigSchema.optional(),
+    projectGroups: projectGroupsSchema.optional(),
   })
   .passthrough();

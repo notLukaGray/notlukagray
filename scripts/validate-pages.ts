@@ -17,8 +17,10 @@ import {
   filterConfigSchema,
   knownPageTagsConfigSchema,
   pageTagsSchema,
+  projectGroupsSchema,
   validateKnownFilterCategories,
   validateKnownPageTags,
+  validateProjectGroups,
   type KnownPageTagsConfig,
 } from "@pb/contracts";
 
@@ -160,12 +162,11 @@ function validateKnownTags(
   slugs: string[],
   config: KnownPageTagsConfig | undefined
 ): TagValidationFailure[] {
-  if (!config) return [];
-
   const slugFilter = new Set(slugs);
   const applySlugFilter = slugFilter.size > 0;
   const failures: TagValidationFailure[] = [];
   const pages = discoverAllPages();
+  const knownPageSlugs = new Set(pages.map((p) => p.slugSegments.join("/")));
 
   for (const page of pages) {
     const slug = page.slugSegments.join("/");
@@ -181,11 +182,18 @@ function validateKnownTags(
       parsed.data.filterConfig === undefined
         ? null
         : filterConfigSchema.safeParse(parsed.data.filterConfig);
+    const projectGroupsResult =
+      parsed.data.projectGroups === undefined
+        ? null
+        : projectGroupsSchema.safeParse(parsed.data.projectGroups);
 
     const issues = [
-      ...(tagsResult?.success ? validateKnownPageTags(tagsResult.data, config) : []),
-      ...(filterConfigResult?.success
+      ...(config && tagsResult?.success ? validateKnownPageTags(tagsResult.data, config) : []),
+      ...(config && filterConfigResult?.success
         ? validateKnownFilterCategories(filterConfigResult.data, config)
+        : []),
+      ...(projectGroupsResult?.success
+        ? validateProjectGroups(projectGroupsResult.data, knownPageSlugs)
         : []),
     ];
 

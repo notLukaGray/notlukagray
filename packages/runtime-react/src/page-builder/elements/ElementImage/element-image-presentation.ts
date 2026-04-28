@@ -268,6 +268,10 @@ export function computeElementImagePresentation(
         `rotate(${imageRotation}deg)`
       );
     }
+    // iOS WebKit drops images that mount inside an opacity/transform-animating
+    // ancestor during a client navigation — onError never fires, the layer just
+    // paints blank. Promoting the img to its own compositing layer avoids it.
+    targetStyle.transform = composeTransform(targetStyle.transform, "translateZ(0)");
   }
 
   const effectiveMinHeight =

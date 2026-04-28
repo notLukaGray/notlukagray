@@ -8296,6 +8296,7 @@
               "NOMA",
               "Parallax",
               "Shifting Ground",
+              "Spinach",
               "Still Water",
               "Threshold",
               "Vessel"
@@ -8320,11 +8321,13 @@
               "Documentary Film",
               "Exhibition Design",
               "Immersive Installation",
+              "Motion Graphics",
               "Motion Design",
               "Photography",
               "Product Design",
               "Short Documentary",
               "Short Film",
+              "Sound Design",
               "UX Research"
             ]
           },
@@ -8388,6 +8391,31 @@
       },
       "required": ["categories"],
       "additionalProperties": false
+    },
+    "projectGroups": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "projectSlug": {
+            "type": "string",
+            "minLength": 1
+          },
+          "elements": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": ["projectSlug", "elements"],
+        "additionalProperties": false
+      }
     }
   },
   "required": ["title", "definitions", "sectionOrder"],

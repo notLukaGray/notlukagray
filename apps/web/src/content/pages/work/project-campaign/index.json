@@ -3,6 +3,10 @@
   "description": "Multi-channel brand campaign for Meridian Bank — art direction, OOH, digital, and social across six European markets.",
   "ogImage": "https://media.notlukagray.com/website/work/project-campaign/og.webp",
   "assetBaseUrl": "/work",
+  "tags": {
+    "brand": ["Meridian"],
+    "ability": ["Brand Campaign", "Art Direction"]
+  },
   "sectionOrder": ["campaign_a", "campaign_b", "campaign_c", "campaign_d", "campaign_e"],
   "bgKey": "bg-campaign",
   "definitions": {

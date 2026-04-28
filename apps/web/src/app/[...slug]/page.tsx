@@ -1,6 +1,7 @@
 import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import type { FilterConfig } from "@pb/contracts";
 import { accessCookieName } from "@/core/lib/auth-constants";
 import { verifyAccessToken } from "@/core/lib/access-cookie";
 import {
@@ -11,6 +12,7 @@ import {
   rewriteProtectedInternalLinks,
   safeRedirectPath,
 } from "@/core/lib/unlock-linking";
+import { parseFiltersFromQuery } from "@/core/lib/parse-page-filters";
 import {
   getPageAsync,
   getPageBuilderPropsAsync,
@@ -22,13 +24,11 @@ import { PageBuilderPage } from "@pb/runtime-react/server";
 import { getTwitterCardForOgImage } from "@/core/lib/globals";
 import { UnlockPageShell } from "@/core/ui/UnlockPageShell";
 
+type SearchParamsRaw = Record<string, string | string[] | undefined>;
+
 type Props = {
   params: Promise<{ slug: string[] }>;
-  searchParams: Promise<{
-    unlock?: string | string[];
-    unlock_redirect?: string | string[];
-    unlock_preview?: string | string[];
-  }>;
+  searchParams: Promise<SearchParamsRaw>;
 };
 function hasUnlockQuery(value: unknown): boolean {
   if (typeof value === "string") return value === "1";
@@ -36,32 +36,54 @@ function hasUnlockQuery(value: unknown): boolean {
   return false;
 }
 
+function buildPageRenderKey(pathname: string, query: SearchParamsRaw): string {
+  const params = new URLSearchParams();
+  for (const [key, rawValue] of Object.entries(query)) {
+    if (rawValue == null) continue;
+    if (Array.isArray(rawValue)) {
+      for (const value of rawValue) params.append(key, value);
+      continue;
+    }
+    params.append(key, rawValue);
+  }
+  const queryString = params.toString();
+  return queryString.length > 0 ? `${pathname}?${queryString}` : pathname;
+}
+
 export async function generateStaticParams(): Promise<{ slug: string[] }[]> {
   return discoverAllPages().map(({ slugSegments }) => ({ slug: slugSegments }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { slug: segments } = await params;
   if (!segments?.length) return {};
 
   const page = await getPageAsync(segments.join("/"));
   if (!page) return {};
 
-  const { title, description, ogImage, canonicalUrl, robots, keywords } = page as {
+  const { title, description, ogImage, canonicalUrl, robots, keywords, filterConfig } = page as {
     title: string;
     description?: string;
     ogImage?: string;
     canonicalUrl?: string;
     robots?: string;
     keywords?: string;
+    filterConfig?: FilterConfig;
   };
+
+  const query = await searchParams;
+  const activeFilters = parseFiltersFromQuery(query, filterConfig);
+  const hasActiveFilters = Object.keys(activeFilters).length > 0;
+
+  const effectiveRobots = hasActiveFilters ? "noindex, follow" : robots;
+  const effectiveCanonical = hasActiveFilters ? `/${segments.join("/")}` : canonicalUrl;
 
   return {
     title,
     ...(description && { description }),
     ...(keywords && { keywords }),
-    ...(robots && { robots }),
-    ...(canonicalUrl && { alternates: { canonical: canonicalUrl } }),
+    ...(effectiveRobots && { robots: effectiveRobots }),
+    ...(effectiveCanonical && { alternates: { canonical: effectiveCanonical } }),
     openGraph: {
       title,
       ...(description && { description }),
@@ -82,19 +104,24 @@ export default async function UniversalSlugPage({ params, searchParams }: Props)
 
   if (!resolvePagePath(segments)) notFound();
 
-  const [headersList, page, cookieStore] = await Promise.all([
+  const [headersList, page, cookieStore, query] = await Promise.all([
     headers(),
     getPageAsync(segments.join("/")),
     cookies(),
+    searchParams,
   ]);
   const hasAccess = verifyAccessToken(cookieStore.get(accessCookieName)?.value);
   const isMobile = isMobileFromUserAgent(headersList.get("user-agent") ?? "");
-  const props = await getPageBuilderPropsAsync(segments.join("/"), { isMobile });
+  const filterConfig = (page as { filterConfig?: FilterConfig } | null)?.filterConfig;
+  const activeFilters = parseFiltersFromQuery(query, filterConfig);
+  const hasActiveFilters = Object.keys(activeFilters).length > 0;
+  const props = await getPageBuilderPropsAsync(segments.join("/"), {
+    isMobile,
+    ...(hasActiveFilters ? { activeFilters } : {}),
+  });
   if (!props) notFound();
 
   const structuredData = (page as { structuredData?: unknown } | null)?.structuredData ?? null;
-
-  const query = await searchParams;
   const unlockPreview = getSafeUnlockPreviewUrl(getSingleQueryValue(query.unlock_preview));
   const unlockRedirect = safeRedirectPath(getSingleQueryValue(query.unlock_redirect));
   const isUnlockRoute = segments.length === 1 && segments[0] === "unlock";
@@ -120,6 +147,7 @@ export default async function UniversalSlugPage({ params, searchParams }: Props)
 
   const shouldRenderProtectedContent = !showUnlockModalOnProtectedPage;
   const structuredDataForRender = shouldRenderProtectedContent ? structuredData : null;
+  const pageRenderKey = buildPageRenderKey(pagePath, query);
 
   return (
     <UnlockPageShell
@@ -131,7 +159,9 @@ export default async function UniversalSlugPage({ params, searchParams }: Props)
       solidBackdropClassName={isUnlockRoute ? "fixed inset-0 -z-10 bg-background" : undefined}
       structuredData={structuredDataForRender}
     >
-      {shouldRenderProtectedContent ? <PageBuilderPage {...pagePropsForRender} /> : null}
+      {shouldRenderProtectedContent ? (
+        <PageBuilderPage key={pageRenderKey} {...pagePropsForRender} />
+      ) : null}
     </UnlockPageShell>
   );
 }

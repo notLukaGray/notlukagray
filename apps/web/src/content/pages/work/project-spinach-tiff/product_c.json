@@ -2,12 +2,12 @@
   "type": "sectionColumn",
   "id": "product_c",
   "width": ["100%", "88%"],
+  "maxWidth": "1440px",
   "height": "hug",
   "minHeight": ["42vh", "34vh"],
   "align": ["full", "center"],
-  "scrollSpeed": 0.94,
+  "scrollSpeed": 0.85,
   "fill": "transparent",
-  "marginTop": ["-2rem", "-4rem"],
   "marginBottom": ["1.5rem", "2.5rem"],
   "columns": {
     "mobile": 1,
@@ -43,34 +43,34 @@
     "mobile": {
       "c-f1": {
         "padding": "1.25rem",
-        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.08)",
         "borderRadius": "1.25rem"
       },
       "c-f2": {
         "padding": "1.25rem",
-        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.08)",
         "borderRadius": "1.25rem"
       },
       "c-f3": {
         "padding": "1.25rem",
-        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.08)",
         "borderRadius": "1.25rem"
       }
     },
     "desktop": {
       "c-f1": {
         "padding": "2rem",
-        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.08)",
         "borderRadius": "1.5rem"
       },
       "c-f2": {
         "padding": "2rem",
-        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.08)",
         "borderRadius": "1.5rem"
       },
       "c-f3": {
         "padding": "2rem",
-        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.031)",
+        "fill": "oklch(from var(--pb-on-secondary) l c h / 0.08)",
         "borderRadius": "1.5rem"
       }
     }
@@ -79,7 +79,7 @@
   "definitions": {
     "c-f1": {
       "type": "elementRichText",
-      "content": "### Feature One\n\nA two-to-three sentence description of what this feature does and why it matters to the user. Focus on behaviour, not implementation.",
+      "content": "### Art Direction \n\n A tongue-in-cheek parody of vintage studio titles, reimagined through the lens of a cannabis brand. Towering nugs, fireworks, and a classic silhouetted composition gave the piece a sense of overblown grandeur while keeping the joke clear.",
       "level": 4,
       "align": "left",
       "textAlign": "left",
@@ -101,7 +101,7 @@
     },
     "c-f2": {
       "type": "elementRichText",
-      "content": "### Feature Two\n\nA two-to-three sentence description of what this feature does and why it matters to the user. Focus on behaviour, not implementation.",
+      "content": "### Production Approach \n\n The cannabis nugs were built from CGI assets, then treated with an old-animation approach. We stacked illustrated cards, wrapped light around the forms, and layered the scene to create a sense of depth, movement, and theatrical scale.",
       "level": 4,
       "align": "left",
       "textAlign": "left",
@@ -123,7 +123,7 @@
     },
     "c-f3": {
       "type": "elementRichText",
-      "content": "### Feature Three\n\nA two-to-three sentence description of what this feature does and why it matters to the user. Focus on behaviour, not implementation.",
+      "content": "### Sound Design \n\n Using Dolby Atmos as a playground, we built a 3D soundscape that let the music move through the room instead of simply playing over the picture. The fireworks, swelled, exploded and wrapped the audience, ending with a perfectly timed *“woahhhhh”* from the front row.",
       "level": 4,
       "align": "left",
       "textAlign": "left",

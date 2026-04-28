@@ -30,7 +30,10 @@ import { useVideoControlContext } from "@/page-builder/elements/ElementVideo/Vid
 import { SectionDefinitionsContext } from "@/page-builder/elements/ElementModule/ModuleSlotContext";
 import { ElementErrorBoundary } from "@/page-builder/SectionErrorBoundary";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
-import { DEFAULT_SNAP_DURATION_MS, lerp } from "./ElementInfiniteScroll/infinite-scroll-math";
+import {
+  DEFAULT_SNAP_DURATION_MS,
+  shouldLoopInfiniteScroll,
+} from "./ElementInfiniteScroll/infinite-scroll-math";
 import { useInfiniteScrollBlocks } from "./ElementInfiniteScroll/infinite-scroll-blocks";
 import {
   buildContainerStyle,
@@ -137,17 +140,20 @@ export function ElementInfiniteScroll({
     selectableRenderedIndices,
   } = useInfiniteScrollBlocks(section, resolveShowWhen, selectedValues, initialIndex, loop);
 
+  const effectiveLoop = shouldLoopInfiniteScroll(loop, selectableBaseIndices.length);
+
   const { normalizeLoopScrollPosition, scheduleNormalizeRetry } = useInfiniteScrollLoopBounds({
     axis: scrollDirection,
     containerRef,
     itemCount,
     itemRefs,
-    loop,
+    loop: effectiveLoop,
   });
 
   const {
     activeBaseIndex,
     clearPendingSnapTarget,
+    committedRenderedIndex,
     goToBaseIndex,
     goToRenderedIndex,
     isMoving,
@@ -165,7 +171,7 @@ export function ElementInfiniteScroll({
     initialRenderedIndex,
     itemCount,
     itemRefs,
-    loop,
+    loop: effectiveLoop,
     normalizeLoopScrollPosition,
     normalizedInitialIndex,
     prefersReducedMotion,
@@ -317,7 +323,7 @@ export function ElementInfiniteScroll({
       typeof resolvedBorderGradient.width === "number");
 
   return (
-    <div style={rootStyle} className="shrink-0">
+    <div style={rootStyle} className="min-h-0 min-w-0" data-pb-infinite-scroll-host="">
       <SectionGlassEffect effects={groupEffects} sectionRef={containerRef} variant="auto" />
       {hasBorderGradient ? (
         <div
@@ -345,14 +351,11 @@ export function ElementInfiniteScroll({
         <SectionDefinitionsContext.Provider value={definitions}>
           <div style={trackStyle}>
             {renderedItems.map(({ baseIndex, renderedIndex, block, renderKey }) => {
-              const isActive = baseIndex === activeBaseIndex;
-              const movingActiveBlend = isMoving && isActive ? 0.72 : 0;
-              const visualScale = isActive
-                ? lerp(resolvedActiveScale, resolvedInactiveScale, movingActiveBlend)
-                : resolvedInactiveScale;
-              const visualOpacity = isActive
-                ? lerp(resolvedActiveOpacity, resolvedInactiveOpacity, movingActiveBlend)
-                : resolvedInactiveOpacity;
+              // Visual active = only the specific committed copy, not all copies of
+              // the same base item. aria-selected uses activeBaseIndex (data layer).
+              const isActive = renderedIndex === committedRenderedIndex;
+              const visualScale = isActive ? resolvedActiveScale : resolvedInactiveScale;
+              const visualOpacity = isActive ? resolvedActiveOpacity : resolvedInactiveOpacity;
               const isSelectable = selectableBaseIndexSet.has(baseIndex);
 
               return (

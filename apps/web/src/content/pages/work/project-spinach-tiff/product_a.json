@@ -19,12 +19,16 @@
   "elementOrder": ["a-platform", "a-title", "a-logline", "a-stack"],
   "definitions": {
     "a-platform": {
-      "type": "elementHeading",
-      "variant": "label",
-      "text": "iOS / ANDROID / WEB · PRODUCT DESIGN",
+      "type": "elementLink",
+      "href": "/work?brand=spinach",
+      "external": false,
+      "copyType": "heading",
+      "level": 6,
+      "label": "*Spinach Cannabis*",
       "align": "center",
       "width": "hug",
       "marginBottom": "1rem",
+      "fontWeight": 700,
       "motionTiming": {
         "entrancePreset": "fade",
         "viewport": {
@@ -40,9 +44,10 @@
     "a-title": {
       "type": "elementHeading",
       "level": 1,
-      "text": "Spinach x TIFF",
+      "text": "Cannabis for Movies",
       "align": "center",
       "width": ["92%", "68%"],
+      "maxWidth": "1000px",
       "wordWrap": true,
       "marginBottom": "1.5rem",
       "motionTiming": {
@@ -61,10 +66,11 @@
     "a-logline": {
       "type": "elementBody",
       "level": 2,
-      "text": "A cinematic parody trailer created for Spinach and shown in association with TIFF. Inspired by the iconic Walt Disney opening, the piece reimagined the familiar castle silhouette as a towering landscape of giant cannabis nugs, complete with sweeping background scenery and fireworks bursting overhead. The result was playful, unexpected, and deliberately tongue-in-cheek, using a universally recognizable film intro to give the brand a bold, theatrical moment on screen.",
+      "text": "A cinematic parody trailer created for **Spinach** to be shown in association with the **Toronto International Film Festival**.",
       "align": "center",
       "textAlign": "center",
       "width": ["88%", "52%"],
+      "maxWidth": "600px",
       "wordWrap": true,
       "marginBottom": "2.5rem",
       "motionTiming": {
@@ -81,12 +87,104 @@
       }
     },
     "a-stack": {
-      "type": "elementBody",
-      "level": 5,
-      "text": "Figma · Prototyping · Design System · Handoff",
+      "type": "elementGroup",
+      "section": {
+        "elementOrder": ["a-tag-1", "a-tag-2", "a-tag-3", "a-tag-4"],
+        "definitions": {
+          "a-tag-1": {
+            "type": "elementLink",
+            "href": "/work?ability=art-direction",
+            "external": false,
+            "copyType": "body",
+            "level": 5,
+            "label": "Art Direction",
+            "motion": {
+              "animate": {
+                "backgroundColor": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
+              },
+              "whileHover": {
+                "backgroundColor": "oklch(0.84 0.03 158)"
+              }
+            },
+            "wrapperStyle": {
+              "padding": "0.38rem 0.72rem",
+              "borderRadius": "999px",
+              "background": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
+            }
+          },
+          "a-tag-2": {
+            "type": "elementLink",
+            "href": "/work?ability=cgi",
+            "external": false,
+            "copyType": "body",
+            "level": 5,
+            "label": "CGI",
+            "motion": {
+              "animate": {
+                "backgroundColor": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
+              },
+              "whileHover": {
+                "backgroundColor": "oklch(0.84 0.03 158)"
+              }
+            },
+            "wrapperStyle": {
+              "padding": "0.38rem 0.72rem",
+              "borderRadius": "999px",
+              "background": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
+            }
+          },
+          "a-tag-3": {
+            "type": "elementLink",
+            "href": "/work?ability=motion-graphics",
+            "external": false,
+            "copyType": "body",
+            "level": 5,
+            "label": "Motion Graphics",
+            "motion": {
+              "animate": {
+                "backgroundColor": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
+              },
+              "whileHover": {
+                "backgroundColor": "oklch(0.84 0.03 158)"
+              }
+            },
+            "wrapperStyle": {
+              "padding": "0.38rem 0.72rem",
+              "borderRadius": "999px",
+              "background": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
+            }
+          },
+          "a-tag-4": {
+            "type": "elementLink",
+            "href": "/work?ability=sound-design",
+            "external": false,
+            "copyType": "body",
+            "level": 5,
+            "label": "Sound Design",
+            "motion": {
+              "animate": {
+                "backgroundColor": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
+              },
+              "whileHover": {
+                "backgroundColor": "oklch(0.84 0.03 158)"
+              }
+            },
+            "wrapperStyle": {
+              "padding": "0.38rem 0.72rem",
+              "borderRadius": "999px",
+              "background": "oklch(from var(--pb-on-secondary) l c h / 0.06)"
+            }
+          }
+        }
+      },
+      "display": "flex",
+      "flexDirection": "row",
+      "flexWrap": "wrap",
+      "alignItems": "center",
+      "justifyContent": "center",
+      "gap": "0.5rem",
       "align": "center",
-      "textAlign": "center",
-      "width": "hug"
+      "width": ["88%", "60%"]
     }
   }
 }

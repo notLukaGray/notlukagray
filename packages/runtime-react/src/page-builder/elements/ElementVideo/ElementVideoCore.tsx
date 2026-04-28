@@ -22,9 +22,16 @@ export type ElementVideoCoreProps = {
   controlsList?: string;
 };
 
+const DEFAULT_CONTROLS_LIST = "nodownload nofullscreen";
+
 function isIosLikeDevice(): boolean {
   if (typeof navigator === "undefined") return false;
   return /iPad|iPhone|iPod/.test(navigator.userAgent);
+}
+
+function resolveControlsList(controlsList?: string): string {
+  if (controlsList != null) return controlsList;
+  return isIosLikeDevice() ? "nodownload" : DEFAULT_CONTROLS_LIST;
 }
 
 export function ElementVideoCore({
@@ -45,6 +52,7 @@ export function ElementVideoCore({
   controlsList,
 }: ElementVideoCoreProps) {
   const videoElRef = useRef<HTMLVideoElement | null>(null);
+  const resolvedControlsList = resolveControlsList(controlsList);
 
   const handleVideoRef = useCallback(
     (el: HTMLVideoElement | null) => {
@@ -60,8 +68,6 @@ export function ElementVideoCore({
   }, [playbackRate]);
 
   const resolvedPoster = shouldLoad ? (poster ?? undefined) : undefined;
-  const resolvedControlsList =
-    controlsList ?? (isIosLikeDevice() ? "nodownload" : "nodownload nofullscreen");
   const disableRemotePlayback = controlsList?.split(/\s+/).includes("noremoteplayback");
 
   return (

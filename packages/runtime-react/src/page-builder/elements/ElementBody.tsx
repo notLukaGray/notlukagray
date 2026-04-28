@@ -34,6 +34,7 @@ export function ElementBody({
   textAlign,
   width,
   height,
+  constraints,
   marginTop,
   marginBottom,
   marginLeft,
@@ -66,6 +67,7 @@ export function ElementBody({
     ...getElementLayoutStyle({
       width,
       height,
+      constraints,
       align,
       textAlign,
       marginTop,

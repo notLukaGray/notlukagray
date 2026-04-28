@@ -165,7 +165,10 @@ export function SectionDivider({
 
   const sectionProps = {
     className: "relative z-10 shrink-0 min-h-0",
-    style: applySectionFillStyle(resolvedFill, layers, finalStyle),
+    style: {
+      ...applySectionFillStyle(resolvedFill, layers, finalStyle),
+      pointerEvents: "none" as const,
+    },
     "aria-hidden": resolvedAriaLabel ? undefined : true,
     ...(resolvedAriaLabel && { "aria-label": resolvedAriaLabel }),
     onWheel: fixed ? undefined : wheelHandler,

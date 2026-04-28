@@ -13,6 +13,64 @@
       }
     ]
   },
+  "projectGroups": {
+    "spinach-tiff": {
+      "projectSlug": "work/project-spinach-tiff",
+      "elements": ["bg-spinach-tiff", "spinach-tiff-item", "spinach-tiff-preview"]
+    },
+    "brand": {
+      "projectSlug": "work/project-brand",
+      "elements": ["bg-brand", "brand-item", "brand-preview"]
+    },
+    "campaign": {
+      "projectSlug": "work/project-campaign",
+      "elements": ["bg-campaign", "campaign-item", "campaign-preview"]
+    },
+    "cinematic": {
+      "projectSlug": "work/project-cinematic",
+      "elements": ["bg-cinematic", "cinematic-item", "cinematic-preview"]
+    },
+    "documentary": {
+      "projectSlug": "work/project-documentary",
+      "elements": ["bg-documentary", "documentary-item", "documentary-preview"]
+    },
+    "editorial": {
+      "projectSlug": "work/project-editorial",
+      "elements": ["bg-editorial", "editorial-item", "editorial-preview"]
+    },
+    "exhibition": {
+      "projectSlug": "work/project-exhibition",
+      "elements": ["bg-exhibition", "exhibition-item", "exhibition-preview"]
+    },
+    "immersive": {
+      "projectSlug": "work/project-immersive",
+      "elements": ["bg-immersive", "immersive-item", "immersive-preview"]
+    },
+    "motion": {
+      "projectSlug": "work/project-motion",
+      "elements": ["bg-motion", "motion-item", "motion-preview"]
+    },
+    "photography": {
+      "projectSlug": "work/project-photography",
+      "elements": ["bg-photography", "photography-item", "photography-preview"]
+    },
+    "process": {
+      "projectSlug": "work/project-process",
+      "elements": ["bg-process", "process-item", "process-preview"]
+    },
+    "systems": {
+      "projectSlug": "work/project-systems",
+      "elements": ["bg-systems", "systems-item", "systems-preview"]
+    },
+    "clean-it-up": {
+      "projectSlug": "work/clean-it-up",
+      "elements": ["bg-clean-it-up", "clean-it-up-item", "clean-it-up-preview"]
+    },
+    "lenero": {
+      "projectSlug": "work/lenero",
+      "elements": ["bg-lenero", "lenero-item", "lenero-preview"]
+    }
+  },
   "sectionOrder": ["hero"],
   "bgKey": "bg",
   "presets": ["work-index.json"],

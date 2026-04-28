@@ -1,6 +1,10 @@
 {
   "title": "Clean It Up",
   "description": "Clean It Up",
+  "tags": {
+    "brand": ["Clean It Up"],
+    "ability": ["Brand Campaign"]
+  },
   "sectionOrder": ["ciu_a"],
   "bgKey": "bg",
   "definitions": {

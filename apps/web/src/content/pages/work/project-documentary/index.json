@@ -4,6 +4,10 @@
   "title": "Still Water — Documentary Film",
   "description": "A 38-minute essay film about a coastal community's relationship with a river system changed beyond recognition.",
   "assetBaseUrl": "/work",
+  "tags": {
+    "brand": ["Still Water"],
+    "ability": ["Documentary Film"]
+  },
   "backgrounds": {
     "bg-film": {
       "type": "backgroundVideo",

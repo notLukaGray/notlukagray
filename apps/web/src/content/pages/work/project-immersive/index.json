@@ -4,6 +4,10 @@
   "title": "Threshold — Immersive Installation",
   "description": "A multi-sensory spatial installation exploring the boundary between physical and digital presence.",
   "assetBaseUrl": "/work",
+  "tags": {
+    "brand": ["Threshold"],
+    "ability": ["Immersive Installation"]
+  },
   "backgrounds": {
     "bg-space": {
       "type": "backgroundVariable",

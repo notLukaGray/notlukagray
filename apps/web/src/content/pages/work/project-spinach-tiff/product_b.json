@@ -8,16 +8,8 @@
   "scrollSpeed": 0.72,
   "zIndex": 1,
   "marginTop": ["-5vh", "-8vh"],
-  "fill": "oklch(from var(--pb-on-secondary) l c h / 0.024)",
   "borderRadius": ["1.25rem", "2rem"],
-  "effects": [
-    {
-      "type": "dropShadow",
-      "y": "12px",
-      "blur": "48px",
-      "color": "rgba(0,0,0,0.4)"
-    }
-  ],
+
   "elementOrder": ["spin-tiff-video"],
   "definitions": {
     "spin-tiff-video": {
@@ -39,7 +31,7 @@
       "module": "video-player-full",
       "width": "100%",
       "height": "hug",
-      "aspectRatio": ["4/3", "16/9"]
+      "aspectRatio": "16/9"
     }
   }
 }

@@ -9,11 +9,14 @@ import {
   type PageBuilderDefinitionBlock,
   type PageDensity,
   type PageScrollConfig,
+  type PageTags,
+  type ProjectGroupsMap,
   type ResolvedPage,
   type SectionBlock,
   type TriggerAction,
   type bgBlock,
 } from "@pb/contracts";
+import { filterPageByActiveTags } from "@pb/core/internal/page-builder-filter-pass";
 import {
   getAssetBaseUrl,
   resolveBgBlockUrls,
@@ -38,6 +41,10 @@ import {
   getPageSlugs,
   getPageSlugsByBase,
 } from "@pb/core/internal/page-builder-load";
+import {
+  readPageJsonAsync,
+  readPageJsonByPathAsync,
+} from "@pb/core/internal/load/page-builder-load-io";
 import {
   discoverAllPages,
   resolvePagePath,
@@ -156,6 +163,8 @@ export type GetPageBuilderPropsOptions = {
   isMobile?: boolean;
   breakpoints?: Partial<BreakpointDefinitions>;
   viewportWidthPx?: number;
+  /** Active filters from query string. Applied via projectGroups before asset resolution. */
+  activeFilters?: PageTags;
 };
 
 export type GetModalPropsOptions = {
@@ -669,6 +678,21 @@ export function getPageBuilderProps(
   };
 }
 
+async function loadPageTagsRaw(slug: string): Promise<PageTags | undefined> {
+  const segments = parseSlugSegments(slug);
+  if (!segments) return undefined;
+  const raw =
+    segments.length === 1
+      ? await readPageJsonAsync(segments[0] as string)
+      : await (async () => {
+          const absolutePath = resolvePagePath(segments);
+          return absolutePath ? readPageJsonByPathAsync(absolutePath, slug) : null;
+        })();
+  if (!raw) return undefined;
+  const tags = (raw as { tags?: unknown }).tags;
+  return tags && typeof tags === "object" && !Array.isArray(tags) ? (tags as PageTags) : undefined;
+}
+
 export async function getPageBuilderPropsAsync(
   slug: string,
   options?: GetPageBuilderPropsOptions
@@ -685,6 +709,27 @@ export async function getPageBuilderPropsAsync(
   let resolvedSections: SectionBlock[] = (page.sections ?? []).map(
     (section) => ({ ...section }) as SectionBlock
   );
+
+  const projectGroups = (page as { projectGroups?: ProjectGroupsMap }).projectGroups;
+  if (options?.activeFilters && projectGroups) {
+    const projectSlugs = Array.from(
+      new Set(Object.values(projectGroups).map((g) => g.projectSlug))
+    );
+    const tagsBySlug = new Map<string, PageTags | undefined>();
+    await Promise.all(
+      projectSlugs.map(async (s) => {
+        tagsBySlug.set(s, await loadPageTagsRaw(s));
+      })
+    );
+    const filtered = filterPageByActiveTags({
+      sections: resolvedSections,
+      projectGroups,
+      activeFilters: options.activeFilters,
+      getProjectTags: (s) => tagsBySlug.get(s),
+    });
+    resolvedSections = filtered.sections;
+  }
+
   if (options?.transformSections) {
     resolvedSections = options.transformSections(resolvedSections);
   }

@@ -6,6 +6,37 @@ export type SmoothScrollOptions = {
   smoothness?: number;
 };
 
+const OVERFLOW_SCROLLISH = new Set(["auto", "scroll", "overlay"]);
+
+function nestedCanAbsorbVerticalWheel(
+  pageEl: HTMLElement,
+  target: EventTarget | null,
+  deltaY: number
+): boolean {
+  if (!(target instanceof Element) || deltaY === 0) return false;
+  let node: Element | null = target;
+  while (node && node !== pageEl) {
+    if (node instanceof HTMLElement) {
+      const style = window.getComputedStyle(node);
+      if (!OVERFLOW_SCROLLISH.has(style.overflowY)) {
+        node = node.parentElement;
+        continue;
+      }
+      if (node.scrollHeight <= node.clientHeight + 1) {
+        node = node.parentElement;
+        continue;
+      }
+      const goingDown = deltaY > 0;
+      const epsilon = 1;
+      const atTop = node.scrollTop <= epsilon;
+      const atBottom = node.scrollTop + node.clientHeight >= node.scrollHeight - epsilon;
+      if ((goingDown && !atBottom) || (!goingDown && !atTop)) return true;
+    }
+    node = node.parentElement;
+  }
+  return false;
+}
+
 export function useSmoothScroll(
   containerRef: RefObject<HTMLDivElement | null>,
   options: SmoothScrollOptions = {}
@@ -43,6 +74,9 @@ export function useSmoothScroll(
     };
 
     const onWheel = (e: WheelEvent) => {
+      if (nestedCanAbsorbVerticalWheel(el, e.target, e.deltaY)) {
+        return;
+      }
       e.preventDefault();
       const max = el.scrollHeight - el.clientHeight;
       if (max <= 0) return;

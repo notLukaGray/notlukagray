@@ -4,6 +4,10 @@
   "passwordProtected": true,
   "robots": "noindex, follow",
   "assetBaseUrl": "/work",
+  "tags": {
+    "brand": ["Echo"],
+    "ability": ["Short Documentary", "Documentary Film"]
+  },
   "sectionOrder": [
     "lenero_section_0",
     "lenero_section_a",

@@ -3,6 +3,10 @@
   "description": "Twenty-four portraits made on the Outer Hebrides at the end of summer — silver gelatin prints from 35mm negatives, shot over six weeks.",
   "ogImage": "https://media.notlukagray.com/website/work/project-photography/og.webp",
   "assetBaseUrl": "/work",
+  "tags": {
+    "brand": ["Last Light"],
+    "ability": ["Photography"]
+  },
   "sectionOrder": ["photo_a", "photo_b", "photo_c", "photo_d", "photo_e"],
   "bgKey": "bg-photo",
   "definitions": {

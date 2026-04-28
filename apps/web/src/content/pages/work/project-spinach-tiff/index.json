@@ -1,14 +1,14 @@
 {
-  "title": "Spinach x TIFF",
+  "title": "Luka Gray - Spinach x tiff - Project",
   "assetBaseUrl": "/work",
   "passwordProtected": true,
   "tags": {
-    "brand": ["Echo"],
-    "ability": ["Art Direction", "CGI", "Editorial", "Color Grading"]
+    "brand": ["Spinach"],
+    "ability": ["Art Direction", "CGI", "Motion Graphics", "Sound Design"]
   },
   "description": "A playful trailer for Spinach shown in association with TIFF, parodying a familiar fairytale studio opening.",
-  "ogImage": "https://media.notlukagray.com/website/work/project-spinach-tiff/og.webp",
-  "sectionOrder": ["product_0", "product_a", "product_b", "product_c", "product_d", "product_e"],
+  "ogImage": "https://media.notlukagray.com/website/work/project-spinach-tiff/ogimgage.jpg",
+  "sectionOrder": ["product_0", "product_a", "product_b", "product_c", "product_d"],
   "bgKey": "bg-product",
   "scroll": {
     "smooth": true,
@@ -25,7 +25,7 @@
         },
         {
           "fill": {
-            "light": "radial-gradient(ellipse 120% 40% at 10% 0%, oklch(0.9 0.01 160) 0%, oklch(1 0.01 160) 100%)",
+            "light": "radial-gradient(ellipse 120% 40% at 10% 0%, oklch(0.84 0.03 158) 0%, oklch(0.95 0.00 145) 100%)",
             "dark": "radial-gradient(ellipse 120% 40% at 10% 0%, oklch(0.3 0.02 160) 0%, oklch(0.1 0.02 160) 100%)"
           }
         }

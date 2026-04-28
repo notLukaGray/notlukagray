@@ -5,7 +5,6 @@ import type { ElementLayout } from "@pb/contracts/page-builder/core/page-builder
 import { resolveResponsiveValue } from "../../lib/responsive-value";
 import { resolveConstraintStyle } from "./figma-constraints-style";
 
-/** JSON often sends `""` for “unset”; treat like undefined so guideline defaults apply. */
 export function coalesceEmptyString(value: unknown): string | undefined {
   if (value == null) return undefined;
   if (typeof value === "number" && !Number.isNaN(value)) return String(value);
@@ -14,7 +13,6 @@ export function coalesceEmptyString(value: unknown): string | undefined {
   return t === "" ? undefined : t;
 }
 
-/** Maps exporter / author quirks to valid flex `align-items` keywords. */
 export function normalizeFlexAlignItemsValue(
   value: string
 ): NonNullable<CSSProperties["alignItems"]> {
@@ -24,7 +22,6 @@ export function normalizeFlexAlignItemsValue(
   return s as NonNullable<CSSProperties["alignItems"]>;
 }
 
-/** Maps exporter / author quirks to valid `justify-content` keywords. */
 export function normalizeFlexJustifyContentValue(value: string): string {
   const s = value.trim();
   if (s === "left" || s === "start") return "flex-start";
@@ -37,18 +34,12 @@ function resolveSize(value: string | undefined): string | undefined {
   return value === "hug" ? "fit-content" : value;
 }
 
-/**
- * Maps page-builder `gap` to a CSS `gap` value. `"auto"` is used when export infers
- * Figma packed/dynamic primary-axis spacing (itemSpacing 0 but non-zero child geometry);
- * flexbox has no gap:auto, so we omit the property and rely on alignment + children.
- */
 export function pageBuilderFlexGapToCss(gap: string | undefined | null): string | undefined {
   if (gap == null || gap === "auto") return undefined;
   if (/^-\d*\.?\d+(px|rem|em|vw|vh|%)$/i.test(gap.trim())) return undefined;
   return gap;
 }
 
-/** Resolved `gap` for element groups, including `pbContentGuidelines.frameGapWhenUnset` when JSON omits `gap`. */
 export function resolveFrameGapCss(gap: string | undefined | null): string | undefined {
   const pbContentGuidelines = getPbContentGuidelines();
   if (gap == null || gap === "") {
@@ -58,7 +49,6 @@ export function resolveFrameGapCss(gap: string | undefined | null): string | und
   return pageBuilderFlexGapToCss(gap);
 }
 
-/** Row gap when JSON omits `rowGap` — uses `frameRowGapWhenUnset` when set. */
 export function resolveFrameRowGapCss(rowGap: string | undefined | null): string | undefined {
   const pbContentGuidelines = getPbContentGuidelines();
   if (rowGap == null || rowGap === "") {
@@ -68,7 +58,6 @@ export function resolveFrameRowGapCss(rowGap: string | undefined | null): string
   return pageBuilderFlexGapToCss(rowGap);
 }
 
-/** Column gap when JSON omits `columnGap` — uses `frameColumnGapWhenUnset` when set. */
 export function resolveFrameColumnGapCss(columnGap: string | undefined | null): string | undefined {
   const pbContentGuidelines = getPbContentGuidelines();
   if (columnGap == null || columnGap === "") {
@@ -103,6 +92,10 @@ export type ResolvedElementLayout = {
   id?: string;
   width?: string;
   height?: string;
+  minWidth?: string;
+  maxWidth?: string;
+  minHeight?: string;
+  maxHeight?: string;
   borderRadius?: string;
   constraints?: ElementLayout["constraints"];
   align?: "left" | "center" | "right";
@@ -122,8 +115,18 @@ export function normalizeLayoutInput(
 ): ResolvedElementLayout | undefined {
   if (!layout) return undefined;
   if (isMobile === undefined) return layout as ResolvedElementLayout;
+  const extendedLayout = layout as Partial<ElementLayout> & {
+    minWidth?: ElementLayout["width"];
+    maxWidth?: ElementLayout["width"];
+    minHeight?: ElementLayout["height"];
+    maxHeight?: ElementLayout["height"];
+  };
   const width = resolveResponsiveValue(layout.width, isMobile);
   const height = resolveResponsiveValue(layout.height, isMobile);
+  const minWidth = resolveResponsiveValue(extendedLayout.minWidth, isMobile);
+  const maxWidth = resolveResponsiveValue(extendedLayout.maxWidth, isMobile);
+  const minHeight = resolveResponsiveValue(extendedLayout.minHeight, isMobile);
+  const maxHeight = resolveResponsiveValue(extendedLayout.maxHeight, isMobile);
   const borderRadius = resolveResponsiveValue(layout.borderRadius, isMobile);
   const align = resolveResponsiveValue(layout.align, isMobile);
   const alignY = resolveResponsiveValue(layout.alignY, isMobile);
@@ -136,6 +139,10 @@ export function normalizeLayoutInput(
     ...layout,
     width,
     height,
+    minWidth,
+    maxWidth,
+    minHeight,
+    maxHeight,
     borderRadius,
     align,
     alignY,
@@ -178,16 +185,24 @@ export function computeSizingStyle(resolved: ResolvedElementLayout): CSSProperti
     style.height = height;
     if (resolved.height != null && resolved.height !== "hug") style.minHeight = 0;
   }
+  if (resolved.minWidth != null) style.minWidth = resolved.minWidth;
+  if (resolved.maxWidth != null) style.maxWidth = resolved.maxWidth;
+  if (resolved.minHeight != null) style.minHeight = resolved.minHeight;
+  if (resolved.maxHeight != null) style.maxHeight = resolved.maxHeight;
   const constraints = Array.isArray(resolved.constraints)
     ? undefined
     : (resolved.constraints as
         | { minWidth?: string; maxWidth?: string; minHeight?: string; maxHeight?: string }
         | undefined);
   if (constraints) {
-    if (constraints.minWidth != null) style.minWidth = constraints.minWidth;
-    if (constraints.maxWidth != null) style.maxWidth = constraints.maxWidth;
-    if (constraints.minHeight != null) style.minHeight = constraints.minHeight;
-    if (constraints.maxHeight != null) style.maxHeight = constraints.maxHeight;
+    if (constraints.minWidth != null && style.minWidth == null)
+      style.minWidth = constraints.minWidth;
+    if (constraints.maxWidth != null && style.maxWidth == null)
+      style.maxWidth = constraints.maxWidth;
+    if (constraints.minHeight != null && style.minHeight == null)
+      style.minHeight = constraints.minHeight;
+    if (constraints.maxHeight != null && style.maxHeight == null)
+      style.maxHeight = constraints.maxHeight;
   }
   return style;
 }
@@ -251,7 +266,6 @@ const LAYOUT_STYLE_HANDLERS: Record<string, (resolved: ResolvedElementLayout) =>
   }),
 };
 
-/** Accepts full or partial layout; entrance* and other optional fields are not used for style. */
 export function getElementLayoutStyle(
   layout: Partial<ElementLayout> | ElementLayout | undefined,
   isMobile?: boolean

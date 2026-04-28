@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import type { RefObject } from "react";
 import { useScroll } from "./triggers";
+import type { UseScrollOptions } from "framer-motion";
 import { useTransform, useMotionValueEvent } from "./motion-values";
 import { animate } from "./animations";
 import type { Easing, MotionValue } from "./types";
@@ -131,8 +132,7 @@ export function useBgLayerMotion(
 
   const { scrollYProgress: parallaxProgress } = useScroll({
     container: containerRef ?? undefined,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    offset: (parallaxMotion?.offset ?? ["start start", "end end"]) as any,
+    offset: (parallaxMotion?.offset ?? ["start start", "end end"]) as UseScrollOptions["offset"],
   });
 
   const parallaxAxis = parallaxMotion?.axis ?? "y";
@@ -155,8 +155,7 @@ export function useBgLayerMotion(
 
   const { scrollYProgress: scrollMotionProgress } = useScroll({
     container: containerRef ?? undefined,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    offset: (scrollMotions[0]?.offset ?? ["start start", "end end"]) as any,
+    offset: (scrollMotions[0]?.offset ?? ["start start", "end end"]) as UseScrollOptions["offset"],
   });
 
   useMotionValueEvent(scrollMotionProgress, "change", (progress) => {

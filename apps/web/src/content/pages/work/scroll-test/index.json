@@ -1,0 +1,142 @@
+{
+  "title": "Scroll test",
+  "description": "elementInfiniteScroll inside the same work shell as /work/scroll-test (plain box) baseline.",
+  "sectionOrder": ["hero"],
+  "bgKey": "bg",
+  "scroll": {
+    "lockBody": true,
+    "overflowX": "hidden",
+    "overflowY": "hidden"
+  },
+  "definitions": {
+    "bg": {
+      "type": "backgroundVariable",
+      "layers": [
+        {
+          "fill": "var(--pb-secondary)"
+        }
+      ]
+    },
+    "hero": {
+      "type": "contentBlock",
+      "ariaLabel": "Infinite scroll isolation test",
+      "width": "100%",
+      "height": "calc(100dvh - var(--nav-height, 64px) - 4rem)",
+      "contentHeight": "full",
+      "align": "center",
+      "fill": "transparent",
+      "overflow": "hidden",
+      "flexDirection": "column",
+      "justifyContent": "flex-start",
+      "alignItems": "stretch",
+      "gap": "1rem",
+      "paddingTop": "1rem",
+      "paddingBottom": "1rem",
+      "paddingLeft": "1rem",
+      "paddingRight": "1rem",
+      "elementOrder": ["title", "scroll-list", "footer-note"],
+      "definitions": {
+        "title": {
+          "type": "elementHeading",
+          "level": 2,
+          "text": "Work shell — elementInfiniteScroll test",
+          "width": "100%"
+        },
+        "scroll-list": {
+          "type": "elementInfiniteScroll",
+          "id": "scroll-test-carousel",
+          "width": "100%",
+          "height": "14rem",
+          "minHeight": "0",
+          "scrollDirection": "vertical",
+          "loop": true,
+          "initialIndex": 0,
+          "snapAlign": "center",
+          "centerOnClick": true,
+          "snapDurationMs": 420,
+          "activeScale": 1,
+          "inactiveScale": 0.94,
+          "activeOpacity": 1,
+          "inactiveOpacity": 0.45,
+          "display": "flex",
+          "flexDirection": "column",
+          "alignItems": "stretch",
+          "gap": "0.35rem",
+          "padding": "0.5rem",
+          "section": {
+            "elementOrder": [
+              "scroll-item-0",
+              "scroll-item-1",
+              "scroll-item-2",
+              "scroll-item-3",
+              "scroll-item-4",
+              "scroll-item-5"
+            ],
+            "definitions": {
+              "scroll-item-0": {
+                "type": "elementBody",
+                "id": "scroll-item-0",
+                "text": "Row 0 — six items so loop mode stays on (min 5). Wheel should scroll this carousel.",
+                "level": 3,
+                "width": "100%",
+                "paddingTop": "0.65rem",
+                "paddingBottom": "0.65rem"
+              },
+              "scroll-item-1": {
+                "type": "elementBody",
+                "id": "scroll-item-1",
+                "text": "Row 1",
+                "level": 3,
+                "width": "100%",
+                "paddingTop": "0.65rem",
+                "paddingBottom": "0.65rem"
+              },
+              "scroll-item-2": {
+                "type": "elementBody",
+                "id": "scroll-item-2",
+                "text": "Row 2",
+                "level": 3,
+                "width": "100%",
+                "paddingTop": "0.65rem",
+                "paddingBottom": "0.65rem"
+              },
+              "scroll-item-3": {
+                "type": "elementBody",
+                "id": "scroll-item-3",
+                "text": "Row 3",
+                "level": 3,
+                "width": "100%",
+                "paddingTop": "0.65rem",
+                "paddingBottom": "0.65rem"
+              },
+              "scroll-item-4": {
+                "type": "elementBody",
+                "id": "scroll-item-4",
+                "text": "Row 4",
+                "level": 3,
+                "width": "100%",
+                "paddingTop": "0.65rem",
+                "paddingBottom": "0.65rem"
+              },
+              "scroll-item-5": {
+                "type": "elementBody",
+                "id": "scroll-item-5",
+                "text": "Row 5 — end of list; add more copy in JSON if you need extra scroll height.",
+                "level": 3,
+                "width": "100%",
+                "paddingTop": "0.65rem",
+                "paddingBottom": "0.65rem"
+              }
+            }
+          }
+        },
+        "footer-note": {
+          "type": "elementBody",
+          "text": "Same route and shell as before, but this grey region is now elementInfiniteScroll. If the plain box scrolled here but this does not, the regression is inside the carousel runtime.",
+          "level": 4,
+          "width": "100%"
+        }
+      }
+    }
+  }
+}
