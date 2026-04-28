@@ -22,7 +22,8 @@ import {
   isMobileFromUserAgent,
 } from "@pb/core";
 import { PageBuilderPage } from "@pb/runtime-react/server";
-import { getTwitterCardForOgImage } from "@/core/lib/globals";
+import { getTwitterCardForOgImage, cdnBase } from "@/core/lib/globals";
+import { getSignedCdnUrl } from "@/core/lib/cdn-asset-server";
 import { UnlockPageShell } from "@/core/ui/UnlockPageShell";
 
 type SearchParamsRaw = Record<string, string | string[] | undefined>;
@@ -85,6 +86,12 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const activeFilters = parseFiltersFromQuery(query, filterConfig);
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
 
+  const normalizedCdnBase = cdnBase.replace(/\/+$/, "");
+  const ogImageKey = ogImage?.startsWith(normalizedCdnBase)
+    ? ogImage.slice(normalizedCdnBase.length).replace(/^\/+/, "")
+    : null;
+  const signedOgImage = ogImageKey ? getSignedCdnUrl(ogImageKey) : ogImage;
+
   const effectiveRobots = isUnlockRoute
     ? "noindex, follow"
     : hasActiveFilters
@@ -105,13 +112,13 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     openGraph: {
       title,
       ...(description && { description }),
-      ...(ogImage && { images: [ogImage] }),
+      ...(signedOgImage && { images: [signedOgImage] }),
     },
     twitter: {
       card: getTwitterCardForOgImage(ogImage),
       title,
       ...(description && { description }),
-      ...(ogImage && { images: [ogImage] }),
+      ...(signedOgImage && { images: [signedOgImage] }),
     },
   };
 }
