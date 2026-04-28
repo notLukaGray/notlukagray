@@ -3,11 +3,6 @@ import { PROTECTED_PAGE_PATHS } from "@/core/lib/protected-slugs.generated";
 import { accessCookieName } from "@/core/lib/auth-constants";
 import { verifyAccessTokenEdge } from "@/core/lib/access-cookie-edge";
 
-const UNLOCK_PREVIEW_BY_PATH: Record<string, string> = {
-  "work/project-spinach-tiff":
-    "https://media.notlukagray.com/website/work/project-spinach-tiff/og.webp",
-};
-
 function buildRequestedPathWithQuery(request: NextRequest): string {
   const params = new URLSearchParams(request.nextUrl.searchParams);
   params.delete("unlock");
@@ -15,13 +10,11 @@ function buildRequestedPathWithQuery(request: NextRequest): string {
   return query.length > 0 ? `${request.nextUrl.pathname}?${query}` : request.nextUrl.pathname;
 }
 
-function buildUnlockRedirectUrl(request: NextRequest, normalizedPath: string): URL {
+function buildUnlockRedirectUrl(request: NextRequest): URL {
   const url = request.nextUrl.clone();
   url.pathname = "/unlock";
   url.search = "";
   url.searchParams.set("unlock_redirect", buildRequestedPathWithQuery(request));
-  const preview = UNLOCK_PREVIEW_BY_PATH[normalizedPath];
-  if (preview) url.searchParams.set("unlock_preview", preview);
   return url;
 }
 
@@ -52,7 +45,7 @@ export async function proxy(request: NextRequest) {
 
   if (!valid) {
     if (wantsUnlock) return NextResponse.next();
-    return NextResponse.redirect(buildUnlockRedirectUrl(request, normalizedPath));
+    return NextResponse.redirect(buildUnlockRedirectUrl(request));
   }
 
   if (wantsUnlock) {

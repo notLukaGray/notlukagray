@@ -13,6 +13,7 @@ import {
   safeRedirectPath,
 } from "@/core/lib/unlock-linking";
 import { parseFiltersFromQuery } from "@/core/lib/parse-page-filters";
+import { PROTECTED_PAGE_PATHS } from "@/core/lib/protected-slugs.generated";
 import {
   getPageAsync,
   getPageBuilderPropsAsync,
@@ -63,7 +64,10 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const redirectTarget = isUnlockRoute
     ? safeRedirectPath(getSingleQueryValue(query.unlock_redirect))
     : null;
-  const effectiveSlug = redirectTarget ? redirectTarget.replace(/^\/+/, "") : segments.join("/");
+  const redirectSlug = redirectTarget?.replace(/^\/+/, "");
+  const validRedirect =
+    redirectSlug && PROTECTED_PAGE_PATHS.has(redirectSlug) ? redirectSlug : null;
+  const effectiveSlug = validRedirect ?? segments.join("/");
 
   const page = await getPageAsync(effectiveSlug);
   if (!page) return {};
