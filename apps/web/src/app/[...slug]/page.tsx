@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import type { FilterConfig } from "@pb/contracts";
 import { accessCookieName } from "@/core/lib/auth-constants";
+import { parseBrowserDataCookie, browserDataCookieName } from "@/core/lib/browser-data-cookie";
 import { verifyAccessToken } from "@/core/lib/access-cookie";
 import {
   buildUnlockModalProps,
@@ -137,11 +138,15 @@ export default async function UniversalSlugPage({ params, searchParams }: Props)
   ]);
   const hasAccess = verifyAccessToken(cookieStore.get(accessCookieName)?.value);
   const isMobile = isMobileFromUserAgent(headersList.get("user-agent") ?? "");
+  const browserData = parseBrowserDataCookie(cookieStore.get(browserDataCookieName)?.value);
   const filterConfig = (page as { filterConfig?: FilterConfig } | null)?.filterConfig;
   const activeFilters = parseFiltersFromQuery(query, filterConfig);
   const hasActiveFilters = Object.keys(activeFilters).length > 0;
   const props = await getPageBuilderPropsAsync(segments.join("/"), {
     isMobile,
+    ...(browserData?.viewportWidthPx != null
+      ? { viewportWidthPx: browserData.viewportWidthPx }
+      : {}),
     ...(hasActiveFilters ? { activeFilters } : {}),
   });
   if (!props) notFound();

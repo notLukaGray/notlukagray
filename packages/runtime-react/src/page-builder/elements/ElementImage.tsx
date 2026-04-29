@@ -7,6 +7,7 @@ import type {
   ElementBlock,
   SectionEffect,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { useBrowserData } from "@pb/runtime-react/core/hooks/use-browser-data";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { computeElementImagePresentation } from "./ElementImage/element-image-presentation";
@@ -89,8 +90,15 @@ export function ElementImage({
   const imageEffects = useMemo(() => coerceSectionEffects(resolvedEffects), [resolvedEffects]);
   const hasGlassEffect = (imageEffects ?? []).some((effect) => effect.type === "glass");
   const { isMobile } = useDeviceType();
+  const browserData = useBrowserData();
   const resolvedAspectRatio = resolveResponsiveValue(aspectRatio, isMobile);
   const resolvedObjectFit = resolveResponsiveValue(objectFit, isMobile) ?? "cover";
+  const measuredViewportSizes =
+    browserData && browserData.viewportWidthPx > 0
+      ? `${Math.round(browserData.viewportWidthPx)}px`
+      : undefined;
+  const resolvedSizes =
+    sizes ?? measuredViewportSizes ?? "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px";
 
   const handleNativeImgError = useCallback(() => {
     setHasError(true);
@@ -221,7 +229,7 @@ export function ElementImage({
               loading={loading ?? (priority ? "eager" : "lazy")}
               decoding={decoding}
               srcSet={srcSet}
-              sizes={sizes}
+              sizes={sizes ?? measuredViewportSizes}
               fetchPriority={priority ? "high" : undefined}
               onError={handleNativeImgError}
               onLoad={handleImgLoad}
@@ -234,7 +242,7 @@ export function ElementImage({
               unoptimized={isBlobSrc}
               priority={!!priority}
               fetchPriority={priority ? "high" : "auto"}
-              sizes={sizes ?? "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"}
+              sizes={resolvedSizes}
               style={fillHeight ? fillImgStyle : nextImageFillStyle}
               loading={loading ?? (priority ? "eager" : "lazy")}
               decoding={decoding}

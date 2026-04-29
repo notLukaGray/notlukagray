@@ -9,6 +9,7 @@ import { getTwitterCardForOgImage, siteUrl, cdnBase, siteMetadata } from "@/core
 import { ThemeProvider } from "@/core/providers/theme-provider";
 import { AppLayout } from "@/core/ui/app-layout";
 import { DeviceTypeProvider } from "@/core/providers/device-type-provider";
+import { BrowserDataClient } from "@/app/BrowserDataClient";
 import { pbBrandCssInline } from "@/app/theme/config";
 import { pbBuilderDefaultsV1 } from "@/app/theme/pb-builder-defaults";
 import { pbContentGuidelinesCssInline } from "@/app/theme/pb-content-guidelines-config";
@@ -132,6 +133,7 @@ export default function RootLayout({
         />
         <DeviceTypeProvider>
           <ThemeProvider attribute="class" disableTransitionOnChange>
+            <BrowserDataClient />
             <DevelopmentClients />
             <AppLayout>{children}</AppLayout>
           </ThemeProvider>

@@ -26,6 +26,7 @@ import { expandPageBuilder } from "@pb/core/internal/page-builder-expand";
 import { resolvePresets } from "@pb/core/internal/page-builder-presets";
 import { applyBuilderElementDefaultsToSections } from "@pb/core/internal/page-builder-apply-element-defaults";
 import { resolveEntranceMotionsIntoSections } from "@pb/core/internal/page-builder-resolve-entrance-motions";
+import { getCoreGlobals } from "@pb/core/lib/globals";
 import {
   buildRawBgDefinitions,
   buildResolvedBgDefinitions,
@@ -299,6 +300,19 @@ function resolveViewportWidthForExpansion(options?: GetPageOptions): number | un
   if (options?.isMobile === undefined) return undefined;
   const breakpoints = resolveBreakpointDefinitions(options.breakpoints);
   return options.isMobile ? breakpoints.desktop - 1 : breakpoints.desktop;
+}
+
+function resolveViewportWidthForAssetSizing(
+  options?: GetPageBuilderPropsOptions
+): number | undefined {
+  if (typeof options?.viewportWidthPx === "number" && Number.isFinite(options.viewportWidthPx)) {
+    return options.viewportWidthPx;
+  }
+  if (options?.isMobile === undefined) return undefined;
+  const breakpoints = resolveBreakpointDefinitions(options.breakpoints);
+  if (options.isMobile) return breakpoints.desktop - 1;
+  const { imageDefaultWidth } = getCoreGlobals();
+  return imageDefaultWidth;
 }
 
 function parseSlugSegments(slug: string): string[] | null {
@@ -741,13 +755,14 @@ export async function getPageBuilderPropsAsync(
       ? page.transitions
       : [page.transitions]
     : [];
+  const assetViewportWidthPx = resolveViewportWidthForAssetSizing(options);
 
   const injected = resolvePageBuilderAssetsOnServer(
     resolvedBg,
     resolvedSections,
     bgDefinitionsRaw,
     transitionsArray,
-    { isMobile: options?.isMobile, viewportWidthPx: options?.viewportWidthPx }
+    { isMobile: options?.isMobile, viewportWidthPx: assetViewportWidthPx }
   );
 
   const injectedSections = resolveEntranceMotionsIntoSections(injected.resolvedSections);
