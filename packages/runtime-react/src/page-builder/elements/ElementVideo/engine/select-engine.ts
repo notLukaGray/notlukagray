@@ -18,8 +18,14 @@ export function isDashVideoSource(src: string): boolean {
   return srcPathname(src).endsWith(".mpd");
 }
 
+function hasMediaSourceSupport(): boolean {
+  return typeof window !== "undefined" && "MediaSource" in window;
+}
+
 export function selectVideoEngineKind(video: HTMLVideoElement, src: string): VideoEngineKind {
-  if (isDashVideoSource(src)) return "dash-js";
+  if (isDashVideoSource(src)) {
+    return hasMediaSourceSupport() ? "dash-js" : "progressive";
+  }
   if (!isHlsVideoSource(src)) return "progressive";
   if (video.canPlayType("application/vnd.apple.mpegurl")) return "native-hls";
   return "hls-js";

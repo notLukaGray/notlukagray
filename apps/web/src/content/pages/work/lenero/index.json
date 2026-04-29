@@ -1,8 +1,7 @@
 {
   "title": "Echo — Short Documentary",
   "description": "A short documentary about presence, stillness, and the landscape of the inner Hardangervidda.",
-  "passwordProtected": true,
-  "robots": "noindex, follow",
+  "passwordProtected": false,
   "assetBaseUrl": "/work",
   "tags": {
     "brand": ["Echo"],

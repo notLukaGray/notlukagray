@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { PageBuilderRuntimeEffects } from "@pb/runtime-react/effects";
 import { MotionConfig } from "@pb/runtime-react/motion";
 import { ScrollContainerProvider } from "@pb/runtime-react/scroll";
 
@@ -29,6 +30,7 @@ export default function UniversalPageBuilderLayout({ children }: { children: Rea
             paddingRight: "env(safe-area-inset-right, 0px)",
           }}
         >
+          <PageBuilderRuntimeEffects />
           {children}
         </div>
       </ScrollContainerProvider>

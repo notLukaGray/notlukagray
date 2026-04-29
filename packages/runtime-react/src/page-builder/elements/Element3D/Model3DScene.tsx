@@ -2,7 +2,9 @@
 
 import { Suspense, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
+import { useDeviceType } from "@pb/runtime-react/core/hooks/use-device-type";
 import { SceneContent } from "./model3d-scene-content";
+import { resolveModel3DRenderProfile } from "./model3d-render-profile";
 import type { Block } from "./model3d-types";
 import type {
   Model3DAnimationCommand,
@@ -25,6 +27,7 @@ export function Model3DScene({
   postProcessingCommand,
   onNavigate,
   onReady,
+  isHomepagePriority = false,
 }: {
   block: Block;
   animationCommand: Model3DAnimationCommand | null;
@@ -36,21 +39,16 @@ export function Model3DScene({
   postProcessingCommand: Model3DPostProcessingCommand | null;
   onNavigate?: (href: string) => void;
   onReady?: () => void;
+  isHomepagePriority?: boolean;
 }) {
-  const dpr = block.canvas?.dpr ?? 1.5;
-  const glOpts = block.canvas?.gl ?? {};
-  const dprArr = useMemo(() => [1, Math.min(dpr, 2)] as [number, number], [dpr]);
+  const { isMobile } = useDeviceType();
+  const renderProfile = useMemo(
+    () => resolveModel3DRenderProfile({ canvas: block.canvas, isMobile, isHomepagePriority }),
+    [block.canvas, isHomepagePriority, isMobile]
+  );
 
   return (
-    <Canvas
-      dpr={dprArr}
-      gl={{
-        antialias: glOpts.antialias ?? true,
-        powerPreference: glOpts.powerPreference ?? "high-performance",
-        alpha: glOpts.alpha ?? true,
-      }}
-      camera={{ position: [0, 0, 1], fov: 50 }}
-    >
+    <Canvas dpr={renderProfile.dpr} gl={renderProfile.gl} camera={{ position: [0, 0, 1], fov: 50 }}>
       <Suspense fallback={null}>
         <SceneContent
           block={block}
@@ -63,6 +61,7 @@ export function Model3DScene({
           postProcessingCommand={postProcessingCommand}
           onNavigate={onNavigate}
           onReady={onReady}
+          isHomepagePriority={isHomepagePriority}
         />
       </Suspense>
     </Canvas>

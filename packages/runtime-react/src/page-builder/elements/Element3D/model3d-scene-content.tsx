@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Environment, OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import dynamic from "next/dynamic";
+import { PerspectiveCamera } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { useTextureMap } from "./model3d-texture-map";
@@ -9,7 +10,6 @@ import { LoadedModel } from "./model3d-loaded-model";
 import { CameraEffects } from "./model3d-camera-effects";
 import { OrthoCameraFromBlock } from "./model3d-ortho-camera";
 import { SceneLights } from "./model3d-lights";
-import { ScenePostProcessing } from "./model3d-post-processing";
 import type {
   Model3DAnimationCommand,
   Model3DCameraCommand,
@@ -22,6 +22,21 @@ import type {
 } from "./model3d-controls";
 import type { Block } from "./model3d-types";
 import type { PageBuilderAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
+
+const SceneEnvironment = dynamic(
+  () => import("./optional-environment").then((mod) => mod.SceneEnvironment),
+  { loading: () => null, ssr: false }
+);
+
+const SceneOrbitControls = dynamic(
+  () => import("./optional-orbit-controls").then((mod) => mod.SceneOrbitControls),
+  { loading: () => null, ssr: false }
+);
+
+const ScenePostProcessing = dynamic(
+  () => import("./model3d-post-processing").then((mod) => mod.ScenePostProcessing),
+  { loading: () => null, ssr: false }
+);
 
 const CAMERA_EASINGS: Record<string, (t: number) => number> = {
   linear: (t) => t,
@@ -178,6 +193,7 @@ export function SceneContent({
   postProcessingCommand,
   onNavigate,
   onReady,
+  isHomepagePriority: _isHomepagePriority = false,
 }: {
   block: Block;
   animationCommand: Model3DAnimationCommand | null;
@@ -189,6 +205,7 @@ export function SceneContent({
   postProcessingCommand: Model3DPostProcessingCommand | null;
   onNavigate?: (href: string) => void;
   onReady?: () => void;
+  isHomepagePriority?: boolean;
 }) {
   const { scene: sceneDef, textures, materials, models } = block;
   const { textureMap, videoReady, videoElement } = useTextureMap(textures);
@@ -286,7 +303,7 @@ export function SceneContent({
   return (
     <>
       {envPath && (
-        <Environment files={envPath} background={false} environmentIntensity={envIntensity} />
+        <SceneEnvironment files={envPath} background={false} environmentIntensity={envIntensity} />
       )}
 
       <SceneLights lights={sceneDef.lights} />
@@ -310,7 +327,7 @@ export function SceneContent({
         }
       />
       {orbitState?.enabled && (
-        <OrbitControls
+        <SceneOrbitControls
           autoRotate={orbitState.autoRotate}
           autoRotateSpeed={orbitState.autoRotateSpeed}
         />

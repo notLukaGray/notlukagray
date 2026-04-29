@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import type { bgBlock, SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { OVERRIDE_KEY_BG } from "@pb/contracts/page-builder/core/page-builder-schemas";
+import { OVERRIDE_KEY_BG } from "@pb/contracts/page-builder/core/page-builder-types/trigger-action-types";
 import {
   applyElementOverrides,
   isBgBlockPayload,

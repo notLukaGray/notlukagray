@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import type {
   ElementBlock,
   MotionPropsFromJson,
@@ -155,7 +155,9 @@ export function ElementModel3D({
     overflow,
   });
   const router = useRouter();
+  const pathname = usePathname();
   const onNavigate = useCallback((href: string) => router.push(href), [router]);
+  const isHomepagePriority = pathname === "/" && initiallyLoaded;
 
   const geometryUrls = useMemo(() => {
     if (!models) return [];
@@ -163,7 +165,7 @@ export function ElementModel3D({
       .map((m) => m.geometry)
       .filter((g): g is string => !!g);
   }, [models]);
-  useModel3DPreload(geometryUrls);
+  useModel3DPreload(geometryUrls, { eager: isHomepagePriority });
 
   const { isLoaded, setLoadedState } = useModel3DLoadedState({ id, initiallyLoaded });
   const [isVisible, setIsVisible] = useState(true);
@@ -274,6 +276,7 @@ export function ElementModel3D({
             postProcessingCommand={postProcessingCommand}
             onNavigate={onNavigate}
             onReady={handleReady}
+            isHomepagePriority={isHomepagePriority}
           />
         </MotionFromJson>
       </div>

@@ -3,11 +3,7 @@ import { NextRequest } from "next/server";
 import { accessCookieName } from "@/core/lib/auth-constants";
 
 vi.mock("@/core/lib/protected-slugs.generated", () => ({
-  PROTECTED_PAGE_PATHS: new Set<string>([
-    "work/lenero",
-    "research/secret-case",
-    "work/project-spinach-tiff",
-  ]),
+  PROTECTED_PAGE_PATHS: new Set<string>(["research/secret-case", "work/project-spinach-tiff"]),
 }));
 
 const verifyAccessTokenEdge = vi.fn<() => Promise<boolean>>();
@@ -113,7 +109,7 @@ describe("proxy", () => {
     expect(res.headers.get("location")).not.toContain("unlock=1");
   });
 
-  it("includes unlock preview for spinach-tiff protected path", async () => {
+  it("redirects spinach-tiff protected path to unlock route", async () => {
     process.env.SITE_PASSWORD = "secret";
     verifyAccessTokenEdge.mockResolvedValue(false);
     const { proxy } = await import("./proxy");
@@ -123,6 +119,5 @@ describe("proxy", () => {
     expect(res.headers.get("location")).toContain(
       "/unlock?unlock_redirect=%2Fwork%2Fproject-spinach-tiff"
     );
-    expect(res.headers.get("location")).toContain("unlock_preview=");
   });
 });

@@ -5,6 +5,7 @@ import type { CSSProperties } from "react";
 
 export type ElementVideoInteractiveContainerProps = {
   containerRef: React.RefObject<HTMLSpanElement | null>;
+  style?: CSSProperties;
   isFullscreen?: boolean;
   onContextMenu: (e: React.MouseEvent) => void;
   onTouchStart: () => void;
@@ -32,6 +33,7 @@ const fullscreenFillStyle: CSSProperties = {
 /** Container span with gesture handlers for module-driven video (tap, touch, hover). */
 export function ElementVideoInteractiveContainer({
   containerRef,
+  style,
   isFullscreen = false,
   onContextMenu,
   onTouchStart,
@@ -49,6 +51,7 @@ export function ElementVideoInteractiveContainer({
       ref={containerRef}
       className="video-module-fullscreen-container relative block w-full h-full select-none"
       style={{
+        ...style,
         WebkitTapHighlightColor: "transparent",
         WebkitTouchCallout: "none",
         touchAction: "manipulation",
