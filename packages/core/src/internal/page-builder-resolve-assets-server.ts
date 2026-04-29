@@ -74,9 +74,7 @@ function shouldResolveViaResponsiveImageProxy(
 function buildResponsiveImageProxyParams(
   params: ReturnType<typeof getBunnyImageParams>
 ): Record<string, string> {
-  const proxyParams: Record<string, string> = {
-    format: params.format,
-  };
+  const proxyParams: Record<string, string> = {};
   if (params.class != null && params.class !== "") {
     proxyParams.class = params.class;
     return proxyParams;

@@ -37,7 +37,7 @@ describe("resolvePageBuilderAssetsOnServer", () => {
 
     const src = (resolvedSections[0] as unknown as { elements: Array<{ src: string }> })
       .elements[0]!.src;
-    expect(src).toBe("/api/video/work/pic.webp?format=webp");
+    expect(src).toBe("/api/video/work/pic.webp");
   });
 
   it("keeps intrinsic element images on fixed signed urls", () => {
@@ -100,7 +100,7 @@ describe("resolvePageBuilderAssetsOnServer", () => {
 
     const src = (resolvedSections[0] as unknown as { elements: Array<{ src: string }> })
       .elements[0]!.src;
-    expect(src).toBe("/api/video/work/pic.webp?format=webp");
+    expect(src).toBe("/api/video/work/pic.webp");
   });
 
   it("routes background video posters through the proxy for responsive fallback images", () => {
@@ -117,7 +117,7 @@ describe("resolvePageBuilderAssetsOnServer", () => {
     );
 
     expect((resolvedBg as { poster: string }).poster).toBe(
-      "/api/video/work/hero.webp?format=webp&aspect_ratio=16%3A9"
+      "/api/video/work/hero.webp?aspect_ratio=16%3A9"
     );
   });
 });
