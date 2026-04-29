@@ -56,7 +56,14 @@ export function isAssetKey(value: string): boolean {
 }
 
 /** Build same-origin proxy URL for an asset key. The API redirects to a fresh signed CDN URL. */
-export function buildProxyUrl(ref: string): string {
+export function buildProxyUrl(ref: string, params?: Record<string, string>): string {
   const path = ref.split("/").map(encodeURIComponent).join("/");
-  return `/api/video/${path}`;
+  const search = new URLSearchParams();
+  if (params) {
+    for (const [key, value] of Object.entries(params)) {
+      if (value != null && value !== "") search.set(key, value);
+    }
+  }
+  const query = search.toString();
+  return query ? `/api/video/${path}?${query}` : `/api/video/${path}`;
 }

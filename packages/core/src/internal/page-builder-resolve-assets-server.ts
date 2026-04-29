@@ -60,6 +60,32 @@ function buildProxyUrlMapServer(refs: string[]): Map<string, string> {
   return m;
 }
 
+function shouldResolveViaResponsiveImageProxy(
+  obj: Record<string, unknown>,
+  assetKey: string
+): boolean {
+  const blockType = obj.type as string | undefined;
+  if (blockType === "backgroundVideo" && assetKey === "poster") return true;
+  if (blockType !== "elementImage" || assetKey !== "src") return false;
+  const height = obj.height;
+  return height !== "hug";
+}
+
+function buildResponsiveImageProxyParams(
+  params: ReturnType<typeof getBunnyImageParams>
+): Record<string, string> {
+  const proxyParams: Record<string, string> = {
+    format: params.format,
+  };
+  if (params.class != null && params.class !== "") {
+    proxyParams.class = params.class;
+    return proxyParams;
+  }
+  if (params.aspect_ratio) proxyParams.aspect_ratio = params.aspect_ratio;
+  if (params.height != null) proxyParams.height = String(params.height);
+  return proxyParams;
+}
+
 function collectAllRefs(
   resolvedBg: bgBlock | null,
   resolvedSections: SectionBlock[],
@@ -108,6 +134,9 @@ function buildGetSignedImageUrl(
       isMobile: options?.isMobile,
       containerWidthPx,
     });
+    if (shouldResolveViaResponsiveImageProxy(obj, assetKey)) {
+      return buildProxyUrl(valid, buildResponsiveImageProxyParams(params));
+    }
     const extraParams: Record<string, string> = {};
     if (params.class != null && params.class !== "") {
       extraParams.class = params.class;

@@ -22,8 +22,12 @@ export default function bunnyImageLoader({
   quality = imageDefaultQuality,
 }: LoaderParams): string {
   if (!src || typeof src !== "string") return src;
-  const sep = src.includes("?") ? "&" : "?";
   try {
+    const relative = new URL(src, "http://local");
+    if (relative.searchParams.has("width") || relative.searchParams.has("class")) {
+      return `${src.split("#")[0]}#w=${width}`;
+    }
+
     const url = new URL(cdnBase);
     const origin = `${url.protocol}//${url.hostname}`;
     const isCdn = src.startsWith(origin) || src.includes(url.hostname);
@@ -44,9 +48,18 @@ export default function bunnyImageLoader({
   } catch {
     // fall through to width-only append
   }
-  // Satisfy Next.js loader contract: returned URL must vary by width
-  const params = new URLSearchParams();
-  params.set("w", String(Math.round(width)));
-  params.set("q", String(quality));
-  return `${src}${sep}${params.toString()}`;
+  // Satisfy Next.js loader contract while preserving same-origin proxy URLs.
+  try {
+    const url = new URL(src, "http://local");
+    stripBunnyParams(url);
+    url.searchParams.set("width", String(Math.round(width)));
+    url.searchParams.set("quality", String(quality));
+    url.searchParams.set("format", imageDefaultFormat);
+    return src.startsWith("http://") || src.startsWith("https://")
+      ? url.toString()
+      : `${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    const sep = src.includes("?") ? "&" : "?";
+    return `${src}${sep}width=${Math.round(width)}&quality=${quality}&format=${imageDefaultFormat}`;
+  }
 }

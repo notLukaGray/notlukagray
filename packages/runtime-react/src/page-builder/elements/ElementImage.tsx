@@ -150,6 +150,7 @@ export function ElementImage({
   const showError = hasError && hasSource;
   const showImage = !showError && hasSource;
   const isBlobSrc = typeof src === "string" && src.startsWith("blob:");
+  const usePlainImg = useIntrinsicSizing && !fillHeight;
   const resolvedTarget = link?.target ?? (!isInternal && resolvedHref ? "_blank" : undefined);
   const resolvedRel =
     link?.rel ??
@@ -207,11 +208,11 @@ export function ElementImage({
       )}
       {showImage && src && (
         <span style={imageFrameStyle}>
-          {useIntrinsicSizing ? (
+          {usePlainImg ? (
             <img
               src={src}
               alt={alt ?? ""}
-              style={fillHeight ? fillImgStyle : imgStyle}
+              style={imgStyle}
               loading={loading ?? (priority ? "eager" : "lazy")}
               decoding={decoding}
               srcSet={srcSet}
@@ -228,8 +229,9 @@ export function ElementImage({
               priority={!!priority}
               fetchPriority={priority ? "high" : "auto"}
               sizes={sizes ?? "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"}
-              style={nextImageFillStyle}
+              style={fillHeight ? fillImgStyle : nextImageFillStyle}
               loading={loading ?? (priority ? "eager" : "lazy")}
+              decoding={decoding}
               onError={handleImgError}
               onLoad={handleImgLoad}
             />
