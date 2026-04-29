@@ -1,6 +1,6 @@
 /**
  * Shared proxy URL helpers for server and client. Asset keys are rewritten to
- * same-origin /api/video/... URLs. The API validates the key, generates a fresh
+ * same-origin /api/media/... URLs. The API validates the key, generates a fresh
  * signed CDN URL, and returns a 302 redirect — the browser/Three.js fetches the
  * asset directly from Bunny. Vercel serves only the redirect, not the asset bytes.
  * Requires Bunny CDN storage zone to have CORS headers enabled (Access-Control-Allow-Origin: *).
@@ -47,7 +47,7 @@ export function isAssetKey(value: string): boolean {
   if (
     value.startsWith("http://") ||
     value.startsWith("https://") ||
-    value.startsWith("/api/video/") ||
+    value.startsWith("/api/media/") ||
     value.startsWith("data:")
   ) {
     return false;
@@ -65,5 +65,5 @@ export function buildProxyUrl(ref: string, params?: Record<string, string>): str
     }
   }
   const query = search.toString();
-  return query ? `/api/video/${path}?${query}` : `/api/video/${path}`;
+  return query ? `/api/media/${path}?${query}` : `/api/media/${path}`;
 }

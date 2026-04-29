@@ -72,14 +72,14 @@ function extractAssetKeyFromAllowedCdnUrl(value: string): string | null {
 
 /**
  * Enforce token-safe homepage media URLs:
- * - asset keys and legacy CDN URLs are rewritten to same-origin /api/video/... proxy URLs
+ * - asset keys and legacy CDN URLs are rewritten to same-origin /api/media/... proxy URLs
  * - unknown absolute URLs are dropped to avoid unsigned direct CDN usage
  */
 export function resolveHomeMediaUrl(raw: string | undefined): string | undefined {
   if (typeof raw !== "string") return undefined;
   const value = raw.trim();
   if (!value) return undefined;
-  if (value.startsWith("/api/video/") || value.startsWith("data:") || value.startsWith("blob:")) {
+  if (value.startsWith("/api/media/") || value.startsWith("data:") || value.startsWith("blob:")) {
     return value;
   }
 

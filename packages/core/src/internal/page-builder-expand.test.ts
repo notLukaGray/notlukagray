@@ -67,7 +67,7 @@ describe("expandPageBuilder", () => {
     expect(section.onVisible?.payload).toBeDefined();
     const payload = section.onVisible!.payload as { type?: string; image?: string };
     expect(payload.type).toBe("backgroundImage");
-    expect(payload.image).toContain("/api/video/");
+    expect(payload.image).toContain("/api/media/");
     expect(payload.image).toContain("work");
     expect(payload.image).toContain("hero.jpg");
   });
@@ -121,7 +121,7 @@ describe("expandPageBuilder", () => {
     expect(sections).toHaveLength(1);
     const section = sections[0] as SectionBlock;
     const payload = section.onVisible!.payload as { type?: string; image?: string };
-    expect(payload.image).toContain("/api/video/");
+    expect(payload.image).toContain("/api/media/");
   });
 
   it("does not throw when sectionOrder contains empty keys", () => {

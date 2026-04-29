@@ -1,25 +1,109 @@
 import type { SectionBlock } from "@pb/contracts";
 
-const VIEWPORT_MOBILE_PX = 768;
-const VIEWPORT_DESKTOP_PX = 1920;
+const BASE_REM_PX = 16;
 
 function parsePercent(value: unknown): number | undefined {
   if (value == null) return undefined;
   const s = String(value).trim();
   const m = s.match(/^(\d+(?:\.\d+)?)\s*%$/);
-  return m ? Math.min(1, Math.max(0, Number(m[1]) / 100)) : undefined;
+  if (!m) return undefined;
+  const pct = Number(m[1]) / 100;
+  return Number.isFinite(pct) && pct >= 0 ? pct : undefined;
+}
+
+function parseLengthTokenPx(
+  token: string,
+  viewportPx: number | undefined,
+  percentBasePx: number | undefined
+): number | undefined {
+  const s = token.trim();
+  const px = s.match(/^(\d+(?:\.\d+)?)\s*px$/i);
+  if (px) return Number(px[1]);
+
+  const rem = s.match(/^(\d+(?:\.\d+)?)\s*rem$/i);
+  if (rem) return Number(rem[1]) * BASE_REM_PX;
+
+  const vw = s.match(/^(\d+(?:\.\d+)?)\s*vw$/i);
+  if (vw) return viewportPx != null ? (Number(vw[1]) / 100) * viewportPx : undefined;
+
+  const pct = parsePercent(s);
+  if (pct != null) return percentBasePx != null ? pct * percentBasePx : undefined;
+  return undefined;
+}
+
+function splitTopLevelCommaList(expr: string): string[] {
+  const out: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < expr.length; i += 1) {
+    const ch = expr[i];
+    if (ch === "(") depth += 1;
+    else if (ch === ")") depth = Math.max(0, depth - 1);
+    else if (ch === "," && depth === 0) {
+      const token = expr.slice(start, i).trim();
+      if (token) out.push(token);
+      start = i + 1;
+    }
+  }
+  const tail = expr.slice(start).trim();
+  if (tail) out.push(tail);
+  return out;
+}
+
+function parseExpressionPx(
+  value: unknown,
+  viewportPx: number | undefined,
+  percentBasePx: number | undefined
+): number | undefined {
+  if (value == null) return undefined;
+  const s = String(value).trim();
+  if (!s) return undefined;
+
+  const minMatch = s.match(/^min\((.*)\)$/i);
+  if (minMatch) {
+    const minExpression = minMatch[1];
+    if (minExpression == null) return undefined;
+    const parts = splitTopLevelCommaList(minExpression);
+    if (parts.length < 2) return undefined;
+    const values = parts
+      .map((part) => parseExpressionPx(part, viewportPx, percentBasePx))
+      .filter((part): part is number => part != null);
+    if (values.length !== parts.length) return undefined;
+    return Math.min(...values);
+  }
+
+  const maxMatch = s.match(/^max\((.*)\)$/i);
+  if (maxMatch) {
+    const maxExpression = maxMatch[1];
+    if (maxExpression == null) return undefined;
+    const parts = splitTopLevelCommaList(maxExpression);
+    if (parts.length < 2) return undefined;
+    const values = parts
+      .map((part) => parseExpressionPx(part, viewportPx, percentBasePx))
+      .filter((part): part is number => part != null);
+    if (values.length !== parts.length) return undefined;
+    return Math.max(...values);
+  }
+
+  return parseLengthTokenPx(s, viewportPx, percentBasePx);
 }
 
 export function computeContainerWidthPx(
   section: SectionBlock,
   elementId: string | undefined,
-  isMobile: boolean
+  viewportWidthPx?: number
 ): number | undefined {
-  const viewportPx = isMobile ? VIEWPORT_MOBILE_PX : VIEWPORT_DESKTOP_PX;
+  const viewportPx =
+    typeof viewportWidthPx === "number" && Number.isFinite(viewportWidthPx) && viewportWidthPx > 0
+      ? viewportWidthPx
+      : undefined;
   const sectionRecord = section as Record<string, unknown>;
-  const widthPct = parsePercent(sectionRecord.width) ?? 1;
-  const contentWidthPct = parsePercent(sectionRecord.contentWidth) ?? 1;
-  const contentAreaPx = Math.round(viewportPx * widthPct * contentWidthPct);
+  const sectionWidthPx =
+    parseExpressionPx(sectionRecord.width, viewportPx, viewportPx) ?? viewportPx;
+  if (sectionWidthPx == null) return undefined;
+  const contentWidthPx =
+    parseExpressionPx(sectionRecord.contentWidth, viewportPx, sectionWidthPx) ?? sectionWidthPx;
+  const contentAreaPx = Math.round(contentWidthPx);
   if (contentAreaPx <= 0) return undefined;
 
   const type = sectionRecord.type as string | undefined;
@@ -37,31 +121,54 @@ export function computeContainerWidthPx(
   const total = columnWidths.reduce((a, b) => a + b, 0);
   if (total <= 0) return contentAreaPx;
 
-  const colIndex =
+  const colIndexRaw =
     elementId != null && columnAssignments && typeof columnAssignments[elementId] === "number"
       ? columnAssignments[elementId]
       : 0;
-  const fraction = columnWidths[Math.min(colIndex, columnWidths.length - 1)]! / total;
+  const colIndex = Number.isFinite(colIndexRaw) ? Math.trunc(colIndexRaw) : 0;
+  const boundedIndex = Math.max(0, Math.min(colIndex, columnWidths.length - 1));
+  const fraction = columnWidths[boundedIndex]! / total;
   return Math.round(contentAreaPx * fraction);
 }
 
 function buildMemoKey(
   section: SectionBlock,
   elementId: string | undefined,
-  isMobile: boolean
+  viewportWidthPx?: number
 ): string {
   const sectionRecord = section as Record<string, unknown>;
-  const widthPct = parsePercent(sectionRecord.width) ?? 1;
-  const contentWidthPct = parsePercent(sectionRecord.contentWidth) ?? 1;
+  const viewportPx =
+    typeof viewportWidthPx === "number" && Number.isFinite(viewportWidthPx) && viewportWidthPx > 0
+      ? viewportWidthPx
+      : undefined;
+  const parsedSectionWidthPx = parseExpressionPx(sectionRecord.width, viewportPx, viewportPx);
+  const effectiveSectionWidthPx = parsedSectionWidthPx ?? viewportPx;
+  const parsedContentWidthPx = parseExpressionPx(
+    sectionRecord.contentWidth,
+    viewportPx,
+    effectiveSectionWidthPx
+  );
+  const effectiveContentWidthPx = parsedContentWidthPx ?? effectiveSectionWidthPx;
+  const widthPx =
+    effectiveSectionWidthPx != null && Number.isFinite(effectiveSectionWidthPx)
+      ? Math.round(effectiveSectionWidthPx)
+      : "na";
+  const contentWidthPx =
+    effectiveContentWidthPx != null && Number.isFinite(effectiveContentWidthPx)
+      ? Math.round(effectiveContentWidthPx)
+      : "na";
   const type = (sectionRecord.type as string) ?? "";
   const columnWidths = sectionRecord.columnWidths as number[] | undefined;
   const columnAssignments = sectionRecord.columnAssignments as Record<string, number> | undefined;
-  const colIndex =
+  const colIndexRaw =
     elementId != null && columnAssignments && typeof columnAssignments[elementId] === "number"
       ? columnAssignments[elementId]
       : 0;
+  const colIndex = Number.isFinite(colIndexRaw) ? Math.trunc(colIndexRaw) : 0;
+  const columnSpan = sectionRecord.columnSpan as Record<string, number | "all"> | undefined;
+  const spanMode = elementId && columnSpan?.[elementId] === "all" ? "all" : "col";
   const columnWidthsStr = Array.isArray(columnWidths) ? columnWidths.join(",") : "";
-  return `${widthPct}:${contentWidthPct}:${type}:${columnWidthsStr}:${colIndex}:${isMobile}`;
+  return `${viewportPx ?? "na"}:${widthPx}:${contentWidthPx}:${type}:${columnWidthsStr}:${colIndex}:${spanMode}`;
 }
 
 /**
@@ -71,13 +178,13 @@ function buildMemoKey(
 export function createMemoizedComputeContainerWidthPx(): (
   section: SectionBlock,
   elementId: string | undefined,
-  isMobile: boolean
+  viewportWidthPx?: number
 ) => number | undefined {
   const memo = new Map<string, number | undefined>();
-  return (section, elementId, isMobile) => {
-    const key = buildMemoKey(section, elementId, isMobile);
+  return (section, elementId, viewportWidthPx) => {
+    const key = buildMemoKey(section, elementId, viewportWidthPx);
     if (memo.has(key)) return memo.get(key);
-    const result = computeContainerWidthPx(section, elementId, isMobile);
+    const result = computeContainerWidthPx(section, elementId, viewportWidthPx);
     memo.set(key, result);
     return result;
   };

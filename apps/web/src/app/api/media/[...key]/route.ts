@@ -137,8 +137,18 @@ function rewriteHlsPlaylist(playlist: string, assetKey: string): string {
     .join("\n");
 }
 
+function buildRedirectResponse(cdnUrl: string): NextResponse {
+  const response = NextResponse.redirect(cdnUrl, 302);
+  response.headers.set(
+    "Cache-Control",
+    "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+  );
+  response.headers.set("X-Image-Delivery-Route", "api_media_proxy");
+  return response;
+}
+
 /**
- * GET /api/video/[...key] – validate asset key and redirect to a fresh signed CDN URL.
+ * GET /api/media/[...key] – validate asset key and redirect to a fresh signed CDN URL.
  * Key can be a single segment (e.g. video.webm) or path/filename (e.g. dump_3d_test/albedo_card.webp).
  * Catch-all ensures path keys are not split when the server decodes %2F to /.
  */
@@ -194,7 +204,7 @@ export async function GET(
 
     // Redirect all asset types to the signed CDN URL — browser/Three.js fetches
     // directly from Bunny. Vercel serves only this tiny redirect, not the asset bytes.
-    return NextResponse.redirect(cdnUrl, 302);
+    return buildRedirectResponse(cdnUrl);
   } catch (_error) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

@@ -409,7 +409,7 @@ export function resolveAssets(
     withEntranceMotions,
     bgDefinitionsRaw,
     transitionsArray,
-    { isMobile: options?.isMobile }
+    { isMobile: options?.isMobile, viewportWidthPx: options?.viewportWidthPx }
   );
 
   return {
@@ -617,7 +617,7 @@ export function getModalProps(id: string, options?: GetModalPropsOptions): Modal
     expanded.sections.map((section) => ({ ...section }) as SectionBlock),
     bgDefinitionsRaw,
     [],
-    { isMobile: options?.isMobile }
+    { isMobile: options?.isMobile, viewportWidthPx: options?.viewportWidthPx }
   );
 
   let resolvedSections = resolved.resolvedSections;
@@ -747,7 +747,7 @@ export async function getPageBuilderPropsAsync(
     resolvedSections,
     bgDefinitionsRaw,
     transitionsArray,
-    { isMobile: options?.isMobile }
+    { isMobile: options?.isMobile, viewportWidthPx: options?.viewportWidthPx }
   );
 
   const injectedSections = resolveEntranceMotionsIntoSections(injected.resolvedSections);

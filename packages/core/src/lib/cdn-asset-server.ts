@@ -39,6 +39,59 @@ function getCdnOrigin(cdnBase: string): string {
   }
 }
 
+function getExpiryBucketSeconds(): number {
+  const raw = process.env.BUNNY_TOKEN_EXPIRY_BUCKET_SECONDS;
+  if (!raw) return 60 * 60;
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed)) return 60 * 60;
+  const rounded = Math.round(parsed);
+  if (rounded < 60) return 60;
+  if (rounded > 24 * 60 * 60) return 24 * 60 * 60;
+  return rounded;
+}
+
+function normalizeImageParams(
+  extraParams: Record<string, string> | undefined
+): Record<string, string> | undefined {
+  if (!extraParams) return undefined;
+  const normalized: Record<string, string> = {};
+
+  const width = Number(extraParams.width);
+  if (Number.isFinite(width)) {
+    const bounded = Math.round(Math.max(1, Math.min(width, 4096)));
+    normalized.width = String(bounded);
+  }
+
+  const height = Number(extraParams.height);
+  if (Number.isFinite(height)) {
+    const bounded = Math.round(Math.max(1, Math.min(height, 4096)));
+    normalized.height = String(bounded);
+  }
+
+  const quality = Number(extraParams.quality);
+  if (Number.isFinite(quality)) {
+    const bounded = Math.round(Math.max(1, Math.min(quality, 100)));
+    normalized.quality = String(bounded);
+  }
+
+  const format = extraParams.format?.toLowerCase();
+  if (format && /^(avif|webp|jpg|jpeg|png)$/.test(format)) {
+    normalized.format = format;
+  }
+
+  const aspectRatio = extraParams.aspect_ratio?.trim();
+  if (aspectRatio && /^\d+(?::|\/)\d+$/.test(aspectRatio)) {
+    normalized.aspect_ratio = aspectRatio.replace("/", ":");
+  }
+
+  const className = extraParams.class?.trim();
+  if (className && /^[a-zA-Z0-9_-]+$/.test(className)) {
+    normalized.class = className;
+  }
+
+  return Object.keys(normalized).length > 0 ? normalized : undefined;
+}
+
 export function validateAssetKey(key: string): string | null {
   if (!key || typeof key !== "string") return null;
 
@@ -147,13 +200,17 @@ function buildSortedParamString(params: Record<string, string>): string {
 export function getSignedCdnUrl(assetKey: string, extraParams?: Record<string, string>): string {
   const { cdnTokenExpiryDays, cdnBase } = getCoreGlobals();
   const tokenExpirySeconds = cdnTokenExpiryDays * 24 * 60 * 60;
-  const expiresAt = Math.floor(Date.now() / 1000) + tokenExpirySeconds;
+  const nowSeconds = Math.floor(Date.now() / 1000);
+  const targetExpiry = nowSeconds + tokenExpirySeconds;
+  const bucketSeconds = getExpiryBucketSeconds();
+  const expiresAt = Math.ceil(targetExpiry / bucketSeconds) * bucketSeconds;
 
   const encodedKey = encodePathPreservingSlashes(assetKey);
   const signingPrefix = getSigningPathPrefixFromCdnBase(cdnBase);
   const pathForSigning = `${signingPrefix}/${encodedKey}`;
+  const normalizedParams = normalizeImageParams(extraParams);
 
-  const parameterData = extraParams ? buildSortedParamString(extraParams) : "";
+  const parameterData = normalizedParams ? buildSortedParamString(normalizedParams) : "";
   const token = generateBunnyToken(pathForSigning, expiresAt, parameterData);
 
   const base = cdnBase.replace(/\/+$/, "");
@@ -161,7 +218,7 @@ export function getSignedCdnUrl(assetKey: string, extraParams?: Record<string, s
 
   if (assetKey.toLowerCase().endsWith(".m3u8") || assetKey.toLowerCase().endsWith(".mpd")) {
     const tokenPath = getDirectoryPath(pathForSigning);
-    const hlsParams = { ...(extraParams ?? {}), token_path: tokenPath };
+    const hlsParams = { ...(normalizedParams ?? {}), token_path: tokenPath };
     const hlsParameterData = buildSortedParamString(hlsParams);
     const hlsToken = generateBunnyToken(tokenPath, expiresAt, hlsParameterData);
     const tokenPathParam = encodeURIComponent(tokenPath);
@@ -169,8 +226,10 @@ export function getSignedCdnUrl(assetKey: string, extraParams?: Record<string, s
   }
 
   const search = new URLSearchParams({ token, expires: String(expiresAt) });
-  if (extraParams) {
-    for (const [k, v] of Object.entries(extraParams)) {
+  if (normalizedParams) {
+    const sortedKeys = Object.keys(normalizedParams).sort((a, b) => a.localeCompare(b));
+    for (const k of sortedKeys) {
+      const v = normalizedParams[k];
       if (v != null && v !== "") search.set(k, v);
     }
   }

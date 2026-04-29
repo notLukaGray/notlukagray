@@ -7,7 +7,10 @@ import {
   buildUrlByKeyMap,
   injectResolvedUrlsIntoPage,
 } from "@pb/core/internal/page-builder-resolved-assets";
-import { computeContainerWidthPx } from "@pb/core/internal/server/page-builder-container-width-server";
+import {
+  computeContainerWidthPx,
+  createMemoizedComputeContainerWidthPx,
+} from "@pb/core/internal/server/page-builder-container-width-server";
 
 describe("page-builder-resolved-assets", () => {
   describe("normalizeAspectRatioForBunny", () => {
@@ -157,7 +160,7 @@ describe("page-builder-resolved-assets", () => {
           containerWidthByElementId[context.element.id ?? ""] = computeContainerWidthPx(
             context.section as never,
             context.element.id,
-            false
+            1920
           );
         }
         return urlByRef.get(ref) ?? ref;
@@ -168,6 +171,91 @@ describe("page-builder-resolved-assets", () => {
       const total = 3;
       expect(containerWidthByElementId.colA).toBe(Math.round((contentAreaPx * 1) / total));
       expect(containerWidthByElementId.colB).toBe(Math.round((contentAreaPx * 2) / total));
+    });
+
+    it("keeps vw in contentWidth relative to viewport while % remains section-relative", () => {
+      const section = {
+        type: "contentBlock",
+        width: "50%",
+        contentWidth: "50vw",
+      };
+      const computed = computeContainerWidthPx(section as never, undefined, 1920);
+      // Desktop viewport is 1920; 50vw should resolve to 960.
+      expect(computed).toBe(960);
+    });
+
+    it("returns undefined when viewport-relative widths are used without viewport input", () => {
+      const section = {
+        type: "contentBlock",
+        width: "50%",
+        contentWidth: "50vw",
+      };
+      expect(computeContainerWidthPx(section as never, undefined)).toBeUndefined();
+    });
+
+    it("supports min/max with 3+ operands in container expression parsing", () => {
+      const section = {
+        type: "contentBlock",
+        width: "100%",
+        contentWidth: "min(80vw, 1200px, 60rem)",
+      };
+      // 80vw on 1920 is 1536; min with 1200 and 960 should resolve to 960.
+      expect(computeContainerWidthPx(section as never, undefined, 1920)).toBe(960);
+    });
+
+    it("allows percentage widths above 100% for overflowing layouts", () => {
+      const section = {
+        type: "contentBlock",
+        width: "120%",
+        contentWidth: "100%",
+      };
+      expect(computeContainerWidthPx(section as never, undefined, 1000)).toBe(1200);
+    });
+
+    it("clamps invalid negative column assignment indices to the first column", () => {
+      const section = {
+        type: "sectionColumn",
+        width: "100%",
+        contentWidth: "100%",
+        columnWidths: [1, 2],
+        columnAssignments: { broken: -1 },
+      };
+      expect(computeContainerWidthPx(section as never, "broken", 1920)).toBe(640);
+    });
+
+    it("memoized width key differentiates full-span and column-scoped elements", () => {
+      const memoizedCompute = createMemoizedComputeContainerWidthPx();
+      const section = {
+        type: "sectionColumn",
+        width: "100%",
+        contentWidth: "100%",
+        columnWidths: [1, 2],
+        columnAssignments: { a: 0, b: 1 },
+        columnSpan: { b: "all" },
+      };
+      const forA = memoizedCompute(section as never, "a", 1920);
+      const forB = memoizedCompute(section as never, "b", 1920);
+      expect(forA).toBe(640);
+      expect(forB).toBe(1920);
+    });
+
+    it("memoization key follows viewport fallback semantics for unparseable section widths", () => {
+      const memoizedCompute = createMemoizedComputeContainerWidthPx();
+      const viewportWidthPx = 1200;
+      const firstSection = {
+        type: "contentBlock",
+        width: "auto",
+        contentWidth: "50%",
+      };
+      const secondSection = {
+        type: "contentBlock",
+        width: "auto",
+        contentWidth: "75%",
+      };
+      const first = memoizedCompute(firstSection as never, undefined, viewportWidthPx);
+      const second = memoizedCompute(secondSection as never, undefined, viewportWidthPx);
+      expect(first).toBe(600);
+      expect(second).toBe(900);
     });
   });
 });

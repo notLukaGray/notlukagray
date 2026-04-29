@@ -76,6 +76,7 @@ export function ElementImage({
 }: Props) {
   const themeMode = usePageBuilderThemeMode();
   const [hasError, setHasError] = useState(false);
+  const [fallbackToNativeImg, setFallbackToNativeImg] = useState(false);
   const figureRef = useRef<HTMLElement | null>(null);
   const resolvedEffects = useMemo(
     () => resolveThemeValueDeep(effects, themeMode) as typeof effects,
@@ -91,11 +92,15 @@ export function ElementImage({
   const resolvedAspectRatio = resolveResponsiveValue(aspectRatio, isMobile);
   const resolvedObjectFit = resolveResponsiveValue(objectFit, isMobile) ?? "cover";
 
-  const handleImgError = useCallback(() => {
+  const handleNativeImgError = useCallback(() => {
     setHasError(true);
+  }, []);
+  const handleNextImageError = useCallback(() => {
+    setFallbackToNativeImg(true);
   }, []);
   const handleImgLoad = useCallback(() => {
     setHasError(false);
+    setFallbackToNativeImg(false);
   }, []);
   const {
     fillHeight,
@@ -150,7 +155,7 @@ export function ElementImage({
   const showError = hasError && hasSource;
   const showImage = !showError && hasSource;
   const isBlobSrc = typeof src === "string" && src.startsWith("blob:");
-  const usePlainImg = useIntrinsicSizing && !fillHeight;
+  const usePlainImg = fallbackToNativeImg || useIntrinsicSizing;
   const resolvedTarget = link?.target ?? (!isInternal && resolvedHref ? "_blank" : undefined);
   const resolvedRel =
     link?.rel ??
@@ -212,12 +217,13 @@ export function ElementImage({
             <img
               src={src}
               alt={alt ?? ""}
-              style={imgStyle}
+              style={fillHeight ? fillImgStyle : imgStyle}
               loading={loading ?? (priority ? "eager" : "lazy")}
               decoding={decoding}
               srcSet={srcSet}
+              sizes={sizes}
               fetchPriority={priority ? "high" : undefined}
-              onError={handleImgError}
+              onError={handleNativeImgError}
               onLoad={handleImgLoad}
             />
           ) : (
@@ -232,7 +238,7 @@ export function ElementImage({
               style={fillHeight ? fillImgStyle : nextImageFillStyle}
               loading={loading ?? (priority ? "eager" : "lazy")}
               decoding={decoding}
-              onError={handleImgError}
+              onError={handleNextImageError}
               onLoad={handleImgLoad}
             />
           )}

@@ -64,24 +64,281 @@ function shouldResolveViaResponsiveImageProxy(
   obj: Record<string, unknown>,
   assetKey: string
 ): boolean {
-  const blockType = obj.type as string | undefined;
-  if (blockType === "backgroundVideo" && assetKey === "poster") return true;
-  if (blockType !== "elementImage" || assetKey !== "src") return false;
-  const height = obj.height;
-  return height !== "hug";
+  void obj;
+  void assetKey;
+  // Images now always resolve directly to signed Bunny URLs.
+  return false;
+}
+
+function isPercentDimension(value: unknown): boolean {
+  if (typeof value === "string") {
+    return /^\s*\d+(?:\.\d+)?\s*%\s*$/.test(value);
+  }
+  if (Array.isArray(value)) {
+    return value.some((entry) => typeof entry === "string" && isPercentDimension(entry));
+  }
+  return false;
+}
+
+function shouldUseFillHeightImageProxy(obj: Record<string, unknown>): boolean {
+  return isPercentDimension(obj.height);
+}
+
+function shouldUseFillWidthImageProxy(obj: Record<string, unknown>): boolean {
+  return isPercentDimension(obj.width) && obj.height === "hug";
+}
+
+function buildFillHeightImageProxyParams(
+  obj: Record<string, unknown>,
+  params: ReturnType<typeof getBunnyImageParams>,
+  viewportWidthPx?: number,
+  containerWidthPx?: number
+): Record<string, string> {
+  const sizesWidthPx = estimateWidthFromSizes(obj.sizes, viewportWidthPx);
+  const estimatedBaseCandidates = [containerWidthPx, sizesWidthPx, params.width].filter(
+    (value): value is number => value != null && Number.isFinite(value) && value >= 0
+  );
+  const estimatedBase =
+    estimatedBaseCandidates.length > 0 ? Math.min(...estimatedBaseCandidates) : params.width;
+  const estimatedWidth = Math.round(estimatedBase * 1.25);
+  return {
+    width: String(Math.max(128, Math.min(estimatedWidth, params.width))),
+    quality: String(params.quality),
+  };
+}
+
+function buildFillWidthImageProxyParams(
+  obj: Record<string, unknown>,
+  params: ReturnType<typeof getBunnyImageParams>,
+  viewportWidthPx?: number,
+  containerWidthPx?: number
+): Record<string, string> {
+  const sizesWidthPx = estimateWidthFromSizes(obj.sizes, viewportWidthPx);
+  const estimatedBaseCandidates = [containerWidthPx, sizesWidthPx, params.width].filter(
+    (value): value is number => value != null && Number.isFinite(value) && value >= 0
+  );
+  const estimatedBase =
+    estimatedBaseCandidates.length > 0 ? Math.min(...estimatedBaseCandidates) : params.width;
+  const estimatedWidth = Math.round(estimatedBase * 1.25);
+  return {
+    width: String(Math.max(128, Math.min(estimatedWidth, params.width))),
+    quality: String(params.quality),
+  };
 }
 
 function buildResponsiveImageProxyParams(
-  params: ReturnType<typeof getBunnyImageParams>
+  obj: Record<string, unknown>,
+  assetKey: string,
+  params: ReturnType<typeof getBunnyImageParams>,
+  viewportWidthPx?: number,
+  containerWidthPx?: number
 ): Record<string, string> {
   const proxyParams: Record<string, string> = {};
   if (params.class != null && params.class !== "") {
     proxyParams.class = params.class;
     return proxyParams;
   }
+  if ((obj.type as string | undefined) === "elementImage" && assetKey === "src") {
+    if (shouldUseFillHeightImageProxy(obj)) {
+      Object.assign(
+        proxyParams,
+        buildFillHeightImageProxyParams(obj, params, viewportWidthPx, containerWidthPx)
+      );
+    } else if (shouldUseFillWidthImageProxy(obj)) {
+      Object.assign(
+        proxyParams,
+        buildFillWidthImageProxyParams(obj, params, viewportWidthPx, containerWidthPx)
+      );
+    }
+  }
   if (params.aspect_ratio) proxyParams.aspect_ratio = params.aspect_ratio;
   if (params.height != null) proxyParams.height = String(params.height);
   return proxyParams;
+}
+
+function splitTopLevelCommaList(value: string): string[] {
+  const out: string[] = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    const ch = value[i];
+    if (ch === "(") depth += 1;
+    else if (ch === ")") depth = Math.max(0, depth - 1);
+    else if (ch === "," && depth === 0) {
+      const token = value.slice(start, i).trim();
+      if (token) out.push(token);
+      start = i + 1;
+    }
+  }
+  const tail = value.slice(start).trim();
+  if (tail) out.push(tail);
+  return out;
+}
+
+function parseMediaLengthCandidate(candidate: string): { media: string; slot: string } | undefined {
+  const trimmed = candidate.trim();
+  const mediaAndSlotMatch = trimmed.match(
+    /^(.+?)\s+(min\(.+\)|max\(.+\)|calc\(.+\)|\d+(?:\.\d+)?(?:vw|px|rem)|0(?:\.0+)?)$/i
+  );
+  if (!mediaAndSlotMatch) return undefined;
+  const media = mediaAndSlotMatch[1]?.trim();
+  const slot = mediaAndSlotMatch[2]?.trim();
+  if (!media || !slot) return undefined;
+  return { media, slot };
+}
+
+function mediaConditionMatchesViewport(media: string, viewportPx?: number): boolean | undefined {
+  if (viewportPx == null) return undefined;
+  const trimmed = media.trim();
+  if (!trimmed) return undefined;
+  const clauseRegex = /\((max|min)-width\s*:\s*(\d+(?:\.\d+)?)\s*(px|rem|em)\)/gi;
+  const mediaAlternatives = splitTopLevelCommaList(trimmed);
+  let sawFalse = false;
+  let sawUnresolved = false;
+  for (const alternative of mediaAlternatives) {
+    const branch = alternative.trim();
+    if (!branch) continue;
+    const clauseMatches = Array.from(branch.matchAll(clauseRegex));
+    if (clauseMatches.length === 0) {
+      sawUnresolved = true;
+      continue;
+    }
+    const unsupported = branch
+      .replace(clauseRegex, "")
+      .replace(/\band\b/gi, "")
+      .replace(/\bonly\b/gi, "")
+      .replace(/\bnot\b/gi, "")
+      .replace(/\ball\b/gi, "")
+      .replace(/\bscreen\b/gi, "")
+      .replace(/\s+/g, "");
+    if (unsupported.length > 0) {
+      sawUnresolved = true;
+      continue;
+    }
+    let allMatch = true;
+    for (const match of clauseMatches) {
+      const kind = match[1]?.toLowerCase();
+      const rawValue = Number(match[2]);
+      const unit = match[3]?.toLowerCase();
+      if (!Number.isFinite(rawValue) || (unit !== "px" && unit !== "rem" && unit !== "em")) {
+        allMatch = false;
+        sawUnresolved = true;
+        break;
+      }
+      const breakpointPx = unit === "px" ? rawValue : rawValue * 16;
+      const matches =
+        kind === "max"
+          ? viewportPx <= breakpointPx
+          : kind === "min"
+            ? viewportPx >= breakpointPx
+            : false;
+      if (!matches) {
+        allMatch = false;
+        break;
+      }
+    }
+    if (allMatch) return true;
+    sawFalse = true;
+  }
+  if (sawUnresolved) return undefined;
+  if (sawFalse) return false;
+  return undefined;
+}
+
+function parseSizesLengthToPx(value: string, viewportPx?: number): number | undefined {
+  const s = value.trim();
+  if (!s) return undefined;
+  if (/^0(?:\.0+)?$/.test(s)) return 0;
+
+  const minMatch = s.match(/^min\((.*)\)$/i);
+  if (minMatch) {
+    const parts = splitTopLevelCommaList(minMatch[1]!);
+    if (parts.length < 2) return undefined;
+    const values = parts
+      .map((part) => parseSizesLengthToPx(part, viewportPx))
+      .filter((part): part is number => part != null);
+    if (values.length !== parts.length) return undefined;
+    return Math.min(...values);
+  }
+
+  const maxMatch = s.match(/^max\((.*)\)$/i);
+  if (maxMatch) {
+    const parts = splitTopLevelCommaList(maxMatch[1]!);
+    if (parts.length < 2) return undefined;
+    const values = parts
+      .map((part) => parseSizesLengthToPx(part, viewportPx))
+      .filter((part): part is number => part != null);
+    if (values.length !== parts.length) return undefined;
+    return Math.max(...values);
+  }
+
+  const calcVwMinusMatch = s.match(
+    /^calc\(\s*(\d+(?:\.\d+)?)\s*vw\s*-\s*(\d+(?:\.\d+)?)\s*(px|rem)\s*\)$/i
+  );
+  if (calcVwMinusMatch) {
+    if (viewportPx == null) return undefined;
+    const vwPct = Number(calcVwMinusMatch[1]);
+    const subtract = Number(calcVwMinusMatch[2]);
+    const unit = calcVwMinusMatch[3]?.toLowerCase();
+    const subtractPx = unit === "rem" ? subtract * 16 : subtract;
+    return Math.round(Math.max(0, (vwPct / 100) * viewportPx - subtractPx));
+  }
+
+  const vwMatch = s.match(/^(\d+(?:\.\d+)?)\s*vw$/i);
+  if (vwMatch) {
+    if (viewportPx == null) return undefined;
+    return Math.round((Number(vwMatch[1]) / 100) * viewportPx);
+  }
+
+  const pxMatch = s.match(/^(\d+(?:\.\d+)?)\s*px$/i);
+  if (pxMatch) return Math.round(Number(pxMatch[1]));
+
+  const remMatch = s.match(/^(\d+(?:\.\d+)?)\s*rem$/i);
+  if (remMatch) return Math.round(Number(remMatch[1]) * 16);
+
+  return undefined;
+}
+
+function estimateWidthFromSizes(sizes: unknown, viewportPx?: number): number | undefined {
+  if (typeof sizes !== "string") return undefined;
+  const trimmed = sizes.trim();
+  if (!trimmed) return undefined;
+
+  const candidates = splitTopLevelCommaList(trimmed);
+  if (candidates.length === 0) return undefined;
+
+  let selected = candidates.at(-1) ?? "";
+  let sawUnresolvedMedia = false;
+  for (const candidate of candidates) {
+    const parsed = parseMediaLengthCandidate(candidate);
+    if (!parsed) continue;
+    const matches = mediaConditionMatchesViewport(parsed.media, viewportPx);
+    if (matches === true) {
+      selected = parsed.slot;
+      break;
+    }
+    if (matches == null) sawUnresolvedMedia = true;
+  }
+
+  const selectedWidth = parseSizesLengthToPx(selected, viewportPx);
+  if (selectedWidth != null) return selectedWidth;
+
+  if (sawUnresolvedMedia) {
+    let widestResolvable = 0;
+    for (const candidate of candidates) {
+      const parsed = parseMediaLengthCandidate(candidate);
+      const slot = parsed?.slot ?? candidate;
+      const width = parseSizesLengthToPx(slot, viewportPx);
+      if (width != null && width > widestResolvable) {
+        widestResolvable = width;
+      }
+    }
+    if (widestResolvable > 0) {
+      return widestResolvable;
+    }
+  }
+
+  return undefined;
 }
 
 function collectAllRefs(
@@ -110,11 +367,11 @@ export type ResolvePageBuilderAssetsResult = {
 function buildGetSignedImageUrl(
   urlByRef: Map<string, string | null>,
   proxyUrlByRef: Map<string, string>,
-  options: { isMobile?: boolean } | undefined,
+  options: { isMobile?: boolean; viewportWidthPx?: number } | undefined,
   computeContainerWidthPxMemo: (
     section: SectionBlock,
     elementId: string | undefined,
-    isMobile: boolean
+    viewportWidthPx?: number
   ) => number | undefined
 ): GetSignedImageUrlFn {
   return (ref, obj, assetKey, elementContext) => {
@@ -125,7 +382,7 @@ function buildGetSignedImageUrl(
         ? computeContainerWidthPxMemo(
             elementContext.section,
             elementContext.element.id,
-            options?.isMobile === true
+            options?.viewportWidthPx
           )
         : undefined;
     const params = getBunnyImageParams(obj, assetKey, {
@@ -133,7 +390,16 @@ function buildGetSignedImageUrl(
       containerWidthPx,
     });
     if (shouldResolveViaResponsiveImageProxy(obj, assetKey)) {
-      return buildProxyUrl(valid, buildResponsiveImageProxyParams(params));
+      return buildProxyUrl(
+        valid,
+        buildResponsiveImageProxyParams(
+          obj,
+          assetKey,
+          params,
+          options?.viewportWidthPx,
+          containerWidthPx
+        )
+      );
     }
     const extraParams: Record<string, string> = {};
     if (params.class != null && params.class !== "") {
@@ -155,7 +421,7 @@ export function resolvePageBuilderAssetsOnServer(
   resolvedSections: SectionBlock[],
   bgDefinitionsRaw: Record<string, bgBlock>,
   transitionsArray: BackgroundTransitionEffect[],
-  options?: { isMobile?: boolean }
+  options?: { isMobile?: boolean; viewportWidthPx?: number }
 ): ResolvePageBuilderAssetsResult {
   const refs = collectAllRefs(resolvedBg, resolvedSections, bgDefinitionsRaw, transitionsArray);
 

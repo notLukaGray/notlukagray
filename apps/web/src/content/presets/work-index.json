@@ -130,7 +130,8 @@
     "align": "full",
     "preload": true,
     "loading": "eager",
-    "priority": true
+    "priority": true,
+    "sizes": "(max-width: 768px) calc(100vw - 2rem), (max-width: 1200px) 42vw, 38vw"
   },
   "work-preview-content": {
     "type": "elementGroup",

@@ -25,7 +25,7 @@ export function resolveVideoPath(source: string | null | undefined): string {
     .split("/")
     .map((seg) => encodeURIComponent(seg))
     .join("/");
-  return `/api/video/${path}`;
+  return `/api/media/${path}`;
 }
 
 export function useTextureMap(textures: Record<string, TextureDef> | undefined) {

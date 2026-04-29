@@ -9,7 +9,7 @@ function addAssetRef(ref: string, collector: AssetRefCollector): void {
   if (
     ref.startsWith("http://") ||
     ref.startsWith("https://") ||
-    ref.startsWith("/api/video/") ||
+    ref.startsWith("/api/media/") ||
     ref.startsWith("data:")
   )
     return;
