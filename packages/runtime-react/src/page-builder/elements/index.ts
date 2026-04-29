@@ -5,7 +5,6 @@ import { ElementBody } from "./ElementBody";
 import { ElementLink } from "./ElementLink";
 import { ElementImage } from "./ElementImage";
 import { ElementVideo } from "./ElementVideo";
-import { ElementRichText } from "./ElementRichText";
 import { ElementVector } from "./ElementVector";
 import { ElementSVG } from "./ElementSVG";
 import { ElementRange } from "./ElementRange";
@@ -39,6 +38,13 @@ const ElementModel3D = dynamic(() => import("./Element3D").then((mod) => mod.Ele
 const ElementRive = dynamic(() => import("./ElementRive").then((mod) => mod.ElementRive), {
   loading: () => null,
 }) as unknown as ComponentType<ElementBlock>;
+
+const ElementRichText = dynamic(
+  () => import("./ElementRichText").then((mod) => mod.ElementRichText),
+  {
+    loading: () => null,
+  }
+) as unknown as ComponentType<ElementBlock>;
 
 export {
   ElementHeading,

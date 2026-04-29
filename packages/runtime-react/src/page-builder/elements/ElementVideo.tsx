@@ -456,6 +456,7 @@ export function ElementVideo({
     <VideoControlContext.Provider value={videoContextValue}>
       <ElementVideoInteractiveContainer
         containerRef={containerRef}
+        style={styles.containerStyle}
         isFullscreen={state.isFullscreen}
         onContextMenu={(e) => e.preventDefault()}
         onTouchStart={() => {
@@ -518,6 +519,7 @@ export function ElementVideo({
         <span
           ref={containerRef}
           className="relative block w-full h-full"
+          style={styles.containerStyle}
           onPointerEnter={armVideoLoad}
           onTouchStart={armVideoLoad}
           onFocusCapture={armVideoLoad}

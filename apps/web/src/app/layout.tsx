@@ -9,8 +9,6 @@ import { getTwitterCardForOgImage, siteUrl, cdnBase, siteMetadata } from "@/core
 import { ThemeProvider } from "@/core/providers/theme-provider";
 import { AppLayout } from "@/core/ui/app-layout";
 import { DeviceTypeProvider } from "@/core/providers/device-type-provider";
-import { DevPageValidationClient } from "@/core/dev/DevPageValidationClient";
-import { DevContentReloadClient } from "@/core/dev/DevContentReloadClient";
 import { pbBrandCssInline } from "@/app/theme/config";
 import { pbBuilderDefaultsV1 } from "@/app/theme/pb-builder-defaults";
 import { pbContentGuidelinesCssInline } from "@/app/theme/pb-content-guidelines-config";
@@ -19,10 +17,7 @@ import { getProductionColorToolPersistedV2 } from "@/app/dev/colors/color-tool-p
 import { getProductionWorkbenchSession } from "@/app/dev/workbench/workbench-defaults";
 import { buildWorkbenchThemeColorVarMap } from "@/app/theme/pb-workbench-color-var-map";
 import { serializePbFoundationsCss } from "@/app/theme/pb-foundation-css";
-import { PbFoundationsRuntimeSync } from "@/app/theme/PbFoundationsRuntimeSync";
-import { PbColorsRuntimeSync } from "@/app/theme/PbColorsRuntimeSync";
 import { setCoreConfig } from "@pb/core";
-import { PageBuilderRuntimeEffects } from "@pb/runtime-react/effects";
 
 function getOrigin(value: string): string | null {
   try {
@@ -93,6 +88,12 @@ const htmlFontClasses = [
   .filter(Boolean)
   .join(" ");
 
+async function DevelopmentClients() {
+  if (process.env.NODE_ENV !== "development") return null;
+  const { DevRuntimeClients } = await import("./DevRuntimeClients");
+  return <DevRuntimeClients />;
+}
+
 setCoreConfig({
   builderDefaults: {
     ...pbBuilderDefaultsV1,
@@ -131,18 +132,8 @@ export default function RootLayout({
         />
         <DeviceTypeProvider>
           <ThemeProvider attribute="class" disableTransitionOnChange>
-            {process.env.NODE_ENV === "development" && (
-              <>
-                <DevPageValidationClient />
-                <DevContentReloadClient />
-                <PbFoundationsRuntimeSync />
-                <PbColorsRuntimeSync />
-              </>
-            )}
-            <AppLayout>
-              <PageBuilderRuntimeEffects />
-              {children}
-            </AppLayout>
+            <DevelopmentClients />
+            <AppLayout>{children}</AppLayout>
           </ThemeProvider>
         </DeviceTypeProvider>
       </body>

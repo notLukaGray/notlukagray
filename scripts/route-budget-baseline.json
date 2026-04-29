@@ -1,25 +1,25 @@
 {
   "version": 1,
-  "generatedAt": "2026-04-10T01:11:47.435Z",
+  "generatedAt": "2026-04-29T12:00:00.000Z",
   "routes": {
     "/": {
-      "bytes": 1339594,
-      "chunkCount": 12
+      "bytes": 794221,
+      "chunkCount": 11
     },
     "/[...slug]": {
-      "bytes": 1359110,
-      "chunkCount": 14
-    },
-    "/playground": {
-      "bytes": 1384007,
+      "bytes": 1177501,
       "chunkCount": 13
     },
+    "/playground": {
+      "bytes": 1238070,
+      "chunkCount": 14
+    },
     "/style-guide": {
-      "bytes": 712295,
-      "chunkCount": 7
+      "bytes": 61438,
+      "chunkCount": 2
     },
     "/unlock": {
-      "bytes": 1357920,
+      "bytes": 1177501,
       "chunkCount": 13
     }
   },

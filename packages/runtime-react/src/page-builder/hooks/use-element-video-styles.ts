@@ -65,6 +65,7 @@ export type UseElementVideoStylesResult = {
   videoStyle: CSSProperties;
   figureStyle: CSSProperties;
   wrapperStyle: CSSProperties;
+  containerStyle: CSSProperties;
 };
 
 export function useElementVideoStyles({
@@ -236,11 +237,24 @@ export function useElementVideoStyles({
     [innerStyle, moduleConfig, containerStyle]
   );
 
+  const videoContainerStyle = useMemo(
+    (): CSSProperties =>
+      resolvedAspectRatio
+        ? {
+            aspectRatio: resolvedAspectRatio,
+            height: "auto",
+            minHeight: 0,
+          }
+        : {},
+    [resolvedAspectRatio]
+  );
+
   return {
     layoutStyle,
     innerStyle,
     videoStyle,
     figureStyle,
     wrapperStyle,
+    containerStyle: videoContainerStyle,
   };
 }

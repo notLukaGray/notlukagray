@@ -5,15 +5,15 @@ import { useGLTF } from "@react-three/drei";
 import { useAfterLcp } from "@pb/runtime-react/core/hooks/use-after-lcp";
 
 /**
- * Preloads GLB geometry files into drei's cache on idle, after LCP.
- * Call this before the canvas mounts (even when initiallyLoaded=false) so
- * assets are ready in cache when the scene eventually renders.
+ * Preloads GLB geometry files into drei's cache on idle.
+ * By default this waits until after LCP; homepage-priority scenes can opt in earlier.
  */
-export function useModel3DPreload(geometryUrls: string[]) {
+export function useModel3DPreload(geometryUrls: string[], options?: { eager?: boolean }) {
   const isAfterLcp = useAfterLcp();
+  const shouldPreload = options?.eager === true || isAfterLcp;
 
   useEffect(() => {
-    if (!isAfterLcp || geometryUrls.length === 0) return;
+    if (!shouldPreload || geometryUrls.length === 0) return;
 
     const preload = () => {
       geometryUrls.forEach((url) => {
@@ -28,5 +28,5 @@ export function useModel3DPreload(geometryUrls: string[]) {
 
     preload();
     return;
-  }, [isAfterLcp, geometryUrls]);
+  }, [geometryUrls, shouldPreload]);
 }
