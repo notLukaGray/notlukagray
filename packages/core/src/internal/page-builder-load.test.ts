@@ -9,8 +9,8 @@ import {
   getPageSlugBases,
   getPageSlugsByBase,
   getPageSlugs,
-} from "@pb/core/internal/page-builder-load";
-import { isSafePathSegment } from "@pb/core/internal/page-builder-paths";
+} from "./page-builder-load";
+import { isSafePathSegment } from "./page-builder-paths";
 
 describe("page-builder-load", () => {
   describe("getPageSlugBases", () => {

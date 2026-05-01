@@ -1,12 +1,12 @@
 import fs from "fs";
 import path from "path";
-import { isSafePathSegment, resolvePathUnder } from "@pb/core/internal/page-builder-paths";
-import { CONTENT_DIR, parseJsonSafe } from "@pb/core/internal/load/page-builder-load-io";
-import { buildPresets } from "@pb/core/internal/load/page-builder-load-presets";
-import { resolveDefinitionPresets } from "@pb/core/internal/load/page-builder-load-definitions";
-import { expandPageBuilder } from "@pb/core/internal/page-builder-expand";
+import { isSafePathSegment, resolvePathUnder } from "../page-builder-paths";
+import { CONTENT_DIR, parseJsonSafe } from "../load/page-builder-load-io";
+import { buildPresets } from "../load/page-builder-load-presets";
+import { resolveDefinitionPresets } from "../load/page-builder-load-definitions";
+import { expandPageBuilder } from "../page-builder-expand";
 import type { PageBuilderDefinitionBlock, SectionBlock } from "@pb/contracts";
-import type { BreakpointDefinitions } from "@pb/core/internal/defaults/pb-breakpoint-defaults";
+import type { BreakpointDefinitions } from "../defaults/pb-breakpoint-defaults";
 
 const OVERLAYS_DIR = path.join(CONTENT_DIR, "site/overlays");
 

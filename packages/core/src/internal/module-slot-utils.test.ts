@@ -7,7 +7,7 @@ import {
   getFeedbackPadding,
   inferSeekFeedbackType,
 } from "./module-slot-utils";
-import type { ModuleSlotConfig } from "@pb/core/internal/module-slot-types";
+import type { ModuleSlotConfig } from "./module-slot-types";
 import {
   elementBlockSchema,
   cssGradientDefinitionSchema,

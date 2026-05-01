@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+
+const DEV_HLS_URL = process.env.NEXT_PUBLIC_DEV_HLS_URL ?? "http://localhost:4319/convert";
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageHeader } from "@/app/dev/_components/DevWorkbenchPageHeader";
 import { DevWorkbenchPageShell } from "@/app/dev/_components/DevWorkbenchPageShell";
@@ -95,7 +97,7 @@ export function HlsToolsClient() {
     abortRef.current = abortController;
 
     try {
-      const response = await fetch("/api/dev/hls-convert", {
+      const response = await fetch(DEV_HLS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -114,10 +116,13 @@ export function HlsToolsClient() {
       const nextLog = await streamTextResponse(response, setLog);
       setConversionComplete(response.ok && conversionSucceeded(nextLog));
     } catch (error) {
+      const msg = (error as { name?: string; message?: string }).message || "Conversion failed.";
       if ((error as { name?: string }).name === "AbortError") {
         setLog((current) => `${current}\nConversion cancelled.`);
+      } else if (/Failed to fetch|NetworkError|ERR_CONNECTION_REFUSED/.test(msg)) {
+        setLog("HLS side-server not running.\n\nStart: npm run dev:hls\n\nThen retry.");
       } else {
-        setLog((error as Error).message || "Conversion failed.");
+        setLog(msg);
       }
     } finally {
       setIsRunning(false);
@@ -154,14 +159,9 @@ export function HlsToolsClient() {
       <DevWorkbenchPageHeader
         eyebrow="Dev · Tools"
         title="HLS Converter"
-        description="Run a local HLS conversion from a source video into a folder you can upload to Bunny Storage/CDN. The generated master playlist is the value to use in an element video source once HLS playback support is wired into the runtime."
-        affects="local files only, via ffmpeg and ffprobe on this development machine"
-        meta={
-          <>
-            Requires <code>ffmpeg</code> and <code>ffprobe</code> on your PATH. This tool does not
-            upload files or modify content JSON.
-          </>
-        }
+        description="Run a local HLS conversion from a source video into a folder for Bunny Storage/CDN."
+        affects="local files via ffmpeg/ffprobe on this machine"
+        meta="Requires ffmpeg and ffprobe on your PATH. Does not upload files or modify content JSON."
       />
 
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,30rem)]">
@@ -223,16 +223,15 @@ export function HlsToolsClient() {
             <div className="grid gap-4">
               <Field
                 label="Bunny asset folder"
-                hint="Use this after uploading the output folder to the same path on Bunny."
+                hint="Use after uploading output to same path on Bunny."
               >
                 <input
                   value={assetFolder}
-                  onChange={(event) => setAssetFolder(event.target.value)}
+                  onChange={(e) => setAssetFolder(e.target.value)}
                   placeholder="work/project-demo/hls"
                   className={controlClassName()}
                 />
               </Field>
-
               <div className="rounded border border-border bg-background p-3">
                 <p className="mb-2 font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
                   elementVideo src
@@ -254,7 +253,6 @@ export function HlsToolsClient() {
               {fallbackText(elementSnippet, "Set an asset folder first.")}
             </pre>
           </section>
-
           <section className="rounded-lg border border-border bg-card/20 p-4">
             <p className="mb-3 font-mono text-[11px] uppercase tracking-wide text-muted-foreground">
               Conversion log

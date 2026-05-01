@@ -5,9 +5,9 @@ import type {
   CssInlineStyle,
   ElementBlock,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
+import { getPbContentGuidelines } from "@pb/core/host";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
-import { generateElementKey } from "@pb/core/internal/element-keys";
+import { generateElementKey } from "@pb/core/keys";
 import { LayoutMotionDiv } from "@/page-builder/integrations/framer-motion";
 import {
   getChildWrapperLayoutStyle,

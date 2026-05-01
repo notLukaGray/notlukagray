@@ -16,23 +16,23 @@ import {
   type TriggerAction,
   type bgBlock,
 } from "@pb/contracts";
-import { filterPageByActiveTags } from "@pb/core/internal/page-builder-filter-pass";
+import { filterPageByActiveTags } from "./internal/page-builder-filter-pass";
 import {
   getAssetBaseUrl,
   resolveBgBlockUrls,
   resolveSectionBlockUrls,
-} from "@pb/core/internal/page-builder-blocks";
-import { expandPageBuilder } from "@pb/core/internal/page-builder-expand";
-import { resolvePresets } from "@pb/core/internal/page-builder-presets";
-import { applyBuilderElementDefaultsToSections } from "@pb/core/internal/page-builder-apply-element-defaults";
-import { resolveEntranceMotionsIntoSections } from "@pb/core/internal/page-builder-resolve-entrance-motions";
+} from "./internal/page-builder-blocks";
+import { expandPageBuilder } from "./internal/page-builder-expand";
+import { resolvePresets } from "./internal/page-builder-presets";
+import { applyBuilderElementDefaultsToSections } from "./internal/page-builder-apply-element-defaults";
+import { resolveEntranceMotionsIntoSections } from "./internal/page-builder-resolve-entrance-motions";
 import { getCoreGlobals } from "@pb/core/lib/globals";
 import {
   buildRawBgDefinitions,
   buildResolvedBgDefinitions,
   resolvePageBuilderAssetsOnServer,
   type ResolvePageBuilderAssetsResult,
-} from "@pb/core/internal/page-builder-resolve-assets-server";
+} from "./internal/page-builder-resolve-assets-server";
 import {
   loadPageBuilder,
   loadPageBuilderAsync,
@@ -41,20 +41,17 @@ import {
   getPageSlugBases,
   getPageSlugs,
   getPageSlugsByBase,
-} from "@pb/core/internal/page-builder-load";
-import {
-  readPageJsonAsync,
-  readPageJsonByPathAsync,
-} from "@pb/core/internal/load/page-builder-load-io";
+} from "./internal/page-builder-load";
+import { readPageJsonAsync, readPageJsonByPathAsync } from "./internal/load/page-builder-load-io";
 import {
   discoverAllPages,
   resolvePagePath,
   type PageEntry,
-} from "@pb/core/internal/load/page-builder-discover-pages";
-import { loadModal, type ModalBuilder } from "@pb/core/internal/modal-load";
-import type { ModalProps } from "@pb/core/internal/modal-types";
-import { loadOverlaySections } from "@pb/core/internal/overlay/page-builder-overlay-loader";
-import { isSafePathSegment } from "@pb/core/internal/page-builder-paths";
+} from "./internal/load/page-builder-discover-pages";
+import { loadModal, type ModalBuilder } from "./internal/modal-load";
+import type { ModalProps } from "./internal/modal-types";
+import { loadOverlaySections } from "./internal/overlay/page-builder-overlay-loader";
+import { isSafePathSegment } from "./internal/page-builder-paths";
 import {
   applyPbDefaultTextAlign,
   getPageBuilderHostConfig,
@@ -62,17 +59,17 @@ import {
   getPbContentGuidelines,
   setPageBuilderHostConfig,
   type PageBuilderHostConfig,
-} from "@pb/core/internal/adapters/host-config";
+} from "./internal/adapters/host-config";
 import { configureCoreGlobals } from "@pb/core/lib/globals";
 import {
   toPbContentGuidelines,
   type PbBuilderDefaults,
-} from "@pb/core/internal/defaults/pb-builder-defaults";
-import type { PbContentGuidelines } from "@pb/core/internal/defaults/pb-guidelines-expand";
+} from "./internal/defaults/pb-builder-defaults";
+import type { PbContentGuidelines } from "./internal/defaults/pb-guidelines-expand";
 import {
   resolveBreakpointDefinitions,
   type BreakpointDefinitions,
-} from "@pb/core/internal/defaults/pb-breakpoint-defaults";
+} from "./internal/defaults/pb-breakpoint-defaults";
 
 export type PageBuilderDiagnostic = {
   code: string;

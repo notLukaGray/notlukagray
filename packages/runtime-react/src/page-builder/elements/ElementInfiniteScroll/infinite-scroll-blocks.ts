@@ -6,8 +6,8 @@ import type {
   SectionDefinitionBlock,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { JsonValue } from "@pb/contracts/page-builder/core/page-builder-types/json-value";
-import { reconcileElementOrderWithDefinitions } from "@pb/core/internal/module-slot-utils";
-import { generateElementKey } from "@pb/core/internal/element-keys";
+import { reconcileElementOrderWithDefinitions } from "@pb/core/modules";
+import { generateElementKey } from "@pb/core/keys";
 import { LOOP_COPY_COUNT, clampIndex, shouldLoopInfiniteScroll } from "./infinite-scroll-math";
 import type {
   InfiniteScrollBlocksResult,

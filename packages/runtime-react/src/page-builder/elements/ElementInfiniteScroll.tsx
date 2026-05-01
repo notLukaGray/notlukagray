@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, type CSSProperties } from "react";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
+import { getPbContentGuidelines } from "@pb/core/host";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import {
   scaleRadiusForDensity,
@@ -17,7 +17,7 @@ import {
   resolveFrameColumnGapCss,
   resolveFrameGapCss,
   resolveFrameRowGapCss,
-} from "@pb/core/internal/element-layout-utils";
+} from "@pb/core/layout";
 import { resolveThemeStyleObject, resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";

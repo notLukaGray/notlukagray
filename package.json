@@ -28,6 +28,7 @@
     "generate-json-schemas": "npm run generate-json-schemas --workspace @notlukagray/web",
     "validate-pages": "npm run validate-pages --workspace @notlukagray/web",
     "check:route-budgets": "tsx scripts/check-route-budgets.ts",
+    "dev:hls": "npm -w tools/dev-hls-server run start",
     "web:dev": "npm run dev --workspace @notlukagray/web",
     "web:build": "npm run build --workspace @notlukagray/web",
     "web:start": "npm run start --workspace @notlukagray/web",

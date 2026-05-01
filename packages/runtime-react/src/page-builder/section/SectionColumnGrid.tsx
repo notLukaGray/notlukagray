@@ -7,7 +7,7 @@ import type {
   ColumnLayoutSegment,
   ColumnStyleInput,
   ItemLayoutEntryInput,
-} from "@pb/core/internal/section-column-layout";
+} from "@pb/core/layout";
 import {
   getOverlapGap,
   getPrimaryGap,

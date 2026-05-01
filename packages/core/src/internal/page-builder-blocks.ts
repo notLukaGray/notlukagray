@@ -5,7 +5,7 @@ import {
   walkBgBlock,
   walkElement,
   walkSection,
-} from "@pb/core/internal/resolved-assets/page-builder-asset-tree-walk";
+} from "./resolved-assets/page-builder-asset-tree-walk";
 
 const BG_BLOCK_TYPES = new Set([
   "backgroundVideo",

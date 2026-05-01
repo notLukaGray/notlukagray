@@ -1,17 +1,17 @@
 import type { CSSProperties } from "react";
-import { applyPbDefaultTextAlign } from "@pb/core/internal/adapters/host-config";
+import { applyPbDefaultTextAlign } from "@pb/core/host";
 import type {
   ElementBlock,
   ElementBodyVariant,
   ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { getElementLayoutStyle } from "@pb/core/internal/element-layout-utils";
+import { getElementLayoutStyle } from "@pb/core/layout";
 import { type PageBuilderThemeMode, resolveThemeString } from "@/page-builder/theme/theme-string";
 import {
   getBodyTypographyClass,
   getHeadingTypographyClass,
   DEFAULT_BODY_LEVEL,
-} from "@pb/core/internal/element-body-typography";
+} from "@pb/core/typography";
 
 type ElementButtonProps = Extract<ElementBlock, { type: "elementButton" }>;
 

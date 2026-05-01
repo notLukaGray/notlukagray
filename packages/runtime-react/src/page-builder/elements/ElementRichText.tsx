@@ -8,12 +8,9 @@ import type {
   ElementBlock,
   ElementBodyVariant,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { getElementLayoutStyle } from "@pb/core/internal/element-layout-utils";
+import { getElementLayoutStyle } from "@pb/core/layout";
 import { sanitizeRichTextMarkup } from "@pb/runtime-react/core/lib/sanitize-rich-text";
-import {
-  getBodyTypographyClass,
-  DEFAULT_BODY_LEVEL,
-} from "@pb/core/internal/element-body-typography";
+import { getBodyTypographyClass, DEFAULT_BODY_LEVEL } from "@pb/core/typography";
 
 import "highlight.js/styles/github-dark.min.css";
 

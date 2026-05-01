@@ -29,7 +29,7 @@ const eslintConfig = defineConfig([
   },
 
   {
-    files: ["scripts/*.ts", "scripts/**/*.ts"],
+    files: ["scripts/*.ts", "scripts/**/*.ts", "tools/dev-hls-server/**/*.ts"],
     rules: {
       "no-console": "off",
     },
@@ -121,6 +121,29 @@ const eslintConfig = defineConfig([
           argsIgnorePattern: "^_",
           varsIgnorePattern: "^_|^HeroModel$|^BobblingCamera$",
           caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+    },
+  },
+
+  {
+    files: [
+      "packages/runtime-react/src/**/*.{ts,tsx}",
+      "apps/web/src/**/*.{ts,tsx}",
+      "packages/sdk/src/**/*.{ts,tsx}",
+      "tools/**/*.{ts,tsx}",
+    ],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@pb/core/internal/*"],
+              message:
+                "Import from @pb/core/internal/* is not allowed outside packages/core. Use @pb/core/<subpath> instead (e.g., @pb/core/layout, @pb/core/keys).",
+            },
+          ],
         },
       ],
     },

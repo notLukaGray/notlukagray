@@ -3,21 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { CSSProperties } from "react";
-import { applyPbDefaultTextAlign } from "@pb/core/internal/adapters/host-config";
+import { applyPbDefaultTextAlign } from "@pb/core/host";
 import type {
   ElementBlock,
   ElementBodyVariant,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import {
-  getElementLayoutStyle,
-  getLayoutRotateFlipStyle,
-} from "@pb/core/internal/element-layout-utils";
+import { getElementLayoutStyle, getLayoutRotateFlipStyle } from "@pb/core/layout";
 import {
   getBodyTypographyClass,
   getHeadingTypographyClass,
   DEFAULT_BODY_LEVEL,
-} from "@pb/core/internal/element-body-typography";
-import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
+} from "@pb/core/typography";
+import { resolveFontFamily } from "@pb/core/typography";
 import { resolveThemeString } from "@/page-builder/theme/theme-string";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import { InlineFormattedText } from "./Shared/InlineFormattedText";

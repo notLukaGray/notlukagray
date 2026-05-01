@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { parseCssValueToPixels } from "@pb/core/internal/section-utils";
+import { parseCssValueToPixels } from "@pb/core/layout";
 import { useScrollContainer } from "@/page-builder/section/position/use-scroll-container";
 
 type UseStickyPositioningProps = {

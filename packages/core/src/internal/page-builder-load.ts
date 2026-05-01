@@ -1,5 +1,5 @@
 import fs from "fs";
-import { isSafePathSegment } from "@pb/core/internal/page-builder-paths";
+import { isSafePathSegment } from "./page-builder-paths";
 import type { PageBuilder } from "@pb/contracts";
 import { pageBuilderSchema, buttonActionSchema } from "@pb/contracts";
 import {

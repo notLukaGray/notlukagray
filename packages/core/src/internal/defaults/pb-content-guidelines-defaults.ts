@@ -4,8 +4,8 @@ import {
   pbBuilderDefaultsV1,
   toPbContentGuidelines,
   type PbBuilderDefaults,
-} from "@pb/core/internal/defaults/pb-builder-defaults";
-import type { PbContentGuidelines } from "@pb/core/internal/defaults/pb-guidelines-expand";
+} from "../defaults/pb-builder-defaults";
+import type { PbContentGuidelines } from "../defaults/pb-guidelines-expand";
 
 export type { PbBuilderDefaults, PbContentGuidelines };
 

@@ -3,11 +3,8 @@
 import { useEffect, useRef } from "react";
 import type { bgBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
-import type { OverridesMap } from "@pb/core/internal/page-builder-overrides";
-import {
-  createTriggerHandlers,
-  type TriggerHandlerContext,
-} from "@pb/core/internal/page-builder-trigger-handlers";
+import type { OverridesMap } from "@pb/core/overrides";
+import { createTriggerHandlers, type TriggerHandlerContext } from "@pb/core/triggers";
 import { PAGE_BUILDER_TRIGGER_EVENT, type PageBuilderTriggerDetail } from "@/page-builder/triggers";
 
 export type UsePageBuilderTriggerListenerParams = {

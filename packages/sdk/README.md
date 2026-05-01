@@ -45,3 +45,7 @@ const migrated = await pb.migrate(pageJson, { from: "0.5.0-v0", to: "1.0.0" });
 
 - `diff` is structural and marks removals as breaking.
 - `migrate` can infer source version from `page.contractVersion` when omitted.
+
+## Internal SDK — Not Published
+
+`@pb/sdk` is an internal workspace package. Despite the "SDK" naming, it is not a released artifact. It describes a programmatic surface within the monorepo; publishing externally would require an explicit build pipeline.

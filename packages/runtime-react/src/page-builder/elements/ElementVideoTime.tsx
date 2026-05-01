@@ -5,8 +5,8 @@ import type {
   ElementBlock,
   ElementBodyVariant,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { getElementLayoutStyle } from "@pb/core/internal/element-layout-utils";
-import { getBodyTypographyClass } from "@pb/core/internal/element-body-typography";
+import { getElementLayoutStyle } from "@pb/core/layout";
+import { getBodyTypographyClass } from "@pb/core/typography";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";
 
 type Props = Extract<ElementBlock, { type: "elementVideoTime" }>;

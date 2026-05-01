@@ -4,7 +4,7 @@ import type {
   ElementLayout,
   ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
+import type { ElementLayoutTransformOptions } from "@pb/core/layout";
 import type { LinkState } from "../Shared/GraphicLinkWrapper";
 import type { VectorShape } from "@pb/contracts/page-builder/core/page-builder-schemas";
 

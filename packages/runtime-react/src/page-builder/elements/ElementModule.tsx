@@ -3,7 +3,7 @@
 import { useMemo, useRef, type CSSProperties } from "react";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
+import { getPbContentGuidelines } from "@pb/core/host";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import {
   scaleRadiusForDensity,
@@ -19,7 +19,7 @@ import {
   resolveFrameColumnGapCss,
   resolveFrameGapCss,
   resolveFrameRowGapCss,
-} from "@pb/core/internal/element-layout-utils";
+} from "@pb/core/layout";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";
 import { useSlotDefaultWrapperStyle } from "@/page-builder/elements/ElementModule/ModuleSlotContext";
 import { useDimensionGestureContext } from "./Shared/DimensionGestureContext";
@@ -31,7 +31,7 @@ import {
   coerceSectionEffects,
   type BorderGradient,
 } from "./ElementModule/element-module-style-utils";
-import { reconcileElementOrderWithDefinitions } from "@pb/core/internal/module-slot-utils";
+import { reconcileElementOrderWithDefinitions } from "@pb/core/modules";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import { resolveThemeStyleObject, resolveThemeValueDeep } from "@/page-builder/theme/theme-string";
 

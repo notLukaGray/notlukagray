@@ -1,11 +1,11 @@
 import fs from "fs";
 import path from "path";
-import { isSafePathSegment, resolvePathUnder } from "@pb/core/internal/page-builder-paths";
+import { isSafePathSegment, resolvePathUnder } from "./page-builder-paths";
 import type { ModalBuilderFromSchema, PageBuilderDefinitionBlock } from "@pb/contracts";
 import { modalBuilderSchema, MOTION_DEFAULTS, sectionEffectSchema } from "@pb/contracts";
-import type { ModalTransitionConfig } from "@pb/core/internal/modal-types";
+import type { ModalTransitionConfig } from "./modal-types";
 import { motionPropsSchema } from "@pb/contracts";
-import { CONTENT_DIR } from "@pb/core/internal/load/page-builder-load-io";
+import { CONTENT_DIR } from "./load/page-builder-load-io";
 
 const MODALS_DIR = path.join(CONTENT_DIR, "modals");
 

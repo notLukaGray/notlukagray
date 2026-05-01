@@ -1,10 +1,10 @@
 "use client";
 
 import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { pageBuilderFlexGapToCss } from "@pb/core/internal/element-layout-utils";
-import { borderToCss } from "@pb/core/internal/section-utils";
-import { generateElementKey } from "@pb/core/internal/element-keys";
-import type { ColumnFlexStyle, ColumnStyleInput } from "@pb/core/internal/section-column-layout";
+import { pageBuilderFlexGapToCss } from "@pb/core/layout";
+import { borderToCss } from "@pb/core/layout";
+import { generateElementKey } from "@pb/core/keys";
+import type { ColumnFlexStyle, ColumnStyleInput } from "@pb/core/layout";
 import { ElementRenderer } from "../../elements/Shared/ElementRenderer";
 import {
   type PageBuilderThemeMode,

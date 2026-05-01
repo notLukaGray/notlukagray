@@ -1,14 +1,14 @@
 import { getSignedCdnUrl, validateAssetKey } from "../lib/cdn-asset-server";
 import { buildProxyUrl, needsProxyUrl } from "../lib/proxy-url";
-import { resolveBgBlockUrls } from "@pb/core/internal/page-builder-blocks";
+import { resolveBgBlockUrls } from "./page-builder-blocks";
 import type { bgBlock, PageBuilderDefinitionBlock, SectionBlock } from "@pb/contracts";
-import type { GetSignedImageUrlFn } from "@pb/core/internal/page-builder-resolved-assets";
-import { getBunnyImageParams } from "@pb/core/internal/page-builder-resolved-assets";
+import type { GetSignedImageUrlFn } from "./page-builder-resolved-assets";
+import { getBunnyImageParams } from "./page-builder-resolved-assets";
 import {
   collectPageBuilderAssetRefs,
   injectResolvedUrlsIntoPage,
   injectResolvedUrlsIntoBgBlock,
-} from "@pb/core/internal/page-builder-resolved-assets";
+} from "./page-builder-resolved-assets";
 import type { BackgroundTransitionEffect } from "@pb/contracts";
 import { createMemoizedComputeContainerWidthPx } from "./server/page-builder-container-width-server";
 

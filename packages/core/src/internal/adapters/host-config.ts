@@ -6,7 +6,7 @@ import {
   defaultPbContentGuidelines,
   type PbBuilderDefaults,
   type PbContentGuidelines,
-} from "@pb/core/internal/defaults/pb-content-guidelines-defaults";
+} from "../defaults/pb-content-guidelines-defaults";
 
 export type PageBuilderHostConfig = {
   pbBuilderDefaults: PbBuilderDefaults;

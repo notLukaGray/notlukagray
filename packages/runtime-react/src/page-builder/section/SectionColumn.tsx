@@ -2,12 +2,12 @@
 
 import { useMemo, useRef } from "react";
 import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/internal/section-utils";
+import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/layout";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useSectionBaseStyles } from "@/page-builder/section/position/use-section-base-styles";
 import { useStickyTrait } from "@/page-builder/section/position/use-sticky-trait";
 import { useFixedTrait } from "@/page-builder/section/position/use-fixed-trait";
-import { applySectionFillStyle } from "@pb/core/internal/section-style-utils";
+import { applySectionFillStyle } from "@pb/core/layout";
 import { LayerStack } from "./stack/LayerStack";
 import { SectionGlassEffect } from "./stack/SectionGlassEffect";
 import { useSectionViewportTrigger } from "@/page-builder/triggers/core/use-section-viewport-trigger";

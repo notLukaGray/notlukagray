@@ -21,7 +21,7 @@ import {
   buildElementButtonWrapperStyles,
   getElementButtonTypographyClass,
 } from "./ElementButton/element-button-styles";
-import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
+import { resolveFontFamily } from "@pb/core/typography";
 import { resolveResponsiveValue } from "@pb/core/lib/responsive-value";
 import {
   buildElementButtonLinkState,

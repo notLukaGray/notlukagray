@@ -41,3 +41,4 @@ import { SectionRenderer, ElementRenderer, ModalRenderer } from "@pb/runtime-rea
 - Use `server` entrypoints in server/RSC contexts and `client` entrypoints in client contexts.
 - Prefer focused documented subpaths over broad `core/*` or `content/*` imports.
 - `dev-*` entrypoints are intended for tooling/dev workflows, not production app APIs.
+- The `@/page-builder/*`, `@/core/*`, and `@/content/*` tsconfig path aliases are package-internal and not public surface.

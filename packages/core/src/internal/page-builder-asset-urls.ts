@@ -5,7 +5,7 @@ import {
   resolveBgBlockUrls,
   resolveElementBlockUrls,
   resolveSectionBlockUrls,
-} from "@pb/core/internal/page-builder-blocks";
+} from "./page-builder-blocks";
 
 function collectAssetUrlsFromElement(block: ElementBlock, base: string, urls: string[]): void {
   const resolved = resolveElementBlockUrls(block, base);

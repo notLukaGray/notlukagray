@@ -1,3 +1,3 @@
-export * from "@pb/core/internal/defaults/pb-builder-defaults";
-export * from "@pb/core/internal/defaults/pb-guidelines-expand";
-export * from "@pb/core/internal/defaults/pb-breakpoint-defaults";
+export * from "./internal/defaults/pb-builder-defaults";
+export * from "./internal/defaults/pb-guidelines-expand";
+export * from "./internal/defaults/pb-breakpoint-defaults";

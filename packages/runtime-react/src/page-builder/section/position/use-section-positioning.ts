@@ -2,8 +2,8 @@
 
 import { useMemo } from "react";
 import type { CSSProperties } from "react";
-import { getSectionAlignStyle } from "@pb/core/internal/section-utils";
-import type { SectionAlign } from "@pb/core/internal/section-utils";
+import { getSectionAlignStyle } from "@pb/core/layout";
+import type { SectionAlign } from "@pb/core/layout";
 
 type UseSectionPositioningProps = {
   align?: SectionAlign;

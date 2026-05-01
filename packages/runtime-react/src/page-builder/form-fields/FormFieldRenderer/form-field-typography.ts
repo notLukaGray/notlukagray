@@ -4,7 +4,7 @@
  * text size; labelClassName/inputClassName/errorClassName override when set.
  */
 import type { ElementBodyVariant } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { getBodyTypographyClass } from "@pb/core/internal/element-body-typography";
+import { getBodyTypographyClass } from "@pb/core/typography";
 
 const STRUCTURAL_LABEL = "block text-foreground mb-1";
 const STRUCTURAL_LABEL_INLINE = "text-foreground";

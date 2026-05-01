@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { ElementBlock, ElementBodyVariant, ElementImageObjectFit } from "@pb/contracts";
-import type { HeadingLevel } from "@pb/core/internal/element-body-typography";
-import type { PbContentGuidelines } from "@pb/core/internal/defaults/pb-guidelines-expand";
+import type { HeadingLevel } from "../element-body-typography";
+import type { PbContentGuidelines } from "../defaults/pb-guidelines-expand";
 
 export type PbTypographyBinding =
   | { copyType: "body"; level: ElementBodyVariant }

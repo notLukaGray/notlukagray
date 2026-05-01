@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
   DEV_NEUTRAL_FONT_CONFIGS,
@@ -70,8 +69,6 @@ async function fetchBunnyFontList(): Promise<Record<string, BunnyFontMeta>> {
 }
 
 export default async function FontDevPage() {
-  if (process.env.NODE_ENV !== "development") notFound();
-
   const fontList = await fetchBunnyFontList();
 
   return (

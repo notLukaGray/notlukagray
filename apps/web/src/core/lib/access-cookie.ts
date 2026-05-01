@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import { accessCookieName, accessCookieMaxAgeDays } from "./globals";
+import { buildCookieHeader } from "./cookies/build-cookie-header";
 
 const MESSAGE = "access";
 
@@ -38,11 +39,11 @@ export function getAccessCookieHeader(): string {
   const token = createAccessToken();
   if (!token) return "";
   const maxAge = accessCookieMaxAgeDays * 24 * 60 * 60;
-  return `${accessCookieName}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}`;
+  return buildCookieHeader({ name: accessCookieName, value: token, maxAge });
 }
 
 export function getClearAccessCookieHeader(): string {
-  return `${accessCookieName}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
+  return buildCookieHeader({ name: accessCookieName, value: "", maxAge: 0 });
 }
 
 export const COOKIE_NAME = accessCookieName;

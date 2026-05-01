@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { LayoutSectionsDevClient } from "./LayoutSectionsDevClient";
 
@@ -10,7 +9,5 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function LayoutSectionsDevPage() {
-  if (process.env.NODE_ENV !== "development") notFound();
-
   return <LayoutSectionsDevClient />;
 }

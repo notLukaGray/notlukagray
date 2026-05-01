@@ -4,7 +4,7 @@ describe("getPageSlugBases nested slug mapping", () => {
   it("keeps the full slug path instead of collapsing to last segment", async () => {
     vi.resetModules();
 
-    vi.doMock("@pb/core/internal/load/page-builder-discover-pages", () => ({
+    vi.doMock("./load/page-builder-discover-pages", () => ({
       discoverAllPages: () => [
         {
           slugSegments: ["work", "shared-leaf"],
@@ -31,7 +31,7 @@ describe("getPageSlugBases nested slug mapping", () => {
       return { ...mocked, default: mocked };
     });
 
-    const { getPageSlugBases } = await import("@pb/core/internal/page-builder-load");
+    const { getPageSlugBases } = await import("./page-builder-load");
     expect(getPageSlugBases()).toEqual([
       { slug: "research/shared-leaf", basePath: "/research" },
       { slug: "work/shared-leaf", basePath: "/work" },

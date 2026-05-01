@@ -12,7 +12,7 @@ import {
 import fs from "fs";
 import path from "path";
 import { discoverAllPages } from "@pb/core";
-import { parseJsonSafe } from "@pb/core/internal/load/page-builder-load-io";
+import { parseJsonSafe } from "@pb/core/loader";
 import {
   filterConfigSchema,
   knownPageTagsConfigSchema,

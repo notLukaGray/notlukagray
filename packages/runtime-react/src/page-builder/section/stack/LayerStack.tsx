@@ -5,7 +5,7 @@ import type {
   dividerLayer,
   ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { castBlendMode } from "@pb/core/internal/section-utils";
+import { castBlendMode } from "@pb/core/layout";
 import { resolveThemeString } from "@/page-builder/theme/theme-string";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 

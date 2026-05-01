@@ -1,4 +1,1 @@
-export {
-  expandPageBuilder,
-  type ExpandPageBuilderOptions,
-} from "@pb/core/internal/page-builder-expand";
+export { expandPageBuilder, type ExpandPageBuilderOptions } from "./internal/page-builder-expand";

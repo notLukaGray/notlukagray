@@ -19,7 +19,7 @@ import {
   isMobileViewportWidth,
   resolveBreakpointDefinitions,
   type BreakpointDefinitions,
-} from "@pb/core/internal/defaults/pb-breakpoint-defaults";
+} from "./defaults/pb-breakpoint-defaults";
 
 export type ExpandPageBuilderOptions = {
   /** When set, trigger payloads get asset URLs resolved in the same pass (avoids second walk in getPage). */

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ElementDevPageContent } from "@/app/dev/elements/ElementDevPageContent";
 import { getElementDevEntryBySlug } from "@/app/dev/elements/element-dev-registry";
+import { assertDevRoute } from "@/core/lib/assert-dev";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export const dynamic = "force-dynamic";
 
 export default async function ElementScaffoldDevPage({ params }: Props) {
-  if (process.env.NODE_ENV !== "development") notFound();
+  assertDevRoute();
 
   const { slug } = await params;
   const entry = getElementDevEntryBySlug(slug);

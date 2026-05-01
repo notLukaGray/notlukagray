@@ -2,7 +2,7 @@ import type React from "react";
 import type { bgBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { OVERRIDE_KEY_BG } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
-import type { OverridesMap } from "@pb/core/internal/page-builder-overrides";
+import type { OverridesMap } from "../page-builder-overrides";
 
 export type TriggerHandlerContext = {
   setOverrides: React.Dispatch<React.SetStateAction<OverridesMap>>;

@@ -17,7 +17,7 @@ import type {
   ItemLayoutInput,
   ItemLayoutEntryInput,
   ElementWithId,
-} from "@pb/core/internal/section-column-layout";
+} from "@pb/core/layout";
 import {
   buildElementMap,
   orderElementsByOrder,
@@ -30,7 +30,7 @@ import {
   type ColumnLayoutSegment,
   type ColumnFlexStyle,
   type GapStyle,
-} from "@pb/core/internal/section-column-layout";
+} from "@pb/core/layout";
 import {
   buildContentWrapperStyle,
   useResolvedColumnLayoutInputs,

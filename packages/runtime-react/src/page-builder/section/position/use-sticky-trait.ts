@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, type CSSProperties } from "react";
-import { buildTransformString } from "@pb/core/internal/section-utils";
+import { buildTransformString } from "@pb/core/layout";
 import { useStickyPositioning } from "@/page-builder/section/position/use-sticky-positioning";
 import type { ResolvedSectionLayout } from "@/page-builder/section/position/use-section-base-styles";
 

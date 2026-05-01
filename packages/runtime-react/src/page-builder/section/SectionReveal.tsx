@@ -16,12 +16,12 @@ import {
   MOTION_DEFAULTS,
   mergeMotionDefaults,
 } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
-import { applySectionFillStyle } from "@pb/core/internal/section-style-utils";
+import { applySectionFillStyle } from "@pb/core/layout";
 import { useSectionBaseStyles } from "@/page-builder/section/position/use-section-base-styles";
 import { LayerStack } from "@/page-builder/section/stack/LayerStack";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
-import { generateElementKey } from "@pb/core/internal/element-keys";
+import { generateElementKey } from "@pb/core/keys";
 import { useRevealExternalTrigger } from "@/page-builder/triggers/core/use-reveal-external-trigger";
 import { useSectionCustomTriggers } from "@/page-builder/triggers/core/use-section-custom-triggers";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";

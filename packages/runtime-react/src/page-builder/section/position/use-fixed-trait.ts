@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, type CSSProperties } from "react";
-import { parseCssValueToPixels, buildTransformString } from "@pb/core/internal/section-utils";
-import { Z_INDEX } from "@pb/core/internal/section-constants";
+import { parseCssValueToPixels, buildTransformString } from "@pb/core/layout";
+import { Z_INDEX } from "@pb/core/layout";
 import type { ResolvedSectionLayout } from "@/page-builder/section/position/use-section-base-styles";
 
 export type UseFixedTraitProps = {

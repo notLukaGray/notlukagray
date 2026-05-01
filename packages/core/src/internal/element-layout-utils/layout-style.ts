@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
+import { getPbContentGuidelines } from "../adapters/host-config";
 import { scaleSpaceForDensity } from "@pb/contracts/page-builder/core/page-density";
 import type { ElementLayout } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveResponsiveValue } from "../../lib/responsive-value";

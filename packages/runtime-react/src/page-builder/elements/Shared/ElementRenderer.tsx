@@ -8,7 +8,7 @@ import type {
   MotionTiming,
   ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { resolveElementBlockForBreakpoint } from "@pb/core/internal/element-layout-utils";
+import { resolveElementBlockForBreakpoint } from "@pb/core/layout";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { MotionFromJson } from "@/page-builder/integrations/framer-motion/motion-from-json";
 import { ElementExitWrapper } from "@/page-builder/integrations/framer-motion";

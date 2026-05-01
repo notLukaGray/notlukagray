@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import {
-  getVideoActionHandler,
-  type VideoActionHandlers,
-} from "@pb/core/internal/element-video-utils";
+import { getVideoActionHandler, type VideoActionHandlers } from "@pb/core/media";
 
 export type VideoKeyBinding = {
   key: string;

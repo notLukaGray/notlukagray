@@ -35,7 +35,7 @@ describe("page-builder-get-props", () => {
           },
         } as ModalBuilder["definitions"],
       };
-      vi.doMock("@pb/core/internal/modal-load", () => ({
+      vi.doMock("./modal-load", () => ({
         loadModal: (id: string) => (id === "unlock" ? modal : null),
       }));
 
@@ -63,7 +63,7 @@ describe("page-builder-get-props", () => {
           b: { type: "contentBlock", gap: "0", elements: [] },
         } as ModalBuilder["definitions"],
       };
-      vi.doMock("@pb/core/internal/modal-load", () => ({
+      vi.doMock("./modal-load", () => ({
         loadModal: (id: string) => (id === "unlock" ? modal : null),
       }));
       const { getModalProps: getMockedModalProps } = await import("@pb/core");
@@ -83,7 +83,7 @@ describe("page-builder-get-props", () => {
           hero: { type: "contentBlock", gap: "0", elements: [] },
         } as ModalBuilder["definitions"],
       };
-      vi.doMock("@pb/core/internal/modal-load", () => ({
+      vi.doMock("./modal-load", () => ({
         loadModal: (id: string) => (id === "unlock" ? modal : null),
       }));
       const { getModalProps: getMockedModalProps } = await import("@pb/core");

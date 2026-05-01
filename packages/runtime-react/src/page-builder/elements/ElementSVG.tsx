@@ -8,7 +8,7 @@ import {
   buildGradientTransformMatrix,
   serializeTransformMatrix,
 } from "@pb/runtime-react/core/lib/svg-transform-utils";
-import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
+import type { ElementLayoutTransformOptions } from "@pb/core/layout";
 import type { ElementLayout } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { GraphicLinkWrapper } from "./Shared/GraphicLinkWrapper";

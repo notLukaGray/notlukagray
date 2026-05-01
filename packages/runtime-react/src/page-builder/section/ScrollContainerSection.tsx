@@ -3,15 +3,15 @@
 import { useEffect, useMemo, useRef } from "react";
 import type { CSSProperties } from "react";
 import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/internal/section-utils";
+import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/layout";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useSectionBaseStyles } from "@/page-builder/section/position/use-section-base-styles";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
-import { applySectionFillStyle } from "@pb/core/internal/section-style-utils";
+import { applySectionFillStyle } from "@pb/core/layout";
 import { LayerStack } from "./stack/LayerStack";
 import { SectionGlassEffect } from "./stack/SectionGlassEffect";
 import { ElementRenderer } from "../elements/Shared/ElementRenderer";
-import { generateElementKey } from "@pb/core/internal/element-keys";
+import { generateElementKey } from "@pb/core/keys";
 import { SectionMotionWrapper } from "@/page-builder/integrations/framer-motion";
 import { SectionScrollTargetProvider } from "@/page-builder/section/position/SectionScrollTargetContext";
 import { useSectionViewportTrigger } from "@/page-builder/triggers/core/use-section-viewport-trigger";

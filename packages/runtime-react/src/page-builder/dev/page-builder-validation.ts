@@ -6,11 +6,8 @@ import {
   loadPageBuilder,
   loadPageBuilderByPath,
   PAGE_DATA_DIR as CORE_PAGE_DATA_DIR,
-} from "@pb/core/internal/page-builder-load";
-import {
-  resolvePagePath,
-  discoverAllPages,
-} from "@pb/core/internal/load/page-builder-discover-pages";
+} from "@pb/core/loader";
+import { resolvePagePath, discoverAllPages } from "@pb/core/loader";
 import { computeFallbackStatsFromPageDefinitions } from "@/page-builder/dev/compute-figma-fallback-walk";
 import {
   parseFigmaExportDiagnostics,

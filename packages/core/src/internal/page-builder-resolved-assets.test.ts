@@ -6,11 +6,11 @@ import {
   urlMapKey,
   buildUrlByKeyMap,
   injectResolvedUrlsIntoPage,
-} from "@pb/core/internal/page-builder-resolved-assets";
+} from "./page-builder-resolved-assets";
 import {
   computeContainerWidthPx,
   createMemoizedComputeContainerWidthPx,
-} from "@pb/core/internal/server/page-builder-container-width-server";
+} from "./server/page-builder-container-width-server";
 
 describe("page-builder-resolved-assets", () => {
   describe("normalizeAspectRatioForBunny", () => {

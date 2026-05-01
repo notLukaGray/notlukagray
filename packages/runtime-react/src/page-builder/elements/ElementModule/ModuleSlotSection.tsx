@@ -13,7 +13,7 @@ import {
   mergeMotionDefaults,
   getEntranceMotionFromPreset,
 } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";
-import { resolveSlotElements, getModuleSlotBaseStyle } from "@pb/core/internal/module-slot-utils";
+import { resolveSlotElements, getModuleSlotBaseStyle } from "@pb/core/modules";
 import { MotionFromJson } from "@/page-builder/integrations/framer-motion";
 import { useSlotGestures } from "@/page-builder/hooks/use-slot-gestures";
 import { ModuleSlotFeedback } from "./ModuleSlotFeedback";
@@ -25,7 +25,7 @@ import { resolveThemeStyleObject, resolveThemeValueDeep } from "@/page-builder/t
 
 export { useSlotDefaultWrapperStyle } from "./ModuleSlotContext";
 
-export { resolveSlotElements } from "@pb/core/internal/module-slot-utils";
+export { resolveSlotElements } from "@pb/core/modules";
 
 export type ModuleSlotSectionProps = {
   slot: ModuleSlotConfig;

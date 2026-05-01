@@ -2,7 +2,7 @@ import type {
   ElementBlock,
   SectionDefinitionBlock,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { generateElementKey } from "@pb/core/internal/element-keys";
+import { generateElementKey } from "@pb/core/keys";
 import { ElementErrorBoundary } from "@/page-builder/SectionErrorBoundary";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
 import { SectionDefinitionsContext } from "@/page-builder/elements/ElementModule/ModuleSlotContext";

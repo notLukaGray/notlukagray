@@ -6,8 +6,8 @@ import {
   uiVideoHoldRepeatMs,
   uiVideoHoldThresholdMs,
 } from "@pb/runtime-react/core/lib/globals";
-import { getRegionFromClientX } from "@pb/core/internal/module-slot-utils";
-import { inferSeekFeedbackType } from "@pb/core/internal/module-slot-utils";
+import { getRegionFromClientX } from "@pb/core/modules";
+import { inferSeekFeedbackType } from "@pb/core/modules";
 import type { GestureDef } from "@/page-builder/elements/ElementModule/types";
 
 export type UseSlotGesturesParams = {

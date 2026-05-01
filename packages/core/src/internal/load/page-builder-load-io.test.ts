@@ -10,7 +10,7 @@ import {
   PAGE_DATA_DIR,
   PAGE_IGNORE,
   resolveSlugDir,
-} from "@pb/core/internal/load/page-builder-load-io";
+} from "../load/page-builder-load-io";
 
 describe("page-builder-load-io", () => {
   describe("readJsonFileSafe", () => {

@@ -40,6 +40,13 @@ Primary root commands:
 4. SDK and CLI expose integration and operational interfaces.
 5. Extensions package defines import/export/CMS plugin contracts.
 
+## Workspace Conventions
+
+- All packages are `"private": true` and exported as TypeScript source (no `dist/` output, no published artifact).
+- Packages are consumed exclusively via Next.js / TypeScript project references within this monorepo.
+- To publish a package externally, a `tsup` (or equivalent) build step would need to be added.
+- Cross-package imports use workspace `@pb/*` npm scopes resolved by TypeScript path mapping.
+
 ## Documentation
 
 - System docs hub: [`docs/README.md`](docs/README.md)

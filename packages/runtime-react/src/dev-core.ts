@@ -1,8 +1,5 @@
-export type { FontSlotName } from "@pb/core/internal/element-font-slot";
-export {
-  resolveEntranceMotion,
-  resolveEntranceMotionsForElement,
-} from "@pb/core/internal/page-builder-resolve-entrance-motions";
+export type { FontSlotName } from "@pb/core/typography";
+export { resolveEntranceMotion, resolveEntranceMotionsForElement } from "@pb/core/motion";
 export {
   evaluateConditions,
   type ConditionOperator,

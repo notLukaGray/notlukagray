@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
@@ -19,7 +18,6 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function ElementsDevPage() {
-  if (process.env.NODE_ENV !== "development") notFound();
   const batches = groupElementDevEntriesByBatch();
 
   return (

@@ -1,16 +1,13 @@
 import type { CSSProperties } from "react";
-import { applyPbDefaultTextAlign } from "@pb/core/internal/adapters/host-config";
+import { applyPbDefaultTextAlign } from "@pb/core/host";
 import type {
   ElementBlock,
   ElementBodyVariant,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import {
-  getElementLayoutStyle,
-  getLayoutRotateFlipStyle,
-} from "@pb/core/internal/element-layout-utils";
-import { getBodyTypographyClass } from "@pb/core/internal/element-body-typography";
+import { getElementLayoutStyle, getLayoutRotateFlipStyle } from "@pb/core/layout";
+import { getBodyTypographyClass } from "@pb/core/typography";
 import { useVariable } from "@/page-builder/runtime/page-builder-variable-store";
-import { resolveFontFamily } from "@pb/core/internal/element-font-slot";
+import { resolveFontFamily } from "@pb/core/typography";
 import { resolveThemeString } from "@/page-builder/theme/theme-string";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import { InlineFormattedText } from "./Shared/InlineFormattedText";

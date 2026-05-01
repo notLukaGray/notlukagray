@@ -1,7 +1,7 @@
 "use client";
 
 import type { ModuleBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { resolveVideoShowWhen, getVideoActionHandler } from "@pb/core/internal/element-video-utils";
+import { resolveVideoShowWhen, getVideoActionHandler } from "@pb/core/media";
 import type { UseVideoPlayerStateResult } from "./use-video-player-state";
 import type { VideoControlContextValue } from "@/page-builder/elements/ElementVideo/VideoControlContext";
 import type { UseVideoControlsResult } from "./use-video-controls";

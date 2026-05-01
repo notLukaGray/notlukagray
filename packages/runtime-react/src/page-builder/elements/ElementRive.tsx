@@ -2,7 +2,7 @@
 
 import { useRef, useCallback } from "react";
 import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
+import type { ElementLayoutTransformOptions } from "@pb/core/layout";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { RivePlayer, type Rive } from "@/page-builder/integrations/rive";
 import { firePageBuilderAction } from "@/page-builder/triggers";

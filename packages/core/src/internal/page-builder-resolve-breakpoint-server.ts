@@ -6,7 +6,7 @@
  */
 
 import { resolveResponsiveValue } from "../lib/responsive-value";
-import { resolveElementBlockForBreakpoint } from "@pb/core/internal/element-layout-utils/breakpoint-resolution";
+import { resolveElementBlockForBreakpoint } from "./element-layout-utils/breakpoint-resolution";
 import {
   resolveColumnAssignments,
   resolveColumnCount,
@@ -18,7 +18,7 @@ import {
   resolveGridMode,
   resolveItemLayout,
   resolveItemStyles,
-} from "@pb/core/internal/section-column-layout";
+} from "./section-column-layout";
 import type {
   ColumnAssignmentsInput,
   ColumnCountInput,
@@ -31,7 +31,7 @@ import type {
   GridModeInput,
   ItemLayoutInput,
   ItemStylesInput,
-} from "@pb/core/internal/section-column-layout";
+} from "./section-column-layout";
 import type {
   bgBlock,
   ElementBlock,
@@ -41,7 +41,7 @@ import type {
 import {
   resolveResponsiveBooleanProp,
   resolveResponsiveStringProp,
-} from "@pb/core/internal/section-column-prop-normalizers";
+} from "./section-column-prop-normalizers";
 
 const MOBILE_UA_REGEX = /iPhone|iPad|iPod|Android/i;
 

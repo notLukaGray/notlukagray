@@ -4,16 +4,13 @@ import { useMemo } from "react";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import type { CSSProperties } from "react";
-import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
-import {
-  getElementLayoutStyle,
-  getElementTransformStyle,
-} from "@pb/core/internal/element-layout-utils";
+import type { ElementLayoutTransformOptions } from "@pb/core/layout";
+import { getElementLayoutStyle, getElementTransformStyle } from "@pb/core/layout";
 import {
   getElementVideoVideoStyle,
   getElementVideoInnerStyle,
   type ElementVideoObjectFit,
-} from "@pb/core/internal/element-video-utils";
+} from "@pb/core/media";
 import { uiVideoDefaultAspectRatio } from "@pb/runtime-react/core/lib/globals";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";

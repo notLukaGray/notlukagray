@@ -6,8 +6,8 @@ import type {
   SectionBlock,
   SectionDefinitionBlock,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/internal/section-utils";
-import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
+import { handleSectionWheel, getDefaultScrollSpeed } from "@pb/core/layout";
+import { getPbContentGuidelines } from "@pb/core/host";
 import {
   coalesceEmptyString,
   normalizeFlexAlignItemsValue,
@@ -16,11 +16,11 @@ import {
   resolveFrameColumnGapCss,
   resolveFrameGapCss,
   resolveFrameRowGapCss,
-} from "@pb/core/internal/element-layout-utils";
+} from "@pb/core/layout";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { SectionMotionWrapper } from "@/page-builder/integrations/framer-motion";
-import { applySectionFillStyle } from "@pb/core/internal/section-style-utils";
+import { applySectionFillStyle } from "@pb/core/layout";
 import { useSectionBaseStyles } from "@/page-builder/section/position/use-section-base-styles";
 import { useStickyTrait } from "@/page-builder/section/position/use-sticky-trait";
 import { useFixedTrait } from "@/page-builder/section/position/use-fixed-trait";

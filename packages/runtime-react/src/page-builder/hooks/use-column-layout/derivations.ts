@@ -30,7 +30,7 @@ import {
   type ItemLayoutInput,
   type ItemStyleInput,
   type ItemStylesInput,
-} from "@pb/core/internal/section-column-layout";
+} from "@pb/core/layout";
 
 type ResolvedColumnLayoutInputs = {
   resolvedColumnCount: number;

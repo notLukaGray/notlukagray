@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import type { bgBlock, SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { SECTION_COMPONENTS } from "@/page-builder/section";
-import { generateSectionKey } from "@pb/core/internal/section-keys";
+import { generateSectionKey } from "@pb/core/keys";
 import type { TriggerAction } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import type { BackgroundTransitionEffect } from "@pb/contracts/page-builder/core/page-builder-types";
 import { usePageBuilderTriggers } from "@/page-builder/hooks/use-page-builder-triggers";

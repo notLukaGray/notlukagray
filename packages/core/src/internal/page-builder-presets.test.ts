@@ -6,7 +6,7 @@ import {
   isPresetRef,
   resolvePresetRef,
   mergePresetIntoBlock,
-} from "@pb/core/internal/page-builder-presets";
+} from "./page-builder-presets";
 
 function elementVectorPreset(overrides: Record<string, unknown> = {}) {
   return elementBlockSchema.parse({

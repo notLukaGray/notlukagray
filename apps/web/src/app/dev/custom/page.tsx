@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { CustomModeDevClient } from "./CustomModeDevClient";
 
@@ -10,6 +9,5 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default function CustomModeDevPage() {
-  if (process.env.NODE_ENV !== "development") notFound();
   return <CustomModeDevClient />;
 }

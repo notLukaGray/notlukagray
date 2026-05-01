@@ -11,8 +11,8 @@ import {
   type PbVideoVariantKey,
   type PbWorkbenchElementDefaults,
   type PbWorkbenchElementDefaultSet,
-} from "@pb/core/internal/defaults/pb-builder-defaults";
-import { getPbBuilderDefaults } from "@pb/core/internal/adapters/host-config";
+} from "./defaults/pb-builder-defaults";
+import { getPbBuilderDefaults } from "./adapters/host-config";
 import type { ElementBlock, SectionBlock } from "@pb/contracts";
 
 function asRecord(value: unknown): Record<string, unknown> | null {

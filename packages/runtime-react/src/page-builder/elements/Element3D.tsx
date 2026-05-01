@@ -6,7 +6,7 @@ import type {
   ElementBlock,
   MotionPropsFromJson,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
+import type { ElementLayoutTransformOptions } from "@pb/core/layout";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { Model3DScene } from "./Element3D/Model3DScene";
 import type {

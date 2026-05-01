@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { HlsToolsClient } from "./HlsToolsClient";
 
 export const metadata: Metadata = {
@@ -7,7 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function DevHlsToolsPage() {
-  if (process.env.NODE_ENV !== "development") notFound();
-
   return <HlsToolsClient />;
 }

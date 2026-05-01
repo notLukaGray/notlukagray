@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageHeader } from "@/app/dev/_components/DevWorkbenchPageHeader";
 import { DevWorkbenchPageShell } from "@/app/dev/_components/DevWorkbenchPageShell";
@@ -10,8 +9,6 @@ export const metadata: Metadata = {
 };
 
 export default function DevToolsPage() {
-  if (process.env.NODE_ENV !== "development") notFound();
-
   return (
     <DevWorkbenchPageShell nav={<DevWorkbenchNav />}>
       <DevWorkbenchPageHeader

@@ -8,7 +8,7 @@ import type {
   SectionDefinitionBlock,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
-import { generateElementKey } from "@pb/core/internal/element-keys";
+import { generateElementKey } from "@pb/core/keys";
 import { motion } from "@/page-builder/integrations/framer-motion";
 import type { Easing } from "@/page-builder/integrations/framer-motion";
 import { MOTION_DEFAULTS } from "@pb/contracts/page-builder/core/page-builder-motion-defaults";

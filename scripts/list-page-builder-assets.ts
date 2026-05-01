@@ -2,7 +2,7 @@
 
 /** Import core modules only — avoid `page-builder` barrel (pulls client components + CSS into Node). */
 import { discoverAllPages, getPage } from "@pb/core";
-import { getAllAssetUrlsFromPage } from "@pb/core/internal/page-builder-asset-urls";
+import { getAllAssetUrlsFromPage } from "@pb/core/media";
 
 async function main() {
   const slugs = discoverAllPages().map((page) => page.slugSegments.join("/"));

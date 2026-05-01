@@ -7,7 +7,7 @@ import type {
   SectionEffect,
   ThemeString,
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import type { ElementLayoutTransformOptions } from "@pb/core/internal/element-layout-utils";
+import type { ElementLayoutTransformOptions } from "@pb/core/layout";
 import type { ElementLayout } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { ElementLayoutWrapper } from "./Shared/ElementLayoutWrapper";
 import { useVideoControlContext } from "./ElementVideo/VideoControlContext";

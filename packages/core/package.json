@@ -9,7 +9,17 @@
     "./defaults": "./src/defaults.ts",
     "./expand": "./src/expand.ts",
     "./lib/*": "./src/lib/*.ts",
-    "./internal/*": "./src/internal/*.ts"
+    "./keys": "./src/keys.ts",
+    "./layout": "./src/layout.ts",
+    "./media": "./src/media.ts",
+    "./typography": "./src/typography.ts",
+    "./triggers": "./src/triggers.ts",
+    "./loader": "./src/loader.ts",
+    "./modal": "./src/modal.ts",
+    "./host": "./src/host.ts",
+    "./motion": "./src/motion.ts",
+    "./overrides": "./src/overrides.ts",
+    "./modules": "./src/modules.ts"
   },
   "files": [
     "src"

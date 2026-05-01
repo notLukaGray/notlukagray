@@ -5,7 +5,7 @@ import type {
   SectionBlock,
   bgBlock,
 } from "@pb/contracts";
-import { isBgBlockShape, resolveBgBlockUrls } from "@pb/core/internal/page-builder-blocks";
+import { isBgBlockShape, resolveBgBlockUrls } from "./page-builder-blocks";
 
 export type TriggerPayloadResolveContext = {
   defs: Record<string, PageBuilderDefinitionBlock> | undefined;

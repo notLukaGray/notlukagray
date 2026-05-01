@@ -4,7 +4,7 @@ import {
   getElementLayoutStyle,
   getElementTransformStyle,
   type ElementLayoutTransformOptions,
-} from "@pb/core/internal/element-layout-utils";
+} from "@pb/core/layout";
 import { resolveElementImageLink } from "./element-image-link";
 
 type ElementImageProps = Extract<ElementBlock, { type: "elementImage" }>;

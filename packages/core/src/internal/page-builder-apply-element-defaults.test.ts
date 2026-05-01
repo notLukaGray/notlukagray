@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { applyBuilderElementDefaultsToSections } from "@pb/core/internal/page-builder-apply-element-defaults";
-import {
-  getPageBuilderHostConfig,
-  setPageBuilderHostConfig,
-} from "@pb/core/internal/adapters/host-config";
+import { applyBuilderElementDefaultsToSections } from "./page-builder-apply-element-defaults";
+import { getPageBuilderHostConfig, setPageBuilderHostConfig } from "./adapters/host-config";
 import type { SectionBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
 
 function imageSection(...elements: Record<string, unknown>[]): SectionBlock {

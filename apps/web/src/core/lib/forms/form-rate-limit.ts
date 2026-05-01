@@ -1,9 +1,11 @@
 import { createHmac, timingSafeEqual } from "crypto";
+import { buildCookieHeader } from "../cookies/build-cookie-header";
+import { getRememberedCount, rememberFingerprint } from "../rate-limit/memory-store";
 
 const DEFAULT_MAX_PER_HOUR = 5;
 const HOUR_MS = 60 * 60 * 1000;
 
-type Payload = { timestamps: number[] };
+type Payload = { timestamps: number[]; fp?: string };
 
 function getSecret(): string | undefined {
   return process.env.SITE_PASSWORD ?? process.env.FORM_RATE_LIMIT_SECRET;
@@ -48,45 +50,56 @@ function parseCookie(cookieHeader: string | null, handlerKey: string): Payload |
   }
 }
 
-/**
- * Returns current submission count in the last hour and whether the client is over the limit.
- */
 export function getFormRateLimitState(
   cookieHeader: string | null,
   handlerKey: string,
-  maxPerHour: number = DEFAULT_MAX_PER_HOUR
+  maxPerHour: number = DEFAULT_MAX_PER_HOUR,
+  fp?: string
 ): { count: number; allowed: boolean } {
   const payload = parseCookie(cookieHeader, handlerKey);
   if (!payload) return { count: 0, allowed: true };
+
   const now = Date.now();
   const cutoff = now - HOUR_MS;
-  const recent = payload.timestamps.filter((t) => typeof t === "number" && t > cutoff);
+  let recent = payload.timestamps.filter((t) => typeof t === "number" && t > cutoff);
+
+  const cookieFp = typeof payload.fp === "string" ? payload.fp : undefined;
+
+  if (fp && cookieFp !== fp) {
+    const remembered = getRememberedCount(fp);
+    if (remembered != null) {
+      recent = Array.from({ length: remembered }, () => cutoff + 1);
+    }
+  }
+
   return { count: recent.length, allowed: recent.length < maxPerHour };
 }
 
-/**
- * Returns Set-Cookie header value to record a new submission (append current timestamp, prune old).
- */
 export function getFormRateLimitCookieHeader(
   cookieHeader: string | null,
   handlerKey: string,
-  maxPerHour: number = DEFAULT_MAX_PER_HOUR
+  maxPerHour: number = DEFAULT_MAX_PER_HOUR,
+  fp?: string
 ): string {
   const payload = parseCookie(cookieHeader, handlerKey);
   const now = Date.now();
   const cutoff = now - HOUR_MS;
   const timestamps = payload?.timestamps ?? [];
   const recent = [...timestamps.filter((t: number) => t > cutoff), now].slice(-maxPerHour);
-  const payloadB64 = Buffer.from(JSON.stringify({ timestamps: recent }), "utf8").toString(
-    "base64url"
-  );
+
+  if (fp) {
+    rememberFingerprint(fp, recent.length, HOUR_MS);
+  }
+
+  const data: Payload = { timestamps: recent, ...(fp != null && { fp }) };
+  const payloadB64 = Buffer.from(JSON.stringify(data), "utf8").toString("base64url");
   const signature = sign(payloadB64);
   if (!signature) return "";
   const name = getCookieName(handlerKey);
   const value = `${payloadB64}.${signature}`;
-  return `${name}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=3600`;
+  return buildCookieHeader({ name, value, maxAge: 3600 });
 }
 
 export function getClearFormRateLimitCookieHeader(handlerKey: string): string {
-  return `${getCookieName(handlerKey)}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
+  return buildCookieHeader({ name: getCookieName(handlerKey), value: "", maxAge: 0 });
 }

@@ -5,10 +5,13 @@ import {
   rateLimitLockoutMinutes,
   rateLimitCookieExpiryHours,
 } from "./globals";
+import { buildCookieHeader } from "./cookies/build-cookie-header";
+import { getRememberedCount, rememberFingerprint } from "./rate-limit/memory-store";
 
 type RateLimitPayload = {
   count: number;
   lockedUntil?: number;
+  fp?: string;
 };
 
 function getSecret(): string | undefined {
@@ -33,7 +36,10 @@ function verify(payload: string, signature: string): boolean {
   }
 }
 
-export function getUnlockRateLimitState(cookieHeader: string | null): {
+export function getUnlockRateLimitState(
+  cookieHeader: string | null,
+  fp?: string
+): {
   locked: boolean;
   lockedUntil?: number;
   count: number;
@@ -55,23 +61,44 @@ export function getUnlockRateLimitState(cookieHeader: string | null): {
     const count = typeof data.count === "number" ? data.count : 0;
     const lockedUntil = typeof data.lockedUntil === "number" ? data.lockedUntil : undefined;
 
+    const cookieFp = typeof data.fp === "string" ? data.fp : undefined;
+
+    let effectiveCount = count;
+
+    if (fp && cookieFp !== fp) {
+      const remembered = getRememberedCount(fp);
+      if (remembered != null) {
+        effectiveCount = remembered;
+      } else {
+        effectiveCount = 0;
+      }
+    }
+
     const now = Date.now();
     if (lockedUntil != null && now < lockedUntil) {
-      return { locked: true, lockedUntil, count };
+      return { locked: true, lockedUntil, count: effectiveCount };
     }
-    return { locked: false, count };
+    return { locked: false, count: effectiveCount };
   } catch {
     return { locked: false, count: 0 };
   }
 }
 
-export function getRateLimitCookieHeader(currentCount: number): string {
+export function getRateLimitCookieHeader(currentCount: number, fp?: string): string {
   const count = currentCount + 1;
   const now = Date.now();
   const lockoutMs = rateLimitLockoutMinutes * 60 * 1000;
   const lockedUntil = count >= rateLimitMaxAttempts ? now + lockoutMs : undefined;
 
-  const payload: RateLimitPayload = { count, ...(lockedUntil != null && { lockedUntil }) };
+  if (fp) {
+    rememberFingerprint(fp, count, lockoutMs + 60_000);
+  }
+
+  const payload: RateLimitPayload = {
+    count,
+    ...(fp != null && { fp }),
+    ...(lockedUntil != null && { lockedUntil }),
+  };
   const payloadB64 = Buffer.from(JSON.stringify(payload), "utf8").toString("base64url");
   const signature = sign(payloadB64);
   if (!signature) return "";
@@ -79,11 +106,11 @@ export function getRateLimitCookieHeader(currentCount: number): string {
   const value = `${payloadB64}.${signature}`;
   const cookieExpirySeconds = rateLimitCookieExpiryHours * 60 * 60;
   const maxAge = lockedUntil != null ? Math.ceil((lockedUntil - now) / 1000) : cookieExpirySeconds;
-  return `${rateLimitCookieName}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}`;
+  return buildCookieHeader({ name: rateLimitCookieName, value, maxAge });
 }
 
 export function getClearRateLimitCookieHeader(): string {
-  return `${rateLimitCookieName}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
+  return buildCookieHeader({ name: rateLimitCookieName, value: "", maxAge: 0 });
 }
 
 export const RATE_LIMIT_COOKIE_NAME = rateLimitCookieName;

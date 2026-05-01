@@ -5,7 +5,7 @@ const fsState = {
   directories: new Set<string>(),
 };
 
-vi.mock("@pb/core/internal/load/page-builder-load-io", () => ({
+vi.mock("./load/page-builder-load-io", () => ({
   CONTENT_DIR: "/virtual/content",
 }));
 

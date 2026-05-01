@@ -12,7 +12,7 @@ import {
   resolveVideoLink,
   type VideoSourceCandidate,
   type VideoSourceSupportProbe,
-} from "@pb/core/internal/element-video-utils";
+} from "@pb/core/media";
 import {
   uiVideoPauseButtonHideDelayMs,
   uiVideoFeedbackDurationMs,

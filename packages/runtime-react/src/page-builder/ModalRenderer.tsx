@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { ModalProps } from "@pb/core/internal/modal-types";
+import type { ModalProps } from "@pb/core/modal";
 import { SECTION_COMPONENTS } from "@/page-builder/section";
-import { generateSectionKey } from "@pb/core/internal/section-keys";
+import { generateSectionKey } from "@pb/core/keys";
 import { SectionErrorBoundary } from "./SectionErrorBoundary";
 import { ModalAnimationWrapper } from "@/page-builder/integrations/framer-motion/modal-wrapper";
 import { SectionGlassEffect } from "@/page-builder/section/stack/SectionGlassEffect";

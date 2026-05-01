@@ -5,7 +5,7 @@ import {
   getDefaultScrollSpeed,
   parseCssValueToPixels,
   computeParallaxOffset,
-} from "@pb/core/internal/section-utils";
+} from "@pb/core/layout";
 import { useScrollContainerRef } from "./use-scroll-container";
 import { useScroll } from "@/page-builder/integrations/framer-motion/triggers";
 import {

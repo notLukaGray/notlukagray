@@ -1,9 +1,9 @@
 import { spawn } from "child_process";
 import fs from "fs/promises";
+import http from "http";
 import path from "path";
 
-export const dynamic = "force-dynamic";
-export const runtime = "nodejs";
+const PORT = Number(process.env.DEV_HLS_PORT ?? 4319);
 
 type HlsConvertRequest = {
   inputPath?: unknown;
@@ -53,8 +53,6 @@ const CODEC_RATE_MULTIPLIERS: Record<HlsCodec, number> = {
   x264: 1,
 };
 
-// x264 supports: film, animation, grain, stillimage
-// x265 supports: grain, animation (no "film" — default is already optimised for live action)
 const X264_TUNES = new Set(["film", "animation", "grain", "stillimage"]);
 const X265_TUNES = new Set(["animation", "grain"]);
 
@@ -80,10 +78,6 @@ function parseCodecs(value: unknown): HlsCodec[] {
     : [];
   const deduped = new Set(requested);
   return CODEC_ORDER.filter((codec) => deduped.has(codec));
-}
-
-function enqueue(controller: ReadableStreamDefaultController<Uint8Array>, text: string) {
-  controller.enqueue(new TextEncoder().encode(text));
 }
 
 function runCapture(command: string, args: string[]): Promise<{ stdout: string; stderr: string }> {
@@ -203,7 +197,6 @@ function buildVp9DashArgs({
     );
   });
 
-  // deadline and cpu-used are libvpx-vp9 AVOptions — must be set globally, not per-stream
   args.push("-deadline", "good", "-cpu-used", "4");
 
   if (hasAudio) {
@@ -223,7 +216,6 @@ function buildVp9DashArgs({
     ? `id=0,streams=${videoStreams} id=1,streams=${variants.length}`
     : `id=0,streams=${videoStreams}`;
 
-  // VP9 keyframe interval via -g; -force_key_frames expressions are for x264/x265 only
   args.push(
     "-g",
     String(Math.round(segmentSeconds * fps)),
@@ -354,18 +346,11 @@ function buildHlsArgs({
   return args;
 }
 
-export async function POST(request: Request) {
-  if (process.env.NODE_ENV !== "development") {
-    return new Response("Not found", { status: 404 });
-  }
-
-  let body: HlsConvertRequest;
-  try {
-    body = (await request.json()) as HlsConvertRequest;
-  } catch {
-    return Response.json({ error: "Invalid JSON body." }, { status: 400 });
-  }
-
+async function handleConvert(body: HlsConvertRequest): Promise<{
+  status: number;
+  headers: Record<string, string>;
+  body: ReadableStream<Uint8Array> | string;
+}> {
   const inputPathRaw = asTrimmedString(body.inputPath);
   const outputDirRaw = asTrimmedString(body.outputDir);
   const requestedHeights = Array.isArray(body.heights)
@@ -386,11 +371,19 @@ export async function POST(request: Request) {
   const tune = X264_TUNES.has(tuneRaw) ? tuneRaw : null;
 
   if (!inputPathRaw || !outputDirRaw) {
-    return Response.json({ error: "Input path and output folder are required." }, { status: 400 });
+    return {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "Input path and output folder are required." }),
+    };
   }
 
   if (selectedCodecs.length === 0) {
-    return Response.json({ error: "At least one codec output is required." }, { status: 400 });
+    return {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: "At least one codec output is required." }),
+    };
   }
 
   const inputPath = resolveLocalPath(inputPathRaw);
@@ -398,23 +391,26 @@ export async function POST(request: Request) {
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
+      const enqueue = (text: string) => {
+        controller.enqueue(new TextEncoder().encode(text));
+      };
+
       try {
-        enqueue(controller, `Input: ${inputPath}\n`);
-        enqueue(controller, `Output: ${outputDir}\n\n`);
+        enqueue(`Input: ${inputPath}\n`);
+        enqueue(`Output: ${outputDir}\n\n`);
 
         const inputStat = await fs.stat(inputPath).catch(() => null);
         if (!inputStat || !inputStat.isFile()) {
-          enqueue(controller, "Input path does not point to a readable file.\n");
+          enqueue("Input path does not point to a readable file.\n");
           controller.close();
           return;
         }
 
         await fs.mkdir(outputDir, { recursive: true });
 
-        enqueue(controller, "Probing source video...\n");
+        enqueue("Probing source video...\n");
         const probe = await probeVideo(inputPath);
         enqueue(
-          controller,
           `Source height: ${probe.height ?? "unknown"}; fps: ${probe.fps.toFixed(3)}; audio: ${probe.hasAudio ? `yes (${probe.audioChannels}ch)` : "no"}\n`
         );
 
@@ -426,21 +422,19 @@ export async function POST(request: Request) {
         });
 
         if (selectedVariants.length === 0) {
-          enqueue(controller, "No renditions selected at or below the source height.\n");
+          enqueue("No renditions selected at or below the source height.\n");
           controller.close();
           return;
         }
 
         enqueue(
-          controller,
           `Renditions: ${selectedVariants.map((variant) => `${variant.height}p`).join(", ")}\n`
         );
         enqueue(
-          controller,
           `Codec outputs: ${selectedCodecs.map((codec) => CODEC_LABELS[codec]).join(", ")}\n`
         );
-        enqueue(controller, `Quality preset: ${qualityPreset}${tune ? `; tune: ${tune}` : ""}\n`);
-        enqueue(controller, `Segment length: ${segmentSeconds}s\n\n`);
+        enqueue(`Quality preset: ${qualityPreset}${tune ? `; tune: ${tune}` : ""}\n`);
+        enqueue(`Segment length: ${segmentSeconds}s\n\n`);
 
         const completed: string[] = [];
         for (const codec of selectedCodecs) {
@@ -473,37 +467,25 @@ export async function POST(request: Request) {
                   tune,
                 });
 
-          enqueue(controller, `\n[${CODEC_LABELS[codec]}]\n`);
-          enqueue(
-            controller,
-            `Running: ffmpeg ${args.map((arg) => JSON.stringify(arg)).join(" ")}\n\n`
-          );
+          enqueue(`\n[${CODEC_LABELS[codec]}]\n`);
+          enqueue(`Running: ffmpeg ${args.map((arg) => JSON.stringify(arg)).join(" ")}\n\n`);
 
           const code = await new Promise<number | null>((resolve) => {
             const child = spawn("ffmpeg", args, { stdio: ["ignore", "pipe", "pipe"] });
-            const abort = () => {
-              enqueue(controller, "\nCancellation requested. Stopping ffmpeg...\n");
-              child.kill("SIGTERM");
-            };
-            request.signal.addEventListener("abort", abort, { once: true });
 
-            child.stdout.on("data", (chunk) => enqueue(controller, chunk.toString()));
-            child.stderr.on("data", (chunk) => enqueue(controller, chunk.toString()));
+            child.stdout.on("data", (chunk) => enqueue(chunk.toString()));
+            child.stderr.on("data", (chunk) => enqueue(chunk.toString()));
             child.on("error", (error) => {
-              enqueue(controller, `\nFailed to start ffmpeg: ${error.message}\n`);
+              enqueue(`\nFailed to start ffmpeg: ${error.message}\n`);
               resolve(null);
             });
             child.on("close", (nextCode) => {
-              request.signal.removeEventListener("abort", abort);
               resolve(nextCode);
             });
           });
 
           if (code !== 0) {
-            enqueue(
-              controller,
-              `\n${CODEC_LABELS[codec]} exited with code ${code ?? "unknown"}.\n`
-            );
+            enqueue(`\n${CODEC_LABELS[codec]} exited with code ${code ?? "unknown"}.\n`);
             controller.close();
             return;
           }
@@ -517,21 +499,74 @@ export async function POST(request: Request) {
           );
         }
 
-        enqueue(controller, "\nDone. Outputs:\n");
-        for (const output of completed) enqueue(controller, `- ${output}\n`);
+        enqueue("\nDone. Outputs:\n");
+        for (const output of completed) enqueue(`- ${output}\n`);
 
         controller.close();
       } catch (error) {
-        enqueue(controller, `\n${(error as Error).message || "Conversion failed."}\n`);
+        enqueue(`\n${(error as Error).message || "Conversion failed."}\n`);
         controller.close();
       }
     },
   });
 
-  return new Response(stream, {
+  return {
+    status: 200,
     headers: {
       "Cache-Control": "no-store",
       "Content-Type": "text/plain; charset=utf-8",
+      "Access-Control-Allow-Origin": "*",
     },
-  });
+    body: stream,
+  };
 }
+
+async function parseJsonBody(req: http.IncomingMessage): Promise<unknown> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of req) {
+    chunks.push(Buffer.from(chunk));
+  }
+  const raw = Buffer.concat(chunks).toString("utf8");
+  return JSON.parse(raw);
+}
+
+const server = http.createServer(async (req, res) => {
+  if (req.method === "POST" && req.url === "/convert") {
+    try {
+      const body = (await parseJsonBody(req)) as HlsConvertRequest;
+      const result = await handleConvert(body);
+
+      for (const [key, value] of Object.entries(result.headers)) {
+        res.setHeader(key, value);
+      }
+
+      if (typeof result.body === "string") {
+        res.writeHead(result.status);
+        res.end(result.body);
+      } else {
+        res.writeHead(result.status);
+        const reader = result.body.getReader();
+        async function pump(): Promise<void> {
+          const { done, value } = await reader.read();
+          if (done) {
+            res.end();
+            return;
+          }
+          res.write(value);
+          return pump();
+        }
+        await pump();
+      }
+    } catch (error) {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: (error as Error).message || "Invalid request." }));
+    }
+  } else {
+    res.writeHead(404);
+    res.end("Not found");
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`[dev-hls-server] Listening on http://localhost:${PORT}`);
+});

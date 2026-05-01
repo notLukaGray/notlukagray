@@ -4,7 +4,7 @@
  */
 
 import type React from "react";
-import { getPbContentGuidelines } from "@pb/core/internal/adapters/host-config";
+import { getPbContentGuidelines } from "./adapters/host-config";
 import {
   coalesceEmptyString,
   normalizeFlexAlignItemsValue,
@@ -12,10 +12,10 @@ import {
   resolveFrameColumnGapCss,
   resolveFrameGapCss,
   resolveFrameRowGapCss,
-} from "@pb/core/internal/element-layout-utils";
+} from "./element-layout-utils";
 import { scaleSpaceShorthandForDensity } from "@pb/contracts/page-builder/core/page-density";
 import type { ElementBlock } from "@pb/contracts/page-builder/core/page-builder-schemas";
-import type { ModuleSlotConfig } from "@pb/core/internal/module-slot-types";
+import type { ModuleSlotConfig } from "./module-slot-types";
 
 /**
  * Honor `elementOrder` for keys present in `definitions`, ignore stale keys, append keys that

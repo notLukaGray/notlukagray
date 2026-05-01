@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAccessCookieHeader, getClearAccessCookieHeader } from "@/core/lib/access-cookie";
+import { buildFingerprint } from "@/core/lib/rate-limit/fingerprint";
 import {
   getUnlockRateLimitState,
   getRateLimitCookieHeader,
@@ -60,7 +61,8 @@ export async function POST(request: NextRequest) {
   }
 
   const cookieHeader = request.headers.get("cookie");
-  const rateState = getUnlockRateLimitState(cookieHeader);
+  const fp = buildFingerprint(request, "unlock");
+  const rateState = getUnlockRateLimitState(cookieHeader, fp);
   if (rateState.locked && rateState.lockedUntil != null) {
     const retryAfterSec = Math.ceil((rateState.lockedUntil - Date.now()) / 1000);
     return buildLockedResponse(retryAfterSec);
@@ -71,7 +73,7 @@ export async function POST(request: NextRequest) {
   const { password, redirect } = parsed;
 
   if (!validatePassword(password)) {
-    const rateLimitHeader = getRateLimitCookieHeader(rateState.count);
+    const rateLimitHeader = getRateLimitCookieHeader(rateState.count, fp);
     const locked = rateState.count + 1 >= 5;
     const retryAfterSec = locked ? Math.ceil(LOCKOUT_MS / 1000) : undefined;
     const response = NextResponse.json(

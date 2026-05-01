@@ -7,7 +7,7 @@ import type {
 } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { uiVideoFeedbackDurationMs } from "@pb/runtime-react/core/lib/globals";
 import { ElementRenderer } from "@/page-builder/elements/Shared/ElementRenderer";
-import { getFeedbackJustifyContent, getFeedbackPadding } from "@pb/core/internal/module-slot-utils";
+import { getFeedbackJustifyContent, getFeedbackPadding } from "@pb/core/modules";
 import type { ModuleSlotConfig } from "./types";
 import { usePageBuilderThemeMode } from "@/page-builder/theme/use-page-builder-theme-mode";
 import { resolveThemeStyleObject } from "@/page-builder/theme/theme-string";

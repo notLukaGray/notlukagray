@@ -3,12 +3,8 @@
 import { useMemo, type CSSProperties } from "react";
 import type { BaseSectionProps } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import { resolveResponsiveValue } from "@pb/runtime-react/core/lib/responsive-value";
-import { sectionEffectsToStyle } from "@pb/core/internal/section-effects";
-import {
-  getDefaultScrollSpeed,
-  buildTransformString,
-  borderToCss,
-} from "@pb/core/internal/section-utils";
+import { sectionEffectsToStyle } from "@pb/core/layout";
+import { getDefaultScrollSpeed, buildTransformString, borderToCss } from "@pb/core/layout";
 import { useDeviceType } from "@pb/runtime-react/core/providers/device-type-provider";
 import { useSectionParallax } from "./use-section-parallax";
 import { useSectionPositioning } from "./use-section-positioning";

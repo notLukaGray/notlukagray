@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { AnimatePresence } from "@/page-builder/integrations/framer-motion";
-import type { ModalTransitionConfig } from "@pb/core/internal/modal-types";
+import type { ModalTransitionConfig } from "@pb/core/modal";
 import type { MotionPropsFromJson } from "@pb/contracts/page-builder/core/page-builder-schemas";
 import {
   MOTION_DEFAULTS,

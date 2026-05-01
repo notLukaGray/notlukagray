@@ -1,5 +1,5 @@
 import { resolveResponsiveValue } from "../lib/responsive-value";
-import type { ColumnSpanInput } from "@pb/core/internal/section-column-layout";
+import type { ColumnSpanInput } from "./section-column-layout";
 
 type ColumnSpanValue = number | "all";
 type LooseColumnSpanMap = Record<string, ColumnSpanValue | undefined>;
