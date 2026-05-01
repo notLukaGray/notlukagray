@@ -2,6 +2,7 @@
   "name": "@pb/runtime-react",
   "version": "1.0.0",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
