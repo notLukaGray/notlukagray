@@ -71,24 +71,46 @@ function projectMatchesFilters(
 }
 
 type ResponsiveOrder = { mobile?: string[]; desktop?: string[] };
+type ResponsiveLayoutMap = { mobile?: Record<string, unknown>; desktop?: Record<string, unknown> };
 
 function filterElementOrder(
   order: unknown,
   removedKeys: ReadonlySet<string>
 ): string[] | ResponsiveOrder | undefined {
   if (Array.isArray(order)) {
-    return order.filter((k): k is string => typeof k === "string" && !removedKeys.has(k));
+    return order.filter(
+      (k): k is string => typeof k === "string" && !idMatchesRemovedKey(k, removedKeys)
+    );
   }
   if (order && typeof order === "object") {
     const obj = order as ResponsiveOrder;
-    const mobile = obj.mobile?.filter((k) => !removedKeys.has(k));
-    const desktop = obj.desktop?.filter((k) => !removedKeys.has(k));
+    const mobile = obj.mobile?.filter((k) => !idMatchesRemovedKey(k, removedKeys));
+    const desktop = obj.desktop?.filter((k) => !idMatchesRemovedKey(k, removedKeys));
     return {
       ...(mobile !== undefined ? { mobile } : {}),
       ...(desktop !== undefined ? { desktop } : {}),
     };
   }
   return undefined;
+}
+
+function filterLayoutMap(map: unknown, removedKeys: ReadonlySet<string>): unknown {
+  if (!map || typeof map !== "object") return map;
+  if (Array.isArray(map)) return map;
+
+  const obj = map as Record<string, unknown>;
+  const hasResponsiveKeys = "mobile" in obj || "desktop" in obj;
+  if (hasResponsiveKeys) {
+    const responsive = obj as ResponsiveLayoutMap;
+    return {
+      ...(responsive.mobile ? { mobile: filterLayoutMap(responsive.mobile, removedKeys) } : {}),
+      ...(responsive.desktop ? { desktop: filterLayoutMap(responsive.desktop, removedKeys) } : {}),
+    };
+  }
+
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !idMatchesRemovedKey(key, removedKeys))
+  );
 }
 
 function idMatchesRemovedKey(id: string | undefined, removedKeys: ReadonlySet<string>): boolean {
@@ -102,6 +124,10 @@ function stripFromSection(section: SectionBlock, removedKeys: ReadonlySet<string
   const s = section as SectionBlock & {
     elements?: ElementBlock[];
     elementOrder?: unknown;
+    columnAssignments?: unknown;
+    columnSpan?: unknown;
+    itemStyles?: unknown;
+    itemLayout?: unknown;
   };
   const next = { ...s };
 
@@ -114,6 +140,12 @@ function stripFromSection(section: SectionBlock, removedKeys: ReadonlySet<string
   if (s.elementOrder !== undefined) {
     const filtered = filterElementOrder(s.elementOrder, removedKeys);
     if (filtered !== undefined) next.elementOrder = filtered;
+  }
+
+  for (const mapKey of ["columnAssignments", "columnSpan", "itemStyles", "itemLayout"] as const) {
+    if (s[mapKey] !== undefined) {
+      next[mapKey] = filterLayoutMap(s[mapKey], removedKeys);
+    }
   }
 
   return next as SectionBlock;
