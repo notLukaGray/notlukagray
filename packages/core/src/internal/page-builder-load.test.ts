@@ -9,6 +9,7 @@ import {
   getPageSlugBases,
   getPageSlugsByBase,
   getPageSlugs,
+  validatePageBuilder,
 } from "./page-builder-load";
 import { isSafePathSegment } from "./page-builder-paths";
 
@@ -80,6 +81,38 @@ describe("page-builder-load", () => {
     it("returns null for invalid slug characters", () => {
       expect(loadPageBuilder(".hidden")).toBe(null);
       expect(loadPageBuilder("with space")).toBe(null);
+    });
+  });
+
+  describe("validatePageBuilder", () => {
+    it("returns ok true for valid page", () => {
+      const result = validatePageBuilder(
+        {
+          slug: "ok",
+          title: "OK",
+          sectionOrder: ["hero"],
+          definitions: { hero: { type: "contentBlock", elements: [] } },
+        } as unknown as Parameters<typeof validatePageBuilder>[0],
+        "ok"
+      );
+      expect(result.ok).toBe(true);
+    });
+
+    it("returns error details for invalid page", () => {
+      const result = validatePageBuilder(
+        {
+          slug: "bad",
+          title: "Bad",
+          sectionOrder: ["hero"],
+          definitions: { hero: { type: "notASection" } },
+        } as unknown as Parameters<typeof validatePageBuilder>[0],
+        "bad"
+      );
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toContain("Page builder validation failed for bad");
+        expect(result.issues.length).toBeGreaterThan(0);
+      }
     });
   });
 

@@ -2,6 +2,7 @@ import fs from "fs";
 import { isSafePathSegment } from "./page-builder-paths";
 import type { PageBuilder } from "@pb/contracts";
 import { pageBuilderSchema, buttonActionSchema } from "@pb/contracts";
+import type { ZodIssue } from "zod";
 import {
   readPageJson,
   readPageJsonAsync,
@@ -63,16 +64,26 @@ function warnUnknownButtonActions(pageBuilder: PageBuilder, slug: string): void 
   }
 }
 
-function validatePageBuilderNonBlocking(pageBuilder: PageBuilder, slug: string): void {
+export type ValidationResult = { ok: true } | { ok: false; error: string; issues: ZodIssue[] };
+
+export function validatePageBuilder(pageBuilder: PageBuilder, slug: string): ValidationResult {
   warnUnknownButtonActions(pageBuilder, slug);
   const validationResult = pageBuilderSchema.safeParse(pageBuilder);
-  if (validationResult.success) return;
+  if (validationResult.success) return { ok: true };
+  return {
+    ok: false,
+    error: `Page builder validation failed for ${slug}: ${validationResult.error.message}`,
+    issues: validationResult.error.issues,
+  };
+}
+
+function handleValidationResult(result: ValidationResult): void {
+  if (result.ok) return;
   const isDev = process.env.NODE_ENV === "development";
   if (isDev && process.env.STRICT_VALIDATION === "true") {
-    throw new Error(
-      `Page builder validation failed for ${slug}: ${validationResult.error.message}`
-    );
+    throw new Error(result.error);
   }
+  console.error(result.error);
 }
 
 export function loadPageBuilder(slug: string): PageBuilder | null {
@@ -94,7 +105,11 @@ export function loadPageBuilder(slug: string): PageBuilder | null {
   const resolvedDefinitions = resolveDefinitionPresets(definitions, presets);
 
   const pageBuilder = { ...withSlug, definitions: resolvedDefinitions } as PageBuilder;
-  validatePageBuilderNonBlocking(pageBuilder, slug);
+  const validation = validatePageBuilder(pageBuilder, slug);
+  if (!validation.ok) {
+    handleValidationResult(validation);
+    return null;
+  }
   return pageBuilder;
 }
 
@@ -123,7 +138,11 @@ export async function loadPageBuilderAsync(slug: string): Promise<PageBuilder | 
   const resolvedDefinitions = resolveDefinitionPresets(resolvedSectionDefinitions, presets);
 
   const pageBuilder = { ...withSlug, definitions: resolvedDefinitions } as PageBuilder;
-  validatePageBuilderNonBlocking(pageBuilder, slug);
+  const validation = validatePageBuilder(pageBuilder, slug);
+  if (!validation.ok) {
+    handleValidationResult(validation);
+    return null;
+  }
   return pageBuilder;
 }
 
@@ -155,7 +174,11 @@ export function loadPageBuilderByPath(
   const resolvedDefinitions = resolveDefinitionPresets(definitions, presets);
 
   const pageBuilder = { ...withSlug, definitions: resolvedDefinitions } as PageBuilder;
-  validatePageBuilderNonBlocking(pageBuilder, slug);
+  const validation = validatePageBuilder(pageBuilder, slug);
+  if (!validation.ok) {
+    handleValidationResult(validation);
+    return null;
+  }
   return pageBuilder;
 }
 
@@ -189,7 +212,11 @@ export async function loadPageBuilderByPathAsync(
   const resolvedDefinitions = resolveDefinitionPresets(resolvedSectionDefinitions, presets);
 
   const pageBuilder = { ...withSlug, definitions: resolvedDefinitions } as PageBuilder;
-  validatePageBuilderNonBlocking(pageBuilder, slug);
+  const validation = validatePageBuilder(pageBuilder, slug);
+  if (!validation.ok) {
+    handleValidationResult(validation);
+    return null;
+  }
   return pageBuilder;
 }
 
