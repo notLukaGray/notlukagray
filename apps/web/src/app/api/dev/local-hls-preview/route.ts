@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { Readable } from "stream";
 import { NextRequest } from "next/server";
+import { resolveDevMediaPath } from "../resolve-dev-media-path";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -21,11 +22,6 @@ const CONTENT_TYPES: Record<string, string> = {
 function contentTypeForPath(filePath: string): string {
   const ext = path.extname(filePath).toLowerCase();
   return CONTENT_TYPES[ext] ?? "application/octet-stream";
-}
-
-function normalizeOutputDir(value: string): string | null {
-  if (!path.isAbsolute(value)) return null;
-  return path.normalize(value);
 }
 
 function normalizePlaylistPath(value: string): string | null {
@@ -117,8 +113,8 @@ export async function GET(request: NextRequest) {
   const fileRaw = request.nextUrl.searchParams.get("file")?.trim() || "master.m3u8";
   if (!outputDirRaw) return new Response("Missing output folder", { status: 400 });
 
-  const outputDir = normalizeOutputDir(outputDirRaw);
-  if (!outputDir) return new Response("Output folder must be an absolute path", { status: 400 });
+  const outputDir = resolveDevMediaPath(outputDirRaw);
+  if (!outputDir) return new Response("Invalid output folder", { status: 400 });
   const filePath = resolvePreviewFile(outputDir, fileRaw);
   if (!filePath) return new Response("Invalid preview path", { status: 400 });
 

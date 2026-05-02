@@ -5,7 +5,7 @@ import { buildCookieHeader } from "./cookies/build-cookie-header";
 const MESSAGE = "access";
 
 function getDeployId(): string {
-  return process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
+  return process.env.ACCESS_TOKEN_VERSION ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
 }
 
 function getSecret(): string | undefined {

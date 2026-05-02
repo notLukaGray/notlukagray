@@ -18,7 +18,7 @@
     "zod": "4.4.2"
   },
   "scripts": {
-    "dev": "npm run generate-json-schemas && set -a && [ -f ../../.env ] && . ../../.env || true && set +a && ../../node_modules/.bin/next dev",
+    "dev": "npm run generate-json-schemas && npm run generate-protected-slugs && set -a && [ -f ../../.env ] && . ../../.env || true && set +a && ../../node_modules/.bin/next dev",
     "build": "npm run generate-protected-slugs && set -a && [ -f ../../.env ] && . ../../.env || true && set +a && ../../node_modules/.bin/next build",
     "start": "set -a && [ -f ../../.env ] && . ../../.env || true && set +a && ../../node_modules/.bin/next start",
     "generate-protected-slugs": "tsx ../../scripts/generate-protected-slugs.ts",
