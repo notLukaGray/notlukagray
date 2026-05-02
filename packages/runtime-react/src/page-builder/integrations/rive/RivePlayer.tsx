@@ -7,6 +7,7 @@
 
 import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
 import type { Rive } from "@rive-app/react-canvas";
+import { useEffect } from "react";
 
 export type RivePlayerProps = {
   /** URL to the .riv file. */
@@ -60,13 +61,14 @@ export function RivePlayer({
     { shouldResizeCanvasToContainer: true }
   );
 
-  // Forward rive instance to caller ref.
-  if (riveRef !== undefined) {
-    riveRef.current = rive ?? null;
-  }
+  useEffect(() => {
+    if (riveRef !== undefined) {
+      riveRef.current = rive ?? null;
+    }
+  }, [rive, riveRef]);
 
-  // Apply SM inputs when rive is ready and inputs change.
-  if (rive && riveInputs) {
+  useEffect(() => {
+    if (!rive || !riveInputs) return;
     for (const [name, value] of Object.entries(riveInputs)) {
       try {
         const input = stateMachine
@@ -78,7 +80,7 @@ export function RivePlayer({
         // Input may not exist in this artboard; silently skip.
       }
     }
-  }
+  }, [rive, riveInputs, stateMachine]);
 
   return (
     <div

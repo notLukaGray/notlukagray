@@ -56,8 +56,12 @@ export function getFormRateLimitState(
   maxPerHour: number = DEFAULT_MAX_PER_HOUR,
   fp?: string
 ): { count: number; allowed: boolean } {
+  const remembered = fp ? getRememberedCount(fp) : undefined;
   const payload = parseCookie(cookieHeader, handlerKey);
-  if (!payload) return { count: 0, allowed: true };
+  if (!payload) {
+    const count = remembered ?? 0;
+    return { count, allowed: count < maxPerHour };
+  }
 
   const now = Date.now();
   const cutoff = now - HOUR_MS;

@@ -34,6 +34,10 @@ import type { ButtonVariantDefaults, ButtonVariantKey, PersistedButtonDefaults }
 
 type GlassEffect = Extract<SectionEffect, { type: "glass" }>;
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value != null && typeof value === "object" && !Array.isArray(value);
+}
+
 function isGlassEffect(e: SectionEffect | undefined): e is GlassEffect {
   return e?.type === "glass";
 }
@@ -67,20 +71,20 @@ function pickButtonEffects(
   return incoming;
 }
 
-// eslint-disable-next-line complexity
 function pickWrapperInteractionVars(
   incoming: Partial<ButtonVariantDefaults>,
   seed: ButtonVariantDefaults["wrapperInteractionVars"]
 ): ButtonVariantDefaults["wrapperInteractionVars"] {
-  if (incoming.wrapperInteractionVars === undefined) return seed;
   const raw = incoming.wrapperInteractionVars;
+  if (raw === undefined) return seed;
   if (raw == null) return undefined;
-  if (typeof raw !== "object" || Array.isArray(raw)) return seed;
+  if (!isRecord(raw)) return seed;
   const out: Record<string, string> = {};
   for (const [k, v] of Object.entries(raw)) {
     if (k.startsWith("--") && typeof v === "string") out[k] = v;
   }
-  return Object.keys(out).length > 0 ? out : undefined;
+  if (Object.keys(out).length === 0) return undefined;
+  return out;
 }
 
 function pickLinkTransition(

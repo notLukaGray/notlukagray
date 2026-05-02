@@ -95,7 +95,10 @@ export function useLocalFontPreviews() {
   }, [previews, ready]);
 
   const previewsRef = useRef(previews);
-  previewsRef.current = previews;
+
+  useEffect(() => {
+    previewsRef.current = previews;
+  }, [previews]);
 
   useEffect(() => {
     return () => {

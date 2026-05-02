@@ -366,7 +366,9 @@ export function validatePage(input: unknown): ValidatePageResult {
 }
 
 export function loadPage(filePath: string): LoadPageResult {
-  const absolute = path.isAbsolute(filePath) ? filePath : path.join(process.cwd(), filePath);
+  const absolute = path.isAbsolute(filePath)
+    ? filePath
+    : path.join(/* turbopackIgnore: true */ process.cwd(), filePath);
   const rawContent = fs.readFileSync(absolute, "utf8");
   const raw = JSON.parse(rawContent) as unknown;
 

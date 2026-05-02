@@ -1,8 +1,13 @@
 "use client";
 
+/* eslint-disable max-lines */
+
 import { useMemo, useRef, useState } from "react";
 
-const DEV_HLS_URL = process.env.NEXT_PUBLIC_DEV_HLS_URL ?? "http://localhost:4319/convert";
+const DEV_TOOLS_BASE_URL = process.env.NEXT_PUBLIC_DEV_TOOLS_URL ?? "http://localhost:4319";
+const DEV_HLS_URL =
+  process.env.NEXT_PUBLIC_DEV_HLS_URL ?? `${DEV_TOOLS_BASE_URL}/tools/hls/convert`;
+const DEV_HLS_POSTER_URL = `${DEV_TOOLS_BASE_URL}/tools/hls/poster`;
 import { DevWorkbenchNav } from "@/app/dev/_components/DevWorkbenchNav";
 import { DevWorkbenchPageHeader } from "@/app/dev/_components/DevWorkbenchPageHeader";
 import { DevWorkbenchPageShell } from "@/app/dev/_components/DevWorkbenchPageShell";
@@ -137,7 +142,7 @@ export function HlsToolsClient() {
   async function extractPoster() {
     setIsExtractingPoster(true);
     try {
-      const response = await fetch("/api/dev/hls-poster", {
+      const response = await fetch(DEV_HLS_POSTER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -148,7 +153,12 @@ export function HlsToolsClient() {
       const text = await response.text();
       setLog((current) => `${current}\n${text}`);
     } catch (error) {
-      setLog((current) => `${current}\n${(error as Error).message || "Poster extraction failed."}`);
+      const msg = (error as { message?: string }).message || "Poster extraction failed.";
+      if (/Failed to fetch|NetworkError|ERR_CONNECTION_REFUSED/.test(msg)) {
+        setLog("HLS side-server not running.\n\nStart: npm run dev:tools\n\nThen retry.");
+      } else {
+        setLog((current) => `${current}\n${msg}`);
+      }
     } finally {
       setIsExtractingPoster(false);
     }

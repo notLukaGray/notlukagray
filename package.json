@@ -8,7 +8,7 @@
     "tools/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace @notlukagray/web",
+    "dev": "concurrently -n web,tools -c cyan,magenta \"npm run web:dev\" \"npm run dev:tools\"",
     "build": "npm run build --workspace @notlukagray/web",
     "generate-protected-slugs": "npm run generate-protected-slugs --workspace @notlukagray/web",
     "start": "npm run start --workspace @notlukagray/web",
@@ -28,7 +28,8 @@
     "generate-json-schemas": "npm run generate-json-schemas --workspace @notlukagray/web",
     "validate-pages": "npm run validate-pages --workspace @notlukagray/web",
     "check:route-budgets": "tsx scripts/check-route-budgets.ts",
-    "dev:hls": "npm -w tools/dev-hls-server run start",
+    "dev:tools": "npm -w tools/dev-hls-server run start",
+    "dev:hls": "npm run dev:tools",
     "web:dev": "npm run dev --workspace @notlukagray/web",
     "web:build": "npm run build --workspace @notlukagray/web",
     "web:start": "npm run start --workspace @notlukagray/web",
@@ -50,7 +51,7 @@
     "@pb/contracts": "1.0.0",
     "@pb/core": "1.0.0",
     "next": "^16.2.4",
-    "zod": "^4.3.6"
+    "zod": "4.4.2"
   },
   "overrides": {
     "next": {
@@ -62,25 +63,26 @@
     "not dead"
   ],
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/postcss": "^4.2.4",
     "@types/culori": "^4.0.1",
     "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^9.39.1",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.4",
     "eslint-config-next": "16.2.4",
     "eslint-config-prettier": "^10.1.8",
     "happy-dom": "^20.9.0",
     "husky": "^9.1.7",
-    "knip": "^6.4.1",
+    "knip": "^6.10.0",
     "lint-staged": "^16.4.0",
     "patch-package": "^8.0.1",
-    "postcss": "^8.5.10",
+    "postcss": "^8.5.13",
     "prettier": "^3.8.3",
-    "tailwindcss": "^4.2.2",
+    "tailwindcss": "^4.2.4",
     "tsx": "^4.21.0",
     "typescript": "6.0.3",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.5"
   }
 }

@@ -4,6 +4,15 @@ import http from "http";
 import path from "path";
 
 const PORT = Number(process.env.DEV_HLS_PORT ?? 4319);
+const HLS_CONVERT_PATH = "/tools/hls/convert";
+const HLS_POSTER_PATH = "/tools/hls/poster";
+const LEGACY_HLS_CONVERT_PATH = "/convert";
+
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+} as const;
 
 type HlsConvertRequest = {
   inputPath?: unknown;
@@ -14,6 +23,11 @@ type HlsConvertRequest = {
   preset?: unknown;
   qualityPreset?: unknown;
   tune?: unknown;
+};
+
+type HlsPosterRequest = {
+  outputDir?: unknown;
+  posterSecond?: unknown;
 };
 
 type HlsCodec = "vp9" | "x265" | "x264";
@@ -78,6 +92,38 @@ function parseCodecs(value: unknown): HlsCodec[] {
     : [];
   const deduped = new Set(requested);
   return CODEC_ORDER.filter((codec) => deduped.has(codec));
+}
+
+function posterArgs(masterPath: string, outputDir: string, posterSecond: number): string[] {
+  return [
+    "-hide_banner",
+    "-y",
+    "-ss",
+    String(posterSecond),
+    "-i",
+    masterPath,
+    "-frames:v",
+    "1",
+    "-vf",
+    "scale='min(1920,iw)':-2",
+    "-q:v",
+    "72",
+    path.join(outputDir, "poster.webp"),
+  ];
+}
+
+async function findPosterSourceMaster(outputDir: string): Promise<string | null> {
+  for (const relativePath of [
+    path.join("x264", "master.m3u8"),
+    path.join("x265", "master.m3u8"),
+    path.join("vp9", "manifest.mpd"),
+    "master.m3u8",
+  ]) {
+    const masterPath = path.join(outputDir, relativePath);
+    const stat = await fs.stat(masterPath).catch(() => null);
+    if (stat?.isFile()) return masterPath;
+  }
+  return null;
 }
 
 function runCapture(command: string, args: string[]): Promise<{ stdout: string; stderr: string }> {
@@ -515,9 +561,77 @@ async function handleConvert(body: HlsConvertRequest): Promise<{
     headers: {
       "Cache-Control": "no-store",
       "Content-Type": "text/plain; charset=utf-8",
-      "Access-Control-Allow-Origin": "*",
+      ...CORS_HEADERS,
     },
     body: stream,
+  };
+}
+
+async function handlePoster(body: HlsPosterRequest): Promise<{
+  status: number;
+  headers: Record<string, string>;
+  body: string;
+}> {
+  const outputDirRaw = asTrimmedString(body.outputDir);
+  const posterSecond =
+    typeof body.posterSecond === "number" && Number.isFinite(body.posterSecond)
+      ? Math.max(0, Math.min(3600, body.posterSecond))
+      : 0;
+
+  if (!outputDirRaw) {
+    return {
+      status: 400,
+      headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+      body: JSON.stringify({ error: "Output folder is required." }),
+    };
+  }
+
+  const outputDir = resolveLocalPath(outputDirRaw);
+  const masterPath = await findPosterSourceMaster(outputDir);
+  if (!masterPath) {
+    return {
+      status: 400,
+      headers: { "Content-Type": "application/json", ...CORS_HEADERS },
+      body: JSON.stringify({ error: "Run conversion first. master.m3u8 was not found." }),
+    };
+  }
+
+  const args = posterArgs(masterPath, outputDir, posterSecond);
+
+  const result = await new Promise<{ status: number; body: string }>((resolve) => {
+    const child = spawn("ffmpeg", args, { stdio: ["ignore", "pipe", "pipe"] });
+    let output = `Extracting poster from ${masterPath} at ${posterSecond.toFixed(2)}s\n\n`;
+
+    child.stdout.on("data", (chunk) => {
+      output += chunk.toString();
+    });
+    child.stderr.on("data", (chunk) => {
+      output += chunk.toString();
+    });
+    child.on("error", (error) => {
+      resolve({
+        status: 500,
+        body: `${output}\nFailed to start ffmpeg: ${error.message}\n`,
+      });
+    });
+    child.on("close", (code) => {
+      if (code === 0) {
+        output += `\nPoster: ${path.join(outputDir, "poster.webp")}\n`;
+        resolve({ status: 200, body: output });
+      } else {
+        output += `\nPoster extraction exited with code ${code ?? "unknown"}.\n`;
+        resolve({ status: 500, body: output });
+      }
+    });
+  });
+
+  return {
+    status: result.status,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      ...CORS_HEADERS,
+    },
+    body: result.body,
   };
 }
 
@@ -531,7 +645,19 @@ async function parseJsonBody(req: http.IncomingMessage): Promise<unknown> {
 }
 
 const server = http.createServer(async (req, res) => {
-  if (req.method === "POST" && req.url === "/convert") {
+  const isHlsConvertRoute = req.url === HLS_CONVERT_PATH || req.url === LEGACY_HLS_CONVERT_PATH;
+  const isHlsPosterRoute = req.url === HLS_POSTER_PATH;
+
+  if ((isHlsConvertRoute || isHlsPosterRoute) && req.method === "OPTIONS") {
+    res.writeHead(204, {
+      ...CORS_HEADERS,
+      "Access-Control-Max-Age": "600",
+    });
+    res.end();
+    return;
+  }
+
+  if (req.method === "POST" && isHlsConvertRoute) {
     try {
       const body = (await parseJsonBody(req)) as HlsConvertRequest;
       const result = await handleConvert(body);
@@ -539,6 +665,8 @@ const server = http.createServer(async (req, res) => {
       for (const [key, value] of Object.entries(result.headers)) {
         res.setHeader(key, value);
       }
+      res.setHeader("Access-Control-Allow-Methods", CORS_HEADERS["Access-Control-Allow-Methods"]);
+      res.setHeader("Access-Control-Allow-Headers", CORS_HEADERS["Access-Control-Allow-Headers"]);
 
       if (typeof result.body === "string") {
         res.writeHead(result.status);
@@ -558,15 +686,41 @@ const server = http.createServer(async (req, res) => {
         await pump();
       }
     } catch (error) {
-      res.writeHead(400, { "Content-Type": "application/json" });
+      res.writeHead(400, {
+        "Content-Type": "application/json",
+        ...CORS_HEADERS,
+      });
       res.end(JSON.stringify({ error: (error as Error).message || "Invalid request." }));
     }
+  } else if (req.method === "POST" && isHlsPosterRoute) {
+    try {
+      const body = (await parseJsonBody(req)) as HlsPosterRequest;
+      const result = await handlePoster(body);
+      for (const [key, value] of Object.entries(result.headers)) {
+        res.setHeader(key, value);
+      }
+      res.writeHead(result.status);
+      res.end(result.body);
+    } catch (error) {
+      res.writeHead(400, {
+        "Content-Type": "application/json",
+        ...CORS_HEADERS,
+      });
+      res.end(JSON.stringify({ error: (error as Error).message || "Invalid request." }));
+    }
+  } else if (req.method === "GET" && req.url === "/health") {
+    res.writeHead(200, { "Content-Type": "application/json", ...CORS_HEADERS });
+    res.end(JSON.stringify({ ok: true, service: "dev-tools-server" }));
   } else {
-    res.writeHead(404);
+    res.writeHead(404, {
+      ...CORS_HEADERS,
+    });
     res.end("Not found");
   }
 });
 
 server.listen(PORT, () => {
-  console.log(`[dev-hls-server] Listening on http://localhost:${PORT}`);
+  console.log(`[dev-tools-server] Listening on http://localhost:${PORT}`);
+  console.log(`[dev-tools-server] HLS convert: POST ${HLS_CONVERT_PATH}`);
+  console.log(`[dev-tools-server] HLS poster: POST ${HLS_POSTER_PATH}`);
 });

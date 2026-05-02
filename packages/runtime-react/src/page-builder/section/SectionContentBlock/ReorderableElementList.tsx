@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type {
   ElementBlock,
   SectionDefinitionBlock,
@@ -46,9 +46,14 @@ export function ReorderableElementList({
   );
   const [order, setOrder] = useState<string[]>(initialOrder);
 
-  useEffect(() => {
-    setOrder(initialOrder);
-  }, [initialOrder]);
+  const activeOrder = useMemo(() => {
+    if (order.length !== initialOrder.length) return initialOrder;
+    const known = new Set(initialOrder);
+    for (const key of order) {
+      if (!known.has(key)) return initialOrder;
+    }
+    return order;
+  }, [initialOrder, order]);
 
   const handleReorder = useCallback(
     (newOrder: string[]) => {
@@ -89,8 +94,8 @@ export function ReorderableElementList({
 
   return (
     <SectionDefinitionsContext.Provider value={sectionDefinitions ?? null}>
-      <ReorderGroup axis={axis} values={order} onReorder={handleReorder} style={groupStyle}>
-        {order.map((key) => {
+      <ReorderGroup axis={axis} values={activeOrder} onReorder={handleReorder} style={groupStyle}>
+        {activeOrder.map((key) => {
           const block = keyToBlock[key];
           if (!block) return null;
           const content = (

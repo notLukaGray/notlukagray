@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { controlClassName } from "@/app/dev/layout/_shared/section-type-workbench";
 import {
   FIELD_TYPES,
@@ -111,9 +111,16 @@ export function FormFieldCard({ field, index, total, onChangeField, onMove, onRe
   const [jsonText, setJsonText] = useState(() => JSON.stringify(field, null, 2));
   const [jsonError, setJsonError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!jsonMode) setJsonText(JSON.stringify(field, null, 2));
-  }, [field, jsonMode]);
+  function toggleJsonMode() {
+    setJsonMode((current) => {
+      const next = !current;
+      if (next) {
+        setJsonText(JSON.stringify(field, null, 2));
+        setJsonError(null);
+      }
+      return next;
+    });
+  }
 
   function commitJson() {
     try {
@@ -151,7 +158,7 @@ export function FormFieldCard({ field, index, total, onChangeField, onMove, onRe
             </option>
           ))}
         </select>
-        <button onClick={() => setJsonMode((m) => !m)} className={tabBtn(jsonMode)}>
+        <button onClick={toggleJsonMode} className={tabBtn(jsonMode)}>
           {"{...}"}
         </button>
         <button

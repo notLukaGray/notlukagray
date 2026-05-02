@@ -176,8 +176,8 @@ export const elementButtonSchema = z
   })
   .merge(elementLayoutSchema)
   // elementLayoutSchema has `action: z.string()` for generic element interactions.
-  // .extend() re-asserts the stricter buttonActionSchema enum after the merge overrides it.
-  .extend({ action: buttonActionSchema.optional() })
+  // .safeExtend() re-asserts the stricter buttonActionSchema enum after the merge overrides it.
+  .safeExtend({ action: buttonActionSchema.optional() })
   .refine(
     (data) => {
       const hasLink = data.href != null && data.href !== "";

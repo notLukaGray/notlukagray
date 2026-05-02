@@ -44,15 +44,19 @@ export function getUnlockRateLimitState(
   lockedUntil?: number;
   count: number;
 } {
-  if (!cookieHeader) return { locked: false, count: 0 };
+  const remembered = fp ? getRememberedCount(fp) : undefined;
+
+  if (!cookieHeader) {
+    return { locked: false, count: remembered ?? 0 };
+  }
 
   const match = cookieHeader.match(new RegExp(`${rateLimitCookieName}=([^;]+)`));
   const value = match?.[1]?.trim();
-  if (!value) return { locked: false, count: 0 };
+  if (!value) return { locked: false, count: remembered ?? 0 };
 
   const [payloadB64, signature] = value.split(".");
   if (!payloadB64 || !signature || !verify(payloadB64, signature)) {
-    return { locked: false, count: 0 };
+    return { locked: false, count: remembered ?? 0 };
   }
 
   try {
@@ -80,7 +84,7 @@ export function getUnlockRateLimitState(
     }
     return { locked: false, count: effectiveCount };
   } catch {
-    return { locked: false, count: 0 };
+    return { locked: false, count: remembered ?? 0 };
   }
 }
 
