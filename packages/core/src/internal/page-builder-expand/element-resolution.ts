@@ -76,7 +76,7 @@ export function applyElementIdsAndModules(
         "type" in moduleBlock &&
         (moduleBlock as { type: string }).type === "module"
       ) {
-        el.moduleConfig = moduleBlock;
+        el.moduleConfig = structuredClone(moduleBlock);
       }
     }
   }

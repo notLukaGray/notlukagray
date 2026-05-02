@@ -2,6 +2,7 @@ import { createReadStream } from "fs";
 import fs from "fs/promises";
 import { Readable } from "stream";
 import { NextRequest } from "next/server";
+import { resolveDevMediaPath } from "../resolve-dev-media-path";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -36,8 +37,10 @@ export async function GET(request: NextRequest) {
     return new Response("Not found", { status: 404 });
   }
 
-  const filePath = request.nextUrl.searchParams.get("path");
-  if (!filePath) return new Response("Missing path", { status: 400 });
+  const filePathRaw = request.nextUrl.searchParams.get("path");
+  if (!filePathRaw) return new Response("Missing path", { status: 400 });
+  const filePath = resolveDevMediaPath(filePathRaw);
+  if (!filePath) return new Response("Invalid path", { status: 400 });
 
   const stat = await fs.stat(filePath).catch(() => null);
   if (!stat || !stat.isFile()) return new Response("File not found", { status: 404 });

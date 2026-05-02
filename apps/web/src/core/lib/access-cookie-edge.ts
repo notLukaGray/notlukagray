@@ -8,7 +8,7 @@
 const MESSAGE = "access";
 
 function getDeployId(): string {
-  return process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
+  return process.env.ACCESS_TOKEN_VERSION ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
 }
 
 function getSignedMessage(): string {

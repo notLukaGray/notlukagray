@@ -59,7 +59,7 @@ export function injectResolvedUrlsIntoPage(
   const onElement = options?.onElement;
   const resolvedBg: bgBlock | null = bg
     ? (() => {
-        const out = { ...bg } as Record<string, unknown>;
+        const out = structuredClone(bg) as Record<string, unknown>;
         walkBgBlock(out as bgBlock, (key, value, node, kind) => {
           if (typeof value !== "string") return;
           const resolved = resolveAssetRef(
@@ -97,7 +97,7 @@ export function injectResolvedUrlsIntoPage(
     if (Array.isArray(elements)) {
       out.elements = (elements as ElementBlock[]).map((el) => {
         onElement?.(section, el);
-        const e = { ...el } as Record<string, unknown>;
+        const e = structuredClone(el) as Record<string, unknown>;
         const elementContext: ElementInjectionContext = {
           section: section as SectionBlock,
           element: el as ElementBlock,
@@ -140,7 +140,7 @@ export function injectResolvedUrlsIntoBgBlock(
   proxyUrlByRef?: Map<string, string>,
   getSignedImageUrl?: GetSignedImageUrlFn
 ): bgBlock {
-  const out = { ...bg } as Record<string, unknown>;
+  const out = structuredClone(bg) as Record<string, unknown>;
   walkBgBlock(out as bgBlock, (key, value, node, kind) => {
     if (typeof value !== "string") return;
     const resolved = resolveAssetRef(
