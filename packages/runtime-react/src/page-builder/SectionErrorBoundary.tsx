@@ -12,7 +12,10 @@ type Props = {
 
 type State = { hasError: boolean };
 
-/** Catches render errors in a single section so the rest of the page still renders. */
+/**
+ * Catches runtime render errors in a single section so the rest of the page still renders.
+ * Schema-invalid content should be filtered earlier by loader validation and not rely on this boundary.
+ */
 export class SectionErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);

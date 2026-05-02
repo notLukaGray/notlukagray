@@ -1,4 +1,5 @@
 import { getSignedCdnUrl, validateAssetKey } from "../lib/cdn-asset-server";
+import { normalizeImageTransformParams } from "../lib/cdn-image-params";
 import { buildProxyUrl, needsProxyUrl } from "../lib/proxy-url";
 import { resolveBgBlockUrls } from "./page-builder-blocks";
 import type { bgBlock, PageBuilderDefinitionBlock, SectionBlock } from "@pb/contracts";
@@ -153,7 +154,7 @@ function buildResponsiveImageProxyParams(
   }
   if (params.aspect_ratio) proxyParams.aspect_ratio = params.aspect_ratio;
   if (params.height != null) proxyParams.height = String(params.height);
-  return proxyParams;
+  return normalizeImageTransformParams(proxyParams) ?? ({} as Record<string, string>);
 }
 
 function splitTopLevelCommaList(value: string): string[] {
@@ -401,7 +402,7 @@ function buildGetSignedImageUrl(
         )
       );
     }
-    const extraParams: Record<string, string> = {};
+    const extraParams: Record<string, unknown> = {};
     if (params.class != null && params.class !== "") {
       extraParams.class = params.class;
       if (params.format) extraParams.format = params.format;
@@ -412,7 +413,7 @@ function buildGetSignedImageUrl(
       if (params.aspect_ratio) extraParams.aspect_ratio = params.aspect_ratio;
       if (params.height != null) extraParams.height = String(params.height);
     }
-    return getSignedCdnUrl(valid, extraParams);
+    return getSignedCdnUrl(valid, normalizeImageTransformParams(extraParams));
   };
 }
 

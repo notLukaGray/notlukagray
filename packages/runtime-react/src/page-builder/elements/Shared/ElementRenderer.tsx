@@ -207,8 +207,21 @@ export function ElementRenderer({
 
   const Component = ELEMENT_COMPONENTS[resolvedBlock.type];
   if (!Component) {
-    if (process.env.NODE_ENV === "development") {
+    if (process.env.NODE_ENV !== "production") {
       console.warn(`[page-builder] ElementRenderer: unknown element type "${resolvedBlock.type}"`);
+      return (
+        <div
+          role="note"
+          style={{
+            border: "1px dashed currentColor",
+            padding: "0.5rem",
+            fontSize: "0.75rem",
+            opacity: 0.8,
+          }}
+        >
+          Unknown element type: {resolvedBlock.type}
+        </div>
+      );
     }
     return null;
   }

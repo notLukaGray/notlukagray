@@ -1,5 +1,19 @@
 import type { NextConfig } from "next";
-import { cdnBase } from "./src/core/lib/globals";
+import fs from "node:fs";
+import path from "node:path";
+
+function readCdnBase(): string {
+  try {
+    const configPath = path.join(process.cwd(), "src/content/config/cdn.json");
+    const raw = fs.readFileSync(configPath, "utf8");
+    const parsed = JSON.parse(raw) as { cdnBase?: unknown };
+    return typeof parsed.cdnBase === "string"
+      ? parsed.cdnBase
+      : "https://media.notlukagray.com/website";
+  } catch {
+    return "https://media.notlukagray.com/website";
+  }
+}
 
 function getCdnHostname(url: string): string | null {
   try {
@@ -10,7 +24,7 @@ function getCdnHostname(url: string): string | null {
   }
 }
 
-const cdnHostname = getCdnHostname(cdnBase);
+const cdnHostname = getCdnHostname(readCdnBase());
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.1.*"],
