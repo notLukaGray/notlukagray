@@ -1,57 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateAssetKey, getSignedCdnUrl } from "@/core/lib/cdn-asset-server";
 import { buildProxyUrl } from "@/core/lib/proxy-url";
-
-function parsePositiveInt(
-  value: string | null,
-  { min, max }: { min: number; max: number }
-): number | null {
-  if (value == null) return null;
-  const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return null;
-  const rounded = Math.round(parsed);
-  if (rounded < min || rounded > max) return null;
-  return rounded;
-}
+import { normalizeImageTransformParams } from "@pb/core/lib/cdn-image-params";
 
 function parseImageParams(request: NextRequest): Record<string, string> | undefined {
   const searchParams = request.nextUrl.searchParams;
-  const params: Record<string, string> = {};
-
-  const width = parsePositiveInt(searchParams.get("width") ?? searchParams.get("w"), {
-    min: 1,
-    max: 4096,
+  return normalizeImageTransformParams({
+    width: searchParams.get("width"),
+    w: searchParams.get("w"),
+    quality: searchParams.get("quality"),
+    q: searchParams.get("q"),
+    height: searchParams.get("height"),
+    format: searchParams.get("format"),
+    aspect_ratio: searchParams.get("aspect_ratio"),
+    class: searchParams.get("class"),
   });
-  if (width != null) params.width = String(width);
-
-  const quality = parsePositiveInt(searchParams.get("quality") ?? searchParams.get("q"), {
-    min: 1,
-    max: 100,
-  });
-  if (quality != null) params.quality = String(quality);
-
-  const height = parsePositiveInt(searchParams.get("height"), {
-    min: 1,
-    max: 4096,
-  });
-  if (height != null) params.height = String(height);
-
-  const format = searchParams.get("format");
-  if (format && /^(avif|webp|jpg|jpeg|png)$/i.test(format)) {
-    params.format = format.toLowerCase();
-  }
-
-  const aspectRatio = searchParams.get("aspect_ratio");
-  if (aspectRatio && /^\d+(?::|\/)\d+$/.test(aspectRatio)) {
-    params.aspect_ratio = aspectRatio.replace("/", ":");
-  }
-
-  const className = searchParams.get("class");
-  if (className && /^[a-zA-Z0-9_-]+$/.test(className)) {
-    params.class = className;
-  }
-
-  return Object.keys(params).length > 0 ? params : undefined;
 }
 
 function isHlsPlaylist(assetKey: string): boolean {

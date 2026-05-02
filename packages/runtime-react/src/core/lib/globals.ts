@@ -1,12 +1,3 @@
-import personRaw from "../../content/site/person.json";
-import cdnRaw from "../../content/config/cdn.json";
-import authRaw from "../../content/config/auth.json";
-import uiRaw from "../../content/config/ui.json";
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 export type HeroProject = {
   id: string;
   title: string;
@@ -34,234 +25,232 @@ export function getTwitterCardForOgImage(ogImage: unknown): TwitterCardType {
   return typeof ogImage === "string" && ogImage.trim() ? "summary_large_image" : "summary";
 }
 
-function getHostname(value: string): string | null {
-  try {
-    return new URL(value).hostname.toLowerCase();
-  } catch {
-    return null;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Site / person
-// ---------------------------------------------------------------------------
-
-export const siteUrl: string =
-  typeof (personRaw as { siteUrl?: string }).siteUrl === "string"
-    ? (personRaw as { siteUrl: string }).siteUrl
-    : "";
-
-export const assetBaseUrl: string =
-  typeof (personRaw as { assetBaseUrl?: string }).assetBaseUrl === "string"
-    ? (personRaw as { assetBaseUrl: string }).assetBaseUrl
-    : "";
-
-const rawPerson = (personRaw as { person?: Record<string, unknown> }).person;
-export const person: PersonSchema | null =
-  rawPerson &&
-  typeof rawPerson.name === "string" &&
-  typeof rawPerson.jobTitle === "string" &&
-  typeof rawPerson.url === "string" &&
-  Array.isArray(rawPerson.sameAs)
-    ? {
-        name: rawPerson.name,
-        jobTitle: rawPerson.jobTitle,
-        url: rawPerson.url,
-        sameAs: (rawPerson.sameAs as string[]).filter((u): u is string => typeof u === "string"),
-      }
-    : null;
-
-export const siteMetadata = {
-  title: person?.name ?? "Portfolio",
-  description: person ? `${person.jobTitle} portfolio by ${person.name}` : "Portfolio",
+export type RuntimeGlobals = {
+  siteUrl: string;
+  assetBaseUrl: string;
+  person: PersonSchema | null;
+  siteMetadata: { title: string; description: string };
+  layoutFromJsonSlugs: string[];
+  cdnBase: string;
+  cdnTokenExpiryDays: number;
+  cdnClientCacheExpiryHours: number;
+  cdnApiCacheMaxAge: number;
+  cdnApiCacheStaleWhileRevalidate: number;
+  cdnAllowedHosts: string[];
+  cdnAllowedExtensions: string[];
+  imageDefaultWidth: number;
+  imageDefaultPosterWidth: number;
+  imagePosterWidth: number;
+  imageMobileMaxWidth: number;
+  imageMobileMaxWidth2x: number;
+  imageDefaultQuality: number;
+  imagePosterQuality: number;
+  imageDefaultFormat: string;
+  imageDefaultAspectRatio: string | null;
+  imagePosterAspectRatio: string | null;
+  imageClass: string | null;
+  imagePosterClass: string | null;
+  accessCookieName: string;
+  accessCookieMaxAgeDays: number;
+  rateLimitCookieName: string;
+  rateLimitMaxAttempts: number;
+  rateLimitLockoutMinutes: number;
+  rateLimitCookieExpiryHours: number;
+  formRateLimitMaxPerHour: number;
+  uiResizeDebounceMs: number;
+  uiVideoPauseButtonHideDelayMs: number;
+  uiHeroCarouselOpacityCurve: number[];
+  uiHeroCarouselPlaceholderBackgrounds: string[];
+  uiVideoDoubleTapThresholdMs: number;
+  uiVideoHoldThresholdMs: number;
+  uiVideoHoldRepeatMs: number;
+  uiVideoFeedbackDurationMs: number;
+  uiVideoSeekBackSeconds: number;
+  uiVideoSeekForwardSeconds: number;
+  uiVideoDefaultAspectRatio: string;
+  cacheVideoUrlPrefix: string;
 };
 
-/**
- * Pages that render their own nav/footer from page-builder JSON; the app Header/Footer is hidden for these.
- * Managed in person.json under `layoutFromJsonSlugs`.
- *
- * Note: an alternative approach would be a `layoutFromJson: boolean` field on individual page definitions,
- * read during page load. That would be self-documenting per-page but requires a pipeline change to plumb
- * the flag through to the layout component.
- */
-export const layoutFromJsonSlugs: string[] = (() => {
-  const raw_ = personRaw as { layoutFromJsonSlugs?: unknown };
-  return Array.isArray(raw_.layoutFromJsonSlugs) &&
-    raw_.layoutFromJsonSlugs.every((s): s is string => typeof s === "string")
-    ? raw_.layoutFromJsonSlugs
-    : [];
-})();
+const DEFAULTS: RuntimeGlobals = {
+  siteUrl: "",
+  assetBaseUrl: "",
+  person: null,
+  siteMetadata: { title: "Portfolio", description: "Portfolio" },
+  layoutFromJsonSlugs: [],
+  cdnBase: "https://media.notlukagray.com/website",
+  cdnTokenExpiryDays: 7,
+  cdnClientCacheExpiryHours: 1,
+  cdnApiCacheMaxAge: 3600,
+  cdnApiCacheStaleWhileRevalidate: 300,
+  cdnAllowedHosts: ["media.notlukagray.com"],
+  cdnAllowedExtensions: [
+    ".webm",
+    ".mp4",
+    ".mpd",
+    ".m3u8",
+    ".ts",
+    ".m4s",
+    ".m4a",
+    ".aac",
+    ".webp",
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".glb",
+    ".gltf",
+    ".exr",
+    ".hdr",
+  ],
+  imageDefaultWidth: 1200,
+  imageDefaultPosterWidth: 1920,
+  imagePosterWidth: 1280,
+  imageMobileMaxWidth: 768,
+  imageMobileMaxWidth2x: 1536,
+  imageDefaultQuality: 75,
+  imagePosterQuality: 75,
+  imageDefaultFormat: "webp",
+  imageDefaultAspectRatio: null,
+  imagePosterAspectRatio: null,
+  imageClass: null,
+  imagePosterClass: null,
+  accessCookieName: "site_access",
+  accessCookieMaxAgeDays: 7,
+  rateLimitCookieName: "unlock_rate",
+  rateLimitMaxAttempts: 5,
+  rateLimitLockoutMinutes: 10,
+  rateLimitCookieExpiryHours: 1,
+  formRateLimitMaxPerHour: 5,
+  uiResizeDebounceMs: 50,
+  uiVideoPauseButtonHideDelayMs: 3000,
+  uiHeroCarouselOpacityCurve: [0],
+  uiHeroCarouselPlaceholderBackgrounds: ["#000000"],
+  uiVideoDoubleTapThresholdMs: 450,
+  uiVideoHoldThresholdMs: 400,
+  uiVideoHoldRepeatMs: 500,
+  uiVideoFeedbackDurationMs: 500,
+  uiVideoSeekBackSeconds: 10,
+  uiVideoSeekForwardSeconds: 30,
+  uiVideoDefaultAspectRatio: "16/9",
+  cacheVideoUrlPrefix: "video_url_",
+};
 
-// ---------------------------------------------------------------------------
-// CDN
-// ---------------------------------------------------------------------------
+let runtimeGlobals: RuntimeGlobals = { ...DEFAULTS };
 
-export const cdnBase: string =
-  typeof (cdnRaw as { cdnBase?: string }).cdnBase === "string"
-    ? (cdnRaw as { cdnBase: string }).cdnBase
-    : "https://media.notlukagray.com/website";
+export let siteUrl = runtimeGlobals.siteUrl;
+export let assetBaseUrl = runtimeGlobals.assetBaseUrl;
+export let person = runtimeGlobals.person;
+export let siteMetadata = runtimeGlobals.siteMetadata;
+export let layoutFromJsonSlugs = runtimeGlobals.layoutFromJsonSlugs;
+export let cdnBase = runtimeGlobals.cdnBase;
+export let cdnTokenExpiryDays = runtimeGlobals.cdnTokenExpiryDays;
+export let cdnClientCacheExpiryHours = runtimeGlobals.cdnClientCacheExpiryHours;
+export let cdnApiCacheMaxAge = runtimeGlobals.cdnApiCacheMaxAge;
+export let cdnApiCacheStaleWhileRevalidate = runtimeGlobals.cdnApiCacheStaleWhileRevalidate;
+export let cdnAllowedHosts = runtimeGlobals.cdnAllowedHosts;
+export let cdnAllowedExtensions = runtimeGlobals.cdnAllowedExtensions;
+export let imageDefaultWidth = runtimeGlobals.imageDefaultWidth;
+export let imageDefaultPosterWidth = runtimeGlobals.imageDefaultPosterWidth;
+export let imagePosterWidth = runtimeGlobals.imagePosterWidth;
+export let imageMobileMaxWidth = runtimeGlobals.imageMobileMaxWidth;
+export let imageMobileMaxWidth2x = runtimeGlobals.imageMobileMaxWidth2x;
+export let imageDefaultQuality = runtimeGlobals.imageDefaultQuality;
+export let imagePosterQuality = runtimeGlobals.imagePosterQuality;
+export let imageDefaultFormat = runtimeGlobals.imageDefaultFormat;
+export let imageDefaultAspectRatio = runtimeGlobals.imageDefaultAspectRatio;
+export let imagePosterAspectRatio = runtimeGlobals.imagePosterAspectRatio;
+export let imageClass = runtimeGlobals.imageClass;
+export let imagePosterClass = runtimeGlobals.imagePosterClass;
+export let accessCookieName = runtimeGlobals.accessCookieName;
+export let accessCookieMaxAgeDays = runtimeGlobals.accessCookieMaxAgeDays;
+export let rateLimitCookieName = runtimeGlobals.rateLimitCookieName;
+export let rateLimitMaxAttempts = runtimeGlobals.rateLimitMaxAttempts;
+export let rateLimitLockoutMinutes = runtimeGlobals.rateLimitLockoutMinutes;
+export let rateLimitCookieExpiryHours = runtimeGlobals.rateLimitCookieExpiryHours;
+export let formRateLimitMaxPerHour = runtimeGlobals.formRateLimitMaxPerHour;
+export let uiResizeDebounceMs = runtimeGlobals.uiResizeDebounceMs;
+export let uiVideoPauseButtonHideDelayMs = runtimeGlobals.uiVideoPauseButtonHideDelayMs;
+export let uiHeroCarouselOpacityCurve = runtimeGlobals.uiHeroCarouselOpacityCurve;
+export let uiHeroCarouselPlaceholderBackgrounds =
+  runtimeGlobals.uiHeroCarouselPlaceholderBackgrounds;
+export let uiVideoDoubleTapThresholdMs = runtimeGlobals.uiVideoDoubleTapThresholdMs;
+export let uiVideoHoldThresholdMs = runtimeGlobals.uiVideoHoldThresholdMs;
+export let uiVideoHoldRepeatMs = runtimeGlobals.uiVideoHoldRepeatMs;
+export let uiVideoFeedbackDurationMs = runtimeGlobals.uiVideoFeedbackDurationMs;
+export let uiVideoSeekBackSeconds = runtimeGlobals.uiVideoSeekBackSeconds;
+export let uiVideoSeekForwardSeconds = runtimeGlobals.uiVideoSeekForwardSeconds;
+export let uiVideoDefaultAspectRatio = runtimeGlobals.uiVideoDefaultAspectRatio;
+export let cacheVideoUrlPrefix = runtimeGlobals.cacheVideoUrlPrefix;
 
-const cdnConfig = (cdnRaw as { cdn?: Record<string, unknown> }).cdn;
-export const cdnTokenExpiryDays: number =
-  typeof cdnConfig?.tokenExpiryDays === "number" ? cdnConfig.tokenExpiryDays : 7;
-export const cdnClientCacheExpiryHours: number =
-  typeof cdnConfig?.clientCacheExpiryHours === "number" ? cdnConfig.clientCacheExpiryHours : 1;
-export const cdnApiCacheMaxAge: number =
-  typeof cdnConfig?.apiCacheMaxAge === "number" ? cdnConfig.apiCacheMaxAge : 3600;
-export const cdnApiCacheStaleWhileRevalidate: number =
-  typeof cdnConfig?.apiCacheStaleWhileRevalidate === "number"
-    ? cdnConfig.apiCacheStaleWhileRevalidate
-    : 300;
-const cdnBaseHost = getHostname(cdnBase);
-const cdnAllowedHostAliases =
-  Array.isArray(cdnConfig?.allowedHosts) &&
-  cdnConfig.allowedHosts.every((host: unknown) => typeof host === "string")
-    ? (cdnConfig.allowedHosts as string[])
-    : [];
-export const cdnAllowedHosts: string[] = [
-  ...new Set([...(cdnBaseHost ? [cdnBaseHost] : []), ...cdnAllowedHostAliases]),
-];
-export const cdnAllowedExtensions: string[] =
-  Array.isArray(cdnConfig?.allowedExtensions) &&
-  cdnConfig.allowedExtensions.every((ext: unknown) => typeof ext === "string")
-    ? (cdnConfig.allowedExtensions as string[])
-    : [
-        ".webm",
-        ".mp4",
-        ".mpd",
-        ".m3u8",
-        ".ts",
-        ".m4s",
-        ".m4a",
-        ".aac",
-        ".webp",
-        ".jpg",
-        ".jpeg",
-        ".png",
-        ".glb",
-        ".gltf",
-        ".exr",
-        ".hdr",
-      ];
+function syncExportedGlobals(): void {
+  siteUrl = runtimeGlobals.siteUrl;
+  assetBaseUrl = runtimeGlobals.assetBaseUrl;
+  person = runtimeGlobals.person;
+  siteMetadata = runtimeGlobals.siteMetadata;
+  layoutFromJsonSlugs = runtimeGlobals.layoutFromJsonSlugs;
+  cdnBase = runtimeGlobals.cdnBase;
+  cdnTokenExpiryDays = runtimeGlobals.cdnTokenExpiryDays;
+  cdnClientCacheExpiryHours = runtimeGlobals.cdnClientCacheExpiryHours;
+  cdnApiCacheMaxAge = runtimeGlobals.cdnApiCacheMaxAge;
+  cdnApiCacheStaleWhileRevalidate = runtimeGlobals.cdnApiCacheStaleWhileRevalidate;
+  cdnAllowedHosts = runtimeGlobals.cdnAllowedHosts;
+  cdnAllowedExtensions = runtimeGlobals.cdnAllowedExtensions;
+  imageDefaultWidth = runtimeGlobals.imageDefaultWidth;
+  imageDefaultPosterWidth = runtimeGlobals.imageDefaultPosterWidth;
+  imagePosterWidth = runtimeGlobals.imagePosterWidth;
+  imageMobileMaxWidth = runtimeGlobals.imageMobileMaxWidth;
+  imageMobileMaxWidth2x = runtimeGlobals.imageMobileMaxWidth2x;
+  imageDefaultQuality = runtimeGlobals.imageDefaultQuality;
+  imagePosterQuality = runtimeGlobals.imagePosterQuality;
+  imageDefaultFormat = runtimeGlobals.imageDefaultFormat;
+  imageDefaultAspectRatio = runtimeGlobals.imageDefaultAspectRatio;
+  imagePosterAspectRatio = runtimeGlobals.imagePosterAspectRatio;
+  imageClass = runtimeGlobals.imageClass;
+  imagePosterClass = runtimeGlobals.imagePosterClass;
+  accessCookieName = runtimeGlobals.accessCookieName;
+  accessCookieMaxAgeDays = runtimeGlobals.accessCookieMaxAgeDays;
+  rateLimitCookieName = runtimeGlobals.rateLimitCookieName;
+  rateLimitMaxAttempts = runtimeGlobals.rateLimitMaxAttempts;
+  rateLimitLockoutMinutes = runtimeGlobals.rateLimitLockoutMinutes;
+  rateLimitCookieExpiryHours = runtimeGlobals.rateLimitCookieExpiryHours;
+  formRateLimitMaxPerHour = runtimeGlobals.formRateLimitMaxPerHour;
+  uiResizeDebounceMs = runtimeGlobals.uiResizeDebounceMs;
+  uiVideoPauseButtonHideDelayMs = runtimeGlobals.uiVideoPauseButtonHideDelayMs;
+  uiHeroCarouselOpacityCurve = runtimeGlobals.uiHeroCarouselOpacityCurve;
+  uiHeroCarouselPlaceholderBackgrounds = runtimeGlobals.uiHeroCarouselPlaceholderBackgrounds;
+  uiVideoDoubleTapThresholdMs = runtimeGlobals.uiVideoDoubleTapThresholdMs;
+  uiVideoHoldThresholdMs = runtimeGlobals.uiVideoHoldThresholdMs;
+  uiVideoHoldRepeatMs = runtimeGlobals.uiVideoHoldRepeatMs;
+  uiVideoFeedbackDurationMs = runtimeGlobals.uiVideoFeedbackDurationMs;
+  uiVideoSeekBackSeconds = runtimeGlobals.uiVideoSeekBackSeconds;
+  uiVideoSeekForwardSeconds = runtimeGlobals.uiVideoSeekForwardSeconds;
+  uiVideoDefaultAspectRatio = runtimeGlobals.uiVideoDefaultAspectRatio;
+  cacheVideoUrlPrefix = runtimeGlobals.cacheVideoUrlPrefix;
+}
 
-const cdnImagesConfig = (cdnConfig as { images?: Record<string, unknown> } | undefined)?.images;
-export const imageDefaultWidth: number =
-  typeof cdnImagesConfig?.defaultWidth === "number" ? cdnImagesConfig.defaultWidth : 1200;
-export const imageDefaultPosterWidth: number =
-  typeof cdnImagesConfig?.defaultPosterWidth === "number"
-    ? cdnImagesConfig.defaultPosterWidth
-    : 1920;
-/** Web-optimized poster width for LCP (hero/background posters). When set in cdn.json, used instead of defaultPosterWidth. */
-export const imagePosterWidth: number =
-  typeof cdnImagesConfig?.posterWidth === "number"
-    ? cdnImagesConfig.posterWidth
-    : imageDefaultPosterWidth;
-export const imageMobileMaxWidth: number =
-  typeof cdnImagesConfig?.mobileMaxWidth === "number" ? cdnImagesConfig.mobileMaxWidth : 768;
-export const imageMobileMaxWidth2x: number =
-  typeof cdnImagesConfig?.mobileMaxWidth2x === "number" ? cdnImagesConfig.mobileMaxWidth2x : 1536;
-export const imageDefaultQuality: number =
-  typeof cdnImagesConfig?.defaultQuality === "number" ? cdnImagesConfig.defaultQuality : 75;
-/** Web-optimized poster quality for LCP. When set in cdn.json, used for hero/background posters. */
-export const imagePosterQuality: number =
-  typeof cdnImagesConfig?.posterQuality === "number"
-    ? cdnImagesConfig.posterQuality
-    : imageDefaultQuality;
-export const imageDefaultFormat: string =
-  typeof cdnImagesConfig?.defaultFormat === "string" ? cdnImagesConfig.defaultFormat : "webp";
-export const imageDefaultAspectRatio: string | null =
-  cdnImagesConfig?.defaultAspectRatio != null &&
-  typeof cdnImagesConfig.defaultAspectRatio === "string"
-    ? cdnImagesConfig.defaultAspectRatio
-    : null;
-export const imagePosterAspectRatio: string | null =
-  cdnImagesConfig?.posterAspectRatio != null &&
-  typeof cdnImagesConfig.posterAspectRatio === "string"
-    ? cdnImagesConfig.posterAspectRatio
-    : null;
-export const imageClass: string | null =
-  cdnImagesConfig?.class != null && typeof cdnImagesConfig.class === "string"
-    ? cdnImagesConfig.class
-    : null;
-export const imagePosterClass: string | null =
-  cdnImagesConfig?.posterClass != null && typeof cdnImagesConfig.posterClass === "string"
-    ? cdnImagesConfig.posterClass
-    : null;
+export function configureRuntimeGlobals(patch: Partial<RuntimeGlobals>): void {
+  runtimeGlobals = {
+    ...runtimeGlobals,
+    ...patch,
+    cdnAllowedExtensions: patch.cdnAllowedExtensions
+      ? [...patch.cdnAllowedExtensions]
+      : runtimeGlobals.cdnAllowedExtensions,
+    cdnAllowedHosts: patch.cdnAllowedHosts
+      ? [...patch.cdnAllowedHosts]
+      : runtimeGlobals.cdnAllowedHosts,
+    layoutFromJsonSlugs: patch.layoutFromJsonSlugs
+      ? [...patch.layoutFromJsonSlugs]
+      : runtimeGlobals.layoutFromJsonSlugs,
+    uiHeroCarouselOpacityCurve: patch.uiHeroCarouselOpacityCurve
+      ? [...patch.uiHeroCarouselOpacityCurve]
+      : runtimeGlobals.uiHeroCarouselOpacityCurve,
+    uiHeroCarouselPlaceholderBackgrounds: patch.uiHeroCarouselPlaceholderBackgrounds
+      ? [...patch.uiHeroCarouselPlaceholderBackgrounds]
+      : runtimeGlobals.uiHeroCarouselPlaceholderBackgrounds,
+  };
+  syncExportedGlobals();
+}
 
-// ---------------------------------------------------------------------------
-// Auth
-// ---------------------------------------------------------------------------
-
-const authConfig = (authRaw as { auth?: Record<string, unknown> }).auth;
-const accessCookieConfig = authConfig?.accessCookie as Record<string, unknown> | undefined;
-export const accessCookieName: string =
-  typeof accessCookieConfig?.name === "string" ? accessCookieConfig.name : "site_access";
-export const accessCookieMaxAgeDays: number =
-  typeof accessCookieConfig?.maxAgeDays === "number" ? accessCookieConfig.maxAgeDays : 7;
-
-const rateLimitConfig = authConfig?.rateLimit as Record<string, unknown> | undefined;
-export const rateLimitCookieName: string =
-  typeof rateLimitConfig?.cookieName === "string" ? rateLimitConfig.cookieName : "unlock_rate";
-export const rateLimitMaxAttempts: number =
-  typeof rateLimitConfig?.maxAttempts === "number" ? rateLimitConfig.maxAttempts : 5;
-export const rateLimitLockoutMinutes: number =
-  typeof rateLimitConfig?.lockoutMinutes === "number" ? rateLimitConfig.lockoutMinutes : 10;
-export const rateLimitCookieExpiryHours: number =
-  typeof rateLimitConfig?.cookieExpiryHours === "number" ? rateLimitConfig.cookieExpiryHours : 1;
-
-const formRateLimitConfig = authConfig?.formRateLimit as Record<string, unknown> | undefined;
-export const formRateLimitMaxPerHour: number =
-  typeof formRateLimitConfig?.maxPerHour === "number" ? formRateLimitConfig.maxPerHour : 5;
-
-// ---------------------------------------------------------------------------
-// UI
-// ---------------------------------------------------------------------------
-
-const uiConfig = (uiRaw as { ui?: Record<string, unknown> }).ui;
-export const uiResizeDebounceMs: number =
-  typeof uiConfig?.resizeDebounceMs === "number" ? uiConfig.resizeDebounceMs : 50;
-export const uiVideoPauseButtonHideDelayMs: number =
-  typeof uiConfig?.videoPauseButtonHideDelayMs === "number"
-    ? uiConfig.videoPauseButtonHideDelayMs
-    : 3000;
-
-const uiHomeConfig = uiConfig?.home as Record<string, unknown> | undefined;
-const uiHeroCarouselConfig = uiHomeConfig?.heroCarousel as Record<string, unknown> | undefined;
-export const uiHeroCarouselOpacityCurve: number[] =
-  Array.isArray(uiHeroCarouselConfig?.opacityCurve) &&
-  uiHeroCarouselConfig.opacityCurve.length > 0 &&
-  uiHeroCarouselConfig.opacityCurve.every((value: unknown) => typeof value === "number")
-    ? (uiHeroCarouselConfig.opacityCurve as number[])
-    : [0];
-export const uiHeroCarouselPlaceholderBackgrounds: string[] =
-  Array.isArray(uiHeroCarouselConfig?.placeholderBackgrounds) &&
-  uiHeroCarouselConfig.placeholderBackgrounds.length > 0 &&
-  uiHeroCarouselConfig.placeholderBackgrounds.every((value: unknown) => typeof value === "string")
-    ? (uiHeroCarouselConfig.placeholderBackgrounds as string[])
-    : ["#000000"];
-
-const uiVideoConfig = uiConfig?.video as Record<string, unknown> | undefined;
-export const uiVideoDoubleTapThresholdMs: number =
-  typeof uiVideoConfig?.doubleTapThresholdMs === "number"
-    ? uiVideoConfig.doubleTapThresholdMs
-    : 450;
-export const uiVideoHoldThresholdMs: number =
-  typeof uiVideoConfig?.holdThresholdMs === "number" ? uiVideoConfig.holdThresholdMs : 400;
-export const uiVideoHoldRepeatMs: number =
-  typeof uiVideoConfig?.holdRepeatMs === "number" ? uiVideoConfig.holdRepeatMs : 500;
-export const uiVideoFeedbackDurationMs: number =
-  typeof uiVideoConfig?.feedbackDurationMs === "number" ? uiVideoConfig.feedbackDurationMs : 500;
-export const uiVideoSeekBackSeconds: number =
-  typeof uiVideoConfig?.seekBackSeconds === "number" ? uiVideoConfig.seekBackSeconds : 10;
-export const uiVideoSeekForwardSeconds: number =
-  typeof uiVideoConfig?.seekForwardSeconds === "number" ? uiVideoConfig.seekForwardSeconds : 30;
-export const uiVideoDefaultAspectRatio: string =
-  typeof uiVideoConfig?.defaultAspectRatio === "string" ? uiVideoConfig.defaultAspectRatio : "16/9";
-
-// ---------------------------------------------------------------------------
-// Cache
-// ---------------------------------------------------------------------------
-
-const cacheConfig = (uiRaw as { cache?: Record<string, unknown> }).cache;
-export const cacheVideoUrlPrefix: string =
-  typeof cacheConfig?.videoUrlPrefix === "string" ? cacheConfig.videoUrlPrefix : "video_url_";
+export function resetRuntimeGlobals(): void {
+  runtimeGlobals = { ...DEFAULTS };
+  syncExportedGlobals();
+}

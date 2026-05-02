@@ -1,5 +1,6 @@
 import { createHash } from "crypto";
 import { getCoreGlobals } from "./globals";
+import { normalizeImageTransformParams } from "./cdn-image-params";
 
 function getSecret(): string | undefined {
   return (
@@ -48,48 +49,6 @@ function getExpiryBucketSeconds(): number {
   if (rounded < 60) return 60;
   if (rounded > 24 * 60 * 60) return 24 * 60 * 60;
   return rounded;
-}
-
-function normalizeImageParams(
-  extraParams: Record<string, string> | undefined
-): Record<string, string> | undefined {
-  if (!extraParams) return undefined;
-  const normalized: Record<string, string> = {};
-
-  const width = Number(extraParams.width);
-  if (Number.isFinite(width)) {
-    const bounded = Math.round(Math.max(1, Math.min(width, 4096)));
-    normalized.width = String(bounded);
-  }
-
-  const height = Number(extraParams.height);
-  if (Number.isFinite(height)) {
-    const bounded = Math.round(Math.max(1, Math.min(height, 4096)));
-    normalized.height = String(bounded);
-  }
-
-  const quality = Number(extraParams.quality);
-  if (Number.isFinite(quality)) {
-    const bounded = Math.round(Math.max(1, Math.min(quality, 100)));
-    normalized.quality = String(bounded);
-  }
-
-  const format = extraParams.format?.toLowerCase();
-  if (format && /^(avif|webp|jpg|jpeg|png)$/.test(format)) {
-    normalized.format = format;
-  }
-
-  const aspectRatio = extraParams.aspect_ratio?.trim();
-  if (aspectRatio && /^\d+(?::|\/)\d+$/.test(aspectRatio)) {
-    normalized.aspect_ratio = aspectRatio.replace("/", ":");
-  }
-
-  const className = extraParams.class?.trim();
-  if (className && /^[a-zA-Z0-9_-]+$/.test(className)) {
-    normalized.class = className;
-  }
-
-  return Object.keys(normalized).length > 0 ? normalized : undefined;
 }
 
 export function validateAssetKey(key: string): string | null {
@@ -183,7 +142,8 @@ export function getContentTypeForAssetKey(assetKey: string): string {
 
 /**
  * Build query param string for token hash (Bunny requires all query params except token/expires
- * to be included in the signature, sorted alphabetically, form-encoded).
+ * to be included in the signature, sorted alphabetically, and concatenated raw as `k=v`.
+ * Bunny decodes query params before verification, so URL form-encoding here would break hashes.
  */
 function buildSortedParamString(params: Record<string, string>): string {
   const entries = Object.entries(params).filter(
@@ -208,7 +168,7 @@ export function getSignedCdnUrl(assetKey: string, extraParams?: Record<string, s
   const encodedKey = encodePathPreservingSlashes(assetKey);
   const signingPrefix = getSigningPathPrefixFromCdnBase(cdnBase);
   const pathForSigning = `${signingPrefix}/${encodedKey}`;
-  const normalizedParams = normalizeImageParams(extraParams);
+  const normalizedParams = normalizeImageTransformParams(extraParams);
 
   const parameterData = normalizedParams ? buildSortedParamString(normalizedParams) : "";
   const token = generateBunnyToken(pathForSigning, expiresAt, parameterData);

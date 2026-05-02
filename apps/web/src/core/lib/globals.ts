@@ -1,4 +1,5 @@
 import { configureCoreGlobals } from "@pb/core/lib/globals";
+import { configureRuntimeGlobals } from "@pb/runtime-react/core/lib/globals";
 import personRaw from "../../content/site/person.json";
 import cdnRaw from "../../content/config/cdn.json";
 import authRaw from "../../content/config/auth.json";
@@ -284,4 +285,50 @@ configureCoreGlobals({
   imagePosterAspectRatio,
   imageClass,
   imagePosterClass,
+});
+
+configureRuntimeGlobals({
+  siteUrl,
+  assetBaseUrl,
+  person,
+  siteMetadata,
+  layoutFromJsonSlugs,
+  cdnBase,
+  cdnTokenExpiryDays,
+  cdnClientCacheExpiryHours,
+  cdnApiCacheMaxAge,
+  cdnApiCacheStaleWhileRevalidate,
+  cdnAllowedHosts,
+  cdnAllowedExtensions,
+  imageDefaultWidth,
+  imageDefaultPosterWidth,
+  imagePosterWidth,
+  imageMobileMaxWidth,
+  imageMobileMaxWidth2x,
+  imageDefaultQuality,
+  imagePosterQuality,
+  imageDefaultFormat,
+  imageDefaultAspectRatio,
+  imagePosterAspectRatio,
+  imageClass,
+  imagePosterClass,
+  accessCookieName,
+  accessCookieMaxAgeDays,
+  rateLimitCookieName,
+  rateLimitMaxAttempts,
+  rateLimitLockoutMinutes,
+  rateLimitCookieExpiryHours,
+  formRateLimitMaxPerHour,
+  uiResizeDebounceMs,
+  uiVideoPauseButtonHideDelayMs,
+  uiHeroCarouselOpacityCurve,
+  uiHeroCarouselPlaceholderBackgrounds,
+  uiVideoDoubleTapThresholdMs,
+  uiVideoHoldThresholdMs,
+  uiVideoHoldRepeatMs,
+  uiVideoFeedbackDurationMs,
+  uiVideoSeekBackSeconds,
+  uiVideoSeekForwardSeconds,
+  uiVideoDefaultAspectRatio,
+  cacheVideoUrlPrefix,
 });

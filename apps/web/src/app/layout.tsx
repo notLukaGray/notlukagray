@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "@/bootstrap";
 import { primaryFontLocal, secondaryFontLocal, monoFontLocal } from "@/app/fonts/create-fonts";
 import { primaryFontConfig, secondaryFontConfig, monoFontConfig } from "@/app/fonts/config";
 import { getActiveWebfontUrls } from "@/app/fonts/webfont";
@@ -11,14 +12,11 @@ import { AppLayout } from "@/core/ui/app-layout";
 import { DeviceTypeProvider } from "@/core/providers/device-type-provider";
 import { BrowserDataClient } from "@/app/BrowserDataClient";
 import { pbBrandCssInline } from "@/app/theme/config";
-import { pbBuilderDefaultsV1 } from "@/app/theme/pb-builder-defaults";
 import { pbContentGuidelinesCssInline } from "@/app/theme/pb-content-guidelines-config";
-import { pbContentGuidelines } from "@/app/theme/pb-content-guidelines-config";
 import { getProductionColorToolPersistedV2 } from "@/app/dev/colors/color-tool-persistence";
 import { getProductionWorkbenchSession } from "@/app/dev/workbench/workbench-defaults";
 import { buildWorkbenchThemeColorVarMap } from "@/app/theme/pb-workbench-color-var-map";
 import { serializePbFoundationsCss } from "@/app/theme/pb-foundation-css";
-import { setCoreConfig } from "@pb/core";
 
 function getOrigin(value: string): string | null {
   try {
@@ -94,14 +92,6 @@ async function DevelopmentClients() {
   const { DevRuntimeClients } = await import("./DevRuntimeClients");
   return <DevRuntimeClients />;
 }
-
-setCoreConfig({
-  builderDefaults: {
-    ...pbBuilderDefaultsV1,
-    workbenchElements: getProductionWorkbenchSession().elements,
-  },
-  contentGuidelines: pbContentGuidelines,
-});
 
 export default function RootLayout({
   children,
