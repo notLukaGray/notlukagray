@@ -10,11 +10,14 @@ function prefixResponsiveRecord<T>(
 ): Record<string, T> | { mobile?: Record<string, T>; desktop?: Record<string, T> } {
   if ("mobile" in value || "desktop" in value) {
     const r = value as { mobile?: Record<string, T>; desktop?: Record<string, T> };
-    if (r.mobile)
-      r.mobile = Object.fromEntries(withPrefix(Object.entries(r.mobile), namespacePrefix));
-    if (r.desktop)
-      r.desktop = Object.fromEntries(withPrefix(Object.entries(r.desktop), namespacePrefix));
-    return r;
+    return {
+      ...(r.mobile
+        ? { mobile: Object.fromEntries(withPrefix(Object.entries(r.mobile), namespacePrefix)) }
+        : {}),
+      ...(r.desktop
+        ? { desktop: Object.fromEntries(withPrefix(Object.entries(r.desktop), namespacePrefix)) }
+        : {}),
+    };
   }
   return Object.fromEntries(
     withPrefix(Object.entries(value as Record<string, T>), namespacePrefix)
@@ -27,9 +30,10 @@ function prefixResponsiveIdList(
 ): string[] | { mobile?: string[]; desktop?: string[] } {
   if (Array.isArray(value)) return value.map((id) => `${namespacePrefix}:${id}`);
   const r = value as { mobile?: string[]; desktop?: string[] };
-  if (r.mobile) r.mobile = r.mobile.map((id) => `${namespacePrefix}:${id}`);
-  if (r.desktop) r.desktop = r.desktop.map((id) => `${namespacePrefix}:${id}`);
-  return r;
+  return {
+    ...(r.mobile ? { mobile: r.mobile.map((id) => `${namespacePrefix}:${id}`) } : {}),
+    ...(r.desktop ? { desktop: r.desktop.map((id) => `${namespacePrefix}:${id}`) } : {}),
+  };
 }
 
 export function applyColumnNamespace(section: SectionWithElements, namespacePrefix: string): void {

@@ -211,4 +211,48 @@ describe("expandPageBuilder", () => {
     const resolvedIds = (section.elements ?? []).map((element: { id?: string }) => element.id);
     expect(resolvedIds).toEqual(["hero:desktopEl"]);
   });
+
+  it("produces identical output when called twice on the same definitions object", () => {
+    const page: PageBuilder = {
+      slug: "immutability-test",
+      title: "Immutability Test",
+      sectionOrder: ["hero"],
+      bgKey: "_none",
+      definitions: {
+        hero: {
+          id: "hero",
+          type: "sectionColumn",
+          elementOrder: { mobile: ["card"], desktop: ["card"] },
+          columnAssignments: { mobile: { card: 1 }, desktop: { card: 2 } },
+        } as unknown as PageBuilder["definitions"][string],
+        card: {
+          id: "card",
+          type: "elementGroup",
+          module: "cardModule",
+          section: {
+            elementOrder: ["inner"],
+            definitions: {
+              inner: { type: "elementBody", text: "Inner" },
+            },
+          },
+        } as unknown as PageBuilder["definitions"][string],
+        cardModule: {
+          type: "module",
+          slots: {
+            default: {
+              section: {
+                definitions: {
+                  heroImage: { type: "elementImage", image: "work/hero.jpg" },
+                },
+              },
+            },
+          },
+        } as unknown as PageBuilder["definitions"][string],
+      },
+    };
+
+    const first = expandPageBuilder(page);
+    const second = expandPageBuilder(page);
+    expect(second).toEqual(first);
+  });
 });
