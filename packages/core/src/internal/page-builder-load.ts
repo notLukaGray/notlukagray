@@ -18,8 +18,6 @@ import {
   getDefinitionsForPageAsync,
   mergeGlobalModulesIntoDefinitions,
   mergeGlobalModulesIntoDefinitionsAsync,
-  hydrateSectionFiles,
-  hydrateSectionFilesAsync,
   hydrateSectionFilesBySegments,
   hydrateSectionFilesBySegmentsAsync,
   resolveDefinitionPresets,
@@ -85,7 +83,7 @@ export function loadPageBuilder(slug: string): PageBuilder | null {
   const sectionOrder = withSlug.sectionOrder as string[];
   let definitions = getDefinitionsForPage(withSlug, slug);
   definitions = mergeGlobalModulesIntoDefinitions(definitions);
-  hydrateSectionFiles(definitions, slug, sectionOrder);
+  hydrateSectionFilesBySegments(definitions, [slug], sectionOrder);
 
   const presets = buildPresets(withSlug);
   for (const key of sectionOrder) {
@@ -112,9 +110,9 @@ export async function loadPageBuilderAsync(slug: string): Promise<PageBuilder | 
     mergeGlobalModulesIntoDefinitionsAsync(definitions),
     buildPresetsAsync(withSlug),
   ]);
-  const resolvedSectionDefinitions = await hydrateSectionFilesAsync(
+  const resolvedSectionDefinitions = await hydrateSectionFilesBySegmentsAsync(
     mergedDefinitions,
-    slug,
+    [slug],
     sectionOrder
   );
   for (const key of sectionOrder) {

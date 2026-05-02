@@ -34,15 +34,13 @@ import {
   type ResolvePageBuilderAssetsResult,
 } from "./internal/page-builder-resolve-assets-server";
 import {
-  loadPageBuilder,
-  loadPageBuilderAsync,
   loadPageBuilderByPath,
   loadPageBuilderByPathAsync,
   getPageSlugBases,
   getPageSlugs,
   getPageSlugsByBase,
 } from "./internal/page-builder-load";
-import { readPageJsonAsync, readPageJsonByPathAsync } from "./internal/load/page-builder-load-io";
+import { readPageJsonByPathAsync } from "./internal/load/page-builder-load-io";
 import {
   discoverAllPages,
   resolvePagePath,
@@ -547,13 +545,8 @@ export function getPage(
   const segments = parseSlugSegments(slug);
   if (!segments) return null;
 
-  const page =
-    segments.length === 1
-      ? loadPageBuilder(segments[0] as string)
-      : (() => {
-          const absolutePath = resolvePagePath(segments);
-          return absolutePath ? loadPageBuilderByPath(absolutePath, segments) : null;
-        })();
+  const absolutePath = resolvePagePath(segments);
+  const page = absolutePath ? loadPageBuilderByPath(absolutePath, segments) : null;
   if (!page) return null;
 
   const assetBase = getAssetBaseUrl(page as ResolvedPage);
@@ -579,13 +572,8 @@ export async function getPageAsync(
   const segments = parseSlugSegments(slug);
   if (!segments) return null;
 
-  const page =
-    segments.length === 1
-      ? await loadPageBuilderAsync(segments[0] as string)
-      : await (async () => {
-          const absolutePath = resolvePagePath(segments);
-          return absolutePath ? loadPageBuilderByPathAsync(absolutePath, segments) : null;
-        })();
+  const absolutePath = resolvePagePath(segments);
+  const page = absolutePath ? await loadPageBuilderByPathAsync(absolutePath, segments) : null;
   if (!page) return null;
 
   const assetBase = getAssetBaseUrl(page as ResolvedPage);
@@ -694,13 +682,8 @@ export function getPageBuilderProps(
 async function loadPageTagsRaw(slug: string): Promise<PageTags | undefined> {
   const segments = parseSlugSegments(slug);
   if (!segments) return undefined;
-  const raw =
-    segments.length === 1
-      ? await readPageJsonAsync(segments[0] as string)
-      : await (async () => {
-          const absolutePath = resolvePagePath(segments);
-          return absolutePath ? readPageJsonByPathAsync(absolutePath, slug) : null;
-        })();
+  const absolutePath = resolvePagePath(segments);
+  const raw = absolutePath ? await readPageJsonByPathAsync(absolutePath, slug) : null;
   if (!raw) return undefined;
   const tags = (raw as { tags?: unknown }).tags;
   return tags && typeof tags === "object" && !Array.isArray(tags) ? (tags as PageTags) : undefined;
