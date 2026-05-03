@@ -6,7 +6,7 @@ const originalAccessTokenVersion = process.env.ACCESS_TOKEN_VERSION;
 const originalSitePassword = process.env.SITE_PASSWORD;
 
 afterEach(() => {
-  process.env.NODE_ENV = originalNodeEnv;
+  process.env["NODE_ENV"] = originalNodeEnv;
   if (originalAccessTokenVersion === undefined) {
     delete process.env.ACCESS_TOKEN_VERSION;
   } else {
@@ -21,7 +21,7 @@ afterEach(() => {
 
 describe("createAccessToken", () => {
   it("throws in production when ACCESS_TOKEN_VERSION is unset", () => {
-    process.env.NODE_ENV = "production";
+    process.env["NODE_ENV"] = "production";
     process.env.SITE_PASSWORD = "test-secret";
     delete process.env.ACCESS_TOKEN_VERSION;
 
