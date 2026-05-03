@@ -4,9 +4,10 @@ import { createAccessToken } from "./access-cookie";
 const originalNodeEnv = process.env.NODE_ENV;
 const originalAccessTokenVersion = process.env.ACCESS_TOKEN_VERSION;
 const originalSitePassword = process.env.SITE_PASSWORD;
+const env = process.env as Record<string, string | undefined>;
 
 afterEach(() => {
-  Object.defineProperty(process.env, "NODE_ENV", { value: originalNodeEnv, configurable: true });
+  env.NODE_ENV = originalNodeEnv;
   if (originalAccessTokenVersion === undefined) {
     delete process.env.ACCESS_TOKEN_VERSION;
   } else {
@@ -21,7 +22,7 @@ afterEach(() => {
 
 describe("createAccessToken", () => {
   it("throws in production when ACCESS_TOKEN_VERSION is unset", () => {
-    Object.defineProperty(process.env, "NODE_ENV", { value: "production", configurable: true });
+    env.NODE_ENV = "production";
     process.env.SITE_PASSWORD = "test-secret";
     delete process.env.ACCESS_TOKEN_VERSION;
 
