@@ -5,7 +5,7 @@ const originalNodeEnv = process.env.NODE_ENV;
 const originalRateLimitSecret = process.env.RATE_LIMIT_SECRET;
 
 afterEach(() => {
-  process.env["NODE_ENV"] = originalNodeEnv;
+  Object.defineProperty(process.env, "NODE_ENV", { value: originalNodeEnv, configurable: true });
   if (originalRateLimitSecret === undefined) {
     delete process.env.RATE_LIMIT_SECRET;
   } else {
@@ -16,7 +16,7 @@ afterEach(() => {
 
 describe("buildFingerprint", () => {
   it("throws in production when RATE_LIMIT_SECRET is unset", () => {
-    process.env["NODE_ENV"] = "production";
+    Object.defineProperty(process.env, "NODE_ENV", { value: "production", configurable: true });
     delete process.env.RATE_LIMIT_SECRET;
 
     expect(() => buildFingerprint({ headers: new Headers() }, "unlock")).toThrow(

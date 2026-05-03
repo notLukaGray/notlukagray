@@ -5,7 +5,7 @@ const originalNodeEnv = process.env.NODE_ENV;
 const originalAccessTokenVersion = process.env.ACCESS_TOKEN_VERSION;
 
 afterEach(() => {
-  process.env["NODE_ENV"] = originalNodeEnv;
+  Object.defineProperty(process.env, "NODE_ENV", { value: originalNodeEnv, configurable: true });
   if (originalAccessTokenVersion === undefined) {
     delete process.env.ACCESS_TOKEN_VERSION;
   } else {
@@ -15,7 +15,7 @@ afterEach(() => {
 
 describe("createAccessTokenEdge", () => {
   it("throws in production when ACCESS_TOKEN_VERSION is unset", async () => {
-    process.env["NODE_ENV"] = "production";
+    Object.defineProperty(process.env, "NODE_ENV", { value: "production", configurable: true });
     delete process.env.ACCESS_TOKEN_VERSION;
 
     await expect(createAccessTokenEdge("test-secret")).rejects.toThrow(
