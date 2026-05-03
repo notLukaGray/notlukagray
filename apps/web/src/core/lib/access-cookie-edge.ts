@@ -8,7 +8,14 @@
 const MESSAGE = "access";
 
 function getDeployId(): string {
-  return process.env.ACCESS_TOKEN_VERSION ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
+  const v = process.env.ACCESS_TOKEN_VERSION;
+  if (!v) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error("ACCESS_TOKEN_VERSION must be set in production");
+    }
+    return "local";
+  }
+  return v;
 }
 
 function getSignedMessage(): string {
