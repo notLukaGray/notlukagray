@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getSignedCdnUrl } from "./cdn-asset-server";
+import { getSignedCdnUrl, validateAssetKey } from "./cdn-asset-server";
 
 describe("getSignedCdnUrl", () => {
   const originalSecret = process.env.BUNNY_TOKEN_SECRET;
@@ -51,5 +51,29 @@ describe("getSignedCdnUrl", () => {
     expect(url.searchParams.get("aspect_ratio")).toBe("16:9");
     expect(url.searchParams.get("class")).toBe("hero");
     expect(url.searchParams.get("bogus")).toBeNull();
+  });
+});
+
+describe("validateAssetKey traversal", () => {
+  it("rejects path traversal as a segment", () => {
+    expect(validateAssetKey("../etc/passwd")).toBeNull();
+    expect(validateAssetKey("a/../b/c.webp")).toBeNull();
+    expect(validateAssetKey("a/b/../c.webp")).toBeNull();
+  });
+
+  it("rejects empty and dot segments", () => {
+    expect(validateAssetKey("a//b.webp")).toBeNull();
+    expect(validateAssetKey("./a.webp")).toBeNull();
+    expect(validateAssetKey("/abs/a.webp")).toBeNull();
+  });
+
+  it("accepts filenames containing dots", () => {
+    expect(validateAssetKey("v1.2/poster.webp")).toBe("v1.2/poster.webp");
+    expect(validateAssetKey("final..export.webp")).toBe("final..export.webp");
+    expect(validateAssetKey("a.b.c/d.e.f.webp")).toBe("a.b.c/d.e.f.webp");
+  });
+
+  it("rejects keys with backslashes turned to slashes that produce traversal", () => {
+    expect(validateAssetKey("..\\foo.webp")).toBeNull();
   });
 });
