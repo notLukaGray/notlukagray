@@ -24,7 +24,7 @@ import {
 } from "@pb/core";
 import { PageBuilderPage } from "@pb/runtime-react/server";
 import { getTwitterCardForOgImage, cdnBase } from "@/core/lib/globals";
-import { getSignedCdnUrl } from "@/core/lib/cdn-asset-server";
+import { getSignedCdnUrl } from "@pb/core/lib/cdn-asset-server";
 import { UnlockPageShell } from "@/core/ui/UnlockPageShell";
 
 type SearchParamsRaw = Record<string, string | string[] | undefined>;

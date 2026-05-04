@@ -68,7 +68,6 @@ export function validateAssetKey(key: string): string | null {
   if (!key || key.length > 512) return null;
 
   // Basic traversal / malformed checks
-  if (key.includes("..")) return null;
   if (key.startsWith("/") || key.endsWith("/")) return null;
   if (key.includes("//")) return null;
 
@@ -76,7 +75,7 @@ export function validateAssetKey(key: string): string | null {
 
   // No empty or dot segments
   if (parts.length === 0) return null;
-  if (parts.some((p) => p.length === 0 || p === ".")) return null;
+  if (parts.some((p) => p.length === 0 || p === "." || p === "..")) return null;
 
   // Optional: cap depth to prevent absurd keys
   if (parts.length > 25) return null;

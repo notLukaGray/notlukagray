@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validateAssetKey, getSignedCdnUrl } from "@/core/lib/cdn-asset-server";
+import { validateAssetKey, getSignedCdnUrl } from "@pb/core/lib/cdn-asset-server";
 import { buildProxyUrl } from "@/core/lib/proxy-url";
 import { normalizeImageTransformParams } from "@pb/core/lib/cdn-image-params";
 
