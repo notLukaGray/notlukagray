@@ -88,35 +88,52 @@ export function injectResolvedUrlsIntoPage(
       node[key] = resolved;
     });
 
-    const elements = "elements" in section ? section.elements : undefined;
-    if (Array.isArray(elements)) {
-      (out as Record<string, unknown>).elements = (elements as ElementBlock[]).map((el) => {
-        onElement?.(section, el);
-        const elementContext: ElementInjectionContext = {
-          section,
-          element: el,
-        };
-        return walkElement(el, (key, value, node, kind) => {
-          if (typeof value !== "string") return;
+    const injectElement = (el: ElementBlock): ElementBlock => {
+      onElement?.(section, el);
+      const elementContext: ElementInjectionContext = {
+        section,
+        element: el,
+      };
+      return walkElement(el, (key, value, node, kind) => {
+        if (typeof value !== "string") return;
 
-          if (kind !== "model3d" && (node as { type?: string }).type === "elementModel3D") {
-            return;
-          }
+        if (kind !== "model3d" && (node as { type?: string }).type === "elementModel3D") {
+          return;
+        }
 
-          node[key] = resolveAssetRef(
-            value,
-            urlByRef,
-            proxyUrlByRef,
-            getSignedImageUrl,
-            node,
-            key,
-            kind === "model3d",
-            elementContext
-          );
-        });
+        node[key] = resolveAssetRef(
+          value,
+          urlByRef,
+          proxyUrlByRef,
+          getSignedImageUrl,
+          node,
+          key,
+          kind === "model3d",
+          elementContext
+        );
       });
-    }
+    };
 
+    const output = out as SectionBlock & {
+      elements?: ElementBlock[];
+      collapsedElements?: ElementBlock[];
+      revealedElements?: ElementBlock[];
+    };
+    if (Array.isArray(output.elements)) {
+      output.elements = output.elements.map((el) =>
+        el && typeof el === "object" ? injectElement(el) : el
+      );
+    }
+    if (Array.isArray(output.collapsedElements)) {
+      output.collapsedElements = output.collapsedElements.map((el) =>
+        el && typeof el === "object" ? injectElement(el) : el
+      );
+    }
+    if (Array.isArray(output.revealedElements)) {
+      output.revealedElements = output.revealedElements.map((el) =>
+        el && typeof el === "object" ? injectElement(el) : el
+      );
+    }
     return out;
   });
 

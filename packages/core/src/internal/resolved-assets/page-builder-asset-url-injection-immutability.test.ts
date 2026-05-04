@@ -91,4 +91,16 @@ describe("injectResolvedUrlsIntoPage immutability", () => {
 
     expect(second).toEqual(first);
   });
+
+  it("resolves nested model3d texture refs", () => {
+    const { resolvedSections } = injectResolvedUrlsIntoPage(makeBg(), makeSections(), makeUrlMap());
+    const content = resolvedSections[0] as unknown as {
+      elements?: Array<{
+        type?: string;
+        textures?: { base?: { source?: string; normalMap?: string } };
+      }>;
+    };
+    const model = content.elements?.find((el) => el.type === "elementModel3D");
+    expect(model?.textures?.base?.source).toBe("https://cdn.example/work/hero.webp");
+  });
 });

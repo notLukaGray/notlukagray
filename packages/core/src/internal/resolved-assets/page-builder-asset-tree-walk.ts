@@ -134,7 +134,7 @@ export function walkElement(
 ): ElementBlock {
   if (!element || typeof element !== "object") return element;
 
-  const el = { ...(element as Record<string, unknown>) };
+  let el = { ...(element as Record<string, unknown>) };
 
   // Standard asset keys on the element itself (including elementModel3D).
   visitStandardAssetKeys(el, "element", visitor);
@@ -150,7 +150,7 @@ export function walkElement(
 
   // 3D subtree for elementModel3D.
   if (el.type === "elementModel3D") {
-    walkModel3DNode(el, visitor);
+    el = walkModel3DNode(el, visitor);
   }
 
   // Element group / infinite scroll: recurse into section.definitions[*].
