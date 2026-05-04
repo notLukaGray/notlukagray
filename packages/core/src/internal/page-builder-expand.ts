@@ -103,6 +103,13 @@ export function expandPageBuilder(
     if (!SECTION_TYPE_STRINGS.has(type)) continue;
 
     const section = { ...block } as SectionWithElements;
+    if (Array.isArray(section.elements)) {
+      section.elements = section.elements.map((element) =>
+        element && typeof element === "object"
+          ? ({ ...(element as Record<string, unknown>) } as SectionWithElements["elements"][number])
+          : element
+      );
+    }
     const order = getElementOrder(section, responsiveIsMobile);
     if (order?.length) {
       const sectionDefs = (section as { definitions?: DefinitionsMap }).definitions;
