@@ -103,12 +103,16 @@ export function expandPageBuilder(
     if (!SECTION_TYPE_STRINGS.has(type)) continue;
 
     const section = { ...block } as SectionWithElements;
-    if (Array.isArray(section.elements)) {
+    if (
+      Array.isArray(section.elements) &&
+      section.elements.length > 0 &&
+      typeof section.elements[0] === "object"
+    ) {
       section.elements = section.elements.map((element) =>
         element && typeof element === "object"
-          ? ({ ...(element as Record<string, unknown>) } as SectionWithElements["elements"][number])
+          ? ({ ...(element as Record<string, unknown>) } as typeof element)
           : element
-      );
+      ) as typeof section.elements;
     }
     const order = getElementOrder(section, responsiveIsMobile);
     if (order?.length) {
