@@ -31,31 +31,25 @@ export function getAssetBaseUrl(page: ResolvedPage | null): string {
 }
 
 export function resolveBgBlockUrls(block: bgBlock, _base: string): bgBlock {
-  const out = { ...block } as Record<string, unknown>;
-  walkBgBlock(out as bgBlock, (key, value, node) => {
+  return walkBgBlock(block, (key, value, node) => {
     if (typeof value !== "string") return;
     if (!isAssetKey(value)) return;
     (node as Record<string, string>)[key] = buildProxyUrl(value);
   });
-  return out as bgBlock;
 }
 
 export function resolveElementBlockUrls(block: ElementBlock, _base: string): ElementBlock {
-  const out = { ...block } as Record<string, unknown>;
-  walkElement(out as ElementBlock, (key, value, node) => {
+  return walkElement(block, (key, value, node) => {
     if (typeof value !== "string") return;
     if (!isAssetKey(value)) return;
     (node as Record<string, string>)[key] = buildProxyUrl(value);
   });
-  return out as ElementBlock;
 }
 
 export function resolveSectionBlockUrls(block: SectionBlock, _base: string): SectionBlock {
-  const out = { ...block } as SectionBlock & Record<string, unknown>;
-  walkSection(out as SectionBlock, (key, value, node) => {
+  return walkSection(block, (key, value, node) => {
     if (typeof value !== "string") return;
     if (!isAssetKey(value)) return;
     (node as Record<string, string>)[key] = buildProxyUrl(value);
   });
-  return out as SectionBlock;
 }

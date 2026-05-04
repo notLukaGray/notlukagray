@@ -23,6 +23,7 @@ import {
   hydrateSectionFilesBySegmentsAsync,
   resolveDefinitionPresets,
 } from "./load/page-builder-load-definitions";
+import { deepFreezeForDev } from "./load/freeze-page-definitions";
 
 export { readJsonFileSafe, coercePresetMap } from "./load/page-builder-load-io";
 export { PAGE_DATA_DIR, PAGE_IGNORE } from "./load/page-builder-load-io";
@@ -110,6 +111,7 @@ export function loadPageBuilder(slug: string): PageBuilder | null {
     handleValidationResult(validation);
     return null;
   }
+  deepFreezeForDev(pageBuilder.definitions);
   return pageBuilder;
 }
 
@@ -143,6 +145,7 @@ export async function loadPageBuilderAsync(slug: string): Promise<PageBuilder | 
     handleValidationResult(validation);
     return null;
   }
+  deepFreezeForDev(pageBuilder.definitions);
   return pageBuilder;
 }
 
@@ -179,6 +182,7 @@ export function loadPageBuilderByPath(
     handleValidationResult(validation);
     return null;
   }
+  deepFreezeForDev(pageBuilder.definitions);
   return pageBuilder;
 }
 
@@ -217,6 +221,7 @@ export async function loadPageBuilderByPathAsync(
     handleValidationResult(validation);
     return null;
   }
+  deepFreezeForDev(pageBuilder.definitions);
   return pageBuilder;
 }
 
