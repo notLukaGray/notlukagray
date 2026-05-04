@@ -80,6 +80,8 @@ function scanDir(dir: string, relativeSegments: string[]): PageEntry[] {
   return entries;
 }
 
+const isDev = process.env.NODE_ENV !== "production";
+
 /** Module-level cache — populated on first call, reused for the lifetime of the process. */
 let cachedPages: PageEntry[] | null = null;
 
@@ -88,13 +90,14 @@ let cachedPages: PageEntry[] | null = null;
  * Result is cached in memory after the first call.
  */
 export function discoverAllPages(): PageEntry[] {
-  if (cachedPages !== null) return cachedPages;
+  if (!isDev && cachedPages !== null) return cachedPages;
   if (!fs.existsSync(PAGE_DATA_DIR)) {
     cachedPages = [];
     return cachedPages;
   }
-  cachedPages = scanDir(PAGE_DATA_DIR, []);
-  return cachedPages;
+  const result = scanDir(PAGE_DATA_DIR, []);
+  if (!isDev) cachedPages = result;
+  return result;
 }
 
 /**

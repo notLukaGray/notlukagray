@@ -20,17 +20,24 @@ function coerceValue(v: unknown): string | string[] | boolean {
 export async function parseFormBody(
   request: NextRequest
 ): Promise<{ payload: FormPayload } | NextResponse> {
-  const contentLength = request.headers.get("content-length");
-  if (contentLength) {
-    const size = parseInt(contentLength, 10);
-    if (!Number.isNaN(size) && size > MAX_BODY_BYTES) {
+  const reader = request.body?.getReader();
+  if (!reader) return NextResponse.json({ error: "Missing body." }, { status: 400 });
+  let received = 0;
+  const chunks: Uint8Array[] = [];
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    received += value.byteLength;
+    if (received > MAX_BODY_BYTES) {
+      await reader.cancel();
       return NextResponse.json({ error: "Payload too large." }, { status: 413 });
     }
+    chunks.push(value);
   }
-
+  const text = new TextDecoder().decode(Buffer.concat(chunks.map((c) => Buffer.from(c))));
   let body: unknown;
   try {
-    body = await request.json();
+    body = JSON.parse(text);
   } catch {
     return NextResponse.json({ error: "Invalid body." }, { status: 400 });
   }
