@@ -58,28 +58,23 @@ export function injectResolvedUrlsIntoPage(
 ): { resolvedBg: bgBlock | null; resolvedSections: SectionBlock[] } {
   const onElement = options?.onElement;
   const resolvedBg: bgBlock | null = bg
-    ? (() => {
-        const out = structuredClone(bg) as Record<string, unknown>;
-        walkBgBlock(out as bgBlock, (key, value, node, kind) => {
-          if (typeof value !== "string") return;
-          const resolved = resolveAssetRef(
-            value,
-            urlByRef,
-            proxyUrlByRef,
-            getSignedImageUrl,
-            node,
-            key,
-            kind === "model3d"
-          );
-          node[key] = resolved;
-        });
-        return out as bgBlock;
-      })()
+    ? walkBgBlock(bg, (key, value, node, kind) => {
+        if (typeof value !== "string") return;
+        const resolved = resolveAssetRef(
+          value,
+          urlByRef,
+          proxyUrlByRef,
+          getSignedImageUrl,
+          node,
+          key,
+          kind === "model3d"
+        );
+        node[key] = resolved;
+      })
     : null;
 
   const resolvedSections: SectionBlock[] = sections.map((section) => {
-    const out = { ...section } as Record<string, unknown>;
-    walkSectionKeys(out as SectionBlock, (key, value, node, kind) => {
+    const out = walkSectionKeys(section, (key, value, node, kind) => {
       if (typeof value !== "string") return;
       const resolved = resolveAssetRef(
         value,
@@ -95,24 +90,20 @@ export function injectResolvedUrlsIntoPage(
 
     const elements = "elements" in section ? section.elements : undefined;
     if (Array.isArray(elements)) {
-      out.elements = (elements as ElementBlock[]).map((el) => {
+      (out as Record<string, unknown>).elements = (elements as ElementBlock[]).map((el) => {
         onElement?.(section, el);
-        const e = structuredClone(el) as Record<string, unknown>;
         const elementContext: ElementInjectionContext = {
-          section: section as SectionBlock,
-          element: el as ElementBlock,
+          section,
+          element: el,
         };
-        walkElement(e as ElementBlock, (key, value, node, kind) => {
+        return walkElement(el, (key, value, node, kind) => {
           if (typeof value !== "string") return;
 
-          // 3D blocks use only MODEL3D_ASSET_KEYS (source, path, geometry); skip webpage
-          // ASSET_URL_KEYS (image, src, poster, etc.) so textures never get Bunny/image logic
-          // meant for display images.
           if (kind !== "model3d" && (node as { type?: string }).type === "elementModel3D") {
             return;
           }
 
-          const resolved = resolveAssetRef(
+          node[key] = resolveAssetRef(
             value,
             urlByRef,
             proxyUrlByRef,
@@ -122,12 +113,11 @@ export function injectResolvedUrlsIntoPage(
             kind === "model3d",
             elementContext
           );
-          node[key] = resolved;
         });
-        return e as ElementBlock;
       });
     }
-    return out as SectionBlock;
+
+    return out;
   });
 
   return { resolvedBg, resolvedSections };
@@ -140,8 +130,7 @@ export function injectResolvedUrlsIntoBgBlock(
   proxyUrlByRef?: Map<string, string>,
   getSignedImageUrl?: GetSignedImageUrlFn
 ): bgBlock {
-  const out = structuredClone(bg) as Record<string, unknown>;
-  walkBgBlock(out as bgBlock, (key, value, node, kind) => {
+  return walkBgBlock(bg, (key, value, node, kind) => {
     if (typeof value !== "string") return;
     const resolved = resolveAssetRef(
       value,
@@ -154,5 +143,4 @@ export function injectResolvedUrlsIntoBgBlock(
     );
     node[key] = resolved;
   });
-  return out as bgBlock;
 }

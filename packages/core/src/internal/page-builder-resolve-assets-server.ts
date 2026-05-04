@@ -12,6 +12,7 @@ import {
 } from "./page-builder-resolved-assets";
 import type { BackgroundTransitionEffect } from "@pb/contracts";
 import { createMemoizedComputeContainerWidthPx } from "./server/page-builder-container-width-server";
+import { walkBgBlock } from "./resolved-assets/page-builder-asset-tree-walk";
 
 const BG_TYPES_FOR_DEFINITIONS = new Set([
   "backgroundVideo",
@@ -48,7 +49,7 @@ export function buildRawBgDefinitions(
   const out: Record<string, bgBlock> = {};
   if (!definitions) return out;
   for (const [key, block] of Object.entries(definitions)) {
-    if (isBgDefinition(block)) out[key] = { ...block };
+    if (isBgDefinition(block)) out[key] = walkBgBlock(block, () => {});
   }
   return out;
 }
